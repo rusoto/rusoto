@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -9980,46 +9980,60 @@ pub enum AssociateVPCWithHostedZoneError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateVPCWithHostedZoneError {
-    pub fn from_body(body: &str) -> AssociateVPCWithHostedZoneError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConflictingDomainExists" => {
-                    AssociateVPCWithHostedZoneError::ConflictingDomainExists(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateVPCWithHostedZoneError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConflictingDomainExists" => {
+                        return AssociateVPCWithHostedZoneError::ConflictingDomainExists(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidInput" => {
+                        return AssociateVPCWithHostedZoneError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidVPCId" => {
+                        return AssociateVPCWithHostedZoneError::InvalidVPCId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitsExceeded" => {
+                        return AssociateVPCWithHostedZoneError::LimitsExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return AssociateVPCWithHostedZoneError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NotAuthorizedException" => {
+                        return AssociateVPCWithHostedZoneError::NotAuthorized(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PublicZoneVPCAssociation" => {
+                        return AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => AssociateVPCWithHostedZoneError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "InvalidVPCId" => AssociateVPCWithHostedZoneError::InvalidVPCId(String::from(
-                    parsed_error.message,
-                )),
-                "LimitsExceeded" => AssociateVPCWithHostedZoneError::LimitsExceeded(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchHostedZone" => AssociateVPCWithHostedZoneError::NoSuchHostedZone(
-                    String::from(parsed_error.message),
-                ),
-                "NotAuthorizedException" => AssociateVPCWithHostedZoneError::NotAuthorized(
-                    String::from(parsed_error.message),
-                ),
-                "PublicZoneVPCAssociation" => {
-                    AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => AssociateVPCWithHostedZoneError::Unknown(String::from(body)),
-            },
-            Err(_) => AssociateVPCWithHostedZoneError::Unknown(body.to_string()),
+            }
         }
+        AssociateVPCWithHostedZoneError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10034,7 +10048,7 @@ impl AssociateVPCWithHostedZoneError {
 impl From<XmlParseError> for AssociateVPCWithHostedZoneError {
     fn from(err: XmlParseError) -> AssociateVPCWithHostedZoneError {
         let XmlParseError(message) = err;
-        AssociateVPCWithHostedZoneError::Unknown(message.to_string())
+        AssociateVPCWithHostedZoneError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AssociateVPCWithHostedZoneError {
@@ -10072,7 +10086,8 @@ impl Error for AssociateVPCWithHostedZoneError {
             AssociateVPCWithHostedZoneError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateVPCWithHostedZoneError::Unknown(ref cause) => cause,
+            AssociateVPCWithHostedZoneError::ParseError(ref cause) => cause,
+            AssociateVPCWithHostedZoneError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10095,38 +10110,50 @@ pub enum ChangeResourceRecordSetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ChangeResourceRecordSetsError {
-    pub fn from_body(body: &str) -> ChangeResourceRecordSetsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidChangeBatch" => ChangeResourceRecordSetsError::InvalidChangeBatch(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidInput" => {
-                    ChangeResourceRecordSetsError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ChangeResourceRecordSetsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidChangeBatch" => {
+                        return ChangeResourceRecordSetsError::InvalidChangeBatch(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return ChangeResourceRecordSetsError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHealthCheck" => {
+                        return ChangeResourceRecordSetsError::NoSuchHealthCheck(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return ChangeResourceRecordSetsError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PriorRequestNotComplete" => {
+                        return ChangeResourceRecordSetsError::PriorRequestNotComplete(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchHealthCheck" => ChangeResourceRecordSetsError::NoSuchHealthCheck(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchHostedZone" => ChangeResourceRecordSetsError::NoSuchHostedZone(
-                    String::from(parsed_error.message),
-                ),
-                "PriorRequestNotComplete" => {
-                    ChangeResourceRecordSetsError::PriorRequestNotComplete(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => ChangeResourceRecordSetsError::Unknown(String::from(body)),
-            },
-            Err(_) => ChangeResourceRecordSetsError::Unknown(body.to_string()),
+            }
         }
+        ChangeResourceRecordSetsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10141,7 +10168,7 @@ impl ChangeResourceRecordSetsError {
 impl From<XmlParseError> for ChangeResourceRecordSetsError {
     fn from(err: XmlParseError) -> ChangeResourceRecordSetsError {
         let XmlParseError(message) = err;
-        ChangeResourceRecordSetsError::Unknown(message.to_string())
+        ChangeResourceRecordSetsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ChangeResourceRecordSetsError {
@@ -10177,7 +10204,8 @@ impl Error for ChangeResourceRecordSetsError {
             ChangeResourceRecordSetsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ChangeResourceRecordSetsError::Unknown(ref cause) => cause,
+            ChangeResourceRecordSetsError::ParseError(ref cause) => cause,
+            ChangeResourceRecordSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10200,36 +10228,50 @@ pub enum ChangeTagsForResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ChangeTagsForResourceError {
-    pub fn from_body(body: &str) -> ChangeTagsForResourceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ChangeTagsForResourceError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ChangeTagsForResourceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ChangeTagsForResourceError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHealthCheck" => {
+                        return ChangeTagsForResourceError::NoSuchHealthCheck(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return ChangeTagsForResourceError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PriorRequestNotComplete" => {
+                        return ChangeTagsForResourceError::PriorRequestNotComplete(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        return ChangeTagsForResourceError::Throttling(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchHealthCheck" => ChangeTagsForResourceError::NoSuchHealthCheck(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchHostedZone" => {
-                    ChangeTagsForResourceError::NoSuchHostedZone(String::from(parsed_error.message))
-                }
-                "PriorRequestNotComplete" => ChangeTagsForResourceError::PriorRequestNotComplete(
-                    String::from(parsed_error.message),
-                ),
-                "ThrottlingException" => {
-                    ChangeTagsForResourceError::Throttling(String::from(parsed_error.message))
-                }
-                _ => ChangeTagsForResourceError::Unknown(String::from(body)),
-            },
-            Err(_) => ChangeTagsForResourceError::Unknown(body.to_string()),
+            }
         }
+        ChangeTagsForResourceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10244,7 +10286,7 @@ impl ChangeTagsForResourceError {
 impl From<XmlParseError> for ChangeTagsForResourceError {
     fn from(err: XmlParseError) -> ChangeTagsForResourceError {
         let XmlParseError(message) = err;
-        ChangeTagsForResourceError::Unknown(message.to_string())
+        ChangeTagsForResourceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ChangeTagsForResourceError {
@@ -10280,7 +10322,8 @@ impl Error for ChangeTagsForResourceError {
             ChangeTagsForResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ChangeTagsForResourceError::Unknown(ref cause) => cause,
+            ChangeTagsForResourceError::ParseError(ref cause) => cause,
+            ChangeTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10299,30 +10342,40 @@ pub enum CreateHealthCheckError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHealthCheckError {
-    pub fn from_body(body: &str) -> CreateHealthCheckError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "HealthCheckAlreadyExists" => CreateHealthCheckError::HealthCheckAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidInput" => {
-                    CreateHealthCheckError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateHealthCheckError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "HealthCheckAlreadyExists" => {
+                        return CreateHealthCheckError::HealthCheckAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return CreateHealthCheckError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyHealthChecks" => {
+                        return CreateHealthCheckError::TooManyHealthChecks(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TooManyHealthChecks" => {
-                    CreateHealthCheckError::TooManyHealthChecks(String::from(parsed_error.message))
-                }
-                _ => CreateHealthCheckError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateHealthCheckError::Unknown(body.to_string()),
+            }
         }
+        CreateHealthCheckError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10337,7 +10390,7 @@ impl CreateHealthCheckError {
 impl From<XmlParseError> for CreateHealthCheckError {
     fn from(err: XmlParseError) -> CreateHealthCheckError {
         let XmlParseError(message) = err;
-        CreateHealthCheckError::Unknown(message.to_string())
+        CreateHealthCheckError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateHealthCheckError {
@@ -10371,7 +10424,8 @@ impl Error for CreateHealthCheckError {
             CreateHealthCheckError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateHealthCheckError::Unknown(ref cause) => cause,
+            CreateHealthCheckError::ParseError(ref cause) => cause,
+            CreateHealthCheckError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10402,48 +10456,70 @@ pub enum CreateHostedZoneError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHostedZoneError {
-    pub fn from_body(body: &str) -> CreateHostedZoneError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConflictingDomainExists" => CreateHostedZoneError::ConflictingDomainExists(
-                    String::from(parsed_error.message),
-                ),
-                "DelegationSetNotAvailable" => CreateHostedZoneError::DelegationSetNotAvailable(
-                    String::from(parsed_error.message),
-                ),
-                "DelegationSetNotReusable" => CreateHostedZoneError::DelegationSetNotReusable(
-                    String::from(parsed_error.message),
-                ),
-                "HostedZoneAlreadyExists" => CreateHostedZoneError::HostedZoneAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidDomainName" => {
-                    CreateHostedZoneError::InvalidDomainName(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateHostedZoneError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConflictingDomainExists" => {
+                        return CreateHostedZoneError::ConflictingDomainExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DelegationSetNotAvailable" => {
+                        return CreateHostedZoneError::DelegationSetNotAvailable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DelegationSetNotReusable" => {
+                        return CreateHostedZoneError::DelegationSetNotReusable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "HostedZoneAlreadyExists" => {
+                        return CreateHostedZoneError::HostedZoneAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidDomainName" => {
+                        return CreateHostedZoneError::InvalidDomainName(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return CreateHostedZoneError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidVPCId" => {
+                        return CreateHostedZoneError::InvalidVPCId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDelegationSet" => {
+                        return CreateHostedZoneError::NoSuchDelegationSet(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyHostedZones" => {
+                        return CreateHostedZoneError::TooManyHostedZones(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => {
-                    CreateHostedZoneError::InvalidInput(String::from(parsed_error.message))
-                }
-                "InvalidVPCId" => {
-                    CreateHostedZoneError::InvalidVPCId(String::from(parsed_error.message))
-                }
-                "NoSuchDelegationSet" => {
-                    CreateHostedZoneError::NoSuchDelegationSet(String::from(parsed_error.message))
-                }
-                "TooManyHostedZones" => {
-                    CreateHostedZoneError::TooManyHostedZones(String::from(parsed_error.message))
-                }
-                _ => CreateHostedZoneError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateHostedZoneError::Unknown(body.to_string()),
+            }
         }
+        CreateHostedZoneError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10458,7 +10534,7 @@ impl CreateHostedZoneError {
 impl From<XmlParseError> for CreateHostedZoneError {
     fn from(err: XmlParseError) -> CreateHostedZoneError {
         let XmlParseError(message) = err;
-        CreateHostedZoneError::Unknown(message.to_string())
+        CreateHostedZoneError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateHostedZoneError {
@@ -10496,7 +10572,8 @@ impl Error for CreateHostedZoneError {
             CreateHostedZoneError::Validation(ref cause) => cause,
             CreateHostedZoneError::Credentials(ref err) => err.description(),
             CreateHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateHostedZoneError::Unknown(ref cause) => cause,
+            CreateHostedZoneError::ParseError(ref cause) => cause,
+            CreateHostedZoneError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10521,45 +10598,25 @@ pub enum CreateQueryLoggingConfigError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateQueryLoggingConfigError {
-    pub fn from_body(body: &str) -> CreateQueryLoggingConfigError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConcurrentModification" => CreateQueryLoggingConfigError::ConcurrentModification(
-                    String::from(parsed_error.message),
-                ),
-                "InsufficientCloudWatchLogsResourcePolicy" => {
-                    CreateQueryLoggingConfigError::InsufficientCloudWatchLogsResourcePolicy(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidInput" => {
-                    CreateQueryLoggingConfigError::InvalidInput(String::from(parsed_error.message))
-                }
-                "NoSuchCloudWatchLogsLogGroup" => {
-                    CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NoSuchHostedZone" => CreateQueryLoggingConfigError::NoSuchHostedZone(
-                    String::from(parsed_error.message),
-                ),
-                "QueryLoggingConfigAlreadyExists" => {
-                    CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => CreateQueryLoggingConfigError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateQueryLoggingConfigError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateQueryLoggingConfigError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConcurrentModification" => return CreateQueryLoggingConfigError::ConcurrentModification(String::from(parsed_error.message)),"InsufficientCloudWatchLogsResourcePolicy" => return CreateQueryLoggingConfigError::InsufficientCloudWatchLogsResourcePolicy(String::from(parsed_error.message)),"InvalidInput" => return CreateQueryLoggingConfigError::InvalidInput(String::from(parsed_error.message)),"NoSuchCloudWatchLogsLogGroup" => return CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(String::from(parsed_error.message)),"NoSuchHostedZone" => return CreateQueryLoggingConfigError::NoSuchHostedZone(String::from(parsed_error.message)),"QueryLoggingConfigAlreadyExists" => return CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        CreateQueryLoggingConfigError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10574,7 +10631,7 @@ impl CreateQueryLoggingConfigError {
 impl From<XmlParseError> for CreateQueryLoggingConfigError {
     fn from(err: XmlParseError) -> CreateQueryLoggingConfigError {
         let XmlParseError(message) = err;
-        CreateQueryLoggingConfigError::Unknown(message.to_string())
+        CreateQueryLoggingConfigError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateQueryLoggingConfigError {
@@ -10613,7 +10670,8 @@ impl Error for CreateQueryLoggingConfigError {
             CreateQueryLoggingConfigError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateQueryLoggingConfigError::Unknown(ref cause) => cause,
+            CreateQueryLoggingConfigError::ParseError(ref cause) => cause,
+            CreateQueryLoggingConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10640,48 +10698,60 @@ pub enum CreateReusableDelegationSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateReusableDelegationSetError {
-    pub fn from_body(body: &str) -> CreateReusableDelegationSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DelegationSetAlreadyCreated" => {
-                    CreateReusableDelegationSetError::DelegationSetAlreadyCreated(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateReusableDelegationSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DelegationSetAlreadyCreated" => {
+                        return CreateReusableDelegationSetError::DelegationSetAlreadyCreated(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "DelegationSetAlreadyReusable" => {
+                        return CreateReusableDelegationSetError::DelegationSetAlreadyReusable(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "DelegationSetNotAvailable" => {
+                        return CreateReusableDelegationSetError::DelegationSetNotAvailable(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "HostedZoneNotFound" => {
+                        return CreateReusableDelegationSetError::HostedZoneNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return CreateReusableDelegationSetError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return CreateReusableDelegationSetError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitsExceeded" => {
+                        return CreateReusableDelegationSetError::LimitsExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "DelegationSetAlreadyReusable" => {
-                    CreateReusableDelegationSetError::DelegationSetAlreadyReusable(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DelegationSetNotAvailable" => {
-                    CreateReusableDelegationSetError::DelegationSetNotAvailable(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "HostedZoneNotFound" => CreateReusableDelegationSetError::HostedZoneNotFound(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidArgument" => CreateReusableDelegationSetError::InvalidArgument(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidInput" => CreateReusableDelegationSetError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "LimitsExceeded" => CreateReusableDelegationSetError::LimitsExceeded(String::from(
-                    parsed_error.message,
-                )),
-                _ => CreateReusableDelegationSetError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateReusableDelegationSetError::Unknown(body.to_string()),
+            }
         }
+        CreateReusableDelegationSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10696,7 +10766,7 @@ impl CreateReusableDelegationSetError {
 impl From<XmlParseError> for CreateReusableDelegationSetError {
     fn from(err: XmlParseError) -> CreateReusableDelegationSetError {
         let XmlParseError(message) = err;
-        CreateReusableDelegationSetError::Unknown(message.to_string())
+        CreateReusableDelegationSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateReusableDelegationSetError {
@@ -10734,7 +10804,8 @@ impl Error for CreateReusableDelegationSetError {
             CreateReusableDelegationSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateReusableDelegationSetError::Unknown(ref cause) => cause,
+            CreateReusableDelegationSetError::ParseError(ref cause) => cause,
+            CreateReusableDelegationSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10755,37 +10826,45 @@ pub enum CreateTrafficPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTrafficPolicyError {
-    pub fn from_body(body: &str) -> CreateTrafficPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    CreateTrafficPolicyError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTrafficPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return CreateTrafficPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidTrafficPolicyDocument" => {
+                        return CreateTrafficPolicyError::InvalidTrafficPolicyDocument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTrafficPolicies" => {
+                        return CreateTrafficPolicyError::TooManyTrafficPolicies(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TrafficPolicyAlreadyExists" => {
+                        return CreateTrafficPolicyError::TrafficPolicyAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidTrafficPolicyDocument" => {
-                    CreateTrafficPolicyError::InvalidTrafficPolicyDocument(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyTrafficPolicies" => CreateTrafficPolicyError::TooManyTrafficPolicies(
-                    String::from(parsed_error.message),
-                ),
-                "TrafficPolicyAlreadyExists" => {
-                    CreateTrafficPolicyError::TrafficPolicyAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => CreateTrafficPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateTrafficPolicyError::Unknown(body.to_string()),
+            }
         }
+        CreateTrafficPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10800,7 +10879,7 @@ impl CreateTrafficPolicyError {
 impl From<XmlParseError> for CreateTrafficPolicyError {
     fn from(err: XmlParseError) -> CreateTrafficPolicyError {
         let XmlParseError(message) = err;
-        CreateTrafficPolicyError::Unknown(message.to_string())
+        CreateTrafficPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateTrafficPolicyError {
@@ -10835,7 +10914,8 @@ impl Error for CreateTrafficPolicyError {
             CreateTrafficPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateTrafficPolicyError::Unknown(ref cause) => cause,
+            CreateTrafficPolicyError::ParseError(ref cause) => cause,
+            CreateTrafficPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10858,40 +10938,50 @@ pub enum CreateTrafficPolicyInstanceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTrafficPolicyInstanceError {
-    pub fn from_body(body: &str) -> CreateTrafficPolicyInstanceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => CreateTrafficPolicyInstanceError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchHostedZone" => CreateTrafficPolicyInstanceError::NoSuchHostedZone(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchTrafficPolicy" => CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyTrafficPolicyInstances" => {
-                    CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTrafficPolicyInstanceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return CreateTrafficPolicyInstanceError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return CreateTrafficPolicyInstanceError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchTrafficPolicy" => {
+                        return CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTrafficPolicyInstances" => {
+                        return CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TrafficPolicyInstanceAlreadyExists" => {
+                        return CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "TrafficPolicyInstanceAlreadyExists" => {
-                    CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => CreateTrafficPolicyInstanceError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateTrafficPolicyInstanceError::Unknown(body.to_string()),
+            }
         }
+        CreateTrafficPolicyInstanceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10906,7 +10996,7 @@ impl CreateTrafficPolicyInstanceError {
 impl From<XmlParseError> for CreateTrafficPolicyInstanceError {
     fn from(err: XmlParseError) -> CreateTrafficPolicyInstanceError {
         let XmlParseError(message) = err;
-        CreateTrafficPolicyInstanceError::Unknown(message.to_string())
+        CreateTrafficPolicyInstanceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateTrafficPolicyInstanceError {
@@ -10944,7 +11034,8 @@ impl Error for CreateTrafficPolicyInstanceError {
             CreateTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateTrafficPolicyInstanceError::Unknown(ref cause) => cause,
+            CreateTrafficPolicyInstanceError::ParseError(ref cause) => cause,
+            CreateTrafficPolicyInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10967,42 +11058,25 @@ pub enum CreateTrafficPolicyVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTrafficPolicyVersionError {
-    pub fn from_body(body: &str) -> CreateTrafficPolicyVersionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConcurrentModification" => {
-                    CreateTrafficPolicyVersionError::ConcurrentModification(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidInput" => CreateTrafficPolicyVersionError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "InvalidTrafficPolicyDocument" => {
-                    CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NoSuchTrafficPolicy" => CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyTrafficPolicyVersionsForCurrentPolicy" => {
-                    CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => CreateTrafficPolicyVersionError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateTrafficPolicyVersionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTrafficPolicyVersionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConcurrentModification" => return CreateTrafficPolicyVersionError::ConcurrentModification(String::from(parsed_error.message)),"InvalidInput" => return CreateTrafficPolicyVersionError::InvalidInput(String::from(parsed_error.message)),"InvalidTrafficPolicyDocument" => return CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(String::from(parsed_error.message)),"NoSuchTrafficPolicy" => return CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(String::from(parsed_error.message)),"TooManyTrafficPolicyVersionsForCurrentPolicy" => return CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        CreateTrafficPolicyVersionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11017,7 +11091,7 @@ impl CreateTrafficPolicyVersionError {
 impl From<XmlParseError> for CreateTrafficPolicyVersionError {
     fn from(err: XmlParseError) -> CreateTrafficPolicyVersionError {
         let XmlParseError(message) = err;
-        CreateTrafficPolicyVersionError::Unknown(message.to_string())
+        CreateTrafficPolicyVersionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateTrafficPolicyVersionError {
@@ -11055,7 +11129,8 @@ impl Error for CreateTrafficPolicyVersionError {
             CreateTrafficPolicyVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateTrafficPolicyVersionError::Unknown(ref cause) => cause,
+            CreateTrafficPolicyVersionError::ParseError(ref cause) => cause,
+            CreateTrafficPolicyVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11078,40 +11153,25 @@ pub enum CreateVPCAssociationAuthorizationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateVPCAssociationAuthorizationError {
-    pub fn from_body(body: &str) -> CreateVPCAssociationAuthorizationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConcurrentModification" => {
-                    CreateVPCAssociationAuthorizationError::ConcurrentModification(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidInput" => CreateVPCAssociationAuthorizationError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidVPCId" => CreateVPCAssociationAuthorizationError::InvalidVPCId(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchHostedZone" => CreateVPCAssociationAuthorizationError::NoSuchHostedZone(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyVPCAssociationAuthorizations" => {
-                    CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => CreateVPCAssociationAuthorizationError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateVPCAssociationAuthorizationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateVPCAssociationAuthorizationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConcurrentModification" => return CreateVPCAssociationAuthorizationError::ConcurrentModification(String::from(parsed_error.message)),"InvalidInput" => return CreateVPCAssociationAuthorizationError::InvalidInput(String::from(parsed_error.message)),"InvalidVPCId" => return CreateVPCAssociationAuthorizationError::InvalidVPCId(String::from(parsed_error.message)),"NoSuchHostedZone" => return CreateVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(parsed_error.message)),"TooManyVPCAssociationAuthorizations" => return CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        CreateVPCAssociationAuthorizationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11126,7 +11186,7 @@ impl CreateVPCAssociationAuthorizationError {
 impl From<XmlParseError> for CreateVPCAssociationAuthorizationError {
     fn from(err: XmlParseError) -> CreateVPCAssociationAuthorizationError {
         let XmlParseError(message) = err;
-        CreateVPCAssociationAuthorizationError::Unknown(message.to_string())
+        CreateVPCAssociationAuthorizationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateVPCAssociationAuthorizationError {
@@ -11164,7 +11224,8 @@ impl Error for CreateVPCAssociationAuthorizationError {
             CreateVPCAssociationAuthorizationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateVPCAssociationAuthorizationError::Unknown(ref cause) => cause,
+            CreateVPCAssociationAuthorizationError::ParseError(ref cause) => cause,
+            CreateVPCAssociationAuthorizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11183,30 +11244,40 @@ pub enum DeleteHealthCheckError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHealthCheckError {
-    pub fn from_body(body: &str) -> DeleteHealthCheckError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "HealthCheckInUse" => {
-                    DeleteHealthCheckError::HealthCheckInUse(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteHealthCheckError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "HealthCheckInUse" => {
+                        return DeleteHealthCheckError::HealthCheckInUse(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return DeleteHealthCheckError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHealthCheck" => {
+                        return DeleteHealthCheckError::NoSuchHealthCheck(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => {
-                    DeleteHealthCheckError::InvalidInput(String::from(parsed_error.message))
-                }
-                "NoSuchHealthCheck" => {
-                    DeleteHealthCheckError::NoSuchHealthCheck(String::from(parsed_error.message))
-                }
-                _ => DeleteHealthCheckError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteHealthCheckError::Unknown(body.to_string()),
+            }
         }
+        DeleteHealthCheckError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11221,7 +11292,7 @@ impl DeleteHealthCheckError {
 impl From<XmlParseError> for DeleteHealthCheckError {
     fn from(err: XmlParseError) -> DeleteHealthCheckError {
         let XmlParseError(message) = err;
-        DeleteHealthCheckError::Unknown(message.to_string())
+        DeleteHealthCheckError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteHealthCheckError {
@@ -11255,7 +11326,8 @@ impl Error for DeleteHealthCheckError {
             DeleteHealthCheckError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteHealthCheckError::Unknown(ref cause) => cause,
+            DeleteHealthCheckError::ParseError(ref cause) => cause,
+            DeleteHealthCheckError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11278,36 +11350,50 @@ pub enum DeleteHostedZoneError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHostedZoneError {
-    pub fn from_body(body: &str) -> DeleteHostedZoneError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "HostedZoneNotEmpty" => {
-                    DeleteHostedZoneError::HostedZoneNotEmpty(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteHostedZoneError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "HostedZoneNotEmpty" => {
+                        return DeleteHostedZoneError::HostedZoneNotEmpty(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidDomainName" => {
+                        return DeleteHostedZoneError::InvalidDomainName(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return DeleteHostedZoneError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return DeleteHostedZoneError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PriorRequestNotComplete" => {
+                        return DeleteHostedZoneError::PriorRequestNotComplete(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidDomainName" => {
-                    DeleteHostedZoneError::InvalidDomainName(String::from(parsed_error.message))
-                }
-                "InvalidInput" => {
-                    DeleteHostedZoneError::InvalidInput(String::from(parsed_error.message))
-                }
-                "NoSuchHostedZone" => {
-                    DeleteHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message))
-                }
-                "PriorRequestNotComplete" => DeleteHostedZoneError::PriorRequestNotComplete(
-                    String::from(parsed_error.message),
-                ),
-                _ => DeleteHostedZoneError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteHostedZoneError::Unknown(body.to_string()),
+            }
         }
+        DeleteHostedZoneError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11322,7 +11408,7 @@ impl DeleteHostedZoneError {
 impl From<XmlParseError> for DeleteHostedZoneError {
     fn from(err: XmlParseError) -> DeleteHostedZoneError {
         let XmlParseError(message) = err;
-        DeleteHostedZoneError::Unknown(message.to_string())
+        DeleteHostedZoneError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteHostedZoneError {
@@ -11356,7 +11442,8 @@ impl Error for DeleteHostedZoneError {
             DeleteHostedZoneError::Validation(ref cause) => cause,
             DeleteHostedZoneError::Credentials(ref err) => err.description(),
             DeleteHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteHostedZoneError::Unknown(ref cause) => cause,
+            DeleteHostedZoneError::ParseError(ref cause) => cause,
+            DeleteHostedZoneError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11375,32 +11462,40 @@ pub enum DeleteQueryLoggingConfigError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteQueryLoggingConfigError {
-    pub fn from_body(body: &str) -> DeleteQueryLoggingConfigError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConcurrentModification" => DeleteQueryLoggingConfigError::ConcurrentModification(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidInput" => {
-                    DeleteQueryLoggingConfigError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteQueryLoggingConfigError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return DeleteQueryLoggingConfigError::ConcurrentModification(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return DeleteQueryLoggingConfigError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchQueryLoggingConfig" => {
+                        return DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "NoSuchQueryLoggingConfig" => {
-                    DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DeleteQueryLoggingConfigError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteQueryLoggingConfigError::Unknown(body.to_string()),
+            }
         }
+        DeleteQueryLoggingConfigError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11415,7 +11510,7 @@ impl DeleteQueryLoggingConfigError {
 impl From<XmlParseError> for DeleteQueryLoggingConfigError {
     fn from(err: XmlParseError) -> DeleteQueryLoggingConfigError {
         let XmlParseError(message) = err;
-        DeleteQueryLoggingConfigError::Unknown(message.to_string())
+        DeleteQueryLoggingConfigError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteQueryLoggingConfigError {
@@ -11449,7 +11544,8 @@ impl Error for DeleteQueryLoggingConfigError {
             DeleteQueryLoggingConfigError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteQueryLoggingConfigError::Unknown(ref cause) => cause,
+            DeleteQueryLoggingConfigError::ParseError(ref cause) => cause,
+            DeleteQueryLoggingConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11470,35 +11566,45 @@ pub enum DeleteReusableDelegationSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteReusableDelegationSetError {
-    pub fn from_body(body: &str) -> DeleteReusableDelegationSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DelegationSetInUse" => DeleteReusableDelegationSetError::DelegationSetInUse(
-                    String::from(parsed_error.message),
-                ),
-                "DelegationSetNotReusable" => {
-                    DeleteReusableDelegationSetError::DelegationSetNotReusable(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteReusableDelegationSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DelegationSetInUse" => {
+                        return DeleteReusableDelegationSetError::DelegationSetInUse(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DelegationSetNotReusable" => {
+                        return DeleteReusableDelegationSetError::DelegationSetNotReusable(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidInput" => {
+                        return DeleteReusableDelegationSetError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDelegationSet" => {
+                        return DeleteReusableDelegationSetError::NoSuchDelegationSet(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => DeleteReusableDelegationSetError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchDelegationSet" => DeleteReusableDelegationSetError::NoSuchDelegationSet(
-                    String::from(parsed_error.message),
-                ),
-                _ => DeleteReusableDelegationSetError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteReusableDelegationSetError::Unknown(body.to_string()),
+            }
         }
+        DeleteReusableDelegationSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11513,7 +11619,7 @@ impl DeleteReusableDelegationSetError {
 impl From<XmlParseError> for DeleteReusableDelegationSetError {
     fn from(err: XmlParseError) -> DeleteReusableDelegationSetError {
         let XmlParseError(message) = err;
-        DeleteReusableDelegationSetError::Unknown(message.to_string())
+        DeleteReusableDelegationSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteReusableDelegationSetError {
@@ -11548,7 +11654,8 @@ impl Error for DeleteReusableDelegationSetError {
             DeleteReusableDelegationSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteReusableDelegationSetError::Unknown(ref cause) => cause,
+            DeleteReusableDelegationSetError::ParseError(ref cause) => cause,
+            DeleteReusableDelegationSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11569,33 +11676,45 @@ pub enum DeleteTrafficPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTrafficPolicyError {
-    pub fn from_body(body: &str) -> DeleteTrafficPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConcurrentModification" => DeleteTrafficPolicyError::ConcurrentModification(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidInput" => {
-                    DeleteTrafficPolicyError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTrafficPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return DeleteTrafficPolicyError::ConcurrentModification(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return DeleteTrafficPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchTrafficPolicy" => {
+                        return DeleteTrafficPolicyError::NoSuchTrafficPolicy(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TrafficPolicyInUse" => {
+                        return DeleteTrafficPolicyError::TrafficPolicyInUse(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchTrafficPolicy" => DeleteTrafficPolicyError::NoSuchTrafficPolicy(
-                    String::from(parsed_error.message),
-                ),
-                "TrafficPolicyInUse" => {
-                    DeleteTrafficPolicyError::TrafficPolicyInUse(String::from(parsed_error.message))
-                }
-                _ => DeleteTrafficPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteTrafficPolicyError::Unknown(body.to_string()),
+            }
         }
+        DeleteTrafficPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11610,7 +11729,7 @@ impl DeleteTrafficPolicyError {
 impl From<XmlParseError> for DeleteTrafficPolicyError {
     fn from(err: XmlParseError) -> DeleteTrafficPolicyError {
         let XmlParseError(message) = err;
-        DeleteTrafficPolicyError::Unknown(message.to_string())
+        DeleteTrafficPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteTrafficPolicyError {
@@ -11645,7 +11764,8 @@ impl Error for DeleteTrafficPolicyError {
             DeleteTrafficPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteTrafficPolicyError::Unknown(ref cause) => cause,
+            DeleteTrafficPolicyError::ParseError(ref cause) => cause,
+            DeleteTrafficPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11664,34 +11784,40 @@ pub enum DeleteTrafficPolicyInstanceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTrafficPolicyInstanceError {
-    pub fn from_body(body: &str) -> DeleteTrafficPolicyInstanceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => DeleteTrafficPolicyInstanceError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchTrafficPolicyInstance" => {
-                    DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTrafficPolicyInstanceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return DeleteTrafficPolicyInstanceError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchTrafficPolicyInstance" => {
+                        return DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "PriorRequestNotComplete" => {
+                        return DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "PriorRequestNotComplete" => {
-                    DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DeleteTrafficPolicyInstanceError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteTrafficPolicyInstanceError::Unknown(body.to_string()),
+            }
         }
+        DeleteTrafficPolicyInstanceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11706,7 +11832,7 @@ impl DeleteTrafficPolicyInstanceError {
 impl From<XmlParseError> for DeleteTrafficPolicyInstanceError {
     fn from(err: XmlParseError) -> DeleteTrafficPolicyInstanceError {
         let XmlParseError(message) = err;
-        DeleteTrafficPolicyInstanceError::Unknown(message.to_string())
+        DeleteTrafficPolicyInstanceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteTrafficPolicyInstanceError {
@@ -11740,7 +11866,8 @@ impl Error for DeleteTrafficPolicyInstanceError {
             DeleteTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteTrafficPolicyInstanceError::Unknown(ref cause) => cause,
+            DeleteTrafficPolicyInstanceError::ParseError(ref cause) => cause,
+            DeleteTrafficPolicyInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11763,40 +11890,25 @@ pub enum DeleteVPCAssociationAuthorizationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVPCAssociationAuthorizationError {
-    pub fn from_body(body: &str) -> DeleteVPCAssociationAuthorizationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConcurrentModification" => {
-                    DeleteVPCAssociationAuthorizationError::ConcurrentModification(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidInput" => DeleteVPCAssociationAuthorizationError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidVPCId" => DeleteVPCAssociationAuthorizationError::InvalidVPCId(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchHostedZone" => DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(
-                    String::from(parsed_error.message),
-                ),
-                "VPCAssociationAuthorizationNotFound" => {
-                    DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => DeleteVPCAssociationAuthorizationError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteVPCAssociationAuthorizationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteVPCAssociationAuthorizationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConcurrentModification" => return DeleteVPCAssociationAuthorizationError::ConcurrentModification(String::from(parsed_error.message)),"InvalidInput" => return DeleteVPCAssociationAuthorizationError::InvalidInput(String::from(parsed_error.message)),"InvalidVPCId" => return DeleteVPCAssociationAuthorizationError::InvalidVPCId(String::from(parsed_error.message)),"NoSuchHostedZone" => return DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(parsed_error.message)),"VPCAssociationAuthorizationNotFound" => return DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        DeleteVPCAssociationAuthorizationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11811,7 +11923,7 @@ impl DeleteVPCAssociationAuthorizationError {
 impl From<XmlParseError> for DeleteVPCAssociationAuthorizationError {
     fn from(err: XmlParseError) -> DeleteVPCAssociationAuthorizationError {
         let XmlParseError(message) = err;
-        DeleteVPCAssociationAuthorizationError::Unknown(message.to_string())
+        DeleteVPCAssociationAuthorizationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteVPCAssociationAuthorizationError {
@@ -11849,7 +11961,8 @@ impl Error for DeleteVPCAssociationAuthorizationError {
             DeleteVPCAssociationAuthorizationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteVPCAssociationAuthorizationError::Unknown(ref cause) => cause,
+            DeleteVPCAssociationAuthorizationError::ParseError(ref cause) => cause,
+            DeleteVPCAssociationAuthorizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11872,38 +11985,50 @@ pub enum DisassociateVPCFromHostedZoneError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateVPCFromHostedZoneError {
-    pub fn from_body(body: &str) -> DisassociateVPCFromHostedZoneError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => DisassociateVPCFromHostedZoneError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "InvalidVPCId" => DisassociateVPCFromHostedZoneError::InvalidVPCId(String::from(
-                    parsed_error.message,
-                )),
-                "LastVPCAssociation" => DisassociateVPCFromHostedZoneError::LastVPCAssociation(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchHostedZone" => DisassociateVPCFromHostedZoneError::NoSuchHostedZone(
-                    String::from(parsed_error.message),
-                ),
-                "VPCAssociationNotFound" => {
-                    DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateVPCFromHostedZoneError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return DisassociateVPCFromHostedZoneError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidVPCId" => {
+                        return DisassociateVPCFromHostedZoneError::InvalidVPCId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LastVPCAssociation" => {
+                        return DisassociateVPCFromHostedZoneError::LastVPCAssociation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return DisassociateVPCFromHostedZoneError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "VPCAssociationNotFound" => {
+                        return DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DisassociateVPCFromHostedZoneError::Unknown(String::from(body)),
-            },
-            Err(_) => DisassociateVPCFromHostedZoneError::Unknown(body.to_string()),
+            }
         }
+        DisassociateVPCFromHostedZoneError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11918,7 +12043,7 @@ impl DisassociateVPCFromHostedZoneError {
 impl From<XmlParseError> for DisassociateVPCFromHostedZoneError {
     fn from(err: XmlParseError) -> DisassociateVPCFromHostedZoneError {
         let XmlParseError(message) = err;
-        DisassociateVPCFromHostedZoneError::Unknown(message.to_string())
+        DisassociateVPCFromHostedZoneError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DisassociateVPCFromHostedZoneError {
@@ -11954,7 +12079,8 @@ impl Error for DisassociateVPCFromHostedZoneError {
             DisassociateVPCFromHostedZoneError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateVPCFromHostedZoneError::Unknown(ref cause) => cause,
+            DisassociateVPCFromHostedZoneError::ParseError(ref cause) => cause,
+            DisassociateVPCFromHostedZoneError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11969,24 +12095,30 @@ pub enum GetAccountLimitError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccountLimitError {
-    pub fn from_body(body: &str) -> GetAccountLimitError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    GetAccountLimitError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetAccountLimitError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetAccountLimitError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => GetAccountLimitError::Unknown(String::from(body)),
-            },
-            Err(_) => GetAccountLimitError::Unknown(body.to_string()),
+            }
         }
+        GetAccountLimitError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12001,7 +12133,7 @@ impl GetAccountLimitError {
 impl From<XmlParseError> for GetAccountLimitError {
     fn from(err: XmlParseError) -> GetAccountLimitError {
         let XmlParseError(message) = err;
-        GetAccountLimitError::Unknown(message.to_string())
+        GetAccountLimitError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetAccountLimitError {
@@ -12031,7 +12163,8 @@ impl Error for GetAccountLimitError {
             GetAccountLimitError::Validation(ref cause) => cause,
             GetAccountLimitError::Credentials(ref err) => err.description(),
             GetAccountLimitError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetAccountLimitError::Unknown(ref cause) => cause,
+            GetAccountLimitError::ParseError(ref cause) => cause,
+            GetAccountLimitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12048,23 +12181,31 @@ pub enum GetChangeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetChangeError {
-    pub fn from_body(body: &str) -> GetChangeError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => GetChangeError::InvalidInput(String::from(parsed_error.message)),
-                "NoSuchChange" => GetChangeError::NoSuchChange(String::from(parsed_error.message)),
-                _ => GetChangeError::Unknown(String::from(body)),
-            },
-            Err(_) => GetChangeError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetChangeError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetChangeError::InvalidInput(String::from(parsed_error.message))
+                    }
+                    "NoSuchChange" => {
+                        return GetChangeError::NoSuchChange(String::from(parsed_error.message))
+                    }
+                    _ => {}
+                }
+            }
         }
+        GetChangeError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12079,7 +12220,7 @@ impl GetChangeError {
 impl From<XmlParseError> for GetChangeError {
     fn from(err: XmlParseError) -> GetChangeError {
         let XmlParseError(message) = err;
-        GetChangeError::Unknown(message.to_string())
+        GetChangeError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetChangeError {
@@ -12110,7 +12251,8 @@ impl Error for GetChangeError {
             GetChangeError::Validation(ref cause) => cause,
             GetChangeError::Credentials(ref err) => err.description(),
             GetChangeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetChangeError::Unknown(ref cause) => cause,
+            GetChangeError::ParseError(ref cause) => cause,
+            GetChangeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12123,21 +12265,25 @@ pub enum GetCheckerIpRangesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCheckerIpRangesError {
-    pub fn from_body(body: &str) -> GetCheckerIpRangesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetCheckerIpRangesError::Unknown(String::from(body)),
-            },
-            Err(_) => GetCheckerIpRangesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetCheckerIpRangesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetCheckerIpRangesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12152,7 +12298,7 @@ impl GetCheckerIpRangesError {
 impl From<XmlParseError> for GetCheckerIpRangesError {
     fn from(err: XmlParseError) -> GetCheckerIpRangesError {
         let XmlParseError(message) = err;
-        GetCheckerIpRangesError::Unknown(message.to_string())
+        GetCheckerIpRangesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetCheckerIpRangesError {
@@ -12183,7 +12329,8 @@ impl Error for GetCheckerIpRangesError {
             GetCheckerIpRangesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetCheckerIpRangesError::Unknown(ref cause) => cause,
+            GetCheckerIpRangesError::ParseError(ref cause) => cause,
+            GetCheckerIpRangesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12200,27 +12347,33 @@ pub enum GetGeoLocationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetGeoLocationError {
-    pub fn from_body(body: &str) -> GetGeoLocationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    GetGeoLocationError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetGeoLocationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetGeoLocationError::InvalidInput(String::from(parsed_error.message))
+                    }
+                    "NoSuchGeoLocation" => {
+                        return GetGeoLocationError::NoSuchGeoLocation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchGeoLocation" => {
-                    GetGeoLocationError::NoSuchGeoLocation(String::from(parsed_error.message))
-                }
-                _ => GetGeoLocationError::Unknown(String::from(body)),
-            },
-            Err(_) => GetGeoLocationError::Unknown(body.to_string()),
+            }
         }
+        GetGeoLocationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12235,7 +12388,7 @@ impl GetGeoLocationError {
 impl From<XmlParseError> for GetGeoLocationError {
     fn from(err: XmlParseError) -> GetGeoLocationError {
         let XmlParseError(message) = err;
-        GetGeoLocationError::Unknown(message.to_string())
+        GetGeoLocationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetGeoLocationError {
@@ -12266,7 +12419,8 @@ impl Error for GetGeoLocationError {
             GetGeoLocationError::Validation(ref cause) => cause,
             GetGeoLocationError::Credentials(ref err) => err.description(),
             GetGeoLocationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGeoLocationError::Unknown(ref cause) => cause,
+            GetGeoLocationError::ParseError(ref cause) => cause,
+            GetGeoLocationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12285,30 +12439,38 @@ pub enum GetHealthCheckError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetHealthCheckError {
-    pub fn from_body(body: &str) -> GetHealthCheckError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "IncompatibleVersion" => {
-                    GetHealthCheckError::IncompatibleVersion(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetHealthCheckError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "IncompatibleVersion" => {
+                        return GetHealthCheckError::IncompatibleVersion(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return GetHealthCheckError::InvalidInput(String::from(parsed_error.message))
+                    }
+                    "NoSuchHealthCheck" => {
+                        return GetHealthCheckError::NoSuchHealthCheck(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => {
-                    GetHealthCheckError::InvalidInput(String::from(parsed_error.message))
-                }
-                "NoSuchHealthCheck" => {
-                    GetHealthCheckError::NoSuchHealthCheck(String::from(parsed_error.message))
-                }
-                _ => GetHealthCheckError::Unknown(String::from(body)),
-            },
-            Err(_) => GetHealthCheckError::Unknown(body.to_string()),
+            }
         }
+        GetHealthCheckError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12323,7 +12485,7 @@ impl GetHealthCheckError {
 impl From<XmlParseError> for GetHealthCheckError {
     fn from(err: XmlParseError) -> GetHealthCheckError {
         let XmlParseError(message) = err;
-        GetHealthCheckError::Unknown(message.to_string())
+        GetHealthCheckError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetHealthCheckError {
@@ -12355,7 +12517,8 @@ impl Error for GetHealthCheckError {
             GetHealthCheckError::Validation(ref cause) => cause,
             GetHealthCheckError::Credentials(ref err) => err.description(),
             GetHealthCheckError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetHealthCheckError::Unknown(ref cause) => cause,
+            GetHealthCheckError::ParseError(ref cause) => cause,
+            GetHealthCheckError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12368,21 +12531,25 @@ pub enum GetHealthCheckCountError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetHealthCheckCountError {
-    pub fn from_body(body: &str) -> GetHealthCheckCountError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetHealthCheckCountError::Unknown(String::from(body)),
-            },
-            Err(_) => GetHealthCheckCountError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetHealthCheckCountError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetHealthCheckCountError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12397,7 +12564,7 @@ impl GetHealthCheckCountError {
 impl From<XmlParseError> for GetHealthCheckCountError {
     fn from(err: XmlParseError) -> GetHealthCheckCountError {
         let XmlParseError(message) = err;
-        GetHealthCheckCountError::Unknown(message.to_string())
+        GetHealthCheckCountError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetHealthCheckCountError {
@@ -12428,7 +12595,8 @@ impl Error for GetHealthCheckCountError {
             GetHealthCheckCountError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetHealthCheckCountError::Unknown(ref cause) => cause,
+            GetHealthCheckCountError::ParseError(ref cause) => cause,
+            GetHealthCheckCountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12445,27 +12613,35 @@ pub enum GetHealthCheckLastFailureReasonError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetHealthCheckLastFailureReasonError {
-    pub fn from_body(body: &str) -> GetHealthCheckLastFailureReasonError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => GetHealthCheckLastFailureReasonError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchHealthCheck" => GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(
-                    String::from(parsed_error.message),
-                ),
-                _ => GetHealthCheckLastFailureReasonError::Unknown(String::from(body)),
-            },
-            Err(_) => GetHealthCheckLastFailureReasonError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetHealthCheckLastFailureReasonError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetHealthCheckLastFailureReasonError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHealthCheck" => {
+                        return GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        GetHealthCheckLastFailureReasonError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12480,7 +12656,7 @@ impl GetHealthCheckLastFailureReasonError {
 impl From<XmlParseError> for GetHealthCheckLastFailureReasonError {
     fn from(err: XmlParseError) -> GetHealthCheckLastFailureReasonError {
         let XmlParseError(message) = err;
-        GetHealthCheckLastFailureReasonError::Unknown(message.to_string())
+        GetHealthCheckLastFailureReasonError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetHealthCheckLastFailureReasonError {
@@ -12513,7 +12689,8 @@ impl Error for GetHealthCheckLastFailureReasonError {
             GetHealthCheckLastFailureReasonError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetHealthCheckLastFailureReasonError::Unknown(ref cause) => cause,
+            GetHealthCheckLastFailureReasonError::ParseError(ref cause) => cause,
+            GetHealthCheckLastFailureReasonError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12530,27 +12707,35 @@ pub enum GetHealthCheckStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetHealthCheckStatusError {
-    pub fn from_body(body: &str) -> GetHealthCheckStatusError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    GetHealthCheckStatusError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetHealthCheckStatusError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetHealthCheckStatusError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHealthCheck" => {
+                        return GetHealthCheckStatusError::NoSuchHealthCheck(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchHealthCheck" => {
-                    GetHealthCheckStatusError::NoSuchHealthCheck(String::from(parsed_error.message))
-                }
-                _ => GetHealthCheckStatusError::Unknown(String::from(body)),
-            },
-            Err(_) => GetHealthCheckStatusError::Unknown(body.to_string()),
+            }
         }
+        GetHealthCheckStatusError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12565,7 +12750,7 @@ impl GetHealthCheckStatusError {
 impl From<XmlParseError> for GetHealthCheckStatusError {
     fn from(err: XmlParseError) -> GetHealthCheckStatusError {
         let XmlParseError(message) = err;
-        GetHealthCheckStatusError::Unknown(message.to_string())
+        GetHealthCheckStatusError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetHealthCheckStatusError {
@@ -12598,7 +12783,8 @@ impl Error for GetHealthCheckStatusError {
             GetHealthCheckStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetHealthCheckStatusError::Unknown(ref cause) => cause,
+            GetHealthCheckStatusError::ParseError(ref cause) => cause,
+            GetHealthCheckStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12615,27 +12801,33 @@ pub enum GetHostedZoneError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetHostedZoneError {
-    pub fn from_body(body: &str) -> GetHostedZoneError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    GetHostedZoneError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetHostedZoneError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetHostedZoneError::InvalidInput(String::from(parsed_error.message))
+                    }
+                    "NoSuchHostedZone" => {
+                        return GetHostedZoneError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchHostedZone" => {
-                    GetHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message))
-                }
-                _ => GetHostedZoneError::Unknown(String::from(body)),
-            },
-            Err(_) => GetHostedZoneError::Unknown(body.to_string()),
+            }
         }
+        GetHostedZoneError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12650,7 +12842,7 @@ impl GetHostedZoneError {
 impl From<XmlParseError> for GetHostedZoneError {
     fn from(err: XmlParseError) -> GetHostedZoneError {
         let XmlParseError(message) = err;
-        GetHostedZoneError::Unknown(message.to_string())
+        GetHostedZoneError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetHostedZoneError {
@@ -12681,7 +12873,8 @@ impl Error for GetHostedZoneError {
             GetHostedZoneError::Validation(ref cause) => cause,
             GetHostedZoneError::Credentials(ref err) => err.description(),
             GetHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetHostedZoneError::Unknown(ref cause) => cause,
+            GetHostedZoneError::ParseError(ref cause) => cause,
+            GetHostedZoneError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12696,24 +12889,30 @@ pub enum GetHostedZoneCountError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetHostedZoneCountError {
-    pub fn from_body(body: &str) -> GetHostedZoneCountError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    GetHostedZoneCountError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetHostedZoneCountError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetHostedZoneCountError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => GetHostedZoneCountError::Unknown(String::from(body)),
-            },
-            Err(_) => GetHostedZoneCountError::Unknown(body.to_string()),
+            }
         }
+        GetHostedZoneCountError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12728,7 +12927,7 @@ impl GetHostedZoneCountError {
 impl From<XmlParseError> for GetHostedZoneCountError {
     fn from(err: XmlParseError) -> GetHostedZoneCountError {
         let XmlParseError(message) = err;
-        GetHostedZoneCountError::Unknown(message.to_string())
+        GetHostedZoneCountError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetHostedZoneCountError {
@@ -12760,7 +12959,8 @@ impl Error for GetHostedZoneCountError {
             GetHostedZoneCountError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetHostedZoneCountError::Unknown(ref cause) => cause,
+            GetHostedZoneCountError::ParseError(ref cause) => cause,
+            GetHostedZoneCountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12779,30 +12979,40 @@ pub enum GetHostedZoneLimitError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetHostedZoneLimitError {
-    pub fn from_body(body: &str) -> GetHostedZoneLimitError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "HostedZoneNotPrivate" => GetHostedZoneLimitError::HostedZoneNotPrivate(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidInput" => {
-                    GetHostedZoneLimitError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetHostedZoneLimitError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "HostedZoneNotPrivate" => {
+                        return GetHostedZoneLimitError::HostedZoneNotPrivate(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return GetHostedZoneLimitError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return GetHostedZoneLimitError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchHostedZone" => {
-                    GetHostedZoneLimitError::NoSuchHostedZone(String::from(parsed_error.message))
-                }
-                _ => GetHostedZoneLimitError::Unknown(String::from(body)),
-            },
-            Err(_) => GetHostedZoneLimitError::Unknown(body.to_string()),
+            }
         }
+        GetHostedZoneLimitError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12817,7 +13027,7 @@ impl GetHostedZoneLimitError {
 impl From<XmlParseError> for GetHostedZoneLimitError {
     fn from(err: XmlParseError) -> GetHostedZoneLimitError {
         let XmlParseError(message) = err;
-        GetHostedZoneLimitError::Unknown(message.to_string())
+        GetHostedZoneLimitError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetHostedZoneLimitError {
@@ -12851,7 +13061,8 @@ impl Error for GetHostedZoneLimitError {
             GetHostedZoneLimitError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetHostedZoneLimitError::Unknown(ref cause) => cause,
+            GetHostedZoneLimitError::ParseError(ref cause) => cause,
+            GetHostedZoneLimitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12868,27 +13079,35 @@ pub enum GetQueryLoggingConfigError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetQueryLoggingConfigError {
-    pub fn from_body(body: &str) -> GetQueryLoggingConfigError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    GetQueryLoggingConfigError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetQueryLoggingConfigError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetQueryLoggingConfigError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchQueryLoggingConfig" => {
+                        return GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchQueryLoggingConfig" => GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(
-                    String::from(parsed_error.message),
-                ),
-                _ => GetQueryLoggingConfigError::Unknown(String::from(body)),
-            },
-            Err(_) => GetQueryLoggingConfigError::Unknown(body.to_string()),
+            }
         }
+        GetQueryLoggingConfigError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12903,7 +13122,7 @@ impl GetQueryLoggingConfigError {
 impl From<XmlParseError> for GetQueryLoggingConfigError {
     fn from(err: XmlParseError) -> GetQueryLoggingConfigError {
         let XmlParseError(message) = err;
-        GetQueryLoggingConfigError::Unknown(message.to_string())
+        GetQueryLoggingConfigError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetQueryLoggingConfigError {
@@ -12936,7 +13155,8 @@ impl Error for GetQueryLoggingConfigError {
             GetQueryLoggingConfigError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetQueryLoggingConfigError::Unknown(ref cause) => cause,
+            GetQueryLoggingConfigError::ParseError(ref cause) => cause,
+            GetQueryLoggingConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12955,32 +13175,40 @@ pub enum GetReusableDelegationSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetReusableDelegationSetError {
-    pub fn from_body(body: &str) -> GetReusableDelegationSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DelegationSetNotReusable" => {
-                    GetReusableDelegationSetError::DelegationSetNotReusable(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> GetReusableDelegationSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DelegationSetNotReusable" => {
+                        return GetReusableDelegationSetError::DelegationSetNotReusable(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidInput" => {
+                        return GetReusableDelegationSetError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDelegationSet" => {
+                        return GetReusableDelegationSetError::NoSuchDelegationSet(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => {
-                    GetReusableDelegationSetError::InvalidInput(String::from(parsed_error.message))
-                }
-                "NoSuchDelegationSet" => GetReusableDelegationSetError::NoSuchDelegationSet(
-                    String::from(parsed_error.message),
-                ),
-                _ => GetReusableDelegationSetError::Unknown(String::from(body)),
-            },
-            Err(_) => GetReusableDelegationSetError::Unknown(body.to_string()),
+            }
         }
+        GetReusableDelegationSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12995,7 +13223,7 @@ impl GetReusableDelegationSetError {
 impl From<XmlParseError> for GetReusableDelegationSetError {
     fn from(err: XmlParseError) -> GetReusableDelegationSetError {
         let XmlParseError(message) = err;
-        GetReusableDelegationSetError::Unknown(message.to_string())
+        GetReusableDelegationSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetReusableDelegationSetError {
@@ -13029,7 +13257,8 @@ impl Error for GetReusableDelegationSetError {
             GetReusableDelegationSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetReusableDelegationSetError::Unknown(ref cause) => cause,
+            GetReusableDelegationSetError::ParseError(ref cause) => cause,
+            GetReusableDelegationSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13046,27 +13275,35 @@ pub enum GetReusableDelegationSetLimitError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetReusableDelegationSetLimitError {
-    pub fn from_body(body: &str) -> GetReusableDelegationSetLimitError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => GetReusableDelegationSetLimitError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchDelegationSet" => GetReusableDelegationSetLimitError::NoSuchDelegationSet(
-                    String::from(parsed_error.message),
-                ),
-                _ => GetReusableDelegationSetLimitError::Unknown(String::from(body)),
-            },
-            Err(_) => GetReusableDelegationSetLimitError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetReusableDelegationSetLimitError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetReusableDelegationSetLimitError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDelegationSet" => {
+                        return GetReusableDelegationSetLimitError::NoSuchDelegationSet(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        GetReusableDelegationSetLimitError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13081,7 +13318,7 @@ impl GetReusableDelegationSetLimitError {
 impl From<XmlParseError> for GetReusableDelegationSetLimitError {
     fn from(err: XmlParseError) -> GetReusableDelegationSetLimitError {
         let XmlParseError(message) = err;
-        GetReusableDelegationSetLimitError::Unknown(message.to_string())
+        GetReusableDelegationSetLimitError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetReusableDelegationSetLimitError {
@@ -13114,7 +13351,8 @@ impl Error for GetReusableDelegationSetLimitError {
             GetReusableDelegationSetLimitError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetReusableDelegationSetLimitError::Unknown(ref cause) => cause,
+            GetReusableDelegationSetLimitError::ParseError(ref cause) => cause,
+            GetReusableDelegationSetLimitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13131,27 +13369,35 @@ pub enum GetTrafficPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetTrafficPolicyError {
-    pub fn from_body(body: &str) -> GetTrafficPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    GetTrafficPolicyError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetTrafficPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetTrafficPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchTrafficPolicy" => {
+                        return GetTrafficPolicyError::NoSuchTrafficPolicy(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchTrafficPolicy" => {
-                    GetTrafficPolicyError::NoSuchTrafficPolicy(String::from(parsed_error.message))
-                }
-                _ => GetTrafficPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => GetTrafficPolicyError::Unknown(body.to_string()),
+            }
         }
+        GetTrafficPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13166,7 +13412,7 @@ impl GetTrafficPolicyError {
 impl From<XmlParseError> for GetTrafficPolicyError {
     fn from(err: XmlParseError) -> GetTrafficPolicyError {
         let XmlParseError(message) = err;
-        GetTrafficPolicyError::Unknown(message.to_string())
+        GetTrafficPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetTrafficPolicyError {
@@ -13197,7 +13443,8 @@ impl Error for GetTrafficPolicyError {
             GetTrafficPolicyError::Validation(ref cause) => cause,
             GetTrafficPolicyError::Credentials(ref err) => err.description(),
             GetTrafficPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTrafficPolicyError::Unknown(ref cause) => cause,
+            GetTrafficPolicyError::ParseError(ref cause) => cause,
+            GetTrafficPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13214,29 +13461,35 @@ pub enum GetTrafficPolicyInstanceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetTrafficPolicyInstanceError {
-    pub fn from_body(body: &str) -> GetTrafficPolicyInstanceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    GetTrafficPolicyInstanceError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetTrafficPolicyInstanceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetTrafficPolicyInstanceError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchTrafficPolicyInstance" => {
+                        return GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "NoSuchTrafficPolicyInstance" => {
-                    GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => GetTrafficPolicyInstanceError::Unknown(String::from(body)),
-            },
-            Err(_) => GetTrafficPolicyInstanceError::Unknown(body.to_string()),
+            }
         }
+        GetTrafficPolicyInstanceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13251,7 +13504,7 @@ impl GetTrafficPolicyInstanceError {
 impl From<XmlParseError> for GetTrafficPolicyInstanceError {
     fn from(err: XmlParseError) -> GetTrafficPolicyInstanceError {
         let XmlParseError(message) = err;
-        GetTrafficPolicyInstanceError::Unknown(message.to_string())
+        GetTrafficPolicyInstanceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetTrafficPolicyInstanceError {
@@ -13284,7 +13537,8 @@ impl Error for GetTrafficPolicyInstanceError {
             GetTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetTrafficPolicyInstanceError::Unknown(ref cause) => cause,
+            GetTrafficPolicyInstanceError::ParseError(ref cause) => cause,
+            GetTrafficPolicyInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13297,21 +13551,25 @@ pub enum GetTrafficPolicyInstanceCountError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetTrafficPolicyInstanceCountError {
-    pub fn from_body(body: &str) -> GetTrafficPolicyInstanceCountError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetTrafficPolicyInstanceCountError::Unknown(String::from(body)),
-            },
-            Err(_) => GetTrafficPolicyInstanceCountError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetTrafficPolicyInstanceCountError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetTrafficPolicyInstanceCountError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13326,7 +13584,7 @@ impl GetTrafficPolicyInstanceCountError {
 impl From<XmlParseError> for GetTrafficPolicyInstanceCountError {
     fn from(err: XmlParseError) -> GetTrafficPolicyInstanceCountError {
         let XmlParseError(message) = err;
-        GetTrafficPolicyInstanceCountError::Unknown(message.to_string())
+        GetTrafficPolicyInstanceCountError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetTrafficPolicyInstanceCountError {
@@ -13357,7 +13615,8 @@ impl Error for GetTrafficPolicyInstanceCountError {
             GetTrafficPolicyInstanceCountError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetTrafficPolicyInstanceCountError::Unknown(ref cause) => cause,
+            GetTrafficPolicyInstanceCountError::ParseError(ref cause) => cause,
+            GetTrafficPolicyInstanceCountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13372,24 +13631,30 @@ pub enum ListGeoLocationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListGeoLocationsError {
-    pub fn from_body(body: &str) -> ListGeoLocationsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ListGeoLocationsError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListGeoLocationsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListGeoLocationsError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ListGeoLocationsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListGeoLocationsError::Unknown(body.to_string()),
+            }
         }
+        ListGeoLocationsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13404,7 +13669,7 @@ impl ListGeoLocationsError {
 impl From<XmlParseError> for ListGeoLocationsError {
     fn from(err: XmlParseError) -> ListGeoLocationsError {
         let XmlParseError(message) = err;
-        ListGeoLocationsError::Unknown(message.to_string())
+        ListGeoLocationsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListGeoLocationsError {
@@ -13434,7 +13699,8 @@ impl Error for ListGeoLocationsError {
             ListGeoLocationsError::Validation(ref cause) => cause,
             ListGeoLocationsError::Credentials(ref err) => err.description(),
             ListGeoLocationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGeoLocationsError::Unknown(ref cause) => cause,
+            ListGeoLocationsError::ParseError(ref cause) => cause,
+            ListGeoLocationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13451,27 +13717,35 @@ pub enum ListHealthChecksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListHealthChecksError {
-    pub fn from_body(body: &str) -> ListHealthChecksError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "IncompatibleVersion" => {
-                    ListHealthChecksError::IncompatibleVersion(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListHealthChecksError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "IncompatibleVersion" => {
+                        return ListHealthChecksError::IncompatibleVersion(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return ListHealthChecksError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => {
-                    ListHealthChecksError::InvalidInput(String::from(parsed_error.message))
-                }
-                _ => ListHealthChecksError::Unknown(String::from(body)),
-            },
-            Err(_) => ListHealthChecksError::Unknown(body.to_string()),
+            }
         }
+        ListHealthChecksError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13486,7 +13760,7 @@ impl ListHealthChecksError {
 impl From<XmlParseError> for ListHealthChecksError {
     fn from(err: XmlParseError) -> ListHealthChecksError {
         let XmlParseError(message) = err;
-        ListHealthChecksError::Unknown(message.to_string())
+        ListHealthChecksError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListHealthChecksError {
@@ -13517,7 +13791,8 @@ impl Error for ListHealthChecksError {
             ListHealthChecksError::Validation(ref cause) => cause,
             ListHealthChecksError::Credentials(ref err) => err.description(),
             ListHealthChecksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListHealthChecksError::Unknown(ref cause) => cause,
+            ListHealthChecksError::ParseError(ref cause) => cause,
+            ListHealthChecksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13536,30 +13811,40 @@ pub enum ListHostedZonesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListHostedZonesError {
-    pub fn from_body(body: &str) -> ListHostedZonesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DelegationSetNotReusable" => ListHostedZonesError::DelegationSetNotReusable(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidInput" => {
-                    ListHostedZonesError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListHostedZonesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DelegationSetNotReusable" => {
+                        return ListHostedZonesError::DelegationSetNotReusable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return ListHostedZonesError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDelegationSet" => {
+                        return ListHostedZonesError::NoSuchDelegationSet(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchDelegationSet" => {
-                    ListHostedZonesError::NoSuchDelegationSet(String::from(parsed_error.message))
-                }
-                _ => ListHostedZonesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListHostedZonesError::Unknown(body.to_string()),
+            }
         }
+        ListHostedZonesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13574,7 +13859,7 @@ impl ListHostedZonesError {
 impl From<XmlParseError> for ListHostedZonesError {
     fn from(err: XmlParseError) -> ListHostedZonesError {
         let XmlParseError(message) = err;
-        ListHostedZonesError::Unknown(message.to_string())
+        ListHostedZonesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListHostedZonesError {
@@ -13606,7 +13891,8 @@ impl Error for ListHostedZonesError {
             ListHostedZonesError::Validation(ref cause) => cause,
             ListHostedZonesError::Credentials(ref err) => err.description(),
             ListHostedZonesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListHostedZonesError::Unknown(ref cause) => cause,
+            ListHostedZonesError::ParseError(ref cause) => cause,
+            ListHostedZonesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13623,27 +13909,35 @@ pub enum ListHostedZonesByNameError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListHostedZonesByNameError {
-    pub fn from_body(body: &str) -> ListHostedZonesByNameError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidDomainName" => ListHostedZonesByNameError::InvalidDomainName(String::from(
-                    parsed_error.message,
-                )),
-                "InvalidInput" => {
-                    ListHostedZonesByNameError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListHostedZonesByNameError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidDomainName" => {
+                        return ListHostedZonesByNameError::InvalidDomainName(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return ListHostedZonesByNameError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ListHostedZonesByNameError::Unknown(String::from(body)),
-            },
-            Err(_) => ListHostedZonesByNameError::Unknown(body.to_string()),
+            }
         }
+        ListHostedZonesByNameError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13658,7 +13952,7 @@ impl ListHostedZonesByNameError {
 impl From<XmlParseError> for ListHostedZonesByNameError {
     fn from(err: XmlParseError) -> ListHostedZonesByNameError {
         let XmlParseError(message) = err;
-        ListHostedZonesByNameError::Unknown(message.to_string())
+        ListHostedZonesByNameError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListHostedZonesByNameError {
@@ -13691,7 +13985,8 @@ impl Error for ListHostedZonesByNameError {
             ListHostedZonesByNameError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListHostedZonesByNameError::Unknown(ref cause) => cause,
+            ListHostedZonesByNameError::ParseError(ref cause) => cause,
+            ListHostedZonesByNameError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13710,30 +14005,40 @@ pub enum ListQueryLoggingConfigsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListQueryLoggingConfigsError {
-    pub fn from_body(body: &str) -> ListQueryLoggingConfigsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ListQueryLoggingConfigsError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListQueryLoggingConfigsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListQueryLoggingConfigsError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidPaginationToken" => {
+                        return ListQueryLoggingConfigsError::InvalidPaginationToken(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return ListQueryLoggingConfigsError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidPaginationToken" => ListQueryLoggingConfigsError::InvalidPaginationToken(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchHostedZone" => ListQueryLoggingConfigsError::NoSuchHostedZone(String::from(
-                    parsed_error.message,
-                )),
-                _ => ListQueryLoggingConfigsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListQueryLoggingConfigsError::Unknown(body.to_string()),
+            }
         }
+        ListQueryLoggingConfigsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13748,7 +14053,7 @@ impl ListQueryLoggingConfigsError {
 impl From<XmlParseError> for ListQueryLoggingConfigsError {
     fn from(err: XmlParseError) -> ListQueryLoggingConfigsError {
         let XmlParseError(message) = err;
-        ListQueryLoggingConfigsError::Unknown(message.to_string())
+        ListQueryLoggingConfigsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListQueryLoggingConfigsError {
@@ -13782,7 +14087,8 @@ impl Error for ListQueryLoggingConfigsError {
             ListQueryLoggingConfigsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListQueryLoggingConfigsError::Unknown(ref cause) => cause,
+            ListQueryLoggingConfigsError::ParseError(ref cause) => cause,
+            ListQueryLoggingConfigsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13799,27 +14105,35 @@ pub enum ListResourceRecordSetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourceRecordSetsError {
-    pub fn from_body(body: &str) -> ListResourceRecordSetsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ListResourceRecordSetsError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListResourceRecordSetsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListResourceRecordSetsError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return ListResourceRecordSetsError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchHostedZone" => ListResourceRecordSetsError::NoSuchHostedZone(String::from(
-                    parsed_error.message,
-                )),
-                _ => ListResourceRecordSetsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListResourceRecordSetsError::Unknown(body.to_string()),
+            }
         }
+        ListResourceRecordSetsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13834,7 +14148,7 @@ impl ListResourceRecordSetsError {
 impl From<XmlParseError> for ListResourceRecordSetsError {
     fn from(err: XmlParseError) -> ListResourceRecordSetsError {
         let XmlParseError(message) = err;
-        ListResourceRecordSetsError::Unknown(message.to_string())
+        ListResourceRecordSetsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListResourceRecordSetsError {
@@ -13867,7 +14181,8 @@ impl Error for ListResourceRecordSetsError {
             ListResourceRecordSetsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListResourceRecordSetsError::Unknown(ref cause) => cause,
+            ListResourceRecordSetsError::ParseError(ref cause) => cause,
+            ListResourceRecordSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13882,24 +14197,30 @@ pub enum ListReusableDelegationSetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListReusableDelegationSetsError {
-    pub fn from_body(body: &str) -> ListReusableDelegationSetsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => ListReusableDelegationSetsError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                _ => ListReusableDelegationSetsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListReusableDelegationSetsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListReusableDelegationSetsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListReusableDelegationSetsError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        ListReusableDelegationSetsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13914,7 +14235,7 @@ impl ListReusableDelegationSetsError {
 impl From<XmlParseError> for ListReusableDelegationSetsError {
     fn from(err: XmlParseError) -> ListReusableDelegationSetsError {
         let XmlParseError(message) = err;
-        ListReusableDelegationSetsError::Unknown(message.to_string())
+        ListReusableDelegationSetsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListReusableDelegationSetsError {
@@ -13946,7 +14267,8 @@ impl Error for ListReusableDelegationSetsError {
             ListReusableDelegationSetsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListReusableDelegationSetsError::Unknown(ref cause) => cause,
+            ListReusableDelegationSetsError::ParseError(ref cause) => cause,
+            ListReusableDelegationSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13969,36 +14291,50 @@ pub enum ListTagsForResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_body(body: &str) -> ListTagsForResourceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ListTagsForResourceError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListTagsForResourceError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHealthCheck" => {
+                        return ListTagsForResourceError::NoSuchHealthCheck(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return ListTagsForResourceError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PriorRequestNotComplete" => {
+                        return ListTagsForResourceError::PriorRequestNotComplete(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        return ListTagsForResourceError::Throttling(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchHealthCheck" => {
-                    ListTagsForResourceError::NoSuchHealthCheck(String::from(parsed_error.message))
-                }
-                "NoSuchHostedZone" => {
-                    ListTagsForResourceError::NoSuchHostedZone(String::from(parsed_error.message))
-                }
-                "PriorRequestNotComplete" => ListTagsForResourceError::PriorRequestNotComplete(
-                    String::from(parsed_error.message),
-                ),
-                "ThrottlingException" => {
-                    ListTagsForResourceError::Throttling(String::from(parsed_error.message))
-                }
-                _ => ListTagsForResourceError::Unknown(String::from(body)),
-            },
-            Err(_) => ListTagsForResourceError::Unknown(body.to_string()),
+            }
         }
+        ListTagsForResourceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14013,7 +14349,7 @@ impl ListTagsForResourceError {
 impl From<XmlParseError> for ListTagsForResourceError {
     fn from(err: XmlParseError) -> ListTagsForResourceError {
         let XmlParseError(message) = err;
-        ListTagsForResourceError::Unknown(message.to_string())
+        ListTagsForResourceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListTagsForResourceError {
@@ -14049,7 +14385,8 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTagsForResourceError::Unknown(ref cause) => cause,
+            ListTagsForResourceError::ParseError(ref cause) => cause,
+            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14072,36 +14409,50 @@ pub enum ListTagsForResourcesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourcesError {
-    pub fn from_body(body: &str) -> ListTagsForResourcesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ListTagsForResourcesError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourcesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListTagsForResourcesError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHealthCheck" => {
+                        return ListTagsForResourcesError::NoSuchHealthCheck(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return ListTagsForResourcesError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PriorRequestNotComplete" => {
+                        return ListTagsForResourcesError::PriorRequestNotComplete(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        return ListTagsForResourcesError::Throttling(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchHealthCheck" => {
-                    ListTagsForResourcesError::NoSuchHealthCheck(String::from(parsed_error.message))
-                }
-                "NoSuchHostedZone" => {
-                    ListTagsForResourcesError::NoSuchHostedZone(String::from(parsed_error.message))
-                }
-                "PriorRequestNotComplete" => ListTagsForResourcesError::PriorRequestNotComplete(
-                    String::from(parsed_error.message),
-                ),
-                "ThrottlingException" => {
-                    ListTagsForResourcesError::Throttling(String::from(parsed_error.message))
-                }
-                _ => ListTagsForResourcesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListTagsForResourcesError::Unknown(body.to_string()),
+            }
         }
+        ListTagsForResourcesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14116,7 +14467,7 @@ impl ListTagsForResourcesError {
 impl From<XmlParseError> for ListTagsForResourcesError {
     fn from(err: XmlParseError) -> ListTagsForResourcesError {
         let XmlParseError(message) = err;
-        ListTagsForResourcesError::Unknown(message.to_string())
+        ListTagsForResourcesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListTagsForResourcesError {
@@ -14152,7 +14503,8 @@ impl Error for ListTagsForResourcesError {
             ListTagsForResourcesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTagsForResourcesError::Unknown(ref cause) => cause,
+            ListTagsForResourcesError::ParseError(ref cause) => cause,
+            ListTagsForResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14167,24 +14519,30 @@ pub enum ListTrafficPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTrafficPoliciesError {
-    pub fn from_body(body: &str) -> ListTrafficPoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ListTrafficPoliciesError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListTrafficPoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListTrafficPoliciesError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ListTrafficPoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListTrafficPoliciesError::Unknown(body.to_string()),
+            }
         }
+        ListTrafficPoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14199,7 +14557,7 @@ impl ListTrafficPoliciesError {
 impl From<XmlParseError> for ListTrafficPoliciesError {
     fn from(err: XmlParseError) -> ListTrafficPoliciesError {
         let XmlParseError(message) = err;
-        ListTrafficPoliciesError::Unknown(message.to_string())
+        ListTrafficPoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListTrafficPoliciesError {
@@ -14231,7 +14589,8 @@ impl Error for ListTrafficPoliciesError {
             ListTrafficPoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTrafficPoliciesError::Unknown(ref cause) => cause,
+            ListTrafficPoliciesError::ParseError(ref cause) => cause,
+            ListTrafficPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14248,29 +14607,35 @@ pub enum ListTrafficPolicyInstancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTrafficPolicyInstancesError {
-    pub fn from_body(body: &str) -> ListTrafficPolicyInstancesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => ListTrafficPolicyInstancesError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchTrafficPolicyInstance" => {
-                    ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ListTrafficPolicyInstancesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListTrafficPolicyInstancesError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchTrafficPolicyInstance" => {
+                        return ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => ListTrafficPolicyInstancesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListTrafficPolicyInstancesError::Unknown(body.to_string()),
+            }
         }
+        ListTrafficPolicyInstancesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14285,7 +14650,7 @@ impl ListTrafficPolicyInstancesError {
 impl From<XmlParseError> for ListTrafficPolicyInstancesError {
     fn from(err: XmlParseError) -> ListTrafficPolicyInstancesError {
         let XmlParseError(message) = err;
-        ListTrafficPolicyInstancesError::Unknown(message.to_string())
+        ListTrafficPolicyInstancesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListTrafficPolicyInstancesError {
@@ -14318,7 +14683,8 @@ impl Error for ListTrafficPolicyInstancesError {
             ListTrafficPolicyInstancesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTrafficPolicyInstancesError::Unknown(ref cause) => cause,
+            ListTrafficPolicyInstancesError::ParseError(ref cause) => cause,
+            ListTrafficPolicyInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14337,34 +14703,25 @@ pub enum ListTrafficPolicyInstancesByHostedZoneError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTrafficPolicyInstancesByHostedZoneError {
-    pub fn from_body(body: &str) -> ListTrafficPolicyInstancesByHostedZoneError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchHostedZone" => {
-                    ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NoSuchTrafficPolicyInstance" => {
-                    ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => ListTrafficPolicyInstancesByHostedZoneError::Unknown(String::from(body)),
-            },
-            Err(_) => ListTrafficPolicyInstancesByHostedZoneError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListTrafficPolicyInstancesByHostedZoneError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "InvalidInput" => return ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(String::from(parsed_error.message)),"NoSuchHostedZone" => return ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message)),"NoSuchTrafficPolicyInstance" => return ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        ListTrafficPolicyInstancesByHostedZoneError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14379,7 +14736,7 @@ impl ListTrafficPolicyInstancesByHostedZoneError {
 impl From<XmlParseError> for ListTrafficPolicyInstancesByHostedZoneError {
     fn from(err: XmlParseError) -> ListTrafficPolicyInstancesByHostedZoneError {
         let XmlParseError(message) = err;
-        ListTrafficPolicyInstancesByHostedZoneError::Unknown(message.to_string())
+        ListTrafficPolicyInstancesByHostedZoneError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListTrafficPolicyInstancesByHostedZoneError {
@@ -14415,7 +14772,8 @@ impl Error for ListTrafficPolicyInstancesByHostedZoneError {
             ListTrafficPolicyInstancesByHostedZoneError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTrafficPolicyInstancesByHostedZoneError::Unknown(ref cause) => cause,
+            ListTrafficPolicyInstancesByHostedZoneError::ParseError(ref cause) => cause,
+            ListTrafficPolicyInstancesByHostedZoneError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14434,34 +14792,40 @@ pub enum ListTrafficPolicyInstancesByPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTrafficPolicyInstancesByPolicyError {
-    pub fn from_body(body: &str) -> ListTrafficPolicyInstancesByPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => ListTrafficPolicyInstancesByPolicyError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchTrafficPolicy" => {
-                    ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ListTrafficPolicyInstancesByPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListTrafficPolicyInstancesByPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchTrafficPolicy" => {
+                        return ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NoSuchTrafficPolicyInstance" => {
+                        return ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicyInstance(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "NoSuchTrafficPolicyInstance" => {
-                    ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicyInstance(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => ListTrafficPolicyInstancesByPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => ListTrafficPolicyInstancesByPolicyError::Unknown(body.to_string()),
+            }
         }
+        ListTrafficPolicyInstancesByPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14476,7 +14840,7 @@ impl ListTrafficPolicyInstancesByPolicyError {
 impl From<XmlParseError> for ListTrafficPolicyInstancesByPolicyError {
     fn from(err: XmlParseError) -> ListTrafficPolicyInstancesByPolicyError {
         let XmlParseError(message) = err;
-        ListTrafficPolicyInstancesByPolicyError::Unknown(message.to_string())
+        ListTrafficPolicyInstancesByPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListTrafficPolicyInstancesByPolicyError {
@@ -14512,7 +14876,8 @@ impl Error for ListTrafficPolicyInstancesByPolicyError {
             ListTrafficPolicyInstancesByPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTrafficPolicyInstancesByPolicyError::Unknown(ref cause) => cause,
+            ListTrafficPolicyInstancesByPolicyError::ParseError(ref cause) => cause,
+            ListTrafficPolicyInstancesByPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14529,27 +14894,35 @@ pub enum ListTrafficPolicyVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTrafficPolicyVersionsError {
-    pub fn from_body(body: &str) -> ListTrafficPolicyVersionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ListTrafficPolicyVersionsError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListTrafficPolicyVersionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListTrafficPolicyVersionsError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchTrafficPolicy" => {
+                        return ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchTrafficPolicy" => ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(
-                    String::from(parsed_error.message),
-                ),
-                _ => ListTrafficPolicyVersionsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListTrafficPolicyVersionsError::Unknown(body.to_string()),
+            }
         }
+        ListTrafficPolicyVersionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14564,7 +14937,7 @@ impl ListTrafficPolicyVersionsError {
 impl From<XmlParseError> for ListTrafficPolicyVersionsError {
     fn from(err: XmlParseError) -> ListTrafficPolicyVersionsError {
         let XmlParseError(message) = err;
-        ListTrafficPolicyVersionsError::Unknown(message.to_string())
+        ListTrafficPolicyVersionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListTrafficPolicyVersionsError {
@@ -14597,7 +14970,8 @@ impl Error for ListTrafficPolicyVersionsError {
             ListTrafficPolicyVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTrafficPolicyVersionsError::Unknown(ref cause) => cause,
+            ListTrafficPolicyVersionsError::ParseError(ref cause) => cause,
+            ListTrafficPolicyVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14616,32 +14990,40 @@ pub enum ListVPCAssociationAuthorizationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListVPCAssociationAuthorizationsError {
-    pub fn from_body(body: &str) -> ListVPCAssociationAuthorizationsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => ListVPCAssociationAuthorizationsError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidPaginationToken" => {
-                    ListVPCAssociationAuthorizationsError::InvalidPaginationToken(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ListVPCAssociationAuthorizationsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListVPCAssociationAuthorizationsError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidPaginationToken" => {
+                        return ListVPCAssociationAuthorizationsError::InvalidPaginationToken(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NoSuchHostedZone" => {
+                        return ListVPCAssociationAuthorizationsError::NoSuchHostedZone(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "NoSuchHostedZone" => ListVPCAssociationAuthorizationsError::NoSuchHostedZone(
-                    String::from(parsed_error.message),
-                ),
-                _ => ListVPCAssociationAuthorizationsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListVPCAssociationAuthorizationsError::Unknown(body.to_string()),
+            }
         }
+        ListVPCAssociationAuthorizationsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14656,7 +15038,7 @@ impl ListVPCAssociationAuthorizationsError {
 impl From<XmlParseError> for ListVPCAssociationAuthorizationsError {
     fn from(err: XmlParseError) -> ListVPCAssociationAuthorizationsError {
         let XmlParseError(message) = err;
-        ListVPCAssociationAuthorizationsError::Unknown(message.to_string())
+        ListVPCAssociationAuthorizationsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListVPCAssociationAuthorizationsError {
@@ -14690,7 +15072,8 @@ impl Error for ListVPCAssociationAuthorizationsError {
             ListVPCAssociationAuthorizationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListVPCAssociationAuthorizationsError::Unknown(ref cause) => cause,
+            ListVPCAssociationAuthorizationsError::ParseError(ref cause) => cause,
+            ListVPCAssociationAuthorizationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14707,27 +15090,33 @@ pub enum TestDNSAnswerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TestDNSAnswerError {
-    pub fn from_body(body: &str) -> TestDNSAnswerError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    TestDNSAnswerError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> TestDNSAnswerError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return TestDNSAnswerError::InvalidInput(String::from(parsed_error.message))
+                    }
+                    "NoSuchHostedZone" => {
+                        return TestDNSAnswerError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchHostedZone" => {
-                    TestDNSAnswerError::NoSuchHostedZone(String::from(parsed_error.message))
-                }
-                _ => TestDNSAnswerError::Unknown(String::from(body)),
-            },
-            Err(_) => TestDNSAnswerError::Unknown(body.to_string()),
+            }
         }
+        TestDNSAnswerError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14742,7 +15131,7 @@ impl TestDNSAnswerError {
 impl From<XmlParseError> for TestDNSAnswerError {
     fn from(err: XmlParseError) -> TestDNSAnswerError {
         let XmlParseError(message) = err;
-        TestDNSAnswerError::Unknown(message.to_string())
+        TestDNSAnswerError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for TestDNSAnswerError {
@@ -14773,7 +15162,8 @@ impl Error for TestDNSAnswerError {
             TestDNSAnswerError::Validation(ref cause) => cause,
             TestDNSAnswerError::Credentials(ref err) => err.description(),
             TestDNSAnswerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TestDNSAnswerError::Unknown(ref cause) => cause,
+            TestDNSAnswerError::ParseError(ref cause) => cause,
+            TestDNSAnswerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14792,30 +15182,40 @@ pub enum UpdateHealthCheckError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateHealthCheckError {
-    pub fn from_body(body: &str) -> UpdateHealthCheckError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "HealthCheckVersionMismatch" => UpdateHealthCheckError::HealthCheckVersionMismatch(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidInput" => {
-                    UpdateHealthCheckError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateHealthCheckError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "HealthCheckVersionMismatch" => {
+                        return UpdateHealthCheckError::HealthCheckVersionMismatch(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return UpdateHealthCheckError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHealthCheck" => {
+                        return UpdateHealthCheckError::NoSuchHealthCheck(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchHealthCheck" => {
-                    UpdateHealthCheckError::NoSuchHealthCheck(String::from(parsed_error.message))
-                }
-                _ => UpdateHealthCheckError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateHealthCheckError::Unknown(body.to_string()),
+            }
         }
+        UpdateHealthCheckError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14830,7 +15230,7 @@ impl UpdateHealthCheckError {
 impl From<XmlParseError> for UpdateHealthCheckError {
     fn from(err: XmlParseError) -> UpdateHealthCheckError {
         let XmlParseError(message) = err;
-        UpdateHealthCheckError::Unknown(message.to_string())
+        UpdateHealthCheckError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateHealthCheckError {
@@ -14864,7 +15264,8 @@ impl Error for UpdateHealthCheckError {
             UpdateHealthCheckError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateHealthCheckError::Unknown(ref cause) => cause,
+            UpdateHealthCheckError::ParseError(ref cause) => cause,
+            UpdateHealthCheckError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14881,27 +15282,35 @@ pub enum UpdateHostedZoneCommentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateHostedZoneCommentError {
-    pub fn from_body(body: &str) -> UpdateHostedZoneCommentError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    UpdateHostedZoneCommentError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateHostedZoneCommentError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return UpdateHostedZoneCommentError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchHostedZone" => {
+                        return UpdateHostedZoneCommentError::NoSuchHostedZone(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchHostedZone" => UpdateHostedZoneCommentError::NoSuchHostedZone(String::from(
-                    parsed_error.message,
-                )),
-                _ => UpdateHostedZoneCommentError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateHostedZoneCommentError::Unknown(body.to_string()),
+            }
         }
+        UpdateHostedZoneCommentError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14916,7 +15325,7 @@ impl UpdateHostedZoneCommentError {
 impl From<XmlParseError> for UpdateHostedZoneCommentError {
     fn from(err: XmlParseError) -> UpdateHostedZoneCommentError {
         let XmlParseError(message) = err;
-        UpdateHostedZoneCommentError::Unknown(message.to_string())
+        UpdateHostedZoneCommentError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateHostedZoneCommentError {
@@ -14949,7 +15358,8 @@ impl Error for UpdateHostedZoneCommentError {
             UpdateHostedZoneCommentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateHostedZoneCommentError::Unknown(ref cause) => cause,
+            UpdateHostedZoneCommentError::ParseError(ref cause) => cause,
+            UpdateHostedZoneCommentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14968,32 +15378,40 @@ pub enum UpdateTrafficPolicyCommentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTrafficPolicyCommentError {
-    pub fn from_body(body: &str) -> UpdateTrafficPolicyCommentError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConcurrentModification" => {
-                    UpdateTrafficPolicyCommentError::ConcurrentModification(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateTrafficPolicyCommentError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return UpdateTrafficPolicyCommentError::ConcurrentModification(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidInput" => {
+                        return UpdateTrafficPolicyCommentError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchTrafficPolicy" => {
+                        return UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => UpdateTrafficPolicyCommentError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchTrafficPolicy" => UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(
-                    String::from(parsed_error.message),
-                ),
-                _ => UpdateTrafficPolicyCommentError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateTrafficPolicyCommentError::Unknown(body.to_string()),
+            }
         }
+        UpdateTrafficPolicyCommentError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15008,7 +15426,7 @@ impl UpdateTrafficPolicyCommentError {
 impl From<XmlParseError> for UpdateTrafficPolicyCommentError {
     fn from(err: XmlParseError) -> UpdateTrafficPolicyCommentError {
         let XmlParseError(message) = err;
-        UpdateTrafficPolicyCommentError::Unknown(message.to_string())
+        UpdateTrafficPolicyCommentError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateTrafficPolicyCommentError {
@@ -15042,7 +15460,8 @@ impl Error for UpdateTrafficPolicyCommentError {
             UpdateTrafficPolicyCommentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateTrafficPolicyCommentError::Unknown(ref cause) => cause,
+            UpdateTrafficPolicyCommentError::ParseError(ref cause) => cause,
+            UpdateTrafficPolicyCommentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15065,40 +15484,50 @@ pub enum UpdateTrafficPolicyInstanceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTrafficPolicyInstanceError {
-    pub fn from_body(body: &str) -> UpdateTrafficPolicyInstanceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConflictingTypes" => UpdateTrafficPolicyInstanceError::ConflictingTypes(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidInput" => UpdateTrafficPolicyInstanceError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchTrafficPolicy" => UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchTrafficPolicyInstance" => {
-                    UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateTrafficPolicyInstanceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConflictingTypes" => {
+                        return UpdateTrafficPolicyInstanceError::ConflictingTypes(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return UpdateTrafficPolicyInstanceError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchTrafficPolicy" => {
+                        return UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchTrafficPolicyInstance" => {
+                        return UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "PriorRequestNotComplete" => {
+                        return UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "PriorRequestNotComplete" => {
-                    UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => UpdateTrafficPolicyInstanceError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateTrafficPolicyInstanceError::Unknown(body.to_string()),
+            }
         }
+        UpdateTrafficPolicyInstanceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15113,7 +15542,7 @@ impl UpdateTrafficPolicyInstanceError {
 impl From<XmlParseError> for UpdateTrafficPolicyInstanceError {
     fn from(err: XmlParseError) -> UpdateTrafficPolicyInstanceError {
         let XmlParseError(message) = err;
-        UpdateTrafficPolicyInstanceError::Unknown(message.to_string())
+        UpdateTrafficPolicyInstanceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateTrafficPolicyInstanceError {
@@ -15149,7 +15578,8 @@ impl Error for UpdateTrafficPolicyInstanceError {
             UpdateTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateTrafficPolicyInstanceError::Unknown(ref cause) => cause,
+            UpdateTrafficPolicyInstanceError::ParseError(ref cause) => cause,
+            UpdateTrafficPolicyInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15564,9 +15994,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateVPCWithHostedZoneError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AssociateVPCWithHostedZoneError::from_response(response))
                 }));
             }
 
@@ -15619,9 +16047,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ChangeResourceRecordSetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ChangeResourceRecordSetsError::from_response(response))
                 }));
             }
 
@@ -15674,11 +16100,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ChangeTagsForResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ChangeTagsForResourceError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15726,11 +16152,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateHealthCheckError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateHealthCheckError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15780,11 +16207,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateHostedZoneError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateHostedZoneError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15835,9 +16263,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateQueryLoggingConfigError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateQueryLoggingConfigError::from_response(response))
                 }));
             }
 
@@ -15889,9 +16315,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReusableDelegationSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateReusableDelegationSetError::from_response(response))
                 }));
             }
 
@@ -15944,11 +16368,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTrafficPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateTrafficPolicyError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15999,9 +16423,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTrafficPolicyInstanceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateTrafficPolicyInstanceError::from_response(response))
                 }));
             }
 
@@ -16055,9 +16477,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTrafficPolicyVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateTrafficPolicyVersionError::from_response(response))
                 }));
             }
 
@@ -16115,8 +16535,8 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateVPCAssociationAuthorizationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateVPCAssociationAuthorizationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -16162,11 +16582,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteHealthCheckError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteHealthCheckError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16205,11 +16626,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteHostedZoneError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteHostedZoneError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16249,9 +16671,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteQueryLoggingConfigError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteQueryLoggingConfigError::from_response(response))
                 }));
             }
 
@@ -16292,9 +16712,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReusableDelegationSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteReusableDelegationSetError::from_response(response))
                 }));
             }
 
@@ -16340,11 +16758,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTrafficPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteTrafficPolicyError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16384,9 +16802,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTrafficPolicyInstanceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteTrafficPolicyInstanceError::from_response(response))
                 }));
             }
 
@@ -16444,8 +16860,8 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVPCAssociationAuthorizationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeleteVPCAssociationAuthorizationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -16502,9 +16918,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateVPCFromHostedZoneError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DisassociateVPCFromHostedZoneError::from_response(response))
                 }));
             }
 
@@ -16546,11 +16960,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAccountLimitError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetAccountLimitError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16589,11 +17004,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetChangeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetChangeError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16632,11 +17048,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCheckerIpRangesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetCheckerIpRangesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16687,11 +17104,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetGeoLocationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetGeoLocationError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16733,11 +17151,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetHealthCheckError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetHealthCheckError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16776,11 +17195,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetHealthCheckCountError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetHealthCheckCountError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16824,8 +17243,8 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetHealthCheckLastFailureReasonError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetHealthCheckLastFailureReasonError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -16871,11 +17290,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetHealthCheckStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetHealthCheckStatusError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16914,11 +17333,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetHostedZoneError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetHostedZoneError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16957,11 +17377,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetHostedZoneCountError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetHostedZoneCountError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17000,11 +17421,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetHostedZoneLimitError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetHostedZoneLimitError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17043,11 +17465,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetQueryLoggingConfigError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetQueryLoggingConfigError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17087,9 +17509,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReusableDelegationSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetReusableDelegationSetError::from_response(response))
                 }));
             }
 
@@ -17131,9 +17551,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReusableDelegationSetLimitError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetReusableDelegationSetLimitError::from_response(response))
                 }));
             }
 
@@ -17179,11 +17597,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTrafficPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetTrafficPolicyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17223,9 +17642,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTrafficPolicyInstanceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetTrafficPolicyInstanceError::from_response(response))
                 }));
             }
 
@@ -17267,9 +17684,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTrafficPolicyInstanceCountError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetTrafficPolicyInstanceCountError::from_response(response))
                 }));
             }
 
@@ -17326,11 +17741,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListGeoLocationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListGeoLocationsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17378,11 +17794,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListHealthChecksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListHealthChecksError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17433,11 +17850,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListHostedZonesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListHostedZonesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17488,11 +17906,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListHostedZonesByNameError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListHostedZonesByNameError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17544,9 +17962,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListQueryLoggingConfigsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListQueryLoggingConfigsError::from_response(response))
                 }));
             }
 
@@ -17605,9 +18021,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListResourceRecordSetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListResourceRecordSetsError::from_response(response))
                 }));
             }
 
@@ -17657,9 +18071,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListReusableDelegationSetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListReusableDelegationSetsError::from_response(response))
                 }));
             }
 
@@ -17703,11 +18115,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsForResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17758,11 +18170,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsForResourcesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourcesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17810,11 +18222,11 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTrafficPoliciesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17869,9 +18281,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPolicyInstancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListTrafficPolicyInstancesError::from_response(response))
                 }));
             }
 
@@ -17928,8 +18338,8 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPolicyInstancesByHostedZoneError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ListTrafficPolicyInstancesByHostedZoneError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -17993,8 +18403,8 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPolicyInstancesByPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ListTrafficPolicyInstancesByPolicyError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -18047,9 +18457,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTrafficPolicyVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListTrafficPolicyVersionsError::from_response(response))
                 }));
             }
 
@@ -18103,8 +18511,8 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVPCAssociationAuthorizationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ListVPCAssociationAuthorizationsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -18162,11 +18570,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TestDNSAnswerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TestDNSAnswerError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18217,11 +18626,12 @@ impl Route53 for Route53Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateHealthCheckError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateHealthCheckError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18270,9 +18680,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateHostedZoneCommentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateHostedZoneCommentError::from_response(response))
                 }));
             }
 
@@ -18326,9 +18734,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTrafficPolicyCommentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateTrafficPolicyCommentError::from_response(response))
                 }));
             }
 
@@ -18378,9 +18784,7 @@ impl Route53 for Route53Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTrafficPolicyInstanceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateTrafficPolicyInstanceError::from_response(response))
                 }));
             }
 

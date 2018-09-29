@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -12775,33 +12775,45 @@ pub enum AddClientIDToOpenIDConnectProviderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddClientIDToOpenIDConnectProviderError {
-    pub fn from_body(body: &str) -> AddClientIDToOpenIDConnectProviderError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => AddClientIDToOpenIDConnectProviderError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceeded" => AddClientIDToOpenIDConnectProviderError::LimitExceeded(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchEntity" => AddClientIDToOpenIDConnectProviderError::NoSuchEntity(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailure" => AddClientIDToOpenIDConnectProviderError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
-                _ => AddClientIDToOpenIDConnectProviderError::Unknown(String::from(body)),
-            },
-            Err(_) => AddClientIDToOpenIDConnectProviderError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> AddClientIDToOpenIDConnectProviderError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return AddClientIDToOpenIDConnectProviderError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return AddClientIDToOpenIDConnectProviderError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return AddClientIDToOpenIDConnectProviderError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return AddClientIDToOpenIDConnectProviderError::ServiceFailure(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        AddClientIDToOpenIDConnectProviderError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12816,7 +12828,7 @@ impl AddClientIDToOpenIDConnectProviderError {
 impl From<XmlParseError> for AddClientIDToOpenIDConnectProviderError {
     fn from(err: XmlParseError) -> AddClientIDToOpenIDConnectProviderError {
         let XmlParseError(message) = err;
-        AddClientIDToOpenIDConnectProviderError::Unknown(message.to_string())
+        AddClientIDToOpenIDConnectProviderError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AddClientIDToOpenIDConnectProviderError {
@@ -12851,7 +12863,8 @@ impl Error for AddClientIDToOpenIDConnectProviderError {
             AddClientIDToOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AddClientIDToOpenIDConnectProviderError::Unknown(ref cause) => cause,
+            AddClientIDToOpenIDConnectProviderError::ParseError(ref cause) => cause,
+            AddClientIDToOpenIDConnectProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12874,36 +12887,50 @@ pub enum AddRoleToInstanceProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddRoleToInstanceProfileError {
-    pub fn from_body(body: &str) -> AddRoleToInstanceProfileError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => AddRoleToInstanceProfileError::EntityAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceeded" => {
-                    AddRoleToInstanceProfileError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> AddRoleToInstanceProfileError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return AddRoleToInstanceProfileError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return AddRoleToInstanceProfileError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return AddRoleToInstanceProfileError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return AddRoleToInstanceProfileError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnmodifiableEntity" => {
+                        return AddRoleToInstanceProfileError::UnmodifiableEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    AddRoleToInstanceProfileError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => AddRoleToInstanceProfileError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                "UnmodifiableEntity" => AddRoleToInstanceProfileError::UnmodifiableEntity(
-                    String::from(parsed_error.message),
-                ),
-                _ => AddRoleToInstanceProfileError::Unknown(String::from(body)),
-            },
-            Err(_) => AddRoleToInstanceProfileError::Unknown(body.to_string()),
+            }
         }
+        AddRoleToInstanceProfileError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12918,7 +12945,7 @@ impl AddRoleToInstanceProfileError {
 impl From<XmlParseError> for AddRoleToInstanceProfileError {
     fn from(err: XmlParseError) -> AddRoleToInstanceProfileError {
         let XmlParseError(message) = err;
-        AddRoleToInstanceProfileError::Unknown(message.to_string())
+        AddRoleToInstanceProfileError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AddRoleToInstanceProfileError {
@@ -12954,7 +12981,8 @@ impl Error for AddRoleToInstanceProfileError {
             AddRoleToInstanceProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AddRoleToInstanceProfileError::Unknown(ref cause) => cause,
+            AddRoleToInstanceProfileError::ParseError(ref cause) => cause,
+            AddRoleToInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12973,30 +13001,38 @@ pub enum AddUserToGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddUserToGroupError {
-    pub fn from_body(body: &str) -> AddUserToGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    AddUserToGroupError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> AddUserToGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return AddUserToGroupError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return AddUserToGroupError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return AddUserToGroupError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    AddUserToGroupError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    AddUserToGroupError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => AddUserToGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => AddUserToGroupError::Unknown(body.to_string()),
+            }
         }
+        AddUserToGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13011,7 +13047,7 @@ impl AddUserToGroupError {
 impl From<XmlParseError> for AddUserToGroupError {
     fn from(err: XmlParseError) -> AddUserToGroupError {
         let XmlParseError(message) = err;
-        AddUserToGroupError::Unknown(message.to_string())
+        AddUserToGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AddUserToGroupError {
@@ -13043,7 +13079,8 @@ impl Error for AddUserToGroupError {
             AddUserToGroupError::Validation(ref cause) => cause,
             AddUserToGroupError::Credentials(ref err) => err.description(),
             AddUserToGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddUserToGroupError::Unknown(ref cause) => cause,
+            AddUserToGroupError::ParseError(ref cause) => cause,
+            AddUserToGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13066,36 +13103,50 @@ pub enum AttachGroupPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AttachGroupPolicyError {
-    pub fn from_body(body: &str) -> AttachGroupPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    AttachGroupPolicyError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> AttachGroupPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return AttachGroupPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return AttachGroupPolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return AttachGroupPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PolicyNotAttachable" => {
+                        return AttachGroupPolicyError::PolicyNotAttachable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return AttachGroupPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    AttachGroupPolicyError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    AttachGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "PolicyNotAttachable" => {
-                    AttachGroupPolicyError::PolicyNotAttachable(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    AttachGroupPolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => AttachGroupPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => AttachGroupPolicyError::Unknown(body.to_string()),
+            }
         }
+        AttachGroupPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13110,7 +13161,7 @@ impl AttachGroupPolicyError {
 impl From<XmlParseError> for AttachGroupPolicyError {
     fn from(err: XmlParseError) -> AttachGroupPolicyError {
         let XmlParseError(message) = err;
-        AttachGroupPolicyError::Unknown(message.to_string())
+        AttachGroupPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AttachGroupPolicyError {
@@ -13146,7 +13197,8 @@ impl Error for AttachGroupPolicyError {
             AttachGroupPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AttachGroupPolicyError::Unknown(ref cause) => cause,
+            AttachGroupPolicyError::ParseError(ref cause) => cause,
+            AttachGroupPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13171,39 +13223,55 @@ pub enum AttachRolePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AttachRolePolicyError {
-    pub fn from_body(body: &str) -> AttachRolePolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    AttachRolePolicyError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> AttachRolePolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return AttachRolePolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return AttachRolePolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return AttachRolePolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PolicyNotAttachable" => {
+                        return AttachRolePolicyError::PolicyNotAttachable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return AttachRolePolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnmodifiableEntity" => {
+                        return AttachRolePolicyError::UnmodifiableEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    AttachRolePolicyError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    AttachRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "PolicyNotAttachable" => {
-                    AttachRolePolicyError::PolicyNotAttachable(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    AttachRolePolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                "UnmodifiableEntity" => {
-                    AttachRolePolicyError::UnmodifiableEntity(String::from(parsed_error.message))
-                }
-                _ => AttachRolePolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => AttachRolePolicyError::Unknown(body.to_string()),
+            }
         }
+        AttachRolePolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13218,7 +13286,7 @@ impl AttachRolePolicyError {
 impl From<XmlParseError> for AttachRolePolicyError {
     fn from(err: XmlParseError) -> AttachRolePolicyError {
         let XmlParseError(message) = err;
-        AttachRolePolicyError::Unknown(message.to_string())
+        AttachRolePolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AttachRolePolicyError {
@@ -13253,7 +13321,8 @@ impl Error for AttachRolePolicyError {
             AttachRolePolicyError::Validation(ref cause) => cause,
             AttachRolePolicyError::Credentials(ref err) => err.description(),
             AttachRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachRolePolicyError::Unknown(ref cause) => cause,
+            AttachRolePolicyError::ParseError(ref cause) => cause,
+            AttachRolePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13276,36 +13345,50 @@ pub enum AttachUserPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AttachUserPolicyError {
-    pub fn from_body(body: &str) -> AttachUserPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    AttachUserPolicyError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> AttachUserPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return AttachUserPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return AttachUserPolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return AttachUserPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PolicyNotAttachable" => {
+                        return AttachUserPolicyError::PolicyNotAttachable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return AttachUserPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    AttachUserPolicyError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    AttachUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "PolicyNotAttachable" => {
-                    AttachUserPolicyError::PolicyNotAttachable(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    AttachUserPolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => AttachUserPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => AttachUserPolicyError::Unknown(body.to_string()),
+            }
         }
+        AttachUserPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13320,7 +13403,7 @@ impl AttachUserPolicyError {
 impl From<XmlParseError> for AttachUserPolicyError {
     fn from(err: XmlParseError) -> AttachUserPolicyError {
         let XmlParseError(message) = err;
-        AttachUserPolicyError::Unknown(message.to_string())
+        AttachUserPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AttachUserPolicyError {
@@ -13354,7 +13437,8 @@ impl Error for AttachUserPolicyError {
             AttachUserPolicyError::Validation(ref cause) => cause,
             AttachUserPolicyError::Credentials(ref err) => err.description(),
             AttachUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachUserPolicyError::Unknown(ref cause) => cause,
+            AttachUserPolicyError::ParseError(ref cause) => cause,
+            AttachUserPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13379,41 +13463,53 @@ pub enum ChangePasswordError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ChangePasswordError {
-    pub fn from_body(body: &str) -> ChangePasswordError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityTemporarilyUnmodifiable" => {
-                    ChangePasswordError::EntityTemporarilyUnmodifiable(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ChangePasswordError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityTemporarilyUnmodifiable" => {
+                        return ChangePasswordError::EntityTemporarilyUnmodifiable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidUserType" => {
+                        return ChangePasswordError::InvalidUserType(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return ChangePasswordError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return ChangePasswordError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "PasswordPolicyViolation" => {
+                        return ChangePasswordError::PasswordPolicyViolation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ChangePasswordError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidUserType" => {
-                    ChangePasswordError::InvalidUserType(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => {
-                    ChangePasswordError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    ChangePasswordError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "PasswordPolicyViolation" => {
-                    ChangePasswordError::PasswordPolicyViolation(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    ChangePasswordError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => ChangePasswordError::Unknown(String::from(body)),
-            },
-            Err(_) => ChangePasswordError::Unknown(body.to_string()),
+            }
         }
+        ChangePasswordError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13428,7 +13524,7 @@ impl ChangePasswordError {
 impl From<XmlParseError> for ChangePasswordError {
     fn from(err: XmlParseError) -> ChangePasswordError {
         let XmlParseError(message) = err;
-        ChangePasswordError::Unknown(message.to_string())
+        ChangePasswordError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ChangePasswordError {
@@ -13463,7 +13559,8 @@ impl Error for ChangePasswordError {
             ChangePasswordError::Validation(ref cause) => cause,
             ChangePasswordError::Credentials(ref err) => err.description(),
             ChangePasswordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ChangePasswordError::Unknown(ref cause) => cause,
+            ChangePasswordError::ParseError(ref cause) => cause,
+            ChangePasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13482,30 +13579,40 @@ pub enum CreateAccessKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAccessKeyError {
-    pub fn from_body(body: &str) -> CreateAccessKeyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    CreateAccessKeyError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateAccessKeyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return CreateAccessKeyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return CreateAccessKeyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return CreateAccessKeyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    CreateAccessKeyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    CreateAccessKeyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => CreateAccessKeyError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateAccessKeyError::Unknown(body.to_string()),
+            }
         }
+        CreateAccessKeyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13520,7 +13627,7 @@ impl CreateAccessKeyError {
 impl From<XmlParseError> for CreateAccessKeyError {
     fn from(err: XmlParseError) -> CreateAccessKeyError {
         let XmlParseError(message) = err;
-        CreateAccessKeyError::Unknown(message.to_string())
+        CreateAccessKeyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateAccessKeyError {
@@ -13552,7 +13659,8 @@ impl Error for CreateAccessKeyError {
             CreateAccessKeyError::Validation(ref cause) => cause,
             CreateAccessKeyError::Credentials(ref err) => err.description(),
             CreateAccessKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateAccessKeyError::Unknown(ref cause) => cause,
+            CreateAccessKeyError::ParseError(ref cause) => cause,
+            CreateAccessKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13571,30 +13679,40 @@ pub enum CreateAccountAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAccountAliasError {
-    pub fn from_body(body: &str) -> CreateAccountAliasError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => {
-                    CreateAccountAliasError::EntityAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateAccountAliasError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return CreateAccountAliasError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateAccountAliasError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return CreateAccountAliasError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    CreateAccountAliasError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    CreateAccountAliasError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => CreateAccountAliasError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateAccountAliasError::Unknown(body.to_string()),
+            }
         }
+        CreateAccountAliasError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13609,7 +13727,7 @@ impl CreateAccountAliasError {
 impl From<XmlParseError> for CreateAccountAliasError {
     fn from(err: XmlParseError) -> CreateAccountAliasError {
         let XmlParseError(message) = err;
-        CreateAccountAliasError::Unknown(message.to_string())
+        CreateAccountAliasError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateAccountAliasError {
@@ -13643,7 +13761,8 @@ impl Error for CreateAccountAliasError {
             CreateAccountAliasError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateAccountAliasError::Unknown(ref cause) => cause,
+            CreateAccountAliasError::ParseError(ref cause) => cause,
+            CreateAccountAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13664,33 +13783,39 @@ pub enum CreateGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGroupError {
-    pub fn from_body(body: &str) -> CreateGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => {
-                    CreateGroupError::EntityAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return CreateGroupError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateGroupError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "NoSuchEntity" => {
+                        return CreateGroupError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return CreateGroupError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    CreateGroupError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    CreateGroupError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    CreateGroupError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => CreateGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateGroupError::Unknown(body.to_string()),
+            }
         }
+        CreateGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13705,7 +13830,7 @@ impl CreateGroupError {
 impl From<XmlParseError> for CreateGroupError {
     fn from(err: XmlParseError) -> CreateGroupError {
         let XmlParseError(message) = err;
-        CreateGroupError::Unknown(message.to_string())
+        CreateGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateGroupError {
@@ -13738,7 +13863,8 @@ impl Error for CreateGroupError {
             CreateGroupError::Validation(ref cause) => cause,
             CreateGroupError::Credentials(ref err) => err.description(),
             CreateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateGroupError::Unknown(ref cause) => cause,
+            CreateGroupError::ParseError(ref cause) => cause,
+            CreateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13757,30 +13883,40 @@ pub enum CreateInstanceProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateInstanceProfileError {
-    pub fn from_body(body: &str) -> CreateInstanceProfileError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => CreateInstanceProfileError::EntityAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceeded" => {
-                    CreateInstanceProfileError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateInstanceProfileError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return CreateInstanceProfileError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateInstanceProfileError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return CreateInstanceProfileError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    CreateInstanceProfileError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => CreateInstanceProfileError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateInstanceProfileError::Unknown(body.to_string()),
+            }
         }
+        CreateInstanceProfileError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13795,7 +13931,7 @@ impl CreateInstanceProfileError {
 impl From<XmlParseError> for CreateInstanceProfileError {
     fn from(err: XmlParseError) -> CreateInstanceProfileError {
         let XmlParseError(message) = err;
-        CreateInstanceProfileError::Unknown(message.to_string())
+        CreateInstanceProfileError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateInstanceProfileError {
@@ -13829,7 +13965,8 @@ impl Error for CreateInstanceProfileError {
             CreateInstanceProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateInstanceProfileError::Unknown(ref cause) => cause,
+            CreateInstanceProfileError::ParseError(ref cause) => cause,
+            CreateInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13852,36 +13989,50 @@ pub enum CreateLoginProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLoginProfileError {
-    pub fn from_body(body: &str) -> CreateLoginProfileError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => {
-                    CreateLoginProfileError::EntityAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateLoginProfileError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return CreateLoginProfileError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateLoginProfileError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return CreateLoginProfileError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PasswordPolicyViolation" => {
+                        return CreateLoginProfileError::PasswordPolicyViolation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return CreateLoginProfileError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    CreateLoginProfileError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    CreateLoginProfileError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "PasswordPolicyViolation" => CreateLoginProfileError::PasswordPolicyViolation(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailure" => {
-                    CreateLoginProfileError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => CreateLoginProfileError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateLoginProfileError::Unknown(body.to_string()),
+            }
         }
+        CreateLoginProfileError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13896,7 +14047,7 @@ impl CreateLoginProfileError {
 impl From<XmlParseError> for CreateLoginProfileError {
     fn from(err: XmlParseError) -> CreateLoginProfileError {
         let XmlParseError(message) = err;
-        CreateLoginProfileError::Unknown(message.to_string())
+        CreateLoginProfileError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateLoginProfileError {
@@ -13932,7 +14083,8 @@ impl Error for CreateLoginProfileError {
             CreateLoginProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateLoginProfileError::Unknown(ref cause) => cause,
+            CreateLoginProfileError::ParseError(ref cause) => cause,
+            CreateLoginProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13953,33 +14105,45 @@ pub enum CreateOpenIDConnectProviderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateOpenIDConnectProviderError {
-    pub fn from_body(body: &str) -> CreateOpenIDConnectProviderError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => CreateOpenIDConnectProviderError::EntityAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidInput" => CreateOpenIDConnectProviderError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "LimitExceeded" => CreateOpenIDConnectProviderError::LimitExceeded(String::from(
-                    parsed_error.message,
-                )),
-                "ServiceFailure" => CreateOpenIDConnectProviderError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => CreateOpenIDConnectProviderError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateOpenIDConnectProviderError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateOpenIDConnectProviderError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return CreateOpenIDConnectProviderError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return CreateOpenIDConnectProviderError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateOpenIDConnectProviderError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return CreateOpenIDConnectProviderError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        CreateOpenIDConnectProviderError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13994,7 +14158,7 @@ impl CreateOpenIDConnectProviderError {
 impl From<XmlParseError> for CreateOpenIDConnectProviderError {
     fn from(err: XmlParseError) -> CreateOpenIDConnectProviderError {
         let XmlParseError(message) = err;
-        CreateOpenIDConnectProviderError::Unknown(message.to_string())
+        CreateOpenIDConnectProviderError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateOpenIDConnectProviderError {
@@ -14029,7 +14193,8 @@ impl Error for CreateOpenIDConnectProviderError {
             CreateOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateOpenIDConnectProviderError::Unknown(ref cause) => cause,
+            CreateOpenIDConnectProviderError::ParseError(ref cause) => cause,
+            CreateOpenIDConnectProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14052,36 +14217,44 @@ pub enum CreatePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePolicyError {
-    pub fn from_body(body: &str) -> CreatePolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => {
-                    CreatePolicyError::EntityAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return CreatePolicyError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return CreatePolicyError::InvalidInput(String::from(parsed_error.message))
+                    }
+                    "LimitExceeded" => {
+                        return CreatePolicyError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "MalformedPolicyDocument" => {
+                        return CreatePolicyError::MalformedPolicyDocument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return CreatePolicyError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => {
-                    CreatePolicyError::InvalidInput(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => {
-                    CreatePolicyError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "MalformedPolicyDocument" => {
-                    CreatePolicyError::MalformedPolicyDocument(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    CreatePolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => CreatePolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => CreatePolicyError::Unknown(body.to_string()),
+            }
         }
+        CreatePolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14096,7 +14269,7 @@ impl CreatePolicyError {
 impl From<XmlParseError> for CreatePolicyError {
     fn from(err: XmlParseError) -> CreatePolicyError {
         let XmlParseError(message) = err;
-        CreatePolicyError::Unknown(message.to_string())
+        CreatePolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreatePolicyError {
@@ -14130,7 +14303,8 @@ impl Error for CreatePolicyError {
             CreatePolicyError::Validation(ref cause) => cause,
             CreatePolicyError::Credentials(ref err) => err.description(),
             CreatePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePolicyError::Unknown(ref cause) => cause,
+            CreatePolicyError::ParseError(ref cause) => cause,
+            CreatePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14153,36 +14327,50 @@ pub enum CreatePolicyVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePolicyVersionError {
-    pub fn from_body(body: &str) -> CreatePolicyVersionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    CreatePolicyVersionError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePolicyVersionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return CreatePolicyVersionError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreatePolicyVersionError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MalformedPolicyDocument" => {
+                        return CreatePolicyVersionError::MalformedPolicyDocument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return CreatePolicyVersionError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return CreatePolicyVersionError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    CreatePolicyVersionError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "MalformedPolicyDocument" => CreatePolicyVersionError::MalformedPolicyDocument(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchEntity" => {
-                    CreatePolicyVersionError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    CreatePolicyVersionError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => CreatePolicyVersionError::Unknown(String::from(body)),
-            },
-            Err(_) => CreatePolicyVersionError::Unknown(body.to_string()),
+            }
         }
+        CreatePolicyVersionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14197,7 +14385,7 @@ impl CreatePolicyVersionError {
 impl From<XmlParseError> for CreatePolicyVersionError {
     fn from(err: XmlParseError) -> CreatePolicyVersionError {
         let XmlParseError(message) = err;
-        CreatePolicyVersionError::Unknown(message.to_string())
+        CreatePolicyVersionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreatePolicyVersionError {
@@ -14233,7 +14421,8 @@ impl Error for CreatePolicyVersionError {
             CreatePolicyVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreatePolicyVersionError::Unknown(ref cause) => cause,
+            CreatePolicyVersionError::ParseError(ref cause) => cause,
+            CreatePolicyVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14256,34 +14445,44 @@ pub enum CreateRoleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRoleError {
-    pub fn from_body(body: &str) -> CreateRoleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => {
-                    CreateRoleError::EntityAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateRoleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return CreateRoleError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return CreateRoleError::InvalidInput(String::from(parsed_error.message))
+                    }
+                    "LimitExceeded" => {
+                        return CreateRoleError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "MalformedPolicyDocument" => {
+                        return CreateRoleError::MalformedPolicyDocument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return CreateRoleError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => CreateRoleError::InvalidInput(String::from(parsed_error.message)),
-                "LimitExceeded" => {
-                    CreateRoleError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "MalformedPolicyDocument" => {
-                    CreateRoleError::MalformedPolicyDocument(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    CreateRoleError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => CreateRoleError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateRoleError::Unknown(body.to_string()),
+            }
         }
+        CreateRoleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14298,7 +14497,7 @@ impl CreateRoleError {
 impl From<XmlParseError> for CreateRoleError {
     fn from(err: XmlParseError) -> CreateRoleError {
         let XmlParseError(message) = err;
-        CreateRoleError::Unknown(message.to_string())
+        CreateRoleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateRoleError {
@@ -14332,7 +14531,8 @@ impl Error for CreateRoleError {
             CreateRoleError::Validation(ref cause) => cause,
             CreateRoleError::Credentials(ref err) => err.description(),
             CreateRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateRoleError::Unknown(ref cause) => cause,
+            CreateRoleError::ParseError(ref cause) => cause,
+            CreateRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14353,33 +14553,45 @@ pub enum CreateSAMLProviderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSAMLProviderError {
-    pub fn from_body(body: &str) -> CreateSAMLProviderError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => {
-                    CreateSAMLProviderError::EntityAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSAMLProviderError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return CreateSAMLProviderError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return CreateSAMLProviderError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateSAMLProviderError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return CreateSAMLProviderError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => {
-                    CreateSAMLProviderError::InvalidInput(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => {
-                    CreateSAMLProviderError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    CreateSAMLProviderError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => CreateSAMLProviderError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateSAMLProviderError::Unknown(body.to_string()),
+            }
         }
+        CreateSAMLProviderError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14394,7 +14606,7 @@ impl CreateSAMLProviderError {
 impl From<XmlParseError> for CreateSAMLProviderError {
     fn from(err: XmlParseError) -> CreateSAMLProviderError {
         let XmlParseError(message) = err;
-        CreateSAMLProviderError::Unknown(message.to_string())
+        CreateSAMLProviderError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateSAMLProviderError {
@@ -14429,7 +14641,8 @@ impl Error for CreateSAMLProviderError {
             CreateSAMLProviderError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateSAMLProviderError::Unknown(ref cause) => cause,
+            CreateSAMLProviderError::ParseError(ref cause) => cause,
+            CreateSAMLProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14450,33 +14663,45 @@ pub enum CreateServiceLinkedRoleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateServiceLinkedRoleError {
-    pub fn from_body(body: &str) -> CreateServiceLinkedRoleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    CreateServiceLinkedRoleError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateServiceLinkedRoleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return CreateServiceLinkedRoleError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateServiceLinkedRoleError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return CreateServiceLinkedRoleError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return CreateServiceLinkedRoleError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    CreateServiceLinkedRoleError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    CreateServiceLinkedRoleError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    CreateServiceLinkedRoleError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => CreateServiceLinkedRoleError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateServiceLinkedRoleError::Unknown(body.to_string()),
+            }
         }
+        CreateServiceLinkedRoleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14491,7 +14716,7 @@ impl CreateServiceLinkedRoleError {
 impl From<XmlParseError> for CreateServiceLinkedRoleError {
     fn from(err: XmlParseError) -> CreateServiceLinkedRoleError {
         let XmlParseError(message) = err;
-        CreateServiceLinkedRoleError::Unknown(message.to_string())
+        CreateServiceLinkedRoleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateServiceLinkedRoleError {
@@ -14526,7 +14751,8 @@ impl Error for CreateServiceLinkedRoleError {
             CreateServiceLinkedRoleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateServiceLinkedRoleError::Unknown(ref cause) => cause,
+            CreateServiceLinkedRoleError::ParseError(ref cause) => cause,
+            CreateServiceLinkedRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14545,30 +14771,40 @@ pub enum CreateServiceSpecificCredentialError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateServiceSpecificCredentialError {
-    pub fn from_body(body: &str) -> CreateServiceSpecificCredentialError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => CreateServiceSpecificCredentialError::LimitExceeded(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchEntity" => CreateServiceSpecificCredentialError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                "NotSupportedService" => CreateServiceSpecificCredentialError::ServiceNotSupported(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateServiceSpecificCredentialError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateServiceSpecificCredentialError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateServiceSpecificCredentialError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return CreateServiceSpecificCredentialError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return CreateServiceSpecificCredentialError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NotSupportedService" => {
+                        return CreateServiceSpecificCredentialError::ServiceNotSupported(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        CreateServiceSpecificCredentialError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14583,7 +14819,7 @@ impl CreateServiceSpecificCredentialError {
 impl From<XmlParseError> for CreateServiceSpecificCredentialError {
     fn from(err: XmlParseError) -> CreateServiceSpecificCredentialError {
         let XmlParseError(message) = err;
-        CreateServiceSpecificCredentialError::Unknown(message.to_string())
+        CreateServiceSpecificCredentialError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateServiceSpecificCredentialError {
@@ -14617,7 +14853,8 @@ impl Error for CreateServiceSpecificCredentialError {
             CreateServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateServiceSpecificCredentialError::Unknown(ref cause) => cause,
+            CreateServiceSpecificCredentialError::ParseError(ref cause) => cause,
+            CreateServiceSpecificCredentialError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14638,31 +14875,39 @@ pub enum CreateUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserError {
-    pub fn from_body(body: &str) -> CreateUserError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => {
-                    CreateUserError::EntityAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateUserError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return CreateUserError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateUserError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "NoSuchEntity" => {
+                        return CreateUserError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return CreateUserError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    CreateUserError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => CreateUserError::NoSuchEntity(String::from(parsed_error.message)),
-                "ServiceFailure" => {
-                    CreateUserError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => CreateUserError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateUserError::Unknown(body.to_string()),
+            }
         }
+        CreateUserError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14677,7 +14922,7 @@ impl CreateUserError {
 impl From<XmlParseError> for CreateUserError {
     fn from(err: XmlParseError) -> CreateUserError {
         let XmlParseError(message) = err;
-        CreateUserError::Unknown(message.to_string())
+        CreateUserError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateUserError {
@@ -14710,7 +14955,8 @@ impl Error for CreateUserError {
             CreateUserError::Validation(ref cause) => cause,
             CreateUserError::Credentials(ref err) => err.description(),
             CreateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateUserError::Unknown(ref cause) => cause,
+            CreateUserError::ParseError(ref cause) => cause,
+            CreateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14729,30 +14975,40 @@ pub enum CreateVirtualMFADeviceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateVirtualMFADeviceError {
-    pub fn from_body(body: &str) -> CreateVirtualMFADeviceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => CreateVirtualMFADeviceError::EntityAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceeded" => {
-                    CreateVirtualMFADeviceError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateVirtualMFADeviceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return CreateVirtualMFADeviceError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateVirtualMFADeviceError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return CreateVirtualMFADeviceError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    CreateVirtualMFADeviceError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => CreateVirtualMFADeviceError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateVirtualMFADeviceError::Unknown(body.to_string()),
+            }
         }
+        CreateVirtualMFADeviceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14767,7 +15023,7 @@ impl CreateVirtualMFADeviceError {
 impl From<XmlParseError> for CreateVirtualMFADeviceError {
     fn from(err: XmlParseError) -> CreateVirtualMFADeviceError {
         let XmlParseError(message) = err;
-        CreateVirtualMFADeviceError::Unknown(message.to_string())
+        CreateVirtualMFADeviceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateVirtualMFADeviceError {
@@ -14801,7 +15057,8 @@ impl Error for CreateVirtualMFADeviceError {
             CreateVirtualMFADeviceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateVirtualMFADeviceError::Unknown(ref cause) => cause,
+            CreateVirtualMFADeviceError::ParseError(ref cause) => cause,
+            CreateVirtualMFADeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14822,35 +15079,45 @@ pub enum DeactivateMFADeviceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeactivateMFADeviceError {
-    pub fn from_body(body: &str) -> DeactivateMFADeviceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityTemporarilyUnmodifiable" => {
-                    DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeactivateMFADeviceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityTemporarilyUnmodifiable" => {
+                        return DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "LimitExceeded" => {
+                        return DeactivateMFADeviceError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeactivateMFADeviceError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeactivateMFADeviceError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    DeactivateMFADeviceError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    DeactivateMFADeviceError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeactivateMFADeviceError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeactivateMFADeviceError::Unknown(String::from(body)),
-            },
-            Err(_) => DeactivateMFADeviceError::Unknown(body.to_string()),
+            }
         }
+        DeactivateMFADeviceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14865,7 +15132,7 @@ impl DeactivateMFADeviceError {
 impl From<XmlParseError> for DeactivateMFADeviceError {
     fn from(err: XmlParseError) -> DeactivateMFADeviceError {
         let XmlParseError(message) = err;
-        DeactivateMFADeviceError::Unknown(message.to_string())
+        DeactivateMFADeviceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeactivateMFADeviceError {
@@ -14900,7 +15167,8 @@ impl Error for DeactivateMFADeviceError {
             DeactivateMFADeviceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeactivateMFADeviceError::Unknown(ref cause) => cause,
+            DeactivateMFADeviceError::ParseError(ref cause) => cause,
+            DeactivateMFADeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14919,30 +15187,40 @@ pub enum DeleteAccessKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAccessKeyError {
-    pub fn from_body(body: &str) -> DeleteAccessKeyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    DeleteAccessKeyError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteAccessKeyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return DeleteAccessKeyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteAccessKeyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteAccessKeyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    DeleteAccessKeyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeleteAccessKeyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeleteAccessKeyError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteAccessKeyError::Unknown(body.to_string()),
+            }
         }
+        DeleteAccessKeyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14957,7 +15235,7 @@ impl DeleteAccessKeyError {
 impl From<XmlParseError> for DeleteAccessKeyError {
     fn from(err: XmlParseError) -> DeleteAccessKeyError {
         let XmlParseError(message) = err;
-        DeleteAccessKeyError::Unknown(message.to_string())
+        DeleteAccessKeyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteAccessKeyError {
@@ -14989,7 +15267,8 @@ impl Error for DeleteAccessKeyError {
             DeleteAccessKeyError::Validation(ref cause) => cause,
             DeleteAccessKeyError::Credentials(ref err) => err.description(),
             DeleteAccessKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteAccessKeyError::Unknown(ref cause) => cause,
+            DeleteAccessKeyError::ParseError(ref cause) => cause,
+            DeleteAccessKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15008,30 +15287,40 @@ pub enum DeleteAccountAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAccountAliasError {
-    pub fn from_body(body: &str) -> DeleteAccountAliasError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    DeleteAccountAliasError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteAccountAliasError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return DeleteAccountAliasError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteAccountAliasError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteAccountAliasError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    DeleteAccountAliasError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeleteAccountAliasError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeleteAccountAliasError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteAccountAliasError::Unknown(body.to_string()),
+            }
         }
+        DeleteAccountAliasError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15046,7 +15335,7 @@ impl DeleteAccountAliasError {
 impl From<XmlParseError> for DeleteAccountAliasError {
     fn from(err: XmlParseError) -> DeleteAccountAliasError {
         let XmlParseError(message) = err;
-        DeleteAccountAliasError::Unknown(message.to_string())
+        DeleteAccountAliasError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteAccountAliasError {
@@ -15080,7 +15369,8 @@ impl Error for DeleteAccountAliasError {
             DeleteAccountAliasError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteAccountAliasError::Unknown(ref cause) => cause,
+            DeleteAccountAliasError::ParseError(ref cause) => cause,
+            DeleteAccountAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15099,30 +15389,40 @@ pub enum DeleteAccountPasswordPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAccountPasswordPolicyError {
-    pub fn from_body(body: &str) -> DeleteAccountPasswordPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => DeleteAccountPasswordPolicyError::LimitExceeded(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchEntity" => DeleteAccountPasswordPolicyError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                "ServiceFailure" => DeleteAccountPasswordPolicyError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => DeleteAccountPasswordPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteAccountPasswordPolicyError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteAccountPasswordPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return DeleteAccountPasswordPolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteAccountPasswordPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteAccountPasswordPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DeleteAccountPasswordPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15137,7 +15437,7 @@ impl DeleteAccountPasswordPolicyError {
 impl From<XmlParseError> for DeleteAccountPasswordPolicyError {
     fn from(err: XmlParseError) -> DeleteAccountPasswordPolicyError {
         let XmlParseError(message) = err;
-        DeleteAccountPasswordPolicyError::Unknown(message.to_string())
+        DeleteAccountPasswordPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteAccountPasswordPolicyError {
@@ -15171,7 +15471,8 @@ impl Error for DeleteAccountPasswordPolicyError {
             DeleteAccountPasswordPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteAccountPasswordPolicyError::Unknown(ref cause) => cause,
+            DeleteAccountPasswordPolicyError::ParseError(ref cause) => cause,
+            DeleteAccountPasswordPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15192,33 +15493,37 @@ pub enum DeleteGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGroupError {
-    pub fn from_body(body: &str) -> DeleteGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflict" => {
-                    DeleteGroupError::DeleteConflict(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DeleteConflict" => {
+                        return DeleteGroupError::DeleteConflict(String::from(parsed_error.message))
+                    }
+                    "LimitExceeded" => {
+                        return DeleteGroupError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteGroupError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteGroupError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    DeleteGroupError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    DeleteGroupError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeleteGroupError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeleteGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteGroupError::Unknown(body.to_string()),
+            }
         }
+        DeleteGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15233,7 +15538,7 @@ impl DeleteGroupError {
 impl From<XmlParseError> for DeleteGroupError {
     fn from(err: XmlParseError) -> DeleteGroupError {
         let XmlParseError(message) = err;
-        DeleteGroupError::Unknown(message.to_string())
+        DeleteGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteGroupError {
@@ -15266,7 +15571,8 @@ impl Error for DeleteGroupError {
             DeleteGroupError::Validation(ref cause) => cause,
             DeleteGroupError::Credentials(ref err) => err.description(),
             DeleteGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteGroupError::Unknown(ref cause) => cause,
+            DeleteGroupError::ParseError(ref cause) => cause,
+            DeleteGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15285,30 +15591,40 @@ pub enum DeleteGroupPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGroupPolicyError {
-    pub fn from_body(body: &str) -> DeleteGroupPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    DeleteGroupPolicyError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteGroupPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return DeleteGroupPolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteGroupPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteGroupPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    DeleteGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeleteGroupPolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeleteGroupPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteGroupPolicyError::Unknown(body.to_string()),
+            }
         }
+        DeleteGroupPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15323,7 +15639,7 @@ impl DeleteGroupPolicyError {
 impl From<XmlParseError> for DeleteGroupPolicyError {
     fn from(err: XmlParseError) -> DeleteGroupPolicyError {
         let XmlParseError(message) = err;
-        DeleteGroupPolicyError::Unknown(message.to_string())
+        DeleteGroupPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteGroupPolicyError {
@@ -15357,7 +15673,8 @@ impl Error for DeleteGroupPolicyError {
             DeleteGroupPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteGroupPolicyError::Unknown(ref cause) => cause,
+            DeleteGroupPolicyError::ParseError(ref cause) => cause,
+            DeleteGroupPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15378,33 +15695,45 @@ pub enum DeleteInstanceProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteInstanceProfileError {
-    pub fn from_body(body: &str) -> DeleteInstanceProfileError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflict" => {
-                    DeleteInstanceProfileError::DeleteConflict(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteInstanceProfileError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DeleteConflict" => {
+                        return DeleteInstanceProfileError::DeleteConflict(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DeleteInstanceProfileError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteInstanceProfileError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteInstanceProfileError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    DeleteInstanceProfileError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    DeleteInstanceProfileError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeleteInstanceProfileError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeleteInstanceProfileError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteInstanceProfileError::Unknown(body.to_string()),
+            }
         }
+        DeleteInstanceProfileError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15419,7 +15748,7 @@ impl DeleteInstanceProfileError {
 impl From<XmlParseError> for DeleteInstanceProfileError {
     fn from(err: XmlParseError) -> DeleteInstanceProfileError {
         let XmlParseError(message) = err;
-        DeleteInstanceProfileError::Unknown(message.to_string())
+        DeleteInstanceProfileError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteInstanceProfileError {
@@ -15454,7 +15783,8 @@ impl Error for DeleteInstanceProfileError {
             DeleteInstanceProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteInstanceProfileError::Unknown(ref cause) => cause,
+            DeleteInstanceProfileError::ParseError(ref cause) => cause,
+            DeleteInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15475,35 +15805,45 @@ pub enum DeleteLoginProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLoginProfileError {
-    pub fn from_body(body: &str) -> DeleteLoginProfileError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityTemporarilyUnmodifiable" => {
-                    DeleteLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteLoginProfileError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityTemporarilyUnmodifiable" => {
+                        return DeleteLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DeleteLoginProfileError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteLoginProfileError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteLoginProfileError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    DeleteLoginProfileError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    DeleteLoginProfileError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeleteLoginProfileError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeleteLoginProfileError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteLoginProfileError::Unknown(body.to_string()),
+            }
         }
+        DeleteLoginProfileError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15518,7 +15858,7 @@ impl DeleteLoginProfileError {
 impl From<XmlParseError> for DeleteLoginProfileError {
     fn from(err: XmlParseError) -> DeleteLoginProfileError {
         let XmlParseError(message) = err;
-        DeleteLoginProfileError::Unknown(message.to_string())
+        DeleteLoginProfileError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteLoginProfileError {
@@ -15553,7 +15893,8 @@ impl Error for DeleteLoginProfileError {
             DeleteLoginProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteLoginProfileError::Unknown(ref cause) => cause,
+            DeleteLoginProfileError::ParseError(ref cause) => cause,
+            DeleteLoginProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15572,30 +15913,40 @@ pub enum DeleteOpenIDConnectProviderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteOpenIDConnectProviderError {
-    pub fn from_body(body: &str) -> DeleteOpenIDConnectProviderError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => DeleteOpenIDConnectProviderError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchEntity" => DeleteOpenIDConnectProviderError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                "ServiceFailure" => DeleteOpenIDConnectProviderError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => DeleteOpenIDConnectProviderError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteOpenIDConnectProviderError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteOpenIDConnectProviderError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return DeleteOpenIDConnectProviderError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteOpenIDConnectProviderError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteOpenIDConnectProviderError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DeleteOpenIDConnectProviderError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15610,7 +15961,7 @@ impl DeleteOpenIDConnectProviderError {
 impl From<XmlParseError> for DeleteOpenIDConnectProviderError {
     fn from(err: XmlParseError) -> DeleteOpenIDConnectProviderError {
         let XmlParseError(message) = err;
-        DeleteOpenIDConnectProviderError::Unknown(message.to_string())
+        DeleteOpenIDConnectProviderError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteOpenIDConnectProviderError {
@@ -15644,7 +15995,8 @@ impl Error for DeleteOpenIDConnectProviderError {
             DeleteOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteOpenIDConnectProviderError::Unknown(ref cause) => cause,
+            DeleteOpenIDConnectProviderError::ParseError(ref cause) => cause,
+            DeleteOpenIDConnectProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15667,36 +16019,40 @@ pub enum DeletePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePolicyError {
-    pub fn from_body(body: &str) -> DeletePolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflict" => {
-                    DeletePolicyError::DeleteConflict(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DeleteConflict" => {
+                        return DeletePolicyError::DeleteConflict(String::from(parsed_error.message))
+                    }
+                    "InvalidInput" => {
+                        return DeletePolicyError::InvalidInput(String::from(parsed_error.message))
+                    }
+                    "LimitExceeded" => {
+                        return DeletePolicyError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "NoSuchEntity" => {
+                        return DeletePolicyError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return DeletePolicyError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => {
-                    DeletePolicyError::InvalidInput(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => {
-                    DeletePolicyError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    DeletePolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeletePolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeletePolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => DeletePolicyError::Unknown(body.to_string()),
+            }
         }
+        DeletePolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15711,7 +16067,7 @@ impl DeletePolicyError {
 impl From<XmlParseError> for DeletePolicyError {
     fn from(err: XmlParseError) -> DeletePolicyError {
         let XmlParseError(message) = err;
-        DeletePolicyError::Unknown(message.to_string())
+        DeletePolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeletePolicyError {
@@ -15745,7 +16101,8 @@ impl Error for DeletePolicyError {
             DeletePolicyError::Validation(ref cause) => cause,
             DeletePolicyError::Credentials(ref err) => err.description(),
             DeletePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePolicyError::Unknown(ref cause) => cause,
+            DeletePolicyError::ParseError(ref cause) => cause,
+            DeletePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15768,36 +16125,50 @@ pub enum DeletePolicyVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePolicyVersionError {
-    pub fn from_body(body: &str) -> DeletePolicyVersionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflict" => {
-                    DeletePolicyVersionError::DeleteConflict(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePolicyVersionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DeleteConflict" => {
+                        return DeletePolicyVersionError::DeleteConflict(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidInput" => {
+                        return DeletePolicyVersionError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DeletePolicyVersionError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeletePolicyVersionError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeletePolicyVersionError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidInput" => {
-                    DeletePolicyVersionError::InvalidInput(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => {
-                    DeletePolicyVersionError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    DeletePolicyVersionError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeletePolicyVersionError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeletePolicyVersionError::Unknown(String::from(body)),
-            },
-            Err(_) => DeletePolicyVersionError::Unknown(body.to_string()),
+            }
         }
+        DeletePolicyVersionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15812,7 +16183,7 @@ impl DeletePolicyVersionError {
 impl From<XmlParseError> for DeletePolicyVersionError {
     fn from(err: XmlParseError) -> DeletePolicyVersionError {
         let XmlParseError(message) = err;
-        DeletePolicyVersionError::Unknown(message.to_string())
+        DeletePolicyVersionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeletePolicyVersionError {
@@ -15848,7 +16219,8 @@ impl Error for DeletePolicyVersionError {
             DeletePolicyVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeletePolicyVersionError::Unknown(ref cause) => cause,
+            DeletePolicyVersionError::ParseError(ref cause) => cause,
+            DeletePolicyVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15871,34 +16243,42 @@ pub enum DeleteRoleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRoleError {
-    pub fn from_body(body: &str) -> DeleteRoleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflict" => {
-                    DeleteRoleError::DeleteConflict(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteRoleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DeleteConflict" => {
+                        return DeleteRoleError::DeleteConflict(String::from(parsed_error.message))
+                    }
+                    "LimitExceeded" => {
+                        return DeleteRoleError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteRoleError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteRoleError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    "UnmodifiableEntity" => {
+                        return DeleteRoleError::UnmodifiableEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    DeleteRoleError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => DeleteRoleError::NoSuchEntity(String::from(parsed_error.message)),
-                "ServiceFailure" => {
-                    DeleteRoleError::ServiceFailure(String::from(parsed_error.message))
-                }
-                "UnmodifiableEntity" => {
-                    DeleteRoleError::UnmodifiableEntity(String::from(parsed_error.message))
-                }
-                _ => DeleteRoleError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteRoleError::Unknown(body.to_string()),
+            }
         }
+        DeleteRoleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15913,7 +16293,7 @@ impl DeleteRoleError {
 impl From<XmlParseError> for DeleteRoleError {
     fn from(err: XmlParseError) -> DeleteRoleError {
         let XmlParseError(message) = err;
-        DeleteRoleError::Unknown(message.to_string())
+        DeleteRoleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteRoleError {
@@ -15947,7 +16327,8 @@ impl Error for DeleteRoleError {
             DeleteRoleError::Validation(ref cause) => cause,
             DeleteRoleError::Credentials(ref err) => err.description(),
             DeleteRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteRoleError::Unknown(ref cause) => cause,
+            DeleteRoleError::ParseError(ref cause) => cause,
+            DeleteRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15966,30 +16347,40 @@ pub enum DeleteRolePermissionsBoundaryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRolePermissionsBoundaryError {
-    pub fn from_body(body: &str) -> DeleteRolePermissionsBoundaryError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => DeleteRolePermissionsBoundaryError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                "ServiceFailure" => DeleteRolePermissionsBoundaryError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
-                "UnmodifiableEntity" => DeleteRolePermissionsBoundaryError::UnmodifiableEntity(
-                    String::from(parsed_error.message),
-                ),
-                _ => DeleteRolePermissionsBoundaryError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteRolePermissionsBoundaryError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteRolePermissionsBoundaryError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return DeleteRolePermissionsBoundaryError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteRolePermissionsBoundaryError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnmodifiableEntity" => {
+                        return DeleteRolePermissionsBoundaryError::UnmodifiableEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DeleteRolePermissionsBoundaryError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16004,7 +16395,7 @@ impl DeleteRolePermissionsBoundaryError {
 impl From<XmlParseError> for DeleteRolePermissionsBoundaryError {
     fn from(err: XmlParseError) -> DeleteRolePermissionsBoundaryError {
         let XmlParseError(message) = err;
-        DeleteRolePermissionsBoundaryError::Unknown(message.to_string())
+        DeleteRolePermissionsBoundaryError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteRolePermissionsBoundaryError {
@@ -16038,7 +16429,8 @@ impl Error for DeleteRolePermissionsBoundaryError {
             DeleteRolePermissionsBoundaryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteRolePermissionsBoundaryError::Unknown(ref cause) => cause,
+            DeleteRolePermissionsBoundaryError::ParseError(ref cause) => cause,
+            DeleteRolePermissionsBoundaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16059,33 +16451,45 @@ pub enum DeleteRolePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRolePolicyError {
-    pub fn from_body(body: &str) -> DeleteRolePolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    DeleteRolePolicyError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteRolePolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return DeleteRolePolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteRolePolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteRolePolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnmodifiableEntity" => {
+                        return DeleteRolePolicyError::UnmodifiableEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    DeleteRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeleteRolePolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                "UnmodifiableEntity" => {
-                    DeleteRolePolicyError::UnmodifiableEntity(String::from(parsed_error.message))
-                }
-                _ => DeleteRolePolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteRolePolicyError::Unknown(body.to_string()),
+            }
         }
+        DeleteRolePolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16100,7 +16504,7 @@ impl DeleteRolePolicyError {
 impl From<XmlParseError> for DeleteRolePolicyError {
     fn from(err: XmlParseError) -> DeleteRolePolicyError {
         let XmlParseError(message) = err;
-        DeleteRolePolicyError::Unknown(message.to_string())
+        DeleteRolePolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteRolePolicyError {
@@ -16133,7 +16537,8 @@ impl Error for DeleteRolePolicyError {
             DeleteRolePolicyError::Validation(ref cause) => cause,
             DeleteRolePolicyError::Credentials(ref err) => err.description(),
             DeleteRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteRolePolicyError::Unknown(ref cause) => cause,
+            DeleteRolePolicyError::ParseError(ref cause) => cause,
+            DeleteRolePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16154,33 +16559,45 @@ pub enum DeleteSAMLProviderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSAMLProviderError {
-    pub fn from_body(body: &str) -> DeleteSAMLProviderError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    DeleteSAMLProviderError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSAMLProviderError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return DeleteSAMLProviderError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DeleteSAMLProviderError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteSAMLProviderError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteSAMLProviderError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    DeleteSAMLProviderError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    DeleteSAMLProviderError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeleteSAMLProviderError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeleteSAMLProviderError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteSAMLProviderError::Unknown(body.to_string()),
+            }
         }
+        DeleteSAMLProviderError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16195,7 +16612,7 @@ impl DeleteSAMLProviderError {
 impl From<XmlParseError> for DeleteSAMLProviderError {
     fn from(err: XmlParseError) -> DeleteSAMLProviderError {
         let XmlParseError(message) = err;
-        DeleteSAMLProviderError::Unknown(message.to_string())
+        DeleteSAMLProviderError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteSAMLProviderError {
@@ -16230,7 +16647,8 @@ impl Error for DeleteSAMLProviderError {
             DeleteSAMLProviderError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteSAMLProviderError::Unknown(ref cause) => cause,
+            DeleteSAMLProviderError::ParseError(ref cause) => cause,
+            DeleteSAMLProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16245,24 +16663,30 @@ pub enum DeleteSSHPublicKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSSHPublicKeyError {
-    pub fn from_body(body: &str) -> DeleteSSHPublicKeyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    DeleteSSHPublicKeyError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSSHPublicKeyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return DeleteSSHPublicKeyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DeleteSSHPublicKeyError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteSSHPublicKeyError::Unknown(body.to_string()),
+            }
         }
+        DeleteSSHPublicKeyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16277,7 +16701,7 @@ impl DeleteSSHPublicKeyError {
 impl From<XmlParseError> for DeleteSSHPublicKeyError {
     fn from(err: XmlParseError) -> DeleteSSHPublicKeyError {
         let XmlParseError(message) = err;
-        DeleteSSHPublicKeyError::Unknown(message.to_string())
+        DeleteSSHPublicKeyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteSSHPublicKeyError {
@@ -16309,7 +16733,8 @@ impl Error for DeleteSSHPublicKeyError {
             DeleteSSHPublicKeyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteSSHPublicKeyError::Unknown(ref cause) => cause,
+            DeleteSSHPublicKeyError::ParseError(ref cause) => cause,
+            DeleteSSHPublicKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16330,33 +16755,45 @@ pub enum DeleteServerCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteServerCertificateError {
-    pub fn from_body(body: &str) -> DeleteServerCertificateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflict" => {
-                    DeleteServerCertificateError::DeleteConflict(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteServerCertificateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DeleteConflict" => {
+                        return DeleteServerCertificateError::DeleteConflict(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DeleteServerCertificateError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteServerCertificateError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteServerCertificateError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    DeleteServerCertificateError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    DeleteServerCertificateError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeleteServerCertificateError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeleteServerCertificateError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteServerCertificateError::Unknown(body.to_string()),
+            }
         }
+        DeleteServerCertificateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16371,7 +16808,7 @@ impl DeleteServerCertificateError {
 impl From<XmlParseError> for DeleteServerCertificateError {
     fn from(err: XmlParseError) -> DeleteServerCertificateError {
         let XmlParseError(message) = err;
-        DeleteServerCertificateError::Unknown(message.to_string())
+        DeleteServerCertificateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteServerCertificateError {
@@ -16406,7 +16843,8 @@ impl Error for DeleteServerCertificateError {
             DeleteServerCertificateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteServerCertificateError::Unknown(ref cause) => cause,
+            DeleteServerCertificateError::ParseError(ref cause) => cause,
+            DeleteServerCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16425,30 +16863,40 @@ pub enum DeleteServiceLinkedRoleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteServiceLinkedRoleError {
-    pub fn from_body(body: &str) -> DeleteServiceLinkedRoleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    DeleteServiceLinkedRoleError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteServiceLinkedRoleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return DeleteServiceLinkedRoleError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteServiceLinkedRoleError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteServiceLinkedRoleError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    DeleteServiceLinkedRoleError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeleteServiceLinkedRoleError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeleteServiceLinkedRoleError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteServiceLinkedRoleError::Unknown(body.to_string()),
+            }
         }
+        DeleteServiceLinkedRoleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16463,7 +16911,7 @@ impl DeleteServiceLinkedRoleError {
 impl From<XmlParseError> for DeleteServiceLinkedRoleError {
     fn from(err: XmlParseError) -> DeleteServiceLinkedRoleError {
         let XmlParseError(message) = err;
-        DeleteServiceLinkedRoleError::Unknown(message.to_string())
+        DeleteServiceLinkedRoleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteServiceLinkedRoleError {
@@ -16497,7 +16945,8 @@ impl Error for DeleteServiceLinkedRoleError {
             DeleteServiceLinkedRoleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteServiceLinkedRoleError::Unknown(ref cause) => cause,
+            DeleteServiceLinkedRoleError::ParseError(ref cause) => cause,
+            DeleteServiceLinkedRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16512,24 +16961,30 @@ pub enum DeleteServiceSpecificCredentialError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteServiceSpecificCredentialError {
-    pub fn from_body(body: &str) -> DeleteServiceSpecificCredentialError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => DeleteServiceSpecificCredentialError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                _ => DeleteServiceSpecificCredentialError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteServiceSpecificCredentialError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteServiceSpecificCredentialError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return DeleteServiceSpecificCredentialError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DeleteServiceSpecificCredentialError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16544,7 +16999,7 @@ impl DeleteServiceSpecificCredentialError {
 impl From<XmlParseError> for DeleteServiceSpecificCredentialError {
     fn from(err: XmlParseError) -> DeleteServiceSpecificCredentialError {
         let XmlParseError(message) = err;
-        DeleteServiceSpecificCredentialError::Unknown(message.to_string())
+        DeleteServiceSpecificCredentialError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteServiceSpecificCredentialError {
@@ -16576,7 +17031,8 @@ impl Error for DeleteServiceSpecificCredentialError {
             DeleteServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteServiceSpecificCredentialError::Unknown(ref cause) => cause,
+            DeleteServiceSpecificCredentialError::ParseError(ref cause) => cause,
+            DeleteServiceSpecificCredentialError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16595,30 +17051,40 @@ pub enum DeleteSigningCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSigningCertificateError {
-    pub fn from_body(body: &str) -> DeleteSigningCertificateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    DeleteSigningCertificateError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSigningCertificateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return DeleteSigningCertificateError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteSigningCertificateError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteSigningCertificateError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    DeleteSigningCertificateError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => DeleteSigningCertificateError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => DeleteSigningCertificateError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteSigningCertificateError::Unknown(body.to_string()),
+            }
         }
+        DeleteSigningCertificateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16633,7 +17099,7 @@ impl DeleteSigningCertificateError {
 impl From<XmlParseError> for DeleteSigningCertificateError {
     fn from(err: XmlParseError) -> DeleteSigningCertificateError {
         let XmlParseError(message) = err;
-        DeleteSigningCertificateError::Unknown(message.to_string())
+        DeleteSigningCertificateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteSigningCertificateError {
@@ -16667,7 +17133,8 @@ impl Error for DeleteSigningCertificateError {
             DeleteSigningCertificateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteSigningCertificateError::Unknown(ref cause) => cause,
+            DeleteSigningCertificateError::ParseError(ref cause) => cause,
+            DeleteSigningCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16688,31 +17155,37 @@ pub enum DeleteUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserError {
-    pub fn from_body(body: &str) -> DeleteUserError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflict" => {
-                    DeleteUserError::DeleteConflict(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DeleteConflict" => {
+                        return DeleteUserError::DeleteConflict(String::from(parsed_error.message))
+                    }
+                    "LimitExceeded" => {
+                        return DeleteUserError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteUserError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteUserError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    DeleteUserError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => DeleteUserError::NoSuchEntity(String::from(parsed_error.message)),
-                "ServiceFailure" => {
-                    DeleteUserError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeleteUserError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteUserError::Unknown(body.to_string()),
+            }
         }
+        DeleteUserError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16727,7 +17200,7 @@ impl DeleteUserError {
 impl From<XmlParseError> for DeleteUserError {
     fn from(err: XmlParseError) -> DeleteUserError {
         let XmlParseError(message) = err;
-        DeleteUserError::Unknown(message.to_string())
+        DeleteUserError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteUserError {
@@ -16760,7 +17233,8 @@ impl Error for DeleteUserError {
             DeleteUserError::Validation(ref cause) => cause,
             DeleteUserError::Credentials(ref err) => err.description(),
             DeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUserError::Unknown(ref cause) => cause,
+            DeleteUserError::ParseError(ref cause) => cause,
+            DeleteUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16777,27 +17251,35 @@ pub enum DeleteUserPermissionsBoundaryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserPermissionsBoundaryError {
-    pub fn from_body(body: &str) -> DeleteUserPermissionsBoundaryError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => DeleteUserPermissionsBoundaryError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                "ServiceFailure" => DeleteUserPermissionsBoundaryError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
-                _ => DeleteUserPermissionsBoundaryError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteUserPermissionsBoundaryError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserPermissionsBoundaryError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return DeleteUserPermissionsBoundaryError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteUserPermissionsBoundaryError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DeleteUserPermissionsBoundaryError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16812,7 +17294,7 @@ impl DeleteUserPermissionsBoundaryError {
 impl From<XmlParseError> for DeleteUserPermissionsBoundaryError {
     fn from(err: XmlParseError) -> DeleteUserPermissionsBoundaryError {
         let XmlParseError(message) = err;
-        DeleteUserPermissionsBoundaryError::Unknown(message.to_string())
+        DeleteUserPermissionsBoundaryError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteUserPermissionsBoundaryError {
@@ -16845,7 +17327,8 @@ impl Error for DeleteUserPermissionsBoundaryError {
             DeleteUserPermissionsBoundaryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteUserPermissionsBoundaryError::Unknown(ref cause) => cause,
+            DeleteUserPermissionsBoundaryError::ParseError(ref cause) => cause,
+            DeleteUserPermissionsBoundaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16864,30 +17347,40 @@ pub enum DeleteUserPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserPolicyError {
-    pub fn from_body(body: &str) -> DeleteUserPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    DeleteUserPolicyError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return DeleteUserPolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteUserPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteUserPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    DeleteUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeleteUserPolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeleteUserPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteUserPolicyError::Unknown(body.to_string()),
+            }
         }
+        DeleteUserPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16902,7 +17395,7 @@ impl DeleteUserPolicyError {
 impl From<XmlParseError> for DeleteUserPolicyError {
     fn from(err: XmlParseError) -> DeleteUserPolicyError {
         let XmlParseError(message) = err;
-        DeleteUserPolicyError::Unknown(message.to_string())
+        DeleteUserPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteUserPolicyError {
@@ -16934,7 +17427,8 @@ impl Error for DeleteUserPolicyError {
             DeleteUserPolicyError::Validation(ref cause) => cause,
             DeleteUserPolicyError::Credentials(ref err) => err.description(),
             DeleteUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUserPolicyError::Unknown(ref cause) => cause,
+            DeleteUserPolicyError::ParseError(ref cause) => cause,
+            DeleteUserPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16955,33 +17449,45 @@ pub enum DeleteVirtualMFADeviceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVirtualMFADeviceError {
-    pub fn from_body(body: &str) -> DeleteVirtualMFADeviceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflict" => {
-                    DeleteVirtualMFADeviceError::DeleteConflict(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteVirtualMFADeviceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DeleteConflict" => {
+                        return DeleteVirtualMFADeviceError::DeleteConflict(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DeleteVirtualMFADeviceError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DeleteVirtualMFADeviceError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DeleteVirtualMFADeviceError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    DeleteVirtualMFADeviceError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    DeleteVirtualMFADeviceError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DeleteVirtualMFADeviceError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DeleteVirtualMFADeviceError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteVirtualMFADeviceError::Unknown(body.to_string()),
+            }
         }
+        DeleteVirtualMFADeviceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16996,7 +17502,7 @@ impl DeleteVirtualMFADeviceError {
 impl From<XmlParseError> for DeleteVirtualMFADeviceError {
     fn from(err: XmlParseError) -> DeleteVirtualMFADeviceError {
         let XmlParseError(message) = err;
-        DeleteVirtualMFADeviceError::Unknown(message.to_string())
+        DeleteVirtualMFADeviceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteVirtualMFADeviceError {
@@ -17031,7 +17537,8 @@ impl Error for DeleteVirtualMFADeviceError {
             DeleteVirtualMFADeviceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteVirtualMFADeviceError::Unknown(ref cause) => cause,
+            DeleteVirtualMFADeviceError::ParseError(ref cause) => cause,
+            DeleteVirtualMFADeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17052,33 +17559,45 @@ pub enum DetachGroupPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetachGroupPolicyError {
-    pub fn from_body(body: &str) -> DetachGroupPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    DetachGroupPolicyError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DetachGroupPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return DetachGroupPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DetachGroupPolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DetachGroupPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DetachGroupPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    DetachGroupPolicyError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    DetachGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DetachGroupPolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DetachGroupPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => DetachGroupPolicyError::Unknown(body.to_string()),
+            }
         }
+        DetachGroupPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17093,7 +17612,7 @@ impl DetachGroupPolicyError {
 impl From<XmlParseError> for DetachGroupPolicyError {
     fn from(err: XmlParseError) -> DetachGroupPolicyError {
         let XmlParseError(message) = err;
-        DetachGroupPolicyError::Unknown(message.to_string())
+        DetachGroupPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DetachGroupPolicyError {
@@ -17128,7 +17647,8 @@ impl Error for DetachGroupPolicyError {
             DetachGroupPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DetachGroupPolicyError::Unknown(ref cause) => cause,
+            DetachGroupPolicyError::ParseError(ref cause) => cause,
+            DetachGroupPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17151,36 +17671,50 @@ pub enum DetachRolePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetachRolePolicyError {
-    pub fn from_body(body: &str) -> DetachRolePolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    DetachRolePolicyError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DetachRolePolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return DetachRolePolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DetachRolePolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DetachRolePolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DetachRolePolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnmodifiableEntity" => {
+                        return DetachRolePolicyError::UnmodifiableEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    DetachRolePolicyError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    DetachRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DetachRolePolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                "UnmodifiableEntity" => {
-                    DetachRolePolicyError::UnmodifiableEntity(String::from(parsed_error.message))
-                }
-                _ => DetachRolePolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => DetachRolePolicyError::Unknown(body.to_string()),
+            }
         }
+        DetachRolePolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17195,7 +17729,7 @@ impl DetachRolePolicyError {
 impl From<XmlParseError> for DetachRolePolicyError {
     fn from(err: XmlParseError) -> DetachRolePolicyError {
         let XmlParseError(message) = err;
-        DetachRolePolicyError::Unknown(message.to_string())
+        DetachRolePolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DetachRolePolicyError {
@@ -17229,7 +17763,8 @@ impl Error for DetachRolePolicyError {
             DetachRolePolicyError::Validation(ref cause) => cause,
             DetachRolePolicyError::Credentials(ref err) => err.description(),
             DetachRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachRolePolicyError::Unknown(ref cause) => cause,
+            DetachRolePolicyError::ParseError(ref cause) => cause,
+            DetachRolePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17250,33 +17785,45 @@ pub enum DetachUserPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetachUserPolicyError {
-    pub fn from_body(body: &str) -> DetachUserPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    DetachUserPolicyError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DetachUserPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return DetachUserPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DetachUserPolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return DetachUserPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return DetachUserPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    DetachUserPolicyError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    DetachUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    DetachUserPolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => DetachUserPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => DetachUserPolicyError::Unknown(body.to_string()),
+            }
         }
+        DetachUserPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17291,7 +17838,7 @@ impl DetachUserPolicyError {
 impl From<XmlParseError> for DetachUserPolicyError {
     fn from(err: XmlParseError) -> DetachUserPolicyError {
         let XmlParseError(message) = err;
-        DetachUserPolicyError::Unknown(message.to_string())
+        DetachUserPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DetachUserPolicyError {
@@ -17324,7 +17871,8 @@ impl Error for DetachUserPolicyError {
             DetachUserPolicyError::Validation(ref cause) => cause,
             DetachUserPolicyError::Credentials(ref err) => err.description(),
             DetachUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachUserPolicyError::Unknown(ref cause) => cause,
+            DetachUserPolicyError::ParseError(ref cause) => cause,
+            DetachUserPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17349,41 +17897,55 @@ pub enum EnableMFADeviceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EnableMFADeviceError {
-    pub fn from_body(body: &str) -> EnableMFADeviceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => {
-                    EnableMFADeviceError::EntityAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> EnableMFADeviceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return EnableMFADeviceError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "EntityTemporarilyUnmodifiable" => {
+                        return EnableMFADeviceError::EntityTemporarilyUnmodifiable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidAuthenticationCode" => {
+                        return EnableMFADeviceError::InvalidAuthenticationCode(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return EnableMFADeviceError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return EnableMFADeviceError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return EnableMFADeviceError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "EntityTemporarilyUnmodifiable" => {
-                    EnableMFADeviceError::EntityTemporarilyUnmodifiable(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidAuthenticationCode" => EnableMFADeviceError::InvalidAuthenticationCode(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceeded" => {
-                    EnableMFADeviceError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    EnableMFADeviceError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    EnableMFADeviceError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => EnableMFADeviceError::Unknown(String::from(body)),
-            },
-            Err(_) => EnableMFADeviceError::Unknown(body.to_string()),
+            }
         }
+        EnableMFADeviceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17398,7 +17960,7 @@ impl EnableMFADeviceError {
 impl From<XmlParseError> for EnableMFADeviceError {
     fn from(err: XmlParseError) -> EnableMFADeviceError {
         let XmlParseError(message) = err;
-        EnableMFADeviceError::Unknown(message.to_string())
+        EnableMFADeviceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for EnableMFADeviceError {
@@ -17433,7 +17995,8 @@ impl Error for EnableMFADeviceError {
             EnableMFADeviceError::Validation(ref cause) => cause,
             EnableMFADeviceError::Credentials(ref err) => err.description(),
             EnableMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EnableMFADeviceError::Unknown(ref cause) => cause,
+            EnableMFADeviceError::ParseError(ref cause) => cause,
+            EnableMFADeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17450,27 +18013,35 @@ pub enum GenerateCredentialReportError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateCredentialReportError {
-    pub fn from_body(body: &str) -> GenerateCredentialReportError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    GenerateCredentialReportError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GenerateCredentialReportError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return GenerateCredentialReportError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return GenerateCredentialReportError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => GenerateCredentialReportError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => GenerateCredentialReportError::Unknown(String::from(body)),
-            },
-            Err(_) => GenerateCredentialReportError::Unknown(body.to_string()),
+            }
         }
+        GenerateCredentialReportError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17485,7 +18056,7 @@ impl GenerateCredentialReportError {
 impl From<XmlParseError> for GenerateCredentialReportError {
     fn from(err: XmlParseError) -> GenerateCredentialReportError {
         let XmlParseError(message) = err;
-        GenerateCredentialReportError::Unknown(message.to_string())
+        GenerateCredentialReportError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GenerateCredentialReportError {
@@ -17518,7 +18089,8 @@ impl Error for GenerateCredentialReportError {
             GenerateCredentialReportError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GenerateCredentialReportError::Unknown(ref cause) => cause,
+            GenerateCredentialReportError::ParseError(ref cause) => cause,
+            GenerateCredentialReportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17533,24 +18105,30 @@ pub enum GetAccessKeyLastUsedError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccessKeyLastUsedError {
-    pub fn from_body(body: &str) -> GetAccessKeyLastUsedError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    GetAccessKeyLastUsedError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetAccessKeyLastUsedError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return GetAccessKeyLastUsedError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => GetAccessKeyLastUsedError::Unknown(String::from(body)),
-            },
-            Err(_) => GetAccessKeyLastUsedError::Unknown(body.to_string()),
+            }
         }
+        GetAccessKeyLastUsedError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17565,7 +18143,7 @@ impl GetAccessKeyLastUsedError {
 impl From<XmlParseError> for GetAccessKeyLastUsedError {
     fn from(err: XmlParseError) -> GetAccessKeyLastUsedError {
         let XmlParseError(message) = err;
-        GetAccessKeyLastUsedError::Unknown(message.to_string())
+        GetAccessKeyLastUsedError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetAccessKeyLastUsedError {
@@ -17597,7 +18175,8 @@ impl Error for GetAccessKeyLastUsedError {
             GetAccessKeyLastUsedError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetAccessKeyLastUsedError::Unknown(ref cause) => cause,
+            GetAccessKeyLastUsedError::ParseError(ref cause) => cause,
+            GetAccessKeyLastUsedError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17612,24 +18191,30 @@ pub enum GetAccountAuthorizationDetailsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccountAuthorizationDetailsError {
-    pub fn from_body(body: &str) -> GetAccountAuthorizationDetailsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailure" => GetAccountAuthorizationDetailsError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
-                _ => GetAccountAuthorizationDetailsError::Unknown(String::from(body)),
-            },
-            Err(_) => GetAccountAuthorizationDetailsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetAccountAuthorizationDetailsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ServiceFailure" => {
+                        return GetAccountAuthorizationDetailsError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        GetAccountAuthorizationDetailsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17644,7 +18229,7 @@ impl GetAccountAuthorizationDetailsError {
 impl From<XmlParseError> for GetAccountAuthorizationDetailsError {
     fn from(err: XmlParseError) -> GetAccountAuthorizationDetailsError {
         let XmlParseError(message) = err;
-        GetAccountAuthorizationDetailsError::Unknown(message.to_string())
+        GetAccountAuthorizationDetailsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetAccountAuthorizationDetailsError {
@@ -17676,7 +18261,8 @@ impl Error for GetAccountAuthorizationDetailsError {
             GetAccountAuthorizationDetailsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetAccountAuthorizationDetailsError::Unknown(ref cause) => cause,
+            GetAccountAuthorizationDetailsError::ParseError(ref cause) => cause,
+            GetAccountAuthorizationDetailsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17693,27 +18279,35 @@ pub enum GetAccountPasswordPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccountPasswordPolicyError {
-    pub fn from_body(body: &str) -> GetAccountPasswordPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    GetAccountPasswordPolicyError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetAccountPasswordPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return GetAccountPasswordPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return GetAccountPasswordPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => GetAccountPasswordPolicyError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => GetAccountPasswordPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => GetAccountPasswordPolicyError::Unknown(body.to_string()),
+            }
         }
+        GetAccountPasswordPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17728,7 +18322,7 @@ impl GetAccountPasswordPolicyError {
 impl From<XmlParseError> for GetAccountPasswordPolicyError {
     fn from(err: XmlParseError) -> GetAccountPasswordPolicyError {
         let XmlParseError(message) = err;
-        GetAccountPasswordPolicyError::Unknown(message.to_string())
+        GetAccountPasswordPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetAccountPasswordPolicyError {
@@ -17761,7 +18355,8 @@ impl Error for GetAccountPasswordPolicyError {
             GetAccountPasswordPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetAccountPasswordPolicyError::Unknown(ref cause) => cause,
+            GetAccountPasswordPolicyError::ParseError(ref cause) => cause,
+            GetAccountPasswordPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17776,24 +18371,30 @@ pub enum GetAccountSummaryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccountSummaryError {
-    pub fn from_body(body: &str) -> GetAccountSummaryError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailure" => {
-                    GetAccountSummaryError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetAccountSummaryError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ServiceFailure" => {
+                        return GetAccountSummaryError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => GetAccountSummaryError::Unknown(String::from(body)),
-            },
-            Err(_) => GetAccountSummaryError::Unknown(body.to_string()),
+            }
         }
+        GetAccountSummaryError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17808,7 +18409,7 @@ impl GetAccountSummaryError {
 impl From<XmlParseError> for GetAccountSummaryError {
     fn from(err: XmlParseError) -> GetAccountSummaryError {
         let XmlParseError(message) = err;
-        GetAccountSummaryError::Unknown(message.to_string())
+        GetAccountSummaryError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetAccountSummaryError {
@@ -17840,7 +18441,8 @@ impl Error for GetAccountSummaryError {
             GetAccountSummaryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetAccountSummaryError::Unknown(ref cause) => cause,
+            GetAccountSummaryError::ParseError(ref cause) => cause,
+            GetAccountSummaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17855,24 +18457,30 @@ pub enum GetContextKeysForCustomPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetContextKeysForCustomPolicyError {
-    pub fn from_body(body: &str) -> GetContextKeysForCustomPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => GetContextKeysForCustomPolicyError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                _ => GetContextKeysForCustomPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => GetContextKeysForCustomPolicyError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetContextKeysForCustomPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetContextKeysForCustomPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        GetContextKeysForCustomPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17887,7 +18495,7 @@ impl GetContextKeysForCustomPolicyError {
 impl From<XmlParseError> for GetContextKeysForCustomPolicyError {
     fn from(err: XmlParseError) -> GetContextKeysForCustomPolicyError {
         let XmlParseError(message) = err;
-        GetContextKeysForCustomPolicyError::Unknown(message.to_string())
+        GetContextKeysForCustomPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetContextKeysForCustomPolicyError {
@@ -17919,7 +18527,8 @@ impl Error for GetContextKeysForCustomPolicyError {
             GetContextKeysForCustomPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetContextKeysForCustomPolicyError::Unknown(ref cause) => cause,
+            GetContextKeysForCustomPolicyError::ParseError(ref cause) => cause,
+            GetContextKeysForCustomPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17936,27 +18545,35 @@ pub enum GetContextKeysForPrincipalPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetContextKeysForPrincipalPolicyError {
-    pub fn from_body(body: &str) -> GetContextKeysForPrincipalPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => GetContextKeysForPrincipalPolicyError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchEntity" => GetContextKeysForPrincipalPolicyError::NoSuchEntity(
-                    String::from(parsed_error.message),
-                ),
-                _ => GetContextKeysForPrincipalPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => GetContextKeysForPrincipalPolicyError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetContextKeysForPrincipalPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetContextKeysForPrincipalPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return GetContextKeysForPrincipalPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        GetContextKeysForPrincipalPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17971,7 +18588,7 @@ impl GetContextKeysForPrincipalPolicyError {
 impl From<XmlParseError> for GetContextKeysForPrincipalPolicyError {
     fn from(err: XmlParseError) -> GetContextKeysForPrincipalPolicyError {
         let XmlParseError(message) = err;
-        GetContextKeysForPrincipalPolicyError::Unknown(message.to_string())
+        GetContextKeysForPrincipalPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetContextKeysForPrincipalPolicyError {
@@ -18004,7 +18621,8 @@ impl Error for GetContextKeysForPrincipalPolicyError {
             GetContextKeysForPrincipalPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetContextKeysForPrincipalPolicyError::Unknown(ref cause) => cause,
+            GetContextKeysForPrincipalPolicyError::ParseError(ref cause) => cause,
+            GetContextKeysForPrincipalPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18025,33 +18643,45 @@ pub enum GetCredentialReportError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCredentialReportError {
-    pub fn from_body(body: &str) -> GetCredentialReportError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ReportExpired" => GetCredentialReportError::CredentialReportExpired(String::from(
-                    parsed_error.message,
-                )),
-                "ReportNotPresent" => GetCredentialReportError::CredentialReportNotPresent(
-                    String::from(parsed_error.message),
-                ),
-                "ReportInProgress" => GetCredentialReportError::CredentialReportNotReady(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailure" => {
-                    GetCredentialReportError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetCredentialReportError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ReportExpired" => {
+                        return GetCredentialReportError::CredentialReportExpired(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ReportNotPresent" => {
+                        return GetCredentialReportError::CredentialReportNotPresent(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ReportInProgress" => {
+                        return GetCredentialReportError::CredentialReportNotReady(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return GetCredentialReportError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => GetCredentialReportError::Unknown(String::from(body)),
-            },
-            Err(_) => GetCredentialReportError::Unknown(body.to_string()),
+            }
         }
+        GetCredentialReportError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18066,7 +18696,7 @@ impl GetCredentialReportError {
 impl From<XmlParseError> for GetCredentialReportError {
     fn from(err: XmlParseError) -> GetCredentialReportError {
         let XmlParseError(message) = err;
-        GetCredentialReportError::Unknown(message.to_string())
+        GetCredentialReportError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetCredentialReportError {
@@ -18101,7 +18731,8 @@ impl Error for GetCredentialReportError {
             GetCredentialReportError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetCredentialReportError::Unknown(ref cause) => cause,
+            GetCredentialReportError::ParseError(ref cause) => cause,
+            GetCredentialReportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18118,25 +18749,31 @@ pub enum GetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupError {
-    pub fn from_body(body: &str) -> GetGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => GetGroupError::NoSuchEntity(String::from(parsed_error.message)),
-                "ServiceFailure" => {
-                    GetGroupError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return GetGroupError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return GetGroupError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => GetGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => GetGroupError::Unknown(body.to_string()),
+            }
         }
+        GetGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18151,7 +18788,7 @@ impl GetGroupError {
 impl From<XmlParseError> for GetGroupError {
     fn from(err: XmlParseError) -> GetGroupError {
         let XmlParseError(message) = err;
-        GetGroupError::Unknown(message.to_string())
+        GetGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetGroupError {
@@ -18182,7 +18819,8 @@ impl Error for GetGroupError {
             GetGroupError::Validation(ref cause) => cause,
             GetGroupError::Credentials(ref err) => err.description(),
             GetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGroupError::Unknown(ref cause) => cause,
+            GetGroupError::ParseError(ref cause) => cause,
+            GetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18199,27 +18837,33 @@ pub enum GetGroupPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupPolicyError {
-    pub fn from_body(body: &str) -> GetGroupPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    GetGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetGroupPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return GetGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return GetGroupPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    GetGroupPolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => GetGroupPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => GetGroupPolicyError::Unknown(body.to_string()),
+            }
         }
+        GetGroupPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18234,7 +18878,7 @@ impl GetGroupPolicyError {
 impl From<XmlParseError> for GetGroupPolicyError {
     fn from(err: XmlParseError) -> GetGroupPolicyError {
         let XmlParseError(message) = err;
-        GetGroupPolicyError::Unknown(message.to_string())
+        GetGroupPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetGroupPolicyError {
@@ -18265,7 +18909,8 @@ impl Error for GetGroupPolicyError {
             GetGroupPolicyError::Validation(ref cause) => cause,
             GetGroupPolicyError::Credentials(ref err) => err.description(),
             GetGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGroupPolicyError::Unknown(ref cause) => cause,
+            GetGroupPolicyError::ParseError(ref cause) => cause,
+            GetGroupPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18282,27 +18927,35 @@ pub enum GetInstanceProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstanceProfileError {
-    pub fn from_body(body: &str) -> GetInstanceProfileError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    GetInstanceProfileError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetInstanceProfileError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return GetInstanceProfileError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return GetInstanceProfileError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    GetInstanceProfileError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => GetInstanceProfileError::Unknown(String::from(body)),
-            },
-            Err(_) => GetInstanceProfileError::Unknown(body.to_string()),
+            }
         }
+        GetInstanceProfileError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18317,7 +18970,7 @@ impl GetInstanceProfileError {
 impl From<XmlParseError> for GetInstanceProfileError {
     fn from(err: XmlParseError) -> GetInstanceProfileError {
         let XmlParseError(message) = err;
-        GetInstanceProfileError::Unknown(message.to_string())
+        GetInstanceProfileError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetInstanceProfileError {
@@ -18350,7 +19003,8 @@ impl Error for GetInstanceProfileError {
             GetInstanceProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetInstanceProfileError::Unknown(ref cause) => cause,
+            GetInstanceProfileError::ParseError(ref cause) => cause,
+            GetInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18367,27 +19021,35 @@ pub enum GetLoginProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetLoginProfileError {
-    pub fn from_body(body: &str) -> GetLoginProfileError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    GetLoginProfileError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetLoginProfileError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return GetLoginProfileError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return GetLoginProfileError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    GetLoginProfileError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => GetLoginProfileError::Unknown(String::from(body)),
-            },
-            Err(_) => GetLoginProfileError::Unknown(body.to_string()),
+            }
         }
+        GetLoginProfileError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18402,7 +19064,7 @@ impl GetLoginProfileError {
 impl From<XmlParseError> for GetLoginProfileError {
     fn from(err: XmlParseError) -> GetLoginProfileError {
         let XmlParseError(message) = err;
-        GetLoginProfileError::Unknown(message.to_string())
+        GetLoginProfileError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetLoginProfileError {
@@ -18433,7 +19095,8 @@ impl Error for GetLoginProfileError {
             GetLoginProfileError::Validation(ref cause) => cause,
             GetLoginProfileError::Credentials(ref err) => err.description(),
             GetLoginProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetLoginProfileError::Unknown(ref cause) => cause,
+            GetLoginProfileError::ParseError(ref cause) => cause,
+            GetLoginProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18452,30 +19115,40 @@ pub enum GetOpenIDConnectProviderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetOpenIDConnectProviderError {
-    pub fn from_body(body: &str) -> GetOpenIDConnectProviderError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    GetOpenIDConnectProviderError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetOpenIDConnectProviderError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetOpenIDConnectProviderError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return GetOpenIDConnectProviderError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return GetOpenIDConnectProviderError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    GetOpenIDConnectProviderError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => GetOpenIDConnectProviderError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => GetOpenIDConnectProviderError::Unknown(String::from(body)),
-            },
-            Err(_) => GetOpenIDConnectProviderError::Unknown(body.to_string()),
+            }
         }
+        GetOpenIDConnectProviderError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18490,7 +19163,7 @@ impl GetOpenIDConnectProviderError {
 impl From<XmlParseError> for GetOpenIDConnectProviderError {
     fn from(err: XmlParseError) -> GetOpenIDConnectProviderError {
         let XmlParseError(message) = err;
-        GetOpenIDConnectProviderError::Unknown(message.to_string())
+        GetOpenIDConnectProviderError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetOpenIDConnectProviderError {
@@ -18524,7 +19197,8 @@ impl Error for GetOpenIDConnectProviderError {
             GetOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetOpenIDConnectProviderError::Unknown(ref cause) => cause,
+            GetOpenIDConnectProviderError::ParseError(ref cause) => cause,
+            GetOpenIDConnectProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18543,26 +19217,34 @@ pub enum GetPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetPolicyError {
-    pub fn from_body(body: &str) -> GetPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => GetPolicyError::InvalidInput(String::from(parsed_error.message)),
-                "NoSuchEntity" => GetPolicyError::NoSuchEntity(String::from(parsed_error.message)),
-                "ServiceFailure" => {
-                    GetPolicyError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetPolicyError::InvalidInput(String::from(parsed_error.message))
+                    }
+                    "NoSuchEntity" => {
+                        return GetPolicyError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return GetPolicyError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => GetPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => GetPolicyError::Unknown(body.to_string()),
+            }
         }
+        GetPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18577,7 +19259,7 @@ impl GetPolicyError {
 impl From<XmlParseError> for GetPolicyError {
     fn from(err: XmlParseError) -> GetPolicyError {
         let XmlParseError(message) = err;
-        GetPolicyError::Unknown(message.to_string())
+        GetPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetPolicyError {
@@ -18609,7 +19291,8 @@ impl Error for GetPolicyError {
             GetPolicyError::Validation(ref cause) => cause,
             GetPolicyError::Credentials(ref err) => err.description(),
             GetPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPolicyError::Unknown(ref cause) => cause,
+            GetPolicyError::ParseError(ref cause) => cause,
+            GetPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18628,30 +19311,40 @@ pub enum GetPolicyVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetPolicyVersionError {
-    pub fn from_body(body: &str) -> GetPolicyVersionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    GetPolicyVersionError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetPolicyVersionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetPolicyVersionError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return GetPolicyVersionError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return GetPolicyVersionError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    GetPolicyVersionError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    GetPolicyVersionError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => GetPolicyVersionError::Unknown(String::from(body)),
-            },
-            Err(_) => GetPolicyVersionError::Unknown(body.to_string()),
+            }
         }
+        GetPolicyVersionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18666,7 +19359,7 @@ impl GetPolicyVersionError {
 impl From<XmlParseError> for GetPolicyVersionError {
     fn from(err: XmlParseError) -> GetPolicyVersionError {
         let XmlParseError(message) = err;
-        GetPolicyVersionError::Unknown(message.to_string())
+        GetPolicyVersionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetPolicyVersionError {
@@ -18698,7 +19391,8 @@ impl Error for GetPolicyVersionError {
             GetPolicyVersionError::Validation(ref cause) => cause,
             GetPolicyVersionError::Credentials(ref err) => err.description(),
             GetPolicyVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPolicyVersionError::Unknown(ref cause) => cause,
+            GetPolicyVersionError::ParseError(ref cause) => cause,
+            GetPolicyVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18715,25 +19409,31 @@ pub enum GetRoleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetRoleError {
-    pub fn from_body(body: &str) -> GetRoleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => GetRoleError::NoSuchEntity(String::from(parsed_error.message)),
-                "ServiceFailure" => {
-                    GetRoleError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetRoleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return GetRoleError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return GetRoleError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => GetRoleError::Unknown(String::from(body)),
-            },
-            Err(_) => GetRoleError::Unknown(body.to_string()),
+            }
         }
+        GetRoleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18748,7 +19448,7 @@ impl GetRoleError {
 impl From<XmlParseError> for GetRoleError {
     fn from(err: XmlParseError) -> GetRoleError {
         let XmlParseError(message) = err;
-        GetRoleError::Unknown(message.to_string())
+        GetRoleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetRoleError {
@@ -18779,7 +19479,8 @@ impl Error for GetRoleError {
             GetRoleError::Validation(ref cause) => cause,
             GetRoleError::Credentials(ref err) => err.description(),
             GetRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRoleError::Unknown(ref cause) => cause,
+            GetRoleError::ParseError(ref cause) => cause,
+            GetRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18796,27 +19497,33 @@ pub enum GetRolePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetRolePolicyError {
-    pub fn from_body(body: &str) -> GetRolePolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    GetRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetRolePolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return GetRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return GetRolePolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    GetRolePolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => GetRolePolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => GetRolePolicyError::Unknown(body.to_string()),
+            }
         }
+        GetRolePolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18831,7 +19538,7 @@ impl GetRolePolicyError {
 impl From<XmlParseError> for GetRolePolicyError {
     fn from(err: XmlParseError) -> GetRolePolicyError {
         let XmlParseError(message) = err;
-        GetRolePolicyError::Unknown(message.to_string())
+        GetRolePolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetRolePolicyError {
@@ -18862,7 +19569,8 @@ impl Error for GetRolePolicyError {
             GetRolePolicyError::Validation(ref cause) => cause,
             GetRolePolicyError::Credentials(ref err) => err.description(),
             GetRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRolePolicyError::Unknown(ref cause) => cause,
+            GetRolePolicyError::ParseError(ref cause) => cause,
+            GetRolePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18881,30 +19589,40 @@ pub enum GetSAMLProviderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSAMLProviderError {
-    pub fn from_body(body: &str) -> GetSAMLProviderError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    GetSAMLProviderError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetSAMLProviderError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetSAMLProviderError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return GetSAMLProviderError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return GetSAMLProviderError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    GetSAMLProviderError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    GetSAMLProviderError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => GetSAMLProviderError::Unknown(String::from(body)),
-            },
-            Err(_) => GetSAMLProviderError::Unknown(body.to_string()),
+            }
         }
+        GetSAMLProviderError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18919,7 +19637,7 @@ impl GetSAMLProviderError {
 impl From<XmlParseError> for GetSAMLProviderError {
     fn from(err: XmlParseError) -> GetSAMLProviderError {
         let XmlParseError(message) = err;
-        GetSAMLProviderError::Unknown(message.to_string())
+        GetSAMLProviderError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetSAMLProviderError {
@@ -18951,7 +19669,8 @@ impl Error for GetSAMLProviderError {
             GetSAMLProviderError::Validation(ref cause) => cause,
             GetSAMLProviderError::Credentials(ref err) => err.description(),
             GetSAMLProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSAMLProviderError::Unknown(ref cause) => cause,
+            GetSAMLProviderError::ParseError(ref cause) => cause,
+            GetSAMLProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18968,29 +19687,35 @@ pub enum GetSSHPublicKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSSHPublicKeyError {
-    pub fn from_body(body: &str) -> GetSSHPublicKeyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    GetSSHPublicKeyError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetSSHPublicKeyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return GetSSHPublicKeyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnrecognizedPublicKeyEncoding" => {
+                        return GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "UnrecognizedPublicKeyEncoding" => {
-                    GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => GetSSHPublicKeyError::Unknown(String::from(body)),
-            },
-            Err(_) => GetSSHPublicKeyError::Unknown(body.to_string()),
+            }
         }
+        GetSSHPublicKeyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19005,7 +19730,7 @@ impl GetSSHPublicKeyError {
 impl From<XmlParseError> for GetSSHPublicKeyError {
     fn from(err: XmlParseError) -> GetSSHPublicKeyError {
         let XmlParseError(message) = err;
-        GetSSHPublicKeyError::Unknown(message.to_string())
+        GetSSHPublicKeyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetSSHPublicKeyError {
@@ -19036,7 +19761,8 @@ impl Error for GetSSHPublicKeyError {
             GetSSHPublicKeyError::Validation(ref cause) => cause,
             GetSSHPublicKeyError::Credentials(ref err) => err.description(),
             GetSSHPublicKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSSHPublicKeyError::Unknown(ref cause) => cause,
+            GetSSHPublicKeyError::ParseError(ref cause) => cause,
+            GetSSHPublicKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19053,27 +19779,35 @@ pub enum GetServerCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetServerCertificateError {
-    pub fn from_body(body: &str) -> GetServerCertificateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    GetServerCertificateError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetServerCertificateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return GetServerCertificateError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return GetServerCertificateError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    GetServerCertificateError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => GetServerCertificateError::Unknown(String::from(body)),
-            },
-            Err(_) => GetServerCertificateError::Unknown(body.to_string()),
+            }
         }
+        GetServerCertificateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19088,7 +19822,7 @@ impl GetServerCertificateError {
 impl From<XmlParseError> for GetServerCertificateError {
     fn from(err: XmlParseError) -> GetServerCertificateError {
         let XmlParseError(message) = err;
-        GetServerCertificateError::Unknown(message.to_string())
+        GetServerCertificateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetServerCertificateError {
@@ -19121,7 +19855,8 @@ impl Error for GetServerCertificateError {
             GetServerCertificateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetServerCertificateError::Unknown(ref cause) => cause,
+            GetServerCertificateError::ParseError(ref cause) => cause,
+            GetServerCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19140,30 +19875,40 @@ pub enum GetServiceLinkedRoleDeletionStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetServiceLinkedRoleDeletionStatusError {
-    pub fn from_body(body: &str) -> GetServiceLinkedRoleDeletionStatusError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => GetServiceLinkedRoleDeletionStatusError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchEntity" => GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailure" => GetServiceLinkedRoleDeletionStatusError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
-                _ => GetServiceLinkedRoleDeletionStatusError::Unknown(String::from(body)),
-            },
-            Err(_) => GetServiceLinkedRoleDeletionStatusError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetServiceLinkedRoleDeletionStatusError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetServiceLinkedRoleDeletionStatusError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return GetServiceLinkedRoleDeletionStatusError::ServiceFailure(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        GetServiceLinkedRoleDeletionStatusError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19178,7 +19923,7 @@ impl GetServiceLinkedRoleDeletionStatusError {
 impl From<XmlParseError> for GetServiceLinkedRoleDeletionStatusError {
     fn from(err: XmlParseError) -> GetServiceLinkedRoleDeletionStatusError {
         let XmlParseError(message) = err;
-        GetServiceLinkedRoleDeletionStatusError::Unknown(message.to_string())
+        GetServiceLinkedRoleDeletionStatusError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetServiceLinkedRoleDeletionStatusError {
@@ -19212,7 +19957,8 @@ impl Error for GetServiceLinkedRoleDeletionStatusError {
             GetServiceLinkedRoleDeletionStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetServiceLinkedRoleDeletionStatusError::Unknown(ref cause) => cause,
+            GetServiceLinkedRoleDeletionStatusError::ParseError(ref cause) => cause,
+            GetServiceLinkedRoleDeletionStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19229,25 +19975,31 @@ pub enum GetUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetUserError {
-    pub fn from_body(body: &str) -> GetUserError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => GetUserError::NoSuchEntity(String::from(parsed_error.message)),
-                "ServiceFailure" => {
-                    GetUserError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetUserError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return GetUserError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return GetUserError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => GetUserError::Unknown(String::from(body)),
-            },
-            Err(_) => GetUserError::Unknown(body.to_string()),
+            }
         }
+        GetUserError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19262,7 +20014,7 @@ impl GetUserError {
 impl From<XmlParseError> for GetUserError {
     fn from(err: XmlParseError) -> GetUserError {
         let XmlParseError(message) = err;
-        GetUserError::Unknown(message.to_string())
+        GetUserError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetUserError {
@@ -19293,7 +20045,8 @@ impl Error for GetUserError {
             GetUserError::Validation(ref cause) => cause,
             GetUserError::Credentials(ref err) => err.description(),
             GetUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetUserError::Unknown(ref cause) => cause,
+            GetUserError::ParseError(ref cause) => cause,
+            GetUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19310,27 +20063,33 @@ pub enum GetUserPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetUserPolicyError {
-    pub fn from_body(body: &str) -> GetUserPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    GetUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetUserPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return GetUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return GetUserPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    GetUserPolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => GetUserPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => GetUserPolicyError::Unknown(body.to_string()),
+            }
         }
+        GetUserPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19345,7 +20104,7 @@ impl GetUserPolicyError {
 impl From<XmlParseError> for GetUserPolicyError {
     fn from(err: XmlParseError) -> GetUserPolicyError {
         let XmlParseError(message) = err;
-        GetUserPolicyError::Unknown(message.to_string())
+        GetUserPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetUserPolicyError {
@@ -19376,7 +20135,8 @@ impl Error for GetUserPolicyError {
             GetUserPolicyError::Validation(ref cause) => cause,
             GetUserPolicyError::Credentials(ref err) => err.description(),
             GetUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetUserPolicyError::Unknown(ref cause) => cause,
+            GetUserPolicyError::ParseError(ref cause) => cause,
+            GetUserPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19393,27 +20153,33 @@ pub enum ListAccessKeysError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAccessKeysError {
-    pub fn from_body(body: &str) -> ListAccessKeysError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    ListAccessKeysError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListAccessKeysError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ListAccessKeysError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return ListAccessKeysError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    ListAccessKeysError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => ListAccessKeysError::Unknown(String::from(body)),
-            },
-            Err(_) => ListAccessKeysError::Unknown(body.to_string()),
+            }
         }
+        ListAccessKeysError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19428,7 +20194,7 @@ impl ListAccessKeysError {
 impl From<XmlParseError> for ListAccessKeysError {
     fn from(err: XmlParseError) -> ListAccessKeysError {
         let XmlParseError(message) = err;
-        ListAccessKeysError::Unknown(message.to_string())
+        ListAccessKeysError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListAccessKeysError {
@@ -19459,7 +20225,8 @@ impl Error for ListAccessKeysError {
             ListAccessKeysError::Validation(ref cause) => cause,
             ListAccessKeysError::Credentials(ref err) => err.description(),
             ListAccessKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListAccessKeysError::Unknown(ref cause) => cause,
+            ListAccessKeysError::ParseError(ref cause) => cause,
+            ListAccessKeysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19474,24 +20241,30 @@ pub enum ListAccountAliasesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAccountAliasesError {
-    pub fn from_body(body: &str) -> ListAccountAliasesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailure" => {
-                    ListAccountAliasesError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListAccountAliasesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ServiceFailure" => {
+                        return ListAccountAliasesError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ListAccountAliasesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListAccountAliasesError::Unknown(body.to_string()),
+            }
         }
+        ListAccountAliasesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19506,7 +20279,7 @@ impl ListAccountAliasesError {
 impl From<XmlParseError> for ListAccountAliasesError {
     fn from(err: XmlParseError) -> ListAccountAliasesError {
         let XmlParseError(message) = err;
-        ListAccountAliasesError::Unknown(message.to_string())
+        ListAccountAliasesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListAccountAliasesError {
@@ -19538,7 +20311,8 @@ impl Error for ListAccountAliasesError {
             ListAccountAliasesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListAccountAliasesError::Unknown(ref cause) => cause,
+            ListAccountAliasesError::ParseError(ref cause) => cause,
+            ListAccountAliasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19557,30 +20331,40 @@ pub enum ListAttachedGroupPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAttachedGroupPoliciesError {
-    pub fn from_body(body: &str) -> ListAttachedGroupPoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ListAttachedGroupPoliciesError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListAttachedGroupPoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListAttachedGroupPoliciesError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return ListAttachedGroupPoliciesError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ListAttachedGroupPoliciesError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    ListAttachedGroupPoliciesError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => ListAttachedGroupPoliciesError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => ListAttachedGroupPoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListAttachedGroupPoliciesError::Unknown(body.to_string()),
+            }
         }
+        ListAttachedGroupPoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19595,7 +20379,7 @@ impl ListAttachedGroupPoliciesError {
 impl From<XmlParseError> for ListAttachedGroupPoliciesError {
     fn from(err: XmlParseError) -> ListAttachedGroupPoliciesError {
         let XmlParseError(message) = err;
-        ListAttachedGroupPoliciesError::Unknown(message.to_string())
+        ListAttachedGroupPoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListAttachedGroupPoliciesError {
@@ -19629,7 +20413,8 @@ impl Error for ListAttachedGroupPoliciesError {
             ListAttachedGroupPoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListAttachedGroupPoliciesError::Unknown(ref cause) => cause,
+            ListAttachedGroupPoliciesError::ParseError(ref cause) => cause,
+            ListAttachedGroupPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19648,30 +20433,40 @@ pub enum ListAttachedRolePoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAttachedRolePoliciesError {
-    pub fn from_body(body: &str) -> ListAttachedRolePoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ListAttachedRolePoliciesError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListAttachedRolePoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListAttachedRolePoliciesError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return ListAttachedRolePoliciesError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ListAttachedRolePoliciesError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    ListAttachedRolePoliciesError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => ListAttachedRolePoliciesError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => ListAttachedRolePoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListAttachedRolePoliciesError::Unknown(body.to_string()),
+            }
         }
+        ListAttachedRolePoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19686,7 +20481,7 @@ impl ListAttachedRolePoliciesError {
 impl From<XmlParseError> for ListAttachedRolePoliciesError {
     fn from(err: XmlParseError) -> ListAttachedRolePoliciesError {
         let XmlParseError(message) = err;
-        ListAttachedRolePoliciesError::Unknown(message.to_string())
+        ListAttachedRolePoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListAttachedRolePoliciesError {
@@ -19720,7 +20515,8 @@ impl Error for ListAttachedRolePoliciesError {
             ListAttachedRolePoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListAttachedRolePoliciesError::Unknown(ref cause) => cause,
+            ListAttachedRolePoliciesError::ParseError(ref cause) => cause,
+            ListAttachedRolePoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19739,30 +20535,40 @@ pub enum ListAttachedUserPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAttachedUserPoliciesError {
-    pub fn from_body(body: &str) -> ListAttachedUserPoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ListAttachedUserPoliciesError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListAttachedUserPoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListAttachedUserPoliciesError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return ListAttachedUserPoliciesError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ListAttachedUserPoliciesError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    ListAttachedUserPoliciesError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => ListAttachedUserPoliciesError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => ListAttachedUserPoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListAttachedUserPoliciesError::Unknown(body.to_string()),
+            }
         }
+        ListAttachedUserPoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19777,7 +20583,7 @@ impl ListAttachedUserPoliciesError {
 impl From<XmlParseError> for ListAttachedUserPoliciesError {
     fn from(err: XmlParseError) -> ListAttachedUserPoliciesError {
         let XmlParseError(message) = err;
-        ListAttachedUserPoliciesError::Unknown(message.to_string())
+        ListAttachedUserPoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListAttachedUserPoliciesError {
@@ -19811,7 +20617,8 @@ impl Error for ListAttachedUserPoliciesError {
             ListAttachedUserPoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListAttachedUserPoliciesError::Unknown(ref cause) => cause,
+            ListAttachedUserPoliciesError::ParseError(ref cause) => cause,
+            ListAttachedUserPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19830,30 +20637,40 @@ pub enum ListEntitiesForPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListEntitiesForPolicyError {
-    pub fn from_body(body: &str) -> ListEntitiesForPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ListEntitiesForPolicyError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListEntitiesForPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListEntitiesForPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return ListEntitiesForPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ListEntitiesForPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    ListEntitiesForPolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    ListEntitiesForPolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => ListEntitiesForPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => ListEntitiesForPolicyError::Unknown(body.to_string()),
+            }
         }
+        ListEntitiesForPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19868,7 +20685,7 @@ impl ListEntitiesForPolicyError {
 impl From<XmlParseError> for ListEntitiesForPolicyError {
     fn from(err: XmlParseError) -> ListEntitiesForPolicyError {
         let XmlParseError(message) = err;
-        ListEntitiesForPolicyError::Unknown(message.to_string())
+        ListEntitiesForPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListEntitiesForPolicyError {
@@ -19902,7 +20719,8 @@ impl Error for ListEntitiesForPolicyError {
             ListEntitiesForPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListEntitiesForPolicyError::Unknown(ref cause) => cause,
+            ListEntitiesForPolicyError::ParseError(ref cause) => cause,
+            ListEntitiesForPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19919,27 +20737,35 @@ pub enum ListGroupPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupPoliciesError {
-    pub fn from_body(body: &str) -> ListGroupPoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    ListGroupPoliciesError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListGroupPoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ListGroupPoliciesError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ListGroupPoliciesError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    ListGroupPoliciesError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => ListGroupPoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListGroupPoliciesError::Unknown(body.to_string()),
+            }
         }
+        ListGroupPoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19954,7 +20780,7 @@ impl ListGroupPoliciesError {
 impl From<XmlParseError> for ListGroupPoliciesError {
     fn from(err: XmlParseError) -> ListGroupPoliciesError {
         let XmlParseError(message) = err;
-        ListGroupPoliciesError::Unknown(message.to_string())
+        ListGroupPoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListGroupPoliciesError {
@@ -19987,7 +20813,8 @@ impl Error for ListGroupPoliciesError {
             ListGroupPoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListGroupPoliciesError::Unknown(ref cause) => cause,
+            ListGroupPoliciesError::ParseError(ref cause) => cause,
+            ListGroupPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20002,24 +20829,28 @@ pub enum ListGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupsError {
-    pub fn from_body(body: &str) -> ListGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailure" => {
-                    ListGroupsError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ServiceFailure" => {
+                        return ListGroupsError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => ListGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListGroupsError::Unknown(body.to_string()),
+            }
         }
+        ListGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20034,7 +20865,7 @@ impl ListGroupsError {
 impl From<XmlParseError> for ListGroupsError {
     fn from(err: XmlParseError) -> ListGroupsError {
         let XmlParseError(message) = err;
-        ListGroupsError::Unknown(message.to_string())
+        ListGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListGroupsError {
@@ -20064,7 +20895,8 @@ impl Error for ListGroupsError {
             ListGroupsError::Validation(ref cause) => cause,
             ListGroupsError::Credentials(ref err) => err.description(),
             ListGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGroupsError::Unknown(ref cause) => cause,
+            ListGroupsError::ParseError(ref cause) => cause,
+            ListGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20081,27 +20913,35 @@ pub enum ListGroupsForUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupsForUserError {
-    pub fn from_body(body: &str) -> ListGroupsForUserError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    ListGroupsForUserError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListGroupsForUserError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ListGroupsForUserError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ListGroupsForUserError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    ListGroupsForUserError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => ListGroupsForUserError::Unknown(String::from(body)),
-            },
-            Err(_) => ListGroupsForUserError::Unknown(body.to_string()),
+            }
         }
+        ListGroupsForUserError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20116,7 +20956,7 @@ impl ListGroupsForUserError {
 impl From<XmlParseError> for ListGroupsForUserError {
     fn from(err: XmlParseError) -> ListGroupsForUserError {
         let XmlParseError(message) = err;
-        ListGroupsForUserError::Unknown(message.to_string())
+        ListGroupsForUserError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListGroupsForUserError {
@@ -20149,7 +20989,8 @@ impl Error for ListGroupsForUserError {
             ListGroupsForUserError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListGroupsForUserError::Unknown(ref cause) => cause,
+            ListGroupsForUserError::ParseError(ref cause) => cause,
+            ListGroupsForUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20164,24 +21005,30 @@ pub enum ListInstanceProfilesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListInstanceProfilesError {
-    pub fn from_body(body: &str) -> ListInstanceProfilesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailure" => {
-                    ListInstanceProfilesError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListInstanceProfilesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ServiceFailure" => {
+                        return ListInstanceProfilesError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ListInstanceProfilesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListInstanceProfilesError::Unknown(body.to_string()),
+            }
         }
+        ListInstanceProfilesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20196,7 +21043,7 @@ impl ListInstanceProfilesError {
 impl From<XmlParseError> for ListInstanceProfilesError {
     fn from(err: XmlParseError) -> ListInstanceProfilesError {
         let XmlParseError(message) = err;
-        ListInstanceProfilesError::Unknown(message.to_string())
+        ListInstanceProfilesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListInstanceProfilesError {
@@ -20228,7 +21075,8 @@ impl Error for ListInstanceProfilesError {
             ListInstanceProfilesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListInstanceProfilesError::Unknown(ref cause) => cause,
+            ListInstanceProfilesError::ParseError(ref cause) => cause,
+            ListInstanceProfilesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20245,27 +21093,35 @@ pub enum ListInstanceProfilesForRoleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListInstanceProfilesForRoleError {
-    pub fn from_body(body: &str) -> ListInstanceProfilesForRoleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => ListInstanceProfilesForRoleError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                "ServiceFailure" => ListInstanceProfilesForRoleError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => ListInstanceProfilesForRoleError::Unknown(String::from(body)),
-            },
-            Err(_) => ListInstanceProfilesForRoleError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListInstanceProfilesForRoleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ListInstanceProfilesForRoleError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ListInstanceProfilesForRoleError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        ListInstanceProfilesForRoleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20280,7 +21136,7 @@ impl ListInstanceProfilesForRoleError {
 impl From<XmlParseError> for ListInstanceProfilesForRoleError {
     fn from(err: XmlParseError) -> ListInstanceProfilesForRoleError {
         let XmlParseError(message) = err;
-        ListInstanceProfilesForRoleError::Unknown(message.to_string())
+        ListInstanceProfilesForRoleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListInstanceProfilesForRoleError {
@@ -20313,7 +21169,8 @@ impl Error for ListInstanceProfilesForRoleError {
             ListInstanceProfilesForRoleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListInstanceProfilesForRoleError::Unknown(ref cause) => cause,
+            ListInstanceProfilesForRoleError::ParseError(ref cause) => cause,
+            ListInstanceProfilesForRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20330,27 +21187,33 @@ pub enum ListMFADevicesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListMFADevicesError {
-    pub fn from_body(body: &str) -> ListMFADevicesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    ListMFADevicesError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListMFADevicesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ListMFADevicesError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return ListMFADevicesError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    ListMFADevicesError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => ListMFADevicesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListMFADevicesError::Unknown(body.to_string()),
+            }
         }
+        ListMFADevicesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20365,7 +21228,7 @@ impl ListMFADevicesError {
 impl From<XmlParseError> for ListMFADevicesError {
     fn from(err: XmlParseError) -> ListMFADevicesError {
         let XmlParseError(message) = err;
-        ListMFADevicesError::Unknown(message.to_string())
+        ListMFADevicesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListMFADevicesError {
@@ -20396,7 +21259,8 @@ impl Error for ListMFADevicesError {
             ListMFADevicesError::Validation(ref cause) => cause,
             ListMFADevicesError::Credentials(ref err) => err.description(),
             ListMFADevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListMFADevicesError::Unknown(ref cause) => cause,
+            ListMFADevicesError::ParseError(ref cause) => cause,
+            ListMFADevicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20411,24 +21275,30 @@ pub enum ListOpenIDConnectProvidersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListOpenIDConnectProvidersError {
-    pub fn from_body(body: &str) -> ListOpenIDConnectProvidersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailure" => ListOpenIDConnectProvidersError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => ListOpenIDConnectProvidersError::Unknown(String::from(body)),
-            },
-            Err(_) => ListOpenIDConnectProvidersError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListOpenIDConnectProvidersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ServiceFailure" => {
+                        return ListOpenIDConnectProvidersError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        ListOpenIDConnectProvidersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20443,7 +21313,7 @@ impl ListOpenIDConnectProvidersError {
 impl From<XmlParseError> for ListOpenIDConnectProvidersError {
     fn from(err: XmlParseError) -> ListOpenIDConnectProvidersError {
         let XmlParseError(message) = err;
-        ListOpenIDConnectProvidersError::Unknown(message.to_string())
+        ListOpenIDConnectProvidersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListOpenIDConnectProvidersError {
@@ -20475,7 +21345,8 @@ impl Error for ListOpenIDConnectProvidersError {
             ListOpenIDConnectProvidersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListOpenIDConnectProvidersError::Unknown(ref cause) => cause,
+            ListOpenIDConnectProvidersError::ParseError(ref cause) => cause,
+            ListOpenIDConnectProvidersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20490,24 +21361,28 @@ pub enum ListPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPoliciesError {
-    pub fn from_body(body: &str) -> ListPoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailure" => {
-                    ListPoliciesError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListPoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ServiceFailure" => {
+                        return ListPoliciesError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => ListPoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListPoliciesError::Unknown(body.to_string()),
+            }
         }
+        ListPoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20522,7 +21397,7 @@ impl ListPoliciesError {
 impl From<XmlParseError> for ListPoliciesError {
     fn from(err: XmlParseError) -> ListPoliciesError {
         let XmlParseError(message) = err;
-        ListPoliciesError::Unknown(message.to_string())
+        ListPoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListPoliciesError {
@@ -20552,7 +21427,8 @@ impl Error for ListPoliciesError {
             ListPoliciesError::Validation(ref cause) => cause,
             ListPoliciesError::Credentials(ref err) => err.description(),
             ListPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPoliciesError::Unknown(ref cause) => cause,
+            ListPoliciesError::ParseError(ref cause) => cause,
+            ListPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20571,30 +21447,40 @@ pub enum ListPolicyVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPolicyVersionsError {
-    pub fn from_body(body: &str) -> ListPolicyVersionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    ListPolicyVersionsError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListPolicyVersionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListPolicyVersionsError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return ListPolicyVersionsError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ListPolicyVersionsError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    ListPolicyVersionsError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    ListPolicyVersionsError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => ListPolicyVersionsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListPolicyVersionsError::Unknown(body.to_string()),
+            }
         }
+        ListPolicyVersionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20609,7 +21495,7 @@ impl ListPolicyVersionsError {
 impl From<XmlParseError> for ListPolicyVersionsError {
     fn from(err: XmlParseError) -> ListPolicyVersionsError {
         let XmlParseError(message) = err;
-        ListPolicyVersionsError::Unknown(message.to_string())
+        ListPolicyVersionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListPolicyVersionsError {
@@ -20643,7 +21529,8 @@ impl Error for ListPolicyVersionsError {
             ListPolicyVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListPolicyVersionsError::Unknown(ref cause) => cause,
+            ListPolicyVersionsError::ParseError(ref cause) => cause,
+            ListPolicyVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20660,27 +21547,35 @@ pub enum ListRolePoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListRolePoliciesError {
-    pub fn from_body(body: &str) -> ListRolePoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    ListRolePoliciesError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListRolePoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ListRolePoliciesError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ListRolePoliciesError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    ListRolePoliciesError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => ListRolePoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListRolePoliciesError::Unknown(body.to_string()),
+            }
         }
+        ListRolePoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20695,7 +21590,7 @@ impl ListRolePoliciesError {
 impl From<XmlParseError> for ListRolePoliciesError {
     fn from(err: XmlParseError) -> ListRolePoliciesError {
         let XmlParseError(message) = err;
-        ListRolePoliciesError::Unknown(message.to_string())
+        ListRolePoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListRolePoliciesError {
@@ -20726,7 +21621,8 @@ impl Error for ListRolePoliciesError {
             ListRolePoliciesError::Validation(ref cause) => cause,
             ListRolePoliciesError::Credentials(ref err) => err.description(),
             ListRolePoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListRolePoliciesError::Unknown(ref cause) => cause,
+            ListRolePoliciesError::ParseError(ref cause) => cause,
+            ListRolePoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20741,24 +21637,28 @@ pub enum ListRolesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListRolesError {
-    pub fn from_body(body: &str) -> ListRolesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailure" => {
-                    ListRolesError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListRolesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ServiceFailure" => {
+                        return ListRolesError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => ListRolesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListRolesError::Unknown(body.to_string()),
+            }
         }
+        ListRolesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20773,7 +21673,7 @@ impl ListRolesError {
 impl From<XmlParseError> for ListRolesError {
     fn from(err: XmlParseError) -> ListRolesError {
         let XmlParseError(message) = err;
-        ListRolesError::Unknown(message.to_string())
+        ListRolesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListRolesError {
@@ -20803,7 +21703,8 @@ impl Error for ListRolesError {
             ListRolesError::Validation(ref cause) => cause,
             ListRolesError::Credentials(ref err) => err.description(),
             ListRolesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListRolesError::Unknown(ref cause) => cause,
+            ListRolesError::ParseError(ref cause) => cause,
+            ListRolesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20818,24 +21719,30 @@ pub enum ListSAMLProvidersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListSAMLProvidersError {
-    pub fn from_body(body: &str) -> ListSAMLProvidersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailure" => {
-                    ListSAMLProvidersError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListSAMLProvidersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ServiceFailure" => {
+                        return ListSAMLProvidersError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ListSAMLProvidersError::Unknown(String::from(body)),
-            },
-            Err(_) => ListSAMLProvidersError::Unknown(body.to_string()),
+            }
         }
+        ListSAMLProvidersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20850,7 +21757,7 @@ impl ListSAMLProvidersError {
 impl From<XmlParseError> for ListSAMLProvidersError {
     fn from(err: XmlParseError) -> ListSAMLProvidersError {
         let XmlParseError(message) = err;
-        ListSAMLProvidersError::Unknown(message.to_string())
+        ListSAMLProvidersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListSAMLProvidersError {
@@ -20882,7 +21789,8 @@ impl Error for ListSAMLProvidersError {
             ListSAMLProvidersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListSAMLProvidersError::Unknown(ref cause) => cause,
+            ListSAMLProvidersError::ParseError(ref cause) => cause,
+            ListSAMLProvidersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20897,24 +21805,30 @@ pub enum ListSSHPublicKeysError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListSSHPublicKeysError {
-    pub fn from_body(body: &str) -> ListSSHPublicKeysError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    ListSSHPublicKeysError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListSSHPublicKeysError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ListSSHPublicKeysError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ListSSHPublicKeysError::Unknown(String::from(body)),
-            },
-            Err(_) => ListSSHPublicKeysError::Unknown(body.to_string()),
+            }
         }
+        ListSSHPublicKeysError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20929,7 +21843,7 @@ impl ListSSHPublicKeysError {
 impl From<XmlParseError> for ListSSHPublicKeysError {
     fn from(err: XmlParseError) -> ListSSHPublicKeysError {
         let XmlParseError(message) = err;
-        ListSSHPublicKeysError::Unknown(message.to_string())
+        ListSSHPublicKeysError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListSSHPublicKeysError {
@@ -20961,7 +21875,8 @@ impl Error for ListSSHPublicKeysError {
             ListSSHPublicKeysError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListSSHPublicKeysError::Unknown(ref cause) => cause,
+            ListSSHPublicKeysError::ParseError(ref cause) => cause,
+            ListSSHPublicKeysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20976,24 +21891,30 @@ pub enum ListServerCertificatesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListServerCertificatesError {
-    pub fn from_body(body: &str) -> ListServerCertificatesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailure" => {
-                    ListServerCertificatesError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListServerCertificatesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ServiceFailure" => {
+                        return ListServerCertificatesError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ListServerCertificatesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListServerCertificatesError::Unknown(body.to_string()),
+            }
         }
+        ListServerCertificatesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21008,7 +21929,7 @@ impl ListServerCertificatesError {
 impl From<XmlParseError> for ListServerCertificatesError {
     fn from(err: XmlParseError) -> ListServerCertificatesError {
         let XmlParseError(message) = err;
-        ListServerCertificatesError::Unknown(message.to_string())
+        ListServerCertificatesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListServerCertificatesError {
@@ -21040,7 +21961,8 @@ impl Error for ListServerCertificatesError {
             ListServerCertificatesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListServerCertificatesError::Unknown(ref cause) => cause,
+            ListServerCertificatesError::ParseError(ref cause) => cause,
+            ListServerCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21057,27 +21979,35 @@ pub enum ListServiceSpecificCredentialsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListServiceSpecificCredentialsError {
-    pub fn from_body(body: &str) -> ListServiceSpecificCredentialsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => ListServiceSpecificCredentialsError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                "NotSupportedService" => ListServiceSpecificCredentialsError::ServiceNotSupported(
-                    String::from(parsed_error.message),
-                ),
-                _ => ListServiceSpecificCredentialsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListServiceSpecificCredentialsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListServiceSpecificCredentialsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ListServiceSpecificCredentialsError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NotSupportedService" => {
+                        return ListServiceSpecificCredentialsError::ServiceNotSupported(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        ListServiceSpecificCredentialsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21092,7 +22022,7 @@ impl ListServiceSpecificCredentialsError {
 impl From<XmlParseError> for ListServiceSpecificCredentialsError {
     fn from(err: XmlParseError) -> ListServiceSpecificCredentialsError {
         let XmlParseError(message) = err;
-        ListServiceSpecificCredentialsError::Unknown(message.to_string())
+        ListServiceSpecificCredentialsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListServiceSpecificCredentialsError {
@@ -21125,7 +22055,8 @@ impl Error for ListServiceSpecificCredentialsError {
             ListServiceSpecificCredentialsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListServiceSpecificCredentialsError::Unknown(ref cause) => cause,
+            ListServiceSpecificCredentialsError::ParseError(ref cause) => cause,
+            ListServiceSpecificCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21142,27 +22073,35 @@ pub enum ListSigningCertificatesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListSigningCertificatesError {
-    pub fn from_body(body: &str) -> ListSigningCertificatesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    ListSigningCertificatesError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListSigningCertificatesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ListSigningCertificatesError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ListSigningCertificatesError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    ListSigningCertificatesError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => ListSigningCertificatesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListSigningCertificatesError::Unknown(body.to_string()),
+            }
         }
+        ListSigningCertificatesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21177,7 +22116,7 @@ impl ListSigningCertificatesError {
 impl From<XmlParseError> for ListSigningCertificatesError {
     fn from(err: XmlParseError) -> ListSigningCertificatesError {
         let XmlParseError(message) = err;
-        ListSigningCertificatesError::Unknown(message.to_string())
+        ListSigningCertificatesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListSigningCertificatesError {
@@ -21210,7 +22149,8 @@ impl Error for ListSigningCertificatesError {
             ListSigningCertificatesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListSigningCertificatesError::Unknown(ref cause) => cause,
+            ListSigningCertificatesError::ParseError(ref cause) => cause,
+            ListSigningCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21227,27 +22167,35 @@ pub enum ListUserPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListUserPoliciesError {
-    pub fn from_body(body: &str) -> ListUserPoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    ListUserPoliciesError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListUserPoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ListUserPoliciesError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ListUserPoliciesError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    ListUserPoliciesError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => ListUserPoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListUserPoliciesError::Unknown(body.to_string()),
+            }
         }
+        ListUserPoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21262,7 +22210,7 @@ impl ListUserPoliciesError {
 impl From<XmlParseError> for ListUserPoliciesError {
     fn from(err: XmlParseError) -> ListUserPoliciesError {
         let XmlParseError(message) = err;
-        ListUserPoliciesError::Unknown(message.to_string())
+        ListUserPoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListUserPoliciesError {
@@ -21293,7 +22241,8 @@ impl Error for ListUserPoliciesError {
             ListUserPoliciesError::Validation(ref cause) => cause,
             ListUserPoliciesError::Credentials(ref err) => err.description(),
             ListUserPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUserPoliciesError::Unknown(ref cause) => cause,
+            ListUserPoliciesError::ParseError(ref cause) => cause,
+            ListUserPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21308,24 +22257,28 @@ pub enum ListUsersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListUsersError {
-    pub fn from_body(body: &str) -> ListUsersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailure" => {
-                    ListUsersError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListUsersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ServiceFailure" => {
+                        return ListUsersError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => ListUsersError::Unknown(String::from(body)),
-            },
-            Err(_) => ListUsersError::Unknown(body.to_string()),
+            }
         }
+        ListUsersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21340,7 +22293,7 @@ impl ListUsersError {
 impl From<XmlParseError> for ListUsersError {
     fn from(err: XmlParseError) -> ListUsersError {
         let XmlParseError(message) = err;
-        ListUsersError::Unknown(message.to_string())
+        ListUsersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListUsersError {
@@ -21370,7 +22323,8 @@ impl Error for ListUsersError {
             ListUsersError::Validation(ref cause) => cause,
             ListUsersError::Credentials(ref err) => err.description(),
             ListUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUsersError::Unknown(ref cause) => cause,
+            ListUsersError::ParseError(ref cause) => cause,
+            ListUsersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21383,21 +22337,25 @@ pub enum ListVirtualMFADevicesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListVirtualMFADevicesError {
-    pub fn from_body(body: &str) -> ListVirtualMFADevicesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListVirtualMFADevicesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListVirtualMFADevicesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListVirtualMFADevicesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListVirtualMFADevicesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21412,7 +22370,7 @@ impl ListVirtualMFADevicesError {
 impl From<XmlParseError> for ListVirtualMFADevicesError {
     fn from(err: XmlParseError) -> ListVirtualMFADevicesError {
         let XmlParseError(message) = err;
-        ListVirtualMFADevicesError::Unknown(message.to_string())
+        ListVirtualMFADevicesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListVirtualMFADevicesError {
@@ -21443,7 +22401,8 @@ impl Error for ListVirtualMFADevicesError {
             ListVirtualMFADevicesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListVirtualMFADevicesError::Unknown(ref cause) => cause,
+            ListVirtualMFADevicesError::ParseError(ref cause) => cause,
+            ListVirtualMFADevicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21464,33 +22423,43 @@ pub enum PutGroupPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutGroupPolicyError {
-    pub fn from_body(body: &str) -> PutGroupPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    PutGroupPolicyError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> PutGroupPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return PutGroupPolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MalformedPolicyDocument" => {
+                        return PutGroupPolicyError::MalformedPolicyDocument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return PutGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return PutGroupPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "MalformedPolicyDocument" => {
-                    PutGroupPolicyError::MalformedPolicyDocument(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    PutGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    PutGroupPolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => PutGroupPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => PutGroupPolicyError::Unknown(body.to_string()),
+            }
         }
+        PutGroupPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21505,7 +22474,7 @@ impl PutGroupPolicyError {
 impl From<XmlParseError> for PutGroupPolicyError {
     fn from(err: XmlParseError) -> PutGroupPolicyError {
         let XmlParseError(message) = err;
-        PutGroupPolicyError::Unknown(message.to_string())
+        PutGroupPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutGroupPolicyError {
@@ -21538,7 +22507,8 @@ impl Error for PutGroupPolicyError {
             PutGroupPolicyError::Validation(ref cause) => cause,
             PutGroupPolicyError::Credentials(ref err) => err.description(),
             PutGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutGroupPolicyError::Unknown(ref cause) => cause,
+            PutGroupPolicyError::ParseError(ref cause) => cause,
+            PutGroupPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21561,36 +22531,50 @@ pub enum PutRolePermissionsBoundaryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutRolePermissionsBoundaryError {
-    pub fn from_body(body: &str) -> PutRolePermissionsBoundaryError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => PutRolePermissionsBoundaryError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchEntity" => PutRolePermissionsBoundaryError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                "PolicyNotAttachable" => PutRolePermissionsBoundaryError::PolicyNotAttachable(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailure" => PutRolePermissionsBoundaryError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                "UnmodifiableEntity" => PutRolePermissionsBoundaryError::UnmodifiableEntity(
-                    String::from(parsed_error.message),
-                ),
-                _ => PutRolePermissionsBoundaryError::Unknown(String::from(body)),
-            },
-            Err(_) => PutRolePermissionsBoundaryError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutRolePermissionsBoundaryError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return PutRolePermissionsBoundaryError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return PutRolePermissionsBoundaryError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PolicyNotAttachable" => {
+                        return PutRolePermissionsBoundaryError::PolicyNotAttachable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return PutRolePermissionsBoundaryError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnmodifiableEntity" => {
+                        return PutRolePermissionsBoundaryError::UnmodifiableEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        PutRolePermissionsBoundaryError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21605,7 +22589,7 @@ impl PutRolePermissionsBoundaryError {
 impl From<XmlParseError> for PutRolePermissionsBoundaryError {
     fn from(err: XmlParseError) -> PutRolePermissionsBoundaryError {
         let XmlParseError(message) = err;
-        PutRolePermissionsBoundaryError::Unknown(message.to_string())
+        PutRolePermissionsBoundaryError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutRolePermissionsBoundaryError {
@@ -21641,7 +22625,8 @@ impl Error for PutRolePermissionsBoundaryError {
             PutRolePermissionsBoundaryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutRolePermissionsBoundaryError::Unknown(ref cause) => cause,
+            PutRolePermissionsBoundaryError::ParseError(ref cause) => cause,
+            PutRolePermissionsBoundaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21664,36 +22649,46 @@ pub enum PutRolePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutRolePolicyError {
-    pub fn from_body(body: &str) -> PutRolePolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    PutRolePolicyError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> PutRolePolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return PutRolePolicyError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "MalformedPolicyDocument" => {
+                        return PutRolePolicyError::MalformedPolicyDocument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return PutRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return PutRolePolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnmodifiableEntity" => {
+                        return PutRolePolicyError::UnmodifiableEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "MalformedPolicyDocument" => {
-                    PutRolePolicyError::MalformedPolicyDocument(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    PutRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    PutRolePolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                "UnmodifiableEntity" => {
-                    PutRolePolicyError::UnmodifiableEntity(String::from(parsed_error.message))
-                }
-                _ => PutRolePolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => PutRolePolicyError::Unknown(body.to_string()),
+            }
         }
+        PutRolePolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21708,7 +22703,7 @@ impl PutRolePolicyError {
 impl From<XmlParseError> for PutRolePolicyError {
     fn from(err: XmlParseError) -> PutRolePolicyError {
         let XmlParseError(message) = err;
-        PutRolePolicyError::Unknown(message.to_string())
+        PutRolePolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutRolePolicyError {
@@ -21742,7 +22737,8 @@ impl Error for PutRolePolicyError {
             PutRolePolicyError::Validation(ref cause) => cause,
             PutRolePolicyError::Credentials(ref err) => err.description(),
             PutRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutRolePolicyError::Unknown(ref cause) => cause,
+            PutRolePolicyError::ParseError(ref cause) => cause,
+            PutRolePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21763,33 +22759,45 @@ pub enum PutUserPermissionsBoundaryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutUserPermissionsBoundaryError {
-    pub fn from_body(body: &str) -> PutUserPermissionsBoundaryError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => PutUserPermissionsBoundaryError::InvalidInput(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchEntity" => PutUserPermissionsBoundaryError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                "PolicyNotAttachable" => PutUserPermissionsBoundaryError::PolicyNotAttachable(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailure" => PutUserPermissionsBoundaryError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => PutUserPermissionsBoundaryError::Unknown(String::from(body)),
-            },
-            Err(_) => PutUserPermissionsBoundaryError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutUserPermissionsBoundaryError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return PutUserPermissionsBoundaryError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return PutUserPermissionsBoundaryError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PolicyNotAttachable" => {
+                        return PutUserPermissionsBoundaryError::PolicyNotAttachable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return PutUserPermissionsBoundaryError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        PutUserPermissionsBoundaryError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21804,7 +22812,7 @@ impl PutUserPermissionsBoundaryError {
 impl From<XmlParseError> for PutUserPermissionsBoundaryError {
     fn from(err: XmlParseError) -> PutUserPermissionsBoundaryError {
         let XmlParseError(message) = err;
-        PutUserPermissionsBoundaryError::Unknown(message.to_string())
+        PutUserPermissionsBoundaryError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutUserPermissionsBoundaryError {
@@ -21839,7 +22847,8 @@ impl Error for PutUserPermissionsBoundaryError {
             PutUserPermissionsBoundaryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutUserPermissionsBoundaryError::Unknown(ref cause) => cause,
+            PutUserPermissionsBoundaryError::ParseError(ref cause) => cause,
+            PutUserPermissionsBoundaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21860,33 +22869,41 @@ pub enum PutUserPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutUserPolicyError {
-    pub fn from_body(body: &str) -> PutUserPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    PutUserPolicyError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> PutUserPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return PutUserPolicyError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "MalformedPolicyDocument" => {
+                        return PutUserPolicyError::MalformedPolicyDocument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return PutUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return PutUserPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "MalformedPolicyDocument" => {
-                    PutUserPolicyError::MalformedPolicyDocument(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    PutUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    PutUserPolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => PutUserPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => PutUserPolicyError::Unknown(body.to_string()),
+            }
         }
+        PutUserPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21901,7 +22918,7 @@ impl PutUserPolicyError {
 impl From<XmlParseError> for PutUserPolicyError {
     fn from(err: XmlParseError) -> PutUserPolicyError {
         let XmlParseError(message) = err;
-        PutUserPolicyError::Unknown(message.to_string())
+        PutUserPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutUserPolicyError {
@@ -21934,7 +22951,8 @@ impl Error for PutUserPolicyError {
             PutUserPolicyError::Validation(ref cause) => cause,
             PutUserPolicyError::Credentials(ref err) => err.description(),
             PutUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutUserPolicyError::Unknown(ref cause) => cause,
+            PutUserPolicyError::ParseError(ref cause) => cause,
+            PutUserPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21953,30 +22971,42 @@ pub enum RemoveClientIDFromOpenIDConnectProviderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveClientIDFromOpenIDConnectProviderError {
-    pub fn from_body(body: &str) -> RemoveClientIDFromOpenIDConnectProviderError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchEntity" => RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailure" => RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
-                _ => RemoveClientIDFromOpenIDConnectProviderError::Unknown(String::from(body)),
-            },
-            Err(_) => RemoveClientIDFromOpenIDConnectProviderError::Unknown(body.to_string()),
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RemoveClientIDFromOpenIDConnectProviderError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NoSuchEntity" => {
+                        return RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ServiceFailure" => {
+                        return RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        RemoveClientIDFromOpenIDConnectProviderError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21991,7 +23021,7 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
 impl From<XmlParseError> for RemoveClientIDFromOpenIDConnectProviderError {
     fn from(err: XmlParseError) -> RemoveClientIDFromOpenIDConnectProviderError {
         let XmlParseError(message) = err;
-        RemoveClientIDFromOpenIDConnectProviderError::Unknown(message.to_string())
+        RemoveClientIDFromOpenIDConnectProviderError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RemoveClientIDFromOpenIDConnectProviderError {
@@ -22025,7 +23055,8 @@ impl Error for RemoveClientIDFromOpenIDConnectProviderError {
             RemoveClientIDFromOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RemoveClientIDFromOpenIDConnectProviderError::Unknown(ref cause) => cause,
+            RemoveClientIDFromOpenIDConnectProviderError::ParseError(ref cause) => cause,
+            RemoveClientIDFromOpenIDConnectProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22046,33 +23077,45 @@ pub enum RemoveRoleFromInstanceProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveRoleFromInstanceProfileError {
-    pub fn from_body(body: &str) -> RemoveRoleFromInstanceProfileError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => RemoveRoleFromInstanceProfileError::LimitExceeded(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchEntity" => RemoveRoleFromInstanceProfileError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                "ServiceFailure" => RemoveRoleFromInstanceProfileError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
-                "UnmodifiableEntity" => RemoveRoleFromInstanceProfileError::UnmodifiableEntity(
-                    String::from(parsed_error.message),
-                ),
-                _ => RemoveRoleFromInstanceProfileError::Unknown(String::from(body)),
-            },
-            Err(_) => RemoveRoleFromInstanceProfileError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> RemoveRoleFromInstanceProfileError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return RemoveRoleFromInstanceProfileError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return RemoveRoleFromInstanceProfileError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return RemoveRoleFromInstanceProfileError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnmodifiableEntity" => {
+                        return RemoveRoleFromInstanceProfileError::UnmodifiableEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        RemoveRoleFromInstanceProfileError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22087,7 +23130,7 @@ impl RemoveRoleFromInstanceProfileError {
 impl From<XmlParseError> for RemoveRoleFromInstanceProfileError {
     fn from(err: XmlParseError) -> RemoveRoleFromInstanceProfileError {
         let XmlParseError(message) = err;
-        RemoveRoleFromInstanceProfileError::Unknown(message.to_string())
+        RemoveRoleFromInstanceProfileError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RemoveRoleFromInstanceProfileError {
@@ -22122,7 +23165,8 @@ impl Error for RemoveRoleFromInstanceProfileError {
             RemoveRoleFromInstanceProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RemoveRoleFromInstanceProfileError::Unknown(ref cause) => cause,
+            RemoveRoleFromInstanceProfileError::ParseError(ref cause) => cause,
+            RemoveRoleFromInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22141,30 +23185,40 @@ pub enum RemoveUserFromGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveUserFromGroupError {
-    pub fn from_body(body: &str) -> RemoveUserFromGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    RemoveUserFromGroupError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> RemoveUserFromGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return RemoveUserFromGroupError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return RemoveUserFromGroupError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return RemoveUserFromGroupError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    RemoveUserFromGroupError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    RemoveUserFromGroupError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => RemoveUserFromGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => RemoveUserFromGroupError::Unknown(body.to_string()),
+            }
         }
+        RemoveUserFromGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22179,7 +23233,7 @@ impl RemoveUserFromGroupError {
 impl From<XmlParseError> for RemoveUserFromGroupError {
     fn from(err: XmlParseError) -> RemoveUserFromGroupError {
         let XmlParseError(message) = err;
-        RemoveUserFromGroupError::Unknown(message.to_string())
+        RemoveUserFromGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RemoveUserFromGroupError {
@@ -22213,7 +23267,8 @@ impl Error for RemoveUserFromGroupError {
             RemoveUserFromGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RemoveUserFromGroupError::Unknown(ref cause) => cause,
+            RemoveUserFromGroupError::ParseError(ref cause) => cause,
+            RemoveUserFromGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22228,24 +23283,30 @@ pub enum ResetServiceSpecificCredentialError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ResetServiceSpecificCredentialError {
-    pub fn from_body(body: &str) -> ResetServiceSpecificCredentialError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => ResetServiceSpecificCredentialError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                _ => ResetServiceSpecificCredentialError::Unknown(String::from(body)),
-            },
-            Err(_) => ResetServiceSpecificCredentialError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ResetServiceSpecificCredentialError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ResetServiceSpecificCredentialError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        ResetServiceSpecificCredentialError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22260,7 +23321,7 @@ impl ResetServiceSpecificCredentialError {
 impl From<XmlParseError> for ResetServiceSpecificCredentialError {
     fn from(err: XmlParseError) -> ResetServiceSpecificCredentialError {
         let XmlParseError(message) = err;
-        ResetServiceSpecificCredentialError::Unknown(message.to_string())
+        ResetServiceSpecificCredentialError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ResetServiceSpecificCredentialError {
@@ -22292,7 +23353,8 @@ impl Error for ResetServiceSpecificCredentialError {
             ResetServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ResetServiceSpecificCredentialError::Unknown(ref cause) => cause,
+            ResetServiceSpecificCredentialError::ParseError(ref cause) => cause,
+            ResetServiceSpecificCredentialError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22313,33 +23375,45 @@ pub enum ResyncMFADeviceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ResyncMFADeviceError {
-    pub fn from_body(body: &str) -> ResyncMFADeviceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidAuthenticationCode" => ResyncMFADeviceError::InvalidAuthenticationCode(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceeded" => {
-                    ResyncMFADeviceError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ResyncMFADeviceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidAuthenticationCode" => {
+                        return ResyncMFADeviceError::InvalidAuthenticationCode(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return ResyncMFADeviceError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return ResyncMFADeviceError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return ResyncMFADeviceError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    ResyncMFADeviceError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    ResyncMFADeviceError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => ResyncMFADeviceError::Unknown(String::from(body)),
-            },
-            Err(_) => ResyncMFADeviceError::Unknown(body.to_string()),
+            }
         }
+        ResyncMFADeviceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22354,7 +23428,7 @@ impl ResyncMFADeviceError {
 impl From<XmlParseError> for ResyncMFADeviceError {
     fn from(err: XmlParseError) -> ResyncMFADeviceError {
         let XmlParseError(message) = err;
-        ResyncMFADeviceError::Unknown(message.to_string())
+        ResyncMFADeviceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ResyncMFADeviceError {
@@ -22387,7 +23461,8 @@ impl Error for ResyncMFADeviceError {
             ResyncMFADeviceError::Validation(ref cause) => cause,
             ResyncMFADeviceError::Credentials(ref err) => err.description(),
             ResyncMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResyncMFADeviceError::Unknown(ref cause) => cause,
+            ResyncMFADeviceError::ParseError(ref cause) => cause,
+            ResyncMFADeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22408,33 +23483,45 @@ pub enum SetDefaultPolicyVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetDefaultPolicyVersionError {
-    pub fn from_body(body: &str) -> SetDefaultPolicyVersionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    SetDefaultPolicyVersionError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> SetDefaultPolicyVersionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return SetDefaultPolicyVersionError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return SetDefaultPolicyVersionError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return SetDefaultPolicyVersionError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return SetDefaultPolicyVersionError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    SetDefaultPolicyVersionError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    SetDefaultPolicyVersionError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    SetDefaultPolicyVersionError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => SetDefaultPolicyVersionError::Unknown(String::from(body)),
-            },
-            Err(_) => SetDefaultPolicyVersionError::Unknown(body.to_string()),
+            }
         }
+        SetDefaultPolicyVersionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22449,7 +23536,7 @@ impl SetDefaultPolicyVersionError {
 impl From<XmlParseError> for SetDefaultPolicyVersionError {
     fn from(err: XmlParseError) -> SetDefaultPolicyVersionError {
         let XmlParseError(message) = err;
-        SetDefaultPolicyVersionError::Unknown(message.to_string())
+        SetDefaultPolicyVersionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetDefaultPolicyVersionError {
@@ -22484,7 +23571,8 @@ impl Error for SetDefaultPolicyVersionError {
             SetDefaultPolicyVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetDefaultPolicyVersionError::Unknown(ref cause) => cause,
+            SetDefaultPolicyVersionError::ParseError(ref cause) => cause,
+            SetDefaultPolicyVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22501,27 +23589,35 @@ pub enum SimulateCustomPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SimulateCustomPolicyError {
-    pub fn from_body(body: &str) -> SimulateCustomPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    SimulateCustomPolicyError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> SimulateCustomPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return SimulateCustomPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PolicyEvaluation" => {
+                        return SimulateCustomPolicyError::PolicyEvaluation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "PolicyEvaluation" => {
-                    SimulateCustomPolicyError::PolicyEvaluation(String::from(parsed_error.message))
-                }
-                _ => SimulateCustomPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => SimulateCustomPolicyError::Unknown(body.to_string()),
+            }
         }
+        SimulateCustomPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22536,7 +23632,7 @@ impl SimulateCustomPolicyError {
 impl From<XmlParseError> for SimulateCustomPolicyError {
     fn from(err: XmlParseError) -> SimulateCustomPolicyError {
         let XmlParseError(message) = err;
-        SimulateCustomPolicyError::Unknown(message.to_string())
+        SimulateCustomPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SimulateCustomPolicyError {
@@ -22569,7 +23665,8 @@ impl Error for SimulateCustomPolicyError {
             SimulateCustomPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SimulateCustomPolicyError::Unknown(ref cause) => cause,
+            SimulateCustomPolicyError::ParseError(ref cause) => cause,
+            SimulateCustomPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22588,30 +23685,40 @@ pub enum SimulatePrincipalPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SimulatePrincipalPolicyError {
-    pub fn from_body(body: &str) -> SimulatePrincipalPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    SimulatePrincipalPolicyError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> SimulatePrincipalPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return SimulatePrincipalPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return SimulatePrincipalPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PolicyEvaluation" => {
+                        return SimulatePrincipalPolicyError::PolicyEvaluation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    SimulatePrincipalPolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "PolicyEvaluation" => SimulatePrincipalPolicyError::PolicyEvaluation(String::from(
-                    parsed_error.message,
-                )),
-                _ => SimulatePrincipalPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => SimulatePrincipalPolicyError::Unknown(body.to_string()),
+            }
         }
+        SimulatePrincipalPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22626,7 +23733,7 @@ impl SimulatePrincipalPolicyError {
 impl From<XmlParseError> for SimulatePrincipalPolicyError {
     fn from(err: XmlParseError) -> SimulatePrincipalPolicyError {
         let XmlParseError(message) = err;
-        SimulatePrincipalPolicyError::Unknown(message.to_string())
+        SimulatePrincipalPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SimulatePrincipalPolicyError {
@@ -22660,7 +23767,8 @@ impl Error for SimulatePrincipalPolicyError {
             SimulatePrincipalPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SimulatePrincipalPolicyError::Unknown(ref cause) => cause,
+            SimulatePrincipalPolicyError::ParseError(ref cause) => cause,
+            SimulatePrincipalPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22679,30 +23787,40 @@ pub enum UpdateAccessKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAccessKeyError {
-    pub fn from_body(body: &str) -> UpdateAccessKeyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    UpdateAccessKeyError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateAccessKeyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return UpdateAccessKeyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return UpdateAccessKeyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return UpdateAccessKeyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    UpdateAccessKeyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    UpdateAccessKeyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => UpdateAccessKeyError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateAccessKeyError::Unknown(body.to_string()),
+            }
         }
+        UpdateAccessKeyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22717,7 +23835,7 @@ impl UpdateAccessKeyError {
 impl From<XmlParseError> for UpdateAccessKeyError {
     fn from(err: XmlParseError) -> UpdateAccessKeyError {
         let XmlParseError(message) = err;
-        UpdateAccessKeyError::Unknown(message.to_string())
+        UpdateAccessKeyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateAccessKeyError {
@@ -22749,7 +23867,8 @@ impl Error for UpdateAccessKeyError {
             UpdateAccessKeyError::Validation(ref cause) => cause,
             UpdateAccessKeyError::Credentials(ref err) => err.description(),
             UpdateAccessKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateAccessKeyError::Unknown(ref cause) => cause,
+            UpdateAccessKeyError::ParseError(ref cause) => cause,
+            UpdateAccessKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22770,35 +23889,45 @@ pub enum UpdateAccountPasswordPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAccountPasswordPolicyError {
-    pub fn from_body(body: &str) -> UpdateAccountPasswordPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => UpdateAccountPasswordPolicyError::LimitExceeded(String::from(
-                    parsed_error.message,
-                )),
-                "MalformedPolicyDocument" => {
-                    UpdateAccountPasswordPolicyError::MalformedPolicyDocument(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateAccountPasswordPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return UpdateAccountPasswordPolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MalformedPolicyDocument" => {
+                        return UpdateAccountPasswordPolicyError::MalformedPolicyDocument(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NoSuchEntity" => {
+                        return UpdateAccountPasswordPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return UpdateAccountPasswordPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => UpdateAccountPasswordPolicyError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                "ServiceFailure" => UpdateAccountPasswordPolicyError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => UpdateAccountPasswordPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateAccountPasswordPolicyError::Unknown(body.to_string()),
+            }
         }
+        UpdateAccountPasswordPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22813,7 +23942,7 @@ impl UpdateAccountPasswordPolicyError {
 impl From<XmlParseError> for UpdateAccountPasswordPolicyError {
     fn from(err: XmlParseError) -> UpdateAccountPasswordPolicyError {
         let XmlParseError(message) = err;
-        UpdateAccountPasswordPolicyError::Unknown(message.to_string())
+        UpdateAccountPasswordPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateAccountPasswordPolicyError {
@@ -22848,7 +23977,8 @@ impl Error for UpdateAccountPasswordPolicyError {
             UpdateAccountPasswordPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateAccountPasswordPolicyError::Unknown(ref cause) => cause,
+            UpdateAccountPasswordPolicyError::ParseError(ref cause) => cause,
+            UpdateAccountPasswordPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22871,36 +24001,50 @@ pub enum UpdateAssumeRolePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAssumeRolePolicyError {
-    pub fn from_body(body: &str) -> UpdateAssumeRolePolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    UpdateAssumeRolePolicyError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateAssumeRolePolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return UpdateAssumeRolePolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MalformedPolicyDocument" => {
+                        return UpdateAssumeRolePolicyError::MalformedPolicyDocument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return UpdateAssumeRolePolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return UpdateAssumeRolePolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnmodifiableEntity" => {
+                        return UpdateAssumeRolePolicyError::UnmodifiableEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "MalformedPolicyDocument" => UpdateAssumeRolePolicyError::MalformedPolicyDocument(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchEntity" => {
-                    UpdateAssumeRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    UpdateAssumeRolePolicyError::ServiceFailure(String::from(parsed_error.message))
-                }
-                "UnmodifiableEntity" => UpdateAssumeRolePolicyError::UnmodifiableEntity(
-                    String::from(parsed_error.message),
-                ),
-                _ => UpdateAssumeRolePolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateAssumeRolePolicyError::Unknown(body.to_string()),
+            }
         }
+        UpdateAssumeRolePolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22915,7 +24059,7 @@ impl UpdateAssumeRolePolicyError {
 impl From<XmlParseError> for UpdateAssumeRolePolicyError {
     fn from(err: XmlParseError) -> UpdateAssumeRolePolicyError {
         let XmlParseError(message) = err;
-        UpdateAssumeRolePolicyError::Unknown(message.to_string())
+        UpdateAssumeRolePolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateAssumeRolePolicyError {
@@ -22951,7 +24095,8 @@ impl Error for UpdateAssumeRolePolicyError {
             UpdateAssumeRolePolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateAssumeRolePolicyError::Unknown(ref cause) => cause,
+            UpdateAssumeRolePolicyError::ParseError(ref cause) => cause,
+            UpdateAssumeRolePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22972,33 +24117,39 @@ pub enum UpdateGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGroupError {
-    pub fn from_body(body: &str) -> UpdateGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => {
-                    UpdateGroupError::EntityAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return UpdateGroupError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return UpdateGroupError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "NoSuchEntity" => {
+                        return UpdateGroupError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return UpdateGroupError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    UpdateGroupError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    UpdateGroupError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    UpdateGroupError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => UpdateGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateGroupError::Unknown(body.to_string()),
+            }
         }
+        UpdateGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23013,7 +24164,7 @@ impl UpdateGroupError {
 impl From<XmlParseError> for UpdateGroupError {
     fn from(err: XmlParseError) -> UpdateGroupError {
         let XmlParseError(message) = err;
-        UpdateGroupError::Unknown(message.to_string())
+        UpdateGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateGroupError {
@@ -23046,7 +24197,8 @@ impl Error for UpdateGroupError {
             UpdateGroupError::Validation(ref cause) => cause,
             UpdateGroupError::Credentials(ref err) => err.description(),
             UpdateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateGroupError::Unknown(ref cause) => cause,
+            UpdateGroupError::ParseError(ref cause) => cause,
+            UpdateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23069,38 +24221,50 @@ pub enum UpdateLoginProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateLoginProfileError {
-    pub fn from_body(body: &str) -> UpdateLoginProfileError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityTemporarilyUnmodifiable" => {
-                    UpdateLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateLoginProfileError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityTemporarilyUnmodifiable" => {
+                        return UpdateLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return UpdateLoginProfileError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return UpdateLoginProfileError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PasswordPolicyViolation" => {
+                        return UpdateLoginProfileError::PasswordPolicyViolation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return UpdateLoginProfileError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    UpdateLoginProfileError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    UpdateLoginProfileError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "PasswordPolicyViolation" => UpdateLoginProfileError::PasswordPolicyViolation(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailure" => {
-                    UpdateLoginProfileError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => UpdateLoginProfileError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateLoginProfileError::Unknown(body.to_string()),
+            }
         }
+        UpdateLoginProfileError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23115,7 +24279,7 @@ impl UpdateLoginProfileError {
 impl From<XmlParseError> for UpdateLoginProfileError {
     fn from(err: XmlParseError) -> UpdateLoginProfileError {
         let XmlParseError(message) = err;
-        UpdateLoginProfileError::Unknown(message.to_string())
+        UpdateLoginProfileError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateLoginProfileError {
@@ -23151,7 +24315,8 @@ impl Error for UpdateLoginProfileError {
             UpdateLoginProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateLoginProfileError::Unknown(ref cause) => cause,
+            UpdateLoginProfileError::ParseError(ref cause) => cause,
+            UpdateLoginProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23170,30 +24335,40 @@ pub enum UpdateOpenIDConnectProviderThumbprintError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateOpenIDConnectProviderThumbprintError {
-    pub fn from_body(body: &str) -> UpdateOpenIDConnectProviderThumbprintError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => UpdateOpenIDConnectProviderThumbprintError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchEntity" => UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailure" => UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
-                _ => UpdateOpenIDConnectProviderThumbprintError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateOpenIDConnectProviderThumbprintError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateOpenIDConnectProviderThumbprintError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return UpdateOpenIDConnectProviderThumbprintError::InvalidInput(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NoSuchEntity" => {
+                        return UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ServiceFailure" => {
+                        return UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        UpdateOpenIDConnectProviderThumbprintError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23208,7 +24383,7 @@ impl UpdateOpenIDConnectProviderThumbprintError {
 impl From<XmlParseError> for UpdateOpenIDConnectProviderThumbprintError {
     fn from(err: XmlParseError) -> UpdateOpenIDConnectProviderThumbprintError {
         let XmlParseError(message) = err;
-        UpdateOpenIDConnectProviderThumbprintError::Unknown(message.to_string())
+        UpdateOpenIDConnectProviderThumbprintError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateOpenIDConnectProviderThumbprintError {
@@ -23242,7 +24417,8 @@ impl Error for UpdateOpenIDConnectProviderThumbprintError {
             UpdateOpenIDConnectProviderThumbprintError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateOpenIDConnectProviderThumbprintError::Unknown(ref cause) => cause,
+            UpdateOpenIDConnectProviderThumbprintError::ParseError(ref cause) => cause,
+            UpdateOpenIDConnectProviderThumbprintError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23261,28 +24437,36 @@ pub enum UpdateRoleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRoleError {
-    pub fn from_body(body: &str) -> UpdateRoleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => UpdateRoleError::NoSuchEntity(String::from(parsed_error.message)),
-                "ServiceFailure" => {
-                    UpdateRoleError::ServiceFailure(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateRoleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return UpdateRoleError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return UpdateRoleError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    "UnmodifiableEntity" => {
+                        return UpdateRoleError::UnmodifiableEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "UnmodifiableEntity" => {
-                    UpdateRoleError::UnmodifiableEntity(String::from(parsed_error.message))
-                }
-                _ => UpdateRoleError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateRoleError::Unknown(body.to_string()),
+            }
         }
+        UpdateRoleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23297,7 +24481,7 @@ impl UpdateRoleError {
 impl From<XmlParseError> for UpdateRoleError {
     fn from(err: XmlParseError) -> UpdateRoleError {
         let XmlParseError(message) = err;
-        UpdateRoleError::Unknown(message.to_string())
+        UpdateRoleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateRoleError {
@@ -23329,7 +24513,8 @@ impl Error for UpdateRoleError {
             UpdateRoleError::Validation(ref cause) => cause,
             UpdateRoleError::Credentials(ref err) => err.description(),
             UpdateRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateRoleError::Unknown(ref cause) => cause,
+            UpdateRoleError::ParseError(ref cause) => cause,
+            UpdateRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23348,30 +24533,40 @@ pub enum UpdateRoleDescriptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRoleDescriptionError {
-    pub fn from_body(body: &str) -> UpdateRoleDescriptionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    UpdateRoleDescriptionError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateRoleDescriptionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return UpdateRoleDescriptionError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return UpdateRoleDescriptionError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnmodifiableEntity" => {
+                        return UpdateRoleDescriptionError::UnmodifiableEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceFailure" => {
-                    UpdateRoleDescriptionError::ServiceFailure(String::from(parsed_error.message))
-                }
-                "UnmodifiableEntity" => UpdateRoleDescriptionError::UnmodifiableEntity(
-                    String::from(parsed_error.message),
-                ),
-                _ => UpdateRoleDescriptionError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateRoleDescriptionError::Unknown(body.to_string()),
+            }
         }
+        UpdateRoleDescriptionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23386,7 +24581,7 @@ impl UpdateRoleDescriptionError {
 impl From<XmlParseError> for UpdateRoleDescriptionError {
     fn from(err: XmlParseError) -> UpdateRoleDescriptionError {
         let XmlParseError(message) = err;
-        UpdateRoleDescriptionError::Unknown(message.to_string())
+        UpdateRoleDescriptionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateRoleDescriptionError {
@@ -23420,7 +24615,8 @@ impl Error for UpdateRoleDescriptionError {
             UpdateRoleDescriptionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateRoleDescriptionError::Unknown(ref cause) => cause,
+            UpdateRoleDescriptionError::ParseError(ref cause) => cause,
+            UpdateRoleDescriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23441,33 +24637,45 @@ pub enum UpdateSAMLProviderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSAMLProviderError {
-    pub fn from_body(body: &str) -> UpdateSAMLProviderError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => {
-                    UpdateSAMLProviderError::InvalidInput(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSAMLProviderError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return UpdateSAMLProviderError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return UpdateSAMLProviderError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return UpdateSAMLProviderError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return UpdateSAMLProviderError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    UpdateSAMLProviderError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    UpdateSAMLProviderError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    UpdateSAMLProviderError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => UpdateSAMLProviderError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateSAMLProviderError::Unknown(body.to_string()),
+            }
         }
+        UpdateSAMLProviderError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23482,7 +24690,7 @@ impl UpdateSAMLProviderError {
 impl From<XmlParseError> for UpdateSAMLProviderError {
     fn from(err: XmlParseError) -> UpdateSAMLProviderError {
         let XmlParseError(message) = err;
-        UpdateSAMLProviderError::Unknown(message.to_string())
+        UpdateSAMLProviderError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateSAMLProviderError {
@@ -23517,7 +24725,8 @@ impl Error for UpdateSAMLProviderError {
             UpdateSAMLProviderError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateSAMLProviderError::Unknown(ref cause) => cause,
+            UpdateSAMLProviderError::ParseError(ref cause) => cause,
+            UpdateSAMLProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23532,24 +24741,30 @@ pub enum UpdateSSHPublicKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSSHPublicKeyError {
-    pub fn from_body(body: &str) -> UpdateSSHPublicKeyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => {
-                    UpdateSSHPublicKeyError::NoSuchEntity(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSSHPublicKeyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return UpdateSSHPublicKeyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => UpdateSSHPublicKeyError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateSSHPublicKeyError::Unknown(body.to_string()),
+            }
         }
+        UpdateSSHPublicKeyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23564,7 +24779,7 @@ impl UpdateSSHPublicKeyError {
 impl From<XmlParseError> for UpdateSSHPublicKeyError {
     fn from(err: XmlParseError) -> UpdateSSHPublicKeyError {
         let XmlParseError(message) = err;
-        UpdateSSHPublicKeyError::Unknown(message.to_string())
+        UpdateSSHPublicKeyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateSSHPublicKeyError {
@@ -23596,7 +24811,8 @@ impl Error for UpdateSSHPublicKeyError {
             UpdateSSHPublicKeyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateSSHPublicKeyError::Unknown(ref cause) => cause,
+            UpdateSSHPublicKeyError::ParseError(ref cause) => cause,
+            UpdateSSHPublicKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23617,33 +24833,45 @@ pub enum UpdateServerCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateServerCertificateError {
-    pub fn from_body(body: &str) -> UpdateServerCertificateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => UpdateServerCertificateError::EntityAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceeded" => {
-                    UpdateServerCertificateError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateServerCertificateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return UpdateServerCertificateError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return UpdateServerCertificateError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return UpdateServerCertificateError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return UpdateServerCertificateError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    UpdateServerCertificateError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => {
-                    UpdateServerCertificateError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => UpdateServerCertificateError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateServerCertificateError::Unknown(body.to_string()),
+            }
         }
+        UpdateServerCertificateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23658,7 +24886,7 @@ impl UpdateServerCertificateError {
 impl From<XmlParseError> for UpdateServerCertificateError {
     fn from(err: XmlParseError) -> UpdateServerCertificateError {
         let XmlParseError(message) = err;
-        UpdateServerCertificateError::Unknown(message.to_string())
+        UpdateServerCertificateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateServerCertificateError {
@@ -23693,7 +24921,8 @@ impl Error for UpdateServerCertificateError {
             UpdateServerCertificateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateServerCertificateError::Unknown(ref cause) => cause,
+            UpdateServerCertificateError::ParseError(ref cause) => cause,
+            UpdateServerCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23708,24 +24937,30 @@ pub enum UpdateServiceSpecificCredentialError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateServiceSpecificCredentialError {
-    pub fn from_body(body: &str) -> UpdateServiceSpecificCredentialError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => UpdateServiceSpecificCredentialError::NoSuchEntity(String::from(
-                    parsed_error.message,
-                )),
-                _ => UpdateServiceSpecificCredentialError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateServiceSpecificCredentialError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateServiceSpecificCredentialError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return UpdateServiceSpecificCredentialError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        UpdateServiceSpecificCredentialError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23740,7 +24975,7 @@ impl UpdateServiceSpecificCredentialError {
 impl From<XmlParseError> for UpdateServiceSpecificCredentialError {
     fn from(err: XmlParseError) -> UpdateServiceSpecificCredentialError {
         let XmlParseError(message) = err;
-        UpdateServiceSpecificCredentialError::Unknown(message.to_string())
+        UpdateServiceSpecificCredentialError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateServiceSpecificCredentialError {
@@ -23772,7 +25007,8 @@ impl Error for UpdateServiceSpecificCredentialError {
             UpdateServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateServiceSpecificCredentialError::Unknown(ref cause) => cause,
+            UpdateServiceSpecificCredentialError::ParseError(ref cause) => cause,
+            UpdateServiceSpecificCredentialError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23791,30 +25027,40 @@ pub enum UpdateSigningCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSigningCertificateError {
-    pub fn from_body(body: &str) -> UpdateSigningCertificateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    UpdateSigningCertificateError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSigningCertificateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return UpdateSigningCertificateError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return UpdateSigningCertificateError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return UpdateSigningCertificateError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchEntity" => {
-                    UpdateSigningCertificateError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => UpdateSigningCertificateError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => UpdateSigningCertificateError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateSigningCertificateError::Unknown(body.to_string()),
+            }
         }
+        UpdateSigningCertificateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23829,7 +25075,7 @@ impl UpdateSigningCertificateError {
 impl From<XmlParseError> for UpdateSigningCertificateError {
     fn from(err: XmlParseError) -> UpdateSigningCertificateError {
         let XmlParseError(message) = err;
-        UpdateSigningCertificateError::Unknown(message.to_string())
+        UpdateSigningCertificateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateSigningCertificateError {
@@ -23863,7 +25109,8 @@ impl Error for UpdateSigningCertificateError {
             UpdateSigningCertificateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateSigningCertificateError::Unknown(ref cause) => cause,
+            UpdateSigningCertificateError::ParseError(ref cause) => cause,
+            UpdateSigningCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23886,34 +25133,44 @@ pub enum UpdateUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserError {
-    pub fn from_body(body: &str) -> UpdateUserError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => {
-                    UpdateUserError::EntityAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return UpdateUserError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "EntityTemporarilyUnmodifiable" => {
+                        return UpdateUserError::EntityTemporarilyUnmodifiable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return UpdateUserError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "NoSuchEntity" => {
+                        return UpdateUserError::NoSuchEntity(String::from(parsed_error.message))
+                    }
+                    "ServiceFailure" => {
+                        return UpdateUserError::ServiceFailure(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "EntityTemporarilyUnmodifiable" => UpdateUserError::EntityTemporarilyUnmodifiable(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceeded" => {
-                    UpdateUserError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => UpdateUserError::NoSuchEntity(String::from(parsed_error.message)),
-                "ServiceFailure" => {
-                    UpdateUserError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => UpdateUserError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateUserError::Unknown(body.to_string()),
+            }
         }
+        UpdateUserError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23928,7 +25185,7 @@ impl UpdateUserError {
 impl From<XmlParseError> for UpdateUserError {
     fn from(err: XmlParseError) -> UpdateUserError {
         let XmlParseError(message) = err;
-        UpdateUserError::Unknown(message.to_string())
+        UpdateUserError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateUserError {
@@ -23962,7 +25219,8 @@ impl Error for UpdateUserError {
             UpdateUserError::Validation(ref cause) => cause,
             UpdateUserError::Credentials(ref err) => err.description(),
             UpdateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateUserError::Unknown(ref cause) => cause,
+            UpdateUserError::ParseError(ref cause) => cause,
+            UpdateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23985,38 +25243,50 @@ pub enum UploadSSHPublicKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UploadSSHPublicKeyError {
-    pub fn from_body(body: &str) -> UploadSSHPublicKeyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DuplicateSSHPublicKey" => UploadSSHPublicKeyError::DuplicateSSHPublicKey(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidPublicKey" => {
-                    UploadSSHPublicKeyError::InvalidPublicKey(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UploadSSHPublicKeyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DuplicateSSHPublicKey" => {
+                        return UploadSSHPublicKeyError::DuplicateSSHPublicKey(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidPublicKey" => {
+                        return UploadSSHPublicKeyError::InvalidPublicKey(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return UploadSSHPublicKeyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return UploadSSHPublicKeyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnrecognizedPublicKeyEncoding" => {
+                        return UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    UploadSSHPublicKeyError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntity" => {
-                    UploadSSHPublicKeyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "UnrecognizedPublicKeyEncoding" => {
-                    UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => UploadSSHPublicKeyError::Unknown(String::from(body)),
-            },
-            Err(_) => UploadSSHPublicKeyError::Unknown(body.to_string()),
+            }
         }
+        UploadSSHPublicKeyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24031,7 +25301,7 @@ impl UploadSSHPublicKeyError {
 impl From<XmlParseError> for UploadSSHPublicKeyError {
     fn from(err: XmlParseError) -> UploadSSHPublicKeyError {
         let XmlParseError(message) = err;
-        UploadSSHPublicKeyError::Unknown(message.to_string())
+        UploadSSHPublicKeyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UploadSSHPublicKeyError {
@@ -24067,7 +25337,8 @@ impl Error for UploadSSHPublicKeyError {
             UploadSSHPublicKeyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UploadSSHPublicKeyError::Unknown(ref cause) => cause,
+            UploadSSHPublicKeyError::ParseError(ref cause) => cause,
+            UploadSSHPublicKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24090,36 +25361,50 @@ pub enum UploadServerCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UploadServerCertificateError {
-    pub fn from_body(body: &str) -> UploadServerCertificateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExists" => UploadServerCertificateError::EntityAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "KeyPairMismatch" => UploadServerCertificateError::KeyPairMismatch(String::from(
-                    parsed_error.message,
-                )),
-                "LimitExceeded" => {
-                    UploadServerCertificateError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UploadServerCertificateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EntityAlreadyExists" => {
+                        return UploadServerCertificateError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "KeyPairMismatch" => {
+                        return UploadServerCertificateError::KeyPairMismatch(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return UploadServerCertificateError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MalformedCertificate" => {
+                        return UploadServerCertificateError::MalformedCertificate(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return UploadServerCertificateError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "MalformedCertificate" => UploadServerCertificateError::MalformedCertificate(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailure" => {
-                    UploadServerCertificateError::ServiceFailure(String::from(parsed_error.message))
-                }
-                _ => UploadServerCertificateError::Unknown(String::from(body)),
-            },
-            Err(_) => UploadServerCertificateError::Unknown(body.to_string()),
+            }
         }
+        UploadServerCertificateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24134,7 +25419,7 @@ impl UploadServerCertificateError {
 impl From<XmlParseError> for UploadServerCertificateError {
     fn from(err: XmlParseError) -> UploadServerCertificateError {
         let XmlParseError(message) = err;
-        UploadServerCertificateError::Unknown(message.to_string())
+        UploadServerCertificateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UploadServerCertificateError {
@@ -24170,7 +25455,8 @@ impl Error for UploadServerCertificateError {
             UploadServerCertificateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UploadServerCertificateError::Unknown(ref cause) => cause,
+            UploadServerCertificateError::ParseError(ref cause) => cause,
+            UploadServerCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24197,42 +25483,60 @@ pub enum UploadSigningCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UploadSigningCertificateError {
-    pub fn from_body(body: &str) -> UploadSigningCertificateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DuplicateCertificate" => UploadSigningCertificateError::DuplicateCertificate(
-                    String::from(parsed_error.message),
-                ),
-                "EntityAlreadyExists" => UploadSigningCertificateError::EntityAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidCertificate" => UploadSigningCertificateError::InvalidCertificate(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceeded" => {
-                    UploadSigningCertificateError::LimitExceeded(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UploadSigningCertificateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DuplicateCertificate" => {
+                        return UploadSigningCertificateError::DuplicateCertificate(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "EntityAlreadyExists" => {
+                        return UploadSigningCertificateError::EntityAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidCertificate" => {
+                        return UploadSigningCertificateError::InvalidCertificate(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return UploadSigningCertificateError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MalformedCertificate" => {
+                        return UploadSigningCertificateError::MalformedCertificate(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchEntity" => {
+                        return UploadSigningCertificateError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceFailure" => {
+                        return UploadSigningCertificateError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "MalformedCertificate" => UploadSigningCertificateError::MalformedCertificate(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchEntity" => {
-                    UploadSigningCertificateError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailure" => UploadSigningCertificateError::ServiceFailure(String::from(
-                    parsed_error.message,
-                )),
-                _ => UploadSigningCertificateError::Unknown(String::from(body)),
-            },
-            Err(_) => UploadSigningCertificateError::Unknown(body.to_string()),
+            }
         }
+        UploadSigningCertificateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24247,7 +25551,7 @@ impl UploadSigningCertificateError {
 impl From<XmlParseError> for UploadSigningCertificateError {
     fn from(err: XmlParseError) -> UploadSigningCertificateError {
         let XmlParseError(message) = err;
-        UploadSigningCertificateError::Unknown(message.to_string())
+        UploadSigningCertificateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UploadSigningCertificateError {
@@ -24285,7 +25589,8 @@ impl Error for UploadSigningCertificateError {
             UploadSigningCertificateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UploadSigningCertificateError::Unknown(ref cause) => cause,
+            UploadSigningCertificateError::ParseError(ref cause) => cause,
+            UploadSigningCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25071,8 +26376,8 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddClientIDToOpenIDConnectProviderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(AddClientIDToOpenIDConnectProviderError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -25100,9 +26405,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddRoleToInstanceProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AddRoleToInstanceProfileError::from_response(response))
                 }));
             }
 
@@ -25128,11 +26431,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddUserToGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AddUserToGroupError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -25157,11 +26461,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AttachGroupPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AttachGroupPolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -25186,11 +26491,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AttachRolePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AttachRolePolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -25215,11 +26521,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AttachUserPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AttachUserPolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -25244,11 +26551,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ChangePasswordError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ChangePasswordError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -25273,11 +26581,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateAccessKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateAccessKeyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25325,11 +26634,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateAccountAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateAccountAliasError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -25354,11 +26664,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateGroupError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25406,11 +26717,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateInstanceProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateInstanceProfileError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25458,11 +26769,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateLoginProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateLoginProfileError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25511,9 +26823,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateOpenIDConnectProviderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateOpenIDConnectProviderError::from_response(response))
                 }));
             }
 
@@ -25564,11 +26874,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreatePolicyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25616,11 +26927,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePolicyVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreatePolicyVersionError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25668,11 +26979,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateRoleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateRoleError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25720,11 +27032,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSAMLProviderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateSAMLProviderError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25773,9 +27086,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateServiceLinkedRoleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateServiceLinkedRoleError::from_response(response))
                 }));
             }
 
@@ -25826,8 +27137,8 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateServiceSpecificCredentialError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateServiceSpecificCredentialError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -25879,11 +27190,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateUserError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25932,9 +27244,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateVirtualMFADeviceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateVirtualMFADeviceError::from_response(response))
                 }));
             }
 
@@ -25983,11 +27293,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeactivateMFADeviceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeactivateMFADeviceError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26012,11 +27322,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAccessKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteAccessKeyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26041,11 +27352,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAccountAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteAccountAliasError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26068,9 +27380,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAccountPasswordPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteAccountPasswordPolicyError::from_response(response))
                 }));
             }
 
@@ -26093,11 +27403,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteGroupError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26122,11 +27433,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteGroupPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteGroupPolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26151,11 +27463,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteInstanceProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteInstanceProfileError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26180,11 +27492,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteLoginProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteLoginProfileError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26210,9 +27523,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteOpenIDConnectProviderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteOpenIDConnectProviderError::from_response(response))
                 }));
             }
 
@@ -26235,11 +27546,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeletePolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26264,11 +27576,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePolicyVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeletePolicyVersionError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26290,11 +27602,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteRoleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteRoleError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26320,9 +27633,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteRolePermissionsBoundaryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteRolePermissionsBoundaryError::from_response(response))
                 }));
             }
 
@@ -26348,11 +27659,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteRolePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteRolePolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26377,11 +27689,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSAMLProviderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteSAMLProviderError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26406,11 +27719,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSSHPublicKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteSSHPublicKeyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26436,9 +27750,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteServerCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteServerCertificateError::from_response(response))
                 }));
             }
 
@@ -26465,9 +27777,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteServiceLinkedRoleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteServiceLinkedRoleError::from_response(response))
                 }));
             }
 
@@ -26517,8 +27827,8 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteServiceSpecificCredentialError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeleteServiceSpecificCredentialError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -26546,9 +27856,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSigningCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteSigningCertificateError::from_response(response))
                 }));
             }
 
@@ -26571,11 +27879,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteUserError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26601,9 +27910,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteUserPermissionsBoundaryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteUserPermissionsBoundaryError::from_response(response))
                 }));
             }
 
@@ -26629,11 +27936,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteUserPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteUserPolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26659,9 +27967,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVirtualMFADeviceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteVirtualMFADeviceError::from_response(response))
                 }));
             }
 
@@ -26687,11 +27993,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetachGroupPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetachGroupPolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26716,11 +28023,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetachRolePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetachRolePolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26745,11 +28053,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetachUserPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetachUserPolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26774,11 +28083,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableMFADeviceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(EnableMFADeviceError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26803,9 +28113,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GenerateCredentialReportError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GenerateCredentialReportError::from_response(response))
                 }));
             }
 
@@ -26854,11 +28162,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAccessKeyLastUsedError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetAccessKeyLastUsedError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -26908,9 +28216,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAccountAuthorizationDetailsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetAccountAuthorizationDetailsError::from_response(response))
                 }));
             }
 
@@ -26961,9 +28267,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAccountPasswordPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetAccountPasswordPolicyError::from_response(response))
                 }));
             }
 
@@ -27011,11 +28315,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAccountSummaryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetAccountSummaryError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27064,9 +28369,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetContextKeysForCustomPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetContextKeysForCustomPolicyError::from_response(response))
                 }));
             }
 
@@ -27116,8 +28419,8 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetContextKeysForPrincipalPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetContextKeysForPrincipalPolicyError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -27166,11 +28469,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCredentialReportError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetCredentialReportError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27215,11 +28518,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetGroupError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27267,11 +28571,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetGroupPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetGroupPolicyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27319,11 +28624,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetInstanceProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetInstanceProfileError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27371,11 +28677,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetLoginProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetLoginProfileError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27424,9 +28731,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetOpenIDConnectProviderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetOpenIDConnectProviderError::from_response(response))
                 }));
             }
 
@@ -27475,11 +28780,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetPolicyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27527,11 +28833,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetPolicyVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetPolicyVersionError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27576,11 +28883,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetRoleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetRoleError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27628,11 +28936,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetRolePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetRolePolicyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27680,11 +28989,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSAMLProviderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetSAMLProviderError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27732,11 +29042,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSSHPublicKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetSSHPublicKeyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27784,11 +29095,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetServerCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetServerCertificateError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27840,8 +29151,8 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetServiceLinkedRoleDeletionStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetServiceLinkedRoleDeletionStatusError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -27890,11 +29201,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetUserError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27942,11 +29254,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetUserPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetUserPolicyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -27994,11 +29307,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAccessKeysError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListAccessKeysError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28046,11 +29360,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAccountAliasesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListAccountAliasesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28099,9 +29414,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAttachedGroupPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListAttachedGroupPoliciesError::from_response(response))
                 }));
             }
 
@@ -28151,9 +29464,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAttachedRolePoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListAttachedRolePoliciesError::from_response(response))
                 }));
             }
 
@@ -28203,9 +29514,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAttachedUserPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListAttachedUserPoliciesError::from_response(response))
                 }));
             }
 
@@ -28254,11 +29563,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListEntitiesForPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListEntitiesForPolicyError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28306,11 +29615,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListGroupPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListGroupPoliciesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28358,11 +29668,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListGroupsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28410,11 +29721,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListGroupsForUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListGroupsForUserError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28462,11 +29774,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListInstanceProfilesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListInstanceProfilesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28515,9 +29827,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListInstanceProfilesForRoleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListInstanceProfilesForRoleError::from_response(response))
                 }));
             }
 
@@ -28568,11 +29878,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListMFADevicesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListMFADevicesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28621,9 +29932,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListOpenIDConnectProvidersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListOpenIDConnectProvidersError::from_response(response))
                 }));
             }
 
@@ -28672,11 +29981,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListPoliciesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28724,11 +30034,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPolicyVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListPolicyVersionsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28776,11 +30087,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListRolePoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListRolePoliciesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28828,11 +30140,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListRolesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListRolesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28880,11 +30193,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSAMLProvidersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListSAMLProvidersError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28932,11 +30246,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSSHPublicKeysError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListSSHPublicKeysError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -28985,9 +30300,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListServerCertificatesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListServerCertificatesError::from_response(response))
                 }));
             }
 
@@ -29038,9 +30351,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListServiceSpecificCredentialsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListServiceSpecificCredentialsError::from_response(response))
                 }));
             }
 
@@ -29092,9 +30403,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSigningCertificatesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListSigningCertificatesError::from_response(response))
                 }));
             }
 
@@ -29143,11 +30452,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListUserPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListUserPoliciesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -29195,11 +30505,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListUsersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListUsersError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -29247,11 +30558,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVirtualMFADevicesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListVirtualMFADevicesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -29299,11 +30610,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutGroupPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutGroupPolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -29329,9 +30641,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutRolePermissionsBoundaryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutRolePermissionsBoundaryError::from_response(response))
                 }));
             }
 
@@ -29354,11 +30664,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutRolePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutRolePolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -29384,9 +30695,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutUserPermissionsBoundaryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutUserPermissionsBoundaryError::from_response(response))
                 }));
             }
 
@@ -29409,11 +30718,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutUserPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutUserPolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -29443,8 +30753,8 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveClientIDFromOpenIDConnectProviderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(RemoveClientIDFromOpenIDConnectProviderError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -29472,9 +30782,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveRoleFromInstanceProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RemoveRoleFromInstanceProfileError::from_response(response))
                 }));
             }
 
@@ -29500,11 +30808,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveUserFromGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RemoveUserFromGroupError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -29531,9 +30839,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResetServiceSpecificCredentialError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ResetServiceSpecificCredentialError::from_response(response))
                 }));
             }
 
@@ -29584,11 +30890,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResyncMFADeviceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ResyncMFADeviceError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -29614,9 +30921,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetDefaultPolicyVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SetDefaultPolicyVersionError::from_response(response))
                 }));
             }
 
@@ -29642,11 +30947,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SimulateCustomPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(SimulateCustomPolicyError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -29695,9 +31000,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SimulatePrincipalPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SimulatePrincipalPolicyError::from_response(response))
                 }));
             }
 
@@ -29746,11 +31049,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateAccessKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateAccessKeyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -29776,9 +31080,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateAccountPasswordPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateAccountPasswordPolicyError::from_response(response))
                 }));
             }
 
@@ -29805,9 +31107,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateAssumeRolePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateAssumeRolePolicyError::from_response(response))
                 }));
             }
 
@@ -29830,11 +31130,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateGroupError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -29859,11 +31160,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateLoginProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateLoginProfileError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -29889,8 +31191,8 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateOpenIDConnectProviderThumbprintError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(UpdateOpenIDConnectProviderThumbprintError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -29917,11 +31219,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateRoleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateRoleError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -29969,11 +31272,11 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateRoleDescriptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateRoleDescriptionError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -30021,11 +31324,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSAMLProviderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateSAMLProviderError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -30073,11 +31377,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSSHPublicKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateSSHPublicKeyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -30103,9 +31408,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateServerCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateServerCertificateError::from_response(response))
                 }));
             }
 
@@ -30132,8 +31435,8 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateServiceSpecificCredentialError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(UpdateServiceSpecificCredentialError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -30161,9 +31464,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSigningCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateSigningCertificateError::from_response(response))
                 }));
             }
 
@@ -30186,11 +31487,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateUserError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -30215,11 +31517,12 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UploadSSHPublicKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UploadSSHPublicKeyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -30268,9 +31571,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UploadServerCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UploadServerCertificateError::from_response(response))
                 }));
             }
 
@@ -30320,9 +31621,7 @@ impl Iam for IamClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UploadSigningCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UploadSigningCertificateError::from_response(response))
                 }));
             }
 

@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -16267,24 +16267,30 @@ pub enum AbortMultipartUploadError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AbortMultipartUploadError {
-    pub fn from_body(body: &str) -> AbortMultipartUploadError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchUpload" => {
-                    AbortMultipartUploadError::NoSuchUpload(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> AbortMultipartUploadError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchUpload" => {
+                        return AbortMultipartUploadError::NoSuchUpload(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => AbortMultipartUploadError::Unknown(String::from(body)),
-            },
-            Err(_) => AbortMultipartUploadError::Unknown(body.to_string()),
+            }
         }
+        AbortMultipartUploadError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16298,7 +16304,7 @@ impl AbortMultipartUploadError {
 impl From<XmlParseError> for AbortMultipartUploadError {
     fn from(err: XmlParseError) -> AbortMultipartUploadError {
         let XmlParseError(message) = err;
-        AbortMultipartUploadError::Unknown(message.to_string())
+        AbortMultipartUploadError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AbortMultipartUploadError {
@@ -16330,7 +16336,8 @@ impl Error for AbortMultipartUploadError {
             AbortMultipartUploadError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AbortMultipartUploadError::Unknown(ref cause) => cause,
+            AbortMultipartUploadError::ParseError(ref cause) => cause,
+            AbortMultipartUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16343,21 +16350,25 @@ pub enum CompleteMultipartUploadError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CompleteMultipartUploadError {
-    pub fn from_body(body: &str) -> CompleteMultipartUploadError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => CompleteMultipartUploadError::Unknown(String::from(body)),
-            },
-            Err(_) => CompleteMultipartUploadError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CompleteMultipartUploadError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        CompleteMultipartUploadError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16371,7 +16382,7 @@ impl CompleteMultipartUploadError {
 impl From<XmlParseError> for CompleteMultipartUploadError {
     fn from(err: XmlParseError) -> CompleteMultipartUploadError {
         let XmlParseError(message) = err;
-        CompleteMultipartUploadError::Unknown(message.to_string())
+        CompleteMultipartUploadError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CompleteMultipartUploadError {
@@ -16402,7 +16413,8 @@ impl Error for CompleteMultipartUploadError {
             CompleteMultipartUploadError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CompleteMultipartUploadError::Unknown(ref cause) => cause,
+            CompleteMultipartUploadError::ParseError(ref cause) => cause,
+            CompleteMultipartUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16417,24 +16429,30 @@ pub enum CopyObjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CopyObjectError {
-    pub fn from_body(body: &str) -> CopyObjectError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ObjectNotInActiveTierError" => {
-                    CopyObjectError::ObjectNotInActiveTierError(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CopyObjectError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ObjectNotInActiveTierError" => {
+                        return CopyObjectError::ObjectNotInActiveTierError(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => CopyObjectError::Unknown(String::from(body)),
-            },
-            Err(_) => CopyObjectError::Unknown(body.to_string()),
+            }
         }
+        CopyObjectError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16448,7 +16466,7 @@ impl CopyObjectError {
 impl From<XmlParseError> for CopyObjectError {
     fn from(err: XmlParseError) -> CopyObjectError {
         let XmlParseError(message) = err;
-        CopyObjectError::Unknown(message.to_string())
+        CopyObjectError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CopyObjectError {
@@ -16478,7 +16496,8 @@ impl Error for CopyObjectError {
             CopyObjectError::Validation(ref cause) => cause,
             CopyObjectError::Credentials(ref err) => err.description(),
             CopyObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CopyObjectError::Unknown(ref cause) => cause,
+            CopyObjectError::ParseError(ref cause) => cause,
+            CopyObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16495,27 +16514,35 @@ pub enum CreateBucketError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBucketError {
-    pub fn from_body(body: &str) -> CreateBucketError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BucketAlreadyExists" => {
-                    CreateBucketError::BucketAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateBucketError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BucketAlreadyExists" => {
+                        return CreateBucketError::BucketAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "BucketAlreadyOwnedByYou" => {
+                        return CreateBucketError::BucketAlreadyOwnedByYou(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "BucketAlreadyOwnedByYou" => {
-                    CreateBucketError::BucketAlreadyOwnedByYou(String::from(parsed_error.message))
-                }
-                _ => CreateBucketError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateBucketError::Unknown(body.to_string()),
+            }
         }
+        CreateBucketError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16529,7 +16556,7 @@ impl CreateBucketError {
 impl From<XmlParseError> for CreateBucketError {
     fn from(err: XmlParseError) -> CreateBucketError {
         let XmlParseError(message) = err;
-        CreateBucketError::Unknown(message.to_string())
+        CreateBucketError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateBucketError {
@@ -16560,7 +16587,8 @@ impl Error for CreateBucketError {
             CreateBucketError::Validation(ref cause) => cause,
             CreateBucketError::Credentials(ref err) => err.description(),
             CreateBucketError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBucketError::Unknown(ref cause) => cause,
+            CreateBucketError::ParseError(ref cause) => cause,
+            CreateBucketError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16573,21 +16601,25 @@ pub enum CreateMultipartUploadError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateMultipartUploadError {
-    pub fn from_body(body: &str) -> CreateMultipartUploadError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => CreateMultipartUploadError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateMultipartUploadError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateMultipartUploadError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        CreateMultipartUploadError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16601,7 +16633,7 @@ impl CreateMultipartUploadError {
 impl From<XmlParseError> for CreateMultipartUploadError {
     fn from(err: XmlParseError) -> CreateMultipartUploadError {
         let XmlParseError(message) = err;
-        CreateMultipartUploadError::Unknown(message.to_string())
+        CreateMultipartUploadError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateMultipartUploadError {
@@ -16632,7 +16664,8 @@ impl Error for CreateMultipartUploadError {
             CreateMultipartUploadError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateMultipartUploadError::Unknown(ref cause) => cause,
+            CreateMultipartUploadError::ParseError(ref cause) => cause,
+            CreateMultipartUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16645,21 +16678,25 @@ pub enum DeleteBucketError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBucketError {
-    pub fn from_body(body: &str) -> DeleteBucketError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteBucketError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteBucketError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteBucketError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16673,7 +16710,7 @@ impl DeleteBucketError {
 impl From<XmlParseError> for DeleteBucketError {
     fn from(err: XmlParseError) -> DeleteBucketError {
         let XmlParseError(message) = err;
-        DeleteBucketError::Unknown(message.to_string())
+        DeleteBucketError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteBucketError {
@@ -16702,7 +16739,8 @@ impl Error for DeleteBucketError {
             DeleteBucketError::Validation(ref cause) => cause,
             DeleteBucketError::Credentials(ref err) => err.description(),
             DeleteBucketError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBucketError::Unknown(ref cause) => cause,
+            DeleteBucketError::ParseError(ref cause) => cause,
+            DeleteBucketError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16715,21 +16753,25 @@ pub enum DeleteBucketAnalyticsConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBucketAnalyticsConfigurationError {
-    pub fn from_body(body: &str) -> DeleteBucketAnalyticsConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteBucketAnalyticsConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteBucketAnalyticsConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketAnalyticsConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteBucketAnalyticsConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16743,7 +16785,7 @@ impl DeleteBucketAnalyticsConfigurationError {
 impl From<XmlParseError> for DeleteBucketAnalyticsConfigurationError {
     fn from(err: XmlParseError) -> DeleteBucketAnalyticsConfigurationError {
         let XmlParseError(message) = err;
-        DeleteBucketAnalyticsConfigurationError::Unknown(message.to_string())
+        DeleteBucketAnalyticsConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteBucketAnalyticsConfigurationError {
@@ -16774,7 +16816,8 @@ impl Error for DeleteBucketAnalyticsConfigurationError {
             DeleteBucketAnalyticsConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteBucketAnalyticsConfigurationError::Unknown(ref cause) => cause,
+            DeleteBucketAnalyticsConfigurationError::ParseError(ref cause) => cause,
+            DeleteBucketAnalyticsConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16787,21 +16830,25 @@ pub enum DeleteBucketCorsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBucketCorsError {
-    pub fn from_body(body: &str) -> DeleteBucketCorsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteBucketCorsError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteBucketCorsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketCorsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteBucketCorsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16815,7 +16862,7 @@ impl DeleteBucketCorsError {
 impl From<XmlParseError> for DeleteBucketCorsError {
     fn from(err: XmlParseError) -> DeleteBucketCorsError {
         let XmlParseError(message) = err;
-        DeleteBucketCorsError::Unknown(message.to_string())
+        DeleteBucketCorsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteBucketCorsError {
@@ -16844,7 +16891,8 @@ impl Error for DeleteBucketCorsError {
             DeleteBucketCorsError::Validation(ref cause) => cause,
             DeleteBucketCorsError::Credentials(ref err) => err.description(),
             DeleteBucketCorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBucketCorsError::Unknown(ref cause) => cause,
+            DeleteBucketCorsError::ParseError(ref cause) => cause,
+            DeleteBucketCorsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16857,21 +16905,25 @@ pub enum DeleteBucketEncryptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBucketEncryptionError {
-    pub fn from_body(body: &str) -> DeleteBucketEncryptionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteBucketEncryptionError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteBucketEncryptionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketEncryptionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteBucketEncryptionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16885,7 +16937,7 @@ impl DeleteBucketEncryptionError {
 impl From<XmlParseError> for DeleteBucketEncryptionError {
     fn from(err: XmlParseError) -> DeleteBucketEncryptionError {
         let XmlParseError(message) = err;
-        DeleteBucketEncryptionError::Unknown(message.to_string())
+        DeleteBucketEncryptionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteBucketEncryptionError {
@@ -16916,7 +16968,8 @@ impl Error for DeleteBucketEncryptionError {
             DeleteBucketEncryptionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteBucketEncryptionError::Unknown(ref cause) => cause,
+            DeleteBucketEncryptionError::ParseError(ref cause) => cause,
+            DeleteBucketEncryptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16929,21 +16982,25 @@ pub enum DeleteBucketInventoryConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBucketInventoryConfigurationError {
-    pub fn from_body(body: &str) -> DeleteBucketInventoryConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteBucketInventoryConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteBucketInventoryConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketInventoryConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteBucketInventoryConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16957,7 +17014,7 @@ impl DeleteBucketInventoryConfigurationError {
 impl From<XmlParseError> for DeleteBucketInventoryConfigurationError {
     fn from(err: XmlParseError) -> DeleteBucketInventoryConfigurationError {
         let XmlParseError(message) = err;
-        DeleteBucketInventoryConfigurationError::Unknown(message.to_string())
+        DeleteBucketInventoryConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteBucketInventoryConfigurationError {
@@ -16988,7 +17045,8 @@ impl Error for DeleteBucketInventoryConfigurationError {
             DeleteBucketInventoryConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteBucketInventoryConfigurationError::Unknown(ref cause) => cause,
+            DeleteBucketInventoryConfigurationError::ParseError(ref cause) => cause,
+            DeleteBucketInventoryConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17001,21 +17059,25 @@ pub enum DeleteBucketLifecycleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBucketLifecycleError {
-    pub fn from_body(body: &str) -> DeleteBucketLifecycleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteBucketLifecycleError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteBucketLifecycleError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketLifecycleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteBucketLifecycleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17029,7 +17091,7 @@ impl DeleteBucketLifecycleError {
 impl From<XmlParseError> for DeleteBucketLifecycleError {
     fn from(err: XmlParseError) -> DeleteBucketLifecycleError {
         let XmlParseError(message) = err;
-        DeleteBucketLifecycleError::Unknown(message.to_string())
+        DeleteBucketLifecycleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteBucketLifecycleError {
@@ -17060,7 +17122,8 @@ impl Error for DeleteBucketLifecycleError {
             DeleteBucketLifecycleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteBucketLifecycleError::Unknown(ref cause) => cause,
+            DeleteBucketLifecycleError::ParseError(ref cause) => cause,
+            DeleteBucketLifecycleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17073,21 +17136,25 @@ pub enum DeleteBucketMetricsConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBucketMetricsConfigurationError {
-    pub fn from_body(body: &str) -> DeleteBucketMetricsConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteBucketMetricsConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteBucketMetricsConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketMetricsConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteBucketMetricsConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17101,7 +17168,7 @@ impl DeleteBucketMetricsConfigurationError {
 impl From<XmlParseError> for DeleteBucketMetricsConfigurationError {
     fn from(err: XmlParseError) -> DeleteBucketMetricsConfigurationError {
         let XmlParseError(message) = err;
-        DeleteBucketMetricsConfigurationError::Unknown(message.to_string())
+        DeleteBucketMetricsConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteBucketMetricsConfigurationError {
@@ -17132,7 +17199,8 @@ impl Error for DeleteBucketMetricsConfigurationError {
             DeleteBucketMetricsConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteBucketMetricsConfigurationError::Unknown(ref cause) => cause,
+            DeleteBucketMetricsConfigurationError::ParseError(ref cause) => cause,
+            DeleteBucketMetricsConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17145,21 +17213,25 @@ pub enum DeleteBucketPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBucketPolicyError {
-    pub fn from_body(body: &str) -> DeleteBucketPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteBucketPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteBucketPolicyError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteBucketPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17173,7 +17245,7 @@ impl DeleteBucketPolicyError {
 impl From<XmlParseError> for DeleteBucketPolicyError {
     fn from(err: XmlParseError) -> DeleteBucketPolicyError {
         let XmlParseError(message) = err;
-        DeleteBucketPolicyError::Unknown(message.to_string())
+        DeleteBucketPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteBucketPolicyError {
@@ -17204,7 +17276,8 @@ impl Error for DeleteBucketPolicyError {
             DeleteBucketPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteBucketPolicyError::Unknown(ref cause) => cause,
+            DeleteBucketPolicyError::ParseError(ref cause) => cause,
+            DeleteBucketPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17217,21 +17290,25 @@ pub enum DeleteBucketReplicationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBucketReplicationError {
-    pub fn from_body(body: &str) -> DeleteBucketReplicationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteBucketReplicationError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteBucketReplicationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketReplicationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteBucketReplicationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17245,7 +17322,7 @@ impl DeleteBucketReplicationError {
 impl From<XmlParseError> for DeleteBucketReplicationError {
     fn from(err: XmlParseError) -> DeleteBucketReplicationError {
         let XmlParseError(message) = err;
-        DeleteBucketReplicationError::Unknown(message.to_string())
+        DeleteBucketReplicationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteBucketReplicationError {
@@ -17276,7 +17353,8 @@ impl Error for DeleteBucketReplicationError {
             DeleteBucketReplicationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteBucketReplicationError::Unknown(ref cause) => cause,
+            DeleteBucketReplicationError::ParseError(ref cause) => cause,
+            DeleteBucketReplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17289,21 +17367,25 @@ pub enum DeleteBucketTaggingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBucketTaggingError {
-    pub fn from_body(body: &str) -> DeleteBucketTaggingError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteBucketTaggingError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteBucketTaggingError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketTaggingError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteBucketTaggingError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17317,7 +17399,7 @@ impl DeleteBucketTaggingError {
 impl From<XmlParseError> for DeleteBucketTaggingError {
     fn from(err: XmlParseError) -> DeleteBucketTaggingError {
         let XmlParseError(message) = err;
-        DeleteBucketTaggingError::Unknown(message.to_string())
+        DeleteBucketTaggingError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteBucketTaggingError {
@@ -17348,7 +17430,8 @@ impl Error for DeleteBucketTaggingError {
             DeleteBucketTaggingError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteBucketTaggingError::Unknown(ref cause) => cause,
+            DeleteBucketTaggingError::ParseError(ref cause) => cause,
+            DeleteBucketTaggingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17361,21 +17444,25 @@ pub enum DeleteBucketWebsiteError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBucketWebsiteError {
-    pub fn from_body(body: &str) -> DeleteBucketWebsiteError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteBucketWebsiteError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteBucketWebsiteError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketWebsiteError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteBucketWebsiteError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17389,7 +17476,7 @@ impl DeleteBucketWebsiteError {
 impl From<XmlParseError> for DeleteBucketWebsiteError {
     fn from(err: XmlParseError) -> DeleteBucketWebsiteError {
         let XmlParseError(message) = err;
-        DeleteBucketWebsiteError::Unknown(message.to_string())
+        DeleteBucketWebsiteError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteBucketWebsiteError {
@@ -17420,7 +17507,8 @@ impl Error for DeleteBucketWebsiteError {
             DeleteBucketWebsiteError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteBucketWebsiteError::Unknown(ref cause) => cause,
+            DeleteBucketWebsiteError::ParseError(ref cause) => cause,
+            DeleteBucketWebsiteError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17433,21 +17521,25 @@ pub enum DeleteObjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteObjectError {
-    pub fn from_body(body: &str) -> DeleteObjectError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteObjectError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteObjectError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteObjectError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteObjectError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17461,7 +17553,7 @@ impl DeleteObjectError {
 impl From<XmlParseError> for DeleteObjectError {
     fn from(err: XmlParseError) -> DeleteObjectError {
         let XmlParseError(message) = err;
-        DeleteObjectError::Unknown(message.to_string())
+        DeleteObjectError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteObjectError {
@@ -17490,7 +17582,8 @@ impl Error for DeleteObjectError {
             DeleteObjectError::Validation(ref cause) => cause,
             DeleteObjectError::Credentials(ref err) => err.description(),
             DeleteObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteObjectError::Unknown(ref cause) => cause,
+            DeleteObjectError::ParseError(ref cause) => cause,
+            DeleteObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17503,21 +17596,25 @@ pub enum DeleteObjectTaggingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteObjectTaggingError {
-    pub fn from_body(body: &str) -> DeleteObjectTaggingError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteObjectTaggingError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteObjectTaggingError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteObjectTaggingError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteObjectTaggingError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17531,7 +17628,7 @@ impl DeleteObjectTaggingError {
 impl From<XmlParseError> for DeleteObjectTaggingError {
     fn from(err: XmlParseError) -> DeleteObjectTaggingError {
         let XmlParseError(message) = err;
-        DeleteObjectTaggingError::Unknown(message.to_string())
+        DeleteObjectTaggingError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteObjectTaggingError {
@@ -17562,7 +17659,8 @@ impl Error for DeleteObjectTaggingError {
             DeleteObjectTaggingError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteObjectTaggingError::Unknown(ref cause) => cause,
+            DeleteObjectTaggingError::ParseError(ref cause) => cause,
+            DeleteObjectTaggingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17575,21 +17673,25 @@ pub enum DeleteObjectsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteObjectsError {
-    pub fn from_body(body: &str) -> DeleteObjectsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteObjectsError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteObjectsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteObjectsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteObjectsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17603,7 +17705,7 @@ impl DeleteObjectsError {
 impl From<XmlParseError> for DeleteObjectsError {
     fn from(err: XmlParseError) -> DeleteObjectsError {
         let XmlParseError(message) = err;
-        DeleteObjectsError::Unknown(message.to_string())
+        DeleteObjectsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteObjectsError {
@@ -17632,7 +17734,8 @@ impl Error for DeleteObjectsError {
             DeleteObjectsError::Validation(ref cause) => cause,
             DeleteObjectsError::Credentials(ref err) => err.description(),
             DeleteObjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteObjectsError::Unknown(ref cause) => cause,
+            DeleteObjectsError::ParseError(ref cause) => cause,
+            DeleteObjectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17645,21 +17748,25 @@ pub enum GetBucketAccelerateConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketAccelerateConfigurationError {
-    pub fn from_body(body: &str) -> GetBucketAccelerateConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketAccelerateConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketAccelerateConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketAccelerateConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketAccelerateConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17673,7 +17780,7 @@ impl GetBucketAccelerateConfigurationError {
 impl From<XmlParseError> for GetBucketAccelerateConfigurationError {
     fn from(err: XmlParseError) -> GetBucketAccelerateConfigurationError {
         let XmlParseError(message) = err;
-        GetBucketAccelerateConfigurationError::Unknown(message.to_string())
+        GetBucketAccelerateConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketAccelerateConfigurationError {
@@ -17704,7 +17811,8 @@ impl Error for GetBucketAccelerateConfigurationError {
             GetBucketAccelerateConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketAccelerateConfigurationError::Unknown(ref cause) => cause,
+            GetBucketAccelerateConfigurationError::ParseError(ref cause) => cause,
+            GetBucketAccelerateConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17717,21 +17825,25 @@ pub enum GetBucketAclError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketAclError {
-    pub fn from_body(body: &str) -> GetBucketAclError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketAclError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketAclError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketAclError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketAclError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17745,7 +17857,7 @@ impl GetBucketAclError {
 impl From<XmlParseError> for GetBucketAclError {
     fn from(err: XmlParseError) -> GetBucketAclError {
         let XmlParseError(message) = err;
-        GetBucketAclError::Unknown(message.to_string())
+        GetBucketAclError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketAclError {
@@ -17774,7 +17886,8 @@ impl Error for GetBucketAclError {
             GetBucketAclError::Validation(ref cause) => cause,
             GetBucketAclError::Credentials(ref err) => err.description(),
             GetBucketAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBucketAclError::Unknown(ref cause) => cause,
+            GetBucketAclError::ParseError(ref cause) => cause,
+            GetBucketAclError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17787,21 +17900,25 @@ pub enum GetBucketAnalyticsConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketAnalyticsConfigurationError {
-    pub fn from_body(body: &str) -> GetBucketAnalyticsConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketAnalyticsConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketAnalyticsConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketAnalyticsConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketAnalyticsConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17815,7 +17932,7 @@ impl GetBucketAnalyticsConfigurationError {
 impl From<XmlParseError> for GetBucketAnalyticsConfigurationError {
     fn from(err: XmlParseError) -> GetBucketAnalyticsConfigurationError {
         let XmlParseError(message) = err;
-        GetBucketAnalyticsConfigurationError::Unknown(message.to_string())
+        GetBucketAnalyticsConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketAnalyticsConfigurationError {
@@ -17846,7 +17963,8 @@ impl Error for GetBucketAnalyticsConfigurationError {
             GetBucketAnalyticsConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketAnalyticsConfigurationError::Unknown(ref cause) => cause,
+            GetBucketAnalyticsConfigurationError::ParseError(ref cause) => cause,
+            GetBucketAnalyticsConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17859,21 +17977,25 @@ pub enum GetBucketCorsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketCorsError {
-    pub fn from_body(body: &str) -> GetBucketCorsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketCorsError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketCorsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketCorsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketCorsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17887,7 +18009,7 @@ impl GetBucketCorsError {
 impl From<XmlParseError> for GetBucketCorsError {
     fn from(err: XmlParseError) -> GetBucketCorsError {
         let XmlParseError(message) = err;
-        GetBucketCorsError::Unknown(message.to_string())
+        GetBucketCorsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketCorsError {
@@ -17916,7 +18038,8 @@ impl Error for GetBucketCorsError {
             GetBucketCorsError::Validation(ref cause) => cause,
             GetBucketCorsError::Credentials(ref err) => err.description(),
             GetBucketCorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBucketCorsError::Unknown(ref cause) => cause,
+            GetBucketCorsError::ParseError(ref cause) => cause,
+            GetBucketCorsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17929,21 +18052,25 @@ pub enum GetBucketEncryptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketEncryptionError {
-    pub fn from_body(body: &str) -> GetBucketEncryptionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketEncryptionError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketEncryptionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketEncryptionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketEncryptionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17957,7 +18084,7 @@ impl GetBucketEncryptionError {
 impl From<XmlParseError> for GetBucketEncryptionError {
     fn from(err: XmlParseError) -> GetBucketEncryptionError {
         let XmlParseError(message) = err;
-        GetBucketEncryptionError::Unknown(message.to_string())
+        GetBucketEncryptionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketEncryptionError {
@@ -17988,7 +18115,8 @@ impl Error for GetBucketEncryptionError {
             GetBucketEncryptionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketEncryptionError::Unknown(ref cause) => cause,
+            GetBucketEncryptionError::ParseError(ref cause) => cause,
+            GetBucketEncryptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18001,21 +18129,25 @@ pub enum GetBucketInventoryConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketInventoryConfigurationError {
-    pub fn from_body(body: &str) -> GetBucketInventoryConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketInventoryConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketInventoryConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketInventoryConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketInventoryConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18029,7 +18161,7 @@ impl GetBucketInventoryConfigurationError {
 impl From<XmlParseError> for GetBucketInventoryConfigurationError {
     fn from(err: XmlParseError) -> GetBucketInventoryConfigurationError {
         let XmlParseError(message) = err;
-        GetBucketInventoryConfigurationError::Unknown(message.to_string())
+        GetBucketInventoryConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketInventoryConfigurationError {
@@ -18060,7 +18192,8 @@ impl Error for GetBucketInventoryConfigurationError {
             GetBucketInventoryConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketInventoryConfigurationError::Unknown(ref cause) => cause,
+            GetBucketInventoryConfigurationError::ParseError(ref cause) => cause,
+            GetBucketInventoryConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18073,21 +18206,25 @@ pub enum GetBucketLifecycleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketLifecycleError {
-    pub fn from_body(body: &str) -> GetBucketLifecycleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketLifecycleError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketLifecycleError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketLifecycleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketLifecycleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18101,7 +18238,7 @@ impl GetBucketLifecycleError {
 impl From<XmlParseError> for GetBucketLifecycleError {
     fn from(err: XmlParseError) -> GetBucketLifecycleError {
         let XmlParseError(message) = err;
-        GetBucketLifecycleError::Unknown(message.to_string())
+        GetBucketLifecycleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketLifecycleError {
@@ -18132,7 +18269,8 @@ impl Error for GetBucketLifecycleError {
             GetBucketLifecycleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketLifecycleError::Unknown(ref cause) => cause,
+            GetBucketLifecycleError::ParseError(ref cause) => cause,
+            GetBucketLifecycleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18145,21 +18283,25 @@ pub enum GetBucketLifecycleConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketLifecycleConfigurationError {
-    pub fn from_body(body: &str) -> GetBucketLifecycleConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketLifecycleConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketLifecycleConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketLifecycleConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketLifecycleConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18173,7 +18315,7 @@ impl GetBucketLifecycleConfigurationError {
 impl From<XmlParseError> for GetBucketLifecycleConfigurationError {
     fn from(err: XmlParseError) -> GetBucketLifecycleConfigurationError {
         let XmlParseError(message) = err;
-        GetBucketLifecycleConfigurationError::Unknown(message.to_string())
+        GetBucketLifecycleConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketLifecycleConfigurationError {
@@ -18204,7 +18346,8 @@ impl Error for GetBucketLifecycleConfigurationError {
             GetBucketLifecycleConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketLifecycleConfigurationError::Unknown(ref cause) => cause,
+            GetBucketLifecycleConfigurationError::ParseError(ref cause) => cause,
+            GetBucketLifecycleConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18217,21 +18360,25 @@ pub enum GetBucketLocationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketLocationError {
-    pub fn from_body(body: &str) -> GetBucketLocationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketLocationError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketLocationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketLocationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketLocationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18245,7 +18392,7 @@ impl GetBucketLocationError {
 impl From<XmlParseError> for GetBucketLocationError {
     fn from(err: XmlParseError) -> GetBucketLocationError {
         let XmlParseError(message) = err;
-        GetBucketLocationError::Unknown(message.to_string())
+        GetBucketLocationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketLocationError {
@@ -18276,7 +18423,8 @@ impl Error for GetBucketLocationError {
             GetBucketLocationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketLocationError::Unknown(ref cause) => cause,
+            GetBucketLocationError::ParseError(ref cause) => cause,
+            GetBucketLocationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18289,21 +18437,25 @@ pub enum GetBucketLoggingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketLoggingError {
-    pub fn from_body(body: &str) -> GetBucketLoggingError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketLoggingError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketLoggingError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketLoggingError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketLoggingError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18317,7 +18469,7 @@ impl GetBucketLoggingError {
 impl From<XmlParseError> for GetBucketLoggingError {
     fn from(err: XmlParseError) -> GetBucketLoggingError {
         let XmlParseError(message) = err;
-        GetBucketLoggingError::Unknown(message.to_string())
+        GetBucketLoggingError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketLoggingError {
@@ -18346,7 +18498,8 @@ impl Error for GetBucketLoggingError {
             GetBucketLoggingError::Validation(ref cause) => cause,
             GetBucketLoggingError::Credentials(ref err) => err.description(),
             GetBucketLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBucketLoggingError::Unknown(ref cause) => cause,
+            GetBucketLoggingError::ParseError(ref cause) => cause,
+            GetBucketLoggingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18359,21 +18512,25 @@ pub enum GetBucketMetricsConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketMetricsConfigurationError {
-    pub fn from_body(body: &str) -> GetBucketMetricsConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketMetricsConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketMetricsConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketMetricsConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketMetricsConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18387,7 +18544,7 @@ impl GetBucketMetricsConfigurationError {
 impl From<XmlParseError> for GetBucketMetricsConfigurationError {
     fn from(err: XmlParseError) -> GetBucketMetricsConfigurationError {
         let XmlParseError(message) = err;
-        GetBucketMetricsConfigurationError::Unknown(message.to_string())
+        GetBucketMetricsConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketMetricsConfigurationError {
@@ -18418,7 +18575,8 @@ impl Error for GetBucketMetricsConfigurationError {
             GetBucketMetricsConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketMetricsConfigurationError::Unknown(ref cause) => cause,
+            GetBucketMetricsConfigurationError::ParseError(ref cause) => cause,
+            GetBucketMetricsConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18431,21 +18589,25 @@ pub enum GetBucketNotificationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketNotificationError {
-    pub fn from_body(body: &str) -> GetBucketNotificationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketNotificationError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketNotificationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketNotificationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketNotificationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18459,7 +18621,7 @@ impl GetBucketNotificationError {
 impl From<XmlParseError> for GetBucketNotificationError {
     fn from(err: XmlParseError) -> GetBucketNotificationError {
         let XmlParseError(message) = err;
-        GetBucketNotificationError::Unknown(message.to_string())
+        GetBucketNotificationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketNotificationError {
@@ -18490,7 +18652,8 @@ impl Error for GetBucketNotificationError {
             GetBucketNotificationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketNotificationError::Unknown(ref cause) => cause,
+            GetBucketNotificationError::ParseError(ref cause) => cause,
+            GetBucketNotificationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18503,21 +18666,25 @@ pub enum GetBucketNotificationConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketNotificationConfigurationError {
-    pub fn from_body(body: &str) -> GetBucketNotificationConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketNotificationConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketNotificationConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketNotificationConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketNotificationConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18531,7 +18698,7 @@ impl GetBucketNotificationConfigurationError {
 impl From<XmlParseError> for GetBucketNotificationConfigurationError {
     fn from(err: XmlParseError) -> GetBucketNotificationConfigurationError {
         let XmlParseError(message) = err;
-        GetBucketNotificationConfigurationError::Unknown(message.to_string())
+        GetBucketNotificationConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketNotificationConfigurationError {
@@ -18562,7 +18729,8 @@ impl Error for GetBucketNotificationConfigurationError {
             GetBucketNotificationConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketNotificationConfigurationError::Unknown(ref cause) => cause,
+            GetBucketNotificationConfigurationError::ParseError(ref cause) => cause,
+            GetBucketNotificationConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18575,21 +18743,25 @@ pub enum GetBucketPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketPolicyError {
-    pub fn from_body(body: &str) -> GetBucketPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketPolicyError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18603,7 +18775,7 @@ impl GetBucketPolicyError {
 impl From<XmlParseError> for GetBucketPolicyError {
     fn from(err: XmlParseError) -> GetBucketPolicyError {
         let XmlParseError(message) = err;
-        GetBucketPolicyError::Unknown(message.to_string())
+        GetBucketPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketPolicyError {
@@ -18632,7 +18804,8 @@ impl Error for GetBucketPolicyError {
             GetBucketPolicyError::Validation(ref cause) => cause,
             GetBucketPolicyError::Credentials(ref err) => err.description(),
             GetBucketPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBucketPolicyError::Unknown(ref cause) => cause,
+            GetBucketPolicyError::ParseError(ref cause) => cause,
+            GetBucketPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18645,21 +18818,25 @@ pub enum GetBucketReplicationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketReplicationError {
-    pub fn from_body(body: &str) -> GetBucketReplicationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketReplicationError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketReplicationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketReplicationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketReplicationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18673,7 +18850,7 @@ impl GetBucketReplicationError {
 impl From<XmlParseError> for GetBucketReplicationError {
     fn from(err: XmlParseError) -> GetBucketReplicationError {
         let XmlParseError(message) = err;
-        GetBucketReplicationError::Unknown(message.to_string())
+        GetBucketReplicationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketReplicationError {
@@ -18704,7 +18881,8 @@ impl Error for GetBucketReplicationError {
             GetBucketReplicationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketReplicationError::Unknown(ref cause) => cause,
+            GetBucketReplicationError::ParseError(ref cause) => cause,
+            GetBucketReplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18717,21 +18895,25 @@ pub enum GetBucketRequestPaymentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketRequestPaymentError {
-    pub fn from_body(body: &str) -> GetBucketRequestPaymentError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketRequestPaymentError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketRequestPaymentError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketRequestPaymentError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketRequestPaymentError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18745,7 +18927,7 @@ impl GetBucketRequestPaymentError {
 impl From<XmlParseError> for GetBucketRequestPaymentError {
     fn from(err: XmlParseError) -> GetBucketRequestPaymentError {
         let XmlParseError(message) = err;
-        GetBucketRequestPaymentError::Unknown(message.to_string())
+        GetBucketRequestPaymentError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketRequestPaymentError {
@@ -18776,7 +18958,8 @@ impl Error for GetBucketRequestPaymentError {
             GetBucketRequestPaymentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketRequestPaymentError::Unknown(ref cause) => cause,
+            GetBucketRequestPaymentError::ParseError(ref cause) => cause,
+            GetBucketRequestPaymentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18789,21 +18972,25 @@ pub enum GetBucketTaggingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketTaggingError {
-    pub fn from_body(body: &str) -> GetBucketTaggingError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketTaggingError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketTaggingError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketTaggingError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketTaggingError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18817,7 +19004,7 @@ impl GetBucketTaggingError {
 impl From<XmlParseError> for GetBucketTaggingError {
     fn from(err: XmlParseError) -> GetBucketTaggingError {
         let XmlParseError(message) = err;
-        GetBucketTaggingError::Unknown(message.to_string())
+        GetBucketTaggingError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketTaggingError {
@@ -18846,7 +19033,8 @@ impl Error for GetBucketTaggingError {
             GetBucketTaggingError::Validation(ref cause) => cause,
             GetBucketTaggingError::Credentials(ref err) => err.description(),
             GetBucketTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBucketTaggingError::Unknown(ref cause) => cause,
+            GetBucketTaggingError::ParseError(ref cause) => cause,
+            GetBucketTaggingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18859,21 +19047,25 @@ pub enum GetBucketVersioningError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketVersioningError {
-    pub fn from_body(body: &str) -> GetBucketVersioningError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketVersioningError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketVersioningError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketVersioningError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketVersioningError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18887,7 +19079,7 @@ impl GetBucketVersioningError {
 impl From<XmlParseError> for GetBucketVersioningError {
     fn from(err: XmlParseError) -> GetBucketVersioningError {
         let XmlParseError(message) = err;
-        GetBucketVersioningError::Unknown(message.to_string())
+        GetBucketVersioningError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketVersioningError {
@@ -18918,7 +19110,8 @@ impl Error for GetBucketVersioningError {
             GetBucketVersioningError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBucketVersioningError::Unknown(ref cause) => cause,
+            GetBucketVersioningError::ParseError(ref cause) => cause,
+            GetBucketVersioningError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18931,21 +19124,25 @@ pub enum GetBucketWebsiteError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBucketWebsiteError {
-    pub fn from_body(body: &str) -> GetBucketWebsiteError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetBucketWebsiteError::Unknown(String::from(body)),
-            },
-            Err(_) => GetBucketWebsiteError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketWebsiteError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetBucketWebsiteError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18959,7 +19156,7 @@ impl GetBucketWebsiteError {
 impl From<XmlParseError> for GetBucketWebsiteError {
     fn from(err: XmlParseError) -> GetBucketWebsiteError {
         let XmlParseError(message) = err;
-        GetBucketWebsiteError::Unknown(message.to_string())
+        GetBucketWebsiteError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetBucketWebsiteError {
@@ -18988,7 +19185,8 @@ impl Error for GetBucketWebsiteError {
             GetBucketWebsiteError::Validation(ref cause) => cause,
             GetBucketWebsiteError::Credentials(ref err) => err.description(),
             GetBucketWebsiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBucketWebsiteError::Unknown(ref cause) => cause,
+            GetBucketWebsiteError::ParseError(ref cause) => cause,
+            GetBucketWebsiteError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19003,22 +19201,28 @@ pub enum GetObjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetObjectError {
-    pub fn from_body(body: &str) -> GetObjectError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchKey" => GetObjectError::NoSuchKey(String::from(parsed_error.message)),
-                _ => GetObjectError::Unknown(String::from(body)),
-            },
-            Err(_) => GetObjectError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetObjectError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchKey" => {
+                        return GetObjectError::NoSuchKey(String::from(parsed_error.message))
+                    }
+                    _ => {}
+                }
+            }
         }
+        GetObjectError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19032,7 +19236,7 @@ impl GetObjectError {
 impl From<XmlParseError> for GetObjectError {
     fn from(err: XmlParseError) -> GetObjectError {
         let XmlParseError(message) = err;
-        GetObjectError::Unknown(message.to_string())
+        GetObjectError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetObjectError {
@@ -19062,7 +19266,8 @@ impl Error for GetObjectError {
             GetObjectError::Validation(ref cause) => cause,
             GetObjectError::Credentials(ref err) => err.description(),
             GetObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetObjectError::Unknown(ref cause) => cause,
+            GetObjectError::ParseError(ref cause) => cause,
+            GetObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19077,22 +19282,28 @@ pub enum GetObjectAclError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetObjectAclError {
-    pub fn from_body(body: &str) -> GetObjectAclError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchKey" => GetObjectAclError::NoSuchKey(String::from(parsed_error.message)),
-                _ => GetObjectAclError::Unknown(String::from(body)),
-            },
-            Err(_) => GetObjectAclError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetObjectAclError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchKey" => {
+                        return GetObjectAclError::NoSuchKey(String::from(parsed_error.message))
+                    }
+                    _ => {}
+                }
+            }
         }
+        GetObjectAclError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19106,7 +19317,7 @@ impl GetObjectAclError {
 impl From<XmlParseError> for GetObjectAclError {
     fn from(err: XmlParseError) -> GetObjectAclError {
         let XmlParseError(message) = err;
-        GetObjectAclError::Unknown(message.to_string())
+        GetObjectAclError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetObjectAclError {
@@ -19136,7 +19347,8 @@ impl Error for GetObjectAclError {
             GetObjectAclError::Validation(ref cause) => cause,
             GetObjectAclError::Credentials(ref err) => err.description(),
             GetObjectAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetObjectAclError::Unknown(ref cause) => cause,
+            GetObjectAclError::ParseError(ref cause) => cause,
+            GetObjectAclError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19149,21 +19361,25 @@ pub enum GetObjectTaggingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetObjectTaggingError {
-    pub fn from_body(body: &str) -> GetObjectTaggingError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetObjectTaggingError::Unknown(String::from(body)),
-            },
-            Err(_) => GetObjectTaggingError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetObjectTaggingError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetObjectTaggingError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19177,7 +19393,7 @@ impl GetObjectTaggingError {
 impl From<XmlParseError> for GetObjectTaggingError {
     fn from(err: XmlParseError) -> GetObjectTaggingError {
         let XmlParseError(message) = err;
-        GetObjectTaggingError::Unknown(message.to_string())
+        GetObjectTaggingError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetObjectTaggingError {
@@ -19206,7 +19422,8 @@ impl Error for GetObjectTaggingError {
             GetObjectTaggingError::Validation(ref cause) => cause,
             GetObjectTaggingError::Credentials(ref err) => err.description(),
             GetObjectTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetObjectTaggingError::Unknown(ref cause) => cause,
+            GetObjectTaggingError::ParseError(ref cause) => cause,
+            GetObjectTaggingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19219,21 +19436,25 @@ pub enum GetObjectTorrentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetObjectTorrentError {
-    pub fn from_body(body: &str) -> GetObjectTorrentError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetObjectTorrentError::Unknown(String::from(body)),
-            },
-            Err(_) => GetObjectTorrentError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetObjectTorrentError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetObjectTorrentError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19247,7 +19468,7 @@ impl GetObjectTorrentError {
 impl From<XmlParseError> for GetObjectTorrentError {
     fn from(err: XmlParseError) -> GetObjectTorrentError {
         let XmlParseError(message) = err;
-        GetObjectTorrentError::Unknown(message.to_string())
+        GetObjectTorrentError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetObjectTorrentError {
@@ -19276,7 +19497,8 @@ impl Error for GetObjectTorrentError {
             GetObjectTorrentError::Validation(ref cause) => cause,
             GetObjectTorrentError::Credentials(ref err) => err.description(),
             GetObjectTorrentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetObjectTorrentError::Unknown(ref cause) => cause,
+            GetObjectTorrentError::ParseError(ref cause) => cause,
+            GetObjectTorrentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19291,22 +19513,28 @@ pub enum HeadBucketError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl HeadBucketError {
-    pub fn from_body(body: &str) -> HeadBucketError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchBucket" => HeadBucketError::NoSuchBucket(String::from(parsed_error.message)),
-                _ => HeadBucketError::Unknown(String::from(body)),
-            },
-            Err(_) => HeadBucketError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> HeadBucketError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchBucket" => {
+                        return HeadBucketError::NoSuchBucket(String::from(parsed_error.message))
+                    }
+                    _ => {}
+                }
+            }
         }
+        HeadBucketError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19320,7 +19548,7 @@ impl HeadBucketError {
 impl From<XmlParseError> for HeadBucketError {
     fn from(err: XmlParseError) -> HeadBucketError {
         let XmlParseError(message) = err;
-        HeadBucketError::Unknown(message.to_string())
+        HeadBucketError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for HeadBucketError {
@@ -19350,7 +19578,8 @@ impl Error for HeadBucketError {
             HeadBucketError::Validation(ref cause) => cause,
             HeadBucketError::Credentials(ref err) => err.description(),
             HeadBucketError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            HeadBucketError::Unknown(ref cause) => cause,
+            HeadBucketError::ParseError(ref cause) => cause,
+            HeadBucketError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19365,22 +19594,28 @@ pub enum HeadObjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl HeadObjectError {
-    pub fn from_body(body: &str) -> HeadObjectError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchKey" => HeadObjectError::NoSuchKey(String::from(parsed_error.message)),
-                _ => HeadObjectError::Unknown(String::from(body)),
-            },
-            Err(_) => HeadObjectError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> HeadObjectError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchKey" => {
+                        return HeadObjectError::NoSuchKey(String::from(parsed_error.message))
+                    }
+                    _ => {}
+                }
+            }
         }
+        HeadObjectError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19394,7 +19629,7 @@ impl HeadObjectError {
 impl From<XmlParseError> for HeadObjectError {
     fn from(err: XmlParseError) -> HeadObjectError {
         let XmlParseError(message) = err;
-        HeadObjectError::Unknown(message.to_string())
+        HeadObjectError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for HeadObjectError {
@@ -19424,7 +19659,8 @@ impl Error for HeadObjectError {
             HeadObjectError::Validation(ref cause) => cause,
             HeadObjectError::Credentials(ref err) => err.description(),
             HeadObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            HeadObjectError::Unknown(ref cause) => cause,
+            HeadObjectError::ParseError(ref cause) => cause,
+            HeadObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19437,21 +19673,25 @@ pub enum ListBucketAnalyticsConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListBucketAnalyticsConfigurationsError {
-    pub fn from_body(body: &str) -> ListBucketAnalyticsConfigurationsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListBucketAnalyticsConfigurationsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListBucketAnalyticsConfigurationsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListBucketAnalyticsConfigurationsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListBucketAnalyticsConfigurationsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19465,7 +19705,7 @@ impl ListBucketAnalyticsConfigurationsError {
 impl From<XmlParseError> for ListBucketAnalyticsConfigurationsError {
     fn from(err: XmlParseError) -> ListBucketAnalyticsConfigurationsError {
         let XmlParseError(message) = err;
-        ListBucketAnalyticsConfigurationsError::Unknown(message.to_string())
+        ListBucketAnalyticsConfigurationsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListBucketAnalyticsConfigurationsError {
@@ -19496,7 +19736,8 @@ impl Error for ListBucketAnalyticsConfigurationsError {
             ListBucketAnalyticsConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListBucketAnalyticsConfigurationsError::Unknown(ref cause) => cause,
+            ListBucketAnalyticsConfigurationsError::ParseError(ref cause) => cause,
+            ListBucketAnalyticsConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19509,21 +19750,25 @@ pub enum ListBucketInventoryConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListBucketInventoryConfigurationsError {
-    pub fn from_body(body: &str) -> ListBucketInventoryConfigurationsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListBucketInventoryConfigurationsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListBucketInventoryConfigurationsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListBucketInventoryConfigurationsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListBucketInventoryConfigurationsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19537,7 +19782,7 @@ impl ListBucketInventoryConfigurationsError {
 impl From<XmlParseError> for ListBucketInventoryConfigurationsError {
     fn from(err: XmlParseError) -> ListBucketInventoryConfigurationsError {
         let XmlParseError(message) = err;
-        ListBucketInventoryConfigurationsError::Unknown(message.to_string())
+        ListBucketInventoryConfigurationsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListBucketInventoryConfigurationsError {
@@ -19568,7 +19813,8 @@ impl Error for ListBucketInventoryConfigurationsError {
             ListBucketInventoryConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListBucketInventoryConfigurationsError::Unknown(ref cause) => cause,
+            ListBucketInventoryConfigurationsError::ParseError(ref cause) => cause,
+            ListBucketInventoryConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19581,21 +19827,25 @@ pub enum ListBucketMetricsConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListBucketMetricsConfigurationsError {
-    pub fn from_body(body: &str) -> ListBucketMetricsConfigurationsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListBucketMetricsConfigurationsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListBucketMetricsConfigurationsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListBucketMetricsConfigurationsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListBucketMetricsConfigurationsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19609,7 +19859,7 @@ impl ListBucketMetricsConfigurationsError {
 impl From<XmlParseError> for ListBucketMetricsConfigurationsError {
     fn from(err: XmlParseError) -> ListBucketMetricsConfigurationsError {
         let XmlParseError(message) = err;
-        ListBucketMetricsConfigurationsError::Unknown(message.to_string())
+        ListBucketMetricsConfigurationsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListBucketMetricsConfigurationsError {
@@ -19640,7 +19890,8 @@ impl Error for ListBucketMetricsConfigurationsError {
             ListBucketMetricsConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListBucketMetricsConfigurationsError::Unknown(ref cause) => cause,
+            ListBucketMetricsConfigurationsError::ParseError(ref cause) => cause,
+            ListBucketMetricsConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19653,21 +19904,25 @@ pub enum ListBucketsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListBucketsError {
-    pub fn from_body(body: &str) -> ListBucketsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListBucketsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListBucketsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListBucketsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListBucketsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19681,7 +19936,7 @@ impl ListBucketsError {
 impl From<XmlParseError> for ListBucketsError {
     fn from(err: XmlParseError) -> ListBucketsError {
         let XmlParseError(message) = err;
-        ListBucketsError::Unknown(message.to_string())
+        ListBucketsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListBucketsError {
@@ -19710,7 +19965,8 @@ impl Error for ListBucketsError {
             ListBucketsError::Validation(ref cause) => cause,
             ListBucketsError::Credentials(ref err) => err.description(),
             ListBucketsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListBucketsError::Unknown(ref cause) => cause,
+            ListBucketsError::ParseError(ref cause) => cause,
+            ListBucketsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19723,21 +19979,25 @@ pub enum ListMultipartUploadsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListMultipartUploadsError {
-    pub fn from_body(body: &str) -> ListMultipartUploadsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListMultipartUploadsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListMultipartUploadsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListMultipartUploadsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListMultipartUploadsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19751,7 +20011,7 @@ impl ListMultipartUploadsError {
 impl From<XmlParseError> for ListMultipartUploadsError {
     fn from(err: XmlParseError) -> ListMultipartUploadsError {
         let XmlParseError(message) = err;
-        ListMultipartUploadsError::Unknown(message.to_string())
+        ListMultipartUploadsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListMultipartUploadsError {
@@ -19782,7 +20042,8 @@ impl Error for ListMultipartUploadsError {
             ListMultipartUploadsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListMultipartUploadsError::Unknown(ref cause) => cause,
+            ListMultipartUploadsError::ParseError(ref cause) => cause,
+            ListMultipartUploadsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19795,21 +20056,25 @@ pub enum ListObjectVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectVersionsError {
-    pub fn from_body(body: &str) -> ListObjectVersionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListObjectVersionsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListObjectVersionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListObjectVersionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListObjectVersionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19823,7 +20088,7 @@ impl ListObjectVersionsError {
 impl From<XmlParseError> for ListObjectVersionsError {
     fn from(err: XmlParseError) -> ListObjectVersionsError {
         let XmlParseError(message) = err;
-        ListObjectVersionsError::Unknown(message.to_string())
+        ListObjectVersionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListObjectVersionsError {
@@ -19854,7 +20119,8 @@ impl Error for ListObjectVersionsError {
             ListObjectVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListObjectVersionsError::Unknown(ref cause) => cause,
+            ListObjectVersionsError::ParseError(ref cause) => cause,
+            ListObjectVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19869,24 +20135,28 @@ pub enum ListObjectsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectsError {
-    pub fn from_body(body: &str) -> ListObjectsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchBucket" => {
-                    ListObjectsError::NoSuchBucket(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListObjectsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchBucket" => {
+                        return ListObjectsError::NoSuchBucket(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => ListObjectsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListObjectsError::Unknown(body.to_string()),
+            }
         }
+        ListObjectsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19900,7 +20170,7 @@ impl ListObjectsError {
 impl From<XmlParseError> for ListObjectsError {
     fn from(err: XmlParseError) -> ListObjectsError {
         let XmlParseError(message) = err;
-        ListObjectsError::Unknown(message.to_string())
+        ListObjectsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListObjectsError {
@@ -19930,7 +20200,8 @@ impl Error for ListObjectsError {
             ListObjectsError::Validation(ref cause) => cause,
             ListObjectsError::Credentials(ref err) => err.description(),
             ListObjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListObjectsError::Unknown(ref cause) => cause,
+            ListObjectsError::ParseError(ref cause) => cause,
+            ListObjectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19945,24 +20216,28 @@ pub enum ListObjectsV2Error {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectsV2Error {
-    pub fn from_body(body: &str) -> ListObjectsV2Error {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchBucket" => {
-                    ListObjectsV2Error::NoSuchBucket(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListObjectsV2Error {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchBucket" => {
+                        return ListObjectsV2Error::NoSuchBucket(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => ListObjectsV2Error::Unknown(String::from(body)),
-            },
-            Err(_) => ListObjectsV2Error::Unknown(body.to_string()),
+            }
         }
+        ListObjectsV2Error::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19976,7 +20251,7 @@ impl ListObjectsV2Error {
 impl From<XmlParseError> for ListObjectsV2Error {
     fn from(err: XmlParseError) -> ListObjectsV2Error {
         let XmlParseError(message) = err;
-        ListObjectsV2Error::Unknown(message.to_string())
+        ListObjectsV2Error::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListObjectsV2Error {
@@ -20006,7 +20281,8 @@ impl Error for ListObjectsV2Error {
             ListObjectsV2Error::Validation(ref cause) => cause,
             ListObjectsV2Error::Credentials(ref err) => err.description(),
             ListObjectsV2Error::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListObjectsV2Error::Unknown(ref cause) => cause,
+            ListObjectsV2Error::ParseError(ref cause) => cause,
+            ListObjectsV2Error::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20019,21 +20295,25 @@ pub enum ListPartsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPartsError {
-    pub fn from_body(body: &str) -> ListPartsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListPartsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListPartsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListPartsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListPartsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20047,7 +20327,7 @@ impl ListPartsError {
 impl From<XmlParseError> for ListPartsError {
     fn from(err: XmlParseError) -> ListPartsError {
         let XmlParseError(message) = err;
-        ListPartsError::Unknown(message.to_string())
+        ListPartsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListPartsError {
@@ -20076,7 +20356,8 @@ impl Error for ListPartsError {
             ListPartsError::Validation(ref cause) => cause,
             ListPartsError::Credentials(ref err) => err.description(),
             ListPartsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPartsError::Unknown(ref cause) => cause,
+            ListPartsError::ParseError(ref cause) => cause,
+            ListPartsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20089,21 +20370,25 @@ pub enum PutBucketAccelerateConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketAccelerateConfigurationError {
-    pub fn from_body(body: &str) -> PutBucketAccelerateConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketAccelerateConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketAccelerateConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketAccelerateConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketAccelerateConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20117,7 +20402,7 @@ impl PutBucketAccelerateConfigurationError {
 impl From<XmlParseError> for PutBucketAccelerateConfigurationError {
     fn from(err: XmlParseError) -> PutBucketAccelerateConfigurationError {
         let XmlParseError(message) = err;
-        PutBucketAccelerateConfigurationError::Unknown(message.to_string())
+        PutBucketAccelerateConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketAccelerateConfigurationError {
@@ -20148,7 +20433,8 @@ impl Error for PutBucketAccelerateConfigurationError {
             PutBucketAccelerateConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutBucketAccelerateConfigurationError::Unknown(ref cause) => cause,
+            PutBucketAccelerateConfigurationError::ParseError(ref cause) => cause,
+            PutBucketAccelerateConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20161,21 +20447,25 @@ pub enum PutBucketAclError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketAclError {
-    pub fn from_body(body: &str) -> PutBucketAclError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketAclError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketAclError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketAclError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketAclError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20189,7 +20479,7 @@ impl PutBucketAclError {
 impl From<XmlParseError> for PutBucketAclError {
     fn from(err: XmlParseError) -> PutBucketAclError {
         let XmlParseError(message) = err;
-        PutBucketAclError::Unknown(message.to_string())
+        PutBucketAclError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketAclError {
@@ -20218,7 +20508,8 @@ impl Error for PutBucketAclError {
             PutBucketAclError::Validation(ref cause) => cause,
             PutBucketAclError::Credentials(ref err) => err.description(),
             PutBucketAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBucketAclError::Unknown(ref cause) => cause,
+            PutBucketAclError::ParseError(ref cause) => cause,
+            PutBucketAclError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20231,21 +20522,25 @@ pub enum PutBucketAnalyticsConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketAnalyticsConfigurationError {
-    pub fn from_body(body: &str) -> PutBucketAnalyticsConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketAnalyticsConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketAnalyticsConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketAnalyticsConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketAnalyticsConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20259,7 +20554,7 @@ impl PutBucketAnalyticsConfigurationError {
 impl From<XmlParseError> for PutBucketAnalyticsConfigurationError {
     fn from(err: XmlParseError) -> PutBucketAnalyticsConfigurationError {
         let XmlParseError(message) = err;
-        PutBucketAnalyticsConfigurationError::Unknown(message.to_string())
+        PutBucketAnalyticsConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketAnalyticsConfigurationError {
@@ -20290,7 +20585,8 @@ impl Error for PutBucketAnalyticsConfigurationError {
             PutBucketAnalyticsConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutBucketAnalyticsConfigurationError::Unknown(ref cause) => cause,
+            PutBucketAnalyticsConfigurationError::ParseError(ref cause) => cause,
+            PutBucketAnalyticsConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20303,21 +20599,25 @@ pub enum PutBucketCorsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketCorsError {
-    pub fn from_body(body: &str) -> PutBucketCorsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketCorsError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketCorsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketCorsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketCorsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20331,7 +20631,7 @@ impl PutBucketCorsError {
 impl From<XmlParseError> for PutBucketCorsError {
     fn from(err: XmlParseError) -> PutBucketCorsError {
         let XmlParseError(message) = err;
-        PutBucketCorsError::Unknown(message.to_string())
+        PutBucketCorsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketCorsError {
@@ -20360,7 +20660,8 @@ impl Error for PutBucketCorsError {
             PutBucketCorsError::Validation(ref cause) => cause,
             PutBucketCorsError::Credentials(ref err) => err.description(),
             PutBucketCorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBucketCorsError::Unknown(ref cause) => cause,
+            PutBucketCorsError::ParseError(ref cause) => cause,
+            PutBucketCorsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20373,21 +20674,25 @@ pub enum PutBucketEncryptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketEncryptionError {
-    pub fn from_body(body: &str) -> PutBucketEncryptionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketEncryptionError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketEncryptionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketEncryptionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketEncryptionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20401,7 +20706,7 @@ impl PutBucketEncryptionError {
 impl From<XmlParseError> for PutBucketEncryptionError {
     fn from(err: XmlParseError) -> PutBucketEncryptionError {
         let XmlParseError(message) = err;
-        PutBucketEncryptionError::Unknown(message.to_string())
+        PutBucketEncryptionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketEncryptionError {
@@ -20432,7 +20737,8 @@ impl Error for PutBucketEncryptionError {
             PutBucketEncryptionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutBucketEncryptionError::Unknown(ref cause) => cause,
+            PutBucketEncryptionError::ParseError(ref cause) => cause,
+            PutBucketEncryptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20445,21 +20751,25 @@ pub enum PutBucketInventoryConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketInventoryConfigurationError {
-    pub fn from_body(body: &str) -> PutBucketInventoryConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketInventoryConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketInventoryConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketInventoryConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketInventoryConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20473,7 +20783,7 @@ impl PutBucketInventoryConfigurationError {
 impl From<XmlParseError> for PutBucketInventoryConfigurationError {
     fn from(err: XmlParseError) -> PutBucketInventoryConfigurationError {
         let XmlParseError(message) = err;
-        PutBucketInventoryConfigurationError::Unknown(message.to_string())
+        PutBucketInventoryConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketInventoryConfigurationError {
@@ -20504,7 +20814,8 @@ impl Error for PutBucketInventoryConfigurationError {
             PutBucketInventoryConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutBucketInventoryConfigurationError::Unknown(ref cause) => cause,
+            PutBucketInventoryConfigurationError::ParseError(ref cause) => cause,
+            PutBucketInventoryConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20517,21 +20828,25 @@ pub enum PutBucketLifecycleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketLifecycleError {
-    pub fn from_body(body: &str) -> PutBucketLifecycleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketLifecycleError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketLifecycleError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketLifecycleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketLifecycleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20545,7 +20860,7 @@ impl PutBucketLifecycleError {
 impl From<XmlParseError> for PutBucketLifecycleError {
     fn from(err: XmlParseError) -> PutBucketLifecycleError {
         let XmlParseError(message) = err;
-        PutBucketLifecycleError::Unknown(message.to_string())
+        PutBucketLifecycleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketLifecycleError {
@@ -20576,7 +20891,8 @@ impl Error for PutBucketLifecycleError {
             PutBucketLifecycleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutBucketLifecycleError::Unknown(ref cause) => cause,
+            PutBucketLifecycleError::ParseError(ref cause) => cause,
+            PutBucketLifecycleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20589,21 +20905,25 @@ pub enum PutBucketLifecycleConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketLifecycleConfigurationError {
-    pub fn from_body(body: &str) -> PutBucketLifecycleConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketLifecycleConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketLifecycleConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketLifecycleConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketLifecycleConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20617,7 +20937,7 @@ impl PutBucketLifecycleConfigurationError {
 impl From<XmlParseError> for PutBucketLifecycleConfigurationError {
     fn from(err: XmlParseError) -> PutBucketLifecycleConfigurationError {
         let XmlParseError(message) = err;
-        PutBucketLifecycleConfigurationError::Unknown(message.to_string())
+        PutBucketLifecycleConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketLifecycleConfigurationError {
@@ -20648,7 +20968,8 @@ impl Error for PutBucketLifecycleConfigurationError {
             PutBucketLifecycleConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutBucketLifecycleConfigurationError::Unknown(ref cause) => cause,
+            PutBucketLifecycleConfigurationError::ParseError(ref cause) => cause,
+            PutBucketLifecycleConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20661,21 +20982,25 @@ pub enum PutBucketLoggingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketLoggingError {
-    pub fn from_body(body: &str) -> PutBucketLoggingError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketLoggingError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketLoggingError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketLoggingError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketLoggingError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20689,7 +21014,7 @@ impl PutBucketLoggingError {
 impl From<XmlParseError> for PutBucketLoggingError {
     fn from(err: XmlParseError) -> PutBucketLoggingError {
         let XmlParseError(message) = err;
-        PutBucketLoggingError::Unknown(message.to_string())
+        PutBucketLoggingError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketLoggingError {
@@ -20718,7 +21043,8 @@ impl Error for PutBucketLoggingError {
             PutBucketLoggingError::Validation(ref cause) => cause,
             PutBucketLoggingError::Credentials(ref err) => err.description(),
             PutBucketLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBucketLoggingError::Unknown(ref cause) => cause,
+            PutBucketLoggingError::ParseError(ref cause) => cause,
+            PutBucketLoggingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20731,21 +21057,25 @@ pub enum PutBucketMetricsConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketMetricsConfigurationError {
-    pub fn from_body(body: &str) -> PutBucketMetricsConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketMetricsConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketMetricsConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketMetricsConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketMetricsConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20759,7 +21089,7 @@ impl PutBucketMetricsConfigurationError {
 impl From<XmlParseError> for PutBucketMetricsConfigurationError {
     fn from(err: XmlParseError) -> PutBucketMetricsConfigurationError {
         let XmlParseError(message) = err;
-        PutBucketMetricsConfigurationError::Unknown(message.to_string())
+        PutBucketMetricsConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketMetricsConfigurationError {
@@ -20790,7 +21120,8 @@ impl Error for PutBucketMetricsConfigurationError {
             PutBucketMetricsConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutBucketMetricsConfigurationError::Unknown(ref cause) => cause,
+            PutBucketMetricsConfigurationError::ParseError(ref cause) => cause,
+            PutBucketMetricsConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20803,21 +21134,25 @@ pub enum PutBucketNotificationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketNotificationError {
-    pub fn from_body(body: &str) -> PutBucketNotificationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketNotificationError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketNotificationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketNotificationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketNotificationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20831,7 +21166,7 @@ impl PutBucketNotificationError {
 impl From<XmlParseError> for PutBucketNotificationError {
     fn from(err: XmlParseError) -> PutBucketNotificationError {
         let XmlParseError(message) = err;
-        PutBucketNotificationError::Unknown(message.to_string())
+        PutBucketNotificationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketNotificationError {
@@ -20862,7 +21197,8 @@ impl Error for PutBucketNotificationError {
             PutBucketNotificationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutBucketNotificationError::Unknown(ref cause) => cause,
+            PutBucketNotificationError::ParseError(ref cause) => cause,
+            PutBucketNotificationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20875,21 +21211,25 @@ pub enum PutBucketNotificationConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketNotificationConfigurationError {
-    pub fn from_body(body: &str) -> PutBucketNotificationConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketNotificationConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketNotificationConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketNotificationConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketNotificationConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20903,7 +21243,7 @@ impl PutBucketNotificationConfigurationError {
 impl From<XmlParseError> for PutBucketNotificationConfigurationError {
     fn from(err: XmlParseError) -> PutBucketNotificationConfigurationError {
         let XmlParseError(message) = err;
-        PutBucketNotificationConfigurationError::Unknown(message.to_string())
+        PutBucketNotificationConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketNotificationConfigurationError {
@@ -20934,7 +21274,8 @@ impl Error for PutBucketNotificationConfigurationError {
             PutBucketNotificationConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutBucketNotificationConfigurationError::Unknown(ref cause) => cause,
+            PutBucketNotificationConfigurationError::ParseError(ref cause) => cause,
+            PutBucketNotificationConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20947,21 +21288,25 @@ pub enum PutBucketPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketPolicyError {
-    pub fn from_body(body: &str) -> PutBucketPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketPolicyError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20975,7 +21320,7 @@ impl PutBucketPolicyError {
 impl From<XmlParseError> for PutBucketPolicyError {
     fn from(err: XmlParseError) -> PutBucketPolicyError {
         let XmlParseError(message) = err;
-        PutBucketPolicyError::Unknown(message.to_string())
+        PutBucketPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketPolicyError {
@@ -21004,7 +21349,8 @@ impl Error for PutBucketPolicyError {
             PutBucketPolicyError::Validation(ref cause) => cause,
             PutBucketPolicyError::Credentials(ref err) => err.description(),
             PutBucketPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBucketPolicyError::Unknown(ref cause) => cause,
+            PutBucketPolicyError::ParseError(ref cause) => cause,
+            PutBucketPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21017,21 +21363,25 @@ pub enum PutBucketReplicationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketReplicationError {
-    pub fn from_body(body: &str) -> PutBucketReplicationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketReplicationError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketReplicationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketReplicationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketReplicationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21045,7 +21395,7 @@ impl PutBucketReplicationError {
 impl From<XmlParseError> for PutBucketReplicationError {
     fn from(err: XmlParseError) -> PutBucketReplicationError {
         let XmlParseError(message) = err;
-        PutBucketReplicationError::Unknown(message.to_string())
+        PutBucketReplicationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketReplicationError {
@@ -21076,7 +21426,8 @@ impl Error for PutBucketReplicationError {
             PutBucketReplicationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutBucketReplicationError::Unknown(ref cause) => cause,
+            PutBucketReplicationError::ParseError(ref cause) => cause,
+            PutBucketReplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21089,21 +21440,25 @@ pub enum PutBucketRequestPaymentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketRequestPaymentError {
-    pub fn from_body(body: &str) -> PutBucketRequestPaymentError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketRequestPaymentError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketRequestPaymentError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketRequestPaymentError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketRequestPaymentError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21117,7 +21472,7 @@ impl PutBucketRequestPaymentError {
 impl From<XmlParseError> for PutBucketRequestPaymentError {
     fn from(err: XmlParseError) -> PutBucketRequestPaymentError {
         let XmlParseError(message) = err;
-        PutBucketRequestPaymentError::Unknown(message.to_string())
+        PutBucketRequestPaymentError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketRequestPaymentError {
@@ -21148,7 +21503,8 @@ impl Error for PutBucketRequestPaymentError {
             PutBucketRequestPaymentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutBucketRequestPaymentError::Unknown(ref cause) => cause,
+            PutBucketRequestPaymentError::ParseError(ref cause) => cause,
+            PutBucketRequestPaymentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21161,21 +21517,25 @@ pub enum PutBucketTaggingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketTaggingError {
-    pub fn from_body(body: &str) -> PutBucketTaggingError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketTaggingError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketTaggingError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketTaggingError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketTaggingError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21189,7 +21549,7 @@ impl PutBucketTaggingError {
 impl From<XmlParseError> for PutBucketTaggingError {
     fn from(err: XmlParseError) -> PutBucketTaggingError {
         let XmlParseError(message) = err;
-        PutBucketTaggingError::Unknown(message.to_string())
+        PutBucketTaggingError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketTaggingError {
@@ -21218,7 +21578,8 @@ impl Error for PutBucketTaggingError {
             PutBucketTaggingError::Validation(ref cause) => cause,
             PutBucketTaggingError::Credentials(ref err) => err.description(),
             PutBucketTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBucketTaggingError::Unknown(ref cause) => cause,
+            PutBucketTaggingError::ParseError(ref cause) => cause,
+            PutBucketTaggingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21231,21 +21592,25 @@ pub enum PutBucketVersioningError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketVersioningError {
-    pub fn from_body(body: &str) -> PutBucketVersioningError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketVersioningError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketVersioningError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketVersioningError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketVersioningError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21259,7 +21624,7 @@ impl PutBucketVersioningError {
 impl From<XmlParseError> for PutBucketVersioningError {
     fn from(err: XmlParseError) -> PutBucketVersioningError {
         let XmlParseError(message) = err;
-        PutBucketVersioningError::Unknown(message.to_string())
+        PutBucketVersioningError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketVersioningError {
@@ -21290,7 +21655,8 @@ impl Error for PutBucketVersioningError {
             PutBucketVersioningError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutBucketVersioningError::Unknown(ref cause) => cause,
+            PutBucketVersioningError::ParseError(ref cause) => cause,
+            PutBucketVersioningError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21303,21 +21669,25 @@ pub enum PutBucketWebsiteError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBucketWebsiteError {
-    pub fn from_body(body: &str) -> PutBucketWebsiteError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutBucketWebsiteError::Unknown(String::from(body)),
-            },
-            Err(_) => PutBucketWebsiteError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutBucketWebsiteError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutBucketWebsiteError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21331,7 +21701,7 @@ impl PutBucketWebsiteError {
 impl From<XmlParseError> for PutBucketWebsiteError {
     fn from(err: XmlParseError) -> PutBucketWebsiteError {
         let XmlParseError(message) = err;
-        PutBucketWebsiteError::Unknown(message.to_string())
+        PutBucketWebsiteError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutBucketWebsiteError {
@@ -21360,7 +21730,8 @@ impl Error for PutBucketWebsiteError {
             PutBucketWebsiteError::Validation(ref cause) => cause,
             PutBucketWebsiteError::Credentials(ref err) => err.description(),
             PutBucketWebsiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBucketWebsiteError::Unknown(ref cause) => cause,
+            PutBucketWebsiteError::ParseError(ref cause) => cause,
+            PutBucketWebsiteError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21373,21 +21744,25 @@ pub enum PutObjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutObjectError {
-    pub fn from_body(body: &str) -> PutObjectError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutObjectError::Unknown(String::from(body)),
-            },
-            Err(_) => PutObjectError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutObjectError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutObjectError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21401,7 +21776,7 @@ impl PutObjectError {
 impl From<XmlParseError> for PutObjectError {
     fn from(err: XmlParseError) -> PutObjectError {
         let XmlParseError(message) = err;
-        PutObjectError::Unknown(message.to_string())
+        PutObjectError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutObjectError {
@@ -21430,7 +21805,8 @@ impl Error for PutObjectError {
             PutObjectError::Validation(ref cause) => cause,
             PutObjectError::Credentials(ref err) => err.description(),
             PutObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutObjectError::Unknown(ref cause) => cause,
+            PutObjectError::ParseError(ref cause) => cause,
+            PutObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21445,22 +21821,28 @@ pub enum PutObjectAclError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutObjectAclError {
-    pub fn from_body(body: &str) -> PutObjectAclError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchKey" => PutObjectAclError::NoSuchKey(String::from(parsed_error.message)),
-                _ => PutObjectAclError::Unknown(String::from(body)),
-            },
-            Err(_) => PutObjectAclError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutObjectAclError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchKey" => {
+                        return PutObjectAclError::NoSuchKey(String::from(parsed_error.message))
+                    }
+                    _ => {}
+                }
+            }
         }
+        PutObjectAclError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21474,7 +21856,7 @@ impl PutObjectAclError {
 impl From<XmlParseError> for PutObjectAclError {
     fn from(err: XmlParseError) -> PutObjectAclError {
         let XmlParseError(message) = err;
-        PutObjectAclError::Unknown(message.to_string())
+        PutObjectAclError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutObjectAclError {
@@ -21504,7 +21886,8 @@ impl Error for PutObjectAclError {
             PutObjectAclError::Validation(ref cause) => cause,
             PutObjectAclError::Credentials(ref err) => err.description(),
             PutObjectAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutObjectAclError::Unknown(ref cause) => cause,
+            PutObjectAclError::ParseError(ref cause) => cause,
+            PutObjectAclError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21517,21 +21900,25 @@ pub enum PutObjectTaggingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutObjectTaggingError {
-    pub fn from_body(body: &str) -> PutObjectTaggingError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => PutObjectTaggingError::Unknown(String::from(body)),
-            },
-            Err(_) => PutObjectTaggingError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PutObjectTaggingError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        PutObjectTaggingError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21545,7 +21932,7 @@ impl PutObjectTaggingError {
 impl From<XmlParseError> for PutObjectTaggingError {
     fn from(err: XmlParseError) -> PutObjectTaggingError {
         let XmlParseError(message) = err;
-        PutObjectTaggingError::Unknown(message.to_string())
+        PutObjectTaggingError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutObjectTaggingError {
@@ -21574,7 +21961,8 @@ impl Error for PutObjectTaggingError {
             PutObjectTaggingError::Validation(ref cause) => cause,
             PutObjectTaggingError::Credentials(ref err) => err.description(),
             PutObjectTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutObjectTaggingError::Unknown(ref cause) => cause,
+            PutObjectTaggingError::ParseError(ref cause) => cause,
+            PutObjectTaggingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21589,26 +21977,30 @@ pub enum RestoreObjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreObjectError {
-    pub fn from_body(body: &str) -> RestoreObjectError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ObjectAlreadyInActiveTierError" => {
-                    RestoreObjectError::ObjectAlreadyInActiveTierError(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> RestoreObjectError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ObjectAlreadyInActiveTierError" => {
+                        return RestoreObjectError::ObjectAlreadyInActiveTierError(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => RestoreObjectError::Unknown(String::from(body)),
-            },
-            Err(_) => RestoreObjectError::Unknown(body.to_string()),
+            }
         }
+        RestoreObjectError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21622,7 +22014,7 @@ impl RestoreObjectError {
 impl From<XmlParseError> for RestoreObjectError {
     fn from(err: XmlParseError) -> RestoreObjectError {
         let XmlParseError(message) = err;
-        RestoreObjectError::Unknown(message.to_string())
+        RestoreObjectError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RestoreObjectError {
@@ -21652,7 +22044,8 @@ impl Error for RestoreObjectError {
             RestoreObjectError::Validation(ref cause) => cause,
             RestoreObjectError::Credentials(ref err) => err.description(),
             RestoreObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RestoreObjectError::Unknown(ref cause) => cause,
+            RestoreObjectError::ParseError(ref cause) => cause,
+            RestoreObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21665,21 +22058,25 @@ pub enum SelectObjectContentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SelectObjectContentError {
-    pub fn from_body(body: &str) -> SelectObjectContentError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => SelectObjectContentError::Unknown(String::from(body)),
-            },
-            Err(_) => SelectObjectContentError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SelectObjectContentError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        SelectObjectContentError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21693,7 +22090,7 @@ impl SelectObjectContentError {
 impl From<XmlParseError> for SelectObjectContentError {
     fn from(err: XmlParseError) -> SelectObjectContentError {
         let XmlParseError(message) = err;
-        SelectObjectContentError::Unknown(message.to_string())
+        SelectObjectContentError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SelectObjectContentError {
@@ -21724,7 +22121,8 @@ impl Error for SelectObjectContentError {
             SelectObjectContentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SelectObjectContentError::Unknown(ref cause) => cause,
+            SelectObjectContentError::ParseError(ref cause) => cause,
+            SelectObjectContentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21737,21 +22135,25 @@ pub enum UploadPartError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UploadPartError {
-    pub fn from_body(body: &str) -> UploadPartError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => UploadPartError::Unknown(String::from(body)),
-            },
-            Err(_) => UploadPartError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UploadPartError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        UploadPartError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21765,7 +22167,7 @@ impl UploadPartError {
 impl From<XmlParseError> for UploadPartError {
     fn from(err: XmlParseError) -> UploadPartError {
         let XmlParseError(message) = err;
-        UploadPartError::Unknown(message.to_string())
+        UploadPartError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UploadPartError {
@@ -21794,7 +22196,8 @@ impl Error for UploadPartError {
             UploadPartError::Validation(ref cause) => cause,
             UploadPartError::Credentials(ref err) => err.description(),
             UploadPartError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UploadPartError::Unknown(ref cause) => cause,
+            UploadPartError::ParseError(ref cause) => cause,
+            UploadPartError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21807,21 +22210,25 @@ pub enum UploadPartCopyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UploadPartCopyError {
-    pub fn from_body(body: &str) -> UploadPartCopyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => UploadPartCopyError::Unknown(String::from(body)),
-            },
-            Err(_) => UploadPartCopyError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UploadPartCopyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        UploadPartCopyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21835,7 +22242,7 @@ impl UploadPartCopyError {
 impl From<XmlParseError> for UploadPartCopyError {
     fn from(err: XmlParseError) -> UploadPartCopyError {
         let XmlParseError(message) = err;
-        UploadPartCopyError::Unknown(message.to_string())
+        UploadPartCopyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UploadPartCopyError {
@@ -21864,7 +22271,8 @@ impl Error for UploadPartCopyError {
             UploadPartCopyError::Validation(ref cause) => cause,
             UploadPartCopyError::Credentials(ref err) => err.description(),
             UploadPartCopyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UploadPartCopyError::Unknown(ref cause) => cause,
+            UploadPartCopyError::ParseError(ref cause) => cause,
+            UploadPartCopyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22369,11 +22777,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AbortMultipartUploadError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AbortMultipartUploadError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -22435,9 +22843,7 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CompleteMultipartUploadError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CompleteMultipartUploadError::from_response(response))
                 }));
             }
 
@@ -22667,11 +23073,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CopyObjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CopyObjectError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -22791,11 +23198,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateBucketError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateBucketError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -22946,11 +23354,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateMultipartUploadError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateMultipartUploadError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23025,11 +23433,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteBucketError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -23054,8 +23463,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketAnalyticsConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeleteBucketAnalyticsConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -23080,11 +23489,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketCorsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteBucketCorsError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -23108,9 +23518,7 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketEncryptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteBucketEncryptionError::from_response(response))
                 }));
             }
 
@@ -23136,8 +23544,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketInventoryConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeleteBucketInventoryConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -23162,11 +23570,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketLifecycleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteBucketLifecycleError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -23191,8 +23599,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketMetricsConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeleteBucketMetricsConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -23217,11 +23625,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteBucketPolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -23245,9 +23654,7 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketReplicationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteBucketReplicationError::from_response(response))
                 }));
             }
 
@@ -23271,11 +23678,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketTaggingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteBucketTaggingError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -23298,11 +23705,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBucketWebsiteError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteBucketWebsiteError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -23334,11 +23741,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteObjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteObjectError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23396,11 +23804,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteObjectTaggingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteObjectTaggingError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23458,11 +23866,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteObjectsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteObjectsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23511,8 +23920,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketAccelerateConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetBucketAccelerateConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -23559,11 +23968,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketAclError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBucketAclError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23609,8 +24019,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketAnalyticsConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetBucketAnalyticsConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -23657,11 +24067,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketCorsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBucketCorsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23704,11 +24115,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketEncryptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetBucketEncryptionError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23754,8 +24165,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketInventoryConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetBucketInventoryConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -23802,11 +24213,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketLifecycleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBucketLifecycleError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23851,8 +24263,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketLifecycleConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetBucketLifecycleConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -23899,11 +24311,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketLocationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBucketLocationError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23946,11 +24359,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketLoggingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBucketLoggingError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -23995,9 +24409,7 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketMetricsConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetBucketMetricsConfigurationError::from_response(response))
                 }));
             }
 
@@ -24043,11 +24455,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketNotificationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetBucketNotificationError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -24093,8 +24505,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketNotificationConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetBucketNotificationConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -24139,11 +24551,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBucketPolicyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().map(move |response| {
@@ -24171,11 +24584,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketReplicationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetBucketReplicationError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -24219,9 +24632,7 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketRequestPaymentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetBucketRequestPaymentError::from_response(response))
                 }));
             }
 
@@ -24265,11 +24676,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketTaggingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBucketTaggingError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -24312,11 +24724,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketVersioningError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetBucketVersioningError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -24359,11 +24771,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBucketWebsiteError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBucketWebsiteError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -24470,11 +24883,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetObjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetObjectError::from_response(response))),
+                );
             }
 
             let mut result = GetObjectOutput::default();
@@ -24632,11 +25046,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetObjectAclError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetObjectAclError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -24686,11 +25101,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetObjectTaggingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetObjectTaggingError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -24740,11 +25156,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetObjectTorrentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetObjectTorrentError::from_response(response))),
+                );
             }
 
             let mut result = GetObjectTorrentOutput::default();
@@ -24769,11 +25186,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(HeadBucketError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(HeadBucketError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -24845,11 +25263,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(HeadObjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(HeadObjectError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25013,8 +25432,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListBucketAnalyticsConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ListBucketAnalyticsConfigurationsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -25066,8 +25485,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListBucketInventoryConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ListBucketInventoryConfigurationsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -25119,8 +25538,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListBucketMetricsConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ListBucketMetricsConfigurationsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -25160,11 +25579,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListBucketsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListBucketsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25225,11 +25645,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListMultipartUploadsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListMultipartUploadsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25290,11 +25710,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListObjectVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListObjectVersionsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25354,11 +25775,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListObjectsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListObjectsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25425,11 +25847,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListObjectsV2Error::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListObjectsV2Error::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25478,11 +25901,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPartsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListPartsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25545,8 +25969,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketAccelerateConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(PutBucketAccelerateConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -25606,11 +26030,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketAclError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutBucketAclError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -25642,8 +26067,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketAnalyticsConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(PutBucketAnalyticsConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -25676,11 +26101,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketCorsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutBucketCorsError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -25713,11 +26139,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketEncryptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutBucketEncryptionError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -25749,8 +26175,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketInventoryConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(PutBucketInventoryConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -25790,11 +26216,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketLifecycleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutBucketLifecycleError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -25830,8 +26257,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketLifecycleConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(PutBucketLifecycleConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -25866,11 +26293,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketLoggingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutBucketLoggingError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -25902,9 +26330,7 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketMetricsConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutBucketMetricsConfigurationError::from_response(response))
                 }));
             }
 
@@ -25938,11 +26364,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketNotificationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutBucketNotificationError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -25973,8 +26399,8 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketNotificationConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(PutBucketNotificationConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -26013,11 +26439,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutBucketPolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26051,11 +26478,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketReplicationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutBucketReplicationError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26089,9 +26516,7 @@ impl S3 for S3Client {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketRequestPaymentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutBucketRequestPaymentError::from_response(response))
                 }));
             }
 
@@ -26122,11 +26547,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketTaggingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutBucketTaggingError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26163,11 +26589,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketVersioningError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutBucketVersioningError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26200,11 +26626,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBucketWebsiteError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutBucketWebsiteError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -26337,11 +26764,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutObjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutObjectError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -26472,11 +26900,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutObjectAclError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutObjectAclError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -26532,11 +26961,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutObjectTaggingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutObjectTaggingError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -26600,11 +27030,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreObjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RestoreObjectError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -26684,11 +27115,11 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SelectObjectContentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(SelectObjectContentError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -26767,11 +27198,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UploadPartError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UploadPartError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -26931,11 +27363,12 @@ impl S3 for S3Client {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UploadPartCopyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UploadPartCopyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

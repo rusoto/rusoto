@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Request of DeleteReportDefinition</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -112,41 +112,41 @@ pub enum DeleteReportDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteReportDefinitionError {
-    pub fn from_body(body: &str) -> DeleteReportDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteReportDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DeleteReportDefinitionError::InternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteReportDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteReportDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DeleteReportDefinitionError::InternalError(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteReportDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteReportDefinitionError::Unknown(String::from(body)),
         }
+        return DeleteReportDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteReportDefinitionError {
     fn from(err: serde_json::error::Error) -> DeleteReportDefinitionError {
-        DeleteReportDefinitionError::Unknown(err.description().to_string())
+        DeleteReportDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteReportDefinitionError {
@@ -178,7 +178,8 @@ impl Error for DeleteReportDefinitionError {
             DeleteReportDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteReportDefinitionError::Unknown(ref cause) => cause,
+            DeleteReportDefinitionError::ParseError(ref cause) => cause,
+            DeleteReportDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -193,41 +194,43 @@ pub enum DescribeReportDefinitionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReportDefinitionsError {
-    pub fn from_body(body: &str) -> DescribeReportDefinitionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeReportDefinitionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DescribeReportDefinitionsError::InternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeReportDefinitionsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeReportDefinitionsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DescribeReportDefinitionsError::InternalError(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DescribeReportDefinitionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeReportDefinitionsError::Unknown(String::from(body)),
         }
+        return DescribeReportDefinitionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeReportDefinitionsError {
     fn from(err: serde_json::error::Error) -> DescribeReportDefinitionsError {
-        DescribeReportDefinitionsError::Unknown(err.description().to_string())
+        DescribeReportDefinitionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeReportDefinitionsError {
@@ -259,7 +262,8 @@ impl Error for DescribeReportDefinitionsError {
             DescribeReportDefinitionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeReportDefinitionsError::Unknown(ref cause) => cause,
+            DescribeReportDefinitionsError::ParseError(ref cause) => cause,
+            DescribeReportDefinitionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -278,47 +282,49 @@ pub enum PutReportDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutReportDefinitionError {
-    pub fn from_body(body: &str) -> PutReportDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutReportDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateReportNameException" => {
-                        PutReportDefinitionError::DuplicateReportName(String::from(error_message))
-                    }
-                    "InternalErrorException" => {
-                        PutReportDefinitionError::InternalError(String::from(error_message))
-                    }
-                    "ReportLimitReachedException" => {
-                        PutReportDefinitionError::ReportLimitReached(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutReportDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => PutReportDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateReportNameException" => {
+                    return PutReportDefinitionError::DuplicateReportName(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalErrorException" => {
+                    return PutReportDefinitionError::InternalError(String::from(error_message))
+                }
+                "ReportLimitReachedException" => {
+                    return PutReportDefinitionError::ReportLimitReached(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutReportDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutReportDefinitionError::Unknown(String::from(body)),
         }
+        return PutReportDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutReportDefinitionError {
     fn from(err: serde_json::error::Error) -> PutReportDefinitionError {
-        PutReportDefinitionError::Unknown(err.description().to_string())
+        PutReportDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutReportDefinitionError {
@@ -352,7 +358,8 @@ impl Error for PutReportDefinitionError {
             PutReportDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutReportDefinitionError::Unknown(ref cause) => cause,
+            PutReportDefinitionError::ParseError(ref cause) => cause,
+            PutReportDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -438,14 +445,15 @@ impl CostAndUsageReport for CostAndUsageReportClient {
 
                     serde_json::from_str::<DeleteReportDefinitionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReportDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteReportDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -476,13 +484,12 @@ impl CostAndUsageReport for CostAndUsageReportClient {
 
                     serde_json::from_str::<DescribeReportDefinitionsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReportDefinitionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeReportDefinitionsError::from_response(response))
                 }))
             }
         })
@@ -514,14 +521,15 @@ impl CostAndUsageReport for CostAndUsageReportClient {
 
                     serde_json::from_str::<PutReportDefinitionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutReportDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutReportDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }

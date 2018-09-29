@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsInput {
@@ -1597,49 +1597,51 @@ pub enum AddTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsError {
-    pub fn from_body(body: &str) -> AddTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AddTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        AddTagsError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        AddTagsError::InvalidInput(String::from(error_message))
-                    }
-                    "InvalidTagException" => AddTagsError::InvalidTag(String::from(error_message)),
-                    "ResourceNotFoundException" => {
-                        AddTagsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TagLimitExceededException" => {
-                        AddTagsError::TagLimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => AddTagsError::Validation(error_message.to_string()),
-                    _ => AddTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return AddTagsError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return AddTagsError::InvalidInput(String::from(error_message))
+                }
+                "InvalidTagException" => {
+                    return AddTagsError::InvalidTag(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return AddTagsError::ResourceNotFound(String::from(error_message))
+                }
+                "TagLimitExceededException" => {
+                    return AddTagsError::TagLimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => return AddTagsError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => AddTagsError::Unknown(String::from(body)),
         }
+        return AddTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AddTagsError {
     fn from(err: serde_json::error::Error) -> AddTagsError {
-        AddTagsError::Unknown(err.description().to_string())
+        AddTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AddTagsError {
@@ -1673,7 +1675,8 @@ impl Error for AddTagsError {
             AddTagsError::Validation(ref cause) => cause,
             AddTagsError::Credentials(ref err) => err.description(),
             AddTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddTagsError::Unknown(ref cause) => cause,
+            AddTagsError::ParseError(ref cause) => cause,
+            AddTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1692,49 +1695,49 @@ pub enum CreateBatchPredictionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBatchPredictionError {
-    pub fn from_body(body: &str) -> CreateBatchPredictionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateBatchPredictionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "IdempotentParameterMismatchException" => {
-                        CreateBatchPredictionError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerException" => {
-                        CreateBatchPredictionError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        CreateBatchPredictionError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateBatchPredictionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateBatchPredictionError::Unknown(String::from(body)),
+            match *error_type {
+                "IdempotentParameterMismatchException" => {
+                    return CreateBatchPredictionError::IdempotentParameterMismatch(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerException" => {
+                    return CreateBatchPredictionError::InternalServer(String::from(error_message))
+                }
+                "InvalidInputException" => {
+                    return CreateBatchPredictionError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateBatchPredictionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateBatchPredictionError::Unknown(String::from(body)),
         }
+        return CreateBatchPredictionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateBatchPredictionError {
     fn from(err: serde_json::error::Error) -> CreateBatchPredictionError {
-        CreateBatchPredictionError::Unknown(err.description().to_string())
+        CreateBatchPredictionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateBatchPredictionError {
@@ -1768,7 +1771,8 @@ impl Error for CreateBatchPredictionError {
             CreateBatchPredictionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateBatchPredictionError::Unknown(ref cause) => cause,
+            CreateBatchPredictionError::ParseError(ref cause) => cause,
+            CreateBatchPredictionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1787,49 +1791,49 @@ pub enum CreateDataSourceFromRDSError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDataSourceFromRDSError {
-    pub fn from_body(body: &str) -> CreateDataSourceFromRDSError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDataSourceFromRDSError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "IdempotentParameterMismatchException" => {
-                        CreateDataSourceFromRDSError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerException" => {
-                        CreateDataSourceFromRDSError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        CreateDataSourceFromRDSError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateDataSourceFromRDSError::Validation(error_message.to_string())
-                    }
-                    _ => CreateDataSourceFromRDSError::Unknown(String::from(body)),
+            match *error_type {
+                "IdempotentParameterMismatchException" => {
+                    return CreateDataSourceFromRDSError::IdempotentParameterMismatch(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerException" => {
+                    return CreateDataSourceFromRDSError::InternalServer(String::from(error_message))
+                }
+                "InvalidInputException" => {
+                    return CreateDataSourceFromRDSError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateDataSourceFromRDSError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateDataSourceFromRDSError::Unknown(String::from(body)),
         }
+        return CreateDataSourceFromRDSError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateDataSourceFromRDSError {
     fn from(err: serde_json::error::Error) -> CreateDataSourceFromRDSError {
-        CreateDataSourceFromRDSError::Unknown(err.description().to_string())
+        CreateDataSourceFromRDSError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateDataSourceFromRDSError {
@@ -1863,7 +1867,8 @@ impl Error for CreateDataSourceFromRDSError {
             CreateDataSourceFromRDSError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateDataSourceFromRDSError::Unknown(ref cause) => cause,
+            CreateDataSourceFromRDSError::ParseError(ref cause) => cause,
+            CreateDataSourceFromRDSError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1882,49 +1887,53 @@ pub enum CreateDataSourceFromRedshiftError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDataSourceFromRedshiftError {
-    pub fn from_body(body: &str) -> CreateDataSourceFromRedshiftError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDataSourceFromRedshiftError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "IdempotentParameterMismatchException" => {
-                        CreateDataSourceFromRedshiftError::IdempotentParameterMismatch(
-                            String::from(error_message),
-                        )
-                    }
-                    "InternalServerException" => CreateDataSourceFromRedshiftError::InternalServer(
+            match *error_type {
+                "IdempotentParameterMismatchException" => {
+                    return CreateDataSourceFromRedshiftError::IdempotentParameterMismatch(
                         String::from(error_message),
-                    ),
-                    "InvalidInputException" => {
-                        CreateDataSourceFromRedshiftError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateDataSourceFromRedshiftError::Validation(error_message.to_string())
-                    }
-                    _ => CreateDataSourceFromRedshiftError::Unknown(String::from(body)),
+                    )
                 }
+                "InternalServerException" => {
+                    return CreateDataSourceFromRedshiftError::InternalServer(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return CreateDataSourceFromRedshiftError::InvalidInput(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateDataSourceFromRedshiftError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateDataSourceFromRedshiftError::Unknown(String::from(body)),
         }
+        return CreateDataSourceFromRedshiftError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateDataSourceFromRedshiftError {
     fn from(err: serde_json::error::Error) -> CreateDataSourceFromRedshiftError {
-        CreateDataSourceFromRedshiftError::Unknown(err.description().to_string())
+        CreateDataSourceFromRedshiftError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateDataSourceFromRedshiftError {
@@ -1958,7 +1967,8 @@ impl Error for CreateDataSourceFromRedshiftError {
             CreateDataSourceFromRedshiftError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateDataSourceFromRedshiftError::Unknown(ref cause) => cause,
+            CreateDataSourceFromRedshiftError::ParseError(ref cause) => cause,
+            CreateDataSourceFromRedshiftError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1977,49 +1987,49 @@ pub enum CreateDataSourceFromS3Error {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDataSourceFromS3Error {
-    pub fn from_body(body: &str) -> CreateDataSourceFromS3Error {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDataSourceFromS3Error {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "IdempotentParameterMismatchException" => {
-                        CreateDataSourceFromS3Error::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerException" => {
-                        CreateDataSourceFromS3Error::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        CreateDataSourceFromS3Error::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateDataSourceFromS3Error::Validation(error_message.to_string())
-                    }
-                    _ => CreateDataSourceFromS3Error::Unknown(String::from(body)),
+            match *error_type {
+                "IdempotentParameterMismatchException" => {
+                    return CreateDataSourceFromS3Error::IdempotentParameterMismatch(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerException" => {
+                    return CreateDataSourceFromS3Error::InternalServer(String::from(error_message))
+                }
+                "InvalidInputException" => {
+                    return CreateDataSourceFromS3Error::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateDataSourceFromS3Error::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateDataSourceFromS3Error::Unknown(String::from(body)),
         }
+        return CreateDataSourceFromS3Error::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateDataSourceFromS3Error {
     fn from(err: serde_json::error::Error) -> CreateDataSourceFromS3Error {
-        CreateDataSourceFromS3Error::Unknown(err.description().to_string())
+        CreateDataSourceFromS3Error::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateDataSourceFromS3Error {
@@ -2053,7 +2063,8 @@ impl Error for CreateDataSourceFromS3Error {
             CreateDataSourceFromS3Error::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateDataSourceFromS3Error::Unknown(ref cause) => cause,
+            CreateDataSourceFromS3Error::ParseError(ref cause) => cause,
+            CreateDataSourceFromS3Error::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2072,49 +2083,49 @@ pub enum CreateEvaluationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateEvaluationError {
-    pub fn from_body(body: &str) -> CreateEvaluationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateEvaluationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "IdempotentParameterMismatchException" => {
-                        CreateEvaluationError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerException" => {
-                        CreateEvaluationError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        CreateEvaluationError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateEvaluationError::Validation(error_message.to_string())
-                    }
-                    _ => CreateEvaluationError::Unknown(String::from(body)),
+            match *error_type {
+                "IdempotentParameterMismatchException" => {
+                    return CreateEvaluationError::IdempotentParameterMismatch(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerException" => {
+                    return CreateEvaluationError::InternalServer(String::from(error_message))
+                }
+                "InvalidInputException" => {
+                    return CreateEvaluationError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateEvaluationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateEvaluationError::Unknown(String::from(body)),
         }
+        return CreateEvaluationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateEvaluationError {
     fn from(err: serde_json::error::Error) -> CreateEvaluationError {
-        CreateEvaluationError::Unknown(err.description().to_string())
+        CreateEvaluationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateEvaluationError {
@@ -2146,7 +2157,8 @@ impl Error for CreateEvaluationError {
             CreateEvaluationError::Validation(ref cause) => cause,
             CreateEvaluationError::Credentials(ref err) => err.description(),
             CreateEvaluationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateEvaluationError::Unknown(ref cause) => cause,
+            CreateEvaluationError::ParseError(ref cause) => cause,
+            CreateEvaluationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2165,47 +2177,49 @@ pub enum CreateMLModelError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateMLModelError {
-    pub fn from_body(body: &str) -> CreateMLModelError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateMLModelError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "IdempotentParameterMismatchException" => {
-                        CreateMLModelError::IdempotentParameterMismatch(String::from(error_message))
-                    }
-                    "InternalServerException" => {
-                        CreateMLModelError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        CreateMLModelError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateMLModelError::Validation(error_message.to_string())
-                    }
-                    _ => CreateMLModelError::Unknown(String::from(body)),
+            match *error_type {
+                "IdempotentParameterMismatchException" => {
+                    return CreateMLModelError::IdempotentParameterMismatch(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerException" => {
+                    return CreateMLModelError::InternalServer(String::from(error_message))
+                }
+                "InvalidInputException" => {
+                    return CreateMLModelError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateMLModelError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateMLModelError::Unknown(String::from(body)),
         }
+        return CreateMLModelError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateMLModelError {
     fn from(err: serde_json::error::Error) -> CreateMLModelError {
-        CreateMLModelError::Unknown(err.description().to_string())
+        CreateMLModelError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateMLModelError {
@@ -2237,7 +2251,8 @@ impl Error for CreateMLModelError {
             CreateMLModelError::Validation(ref cause) => cause,
             CreateMLModelError::Credentials(ref err) => err.description(),
             CreateMLModelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateMLModelError::Unknown(ref cause) => cause,
+            CreateMLModelError::ParseError(ref cause) => cause,
+            CreateMLModelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2256,47 +2271,49 @@ pub enum CreateRealtimeEndpointError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRealtimeEndpointError {
-    pub fn from_body(body: &str) -> CreateRealtimeEndpointError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateRealtimeEndpointError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        CreateRealtimeEndpointError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        CreateRealtimeEndpointError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateRealtimeEndpointError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateRealtimeEndpointError::Validation(error_message.to_string())
-                    }
-                    _ => CreateRealtimeEndpointError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return CreateRealtimeEndpointError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return CreateRealtimeEndpointError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateRealtimeEndpointError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateRealtimeEndpointError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateRealtimeEndpointError::Unknown(String::from(body)),
         }
+        return CreateRealtimeEndpointError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateRealtimeEndpointError {
     fn from(err: serde_json::error::Error) -> CreateRealtimeEndpointError {
-        CreateRealtimeEndpointError::Unknown(err.description().to_string())
+        CreateRealtimeEndpointError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateRealtimeEndpointError {
@@ -2330,7 +2347,8 @@ impl Error for CreateRealtimeEndpointError {
             CreateRealtimeEndpointError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateRealtimeEndpointError::Unknown(ref cause) => cause,
+            CreateRealtimeEndpointError::ParseError(ref cause) => cause,
+            CreateRealtimeEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2349,47 +2367,47 @@ pub enum DeleteBatchPredictionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBatchPredictionError {
-    pub fn from_body(body: &str) -> DeleteBatchPredictionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBatchPredictionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DeleteBatchPredictionError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DeleteBatchPredictionError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteBatchPredictionError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteBatchPredictionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteBatchPredictionError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DeleteBatchPredictionError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return DeleteBatchPredictionError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteBatchPredictionError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteBatchPredictionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteBatchPredictionError::Unknown(String::from(body)),
         }
+        return DeleteBatchPredictionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteBatchPredictionError {
     fn from(err: serde_json::error::Error) -> DeleteBatchPredictionError {
-        DeleteBatchPredictionError::Unknown(err.description().to_string())
+        DeleteBatchPredictionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteBatchPredictionError {
@@ -2423,7 +2441,8 @@ impl Error for DeleteBatchPredictionError {
             DeleteBatchPredictionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteBatchPredictionError::Unknown(ref cause) => cause,
+            DeleteBatchPredictionError::ParseError(ref cause) => cause,
+            DeleteBatchPredictionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2442,47 +2461,47 @@ pub enum DeleteDataSourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDataSourceError {
-    pub fn from_body(body: &str) -> DeleteDataSourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDataSourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DeleteDataSourceError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DeleteDataSourceError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteDataSourceError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteDataSourceError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteDataSourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DeleteDataSourceError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return DeleteDataSourceError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteDataSourceError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteDataSourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteDataSourceError::Unknown(String::from(body)),
         }
+        return DeleteDataSourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteDataSourceError {
     fn from(err: serde_json::error::Error) -> DeleteDataSourceError {
-        DeleteDataSourceError::Unknown(err.description().to_string())
+        DeleteDataSourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteDataSourceError {
@@ -2514,7 +2533,8 @@ impl Error for DeleteDataSourceError {
             DeleteDataSourceError::Validation(ref cause) => cause,
             DeleteDataSourceError::Credentials(ref err) => err.description(),
             DeleteDataSourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDataSourceError::Unknown(ref cause) => cause,
+            DeleteDataSourceError::ParseError(ref cause) => cause,
+            DeleteDataSourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2533,47 +2553,47 @@ pub enum DeleteEvaluationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEvaluationError {
-    pub fn from_body(body: &str) -> DeleteEvaluationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteEvaluationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DeleteEvaluationError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DeleteEvaluationError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteEvaluationError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteEvaluationError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteEvaluationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DeleteEvaluationError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return DeleteEvaluationError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteEvaluationError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteEvaluationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteEvaluationError::Unknown(String::from(body)),
         }
+        return DeleteEvaluationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteEvaluationError {
     fn from(err: serde_json::error::Error) -> DeleteEvaluationError {
-        DeleteEvaluationError::Unknown(err.description().to_string())
+        DeleteEvaluationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteEvaluationError {
@@ -2605,7 +2625,8 @@ impl Error for DeleteEvaluationError {
             DeleteEvaluationError::Validation(ref cause) => cause,
             DeleteEvaluationError::Credentials(ref err) => err.description(),
             DeleteEvaluationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteEvaluationError::Unknown(ref cause) => cause,
+            DeleteEvaluationError::ParseError(ref cause) => cause,
+            DeleteEvaluationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2624,47 +2645,47 @@ pub enum DeleteMLModelError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteMLModelError {
-    pub fn from_body(body: &str) -> DeleteMLModelError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteMLModelError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DeleteMLModelError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DeleteMLModelError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteMLModelError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteMLModelError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteMLModelError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DeleteMLModelError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return DeleteMLModelError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteMLModelError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteMLModelError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteMLModelError::Unknown(String::from(body)),
         }
+        return DeleteMLModelError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteMLModelError {
     fn from(err: serde_json::error::Error) -> DeleteMLModelError {
-        DeleteMLModelError::Unknown(err.description().to_string())
+        DeleteMLModelError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteMLModelError {
@@ -2696,7 +2717,8 @@ impl Error for DeleteMLModelError {
             DeleteMLModelError::Validation(ref cause) => cause,
             DeleteMLModelError::Credentials(ref err) => err.description(),
             DeleteMLModelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteMLModelError::Unknown(ref cause) => cause,
+            DeleteMLModelError::ParseError(ref cause) => cause,
+            DeleteMLModelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2715,47 +2737,49 @@ pub enum DeleteRealtimeEndpointError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRealtimeEndpointError {
-    pub fn from_body(body: &str) -> DeleteRealtimeEndpointError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteRealtimeEndpointError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DeleteRealtimeEndpointError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DeleteRealtimeEndpointError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteRealtimeEndpointError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteRealtimeEndpointError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteRealtimeEndpointError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DeleteRealtimeEndpointError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return DeleteRealtimeEndpointError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteRealtimeEndpointError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteRealtimeEndpointError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteRealtimeEndpointError::Unknown(String::from(body)),
         }
+        return DeleteRealtimeEndpointError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteRealtimeEndpointError {
     fn from(err: serde_json::error::Error) -> DeleteRealtimeEndpointError {
-        DeleteRealtimeEndpointError::Unknown(err.description().to_string())
+        DeleteRealtimeEndpointError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteRealtimeEndpointError {
@@ -2789,7 +2813,8 @@ impl Error for DeleteRealtimeEndpointError {
             DeleteRealtimeEndpointError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteRealtimeEndpointError::Unknown(ref cause) => cause,
+            DeleteRealtimeEndpointError::ParseError(ref cause) => cause,
+            DeleteRealtimeEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2810,48 +2835,50 @@ pub enum DeleteTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTagsError {
-    pub fn from_body(body: &str) -> DeleteTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DeleteTagsError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DeleteTagsError::InvalidInput(String::from(error_message))
-                    }
-                    "InvalidTagException" => {
-                        DeleteTagsError::InvalidTag(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteTagsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => DeleteTagsError::Validation(error_message.to_string()),
-                    _ => DeleteTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DeleteTagsError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return DeleteTagsError::InvalidInput(String::from(error_message))
+                }
+                "InvalidTagException" => {
+                    return DeleteTagsError::InvalidTag(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteTagsError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteTagsError::Unknown(String::from(body)),
         }
+        return DeleteTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteTagsError {
     fn from(err: serde_json::error::Error) -> DeleteTagsError {
-        DeleteTagsError::Unknown(err.description().to_string())
+        DeleteTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteTagsError {
@@ -2884,7 +2911,8 @@ impl Error for DeleteTagsError {
             DeleteTagsError::Validation(ref cause) => cause,
             DeleteTagsError::Credentials(ref err) => err.description(),
             DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTagsError::Unknown(ref cause) => cause,
+            DeleteTagsError::ParseError(ref cause) => cause,
+            DeleteTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2901,44 +2929,46 @@ pub enum DescribeBatchPredictionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBatchPredictionsError {
-    pub fn from_body(body: &str) -> DescribeBatchPredictionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeBatchPredictionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DescribeBatchPredictionsError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DescribeBatchPredictionsError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeBatchPredictionsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeBatchPredictionsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeBatchPredictionsError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidInputException" => {
+                    return DescribeBatchPredictionsError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeBatchPredictionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeBatchPredictionsError::Unknown(String::from(body)),
         }
+        return DescribeBatchPredictionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeBatchPredictionsError {
     fn from(err: serde_json::error::Error) -> DescribeBatchPredictionsError {
-        DescribeBatchPredictionsError::Unknown(err.description().to_string())
+        DescribeBatchPredictionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeBatchPredictionsError {
@@ -2971,7 +3001,8 @@ impl Error for DescribeBatchPredictionsError {
             DescribeBatchPredictionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeBatchPredictionsError::Unknown(ref cause) => cause,
+            DescribeBatchPredictionsError::ParseError(ref cause) => cause,
+            DescribeBatchPredictionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2988,44 +3019,44 @@ pub enum DescribeDataSourcesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDataSourcesError {
-    pub fn from_body(body: &str) -> DescribeDataSourcesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeDataSourcesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DescribeDataSourcesError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DescribeDataSourcesError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeDataSourcesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeDataSourcesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeDataSourcesError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return DescribeDataSourcesError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeDataSourcesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeDataSourcesError::Unknown(String::from(body)),
         }
+        return DescribeDataSourcesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeDataSourcesError {
     fn from(err: serde_json::error::Error) -> DescribeDataSourcesError {
-        DescribeDataSourcesError::Unknown(err.description().to_string())
+        DescribeDataSourcesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeDataSourcesError {
@@ -3058,7 +3089,8 @@ impl Error for DescribeDataSourcesError {
             DescribeDataSourcesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeDataSourcesError::Unknown(ref cause) => cause,
+            DescribeDataSourcesError::ParseError(ref cause) => cause,
+            DescribeDataSourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3075,44 +3107,44 @@ pub enum DescribeEvaluationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEvaluationsError {
-    pub fn from_body(body: &str) -> DescribeEvaluationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEvaluationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DescribeEvaluationsError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DescribeEvaluationsError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeEvaluationsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeEvaluationsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeEvaluationsError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return DescribeEvaluationsError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeEvaluationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeEvaluationsError::Unknown(String::from(body)),
         }
+        return DescribeEvaluationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeEvaluationsError {
     fn from(err: serde_json::error::Error) -> DescribeEvaluationsError {
-        DescribeEvaluationsError::Unknown(err.description().to_string())
+        DescribeEvaluationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeEvaluationsError {
@@ -3145,7 +3177,8 @@ impl Error for DescribeEvaluationsError {
             DescribeEvaluationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEvaluationsError::Unknown(ref cause) => cause,
+            DescribeEvaluationsError::ParseError(ref cause) => cause,
+            DescribeEvaluationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3162,44 +3195,44 @@ pub enum DescribeMLModelsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeMLModelsError {
-    pub fn from_body(body: &str) -> DescribeMLModelsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeMLModelsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DescribeMLModelsError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DescribeMLModelsError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeMLModelsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeMLModelsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeMLModelsError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return DescribeMLModelsError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeMLModelsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeMLModelsError::Unknown(String::from(body)),
         }
+        return DescribeMLModelsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeMLModelsError {
     fn from(err: serde_json::error::Error) -> DescribeMLModelsError {
-        DescribeMLModelsError::Unknown(err.description().to_string())
+        DescribeMLModelsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeMLModelsError {
@@ -3230,7 +3263,8 @@ impl Error for DescribeMLModelsError {
             DescribeMLModelsError::Validation(ref cause) => cause,
             DescribeMLModelsError::Credentials(ref err) => err.description(),
             DescribeMLModelsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeMLModelsError::Unknown(ref cause) => cause,
+            DescribeMLModelsError::ParseError(ref cause) => cause,
+            DescribeMLModelsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3249,47 +3283,47 @@ pub enum DescribeTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_body(body: &str) -> DescribeTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DescribeTagsError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DescribeTagsError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeTagsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeTagsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeTagsError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return DescribeTagsError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeTagsError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTagsError::Unknown(String::from(body)),
         }
+        return DescribeTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTagsError {
     fn from(err: serde_json::error::Error) -> DescribeTagsError {
-        DescribeTagsError::Unknown(err.description().to_string())
+        DescribeTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTagsError {
@@ -3321,7 +3355,8 @@ impl Error for DescribeTagsError {
             DescribeTagsError::Validation(ref cause) => cause,
             DescribeTagsError::Credentials(ref err) => err.description(),
             DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::Unknown(ref cause) => cause,
+            DescribeTagsError::ParseError(ref cause) => cause,
+            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3340,47 +3375,47 @@ pub enum GetBatchPredictionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBatchPredictionError {
-    pub fn from_body(body: &str) -> GetBatchPredictionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetBatchPredictionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        GetBatchPredictionError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        GetBatchPredictionError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetBatchPredictionError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetBatchPredictionError::Validation(error_message.to_string())
-                    }
-                    _ => GetBatchPredictionError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return GetBatchPredictionError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return GetBatchPredictionError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetBatchPredictionError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetBatchPredictionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetBatchPredictionError::Unknown(String::from(body)),
         }
+        return GetBatchPredictionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetBatchPredictionError {
     fn from(err: serde_json::error::Error) -> GetBatchPredictionError {
-        GetBatchPredictionError::Unknown(err.description().to_string())
+        GetBatchPredictionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetBatchPredictionError {
@@ -3414,7 +3449,8 @@ impl Error for GetBatchPredictionError {
             GetBatchPredictionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBatchPredictionError::Unknown(ref cause) => cause,
+            GetBatchPredictionError::ParseError(ref cause) => cause,
+            GetBatchPredictionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3433,47 +3469,47 @@ pub enum GetDataSourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDataSourceError {
-    pub fn from_body(body: &str) -> GetDataSourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetDataSourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        GetDataSourceError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        GetDataSourceError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetDataSourceError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetDataSourceError::Validation(error_message.to_string())
-                    }
-                    _ => GetDataSourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return GetDataSourceError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return GetDataSourceError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetDataSourceError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetDataSourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetDataSourceError::Unknown(String::from(body)),
         }
+        return GetDataSourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetDataSourceError {
     fn from(err: serde_json::error::Error) -> GetDataSourceError {
-        GetDataSourceError::Unknown(err.description().to_string())
+        GetDataSourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetDataSourceError {
@@ -3505,7 +3541,8 @@ impl Error for GetDataSourceError {
             GetDataSourceError::Validation(ref cause) => cause,
             GetDataSourceError::Credentials(ref err) => err.description(),
             GetDataSourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDataSourceError::Unknown(ref cause) => cause,
+            GetDataSourceError::ParseError(ref cause) => cause,
+            GetDataSourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3524,47 +3561,47 @@ pub enum GetEvaluationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetEvaluationError {
-    pub fn from_body(body: &str) -> GetEvaluationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetEvaluationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        GetEvaluationError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        GetEvaluationError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetEvaluationError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetEvaluationError::Validation(error_message.to_string())
-                    }
-                    _ => GetEvaluationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return GetEvaluationError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return GetEvaluationError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetEvaluationError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetEvaluationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetEvaluationError::Unknown(String::from(body)),
         }
+        return GetEvaluationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetEvaluationError {
     fn from(err: serde_json::error::Error) -> GetEvaluationError {
-        GetEvaluationError::Unknown(err.description().to_string())
+        GetEvaluationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetEvaluationError {
@@ -3596,7 +3633,8 @@ impl Error for GetEvaluationError {
             GetEvaluationError::Validation(ref cause) => cause,
             GetEvaluationError::Credentials(ref err) => err.description(),
             GetEvaluationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetEvaluationError::Unknown(ref cause) => cause,
+            GetEvaluationError::ParseError(ref cause) => cause,
+            GetEvaluationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3615,45 +3653,47 @@ pub enum GetMLModelError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetMLModelError {
-    pub fn from_body(body: &str) -> GetMLModelError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetMLModelError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        GetMLModelError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        GetMLModelError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetMLModelError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => GetMLModelError::Validation(error_message.to_string()),
-                    _ => GetMLModelError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return GetMLModelError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return GetMLModelError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetMLModelError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetMLModelError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetMLModelError::Unknown(String::from(body)),
         }
+        return GetMLModelError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetMLModelError {
     fn from(err: serde_json::error::Error) -> GetMLModelError {
-        GetMLModelError::Unknown(err.description().to_string())
+        GetMLModelError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetMLModelError {
@@ -3685,7 +3725,8 @@ impl Error for GetMLModelError {
             GetMLModelError::Validation(ref cause) => cause,
             GetMLModelError::Credentials(ref err) => err.description(),
             GetMLModelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetMLModelError::Unknown(ref cause) => cause,
+            GetMLModelError::ParseError(ref cause) => cause,
+            GetMLModelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3708,51 +3749,51 @@ pub enum PredictError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PredictError {
-    pub fn from_body(body: &str) -> PredictError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PredictError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        PredictError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        PredictError::InvalidInput(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PredictError::LimitExceeded(String::from(error_message))
-                    }
-                    "PredictorNotMountedException" => {
-                        PredictError::PredictorNotMounted(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        PredictError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => PredictError::Validation(error_message.to_string()),
-                    _ => PredictError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return PredictError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return PredictError::InvalidInput(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PredictError::LimitExceeded(String::from(error_message))
+                }
+                "PredictorNotMountedException" => {
+                    return PredictError::PredictorNotMounted(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return PredictError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => return PredictError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => PredictError::Unknown(String::from(body)),
         }
+        return PredictError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PredictError {
     fn from(err: serde_json::error::Error) -> PredictError {
-        PredictError::Unknown(err.description().to_string())
+        PredictError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PredictError {
@@ -3786,7 +3827,8 @@ impl Error for PredictError {
             PredictError::Validation(ref cause) => cause,
             PredictError::Credentials(ref err) => err.description(),
             PredictError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PredictError::Unknown(ref cause) => cause,
+            PredictError::ParseError(ref cause) => cause,
+            PredictError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3805,47 +3847,47 @@ pub enum UpdateBatchPredictionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateBatchPredictionError {
-    pub fn from_body(body: &str) -> UpdateBatchPredictionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateBatchPredictionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        UpdateBatchPredictionError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        UpdateBatchPredictionError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateBatchPredictionError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateBatchPredictionError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateBatchPredictionError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return UpdateBatchPredictionError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return UpdateBatchPredictionError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateBatchPredictionError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateBatchPredictionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateBatchPredictionError::Unknown(String::from(body)),
         }
+        return UpdateBatchPredictionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateBatchPredictionError {
     fn from(err: serde_json::error::Error) -> UpdateBatchPredictionError {
-        UpdateBatchPredictionError::Unknown(err.description().to_string())
+        UpdateBatchPredictionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateBatchPredictionError {
@@ -3879,7 +3921,8 @@ impl Error for UpdateBatchPredictionError {
             UpdateBatchPredictionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateBatchPredictionError::Unknown(ref cause) => cause,
+            UpdateBatchPredictionError::ParseError(ref cause) => cause,
+            UpdateBatchPredictionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3898,47 +3941,47 @@ pub enum UpdateDataSourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDataSourceError {
-    pub fn from_body(body: &str) -> UpdateDataSourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateDataSourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        UpdateDataSourceError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        UpdateDataSourceError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateDataSourceError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateDataSourceError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateDataSourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return UpdateDataSourceError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return UpdateDataSourceError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateDataSourceError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateDataSourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateDataSourceError::Unknown(String::from(body)),
         }
+        return UpdateDataSourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateDataSourceError {
     fn from(err: serde_json::error::Error) -> UpdateDataSourceError {
-        UpdateDataSourceError::Unknown(err.description().to_string())
+        UpdateDataSourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateDataSourceError {
@@ -3970,7 +4013,8 @@ impl Error for UpdateDataSourceError {
             UpdateDataSourceError::Validation(ref cause) => cause,
             UpdateDataSourceError::Credentials(ref err) => err.description(),
             UpdateDataSourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateDataSourceError::Unknown(ref cause) => cause,
+            UpdateDataSourceError::ParseError(ref cause) => cause,
+            UpdateDataSourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3989,47 +4033,47 @@ pub enum UpdateEvaluationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateEvaluationError {
-    pub fn from_body(body: &str) -> UpdateEvaluationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateEvaluationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        UpdateEvaluationError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        UpdateEvaluationError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateEvaluationError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateEvaluationError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateEvaluationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return UpdateEvaluationError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return UpdateEvaluationError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateEvaluationError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateEvaluationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateEvaluationError::Unknown(String::from(body)),
         }
+        return UpdateEvaluationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateEvaluationError {
     fn from(err: serde_json::error::Error) -> UpdateEvaluationError {
-        UpdateEvaluationError::Unknown(err.description().to_string())
+        UpdateEvaluationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateEvaluationError {
@@ -4061,7 +4105,8 @@ impl Error for UpdateEvaluationError {
             UpdateEvaluationError::Validation(ref cause) => cause,
             UpdateEvaluationError::Credentials(ref err) => err.description(),
             UpdateEvaluationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateEvaluationError::Unknown(ref cause) => cause,
+            UpdateEvaluationError::ParseError(ref cause) => cause,
+            UpdateEvaluationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4080,47 +4125,47 @@ pub enum UpdateMLModelError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateMLModelError {
-    pub fn from_body(body: &str) -> UpdateMLModelError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateMLModelError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        UpdateMLModelError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        UpdateMLModelError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateMLModelError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateMLModelError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateMLModelError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return UpdateMLModelError::InternalServer(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return UpdateMLModelError::InvalidInput(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateMLModelError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateMLModelError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateMLModelError::Unknown(String::from(body)),
         }
+        return UpdateMLModelError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateMLModelError {
     fn from(err: serde_json::error::Error) -> UpdateMLModelError {
-        UpdateMLModelError::Unknown(err.description().to_string())
+        UpdateMLModelError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateMLModelError {
@@ -4152,7 +4197,8 @@ impl Error for UpdateMLModelError {
             UpdateMLModelError::Validation(ref cause) => cause,
             UpdateMLModelError::Credentials(ref err) => err.description(),
             UpdateMLModelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateMLModelError::Unknown(ref cause) => cause,
+            UpdateMLModelError::ParseError(ref cause) => cause,
+            UpdateMLModelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4376,14 +4422,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<AddTagsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AddTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -4411,14 +4459,15 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<CreateBatchPredictionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateBatchPredictionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateBatchPredictionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4446,13 +4495,12 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<CreateDataSourceFromRDSOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDataSourceFromRDSError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateDataSourceFromRDSError::from_response(response))
                 }))
             }
         })
@@ -4484,13 +4532,12 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<CreateDataSourceFromRedshiftOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDataSourceFromRedshiftError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateDataSourceFromRedshiftError::from_response(response))
                 }))
             }
         })
@@ -4519,14 +4566,15 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<CreateDataSourceFromS3Output>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDataSourceFromS3Error::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateDataSourceFromS3Error::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4554,14 +4602,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<CreateEvaluationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateEvaluationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateEvaluationError::from_response(response))),
+                )
             }
         })
     }
@@ -4589,14 +4639,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<CreateMLModelOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateMLModelError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateMLModelError::from_response(response))),
+                )
             }
         })
     }
@@ -4624,14 +4676,15 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<CreateRealtimeEndpointOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateRealtimeEndpointError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateRealtimeEndpointError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4659,14 +4712,15 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<DeleteBatchPredictionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBatchPredictionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteBatchPredictionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4694,14 +4748,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<DeleteDataSourceOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDataSourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteDataSourceError::from_response(response))),
+                )
             }
         })
     }
@@ -4729,14 +4785,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<DeleteEvaluationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteEvaluationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteEvaluationError::from_response(response))),
+                )
             }
         })
     }
@@ -4764,14 +4822,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<DeleteMLModelOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteMLModelError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteMLModelError::from_response(response))),
+                )
             }
         })
     }
@@ -4799,14 +4859,15 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<DeleteRealtimeEndpointOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteRealtimeEndpointError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteRealtimeEndpointError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4834,14 +4895,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<DeleteTagsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -4869,13 +4932,12 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<DescribeBatchPredictionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeBatchPredictionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeBatchPredictionsError::from_response(response))
                 }))
             }
         })
@@ -4904,14 +4966,15 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<DescribeDataSourcesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDataSourcesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeDataSourcesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4939,14 +5002,15 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<DescribeEvaluationsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEvaluationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeEvaluationsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4974,14 +5038,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<DescribeMLModelsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeMLModelsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeMLModelsError::from_response(response))),
+                )
             }
         })
     }
@@ -5009,14 +5075,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<DescribeTagsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -5044,14 +5112,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<GetBatchPredictionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBatchPredictionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBatchPredictionError::from_response(response))),
+                )
             }
         })
     }
@@ -5079,14 +5149,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<GetDataSourceOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDataSourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetDataSourceError::from_response(response))),
+                )
             }
         })
     }
@@ -5114,14 +5186,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<GetEvaluationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetEvaluationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetEvaluationError::from_response(response))),
+                )
             }
         })
     }
@@ -5149,14 +5223,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<GetMLModelOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetMLModelError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetMLModelError::from_response(response))),
+                )
             }
         })
     }
@@ -5181,14 +5257,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<PredictOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PredictError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PredictError::from_response(response))),
+                )
             }
         })
     }
@@ -5216,14 +5294,15 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<UpdateBatchPredictionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateBatchPredictionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateBatchPredictionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5251,14 +5330,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<UpdateDataSourceOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateDataSourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateDataSourceError::from_response(response))),
+                )
             }
         })
     }
@@ -5286,14 +5367,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<UpdateEvaluationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateEvaluationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateEvaluationError::from_response(response))),
+                )
             }
         })
     }
@@ -5321,14 +5404,16 @@ impl MachineLearning for MachineLearningClient {
 
                     serde_json::from_str::<UpdateMLModelOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateMLModelError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateMLModelError::from_response(response))),
+                )
             }
         })
     }

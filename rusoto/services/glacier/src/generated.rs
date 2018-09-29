@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -27,7 +27,7 @@ use rusoto_core::request::HttpDispatchError;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Provides options to abort a multipart upload identified by the upload ID.</p> <p>For information about the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-abort-upload.html">Abort Multipart Upload</a>. For conceptual information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1160,7 +1160,7 @@ pub struct UploadArchiveInput {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub body: Option<Vec<u8>>,
     /// <p>The SHA256 tree hash of the data being uploaded.</p>
@@ -1208,7 +1208,7 @@ pub struct UploadMultipartPartInput {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub body: Option<Vec<u8>>,
     /// <p>The SHA256 tree hash of the data being uploaded.</p>
@@ -1284,54 +1284,56 @@ pub enum AbortMultipartUploadError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AbortMultipartUploadError {
-    pub fn from_body(body: &str) -> AbortMultipartUploadError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AbortMultipartUploadError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        AbortMultipartUploadError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        AbortMultipartUploadError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        AbortMultipartUploadError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        AbortMultipartUploadError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AbortMultipartUploadError::Validation(error_message.to_string())
-                    }
-                    _ => AbortMultipartUploadError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return AbortMultipartUploadError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return AbortMultipartUploadError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return AbortMultipartUploadError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return AbortMultipartUploadError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AbortMultipartUploadError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AbortMultipartUploadError::Unknown(String::from(body)),
         }
+        return AbortMultipartUploadError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AbortMultipartUploadError {
     fn from(err: serde_json::error::Error) -> AbortMultipartUploadError {
-        AbortMultipartUploadError::Unknown(err.description().to_string())
+        AbortMultipartUploadError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AbortMultipartUploadError {
@@ -1366,7 +1368,8 @@ impl Error for AbortMultipartUploadError {
             AbortMultipartUploadError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AbortMultipartUploadError::Unknown(ref cause) => cause,
+            AbortMultipartUploadError::ParseError(ref cause) => cause,
+            AbortMultipartUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1387,50 +1390,50 @@ pub enum AbortVaultLockError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AbortVaultLockError {
-    pub fn from_body(body: &str) -> AbortVaultLockError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AbortVaultLockError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        AbortVaultLockError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        AbortVaultLockError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        AbortVaultLockError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        AbortVaultLockError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AbortVaultLockError::Validation(error_message.to_string())
-                    }
-                    _ => AbortVaultLockError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return AbortVaultLockError::InvalidParameterValue(String::from(error_message))
                 }
+                "MissingParameterValueException" => {
+                    return AbortVaultLockError::MissingParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return AbortVaultLockError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return AbortVaultLockError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AbortVaultLockError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AbortVaultLockError::Unknown(String::from(body)),
         }
+        return AbortVaultLockError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AbortVaultLockError {
     fn from(err: serde_json::error::Error) -> AbortVaultLockError {
-        AbortVaultLockError::Unknown(err.description().to_string())
+        AbortVaultLockError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AbortVaultLockError {
@@ -1463,7 +1466,8 @@ impl Error for AbortVaultLockError {
             AbortVaultLockError::Validation(ref cause) => cause,
             AbortVaultLockError::Credentials(ref err) => err.description(),
             AbortVaultLockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AbortVaultLockError::Unknown(ref cause) => cause,
+            AbortVaultLockError::ParseError(ref cause) => cause,
+            AbortVaultLockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1486,53 +1490,53 @@ pub enum AddTagsToVaultError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsToVaultError {
-    pub fn from_body(body: &str) -> AddTagsToVaultError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AddTagsToVaultError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        AddTagsToVaultError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        AddTagsToVaultError::LimitExceeded(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        AddTagsToVaultError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        AddTagsToVaultError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        AddTagsToVaultError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AddTagsToVaultError::Validation(error_message.to_string())
-                    }
-                    _ => AddTagsToVaultError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return AddTagsToVaultError::InvalidParameterValue(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return AddTagsToVaultError::LimitExceeded(String::from(error_message))
+                }
+                "MissingParameterValueException" => {
+                    return AddTagsToVaultError::MissingParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return AddTagsToVaultError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return AddTagsToVaultError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AddTagsToVaultError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AddTagsToVaultError::Unknown(String::from(body)),
         }
+        return AddTagsToVaultError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AddTagsToVaultError {
     fn from(err: serde_json::error::Error) -> AddTagsToVaultError {
-        AddTagsToVaultError::Unknown(err.description().to_string())
+        AddTagsToVaultError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AddTagsToVaultError {
@@ -1566,7 +1570,8 @@ impl Error for AddTagsToVaultError {
             AddTagsToVaultError::Validation(ref cause) => cause,
             AddTagsToVaultError::Credentials(ref err) => err.description(),
             AddTagsToVaultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddTagsToVaultError::Unknown(ref cause) => cause,
+            AddTagsToVaultError::ParseError(ref cause) => cause,
+            AddTagsToVaultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1587,56 +1592,58 @@ pub enum CompleteMultipartUploadError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CompleteMultipartUploadError {
-    pub fn from_body(body: &str) -> CompleteMultipartUploadError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CompleteMultipartUploadError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        CompleteMultipartUploadError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        CompleteMultipartUploadError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        CompleteMultipartUploadError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        CompleteMultipartUploadError::ServiceUnavailable(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CompleteMultipartUploadError::Validation(error_message.to_string())
-                    }
-                    _ => CompleteMultipartUploadError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return CompleteMultipartUploadError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return CompleteMultipartUploadError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return CompleteMultipartUploadError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return CompleteMultipartUploadError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CompleteMultipartUploadError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CompleteMultipartUploadError::Unknown(String::from(body)),
         }
+        return CompleteMultipartUploadError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CompleteMultipartUploadError {
     fn from(err: serde_json::error::Error) -> CompleteMultipartUploadError {
-        CompleteMultipartUploadError::Unknown(err.description().to_string())
+        CompleteMultipartUploadError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CompleteMultipartUploadError {
@@ -1671,7 +1678,8 @@ impl Error for CompleteMultipartUploadError {
             CompleteMultipartUploadError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CompleteMultipartUploadError::Unknown(ref cause) => cause,
+            CompleteMultipartUploadError::ParseError(ref cause) => cause,
+            CompleteMultipartUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1692,50 +1700,54 @@ pub enum CompleteVaultLockError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CompleteVaultLockError {
-    pub fn from_body(body: &str) -> CompleteVaultLockError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CompleteVaultLockError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        CompleteVaultLockError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        CompleteVaultLockError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CompleteVaultLockError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        CompleteVaultLockError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CompleteVaultLockError::Validation(error_message.to_string())
-                    }
-                    _ => CompleteVaultLockError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return CompleteVaultLockError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return CompleteVaultLockError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return CompleteVaultLockError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return CompleteVaultLockError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CompleteVaultLockError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CompleteVaultLockError::Unknown(String::from(body)),
         }
+        return CompleteVaultLockError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CompleteVaultLockError {
     fn from(err: serde_json::error::Error) -> CompleteVaultLockError {
-        CompleteVaultLockError::Unknown(err.description().to_string())
+        CompleteVaultLockError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CompleteVaultLockError {
@@ -1770,7 +1782,8 @@ impl Error for CompleteVaultLockError {
             CompleteVaultLockError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CompleteVaultLockError::Unknown(ref cause) => cause,
+            CompleteVaultLockError::ParseError(ref cause) => cause,
+            CompleteVaultLockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1791,50 +1804,50 @@ pub enum CreateVaultError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateVaultError {
-    pub fn from_body(body: &str) -> CreateVaultError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateVaultError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        CreateVaultError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateVaultError::LimitExceeded(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        CreateVaultError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        CreateVaultError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateVaultError::Validation(error_message.to_string())
-                    }
-                    _ => CreateVaultError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return CreateVaultError::InvalidParameterValue(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return CreateVaultError::LimitExceeded(String::from(error_message))
+                }
+                "MissingParameterValueException" => {
+                    return CreateVaultError::MissingParameterValue(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return CreateVaultError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateVaultError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateVaultError::Unknown(String::from(body)),
         }
+        return CreateVaultError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateVaultError {
     fn from(err: serde_json::error::Error) -> CreateVaultError {
-        CreateVaultError::Unknown(err.description().to_string())
+        CreateVaultError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateVaultError {
@@ -1867,7 +1880,8 @@ impl Error for CreateVaultError {
             CreateVaultError::Validation(ref cause) => cause,
             CreateVaultError::Credentials(ref err) => err.description(),
             CreateVaultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateVaultError::Unknown(ref cause) => cause,
+            CreateVaultError::ParseError(ref cause) => cause,
+            CreateVaultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1888,50 +1902,50 @@ pub enum DeleteArchiveError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteArchiveError {
-    pub fn from_body(body: &str) -> DeleteArchiveError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteArchiveError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        DeleteArchiveError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        DeleteArchiveError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteArchiveError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        DeleteArchiveError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteArchiveError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteArchiveError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return DeleteArchiveError::InvalidParameterValue(String::from(error_message))
                 }
+                "MissingParameterValueException" => {
+                    return DeleteArchiveError::MissingParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteArchiveError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return DeleteArchiveError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteArchiveError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteArchiveError::Unknown(String::from(body)),
         }
+        return DeleteArchiveError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteArchiveError {
     fn from(err: serde_json::error::Error) -> DeleteArchiveError {
-        DeleteArchiveError::Unknown(err.description().to_string())
+        DeleteArchiveError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteArchiveError {
@@ -1964,7 +1978,8 @@ impl Error for DeleteArchiveError {
             DeleteArchiveError::Validation(ref cause) => cause,
             DeleteArchiveError::Credentials(ref err) => err.description(),
             DeleteArchiveError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteArchiveError::Unknown(ref cause) => cause,
+            DeleteArchiveError::ParseError(ref cause) => cause,
+            DeleteArchiveError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1985,50 +2000,50 @@ pub enum DeleteVaultError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVaultError {
-    pub fn from_body(body: &str) -> DeleteVaultError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteVaultError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        DeleteVaultError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        DeleteVaultError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteVaultError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        DeleteVaultError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteVaultError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteVaultError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return DeleteVaultError::InvalidParameterValue(String::from(error_message))
                 }
+                "MissingParameterValueException" => {
+                    return DeleteVaultError::MissingParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteVaultError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return DeleteVaultError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteVaultError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteVaultError::Unknown(String::from(body)),
         }
+        return DeleteVaultError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteVaultError {
     fn from(err: serde_json::error::Error) -> DeleteVaultError {
-        DeleteVaultError::Unknown(err.description().to_string())
+        DeleteVaultError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteVaultError {
@@ -2061,7 +2076,8 @@ impl Error for DeleteVaultError {
             DeleteVaultError::Validation(ref cause) => cause,
             DeleteVaultError::Credentials(ref err) => err.description(),
             DeleteVaultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteVaultError::Unknown(ref cause) => cause,
+            DeleteVaultError::ParseError(ref cause) => cause,
+            DeleteVaultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2082,56 +2098,58 @@ pub enum DeleteVaultAccessPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVaultAccessPolicyError {
-    pub fn from_body(body: &str) -> DeleteVaultAccessPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteVaultAccessPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        DeleteVaultAccessPolicyError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        DeleteVaultAccessPolicyError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteVaultAccessPolicyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        DeleteVaultAccessPolicyError::ServiceUnavailable(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteVaultAccessPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteVaultAccessPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return DeleteVaultAccessPolicyError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return DeleteVaultAccessPolicyError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteVaultAccessPolicyError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return DeleteVaultAccessPolicyError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteVaultAccessPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteVaultAccessPolicyError::Unknown(String::from(body)),
         }
+        return DeleteVaultAccessPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteVaultAccessPolicyError {
     fn from(err: serde_json::error::Error) -> DeleteVaultAccessPolicyError {
-        DeleteVaultAccessPolicyError::Unknown(err.description().to_string())
+        DeleteVaultAccessPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteVaultAccessPolicyError {
@@ -2166,7 +2184,8 @@ impl Error for DeleteVaultAccessPolicyError {
             DeleteVaultAccessPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteVaultAccessPolicyError::Unknown(ref cause) => cause,
+            DeleteVaultAccessPolicyError::ParseError(ref cause) => cause,
+            DeleteVaultAccessPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2187,56 +2206,58 @@ pub enum DeleteVaultNotificationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVaultNotificationsError {
-    pub fn from_body(body: &str) -> DeleteVaultNotificationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteVaultNotificationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        DeleteVaultNotificationsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        DeleteVaultNotificationsError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteVaultNotificationsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        DeleteVaultNotificationsError::ServiceUnavailable(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteVaultNotificationsError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteVaultNotificationsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return DeleteVaultNotificationsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return DeleteVaultNotificationsError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteVaultNotificationsError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return DeleteVaultNotificationsError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteVaultNotificationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteVaultNotificationsError::Unknown(String::from(body)),
         }
+        return DeleteVaultNotificationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteVaultNotificationsError {
     fn from(err: serde_json::error::Error) -> DeleteVaultNotificationsError {
-        DeleteVaultNotificationsError::Unknown(err.description().to_string())
+        DeleteVaultNotificationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteVaultNotificationsError {
@@ -2271,7 +2292,8 @@ impl Error for DeleteVaultNotificationsError {
             DeleteVaultNotificationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteVaultNotificationsError::Unknown(ref cause) => cause,
+            DeleteVaultNotificationsError::ParseError(ref cause) => cause,
+            DeleteVaultNotificationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2292,50 +2314,50 @@ pub enum DescribeJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeJobError {
-    pub fn from_body(body: &str) -> DescribeJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        DescribeJobError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        DescribeJobError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeJobError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        DescribeJobError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeJobError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return DescribeJobError::InvalidParameterValue(String::from(error_message))
                 }
+                "MissingParameterValueException" => {
+                    return DescribeJobError::MissingParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeJobError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return DescribeJobError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeJobError::Unknown(String::from(body)),
         }
+        return DescribeJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeJobError {
     fn from(err: serde_json::error::Error) -> DescribeJobError {
-        DescribeJobError::Unknown(err.description().to_string())
+        DescribeJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeJobError {
@@ -2368,7 +2390,8 @@ impl Error for DescribeJobError {
             DescribeJobError::Validation(ref cause) => cause,
             DescribeJobError::Credentials(ref err) => err.description(),
             DescribeJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeJobError::Unknown(ref cause) => cause,
+            DescribeJobError::ParseError(ref cause) => cause,
+            DescribeJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2389,50 +2412,50 @@ pub enum DescribeVaultError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeVaultError {
-    pub fn from_body(body: &str) -> DescribeVaultError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeVaultError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        DescribeVaultError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        DescribeVaultError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeVaultError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        DescribeVaultError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeVaultError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeVaultError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return DescribeVaultError::InvalidParameterValue(String::from(error_message))
                 }
+                "MissingParameterValueException" => {
+                    return DescribeVaultError::MissingParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeVaultError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return DescribeVaultError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeVaultError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeVaultError::Unknown(String::from(body)),
         }
+        return DescribeVaultError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeVaultError {
     fn from(err: serde_json::error::Error) -> DescribeVaultError {
-        DescribeVaultError::Unknown(err.description().to_string())
+        DescribeVaultError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeVaultError {
@@ -2465,7 +2488,8 @@ impl Error for DescribeVaultError {
             DescribeVaultError::Validation(ref cause) => cause,
             DescribeVaultError::Credentials(ref err) => err.description(),
             DescribeVaultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeVaultError::Unknown(ref cause) => cause,
+            DescribeVaultError::ParseError(ref cause) => cause,
+            DescribeVaultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2484,51 +2508,53 @@ pub enum GetDataRetrievalPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDataRetrievalPolicyError {
-    pub fn from_body(body: &str) -> GetDataRetrievalPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetDataRetrievalPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        GetDataRetrievalPolicyError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        GetDataRetrievalPolicyError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServiceUnavailableException" => {
-                        GetDataRetrievalPolicyError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetDataRetrievalPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => GetDataRetrievalPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return GetDataRetrievalPolicyError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return GetDataRetrievalPolicyError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return GetDataRetrievalPolicyError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetDataRetrievalPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetDataRetrievalPolicyError::Unknown(String::from(body)),
         }
+        return GetDataRetrievalPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetDataRetrievalPolicyError {
     fn from(err: serde_json::error::Error) -> GetDataRetrievalPolicyError {
-        GetDataRetrievalPolicyError::Unknown(err.description().to_string())
+        GetDataRetrievalPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetDataRetrievalPolicyError {
@@ -2562,7 +2588,8 @@ impl Error for GetDataRetrievalPolicyError {
             GetDataRetrievalPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetDataRetrievalPolicyError::Unknown(ref cause) => cause,
+            GetDataRetrievalPolicyError::ParseError(ref cause) => cause,
+            GetDataRetrievalPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2583,50 +2610,50 @@ pub enum GetJobOutputError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobOutputError {
-    pub fn from_body(body: &str) -> GetJobOutputError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetJobOutputError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        GetJobOutputError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        GetJobOutputError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetJobOutputError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        GetJobOutputError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetJobOutputError::Validation(error_message.to_string())
-                    }
-                    _ => GetJobOutputError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return GetJobOutputError::InvalidParameterValue(String::from(error_message))
                 }
+                "MissingParameterValueException" => {
+                    return GetJobOutputError::MissingParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetJobOutputError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return GetJobOutputError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetJobOutputError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetJobOutputError::Unknown(String::from(body)),
         }
+        return GetJobOutputError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetJobOutputError {
     fn from(err: serde_json::error::Error) -> GetJobOutputError {
-        GetJobOutputError::Unknown(err.description().to_string())
+        GetJobOutputError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetJobOutputError {
@@ -2659,7 +2686,8 @@ impl Error for GetJobOutputError {
             GetJobOutputError::Validation(ref cause) => cause,
             GetJobOutputError::Credentials(ref err) => err.description(),
             GetJobOutputError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobOutputError::Unknown(ref cause) => cause,
+            GetJobOutputError::ParseError(ref cause) => cause,
+            GetJobOutputError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2680,54 +2708,56 @@ pub enum GetVaultAccessPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetVaultAccessPolicyError {
-    pub fn from_body(body: &str) -> GetVaultAccessPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetVaultAccessPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        GetVaultAccessPolicyError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        GetVaultAccessPolicyError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetVaultAccessPolicyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        GetVaultAccessPolicyError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetVaultAccessPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => GetVaultAccessPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return GetVaultAccessPolicyError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return GetVaultAccessPolicyError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetVaultAccessPolicyError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return GetVaultAccessPolicyError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetVaultAccessPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetVaultAccessPolicyError::Unknown(String::from(body)),
         }
+        return GetVaultAccessPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetVaultAccessPolicyError {
     fn from(err: serde_json::error::Error) -> GetVaultAccessPolicyError {
-        GetVaultAccessPolicyError::Unknown(err.description().to_string())
+        GetVaultAccessPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetVaultAccessPolicyError {
@@ -2762,7 +2792,8 @@ impl Error for GetVaultAccessPolicyError {
             GetVaultAccessPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetVaultAccessPolicyError::Unknown(ref cause) => cause,
+            GetVaultAccessPolicyError::ParseError(ref cause) => cause,
+            GetVaultAccessPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2783,50 +2814,50 @@ pub enum GetVaultLockError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetVaultLockError {
-    pub fn from_body(body: &str) -> GetVaultLockError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetVaultLockError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        GetVaultLockError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        GetVaultLockError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetVaultLockError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        GetVaultLockError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetVaultLockError::Validation(error_message.to_string())
-                    }
-                    _ => GetVaultLockError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return GetVaultLockError::InvalidParameterValue(String::from(error_message))
                 }
+                "MissingParameterValueException" => {
+                    return GetVaultLockError::MissingParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetVaultLockError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return GetVaultLockError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetVaultLockError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetVaultLockError::Unknown(String::from(body)),
         }
+        return GetVaultLockError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetVaultLockError {
     fn from(err: serde_json::error::Error) -> GetVaultLockError {
-        GetVaultLockError::Unknown(err.description().to_string())
+        GetVaultLockError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetVaultLockError {
@@ -2859,7 +2890,8 @@ impl Error for GetVaultLockError {
             GetVaultLockError::Validation(ref cause) => cause,
             GetVaultLockError::Credentials(ref err) => err.description(),
             GetVaultLockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetVaultLockError::Unknown(ref cause) => cause,
+            GetVaultLockError::ParseError(ref cause) => cause,
+            GetVaultLockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2880,54 +2912,56 @@ pub enum GetVaultNotificationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetVaultNotificationsError {
-    pub fn from_body(body: &str) -> GetVaultNotificationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetVaultNotificationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        GetVaultNotificationsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        GetVaultNotificationsError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetVaultNotificationsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        GetVaultNotificationsError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetVaultNotificationsError::Validation(error_message.to_string())
-                    }
-                    _ => GetVaultNotificationsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return GetVaultNotificationsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return GetVaultNotificationsError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetVaultNotificationsError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return GetVaultNotificationsError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetVaultNotificationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetVaultNotificationsError::Unknown(String::from(body)),
         }
+        return GetVaultNotificationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetVaultNotificationsError {
     fn from(err: serde_json::error::Error) -> GetVaultNotificationsError {
-        GetVaultNotificationsError::Unknown(err.description().to_string())
+        GetVaultNotificationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetVaultNotificationsError {
@@ -2962,7 +2996,8 @@ impl Error for GetVaultNotificationsError {
             GetVaultNotificationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetVaultNotificationsError::Unknown(ref cause) => cause,
+            GetVaultNotificationsError::ParseError(ref cause) => cause,
+            GetVaultNotificationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2987,56 +3022,56 @@ pub enum InitiateJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl InitiateJobError {
-    pub fn from_body(body: &str) -> InitiateJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> InitiateJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InsufficientCapacityException" => {
-                        InitiateJobError::InsufficientCapacity(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        InitiateJobError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        InitiateJobError::MissingParameterValue(String::from(error_message))
-                    }
-                    "PolicyEnforcedException" => {
-                        InitiateJobError::PolicyEnforced(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        InitiateJobError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        InitiateJobError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        InitiateJobError::Validation(error_message.to_string())
-                    }
-                    _ => InitiateJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InsufficientCapacityException" => {
+                    return InitiateJobError::InsufficientCapacity(String::from(error_message))
                 }
+                "InvalidParameterValueException" => {
+                    return InitiateJobError::InvalidParameterValue(String::from(error_message))
+                }
+                "MissingParameterValueException" => {
+                    return InitiateJobError::MissingParameterValue(String::from(error_message))
+                }
+                "PolicyEnforcedException" => {
+                    return InitiateJobError::PolicyEnforced(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return InitiateJobError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return InitiateJobError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return InitiateJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => InitiateJobError::Unknown(String::from(body)),
         }
+        return InitiateJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for InitiateJobError {
     fn from(err: serde_json::error::Error) -> InitiateJobError {
-        InitiateJobError::Unknown(err.description().to_string())
+        InitiateJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for InitiateJobError {
@@ -3071,7 +3106,8 @@ impl Error for InitiateJobError {
             InitiateJobError::Validation(ref cause) => cause,
             InitiateJobError::Credentials(ref err) => err.description(),
             InitiateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            InitiateJobError::Unknown(ref cause) => cause,
+            InitiateJobError::ParseError(ref cause) => cause,
+            InitiateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3092,56 +3128,58 @@ pub enum InitiateMultipartUploadError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl InitiateMultipartUploadError {
-    pub fn from_body(body: &str) -> InitiateMultipartUploadError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> InitiateMultipartUploadError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        InitiateMultipartUploadError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        InitiateMultipartUploadError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        InitiateMultipartUploadError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        InitiateMultipartUploadError::ServiceUnavailable(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        InitiateMultipartUploadError::Validation(error_message.to_string())
-                    }
-                    _ => InitiateMultipartUploadError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return InitiateMultipartUploadError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return InitiateMultipartUploadError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return InitiateMultipartUploadError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return InitiateMultipartUploadError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return InitiateMultipartUploadError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => InitiateMultipartUploadError::Unknown(String::from(body)),
         }
+        return InitiateMultipartUploadError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for InitiateMultipartUploadError {
     fn from(err: serde_json::error::Error) -> InitiateMultipartUploadError {
-        InitiateMultipartUploadError::Unknown(err.description().to_string())
+        InitiateMultipartUploadError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for InitiateMultipartUploadError {
@@ -3176,7 +3214,8 @@ impl Error for InitiateMultipartUploadError {
             InitiateMultipartUploadError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            InitiateMultipartUploadError::Unknown(ref cause) => cause,
+            InitiateMultipartUploadError::ParseError(ref cause) => cause,
+            InitiateMultipartUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3197,50 +3236,54 @@ pub enum InitiateVaultLockError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl InitiateVaultLockError {
-    pub fn from_body(body: &str) -> InitiateVaultLockError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> InitiateVaultLockError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        InitiateVaultLockError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        InitiateVaultLockError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        InitiateVaultLockError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        InitiateVaultLockError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        InitiateVaultLockError::Validation(error_message.to_string())
-                    }
-                    _ => InitiateVaultLockError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return InitiateVaultLockError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return InitiateVaultLockError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return InitiateVaultLockError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return InitiateVaultLockError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return InitiateVaultLockError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => InitiateVaultLockError::Unknown(String::from(body)),
         }
+        return InitiateVaultLockError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for InitiateVaultLockError {
     fn from(err: serde_json::error::Error) -> InitiateVaultLockError {
-        InitiateVaultLockError::Unknown(err.description().to_string())
+        InitiateVaultLockError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for InitiateVaultLockError {
@@ -3275,7 +3318,8 @@ impl Error for InitiateVaultLockError {
             InitiateVaultLockError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            InitiateVaultLockError::Unknown(ref cause) => cause,
+            InitiateVaultLockError::ParseError(ref cause) => cause,
+            InitiateVaultLockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3296,48 +3340,50 @@ pub enum ListJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListJobsError {
-    pub fn from_body(body: &str) -> ListJobsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        ListJobsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        ListJobsError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListJobsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        ListJobsError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => ListJobsError::Validation(error_message.to_string()),
-                    _ => ListJobsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return ListJobsError::InvalidParameterValue(String::from(error_message))
                 }
+                "MissingParameterValueException" => {
+                    return ListJobsError::MissingParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListJobsError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return ListJobsError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListJobsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListJobsError::Unknown(String::from(body)),
         }
+        return ListJobsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListJobsError {
     fn from(err: serde_json::error::Error) -> ListJobsError {
-        ListJobsError::Unknown(err.description().to_string())
+        ListJobsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListJobsError {
@@ -3370,7 +3416,8 @@ impl Error for ListJobsError {
             ListJobsError::Validation(ref cause) => cause,
             ListJobsError::Credentials(ref err) => err.description(),
             ListJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListJobsError::Unknown(ref cause) => cause,
+            ListJobsError::ParseError(ref cause) => cause,
+            ListJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3391,54 +3438,56 @@ pub enum ListMultipartUploadsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListMultipartUploadsError {
-    pub fn from_body(body: &str) -> ListMultipartUploadsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListMultipartUploadsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        ListMultipartUploadsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        ListMultipartUploadsError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListMultipartUploadsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        ListMultipartUploadsError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListMultipartUploadsError::Validation(error_message.to_string())
-                    }
-                    _ => ListMultipartUploadsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return ListMultipartUploadsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return ListMultipartUploadsError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return ListMultipartUploadsError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return ListMultipartUploadsError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListMultipartUploadsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListMultipartUploadsError::Unknown(String::from(body)),
         }
+        return ListMultipartUploadsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListMultipartUploadsError {
     fn from(err: serde_json::error::Error) -> ListMultipartUploadsError {
-        ListMultipartUploadsError::Unknown(err.description().to_string())
+        ListMultipartUploadsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListMultipartUploadsError {
@@ -3473,7 +3522,8 @@ impl Error for ListMultipartUploadsError {
             ListMultipartUploadsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListMultipartUploadsError::Unknown(ref cause) => cause,
+            ListMultipartUploadsError::ParseError(ref cause) => cause,
+            ListMultipartUploadsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3494,48 +3544,50 @@ pub enum ListPartsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPartsError {
-    pub fn from_body(body: &str) -> ListPartsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListPartsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        ListPartsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        ListPartsError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListPartsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        ListPartsError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => ListPartsError::Validation(error_message.to_string()),
-                    _ => ListPartsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return ListPartsError::InvalidParameterValue(String::from(error_message))
                 }
+                "MissingParameterValueException" => {
+                    return ListPartsError::MissingParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListPartsError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return ListPartsError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListPartsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListPartsError::Unknown(String::from(body)),
         }
+        return ListPartsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPartsError {
     fn from(err: serde_json::error::Error) -> ListPartsError {
-        ListPartsError::Unknown(err.description().to_string())
+        ListPartsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPartsError {
@@ -3568,7 +3620,8 @@ impl Error for ListPartsError {
             ListPartsError::Validation(ref cause) => cause,
             ListPartsError::Credentials(ref err) => err.description(),
             ListPartsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPartsError::Unknown(ref cause) => cause,
+            ListPartsError::ParseError(ref cause) => cause,
+            ListPartsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3587,53 +3640,53 @@ pub enum ListProvisionedCapacityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListProvisionedCapacityError {
-    pub fn from_body(body: &str) -> ListProvisionedCapacityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListProvisionedCapacityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        ListProvisionedCapacityError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        ListProvisionedCapacityError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServiceUnavailableException" => {
-                        ListProvisionedCapacityError::ServiceUnavailable(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListProvisionedCapacityError::Validation(error_message.to_string())
-                    }
-                    _ => ListProvisionedCapacityError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return ListProvisionedCapacityError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return ListProvisionedCapacityError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return ListProvisionedCapacityError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListProvisionedCapacityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListProvisionedCapacityError::Unknown(String::from(body)),
         }
+        return ListProvisionedCapacityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListProvisionedCapacityError {
     fn from(err: serde_json::error::Error) -> ListProvisionedCapacityError {
-        ListProvisionedCapacityError::Unknown(err.description().to_string())
+        ListProvisionedCapacityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListProvisionedCapacityError {
@@ -3667,7 +3720,8 @@ impl Error for ListProvisionedCapacityError {
             ListProvisionedCapacityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListProvisionedCapacityError::Unknown(ref cause) => cause,
+            ListProvisionedCapacityError::ParseError(ref cause) => cause,
+            ListProvisionedCapacityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3688,50 +3742,50 @@ pub enum ListTagsForVaultError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForVaultError {
-    pub fn from_body(body: &str) -> ListTagsForVaultError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForVaultError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        ListTagsForVaultError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        ListTagsForVaultError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListTagsForVaultError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        ListTagsForVaultError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTagsForVaultError::Validation(error_message.to_string())
-                    }
-                    _ => ListTagsForVaultError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return ListTagsForVaultError::InvalidParameterValue(String::from(error_message))
                 }
+                "MissingParameterValueException" => {
+                    return ListTagsForVaultError::MissingParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListTagsForVaultError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return ListTagsForVaultError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTagsForVaultError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTagsForVaultError::Unknown(String::from(body)),
         }
+        return ListTagsForVaultError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTagsForVaultError {
     fn from(err: serde_json::error::Error) -> ListTagsForVaultError {
-        ListTagsForVaultError::Unknown(err.description().to_string())
+        ListTagsForVaultError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTagsForVaultError {
@@ -3764,7 +3818,8 @@ impl Error for ListTagsForVaultError {
             ListTagsForVaultError::Validation(ref cause) => cause,
             ListTagsForVaultError::Credentials(ref err) => err.description(),
             ListTagsForVaultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTagsForVaultError::Unknown(ref cause) => cause,
+            ListTagsForVaultError::ParseError(ref cause) => cause,
+            ListTagsForVaultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3785,48 +3840,50 @@ pub enum ListVaultsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListVaultsError {
-    pub fn from_body(body: &str) -> ListVaultsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListVaultsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        ListVaultsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        ListVaultsError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListVaultsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        ListVaultsError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => ListVaultsError::Validation(error_message.to_string()),
-                    _ => ListVaultsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return ListVaultsError::InvalidParameterValue(String::from(error_message))
                 }
+                "MissingParameterValueException" => {
+                    return ListVaultsError::MissingParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListVaultsError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return ListVaultsError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListVaultsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListVaultsError::Unknown(String::from(body)),
         }
+        return ListVaultsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListVaultsError {
     fn from(err: serde_json::error::Error) -> ListVaultsError {
-        ListVaultsError::Unknown(err.description().to_string())
+        ListVaultsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListVaultsError {
@@ -3859,7 +3916,8 @@ impl Error for ListVaultsError {
             ListVaultsError::Validation(ref cause) => cause,
             ListVaultsError::Credentials(ref err) => err.description(),
             ListVaultsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListVaultsError::Unknown(ref cause) => cause,
+            ListVaultsError::ParseError(ref cause) => cause,
+            ListVaultsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3880,56 +3938,58 @@ pub enum PurchaseProvisionedCapacityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PurchaseProvisionedCapacityError {
-    pub fn from_body(body: &str) -> PurchaseProvisionedCapacityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PurchaseProvisionedCapacityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        PurchaseProvisionedCapacityError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        PurchaseProvisionedCapacityError::LimitExceeded(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        PurchaseProvisionedCapacityError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServiceUnavailableException" => {
-                        PurchaseProvisionedCapacityError::ServiceUnavailable(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        PurchaseProvisionedCapacityError::Validation(error_message.to_string())
-                    }
-                    _ => PurchaseProvisionedCapacityError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return PurchaseProvisionedCapacityError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "LimitExceededException" => {
+                    return PurchaseProvisionedCapacityError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "MissingParameterValueException" => {
+                    return PurchaseProvisionedCapacityError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return PurchaseProvisionedCapacityError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return PurchaseProvisionedCapacityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PurchaseProvisionedCapacityError::Unknown(String::from(body)),
         }
+        return PurchaseProvisionedCapacityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PurchaseProvisionedCapacityError {
     fn from(err: serde_json::error::Error) -> PurchaseProvisionedCapacityError {
-        PurchaseProvisionedCapacityError::Unknown(err.description().to_string())
+        PurchaseProvisionedCapacityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PurchaseProvisionedCapacityError {
@@ -3964,7 +4024,8 @@ impl Error for PurchaseProvisionedCapacityError {
             PurchaseProvisionedCapacityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PurchaseProvisionedCapacityError::Unknown(ref cause) => cause,
+            PurchaseProvisionedCapacityError::ParseError(ref cause) => cause,
+            PurchaseProvisionedCapacityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3985,50 +4046,54 @@ pub enum RemoveTagsFromVaultError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsFromVaultError {
-    pub fn from_body(body: &str) -> RemoveTagsFromVaultError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsFromVaultError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        RemoveTagsFromVaultError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        RemoveTagsFromVaultError::MissingParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        RemoveTagsFromVaultError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        RemoveTagsFromVaultError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RemoveTagsFromVaultError::Validation(error_message.to_string())
-                    }
-                    _ => RemoveTagsFromVaultError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return RemoveTagsFromVaultError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return RemoveTagsFromVaultError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RemoveTagsFromVaultError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return RemoveTagsFromVaultError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RemoveTagsFromVaultError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RemoveTagsFromVaultError::Unknown(String::from(body)),
         }
+        return RemoveTagsFromVaultError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RemoveTagsFromVaultError {
     fn from(err: serde_json::error::Error) -> RemoveTagsFromVaultError {
-        RemoveTagsFromVaultError::Unknown(err.description().to_string())
+        RemoveTagsFromVaultError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RemoveTagsFromVaultError {
@@ -4063,7 +4128,8 @@ impl Error for RemoveTagsFromVaultError {
             RemoveTagsFromVaultError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RemoveTagsFromVaultError::Unknown(ref cause) => cause,
+            RemoveTagsFromVaultError::ParseError(ref cause) => cause,
+            RemoveTagsFromVaultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4082,51 +4148,53 @@ pub enum SetDataRetrievalPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetDataRetrievalPolicyError {
-    pub fn from_body(body: &str) -> SetDataRetrievalPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SetDataRetrievalPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        SetDataRetrievalPolicyError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        SetDataRetrievalPolicyError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServiceUnavailableException" => {
-                        SetDataRetrievalPolicyError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SetDataRetrievalPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => SetDataRetrievalPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return SetDataRetrievalPolicyError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return SetDataRetrievalPolicyError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return SetDataRetrievalPolicyError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return SetDataRetrievalPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SetDataRetrievalPolicyError::Unknown(String::from(body)),
         }
+        return SetDataRetrievalPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SetDataRetrievalPolicyError {
     fn from(err: serde_json::error::Error) -> SetDataRetrievalPolicyError {
-        SetDataRetrievalPolicyError::Unknown(err.description().to_string())
+        SetDataRetrievalPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SetDataRetrievalPolicyError {
@@ -4160,7 +4228,8 @@ impl Error for SetDataRetrievalPolicyError {
             SetDataRetrievalPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetDataRetrievalPolicyError::Unknown(ref cause) => cause,
+            SetDataRetrievalPolicyError::ParseError(ref cause) => cause,
+            SetDataRetrievalPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4181,54 +4250,56 @@ pub enum SetVaultAccessPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetVaultAccessPolicyError {
-    pub fn from_body(body: &str) -> SetVaultAccessPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SetVaultAccessPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        SetVaultAccessPolicyError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        SetVaultAccessPolicyError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        SetVaultAccessPolicyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        SetVaultAccessPolicyError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SetVaultAccessPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => SetVaultAccessPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return SetVaultAccessPolicyError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return SetVaultAccessPolicyError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return SetVaultAccessPolicyError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return SetVaultAccessPolicyError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return SetVaultAccessPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SetVaultAccessPolicyError::Unknown(String::from(body)),
         }
+        return SetVaultAccessPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SetVaultAccessPolicyError {
     fn from(err: serde_json::error::Error) -> SetVaultAccessPolicyError {
-        SetVaultAccessPolicyError::Unknown(err.description().to_string())
+        SetVaultAccessPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SetVaultAccessPolicyError {
@@ -4263,7 +4334,8 @@ impl Error for SetVaultAccessPolicyError {
             SetVaultAccessPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetVaultAccessPolicyError::Unknown(ref cause) => cause,
+            SetVaultAccessPolicyError::ParseError(ref cause) => cause,
+            SetVaultAccessPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4284,54 +4356,56 @@ pub enum SetVaultNotificationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetVaultNotificationsError {
-    pub fn from_body(body: &str) -> SetVaultNotificationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SetVaultNotificationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        SetVaultNotificationsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingParameterValueException" => {
-                        SetVaultNotificationsError::MissingParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        SetVaultNotificationsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        SetVaultNotificationsError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SetVaultNotificationsError::Validation(error_message.to_string())
-                    }
-                    _ => SetVaultNotificationsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return SetVaultNotificationsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return SetVaultNotificationsError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return SetVaultNotificationsError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return SetVaultNotificationsError::ServiceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return SetVaultNotificationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SetVaultNotificationsError::Unknown(String::from(body)),
         }
+        return SetVaultNotificationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SetVaultNotificationsError {
     fn from(err: serde_json::error::Error) -> SetVaultNotificationsError {
-        SetVaultNotificationsError::Unknown(err.description().to_string())
+        SetVaultNotificationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SetVaultNotificationsError {
@@ -4366,7 +4440,8 @@ impl Error for SetVaultNotificationsError {
             SetVaultNotificationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetVaultNotificationsError::Unknown(ref cause) => cause,
+            SetVaultNotificationsError::ParseError(ref cause) => cause,
+            SetVaultNotificationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4389,53 +4464,53 @@ pub enum UploadArchiveError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UploadArchiveError {
-    pub fn from_body(body: &str) -> UploadArchiveError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UploadArchiveError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        UploadArchiveError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        UploadArchiveError::MissingParameterValue(String::from(error_message))
-                    }
-                    "RequestTimeoutException" => {
-                        UploadArchiveError::RequestTimeout(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UploadArchiveError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        UploadArchiveError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UploadArchiveError::Validation(error_message.to_string())
-                    }
-                    _ => UploadArchiveError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return UploadArchiveError::InvalidParameterValue(String::from(error_message))
                 }
+                "MissingParameterValueException" => {
+                    return UploadArchiveError::MissingParameterValue(String::from(error_message))
+                }
+                "RequestTimeoutException" => {
+                    return UploadArchiveError::RequestTimeout(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UploadArchiveError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return UploadArchiveError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UploadArchiveError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UploadArchiveError::Unknown(String::from(body)),
         }
+        return UploadArchiveError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UploadArchiveError {
     fn from(err: serde_json::error::Error) -> UploadArchiveError {
-        UploadArchiveError::Unknown(err.description().to_string())
+        UploadArchiveError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UploadArchiveError {
@@ -4469,7 +4544,8 @@ impl Error for UploadArchiveError {
             UploadArchiveError::Validation(ref cause) => cause,
             UploadArchiveError::Credentials(ref err) => err.description(),
             UploadArchiveError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UploadArchiveError::Unknown(ref cause) => cause,
+            UploadArchiveError::ParseError(ref cause) => cause,
+            UploadArchiveError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4492,53 +4568,57 @@ pub enum UploadMultipartPartError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UploadMultipartPartError {
-    pub fn from_body(body: &str) -> UploadMultipartPartError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UploadMultipartPartError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        UploadMultipartPartError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MissingParameterValueException" => {
-                        UploadMultipartPartError::MissingParameterValue(String::from(error_message))
-                    }
-                    "RequestTimeoutException" => {
-                        UploadMultipartPartError::RequestTimeout(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UploadMultipartPartError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        UploadMultipartPartError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UploadMultipartPartError::Validation(error_message.to_string())
-                    }
-                    _ => UploadMultipartPartError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return UploadMultipartPartError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingParameterValueException" => {
+                    return UploadMultipartPartError::MissingParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "RequestTimeoutException" => {
+                    return UploadMultipartPartError::RequestTimeout(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UploadMultipartPartError::ResourceNotFound(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return UploadMultipartPartError::ServiceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UploadMultipartPartError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UploadMultipartPartError::Unknown(String::from(body)),
         }
+        return UploadMultipartPartError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UploadMultipartPartError {
     fn from(err: serde_json::error::Error) -> UploadMultipartPartError {
-        UploadMultipartPartError::Unknown(err.description().to_string())
+        UploadMultipartPartError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UploadMultipartPartError {
@@ -4574,7 +4654,8 @@ impl Error for UploadMultipartPartError {
             UploadMultipartPartError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UploadMultipartPartError::Unknown(ref cause) => cause,
+            UploadMultipartPartError::ParseError(ref cause) => cause,
+            UploadMultipartPartError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4824,11 +4905,11 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AbortMultipartUploadError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AbortMultipartUploadError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4856,11 +4937,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AbortVaultLockError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AbortVaultLockError::from_response(response))),
+                )
             }
         })
     }
@@ -4895,11 +4977,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddTagsToVaultError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AddTagsToVaultError::from_response(response))),
+                )
             }
         })
     }
@@ -4959,9 +5042,7 @@ impl Glacier for GlacierClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CompleteMultipartUploadError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CompleteMultipartUploadError::from_response(response))
                 }))
             }
         })
@@ -4991,11 +5072,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CompleteVaultLockError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CompleteVaultLockError::from_response(response))),
+                )
             }
         })
     }
@@ -5036,11 +5118,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateVaultError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateVaultError::from_response(response))),
+                )
             }
         })
     }
@@ -5066,11 +5149,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteArchiveError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteArchiveError::from_response(response))),
+                )
             }
         })
     }
@@ -5095,11 +5179,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVaultError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteVaultError::from_response(response))),
+                )
             }
         })
     }
@@ -5128,9 +5213,7 @@ impl Glacier for GlacierClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVaultAccessPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteVaultAccessPolicyError::from_response(response))
                 }))
             }
         })
@@ -5160,9 +5243,7 @@ impl Glacier for GlacierClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVaultNotificationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteVaultNotificationsError::from_response(response))
                 }))
             }
         })
@@ -5200,11 +5281,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeJobError::from_response(response))),
+                )
             }
         })
     }
@@ -5240,11 +5322,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeVaultError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeVaultError::from_response(response))),
+                )
             }
         })
     }
@@ -5280,11 +5363,11 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDataRetrievalPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetDataRetrievalPolicyError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5341,11 +5424,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetJobOutputError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetJobOutputError::from_response(response))),
+                )
             }
         })
     }
@@ -5382,11 +5466,11 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetVaultAccessPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetVaultAccessPolicyError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5422,11 +5506,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetVaultLockError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetVaultLockError::from_response(response))),
+                )
             }
         })
     }
@@ -5463,11 +5548,11 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetVaultNotificationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetVaultNotificationsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5519,11 +5604,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(InitiateJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(InitiateJobError::from_response(response))),
+                )
             }
         })
     }
@@ -5581,9 +5667,7 @@ impl Glacier for GlacierClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(InitiateMultipartUploadError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(InitiateMultipartUploadError::from_response(response))
                 }))
             }
         })
@@ -5629,11 +5713,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(InitiateVaultLockError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(InitiateVaultLockError::from_response(response))),
+                )
             }
         })
     }
@@ -5681,11 +5766,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListJobsError::from_response(response))),
+                )
             }
         })
     }
@@ -5731,11 +5817,11 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListMultipartUploadsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListMultipartUploadsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5778,11 +5864,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPartsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListPartsError::from_response(response))),
+                )
             }
         })
     }
@@ -5819,9 +5906,7 @@ impl Glacier for GlacierClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListProvisionedCapacityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListProvisionedCapacityError::from_response(response))
                 }))
             }
         })
@@ -5858,11 +5943,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsForVaultError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTagsForVaultError::from_response(response))),
+                )
             }
         })
     }
@@ -5903,11 +5989,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVaultsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListVaultsError::from_response(response))),
+                )
             }
         })
     }
@@ -5949,9 +6036,7 @@ impl Glacier for GlacierClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PurchaseProvisionedCapacityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PurchaseProvisionedCapacityError::from_response(response))
                 }))
             }
         })
@@ -5987,11 +6072,11 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveTagsFromVaultError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RemoveTagsFromVaultError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6021,11 +6106,11 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetDataRetrievalPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(SetDataRetrievalPolicyError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6056,11 +6141,11 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetVaultAccessPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(SetVaultAccessPolicyError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6091,11 +6176,11 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetVaultNotificationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(SetVaultNotificationsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6163,11 +6248,12 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UploadArchiveError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UploadArchiveError::from_response(response))),
+                )
             }
         })
     }
@@ -6225,11 +6311,11 @@ impl Glacier for GlacierClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UploadMultipartPartError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UploadMultipartPartError::from_response(response))
+                    }),
+                )
             }
         })
     }

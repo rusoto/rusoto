@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateAdminAccountRequest {
@@ -385,50 +385,50 @@ pub enum AssociateAdminAccountError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateAdminAccountError {
-    pub fn from_body(body: &str) -> AssociateAdminAccountError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateAdminAccountError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        AssociateAdminAccountError::InternalError(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        AssociateAdminAccountError::InvalidInput(String::from(error_message))
-                    }
-                    "InvalidOperationException" => {
-                        AssociateAdminAccountError::InvalidOperation(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        AssociateAdminAccountError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AssociateAdminAccountError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateAdminAccountError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return AssociateAdminAccountError::InternalError(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return AssociateAdminAccountError::InvalidInput(String::from(error_message))
+                }
+                "InvalidOperationException" => {
+                    return AssociateAdminAccountError::InvalidOperation(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return AssociateAdminAccountError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AssociateAdminAccountError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AssociateAdminAccountError::Unknown(String::from(body)),
         }
+        return AssociateAdminAccountError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateAdminAccountError {
     fn from(err: serde_json::error::Error) -> AssociateAdminAccountError {
-        AssociateAdminAccountError::Unknown(err.description().to_string())
+        AssociateAdminAccountError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateAdminAccountError {
@@ -463,7 +463,8 @@ impl Error for AssociateAdminAccountError {
             AssociateAdminAccountError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateAdminAccountError::Unknown(ref cause) => cause,
+            AssociateAdminAccountError::ParseError(ref cause) => cause,
+            AssociateAdminAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -482,51 +483,53 @@ pub enum DeleteNotificationChannelError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteNotificationChannelError {
-    pub fn from_body(body: &str) -> DeleteNotificationChannelError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteNotificationChannelError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DeleteNotificationChannelError::InternalError(String::from(error_message))
-                    }
-                    "InvalidOperationException" => {
-                        DeleteNotificationChannelError::InvalidOperation(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteNotificationChannelError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteNotificationChannelError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteNotificationChannelError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DeleteNotificationChannelError::InternalError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidOperationException" => {
+                    return DeleteNotificationChannelError::InvalidOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteNotificationChannelError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteNotificationChannelError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteNotificationChannelError::Unknown(String::from(body)),
         }
+        return DeleteNotificationChannelError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteNotificationChannelError {
     fn from(err: serde_json::error::Error) -> DeleteNotificationChannelError {
-        DeleteNotificationChannelError::Unknown(err.description().to_string())
+        DeleteNotificationChannelError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteNotificationChannelError {
@@ -560,7 +563,8 @@ impl Error for DeleteNotificationChannelError {
             DeleteNotificationChannelError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteNotificationChannelError::Unknown(ref cause) => cause,
+            DeleteNotificationChannelError::ParseError(ref cause) => cause,
+            DeleteNotificationChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -579,47 +583,47 @@ pub enum DeletePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePolicyError {
-    pub fn from_body(body: &str) -> DeletePolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DeletePolicyError::InternalError(String::from(error_message))
-                    }
-                    "InvalidOperationException" => {
-                        DeletePolicyError::InvalidOperation(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeletePolicyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeletePolicyError::Validation(error_message.to_string())
-                    }
-                    _ => DeletePolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DeletePolicyError::InternalError(String::from(error_message))
                 }
+                "InvalidOperationException" => {
+                    return DeletePolicyError::InvalidOperation(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeletePolicyError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeletePolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeletePolicyError::Unknown(String::from(body)),
         }
+        return DeletePolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeletePolicyError {
     fn from(err: serde_json::error::Error) -> DeletePolicyError {
-        DeletePolicyError::Unknown(err.description().to_string())
+        DeletePolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeletePolicyError {
@@ -651,7 +655,8 @@ impl Error for DeletePolicyError {
             DeletePolicyError::Validation(ref cause) => cause,
             DeletePolicyError::Credentials(ref err) => err.description(),
             DeletePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePolicyError::Unknown(ref cause) => cause,
+            DeletePolicyError::ParseError(ref cause) => cause,
+            DeletePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -670,47 +675,51 @@ pub enum DisassociateAdminAccountError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateAdminAccountError {
-    pub fn from_body(body: &str) -> DisassociateAdminAccountError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateAdminAccountError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DisassociateAdminAccountError::InternalError(String::from(error_message))
-                    }
-                    "InvalidOperationException" => {
-                        DisassociateAdminAccountError::InvalidOperation(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DisassociateAdminAccountError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DisassociateAdminAccountError::Validation(error_message.to_string())
-                    }
-                    _ => DisassociateAdminAccountError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DisassociateAdminAccountError::InternalError(String::from(error_message))
                 }
+                "InvalidOperationException" => {
+                    return DisassociateAdminAccountError::InvalidOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DisassociateAdminAccountError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DisassociateAdminAccountError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisassociateAdminAccountError::Unknown(String::from(body)),
         }
+        return DisassociateAdminAccountError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateAdminAccountError {
     fn from(err: serde_json::error::Error) -> DisassociateAdminAccountError {
-        DisassociateAdminAccountError::Unknown(err.description().to_string())
+        DisassociateAdminAccountError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateAdminAccountError {
@@ -744,7 +753,8 @@ impl Error for DisassociateAdminAccountError {
             DisassociateAdminAccountError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateAdminAccountError::Unknown(ref cause) => cause,
+            DisassociateAdminAccountError::ParseError(ref cause) => cause,
+            DisassociateAdminAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -763,47 +773,47 @@ pub enum GetAdminAccountError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAdminAccountError {
-    pub fn from_body(body: &str) -> GetAdminAccountError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetAdminAccountError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        GetAdminAccountError::InternalError(String::from(error_message))
-                    }
-                    "InvalidOperationException" => {
-                        GetAdminAccountError::InvalidOperation(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetAdminAccountError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetAdminAccountError::Validation(error_message.to_string())
-                    }
-                    _ => GetAdminAccountError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return GetAdminAccountError::InternalError(String::from(error_message))
                 }
+                "InvalidOperationException" => {
+                    return GetAdminAccountError::InvalidOperation(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetAdminAccountError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetAdminAccountError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetAdminAccountError::Unknown(String::from(body)),
         }
+        return GetAdminAccountError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetAdminAccountError {
     fn from(err: serde_json::error::Error) -> GetAdminAccountError {
-        GetAdminAccountError::Unknown(err.description().to_string())
+        GetAdminAccountError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetAdminAccountError {
@@ -835,7 +845,8 @@ impl Error for GetAdminAccountError {
             GetAdminAccountError::Validation(ref cause) => cause,
             GetAdminAccountError::Credentials(ref err) => err.description(),
             GetAdminAccountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetAdminAccountError::Unknown(ref cause) => cause,
+            GetAdminAccountError::ParseError(ref cause) => cause,
+            GetAdminAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -852,44 +863,44 @@ pub enum GetComplianceDetailError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetComplianceDetailError {
-    pub fn from_body(body: &str) -> GetComplianceDetailError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetComplianceDetailError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        GetComplianceDetailError::InternalError(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetComplianceDetailError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetComplianceDetailError::Validation(error_message.to_string())
-                    }
-                    _ => GetComplianceDetailError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return GetComplianceDetailError::InternalError(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return GetComplianceDetailError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetComplianceDetailError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetComplianceDetailError::Unknown(String::from(body)),
         }
+        return GetComplianceDetailError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetComplianceDetailError {
     fn from(err: serde_json::error::Error) -> GetComplianceDetailError {
-        GetComplianceDetailError::Unknown(err.description().to_string())
+        GetComplianceDetailError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetComplianceDetailError {
@@ -922,7 +933,8 @@ impl Error for GetComplianceDetailError {
             GetComplianceDetailError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetComplianceDetailError::Unknown(ref cause) => cause,
+            GetComplianceDetailError::ParseError(ref cause) => cause,
+            GetComplianceDetailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -941,47 +953,51 @@ pub enum GetNotificationChannelError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetNotificationChannelError {
-    pub fn from_body(body: &str) -> GetNotificationChannelError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetNotificationChannelError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        GetNotificationChannelError::InternalError(String::from(error_message))
-                    }
-                    "InvalidOperationException" => {
-                        GetNotificationChannelError::InvalidOperation(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetNotificationChannelError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetNotificationChannelError::Validation(error_message.to_string())
-                    }
-                    _ => GetNotificationChannelError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return GetNotificationChannelError::InternalError(String::from(error_message))
                 }
+                "InvalidOperationException" => {
+                    return GetNotificationChannelError::InvalidOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetNotificationChannelError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetNotificationChannelError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetNotificationChannelError::Unknown(String::from(body)),
         }
+        return GetNotificationChannelError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetNotificationChannelError {
     fn from(err: serde_json::error::Error) -> GetNotificationChannelError {
-        GetNotificationChannelError::Unknown(err.description().to_string())
+        GetNotificationChannelError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetNotificationChannelError {
@@ -1015,7 +1031,8 @@ impl Error for GetNotificationChannelError {
             GetNotificationChannelError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetNotificationChannelError::Unknown(ref cause) => cause,
+            GetNotificationChannelError::ParseError(ref cause) => cause,
+            GetNotificationChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1034,45 +1051,47 @@ pub enum GetPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetPolicyError {
-    pub fn from_body(body: &str) -> GetPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        GetPolicyError::InternalError(String::from(error_message))
-                    }
-                    "InvalidOperationException" => {
-                        GetPolicyError::InvalidOperation(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetPolicyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => GetPolicyError::Validation(error_message.to_string()),
-                    _ => GetPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return GetPolicyError::InternalError(String::from(error_message))
                 }
+                "InvalidOperationException" => {
+                    return GetPolicyError::InvalidOperation(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetPolicyError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetPolicyError::Unknown(String::from(body)),
         }
+        return GetPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetPolicyError {
     fn from(err: serde_json::error::Error) -> GetPolicyError {
-        GetPolicyError::Unknown(err.description().to_string())
+        GetPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetPolicyError {
@@ -1104,7 +1123,8 @@ impl Error for GetPolicyError {
             GetPolicyError::Validation(ref cause) => cause,
             GetPolicyError::Credentials(ref err) => err.description(),
             GetPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPolicyError::Unknown(ref cause) => cause,
+            GetPolicyError::ParseError(ref cause) => cause,
+            GetPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1121,44 +1141,44 @@ pub enum ListComplianceStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListComplianceStatusError {
-    pub fn from_body(body: &str) -> ListComplianceStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListComplianceStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        ListComplianceStatusError::InternalError(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListComplianceStatusError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListComplianceStatusError::Validation(error_message.to_string())
-                    }
-                    _ => ListComplianceStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return ListComplianceStatusError::InternalError(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return ListComplianceStatusError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListComplianceStatusError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListComplianceStatusError::Unknown(String::from(body)),
         }
+        return ListComplianceStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListComplianceStatusError {
     fn from(err: serde_json::error::Error) -> ListComplianceStatusError {
-        ListComplianceStatusError::Unknown(err.description().to_string())
+        ListComplianceStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListComplianceStatusError {
@@ -1191,7 +1211,8 @@ impl Error for ListComplianceStatusError {
             ListComplianceStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListComplianceStatusError::Unknown(ref cause) => cause,
+            ListComplianceStatusError::ParseError(ref cause) => cause,
+            ListComplianceStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1212,50 +1233,50 @@ pub enum ListPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPoliciesError {
-    pub fn from_body(body: &str) -> ListPoliciesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListPoliciesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        ListPoliciesError::InternalError(String::from(error_message))
-                    }
-                    "InvalidOperationException" => {
-                        ListPoliciesError::InvalidOperation(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListPoliciesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListPoliciesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListPoliciesError::Validation(error_message.to_string())
-                    }
-                    _ => ListPoliciesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return ListPoliciesError::InternalError(String::from(error_message))
                 }
+                "InvalidOperationException" => {
+                    return ListPoliciesError::InvalidOperation(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListPoliciesError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListPoliciesError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListPoliciesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListPoliciesError::Unknown(String::from(body)),
         }
+        return ListPoliciesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPoliciesError {
     fn from(err: serde_json::error::Error) -> ListPoliciesError {
-        ListPoliciesError::Unknown(err.description().to_string())
+        ListPoliciesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPoliciesError {
@@ -1288,7 +1309,8 @@ impl Error for ListPoliciesError {
             ListPoliciesError::Validation(ref cause) => cause,
             ListPoliciesError::Credentials(ref err) => err.description(),
             ListPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPoliciesError::Unknown(ref cause) => cause,
+            ListPoliciesError::ParseError(ref cause) => cause,
+            ListPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1307,47 +1329,51 @@ pub enum PutNotificationChannelError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutNotificationChannelError {
-    pub fn from_body(body: &str) -> PutNotificationChannelError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutNotificationChannelError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        PutNotificationChannelError::InternalError(String::from(error_message))
-                    }
-                    "InvalidOperationException" => {
-                        PutNotificationChannelError::InvalidOperation(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        PutNotificationChannelError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutNotificationChannelError::Validation(error_message.to_string())
-                    }
-                    _ => PutNotificationChannelError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return PutNotificationChannelError::InternalError(String::from(error_message))
                 }
+                "InvalidOperationException" => {
+                    return PutNotificationChannelError::InvalidOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return PutNotificationChannelError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return PutNotificationChannelError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutNotificationChannelError::Unknown(String::from(body)),
         }
+        return PutNotificationChannelError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutNotificationChannelError {
     fn from(err: serde_json::error::Error) -> PutNotificationChannelError {
-        PutNotificationChannelError::Unknown(err.description().to_string())
+        PutNotificationChannelError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutNotificationChannelError {
@@ -1381,7 +1407,8 @@ impl Error for PutNotificationChannelError {
             PutNotificationChannelError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutNotificationChannelError::Unknown(ref cause) => cause,
+            PutNotificationChannelError::ParseError(ref cause) => cause,
+            PutNotificationChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1402,48 +1429,50 @@ pub enum PutPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutPolicyError {
-    pub fn from_body(body: &str) -> PutPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        PutPolicyError::InternalError(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        PutPolicyError::InvalidInput(String::from(error_message))
-                    }
-                    "InvalidOperationException" => {
-                        PutPolicyError::InvalidOperation(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        PutPolicyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => PutPolicyError::Validation(error_message.to_string()),
-                    _ => PutPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return PutPolicyError::InternalError(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return PutPolicyError::InvalidInput(String::from(error_message))
+                }
+                "InvalidOperationException" => {
+                    return PutPolicyError::InvalidOperation(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return PutPolicyError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutPolicyError::Unknown(String::from(body)),
         }
+        return PutPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutPolicyError {
     fn from(err: serde_json::error::Error) -> PutPolicyError {
-        PutPolicyError::Unknown(err.description().to_string())
+        PutPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutPolicyError {
@@ -1476,7 +1505,8 @@ impl Error for PutPolicyError {
             PutPolicyError::Validation(ref cause) => cause,
             PutPolicyError::Credentials(ref err) => err.description(),
             PutPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutPolicyError::Unknown(ref cause) => cause,
+            PutPolicyError::ParseError(ref cause) => cause,
+            PutPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1593,11 +1623,11 @@ impl Fms for FmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateAdminAccountError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AssociateAdminAccountError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1615,9 +1645,7 @@ impl Fms for FmsClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteNotificationChannelError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteNotificationChannelError::from_response(response))
                 }))
             }
         })
@@ -1636,11 +1664,12 @@ impl Fms for FmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeletePolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -1658,9 +1687,7 @@ impl Fms for FmsClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateAdminAccountError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DisassociateAdminAccountError::from_response(response))
                 }))
             }
         })
@@ -1685,14 +1712,16 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<GetAdminAccountResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAdminAccountError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetAdminAccountError::from_response(response))),
+                )
             }
         })
     }
@@ -1720,14 +1749,15 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<GetComplianceDetailResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetComplianceDetailError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetComplianceDetailError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1753,14 +1783,15 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<GetNotificationChannelResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetNotificationChannelError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetNotificationChannelError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1788,14 +1819,16 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<GetPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetPolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -1823,14 +1856,15 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<ListComplianceStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListComplianceStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListComplianceStatusError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1858,14 +1892,16 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<ListPoliciesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListPoliciesError::from_response(response))),
+                )
             }
         })
     }
@@ -1886,11 +1922,11 @@ impl Fms for FmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutNotificationChannelError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutNotificationChannelError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1918,14 +1954,16 @@ impl Fms for FmsClient {
 
                     serde_json::from_str::<PutPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutPolicyError::from_response(response))),
+                )
             }
         })
     }

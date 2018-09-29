@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -1027,21 +1027,25 @@ pub enum BatchDeleteAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDeleteAttributesError {
-    pub fn from_body(body: &str) -> BatchDeleteAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => BatchDeleteAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => BatchDeleteAttributesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> BatchDeleteAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        BatchDeleteAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1056,7 +1060,7 @@ impl BatchDeleteAttributesError {
 impl From<XmlParseError> for BatchDeleteAttributesError {
     fn from(err: XmlParseError) -> BatchDeleteAttributesError {
         let XmlParseError(message) = err;
-        BatchDeleteAttributesError::Unknown(message.to_string())
+        BatchDeleteAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for BatchDeleteAttributesError {
@@ -1087,7 +1091,8 @@ impl Error for BatchDeleteAttributesError {
             BatchDeleteAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            BatchDeleteAttributesError::Unknown(ref cause) => cause,
+            BatchDeleteAttributesError::ParseError(ref cause) => cause,
+            BatchDeleteAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1118,56 +1123,70 @@ pub enum BatchPutAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchPutAttributesError {
-    pub fn from_body(body: &str) -> BatchPutAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DuplicateItemName" => {
-                    BatchPutAttributesError::DuplicateItemName(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> BatchPutAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DuplicateItemName" => {
+                        return BatchPutAttributesError::DuplicateItemName(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return BatchPutAttributesError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return BatchPutAttributesError::MissingParameter(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDomain" => {
+                        return BatchPutAttributesError::NoSuchDomain(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NumberDomainAttributesExceeded" => {
+                        return BatchPutAttributesError::NumberDomainAttributesExceeded(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NumberDomainBytesExceeded" => {
+                        return BatchPutAttributesError::NumberDomainBytesExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NumberItemAttributesExceeded" => {
+                        return BatchPutAttributesError::NumberItemAttributesExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NumberSubmittedAttributesExceeded" => {
+                        return BatchPutAttributesError::NumberSubmittedAttributesExceeded(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NumberSubmittedItemsExceeded" => {
+                        return BatchPutAttributesError::NumberSubmittedItemsExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => BatchPutAttributesError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                "MissingParameter" => {
-                    BatchPutAttributesError::MissingParameter(String::from(parsed_error.message))
-                }
-                "NoSuchDomain" => {
-                    BatchPutAttributesError::NoSuchDomain(String::from(parsed_error.message))
-                }
-                "NumberDomainAttributesExceeded" => {
-                    BatchPutAttributesError::NumberDomainAttributesExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NumberDomainBytesExceeded" => BatchPutAttributesError::NumberDomainBytesExceeded(
-                    String::from(parsed_error.message),
-                ),
-                "NumberItemAttributesExceeded" => {
-                    BatchPutAttributesError::NumberItemAttributesExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NumberSubmittedAttributesExceeded" => {
-                    BatchPutAttributesError::NumberSubmittedAttributesExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NumberSubmittedItemsExceeded" => {
-                    BatchPutAttributesError::NumberSubmittedItemsExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => BatchPutAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => BatchPutAttributesError::Unknown(body.to_string()),
+            }
         }
+        BatchPutAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1182,7 +1201,7 @@ impl BatchPutAttributesError {
 impl From<XmlParseError> for BatchPutAttributesError {
     fn from(err: XmlParseError) -> BatchPutAttributesError {
         let XmlParseError(message) = err;
-        BatchPutAttributesError::Unknown(message.to_string())
+        BatchPutAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for BatchPutAttributesError {
@@ -1222,7 +1241,8 @@ impl Error for BatchPutAttributesError {
             BatchPutAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            BatchPutAttributesError::Unknown(ref cause) => cause,
+            BatchPutAttributesError::ParseError(ref cause) => cause,
+            BatchPutAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1241,30 +1261,40 @@ pub enum CreateDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDomainError {
-    pub fn from_body(body: &str) -> CreateDomainError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterValue" => {
-                    CreateDomainError::InvalidParameterValue(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDomainError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterValue" => {
+                        return CreateDomainError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return CreateDomainError::MissingParameter(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NumberDomainsExceeded" => {
+                        return CreateDomainError::NumberDomainsExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "MissingParameter" => {
-                    CreateDomainError::MissingParameter(String::from(parsed_error.message))
-                }
-                "NumberDomainsExceeded" => {
-                    CreateDomainError::NumberDomainsExceeded(String::from(parsed_error.message))
-                }
-                _ => CreateDomainError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateDomainError::Unknown(body.to_string()),
+            }
         }
+        CreateDomainError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1279,7 +1309,7 @@ impl CreateDomainError {
 impl From<XmlParseError> for CreateDomainError {
     fn from(err: XmlParseError) -> CreateDomainError {
         let XmlParseError(message) = err;
-        CreateDomainError::Unknown(message.to_string())
+        CreateDomainError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateDomainError {
@@ -1311,7 +1341,8 @@ impl Error for CreateDomainError {
             CreateDomainError::Validation(ref cause) => cause,
             CreateDomainError::Credentials(ref err) => err.description(),
             CreateDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDomainError::Unknown(ref cause) => cause,
+            CreateDomainError::ParseError(ref cause) => cause,
+            CreateDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1332,33 +1363,45 @@ pub enum DeleteAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAttributesError {
-    pub fn from_body(body: &str) -> DeleteAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AttributeDoesNotExist" => {
-                    DeleteAttributesError::AttributeDoesNotExist(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AttributeDoesNotExist" => {
+                        return DeleteAttributesError::AttributeDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return DeleteAttributesError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return DeleteAttributesError::MissingParameter(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDomain" => {
+                        return DeleteAttributesError::NoSuchDomain(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => {
-                    DeleteAttributesError::InvalidParameterValue(String::from(parsed_error.message))
-                }
-                "MissingParameter" => {
-                    DeleteAttributesError::MissingParameter(String::from(parsed_error.message))
-                }
-                "NoSuchDomain" => {
-                    DeleteAttributesError::NoSuchDomain(String::from(parsed_error.message))
-                }
-                _ => DeleteAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteAttributesError::Unknown(body.to_string()),
+            }
         }
+        DeleteAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1373,7 +1416,7 @@ impl DeleteAttributesError {
 impl From<XmlParseError> for DeleteAttributesError {
     fn from(err: XmlParseError) -> DeleteAttributesError {
         let XmlParseError(message) = err;
-        DeleteAttributesError::Unknown(message.to_string())
+        DeleteAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteAttributesError {
@@ -1406,7 +1449,8 @@ impl Error for DeleteAttributesError {
             DeleteAttributesError::Validation(ref cause) => cause,
             DeleteAttributesError::Credentials(ref err) => err.description(),
             DeleteAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteAttributesError::Unknown(ref cause) => cause,
+            DeleteAttributesError::ParseError(ref cause) => cause,
+            DeleteAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1421,24 +1465,30 @@ pub enum DeleteDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDomainError {
-    pub fn from_body(body: &str) -> DeleteDomainError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "MissingParameter" => {
-                    DeleteDomainError::MissingParameter(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDomainError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "MissingParameter" => {
+                        return DeleteDomainError::MissingParameter(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DeleteDomainError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteDomainError::Unknown(body.to_string()),
+            }
         }
+        DeleteDomainError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1453,7 +1503,7 @@ impl DeleteDomainError {
 impl From<XmlParseError> for DeleteDomainError {
     fn from(err: XmlParseError) -> DeleteDomainError {
         let XmlParseError(message) = err;
-        DeleteDomainError::Unknown(message.to_string())
+        DeleteDomainError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteDomainError {
@@ -1483,7 +1533,8 @@ impl Error for DeleteDomainError {
             DeleteDomainError::Validation(ref cause) => cause,
             DeleteDomainError::Credentials(ref err) => err.description(),
             DeleteDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDomainError::Unknown(ref cause) => cause,
+            DeleteDomainError::ParseError(ref cause) => cause,
+            DeleteDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1500,27 +1551,33 @@ pub enum DomainMetadataError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DomainMetadataError {
-    pub fn from_body(body: &str) -> DomainMetadataError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "MissingParameter" => {
-                    DomainMetadataError::MissingParameter(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DomainMetadataError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "MissingParameter" => {
+                        return DomainMetadataError::MissingParameter(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDomain" => {
+                        return DomainMetadataError::NoSuchDomain(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "NoSuchDomain" => {
-                    DomainMetadataError::NoSuchDomain(String::from(parsed_error.message))
-                }
-                _ => DomainMetadataError::Unknown(String::from(body)),
-            },
-            Err(_) => DomainMetadataError::Unknown(body.to_string()),
+            }
         }
+        DomainMetadataError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1535,7 +1592,7 @@ impl DomainMetadataError {
 impl From<XmlParseError> for DomainMetadataError {
     fn from(err: XmlParseError) -> DomainMetadataError {
         let XmlParseError(message) = err;
-        DomainMetadataError::Unknown(message.to_string())
+        DomainMetadataError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DomainMetadataError {
@@ -1566,7 +1623,8 @@ impl Error for DomainMetadataError {
             DomainMetadataError::Validation(ref cause) => cause,
             DomainMetadataError::Credentials(ref err) => err.description(),
             DomainMetadataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DomainMetadataError::Unknown(ref cause) => cause,
+            DomainMetadataError::ParseError(ref cause) => cause,
+            DomainMetadataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1585,30 +1643,38 @@ pub enum GetAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAttributesError {
-    pub fn from_body(body: &str) -> GetAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterValue" => {
-                    GetAttributesError::InvalidParameterValue(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterValue" => {
+                        return GetAttributesError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return GetAttributesError::MissingParameter(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDomain" => {
+                        return GetAttributesError::NoSuchDomain(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "MissingParameter" => {
-                    GetAttributesError::MissingParameter(String::from(parsed_error.message))
-                }
-                "NoSuchDomain" => {
-                    GetAttributesError::NoSuchDomain(String::from(parsed_error.message))
-                }
-                _ => GetAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => GetAttributesError::Unknown(body.to_string()),
+            }
         }
+        GetAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1623,7 +1689,7 @@ impl GetAttributesError {
 impl From<XmlParseError> for GetAttributesError {
     fn from(err: XmlParseError) -> GetAttributesError {
         let XmlParseError(message) = err;
-        GetAttributesError::Unknown(message.to_string())
+        GetAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetAttributesError {
@@ -1655,7 +1721,8 @@ impl Error for GetAttributesError {
             GetAttributesError::Validation(ref cause) => cause,
             GetAttributesError::Credentials(ref err) => err.description(),
             GetAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetAttributesError::Unknown(ref cause) => cause,
+            GetAttributesError::ParseError(ref cause) => cause,
+            GetAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1672,27 +1739,35 @@ pub enum ListDomainsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDomainsError {
-    pub fn from_body(body: &str) -> ListDomainsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => {
-                    ListDomainsError::InvalidNextToken(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListDomainsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return ListDomainsError::InvalidNextToken(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return ListDomainsError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => {
-                    ListDomainsError::InvalidParameterValue(String::from(parsed_error.message))
-                }
-                _ => ListDomainsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListDomainsError::Unknown(body.to_string()),
+            }
         }
+        ListDomainsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1707,7 +1782,7 @@ impl ListDomainsError {
 impl From<XmlParseError> for ListDomainsError {
     fn from(err: XmlParseError) -> ListDomainsError {
         let XmlParseError(message) = err;
-        ListDomainsError::Unknown(message.to_string())
+        ListDomainsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListDomainsError {
@@ -1738,7 +1813,8 @@ impl Error for ListDomainsError {
             ListDomainsError::Validation(ref cause) => cause,
             ListDomainsError::Credentials(ref err) => err.description(),
             ListDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDomainsError::Unknown(ref cause) => cause,
+            ListDomainsError::ParseError(ref cause) => cause,
+            ListDomainsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1765,44 +1841,58 @@ pub enum PutAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutAttributesError {
-    pub fn from_body(body: &str) -> PutAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AttributeDoesNotExist" => {
-                    PutAttributesError::AttributeDoesNotExist(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> PutAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AttributeDoesNotExist" => {
+                        return PutAttributesError::AttributeDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return PutAttributesError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return PutAttributesError::MissingParameter(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDomain" => {
+                        return PutAttributesError::NoSuchDomain(String::from(parsed_error.message))
+                    }
+                    "NumberDomainAttributesExceeded" => {
+                        return PutAttributesError::NumberDomainAttributesExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NumberDomainBytesExceeded" => {
+                        return PutAttributesError::NumberDomainBytesExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NumberItemAttributesExceeded" => {
+                        return PutAttributesError::NumberItemAttributesExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => {
-                    PutAttributesError::InvalidParameterValue(String::from(parsed_error.message))
-                }
-                "MissingParameter" => {
-                    PutAttributesError::MissingParameter(String::from(parsed_error.message))
-                }
-                "NoSuchDomain" => {
-                    PutAttributesError::NoSuchDomain(String::from(parsed_error.message))
-                }
-                "NumberDomainAttributesExceeded" => {
-                    PutAttributesError::NumberDomainAttributesExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NumberDomainBytesExceeded" => PutAttributesError::NumberDomainBytesExceeded(
-                    String::from(parsed_error.message),
-                ),
-                "NumberItemAttributesExceeded" => PutAttributesError::NumberItemAttributesExceeded(
-                    String::from(parsed_error.message),
-                ),
-                _ => PutAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => PutAttributesError::Unknown(body.to_string()),
+            }
         }
+        PutAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1817,7 +1907,7 @@ impl PutAttributesError {
 impl From<XmlParseError> for PutAttributesError {
     fn from(err: XmlParseError) -> PutAttributesError {
         let XmlParseError(message) = err;
-        PutAttributesError::Unknown(message.to_string())
+        PutAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutAttributesError {
@@ -1853,7 +1943,8 @@ impl Error for PutAttributesError {
             PutAttributesError::Validation(ref cause) => cause,
             PutAttributesError::Credentials(ref err) => err.description(),
             PutAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutAttributesError::Unknown(ref cause) => cause,
+            PutAttributesError::ParseError(ref cause) => cause,
+            PutAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1884,44 +1975,62 @@ pub enum SelectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SelectError {
-    pub fn from_body(body: &str) -> SelectError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => {
-                    SelectError::InvalidNextToken(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> SelectError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return SelectError::InvalidNextToken(String::from(parsed_error.message))
+                    }
+                    "InvalidNumberPredicates" => {
+                        return SelectError::InvalidNumberPredicates(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidNumberValueTests" => {
+                        return SelectError::InvalidNumberValueTests(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return SelectError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidQueryExpression" => {
+                        return SelectError::InvalidQueryExpression(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return SelectError::MissingParameter(String::from(parsed_error.message))
+                    }
+                    "NoSuchDomain" => {
+                        return SelectError::NoSuchDomain(String::from(parsed_error.message))
+                    }
+                    "RequestTimeout" => {
+                        return SelectError::RequestTimeout(String::from(parsed_error.message))
+                    }
+                    "TooManyRequestedAttributes" => {
+                        return SelectError::TooManyRequestedAttributes(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidNumberPredicates" => {
-                    SelectError::InvalidNumberPredicates(String::from(parsed_error.message))
-                }
-                "InvalidNumberValueTests" => {
-                    SelectError::InvalidNumberValueTests(String::from(parsed_error.message))
-                }
-                "InvalidParameterValue" => {
-                    SelectError::InvalidParameterValue(String::from(parsed_error.message))
-                }
-                "InvalidQueryExpression" => {
-                    SelectError::InvalidQueryExpression(String::from(parsed_error.message))
-                }
-                "MissingParameter" => {
-                    SelectError::MissingParameter(String::from(parsed_error.message))
-                }
-                "NoSuchDomain" => SelectError::NoSuchDomain(String::from(parsed_error.message)),
-                "RequestTimeout" => SelectError::RequestTimeout(String::from(parsed_error.message)),
-                "TooManyRequestedAttributes" => {
-                    SelectError::TooManyRequestedAttributes(String::from(parsed_error.message))
-                }
-                _ => SelectError::Unknown(String::from(body)),
-            },
-            Err(_) => SelectError::Unknown(body.to_string()),
+            }
         }
+        SelectError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1936,7 +2045,7 @@ impl SelectError {
 impl From<XmlParseError> for SelectError {
     fn from(err: XmlParseError) -> SelectError {
         let XmlParseError(message) = err;
-        SelectError::Unknown(message.to_string())
+        SelectError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SelectError {
@@ -1974,7 +2083,8 @@ impl Error for SelectError {
             SelectError::Validation(ref cause) => cause,
             SelectError::Credentials(ref err) => err.description(),
             SelectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SelectError::Unknown(ref cause) => cause,
+            SelectError::ParseError(ref cause) => cause,
+            SelectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2082,11 +2192,11 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchDeleteAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(BatchDeleteAttributesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -2111,11 +2221,12 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchPutAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchPutAttributesError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -2137,11 +2248,12 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateDomainError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -2166,11 +2278,12 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteAttributesError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -2192,11 +2305,12 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteDomainError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -2221,11 +2335,12 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DomainMetadataError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DomainMetadataError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -2273,11 +2388,12 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetAttributesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -2325,11 +2441,12 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDomainsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListDomainsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -2374,11 +2491,12 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutAttributesError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -2400,11 +2518,12 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SelectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SelectError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

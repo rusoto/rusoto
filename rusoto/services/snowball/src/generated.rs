@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>The address that you want the Snowball or Snowballs associated with a specific job to be shipped to. Addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. Although no individual elements of the <code>Address</code> are required, if the address is invalid or unsupported, then an exception is thrown.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -902,47 +902,47 @@ pub enum CancelClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CancelClusterError {
-    pub fn from_body(body: &str) -> CancelClusterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CancelClusterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidJobStateException" => {
-                        CancelClusterError::InvalidJobState(String::from(error_message))
-                    }
-                    "InvalidResourceException" => {
-                        CancelClusterError::InvalidResource(String::from(error_message))
-                    }
-                    "KMSRequestFailedException" => {
-                        CancelClusterError::KMSRequestFailed(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CancelClusterError::Validation(error_message.to_string())
-                    }
-                    _ => CancelClusterError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidJobStateException" => {
+                    return CancelClusterError::InvalidJobState(String::from(error_message))
                 }
+                "InvalidResourceException" => {
+                    return CancelClusterError::InvalidResource(String::from(error_message))
+                }
+                "KMSRequestFailedException" => {
+                    return CancelClusterError::KMSRequestFailed(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CancelClusterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CancelClusterError::Unknown(String::from(body)),
         }
+        return CancelClusterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CancelClusterError {
     fn from(err: serde_json::error::Error) -> CancelClusterError {
-        CancelClusterError::Unknown(err.description().to_string())
+        CancelClusterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CancelClusterError {
@@ -974,7 +974,8 @@ impl Error for CancelClusterError {
             CancelClusterError::Validation(ref cause) => cause,
             CancelClusterError::Credentials(ref err) => err.description(),
             CancelClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelClusterError::Unknown(ref cause) => cause,
+            CancelClusterError::ParseError(ref cause) => cause,
+            CancelClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -993,45 +994,47 @@ pub enum CancelJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CancelJobError {
-    pub fn from_body(body: &str) -> CancelJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CancelJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidJobStateException" => {
-                        CancelJobError::InvalidJobState(String::from(error_message))
-                    }
-                    "InvalidResourceException" => {
-                        CancelJobError::InvalidResource(String::from(error_message))
-                    }
-                    "KMSRequestFailedException" => {
-                        CancelJobError::KMSRequestFailed(String::from(error_message))
-                    }
-                    "ValidationException" => CancelJobError::Validation(error_message.to_string()),
-                    _ => CancelJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidJobStateException" => {
+                    return CancelJobError::InvalidJobState(String::from(error_message))
                 }
+                "InvalidResourceException" => {
+                    return CancelJobError::InvalidResource(String::from(error_message))
+                }
+                "KMSRequestFailedException" => {
+                    return CancelJobError::KMSRequestFailed(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CancelJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CancelJobError::Unknown(String::from(body)),
         }
+        return CancelJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CancelJobError {
     fn from(err: serde_json::error::Error) -> CancelJobError {
-        CancelJobError::Unknown(err.description().to_string())
+        CancelJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CancelJobError {
@@ -1063,7 +1066,8 @@ impl Error for CancelJobError {
             CancelJobError::Validation(ref cause) => cause,
             CancelJobError::Credentials(ref err) => err.description(),
             CancelJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelJobError::Unknown(ref cause) => cause,
+            CancelJobError::ParseError(ref cause) => cause,
+            CancelJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1080,44 +1084,44 @@ pub enum CreateAddressError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAddressError {
-    pub fn from_body(body: &str) -> CreateAddressError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateAddressError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidAddressException" => {
-                        CreateAddressError::InvalidAddress(String::from(error_message))
-                    }
-                    "UnsupportedAddressException" => {
-                        CreateAddressError::UnsupportedAddress(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateAddressError::Validation(error_message.to_string())
-                    }
-                    _ => CreateAddressError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidAddressException" => {
+                    return CreateAddressError::InvalidAddress(String::from(error_message))
                 }
+                "UnsupportedAddressException" => {
+                    return CreateAddressError::UnsupportedAddress(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateAddressError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateAddressError::Unknown(String::from(body)),
         }
+        return CreateAddressError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateAddressError {
     fn from(err: serde_json::error::Error) -> CreateAddressError {
-        CreateAddressError::Unknown(err.description().to_string())
+        CreateAddressError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateAddressError {
@@ -1148,7 +1152,8 @@ impl Error for CreateAddressError {
             CreateAddressError::Validation(ref cause) => cause,
             CreateAddressError::Credentials(ref err) => err.description(),
             CreateAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateAddressError::Unknown(ref cause) => cause,
+            CreateAddressError::ParseError(ref cause) => cause,
+            CreateAddressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1169,50 +1174,50 @@ pub enum CreateClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterError {
-    pub fn from_body(body: &str) -> CreateClusterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "Ec2RequestFailedException" => {
-                        CreateClusterError::Ec2RequestFailed(String::from(error_message))
-                    }
-                    "InvalidInputCombinationException" => {
-                        CreateClusterError::InvalidInputCombination(String::from(error_message))
-                    }
-                    "InvalidResourceException" => {
-                        CreateClusterError::InvalidResource(String::from(error_message))
-                    }
-                    "KMSRequestFailedException" => {
-                        CreateClusterError::KMSRequestFailed(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateClusterError::Validation(error_message.to_string())
-                    }
-                    _ => CreateClusterError::Unknown(String::from(body)),
+            match *error_type {
+                "Ec2RequestFailedException" => {
+                    return CreateClusterError::Ec2RequestFailed(String::from(error_message))
                 }
+                "InvalidInputCombinationException" => {
+                    return CreateClusterError::InvalidInputCombination(String::from(error_message))
+                }
+                "InvalidResourceException" => {
+                    return CreateClusterError::InvalidResource(String::from(error_message))
+                }
+                "KMSRequestFailedException" => {
+                    return CreateClusterError::KMSRequestFailed(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateClusterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateClusterError::Unknown(String::from(body)),
         }
+        return CreateClusterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateClusterError {
     fn from(err: serde_json::error::Error) -> CreateClusterError {
-        CreateClusterError::Unknown(err.description().to_string())
+        CreateClusterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateClusterError {
@@ -1245,7 +1250,8 @@ impl Error for CreateClusterError {
             CreateClusterError::Validation(ref cause) => cause,
             CreateClusterError::Credentials(ref err) => err.description(),
             CreateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateClusterError::Unknown(ref cause) => cause,
+            CreateClusterError::ParseError(ref cause) => cause,
+            CreateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1268,51 +1274,53 @@ pub enum CreateJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateJobError {
-    pub fn from_body(body: &str) -> CreateJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterLimitExceededException" => {
-                        CreateJobError::ClusterLimitExceeded(String::from(error_message))
-                    }
-                    "Ec2RequestFailedException" => {
-                        CreateJobError::Ec2RequestFailed(String::from(error_message))
-                    }
-                    "InvalidInputCombinationException" => {
-                        CreateJobError::InvalidInputCombination(String::from(error_message))
-                    }
-                    "InvalidResourceException" => {
-                        CreateJobError::InvalidResource(String::from(error_message))
-                    }
-                    "KMSRequestFailedException" => {
-                        CreateJobError::KMSRequestFailed(String::from(error_message))
-                    }
-                    "ValidationException" => CreateJobError::Validation(error_message.to_string()),
-                    _ => CreateJobError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterLimitExceededException" => {
+                    return CreateJobError::ClusterLimitExceeded(String::from(error_message))
                 }
+                "Ec2RequestFailedException" => {
+                    return CreateJobError::Ec2RequestFailed(String::from(error_message))
+                }
+                "InvalidInputCombinationException" => {
+                    return CreateJobError::InvalidInputCombination(String::from(error_message))
+                }
+                "InvalidResourceException" => {
+                    return CreateJobError::InvalidResource(String::from(error_message))
+                }
+                "KMSRequestFailedException" => {
+                    return CreateJobError::KMSRequestFailed(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateJobError::Unknown(String::from(body)),
         }
+        return CreateJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateJobError {
     fn from(err: serde_json::error::Error) -> CreateJobError {
-        CreateJobError::Unknown(err.description().to_string())
+        CreateJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateJobError {
@@ -1346,7 +1354,8 @@ impl Error for CreateJobError {
             CreateJobError::Validation(ref cause) => cause,
             CreateJobError::Credentials(ref err) => err.description(),
             CreateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateJobError::Unknown(ref cause) => cause,
+            CreateJobError::ParseError(ref cause) => cause,
+            CreateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1361,41 +1370,41 @@ pub enum DescribeAddressError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAddressError {
-    pub fn from_body(body: &str) -> DescribeAddressError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAddressError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidResourceException" => {
-                        DescribeAddressError::InvalidResource(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeAddressError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeAddressError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidResourceException" => {
+                    return DescribeAddressError::InvalidResource(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DescribeAddressError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeAddressError::Unknown(String::from(body)),
         }
+        return DescribeAddressError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeAddressError {
     fn from(err: serde_json::error::Error) -> DescribeAddressError {
-        DescribeAddressError::Unknown(err.description().to_string())
+        DescribeAddressError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeAddressError {
@@ -1425,7 +1434,8 @@ impl Error for DescribeAddressError {
             DescribeAddressError::Validation(ref cause) => cause,
             DescribeAddressError::Credentials(ref err) => err.description(),
             DescribeAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeAddressError::Unknown(ref cause) => cause,
+            DescribeAddressError::ParseError(ref cause) => cause,
+            DescribeAddressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1442,44 +1452,44 @@ pub enum DescribeAddressesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAddressesError {
-    pub fn from_body(body: &str) -> DescribeAddressesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAddressesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        DescribeAddressesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "InvalidResourceException" => {
-                        DescribeAddressesError::InvalidResource(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeAddressesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeAddressesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return DescribeAddressesError::InvalidNextToken(String::from(error_message))
                 }
+                "InvalidResourceException" => {
+                    return DescribeAddressesError::InvalidResource(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeAddressesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeAddressesError::Unknown(String::from(body)),
         }
+        return DescribeAddressesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeAddressesError {
     fn from(err: serde_json::error::Error) -> DescribeAddressesError {
-        DescribeAddressesError::Unknown(err.description().to_string())
+        DescribeAddressesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeAddressesError {
@@ -1512,7 +1522,8 @@ impl Error for DescribeAddressesError {
             DescribeAddressesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAddressesError::Unknown(ref cause) => cause,
+            DescribeAddressesError::ParseError(ref cause) => cause,
+            DescribeAddressesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1527,41 +1538,41 @@ pub enum DescribeClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterError {
-    pub fn from_body(body: &str) -> DescribeClusterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidResourceException" => {
-                        DescribeClusterError::InvalidResource(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeClusterError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeClusterError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidResourceException" => {
+                    return DescribeClusterError::InvalidResource(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DescribeClusterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeClusterError::Unknown(String::from(body)),
         }
+        return DescribeClusterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeClusterError {
     fn from(err: serde_json::error::Error) -> DescribeClusterError {
-        DescribeClusterError::Unknown(err.description().to_string())
+        DescribeClusterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeClusterError {
@@ -1591,7 +1602,8 @@ impl Error for DescribeClusterError {
             DescribeClusterError::Validation(ref cause) => cause,
             DescribeClusterError::Credentials(ref err) => err.description(),
             DescribeClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeClusterError::Unknown(ref cause) => cause,
+            DescribeClusterError::ParseError(ref cause) => cause,
+            DescribeClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1606,41 +1618,41 @@ pub enum DescribeJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeJobError {
-    pub fn from_body(body: &str) -> DescribeJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidResourceException" => {
-                        DescribeJobError::InvalidResource(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeJobError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidResourceException" => {
+                    return DescribeJobError::InvalidResource(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DescribeJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeJobError::Unknown(String::from(body)),
         }
+        return DescribeJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeJobError {
     fn from(err: serde_json::error::Error) -> DescribeJobError {
-        DescribeJobError::Unknown(err.description().to_string())
+        DescribeJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeJobError {
@@ -1670,7 +1682,8 @@ impl Error for DescribeJobError {
             DescribeJobError::Validation(ref cause) => cause,
             DescribeJobError::Credentials(ref err) => err.description(),
             DescribeJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeJobError::Unknown(ref cause) => cause,
+            DescribeJobError::ParseError(ref cause) => cause,
+            DescribeJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1687,44 +1700,44 @@ pub enum GetJobManifestError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobManifestError {
-    pub fn from_body(body: &str) -> GetJobManifestError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetJobManifestError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidJobStateException" => {
-                        GetJobManifestError::InvalidJobState(String::from(error_message))
-                    }
-                    "InvalidResourceException" => {
-                        GetJobManifestError::InvalidResource(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetJobManifestError::Validation(error_message.to_string())
-                    }
-                    _ => GetJobManifestError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidJobStateException" => {
+                    return GetJobManifestError::InvalidJobState(String::from(error_message))
                 }
+                "InvalidResourceException" => {
+                    return GetJobManifestError::InvalidResource(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetJobManifestError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetJobManifestError::Unknown(String::from(body)),
         }
+        return GetJobManifestError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetJobManifestError {
     fn from(err: serde_json::error::Error) -> GetJobManifestError {
-        GetJobManifestError::Unknown(err.description().to_string())
+        GetJobManifestError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetJobManifestError {
@@ -1755,7 +1768,8 @@ impl Error for GetJobManifestError {
             GetJobManifestError::Validation(ref cause) => cause,
             GetJobManifestError::Credentials(ref err) => err.description(),
             GetJobManifestError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobManifestError::Unknown(ref cause) => cause,
+            GetJobManifestError::ParseError(ref cause) => cause,
+            GetJobManifestError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1772,44 +1786,44 @@ pub enum GetJobUnlockCodeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobUnlockCodeError {
-    pub fn from_body(body: &str) -> GetJobUnlockCodeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetJobUnlockCodeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidJobStateException" => {
-                        GetJobUnlockCodeError::InvalidJobState(String::from(error_message))
-                    }
-                    "InvalidResourceException" => {
-                        GetJobUnlockCodeError::InvalidResource(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetJobUnlockCodeError::Validation(error_message.to_string())
-                    }
-                    _ => GetJobUnlockCodeError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidJobStateException" => {
+                    return GetJobUnlockCodeError::InvalidJobState(String::from(error_message))
                 }
+                "InvalidResourceException" => {
+                    return GetJobUnlockCodeError::InvalidResource(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetJobUnlockCodeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetJobUnlockCodeError::Unknown(String::from(body)),
         }
+        return GetJobUnlockCodeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetJobUnlockCodeError {
     fn from(err: serde_json::error::Error) -> GetJobUnlockCodeError {
-        GetJobUnlockCodeError::Unknown(err.description().to_string())
+        GetJobUnlockCodeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetJobUnlockCodeError {
@@ -1840,7 +1854,8 @@ impl Error for GetJobUnlockCodeError {
             GetJobUnlockCodeError::Validation(ref cause) => cause,
             GetJobUnlockCodeError::Credentials(ref err) => err.description(),
             GetJobUnlockCodeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobUnlockCodeError::Unknown(ref cause) => cause,
+            GetJobUnlockCodeError::ParseError(ref cause) => cause,
+            GetJobUnlockCodeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1853,38 +1868,38 @@ pub enum GetSnowballUsageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSnowballUsageError {
-    pub fn from_body(body: &str) -> GetSnowballUsageError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetSnowballUsageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        GetSnowballUsageError::Validation(error_message.to_string())
-                    }
-                    _ => GetSnowballUsageError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return GetSnowballUsageError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => GetSnowballUsageError::Unknown(String::from(body)),
         }
+        return GetSnowballUsageError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetSnowballUsageError {
     fn from(err: serde_json::error::Error) -> GetSnowballUsageError {
-        GetSnowballUsageError::Unknown(err.description().to_string())
+        GetSnowballUsageError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetSnowballUsageError {
@@ -1913,7 +1928,8 @@ impl Error for GetSnowballUsageError {
             GetSnowballUsageError::Validation(ref cause) => cause,
             GetSnowballUsageError::Credentials(ref err) => err.description(),
             GetSnowballUsageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSnowballUsageError::Unknown(ref cause) => cause,
+            GetSnowballUsageError::ParseError(ref cause) => cause,
+            GetSnowballUsageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1930,44 +1946,44 @@ pub enum ListClusterJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListClusterJobsError {
-    pub fn from_body(body: &str) -> ListClusterJobsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListClusterJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListClusterJobsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "InvalidResourceException" => {
-                        ListClusterJobsError::InvalidResource(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListClusterJobsError::Validation(error_message.to_string())
-                    }
-                    _ => ListClusterJobsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListClusterJobsError::InvalidNextToken(String::from(error_message))
                 }
+                "InvalidResourceException" => {
+                    return ListClusterJobsError::InvalidResource(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListClusterJobsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListClusterJobsError::Unknown(String::from(body)),
         }
+        return ListClusterJobsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListClusterJobsError {
     fn from(err: serde_json::error::Error) -> ListClusterJobsError {
-        ListClusterJobsError::Unknown(err.description().to_string())
+        ListClusterJobsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListClusterJobsError {
@@ -1998,7 +2014,8 @@ impl Error for ListClusterJobsError {
             ListClusterJobsError::Validation(ref cause) => cause,
             ListClusterJobsError::Credentials(ref err) => err.description(),
             ListClusterJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListClusterJobsError::Unknown(ref cause) => cause,
+            ListClusterJobsError::ParseError(ref cause) => cause,
+            ListClusterJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2013,41 +2030,41 @@ pub enum ListClustersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListClustersError {
-    pub fn from_body(body: &str) -> ListClustersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListClustersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListClustersError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListClustersError::Validation(error_message.to_string())
-                    }
-                    _ => ListClustersError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListClustersError::InvalidNextToken(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListClustersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListClustersError::Unknown(String::from(body)),
         }
+        return ListClustersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListClustersError {
     fn from(err: serde_json::error::Error) -> ListClustersError {
-        ListClustersError::Unknown(err.description().to_string())
+        ListClustersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListClustersError {
@@ -2077,7 +2094,8 @@ impl Error for ListClustersError {
             ListClustersError::Validation(ref cause) => cause,
             ListClustersError::Credentials(ref err) => err.description(),
             ListClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListClustersError::Unknown(ref cause) => cause,
+            ListClustersError::ParseError(ref cause) => cause,
+            ListClustersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2094,44 +2112,44 @@ pub enum ListCompatibleImagesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListCompatibleImagesError {
-    pub fn from_body(body: &str) -> ListCompatibleImagesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListCompatibleImagesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "Ec2RequestFailedException" => {
-                        ListCompatibleImagesError::Ec2RequestFailed(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListCompatibleImagesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListCompatibleImagesError::Validation(error_message.to_string())
-                    }
-                    _ => ListCompatibleImagesError::Unknown(String::from(body)),
+            match *error_type {
+                "Ec2RequestFailedException" => {
+                    return ListCompatibleImagesError::Ec2RequestFailed(String::from(error_message))
                 }
+                "InvalidNextTokenException" => {
+                    return ListCompatibleImagesError::InvalidNextToken(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListCompatibleImagesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListCompatibleImagesError::Unknown(String::from(body)),
         }
+        return ListCompatibleImagesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListCompatibleImagesError {
     fn from(err: serde_json::error::Error) -> ListCompatibleImagesError {
-        ListCompatibleImagesError::Unknown(err.description().to_string())
+        ListCompatibleImagesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListCompatibleImagesError {
@@ -2164,7 +2182,8 @@ impl Error for ListCompatibleImagesError {
             ListCompatibleImagesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListCompatibleImagesError::Unknown(ref cause) => cause,
+            ListCompatibleImagesError::ParseError(ref cause) => cause,
+            ListCompatibleImagesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2179,39 +2198,41 @@ pub enum ListJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListJobsError {
-    pub fn from_body(body: &str) -> ListJobsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListJobsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ValidationException" => ListJobsError::Validation(error_message.to_string()),
-                    _ => ListJobsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListJobsError::InvalidNextToken(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListJobsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListJobsError::Unknown(String::from(body)),
         }
+        return ListJobsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListJobsError {
     fn from(err: serde_json::error::Error) -> ListJobsError {
-        ListJobsError::Unknown(err.description().to_string())
+        ListJobsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListJobsError {
@@ -2241,7 +2262,8 @@ impl Error for ListJobsError {
             ListJobsError::Validation(ref cause) => cause,
             ListJobsError::Credentials(ref err) => err.description(),
             ListJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListJobsError::Unknown(ref cause) => cause,
+            ListJobsError::ParseError(ref cause) => cause,
+            ListJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2264,53 +2286,53 @@ pub enum UpdateClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateClusterError {
-    pub fn from_body(body: &str) -> UpdateClusterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateClusterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "Ec2RequestFailedException" => {
-                        UpdateClusterError::Ec2RequestFailed(String::from(error_message))
-                    }
-                    "InvalidInputCombinationException" => {
-                        UpdateClusterError::InvalidInputCombination(String::from(error_message))
-                    }
-                    "InvalidJobStateException" => {
-                        UpdateClusterError::InvalidJobState(String::from(error_message))
-                    }
-                    "InvalidResourceException" => {
-                        UpdateClusterError::InvalidResource(String::from(error_message))
-                    }
-                    "KMSRequestFailedException" => {
-                        UpdateClusterError::KMSRequestFailed(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateClusterError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateClusterError::Unknown(String::from(body)),
+            match *error_type {
+                "Ec2RequestFailedException" => {
+                    return UpdateClusterError::Ec2RequestFailed(String::from(error_message))
                 }
+                "InvalidInputCombinationException" => {
+                    return UpdateClusterError::InvalidInputCombination(String::from(error_message))
+                }
+                "InvalidJobStateException" => {
+                    return UpdateClusterError::InvalidJobState(String::from(error_message))
+                }
+                "InvalidResourceException" => {
+                    return UpdateClusterError::InvalidResource(String::from(error_message))
+                }
+                "KMSRequestFailedException" => {
+                    return UpdateClusterError::KMSRequestFailed(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateClusterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateClusterError::Unknown(String::from(body)),
         }
+        return UpdateClusterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateClusterError {
     fn from(err: serde_json::error::Error) -> UpdateClusterError {
-        UpdateClusterError::Unknown(err.description().to_string())
+        UpdateClusterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateClusterError {
@@ -2344,7 +2366,8 @@ impl Error for UpdateClusterError {
             UpdateClusterError::Validation(ref cause) => cause,
             UpdateClusterError::Credentials(ref err) => err.description(),
             UpdateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateClusterError::Unknown(ref cause) => cause,
+            UpdateClusterError::ParseError(ref cause) => cause,
+            UpdateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2369,54 +2392,56 @@ pub enum UpdateJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateJobError {
-    pub fn from_body(body: &str) -> UpdateJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterLimitExceededException" => {
-                        UpdateJobError::ClusterLimitExceeded(String::from(error_message))
-                    }
-                    "Ec2RequestFailedException" => {
-                        UpdateJobError::Ec2RequestFailed(String::from(error_message))
-                    }
-                    "InvalidInputCombinationException" => {
-                        UpdateJobError::InvalidInputCombination(String::from(error_message))
-                    }
-                    "InvalidJobStateException" => {
-                        UpdateJobError::InvalidJobState(String::from(error_message))
-                    }
-                    "InvalidResourceException" => {
-                        UpdateJobError::InvalidResource(String::from(error_message))
-                    }
-                    "KMSRequestFailedException" => {
-                        UpdateJobError::KMSRequestFailed(String::from(error_message))
-                    }
-                    "ValidationException" => UpdateJobError::Validation(error_message.to_string()),
-                    _ => UpdateJobError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterLimitExceededException" => {
+                    return UpdateJobError::ClusterLimitExceeded(String::from(error_message))
                 }
+                "Ec2RequestFailedException" => {
+                    return UpdateJobError::Ec2RequestFailed(String::from(error_message))
+                }
+                "InvalidInputCombinationException" => {
+                    return UpdateJobError::InvalidInputCombination(String::from(error_message))
+                }
+                "InvalidJobStateException" => {
+                    return UpdateJobError::InvalidJobState(String::from(error_message))
+                }
+                "InvalidResourceException" => {
+                    return UpdateJobError::InvalidResource(String::from(error_message))
+                }
+                "KMSRequestFailedException" => {
+                    return UpdateJobError::KMSRequestFailed(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateJobError::Unknown(String::from(body)),
         }
+        return UpdateJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateJobError {
     fn from(err: serde_json::error::Error) -> UpdateJobError {
-        UpdateJobError::Unknown(err.description().to_string())
+        UpdateJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateJobError {
@@ -2451,7 +2476,8 @@ impl Error for UpdateJobError {
             UpdateJobError::Validation(ref cause) => cause,
             UpdateJobError::Credentials(ref err) => err.description(),
             UpdateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateJobError::Unknown(ref cause) => cause,
+            UpdateJobError::ParseError(ref cause) => cause,
+            UpdateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2612,14 +2638,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<CancelClusterResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CancelClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CancelClusterError::from_response(response))),
+                )
             }
         })
     }
@@ -2647,14 +2675,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<CancelJobResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CancelJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CancelJobError::from_response(response))),
+                )
             }
         })
     }
@@ -2685,14 +2715,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<CreateAddressResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateAddressError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateAddressError::from_response(response))),
+                )
             }
         })
     }
@@ -2723,14 +2755,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<CreateClusterResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateClusterError::from_response(response))),
+                )
             }
         })
     }
@@ -2758,14 +2792,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<CreateJobResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateJobError::from_response(response))),
+                )
             }
         })
     }
@@ -2796,14 +2832,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<DescribeAddressResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAddressError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeAddressError::from_response(response))),
+                )
             }
         })
     }
@@ -2834,14 +2872,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<DescribeAddressesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAddressesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeAddressesError::from_response(response))),
+                )
             }
         })
     }
@@ -2872,14 +2912,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<DescribeClusterResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeClusterError::from_response(response))),
+                )
             }
         })
     }
@@ -2910,14 +2952,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<DescribeJobResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeJobError::from_response(response))),
+                )
             }
         })
     }
@@ -2948,14 +2992,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<GetJobManifestResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetJobManifestError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetJobManifestError::from_response(response))),
+                )
             }
         })
     }
@@ -2986,14 +3032,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<GetJobUnlockCodeResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetJobUnlockCodeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetJobUnlockCodeError::from_response(response))),
+                )
             }
         })
     }
@@ -3020,14 +3068,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<GetSnowballUsageResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSnowballUsageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetSnowballUsageError::from_response(response))),
+                )
             }
         })
     }
@@ -3058,14 +3108,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<ListClusterJobsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListClusterJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListClusterJobsError::from_response(response))),
+                )
             }
         })
     }
@@ -3096,14 +3148,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<ListClustersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListClustersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListClustersError::from_response(response))),
+                )
             }
         })
     }
@@ -3134,14 +3188,15 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<ListCompatibleImagesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListCompatibleImagesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListCompatibleImagesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3166,14 +3221,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<ListJobsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListJobsError::from_response(response))),
+                )
             }
         })
     }
@@ -3204,14 +3261,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<UpdateClusterResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateClusterError::from_response(response))),
+                )
             }
         })
     }
@@ -3239,14 +3298,16 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<UpdateJobResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateJobError::from_response(response))),
+                )
             }
         })
     }

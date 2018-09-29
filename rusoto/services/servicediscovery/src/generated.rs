@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePrivateDnsNamespaceRequest {
@@ -774,54 +774,56 @@ pub enum CreatePrivateDnsNamespaceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePrivateDnsNamespaceError {
-    pub fn from_body(body: &str) -> CreatePrivateDnsNamespaceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePrivateDnsNamespaceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequest" => CreatePrivateDnsNamespaceError::DuplicateRequest(
-                        String::from(error_message),
-                    ),
-                    "InvalidInput" => {
-                        CreatePrivateDnsNamespaceError::InvalidInput(String::from(error_message))
-                    }
-                    "NamespaceAlreadyExists" => {
-                        CreatePrivateDnsNamespaceError::NamespaceAlreadyExists(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceLimitExceeded" => {
-                        CreatePrivateDnsNamespaceError::ResourceLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreatePrivateDnsNamespaceError::Validation(error_message.to_string())
-                    }
-                    _ => CreatePrivateDnsNamespaceError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequest" => {
+                    return CreatePrivateDnsNamespaceError::DuplicateRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidInput" => {
+                    return CreatePrivateDnsNamespaceError::InvalidInput(String::from(error_message))
+                }
+                "NamespaceAlreadyExists" => {
+                    return CreatePrivateDnsNamespaceError::NamespaceAlreadyExists(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceLimitExceeded" => {
+                    return CreatePrivateDnsNamespaceError::ResourceLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreatePrivateDnsNamespaceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreatePrivateDnsNamespaceError::Unknown(String::from(body)),
         }
+        return CreatePrivateDnsNamespaceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreatePrivateDnsNamespaceError {
     fn from(err: serde_json::error::Error) -> CreatePrivateDnsNamespaceError {
-        CreatePrivateDnsNamespaceError::Unknown(err.description().to_string())
+        CreatePrivateDnsNamespaceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreatePrivateDnsNamespaceError {
@@ -856,7 +858,8 @@ impl Error for CreatePrivateDnsNamespaceError {
             CreatePrivateDnsNamespaceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreatePrivateDnsNamespaceError::Unknown(ref cause) => cause,
+            CreatePrivateDnsNamespaceError::ParseError(ref cause) => cause,
+            CreatePrivateDnsNamespaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -877,54 +880,56 @@ pub enum CreatePublicDnsNamespaceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePublicDnsNamespaceError {
-    pub fn from_body(body: &str) -> CreatePublicDnsNamespaceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePublicDnsNamespaceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequest" => {
-                        CreatePublicDnsNamespaceError::DuplicateRequest(String::from(error_message))
-                    }
-                    "InvalidInput" => {
-                        CreatePublicDnsNamespaceError::InvalidInput(String::from(error_message))
-                    }
-                    "NamespaceAlreadyExists" => {
-                        CreatePublicDnsNamespaceError::NamespaceAlreadyExists(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceLimitExceeded" => {
-                        CreatePublicDnsNamespaceError::ResourceLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreatePublicDnsNamespaceError::Validation(error_message.to_string())
-                    }
-                    _ => CreatePublicDnsNamespaceError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequest" => {
+                    return CreatePublicDnsNamespaceError::DuplicateRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidInput" => {
+                    return CreatePublicDnsNamespaceError::InvalidInput(String::from(error_message))
+                }
+                "NamespaceAlreadyExists" => {
+                    return CreatePublicDnsNamespaceError::NamespaceAlreadyExists(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceLimitExceeded" => {
+                    return CreatePublicDnsNamespaceError::ResourceLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreatePublicDnsNamespaceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreatePublicDnsNamespaceError::Unknown(String::from(body)),
         }
+        return CreatePublicDnsNamespaceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreatePublicDnsNamespaceError {
     fn from(err: serde_json::error::Error) -> CreatePublicDnsNamespaceError {
-        CreatePublicDnsNamespaceError::Unknown(err.description().to_string())
+        CreatePublicDnsNamespaceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreatePublicDnsNamespaceError {
@@ -959,7 +964,8 @@ impl Error for CreatePublicDnsNamespaceError {
             CreatePublicDnsNamespaceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreatePublicDnsNamespaceError::Unknown(ref cause) => cause,
+            CreatePublicDnsNamespaceError::ParseError(ref cause) => cause,
+            CreatePublicDnsNamespaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -980,48 +986,50 @@ pub enum CreateServiceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateServiceError {
-    pub fn from_body(body: &str) -> CreateServiceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateServiceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => CreateServiceError::InvalidInput(String::from(error_message)),
-                    "NamespaceNotFound" => {
-                        CreateServiceError::NamespaceNotFound(String::from(error_message))
-                    }
-                    "ResourceLimitExceeded" => {
-                        CreateServiceError::ResourceLimitExceeded(String::from(error_message))
-                    }
-                    "ServiceAlreadyExists" => {
-                        CreateServiceError::ServiceAlreadyExists(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateServiceError::Validation(error_message.to_string())
-                    }
-                    _ => CreateServiceError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return CreateServiceError::InvalidInput(String::from(error_message))
                 }
+                "NamespaceNotFound" => {
+                    return CreateServiceError::NamespaceNotFound(String::from(error_message))
+                }
+                "ResourceLimitExceeded" => {
+                    return CreateServiceError::ResourceLimitExceeded(String::from(error_message))
+                }
+                "ServiceAlreadyExists" => {
+                    return CreateServiceError::ServiceAlreadyExists(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateServiceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateServiceError::Unknown(String::from(body)),
         }
+        return CreateServiceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateServiceError {
     fn from(err: serde_json::error::Error) -> CreateServiceError {
-        CreateServiceError::Unknown(err.description().to_string())
+        CreateServiceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateServiceError {
@@ -1054,7 +1062,8 @@ impl Error for CreateServiceError {
             CreateServiceError::Validation(ref cause) => cause,
             CreateServiceError::Credentials(ref err) => err.description(),
             CreateServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateServiceError::Unknown(ref cause) => cause,
+            CreateServiceError::ParseError(ref cause) => cause,
+            CreateServiceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1075,50 +1084,50 @@ pub enum DeleteNamespaceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteNamespaceError {
-    pub fn from_body(body: &str) -> DeleteNamespaceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteNamespaceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequest" => {
-                        DeleteNamespaceError::DuplicateRequest(String::from(error_message))
-                    }
-                    "InvalidInput" => {
-                        DeleteNamespaceError::InvalidInput(String::from(error_message))
-                    }
-                    "NamespaceNotFound" => {
-                        DeleteNamespaceError::NamespaceNotFound(String::from(error_message))
-                    }
-                    "ResourceInUse" => {
-                        DeleteNamespaceError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteNamespaceError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteNamespaceError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequest" => {
+                    return DeleteNamespaceError::DuplicateRequest(String::from(error_message))
                 }
+                "InvalidInput" => {
+                    return DeleteNamespaceError::InvalidInput(String::from(error_message))
+                }
+                "NamespaceNotFound" => {
+                    return DeleteNamespaceError::NamespaceNotFound(String::from(error_message))
+                }
+                "ResourceInUse" => {
+                    return DeleteNamespaceError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteNamespaceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteNamespaceError::Unknown(String::from(body)),
         }
+        return DeleteNamespaceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteNamespaceError {
     fn from(err: serde_json::error::Error) -> DeleteNamespaceError {
-        DeleteNamespaceError::Unknown(err.description().to_string())
+        DeleteNamespaceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteNamespaceError {
@@ -1151,7 +1160,8 @@ impl Error for DeleteNamespaceError {
             DeleteNamespaceError::Validation(ref cause) => cause,
             DeleteNamespaceError::Credentials(ref err) => err.description(),
             DeleteNamespaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteNamespaceError::Unknown(ref cause) => cause,
+            DeleteNamespaceError::ParseError(ref cause) => cause,
+            DeleteNamespaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1170,45 +1180,47 @@ pub enum DeleteServiceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteServiceError {
-    pub fn from_body(body: &str) -> DeleteServiceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteServiceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => DeleteServiceError::InvalidInput(String::from(error_message)),
-                    "ResourceInUse" => {
-                        DeleteServiceError::ResourceInUse(String::from(error_message))
-                    }
-                    "ServiceNotFound" => {
-                        DeleteServiceError::ServiceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteServiceError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteServiceError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return DeleteServiceError::InvalidInput(String::from(error_message))
                 }
+                "ResourceInUse" => {
+                    return DeleteServiceError::ResourceInUse(String::from(error_message))
+                }
+                "ServiceNotFound" => {
+                    return DeleteServiceError::ServiceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteServiceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteServiceError::Unknown(String::from(body)),
         }
+        return DeleteServiceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteServiceError {
     fn from(err: serde_json::error::Error) -> DeleteServiceError {
-        DeleteServiceError::Unknown(err.description().to_string())
+        DeleteServiceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteServiceError {
@@ -1240,7 +1252,8 @@ impl Error for DeleteServiceError {
             DeleteServiceError::Validation(ref cause) => cause,
             DeleteServiceError::Credentials(ref err) => err.description(),
             DeleteServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteServiceError::Unknown(ref cause) => cause,
+            DeleteServiceError::ParseError(ref cause) => cause,
+            DeleteServiceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1263,53 +1276,53 @@ pub enum DeregisterInstanceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterInstanceError {
-    pub fn from_body(body: &str) -> DeregisterInstanceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeregisterInstanceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequest" => {
-                        DeregisterInstanceError::DuplicateRequest(String::from(error_message))
-                    }
-                    "InstanceNotFound" => {
-                        DeregisterInstanceError::InstanceNotFound(String::from(error_message))
-                    }
-                    "InvalidInput" => {
-                        DeregisterInstanceError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceInUse" => {
-                        DeregisterInstanceError::ResourceInUse(String::from(error_message))
-                    }
-                    "ServiceNotFound" => {
-                        DeregisterInstanceError::ServiceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeregisterInstanceError::Validation(error_message.to_string())
-                    }
-                    _ => DeregisterInstanceError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequest" => {
+                    return DeregisterInstanceError::DuplicateRequest(String::from(error_message))
                 }
+                "InstanceNotFound" => {
+                    return DeregisterInstanceError::InstanceNotFound(String::from(error_message))
+                }
+                "InvalidInput" => {
+                    return DeregisterInstanceError::InvalidInput(String::from(error_message))
+                }
+                "ResourceInUse" => {
+                    return DeregisterInstanceError::ResourceInUse(String::from(error_message))
+                }
+                "ServiceNotFound" => {
+                    return DeregisterInstanceError::ServiceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeregisterInstanceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeregisterInstanceError::Unknown(String::from(body)),
         }
+        return DeregisterInstanceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeregisterInstanceError {
     fn from(err: serde_json::error::Error) -> DeregisterInstanceError {
-        DeregisterInstanceError::Unknown(err.description().to_string())
+        DeregisterInstanceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeregisterInstanceError {
@@ -1345,7 +1358,8 @@ impl Error for DeregisterInstanceError {
             DeregisterInstanceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeregisterInstanceError::Unknown(ref cause) => cause,
+            DeregisterInstanceError::ParseError(ref cause) => cause,
+            DeregisterInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1364,45 +1378,47 @@ pub enum GetInstanceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstanceError {
-    pub fn from_body(body: &str) -> GetInstanceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetInstanceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InstanceNotFound" => {
-                        GetInstanceError::InstanceNotFound(String::from(error_message))
-                    }
-                    "InvalidInput" => GetInstanceError::InvalidInput(String::from(error_message)),
-                    "ServiceNotFound" => {
-                        GetInstanceError::ServiceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetInstanceError::Validation(error_message.to_string())
-                    }
-                    _ => GetInstanceError::Unknown(String::from(body)),
+            match *error_type {
+                "InstanceNotFound" => {
+                    return GetInstanceError::InstanceNotFound(String::from(error_message))
                 }
+                "InvalidInput" => {
+                    return GetInstanceError::InvalidInput(String::from(error_message))
+                }
+                "ServiceNotFound" => {
+                    return GetInstanceError::ServiceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetInstanceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetInstanceError::Unknown(String::from(body)),
         }
+        return GetInstanceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetInstanceError {
     fn from(err: serde_json::error::Error) -> GetInstanceError {
-        GetInstanceError::Unknown(err.description().to_string())
+        GetInstanceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetInstanceError {
@@ -1434,7 +1450,8 @@ impl Error for GetInstanceError {
             GetInstanceError::Validation(ref cause) => cause,
             GetInstanceError::Credentials(ref err) => err.description(),
             GetInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetInstanceError::Unknown(ref cause) => cause,
+            GetInstanceError::ParseError(ref cause) => cause,
+            GetInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1453,47 +1470,51 @@ pub enum GetInstancesHealthStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstancesHealthStatusError {
-    pub fn from_body(body: &str) -> GetInstancesHealthStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetInstancesHealthStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InstanceNotFound" => {
-                        GetInstancesHealthStatusError::InstanceNotFound(String::from(error_message))
-                    }
-                    "InvalidInput" => {
-                        GetInstancesHealthStatusError::InvalidInput(String::from(error_message))
-                    }
-                    "ServiceNotFound" => {
-                        GetInstancesHealthStatusError::ServiceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetInstancesHealthStatusError::Validation(error_message.to_string())
-                    }
-                    _ => GetInstancesHealthStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "InstanceNotFound" => {
+                    return GetInstancesHealthStatusError::InstanceNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidInput" => {
+                    return GetInstancesHealthStatusError::InvalidInput(String::from(error_message))
+                }
+                "ServiceNotFound" => {
+                    return GetInstancesHealthStatusError::ServiceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetInstancesHealthStatusError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetInstancesHealthStatusError::Unknown(String::from(body)),
         }
+        return GetInstancesHealthStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetInstancesHealthStatusError {
     fn from(err: serde_json::error::Error) -> GetInstancesHealthStatusError {
-        GetInstancesHealthStatusError::Unknown(err.description().to_string())
+        GetInstancesHealthStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetInstancesHealthStatusError {
@@ -1527,7 +1548,8 @@ impl Error for GetInstancesHealthStatusError {
             GetInstancesHealthStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetInstancesHealthStatusError::Unknown(ref cause) => cause,
+            GetInstancesHealthStatusError::ParseError(ref cause) => cause,
+            GetInstancesHealthStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1544,42 +1566,44 @@ pub enum GetNamespaceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetNamespaceError {
-    pub fn from_body(body: &str) -> GetNamespaceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetNamespaceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => GetNamespaceError::InvalidInput(String::from(error_message)),
-                    "NamespaceNotFound" => {
-                        GetNamespaceError::NamespaceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetNamespaceError::Validation(error_message.to_string())
-                    }
-                    _ => GetNamespaceError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return GetNamespaceError::InvalidInput(String::from(error_message))
                 }
+                "NamespaceNotFound" => {
+                    return GetNamespaceError::NamespaceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetNamespaceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetNamespaceError::Unknown(String::from(body)),
         }
+        return GetNamespaceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetNamespaceError {
     fn from(err: serde_json::error::Error) -> GetNamespaceError {
-        GetNamespaceError::Unknown(err.description().to_string())
+        GetNamespaceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetNamespaceError {
@@ -1610,7 +1634,8 @@ impl Error for GetNamespaceError {
             GetNamespaceError::Validation(ref cause) => cause,
             GetNamespaceError::Credentials(ref err) => err.description(),
             GetNamespaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetNamespaceError::Unknown(ref cause) => cause,
+            GetNamespaceError::ParseError(ref cause) => cause,
+            GetNamespaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1625,41 +1650,41 @@ pub enum GetOperationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetOperationError {
-    pub fn from_body(body: &str) -> GetOperationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetOperationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotFound" => {
-                        GetOperationError::OperationNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetOperationError::Validation(error_message.to_string())
-                    }
-                    _ => GetOperationError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotFound" => {
+                    return GetOperationError::OperationNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetOperationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetOperationError::Unknown(String::from(body)),
         }
+        return GetOperationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetOperationError {
     fn from(err: serde_json::error::Error) -> GetOperationError {
-        GetOperationError::Unknown(err.description().to_string())
+        GetOperationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetOperationError {
@@ -1689,7 +1714,8 @@ impl Error for GetOperationError {
             GetOperationError::Validation(ref cause) => cause,
             GetOperationError::Credentials(ref err) => err.description(),
             GetOperationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetOperationError::Unknown(ref cause) => cause,
+            GetOperationError::ParseError(ref cause) => cause,
+            GetOperationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1706,40 +1732,42 @@ pub enum GetServiceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetServiceError {
-    pub fn from_body(body: &str) -> GetServiceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetServiceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => GetServiceError::InvalidInput(String::from(error_message)),
-                    "ServiceNotFound" => {
-                        GetServiceError::ServiceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => GetServiceError::Validation(error_message.to_string()),
-                    _ => GetServiceError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => return GetServiceError::InvalidInput(String::from(error_message)),
+                "ServiceNotFound" => {
+                    return GetServiceError::ServiceNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetServiceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetServiceError::Unknown(String::from(body)),
         }
+        return GetServiceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetServiceError {
     fn from(err: serde_json::error::Error) -> GetServiceError {
-        GetServiceError::Unknown(err.description().to_string())
+        GetServiceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetServiceError {
@@ -1770,7 +1798,8 @@ impl Error for GetServiceError {
             GetServiceError::Validation(ref cause) => cause,
             GetServiceError::Credentials(ref err) => err.description(),
             GetServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetServiceError::Unknown(ref cause) => cause,
+            GetServiceError::ParseError(ref cause) => cause,
+            GetServiceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1787,42 +1816,44 @@ pub enum ListInstancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListInstancesError {
-    pub fn from_body(body: &str) -> ListInstancesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListInstancesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => ListInstancesError::InvalidInput(String::from(error_message)),
-                    "ServiceNotFound" => {
-                        ListInstancesError::ServiceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListInstancesError::Validation(error_message.to_string())
-                    }
-                    _ => ListInstancesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return ListInstancesError::InvalidInput(String::from(error_message))
                 }
+                "ServiceNotFound" => {
+                    return ListInstancesError::ServiceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListInstancesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListInstancesError::Unknown(String::from(body)),
         }
+        return ListInstancesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListInstancesError {
     fn from(err: serde_json::error::Error) -> ListInstancesError {
-        ListInstancesError::Unknown(err.description().to_string())
+        ListInstancesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListInstancesError {
@@ -1853,7 +1884,8 @@ impl Error for ListInstancesError {
             ListInstancesError::Validation(ref cause) => cause,
             ListInstancesError::Credentials(ref err) => err.description(),
             ListInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListInstancesError::Unknown(ref cause) => cause,
+            ListInstancesError::ParseError(ref cause) => cause,
+            ListInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1868,41 +1900,41 @@ pub enum ListNamespacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListNamespacesError {
-    pub fn from_body(body: &str) -> ListNamespacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListNamespacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        ListNamespacesError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListNamespacesError::Validation(error_message.to_string())
-                    }
-                    _ => ListNamespacesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return ListNamespacesError::InvalidInput(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListNamespacesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListNamespacesError::Unknown(String::from(body)),
         }
+        return ListNamespacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListNamespacesError {
     fn from(err: serde_json::error::Error) -> ListNamespacesError {
-        ListNamespacesError::Unknown(err.description().to_string())
+        ListNamespacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListNamespacesError {
@@ -1932,7 +1964,8 @@ impl Error for ListNamespacesError {
             ListNamespacesError::Validation(ref cause) => cause,
             ListNamespacesError::Credentials(ref err) => err.description(),
             ListNamespacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListNamespacesError::Unknown(ref cause) => cause,
+            ListNamespacesError::ParseError(ref cause) => cause,
+            ListNamespacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1947,41 +1980,41 @@ pub enum ListOperationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListOperationsError {
-    pub fn from_body(body: &str) -> ListOperationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListOperationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        ListOperationsError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListOperationsError::Validation(error_message.to_string())
-                    }
-                    _ => ListOperationsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return ListOperationsError::InvalidInput(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListOperationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListOperationsError::Unknown(String::from(body)),
         }
+        return ListOperationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListOperationsError {
     fn from(err: serde_json::error::Error) -> ListOperationsError {
-        ListOperationsError::Unknown(err.description().to_string())
+        ListOperationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListOperationsError {
@@ -2011,7 +2044,8 @@ impl Error for ListOperationsError {
             ListOperationsError::Validation(ref cause) => cause,
             ListOperationsError::Credentials(ref err) => err.description(),
             ListOperationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListOperationsError::Unknown(ref cause) => cause,
+            ListOperationsError::ParseError(ref cause) => cause,
+            ListOperationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2026,39 +2060,41 @@ pub enum ListServicesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListServicesError {
-    pub fn from_body(body: &str) -> ListServicesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListServicesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => ListServicesError::InvalidInput(String::from(error_message)),
-                    "ValidationException" => {
-                        ListServicesError::Validation(error_message.to_string())
-                    }
-                    _ => ListServicesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return ListServicesError::InvalidInput(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListServicesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListServicesError::Unknown(String::from(body)),
         }
+        return ListServicesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListServicesError {
     fn from(err: serde_json::error::Error) -> ListServicesError {
-        ListServicesError::Unknown(err.description().to_string())
+        ListServicesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListServicesError {
@@ -2088,7 +2124,8 @@ impl Error for ListServicesError {
             ListServicesError::Validation(ref cause) => cause,
             ListServicesError::Credentials(ref err) => err.description(),
             ListServicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListServicesError::Unknown(ref cause) => cause,
+            ListServicesError::ParseError(ref cause) => cause,
+            ListServicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2111,53 +2148,53 @@ pub enum RegisterInstanceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterInstanceError {
-    pub fn from_body(body: &str) -> RegisterInstanceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterInstanceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequest" => {
-                        RegisterInstanceError::DuplicateRequest(String::from(error_message))
-                    }
-                    "InvalidInput" => {
-                        RegisterInstanceError::InvalidInput(String::from(error_message))
-                    }
-                    "ResourceInUse" => {
-                        RegisterInstanceError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceLimitExceeded" => {
-                        RegisterInstanceError::ResourceLimitExceeded(String::from(error_message))
-                    }
-                    "ServiceNotFound" => {
-                        RegisterInstanceError::ServiceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RegisterInstanceError::Validation(error_message.to_string())
-                    }
-                    _ => RegisterInstanceError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequest" => {
+                    return RegisterInstanceError::DuplicateRequest(String::from(error_message))
                 }
+                "InvalidInput" => {
+                    return RegisterInstanceError::InvalidInput(String::from(error_message))
+                }
+                "ResourceInUse" => {
+                    return RegisterInstanceError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceLimitExceeded" => {
+                    return RegisterInstanceError::ResourceLimitExceeded(String::from(error_message))
+                }
+                "ServiceNotFound" => {
+                    return RegisterInstanceError::ServiceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RegisterInstanceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RegisterInstanceError::Unknown(String::from(body)),
         }
+        return RegisterInstanceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RegisterInstanceError {
     fn from(err: serde_json::error::Error) -> RegisterInstanceError {
-        RegisterInstanceError::Unknown(err.description().to_string())
+        RegisterInstanceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RegisterInstanceError {
@@ -2191,7 +2228,8 @@ impl Error for RegisterInstanceError {
             RegisterInstanceError::Validation(ref cause) => cause,
             RegisterInstanceError::Credentials(ref err) => err.description(),
             RegisterInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RegisterInstanceError::Unknown(ref cause) => cause,
+            RegisterInstanceError::ParseError(ref cause) => cause,
+            RegisterInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2211,52 +2249,60 @@ pub enum UpdateInstanceCustomHealthStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateInstanceCustomHealthStatusError {
-    pub fn from_body(body: &str) -> UpdateInstanceCustomHealthStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateInstanceCustomHealthStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CustomHealthNotFound" => {
-                        UpdateInstanceCustomHealthStatusError::CustomHealthNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InstanceNotFound" => UpdateInstanceCustomHealthStatusError::InstanceNotFound(
+            match *error_type {
+                "CustomHealthNotFound" => {
+                    return UpdateInstanceCustomHealthStatusError::CustomHealthNotFound(
                         String::from(error_message),
-                    ),
-                    "InvalidInput" => UpdateInstanceCustomHealthStatusError::InvalidInput(
-                        String::from(error_message),
-                    ),
-                    "ServiceNotFound" => UpdateInstanceCustomHealthStatusError::ServiceNotFound(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        UpdateInstanceCustomHealthStatusError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateInstanceCustomHealthStatusError::Unknown(String::from(body)),
+                    )
                 }
+                "InstanceNotFound" => {
+                    return UpdateInstanceCustomHealthStatusError::InstanceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidInput" => {
+                    return UpdateInstanceCustomHealthStatusError::InvalidInput(String::from(
+                        error_message,
+                    ))
+                }
+                "ServiceNotFound" => {
+                    return UpdateInstanceCustomHealthStatusError::ServiceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateInstanceCustomHealthStatusError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => UpdateInstanceCustomHealthStatusError::Unknown(String::from(body)),
         }
+        return UpdateInstanceCustomHealthStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateInstanceCustomHealthStatusError {
     fn from(err: serde_json::error::Error) -> UpdateInstanceCustomHealthStatusError {
-        UpdateInstanceCustomHealthStatusError::Unknown(err.description().to_string())
+        UpdateInstanceCustomHealthStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateInstanceCustomHealthStatusError {
@@ -2291,7 +2337,8 @@ impl Error for UpdateInstanceCustomHealthStatusError {
             UpdateInstanceCustomHealthStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateInstanceCustomHealthStatusError::Unknown(ref cause) => cause,
+            UpdateInstanceCustomHealthStatusError::ParseError(ref cause) => cause,
+            UpdateInstanceCustomHealthStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2310,45 +2357,47 @@ pub enum UpdateServiceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateServiceError {
-    pub fn from_body(body: &str) -> UpdateServiceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateServiceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequest" => {
-                        UpdateServiceError::DuplicateRequest(String::from(error_message))
-                    }
-                    "InvalidInput" => UpdateServiceError::InvalidInput(String::from(error_message)),
-                    "ServiceNotFound" => {
-                        UpdateServiceError::ServiceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateServiceError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateServiceError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequest" => {
+                    return UpdateServiceError::DuplicateRequest(String::from(error_message))
                 }
+                "InvalidInput" => {
+                    return UpdateServiceError::InvalidInput(String::from(error_message))
+                }
+                "ServiceNotFound" => {
+                    return UpdateServiceError::ServiceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateServiceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateServiceError::Unknown(String::from(body)),
         }
+        return UpdateServiceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateServiceError {
     fn from(err: serde_json::error::Error) -> UpdateServiceError {
-        UpdateServiceError::Unknown(err.description().to_string())
+        UpdateServiceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateServiceError {
@@ -2380,7 +2429,8 @@ impl Error for UpdateServiceError {
             UpdateServiceError::Validation(ref cause) => cause,
             UpdateServiceError::Credentials(ref err) => err.description(),
             UpdateServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateServiceError::Unknown(ref cause) => cause,
+            UpdateServiceError::ParseError(ref cause) => cause,
+            UpdateServiceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2555,13 +2605,12 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<CreatePrivateDnsNamespaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePrivateDnsNamespaceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreatePrivateDnsNamespaceError::from_response(response))
                 }))
             }
         })
@@ -2593,13 +2642,12 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<CreatePublicDnsNamespaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePublicDnsNamespaceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreatePublicDnsNamespaceError::from_response(response))
                 }))
             }
         })
@@ -2628,14 +2676,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<CreateServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateServiceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateServiceError::from_response(response))),
+                )
             }
         })
     }
@@ -2666,14 +2716,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<DeleteNamespaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteNamespaceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteNamespaceError::from_response(response))),
+                )
             }
         })
     }
@@ -2701,14 +2753,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<DeleteServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteServiceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteServiceError::from_response(response))),
+                )
             }
         })
     }
@@ -2739,14 +2793,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<DeregisterInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeregisterInstanceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeregisterInstanceError::from_response(response))),
+                )
             }
         })
     }
@@ -2774,14 +2830,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<GetInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetInstanceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetInstanceError::from_response(response))),
+                )
             }
         })
     }
@@ -2812,13 +2870,12 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<GetInstancesHealthStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetInstancesHealthStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetInstancesHealthStatusError::from_response(response))
                 }))
             }
         })
@@ -2847,14 +2904,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<GetNamespaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetNamespaceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetNamespaceError::from_response(response))),
+                )
             }
         })
     }
@@ -2882,14 +2941,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<GetOperationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetOperationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetOperationError::from_response(response))),
+                )
             }
         })
     }
@@ -2917,14 +2978,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<GetServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetServiceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetServiceError::from_response(response))),
+                )
             }
         })
     }
@@ -2952,14 +3015,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<ListInstancesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListInstancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListInstancesError::from_response(response))),
+                )
             }
         })
     }
@@ -2987,14 +3052,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<ListNamespacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListNamespacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListNamespacesError::from_response(response))),
+                )
             }
         })
     }
@@ -3022,14 +3089,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<ListOperationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListOperationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListOperationsError::from_response(response))),
+                )
             }
         })
     }
@@ -3057,14 +3126,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<ListServicesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListServicesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListServicesError::from_response(response))),
+                )
             }
         })
     }
@@ -3095,14 +3166,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<RegisterInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterInstanceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RegisterInstanceError::from_response(response))),
+                )
             }
         })
     }
@@ -3126,8 +3199,8 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateInstanceCustomHealthStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(UpdateInstanceCustomHealthStatusError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -3157,14 +3230,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
                     serde_json::from_str::<UpdateServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateServiceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateServiceError::from_response(response))),
+                )
             }
         })
     }

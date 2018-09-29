@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents the output of the <code>CreateBudget</code> operation. The content consists of the detailed metadata and data file information, and the current status of the <code>budget</code>.</p> <p>The ARN pattern for a budget is: <code>arn:aws:budgetservice::AccountId:budget/budgetName</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -495,50 +495,50 @@ pub enum CreateBudgetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBudgetError {
-    pub fn from_body(body: &str) -> CreateBudgetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateBudgetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CreationLimitExceededException" => {
-                        CreateBudgetError::CreationLimitExceeded(String::from(error_message))
-                    }
-                    "DuplicateRecordException" => {
-                        CreateBudgetError::DuplicateRecord(String::from(error_message))
-                    }
-                    "InternalErrorException" => {
-                        CreateBudgetError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateBudgetError::InvalidParameter(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateBudgetError::Validation(error_message.to_string())
-                    }
-                    _ => CreateBudgetError::Unknown(String::from(body)),
+            match *error_type {
+                "CreationLimitExceededException" => {
+                    return CreateBudgetError::CreationLimitExceeded(String::from(error_message))
                 }
+                "DuplicateRecordException" => {
+                    return CreateBudgetError::DuplicateRecord(String::from(error_message))
+                }
+                "InternalErrorException" => {
+                    return CreateBudgetError::InternalError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return CreateBudgetError::InvalidParameter(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateBudgetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateBudgetError::Unknown(String::from(body)),
         }
+        return CreateBudgetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateBudgetError {
     fn from(err: serde_json::error::Error) -> CreateBudgetError {
-        CreateBudgetError::Unknown(err.description().to_string())
+        CreateBudgetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateBudgetError {
@@ -571,7 +571,8 @@ impl Error for CreateBudgetError {
             CreateBudgetError::Validation(ref cause) => cause,
             CreateBudgetError::Credentials(ref err) => err.description(),
             CreateBudgetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBudgetError::Unknown(ref cause) => cause,
+            CreateBudgetError::ParseError(ref cause) => cause,
+            CreateBudgetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -594,53 +595,55 @@ pub enum CreateNotificationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateNotificationError {
-    pub fn from_body(body: &str) -> CreateNotificationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateNotificationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CreationLimitExceededException" => {
-                        CreateNotificationError::CreationLimitExceeded(String::from(error_message))
-                    }
-                    "DuplicateRecordException" => {
-                        CreateNotificationError::DuplicateRecord(String::from(error_message))
-                    }
-                    "InternalErrorException" => {
-                        CreateNotificationError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateNotificationError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        CreateNotificationError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateNotificationError::Validation(error_message.to_string())
-                    }
-                    _ => CreateNotificationError::Unknown(String::from(body)),
+            match *error_type {
+                "CreationLimitExceededException" => {
+                    return CreateNotificationError::CreationLimitExceeded(String::from(
+                        error_message,
+                    ))
                 }
+                "DuplicateRecordException" => {
+                    return CreateNotificationError::DuplicateRecord(String::from(error_message))
+                }
+                "InternalErrorException" => {
+                    return CreateNotificationError::InternalError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return CreateNotificationError::InvalidParameter(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreateNotificationError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateNotificationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateNotificationError::Unknown(String::from(body)),
         }
+        return CreateNotificationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateNotificationError {
     fn from(err: serde_json::error::Error) -> CreateNotificationError {
-        CreateNotificationError::Unknown(err.description().to_string())
+        CreateNotificationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateNotificationError {
@@ -676,7 +679,8 @@ impl Error for CreateNotificationError {
             CreateNotificationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateNotificationError::Unknown(ref cause) => cause,
+            CreateNotificationError::ParseError(ref cause) => cause,
+            CreateNotificationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -699,53 +703,53 @@ pub enum CreateSubscriberError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSubscriberError {
-    pub fn from_body(body: &str) -> CreateSubscriberError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSubscriberError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CreationLimitExceededException" => {
-                        CreateSubscriberError::CreationLimitExceeded(String::from(error_message))
-                    }
-                    "DuplicateRecordException" => {
-                        CreateSubscriberError::DuplicateRecord(String::from(error_message))
-                    }
-                    "InternalErrorException" => {
-                        CreateSubscriberError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateSubscriberError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        CreateSubscriberError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateSubscriberError::Validation(error_message.to_string())
-                    }
-                    _ => CreateSubscriberError::Unknown(String::from(body)),
+            match *error_type {
+                "CreationLimitExceededException" => {
+                    return CreateSubscriberError::CreationLimitExceeded(String::from(error_message))
                 }
+                "DuplicateRecordException" => {
+                    return CreateSubscriberError::DuplicateRecord(String::from(error_message))
+                }
+                "InternalErrorException" => {
+                    return CreateSubscriberError::InternalError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return CreateSubscriberError::InvalidParameter(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreateSubscriberError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateSubscriberError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateSubscriberError::Unknown(String::from(body)),
         }
+        return CreateSubscriberError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateSubscriberError {
     fn from(err: serde_json::error::Error) -> CreateSubscriberError {
-        CreateSubscriberError::Unknown(err.description().to_string())
+        CreateSubscriberError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateSubscriberError {
@@ -779,7 +783,8 @@ impl Error for CreateSubscriberError {
             CreateSubscriberError::Validation(ref cause) => cause,
             CreateSubscriberError::Credentials(ref err) => err.description(),
             CreateSubscriberError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateSubscriberError::Unknown(ref cause) => cause,
+            CreateSubscriberError::ParseError(ref cause) => cause,
+            CreateSubscriberError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -798,45 +803,47 @@ pub enum DeleteBudgetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBudgetError {
-    pub fn from_body(body: &str) -> DeleteBudgetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBudgetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DeleteBudgetError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteBudgetError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotFoundException" => DeleteBudgetError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        DeleteBudgetError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteBudgetError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DeleteBudgetError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DeleteBudgetError::InvalidParameter(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteBudgetError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteBudgetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteBudgetError::Unknown(String::from(body)),
         }
+        return DeleteBudgetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteBudgetError {
     fn from(err: serde_json::error::Error) -> DeleteBudgetError {
-        DeleteBudgetError::Unknown(err.description().to_string())
+        DeleteBudgetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteBudgetError {
@@ -868,7 +875,8 @@ impl Error for DeleteBudgetError {
             DeleteBudgetError::Validation(ref cause) => cause,
             DeleteBudgetError::Credentials(ref err) => err.description(),
             DeleteBudgetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBudgetError::Unknown(ref cause) => cause,
+            DeleteBudgetError::ParseError(ref cause) => cause,
+            DeleteBudgetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -887,47 +895,47 @@ pub enum DeleteNotificationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteNotificationError {
-    pub fn from_body(body: &str) -> DeleteNotificationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteNotificationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DeleteNotificationError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteNotificationError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteNotificationError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteNotificationError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteNotificationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DeleteNotificationError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DeleteNotificationError::InvalidParameter(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteNotificationError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteNotificationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteNotificationError::Unknown(String::from(body)),
         }
+        return DeleteNotificationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteNotificationError {
     fn from(err: serde_json::error::Error) -> DeleteNotificationError {
-        DeleteNotificationError::Unknown(err.description().to_string())
+        DeleteNotificationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteNotificationError {
@@ -961,7 +969,8 @@ impl Error for DeleteNotificationError {
             DeleteNotificationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteNotificationError::Unknown(ref cause) => cause,
+            DeleteNotificationError::ParseError(ref cause) => cause,
+            DeleteNotificationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -980,47 +989,47 @@ pub enum DeleteSubscriberError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSubscriberError {
-    pub fn from_body(body: &str) -> DeleteSubscriberError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSubscriberError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DeleteSubscriberError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteSubscriberError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteSubscriberError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteSubscriberError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteSubscriberError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DeleteSubscriberError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DeleteSubscriberError::InvalidParameter(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteSubscriberError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteSubscriberError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteSubscriberError::Unknown(String::from(body)),
         }
+        return DeleteSubscriberError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteSubscriberError {
     fn from(err: serde_json::error::Error) -> DeleteSubscriberError {
-        DeleteSubscriberError::Unknown(err.description().to_string())
+        DeleteSubscriberError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteSubscriberError {
@@ -1052,7 +1061,8 @@ impl Error for DeleteSubscriberError {
             DeleteSubscriberError::Validation(ref cause) => cause,
             DeleteSubscriberError::Credentials(ref err) => err.description(),
             DeleteSubscriberError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteSubscriberError::Unknown(ref cause) => cause,
+            DeleteSubscriberError::ParseError(ref cause) => cause,
+            DeleteSubscriberError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1071,47 +1081,47 @@ pub enum DescribeBudgetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBudgetError {
-    pub fn from_body(body: &str) -> DescribeBudgetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeBudgetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DescribeBudgetError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeBudgetError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeBudgetError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeBudgetError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeBudgetError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DescribeBudgetError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DescribeBudgetError::InvalidParameter(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeBudgetError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeBudgetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeBudgetError::Unknown(String::from(body)),
         }
+        return DescribeBudgetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeBudgetError {
     fn from(err: serde_json::error::Error) -> DescribeBudgetError {
-        DescribeBudgetError::Unknown(err.description().to_string())
+        DescribeBudgetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeBudgetError {
@@ -1143,7 +1153,8 @@ impl Error for DescribeBudgetError {
             DescribeBudgetError::Validation(ref cause) => cause,
             DescribeBudgetError::Credentials(ref err) => err.description(),
             DescribeBudgetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeBudgetError::Unknown(ref cause) => cause,
+            DescribeBudgetError::ParseError(ref cause) => cause,
+            DescribeBudgetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1166,53 +1177,53 @@ pub enum DescribeBudgetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBudgetsError {
-    pub fn from_body(body: &str) -> DescribeBudgetsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeBudgetsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ExpiredNextTokenException" => {
-                        DescribeBudgetsError::ExpiredNextToken(String::from(error_message))
-                    }
-                    "InternalErrorException" => {
-                        DescribeBudgetsError::InternalError(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        DescribeBudgetsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeBudgetsError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeBudgetsError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeBudgetsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeBudgetsError::Unknown(String::from(body)),
+            match *error_type {
+                "ExpiredNextTokenException" => {
+                    return DescribeBudgetsError::ExpiredNextToken(String::from(error_message))
                 }
+                "InternalErrorException" => {
+                    return DescribeBudgetsError::InternalError(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return DescribeBudgetsError::InvalidNextToken(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return DescribeBudgetsError::InvalidParameter(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeBudgetsError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeBudgetsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeBudgetsError::Unknown(String::from(body)),
         }
+        return DescribeBudgetsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeBudgetsError {
     fn from(err: serde_json::error::Error) -> DescribeBudgetsError {
-        DescribeBudgetsError::Unknown(err.description().to_string())
+        DescribeBudgetsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeBudgetsError {
@@ -1246,7 +1257,8 @@ impl Error for DescribeBudgetsError {
             DescribeBudgetsError::Validation(ref cause) => cause,
             DescribeBudgetsError::Credentials(ref err) => err.description(),
             DescribeBudgetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeBudgetsError::Unknown(ref cause) => cause,
+            DescribeBudgetsError::ParseError(ref cause) => cause,
+            DescribeBudgetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1269,59 +1281,65 @@ pub enum DescribeNotificationsForBudgetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeNotificationsForBudgetError {
-    pub fn from_body(body: &str) -> DescribeNotificationsForBudgetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeNotificationsForBudgetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ExpiredNextTokenException" => {
-                        DescribeNotificationsForBudgetError::ExpiredNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalErrorException" => DescribeNotificationsForBudgetError::InternalError(
-                        String::from(error_message),
-                    ),
-                    "InvalidNextTokenException" => {
-                        DescribeNotificationsForBudgetError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeNotificationsForBudgetError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NotFoundException" => {
-                        DescribeNotificationsForBudgetError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeNotificationsForBudgetError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeNotificationsForBudgetError::Unknown(String::from(body)),
+            match *error_type {
+                "ExpiredNextTokenException" => {
+                    return DescribeNotificationsForBudgetError::ExpiredNextToken(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalErrorException" => {
+                    return DescribeNotificationsForBudgetError::InternalError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return DescribeNotificationsForBudgetError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return DescribeNotificationsForBudgetError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeNotificationsForBudgetError::NotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeNotificationsForBudgetError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeNotificationsForBudgetError::Unknown(String::from(body)),
         }
+        return DescribeNotificationsForBudgetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeNotificationsForBudgetError {
     fn from(err: serde_json::error::Error) -> DescribeNotificationsForBudgetError {
-        DescribeNotificationsForBudgetError::Unknown(err.description().to_string())
+        DescribeNotificationsForBudgetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeNotificationsForBudgetError {
@@ -1357,7 +1375,8 @@ impl Error for DescribeNotificationsForBudgetError {
             DescribeNotificationsForBudgetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeNotificationsForBudgetError::Unknown(ref cause) => cause,
+            DescribeNotificationsForBudgetError::ParseError(ref cause) => cause,
+            DescribeNotificationsForBudgetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1380,61 +1399,65 @@ pub enum DescribeSubscribersForNotificationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSubscribersForNotificationError {
-    pub fn from_body(body: &str) -> DescribeSubscribersForNotificationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSubscribersForNotificationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ExpiredNextTokenException" => {
-                        DescribeSubscribersForNotificationError::ExpiredNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalErrorException" => {
-                        DescribeSubscribersForNotificationError::InternalError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidNextTokenException" => {
-                        DescribeSubscribersForNotificationError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeSubscribersForNotificationError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NotFoundException" => DescribeSubscribersForNotificationError::NotFound(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => DescribeSubscribersForNotificationError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DescribeSubscribersForNotificationError::Unknown(String::from(body)),
+            match *error_type {
+                "ExpiredNextTokenException" => {
+                    return DescribeSubscribersForNotificationError::ExpiredNextToken(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalErrorException" => {
+                    return DescribeSubscribersForNotificationError::InternalError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return DescribeSubscribersForNotificationError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return DescribeSubscribersForNotificationError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeSubscribersForNotificationError::NotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeSubscribersForNotificationError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeSubscribersForNotificationError::Unknown(String::from(body)),
         }
+        return DescribeSubscribersForNotificationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeSubscribersForNotificationError {
     fn from(err: serde_json::error::Error) -> DescribeSubscribersForNotificationError {
-        DescribeSubscribersForNotificationError::Unknown(err.description().to_string())
+        DescribeSubscribersForNotificationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeSubscribersForNotificationError {
@@ -1470,7 +1493,8 @@ impl Error for DescribeSubscribersForNotificationError {
             DescribeSubscribersForNotificationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeSubscribersForNotificationError::Unknown(ref cause) => cause,
+            DescribeSubscribersForNotificationError::ParseError(ref cause) => cause,
+            DescribeSubscribersForNotificationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1489,45 +1513,47 @@ pub enum UpdateBudgetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateBudgetError {
-    pub fn from_body(body: &str) -> UpdateBudgetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateBudgetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        UpdateBudgetError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateBudgetError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotFoundException" => UpdateBudgetError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        UpdateBudgetError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateBudgetError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return UpdateBudgetError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return UpdateBudgetError::InvalidParameter(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateBudgetError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateBudgetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateBudgetError::Unknown(String::from(body)),
         }
+        return UpdateBudgetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateBudgetError {
     fn from(err: serde_json::error::Error) -> UpdateBudgetError {
-        UpdateBudgetError::Unknown(err.description().to_string())
+        UpdateBudgetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateBudgetError {
@@ -1559,7 +1585,8 @@ impl Error for UpdateBudgetError {
             UpdateBudgetError::Validation(ref cause) => cause,
             UpdateBudgetError::Credentials(ref err) => err.description(),
             UpdateBudgetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateBudgetError::Unknown(ref cause) => cause,
+            UpdateBudgetError::ParseError(ref cause) => cause,
+            UpdateBudgetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1580,50 +1607,50 @@ pub enum UpdateNotificationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateNotificationError {
-    pub fn from_body(body: &str) -> UpdateNotificationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateNotificationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRecordException" => {
-                        UpdateNotificationError::DuplicateRecord(String::from(error_message))
-                    }
-                    "InternalErrorException" => {
-                        UpdateNotificationError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateNotificationError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateNotificationError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateNotificationError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateNotificationError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRecordException" => {
+                    return UpdateNotificationError::DuplicateRecord(String::from(error_message))
                 }
+                "InternalErrorException" => {
+                    return UpdateNotificationError::InternalError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return UpdateNotificationError::InvalidParameter(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateNotificationError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateNotificationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateNotificationError::Unknown(String::from(body)),
         }
+        return UpdateNotificationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateNotificationError {
     fn from(err: serde_json::error::Error) -> UpdateNotificationError {
-        UpdateNotificationError::Unknown(err.description().to_string())
+        UpdateNotificationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateNotificationError {
@@ -1658,7 +1685,8 @@ impl Error for UpdateNotificationError {
             UpdateNotificationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateNotificationError::Unknown(ref cause) => cause,
+            UpdateNotificationError::ParseError(ref cause) => cause,
+            UpdateNotificationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1679,50 +1707,50 @@ pub enum UpdateSubscriberError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSubscriberError {
-    pub fn from_body(body: &str) -> UpdateSubscriberError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSubscriberError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRecordException" => {
-                        UpdateSubscriberError::DuplicateRecord(String::from(error_message))
-                    }
-                    "InternalErrorException" => {
-                        UpdateSubscriberError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateSubscriberError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateSubscriberError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateSubscriberError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateSubscriberError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRecordException" => {
+                    return UpdateSubscriberError::DuplicateRecord(String::from(error_message))
                 }
+                "InternalErrorException" => {
+                    return UpdateSubscriberError::InternalError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return UpdateSubscriberError::InvalidParameter(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateSubscriberError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateSubscriberError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateSubscriberError::Unknown(String::from(body)),
         }
+        return UpdateSubscriberError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateSubscriberError {
     fn from(err: serde_json::error::Error) -> UpdateSubscriberError {
-        UpdateSubscriberError::Unknown(err.description().to_string())
+        UpdateSubscriberError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateSubscriberError {
@@ -1755,7 +1783,8 @@ impl Error for UpdateSubscriberError {
             UpdateSubscriberError::Validation(ref cause) => cause,
             UpdateSubscriberError::Credentials(ref err) => err.description(),
             UpdateSubscriberError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateSubscriberError::Unknown(ref cause) => cause,
+            UpdateSubscriberError::ParseError(ref cause) => cause,
+            UpdateSubscriberError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1901,14 +1930,16 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<CreateBudgetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateBudgetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateBudgetError::from_response(response))),
+                )
             }
         })
     }
@@ -1936,14 +1967,16 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<CreateNotificationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateNotificationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateNotificationError::from_response(response))),
+                )
             }
         })
     }
@@ -1971,14 +2004,16 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<CreateSubscriberResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSubscriberError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateSubscriberError::from_response(response))),
+                )
             }
         })
     }
@@ -2006,14 +2041,16 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DeleteBudgetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBudgetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteBudgetError::from_response(response))),
+                )
             }
         })
     }
@@ -2041,14 +2078,16 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DeleteNotificationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteNotificationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteNotificationError::from_response(response))),
+                )
             }
         })
     }
@@ -2076,14 +2115,16 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DeleteSubscriberResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSubscriberError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteSubscriberError::from_response(response))),
+                )
             }
         })
     }
@@ -2111,14 +2152,16 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DescribeBudgetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeBudgetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeBudgetError::from_response(response))),
+                )
             }
         })
     }
@@ -2146,14 +2189,16 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DescribeBudgetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeBudgetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeBudgetsError::from_response(response))),
+                )
             }
         })
     }
@@ -2185,13 +2230,12 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DescribeNotificationsForBudgetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeNotificationsForBudgetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeNotificationsForBudgetError::from_response(response))
                 }))
             }
         })
@@ -2226,12 +2270,13 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DescribeSubscribersForNotificationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSubscribersForNotificationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeSubscribersForNotificationError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -2261,14 +2306,16 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<UpdateBudgetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateBudgetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateBudgetError::from_response(response))),
+                )
             }
         })
     }
@@ -2296,14 +2343,16 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<UpdateNotificationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateNotificationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateNotificationError::from_response(response))),
+                )
             }
         })
     }
@@ -2331,14 +2380,16 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<UpdateSubscriberResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSubscriberError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateSubscriberError::from_response(response))),
+                )
             }
         })
     }

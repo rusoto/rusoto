@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -27,7 +27,7 @@ use rusoto_core::request::HttpDispatchError;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Returns information about all brokers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1177,51 +1177,53 @@ pub enum CreateBrokerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBrokerError {
-    pub fn from_body(body: &str) -> CreateBrokerError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateBrokerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateBrokerError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => CreateBrokerError::Conflict(String::from(error_message)),
-                    "ForbiddenException" => {
-                        CreateBrokerError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        CreateBrokerError::InternalServerError(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        CreateBrokerError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateBrokerError::Validation(error_message.to_string())
-                    }
-                    _ => CreateBrokerError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateBrokerError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return CreateBrokerError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return CreateBrokerError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return CreateBrokerError::InternalServerError(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return CreateBrokerError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateBrokerError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateBrokerError::Unknown(String::from(body)),
         }
+        return CreateBrokerError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateBrokerError {
     fn from(err: serde_json::error::Error) -> CreateBrokerError {
-        CreateBrokerError::Unknown(err.description().to_string())
+        CreateBrokerError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateBrokerError {
@@ -1255,7 +1257,8 @@ impl Error for CreateBrokerError {
             CreateBrokerError::Validation(ref cause) => cause,
             CreateBrokerError::Credentials(ref err) => err.description(),
             CreateBrokerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBrokerError::Unknown(ref cause) => cause,
+            CreateBrokerError::ParseError(ref cause) => cause,
+            CreateBrokerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1276,50 +1279,52 @@ pub enum CreateConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConfigurationError {
-    pub fn from_body(body: &str) -> CreateConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateConfigurationError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        CreateConfigurationError::Conflict(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        CreateConfigurationError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        CreateConfigurationError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => CreateConfigurationError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateConfigurationError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return CreateConfigurationError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return CreateConfigurationError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return CreateConfigurationError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateConfigurationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateConfigurationError::Unknown(String::from(body)),
         }
+        return CreateConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateConfigurationError {
     fn from(err: serde_json::error::Error) -> CreateConfigurationError {
-        CreateConfigurationError::Unknown(err.description().to_string())
+        CreateConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateConfigurationError {
@@ -1354,7 +1359,8 @@ impl Error for CreateConfigurationError {
             CreateConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateConfigurationError::Unknown(ref cause) => cause,
+            CreateConfigurationError::ParseError(ref cause) => cause,
+            CreateConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1377,45 +1383,53 @@ pub enum CreateUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserError {
-    pub fn from_body(body: &str) -> CreateUserError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateUserError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateUserError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => CreateUserError::Conflict(String::from(error_message)),
-                    "ForbiddenException" => CreateUserError::Forbidden(String::from(error_message)),
-                    "InternalServerErrorException" => {
-                        CreateUserError::InternalServerError(String::from(error_message))
-                    }
-                    "NotFoundException" => CreateUserError::NotFound(String::from(error_message)),
-                    "ValidationException" => CreateUserError::Validation(error_message.to_string()),
-                    _ => CreateUserError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateUserError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return CreateUserError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return CreateUserError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return CreateUserError::InternalServerError(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreateUserError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateUserError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateUserError::Unknown(String::from(body)),
         }
+        return CreateUserError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateUserError {
     fn from(err: serde_json::error::Error) -> CreateUserError {
-        CreateUserError::Unknown(err.description().to_string())
+        CreateUserError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateUserError {
@@ -1449,7 +1463,8 @@ impl Error for CreateUserError {
             CreateUserError::Validation(ref cause) => cause,
             CreateUserError::Credentials(ref err) => err.description(),
             CreateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateUserError::Unknown(ref cause) => cause,
+            CreateUserError::ParseError(ref cause) => cause,
+            CreateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1470,48 +1485,50 @@ pub enum DeleteBrokerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBrokerError {
-    pub fn from_body(body: &str) -> DeleteBrokerError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBrokerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteBrokerError::BadRequest(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        DeleteBrokerError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        DeleteBrokerError::InternalServerError(String::from(error_message))
-                    }
-                    "NotFoundException" => DeleteBrokerError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        DeleteBrokerError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteBrokerError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteBrokerError::BadRequest(String::from(error_message))
                 }
+                "ForbiddenException" => {
+                    return DeleteBrokerError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return DeleteBrokerError::InternalServerError(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteBrokerError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteBrokerError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteBrokerError::Unknown(String::from(body)),
         }
+        return DeleteBrokerError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteBrokerError {
     fn from(err: serde_json::error::Error) -> DeleteBrokerError {
-        DeleteBrokerError::Unknown(err.description().to_string())
+        DeleteBrokerError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteBrokerError {
@@ -1544,7 +1561,8 @@ impl Error for DeleteBrokerError {
             DeleteBrokerError::Validation(ref cause) => cause,
             DeleteBrokerError::Credentials(ref err) => err.description(),
             DeleteBrokerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBrokerError::Unknown(ref cause) => cause,
+            DeleteBrokerError::ParseError(ref cause) => cause,
+            DeleteBrokerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1565,44 +1583,50 @@ pub enum DeleteUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserError {
-    pub fn from_body(body: &str) -> DeleteUserError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteUserError::BadRequest(String::from(error_message))
-                    }
-                    "ForbiddenException" => DeleteUserError::Forbidden(String::from(error_message)),
-                    "InternalServerErrorException" => {
-                        DeleteUserError::InternalServerError(String::from(error_message))
-                    }
-                    "NotFoundException" => DeleteUserError::NotFound(String::from(error_message)),
-                    "ValidationException" => DeleteUserError::Validation(error_message.to_string()),
-                    _ => DeleteUserError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteUserError::BadRequest(String::from(error_message))
                 }
+                "ForbiddenException" => {
+                    return DeleteUserError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return DeleteUserError::InternalServerError(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteUserError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteUserError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteUserError::Unknown(String::from(body)),
         }
+        return DeleteUserError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteUserError {
     fn from(err: serde_json::error::Error) -> DeleteUserError {
-        DeleteUserError::Unknown(err.description().to_string())
+        DeleteUserError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteUserError {
@@ -1635,7 +1659,8 @@ impl Error for DeleteUserError {
             DeleteUserError::Validation(ref cause) => cause,
             DeleteUserError::Credentials(ref err) => err.description(),
             DeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUserError::Unknown(ref cause) => cause,
+            DeleteUserError::ParseError(ref cause) => cause,
+            DeleteUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1656,50 +1681,50 @@ pub enum DescribeBrokerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBrokerError {
-    pub fn from_body(body: &str) -> DescribeBrokerError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeBrokerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DescribeBrokerError::BadRequest(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        DescribeBrokerError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        DescribeBrokerError::InternalServerError(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeBrokerError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeBrokerError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeBrokerError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DescribeBrokerError::BadRequest(String::from(error_message))
                 }
+                "ForbiddenException" => {
+                    return DescribeBrokerError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return DescribeBrokerError::InternalServerError(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeBrokerError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeBrokerError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeBrokerError::Unknown(String::from(body)),
         }
+        return DescribeBrokerError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeBrokerError {
     fn from(err: serde_json::error::Error) -> DescribeBrokerError {
-        DescribeBrokerError::Unknown(err.description().to_string())
+        DescribeBrokerError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeBrokerError {
@@ -1732,7 +1757,8 @@ impl Error for DescribeBrokerError {
             DescribeBrokerError::Validation(ref cause) => cause,
             DescribeBrokerError::Credentials(ref err) => err.description(),
             DescribeBrokerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeBrokerError::Unknown(ref cause) => cause,
+            DescribeBrokerError::ParseError(ref cause) => cause,
+            DescribeBrokerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1753,50 +1779,52 @@ pub enum DescribeConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationError {
-    pub fn from_body(body: &str) -> DescribeConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DescribeConfigurationError::BadRequest(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        DescribeConfigurationError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        DescribeConfigurationError::InternalServerError(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeConfigurationError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeConfigurationError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DescribeConfigurationError::BadRequest(String::from(error_message))
                 }
+                "ForbiddenException" => {
+                    return DescribeConfigurationError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return DescribeConfigurationError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeConfigurationError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeConfigurationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeConfigurationError::Unknown(String::from(body)),
         }
+        return DescribeConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConfigurationError {
     fn from(err: serde_json::error::Error) -> DescribeConfigurationError {
-        DescribeConfigurationError::Unknown(err.description().to_string())
+        DescribeConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConfigurationError {
@@ -1831,7 +1859,8 @@ impl Error for DescribeConfigurationError {
             DescribeConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConfigurationError::Unknown(ref cause) => cause,
+            DescribeConfigurationError::ParseError(ref cause) => cause,
+            DescribeConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1852,52 +1881,56 @@ pub enum DescribeConfigurationRevisionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationRevisionError {
-    pub fn from_body(body: &str) -> DescribeConfigurationRevisionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationRevisionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DescribeConfigurationRevisionError::BadRequest(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        DescribeConfigurationRevisionError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        DescribeConfigurationRevisionError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NotFoundException" => {
-                        DescribeConfigurationRevisionError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeConfigurationRevisionError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeConfigurationRevisionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DescribeConfigurationRevisionError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ForbiddenException" => {
+                    return DescribeConfigurationRevisionError::Forbidden(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return DescribeConfigurationRevisionError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeConfigurationRevisionError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeConfigurationRevisionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeConfigurationRevisionError::Unknown(String::from(body)),
         }
+        return DescribeConfigurationRevisionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConfigurationRevisionError {
     fn from(err: serde_json::error::Error) -> DescribeConfigurationRevisionError {
-        DescribeConfigurationRevisionError::Unknown(err.description().to_string())
+        DescribeConfigurationRevisionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConfigurationRevisionError {
@@ -1932,7 +1965,8 @@ impl Error for DescribeConfigurationRevisionError {
             DescribeConfigurationRevisionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConfigurationRevisionError::Unknown(ref cause) => cause,
+            DescribeConfigurationRevisionError::ParseError(ref cause) => cause,
+            DescribeConfigurationRevisionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1953,48 +1987,50 @@ pub enum DescribeUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUserError {
-    pub fn from_body(body: &str) -> DescribeUserError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeUserError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DescribeUserError::BadRequest(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        DescribeUserError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        DescribeUserError::InternalServerError(String::from(error_message))
-                    }
-                    "NotFoundException" => DescribeUserError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeUserError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeUserError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DescribeUserError::BadRequest(String::from(error_message))
                 }
+                "ForbiddenException" => {
+                    return DescribeUserError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return DescribeUserError::InternalServerError(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeUserError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeUserError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeUserError::Unknown(String::from(body)),
         }
+        return DescribeUserError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeUserError {
     fn from(err: serde_json::error::Error) -> DescribeUserError {
-        DescribeUserError::Unknown(err.description().to_string())
+        DescribeUserError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeUserError {
@@ -2027,7 +2063,8 @@ impl Error for DescribeUserError {
             DescribeUserError::Validation(ref cause) => cause,
             DescribeUserError::Credentials(ref err) => err.description(),
             DescribeUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeUserError::Unknown(ref cause) => cause,
+            DescribeUserError::ParseError(ref cause) => cause,
+            DescribeUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2046,47 +2083,47 @@ pub enum ListBrokersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListBrokersError {
-    pub fn from_body(body: &str) -> ListBrokersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListBrokersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListBrokersError::BadRequest(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        ListBrokersError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        ListBrokersError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListBrokersError::Validation(error_message.to_string())
-                    }
-                    _ => ListBrokersError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListBrokersError::BadRequest(String::from(error_message))
                 }
+                "ForbiddenException" => {
+                    return ListBrokersError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return ListBrokersError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListBrokersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListBrokersError::Unknown(String::from(body)),
         }
+        return ListBrokersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListBrokersError {
     fn from(err: serde_json::error::Error) -> ListBrokersError {
-        ListBrokersError::Unknown(err.description().to_string())
+        ListBrokersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListBrokersError {
@@ -2118,7 +2155,8 @@ impl Error for ListBrokersError {
             ListBrokersError::Validation(ref cause) => cause,
             ListBrokersError::Credentials(ref err) => err.description(),
             ListBrokersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListBrokersError::Unknown(ref cause) => cause,
+            ListBrokersError::ParseError(ref cause) => cause,
+            ListBrokersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2139,52 +2177,52 @@ pub enum ListConfigurationRevisionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListConfigurationRevisionsError {
-    pub fn from_body(body: &str) -> ListConfigurationRevisionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListConfigurationRevisionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListConfigurationRevisionsError::BadRequest(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        ListConfigurationRevisionsError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        ListConfigurationRevisionsError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NotFoundException" => {
-                        ListConfigurationRevisionsError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListConfigurationRevisionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListConfigurationRevisionsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListConfigurationRevisionsError::BadRequest(String::from(error_message))
                 }
+                "ForbiddenException" => {
+                    return ListConfigurationRevisionsError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return ListConfigurationRevisionsError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return ListConfigurationRevisionsError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListConfigurationRevisionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListConfigurationRevisionsError::Unknown(String::from(body)),
         }
+        return ListConfigurationRevisionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListConfigurationRevisionsError {
     fn from(err: serde_json::error::Error) -> ListConfigurationRevisionsError {
-        ListConfigurationRevisionsError::Unknown(err.description().to_string())
+        ListConfigurationRevisionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListConfigurationRevisionsError {
@@ -2219,7 +2257,8 @@ impl Error for ListConfigurationRevisionsError {
             ListConfigurationRevisionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListConfigurationRevisionsError::Unknown(ref cause) => cause,
+            ListConfigurationRevisionsError::ParseError(ref cause) => cause,
+            ListConfigurationRevisionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2238,47 +2277,47 @@ pub enum ListConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListConfigurationsError {
-    pub fn from_body(body: &str) -> ListConfigurationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListConfigurationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListConfigurationsError::BadRequest(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        ListConfigurationsError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        ListConfigurationsError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListConfigurationsError::Validation(error_message.to_string())
-                    }
-                    _ => ListConfigurationsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListConfigurationsError::BadRequest(String::from(error_message))
                 }
+                "ForbiddenException" => {
+                    return ListConfigurationsError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return ListConfigurationsError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListConfigurationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListConfigurationsError::Unknown(String::from(body)),
         }
+        return ListConfigurationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListConfigurationsError {
     fn from(err: serde_json::error::Error) -> ListConfigurationsError {
-        ListConfigurationsError::Unknown(err.description().to_string())
+        ListConfigurationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListConfigurationsError {
@@ -2312,7 +2351,8 @@ impl Error for ListConfigurationsError {
             ListConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListConfigurationsError::Unknown(ref cause) => cause,
+            ListConfigurationsError::ParseError(ref cause) => cause,
+            ListConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2333,44 +2373,48 @@ pub enum ListUsersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListUsersError {
-    pub fn from_body(body: &str) -> ListUsersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListUsersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListUsersError::BadRequest(String::from(error_message))
-                    }
-                    "ForbiddenException" => ListUsersError::Forbidden(String::from(error_message)),
-                    "InternalServerErrorException" => {
-                        ListUsersError::InternalServerError(String::from(error_message))
-                    }
-                    "NotFoundException" => ListUsersError::NotFound(String::from(error_message)),
-                    "ValidationException" => ListUsersError::Validation(error_message.to_string()),
-                    _ => ListUsersError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListUsersError::BadRequest(String::from(error_message))
                 }
+                "ForbiddenException" => {
+                    return ListUsersError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return ListUsersError::InternalServerError(String::from(error_message))
+                }
+                "NotFoundException" => return ListUsersError::NotFound(String::from(error_message)),
+                "ValidationException" => {
+                    return ListUsersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListUsersError::Unknown(String::from(body)),
         }
+        return ListUsersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListUsersError {
     fn from(err: serde_json::error::Error) -> ListUsersError {
-        ListUsersError::Unknown(err.description().to_string())
+        ListUsersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListUsersError {
@@ -2403,7 +2447,8 @@ impl Error for ListUsersError {
             ListUsersError::Validation(ref cause) => cause,
             ListUsersError::Credentials(ref err) => err.description(),
             ListUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUsersError::Unknown(ref cause) => cause,
+            ListUsersError::ParseError(ref cause) => cause,
+            ListUsersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2424,48 +2469,50 @@ pub enum RebootBrokerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RebootBrokerError {
-    pub fn from_body(body: &str) -> RebootBrokerError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RebootBrokerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        RebootBrokerError::BadRequest(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        RebootBrokerError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        RebootBrokerError::InternalServerError(String::from(error_message))
-                    }
-                    "NotFoundException" => RebootBrokerError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        RebootBrokerError::Validation(error_message.to_string())
-                    }
-                    _ => RebootBrokerError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return RebootBrokerError::BadRequest(String::from(error_message))
                 }
+                "ForbiddenException" => {
+                    return RebootBrokerError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return RebootBrokerError::InternalServerError(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return RebootBrokerError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RebootBrokerError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RebootBrokerError::Unknown(String::from(body)),
         }
+        return RebootBrokerError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RebootBrokerError {
     fn from(err: serde_json::error::Error) -> RebootBrokerError {
-        RebootBrokerError::Unknown(err.description().to_string())
+        RebootBrokerError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RebootBrokerError {
@@ -2498,7 +2545,8 @@ impl Error for RebootBrokerError {
             RebootBrokerError::Validation(ref cause) => cause,
             RebootBrokerError::Credentials(ref err) => err.description(),
             RebootBrokerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RebootBrokerError::Unknown(ref cause) => cause,
+            RebootBrokerError::ParseError(ref cause) => cause,
+            RebootBrokerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2519,48 +2567,50 @@ pub enum UpdateBrokerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateBrokerError {
-    pub fn from_body(body: &str) -> UpdateBrokerError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateBrokerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateBrokerError::BadRequest(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        UpdateBrokerError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        UpdateBrokerError::InternalServerError(String::from(error_message))
-                    }
-                    "NotFoundException" => UpdateBrokerError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        UpdateBrokerError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateBrokerError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateBrokerError::BadRequest(String::from(error_message))
                 }
+                "ForbiddenException" => {
+                    return UpdateBrokerError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return UpdateBrokerError::InternalServerError(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateBrokerError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateBrokerError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateBrokerError::Unknown(String::from(body)),
         }
+        return UpdateBrokerError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateBrokerError {
     fn from(err: serde_json::error::Error) -> UpdateBrokerError {
-        UpdateBrokerError::Unknown(err.description().to_string())
+        UpdateBrokerError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateBrokerError {
@@ -2593,7 +2643,8 @@ impl Error for UpdateBrokerError {
             UpdateBrokerError::Validation(ref cause) => cause,
             UpdateBrokerError::Credentials(ref err) => err.description(),
             UpdateBrokerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateBrokerError::Unknown(ref cause) => cause,
+            UpdateBrokerError::ParseError(ref cause) => cause,
+            UpdateBrokerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2616,53 +2667,55 @@ pub enum UpdateConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConfigurationError {
-    pub fn from_body(body: &str) -> UpdateConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateConfigurationError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        UpdateConfigurationError::Conflict(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        UpdateConfigurationError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        UpdateConfigurationError::InternalServerError(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateConfigurationError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateConfigurationError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateConfigurationError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return UpdateConfigurationError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return UpdateConfigurationError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return UpdateConfigurationError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return UpdateConfigurationError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateConfigurationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateConfigurationError::Unknown(String::from(body)),
         }
+        return UpdateConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateConfigurationError {
     fn from(err: serde_json::error::Error) -> UpdateConfigurationError {
-        UpdateConfigurationError::Unknown(err.description().to_string())
+        UpdateConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateConfigurationError {
@@ -2698,7 +2751,8 @@ impl Error for UpdateConfigurationError {
             UpdateConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateConfigurationError::Unknown(ref cause) => cause,
+            UpdateConfigurationError::ParseError(ref cause) => cause,
+            UpdateConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2721,45 +2775,53 @@ pub enum UpdateUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserError {
-    pub fn from_body(body: &str) -> UpdateUserError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateUserError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => UpdateUserError::Conflict(String::from(error_message)),
-                    "ForbiddenException" => UpdateUserError::Forbidden(String::from(error_message)),
-                    "InternalServerErrorException" => {
-                        UpdateUserError::InternalServerError(String::from(error_message))
-                    }
-                    "NotFoundException" => UpdateUserError::NotFound(String::from(error_message)),
-                    "ValidationException" => UpdateUserError::Validation(error_message.to_string()),
-                    _ => UpdateUserError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateUserError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return UpdateUserError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return UpdateUserError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return UpdateUserError::InternalServerError(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateUserError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateUserError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateUserError::Unknown(String::from(body)),
         }
+        return UpdateUserError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateUserError {
     fn from(err: serde_json::error::Error) -> UpdateUserError {
-        UpdateUserError::Unknown(err.description().to_string())
+        UpdateUserError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateUserError {
@@ -2793,7 +2855,8 @@ impl Error for UpdateUserError {
             UpdateUserError::Validation(ref cause) => cause,
             UpdateUserError::Credentials(ref err) => err.description(),
             UpdateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateUserError::Unknown(ref cause) => cause,
+            UpdateUserError::ParseError(ref cause) => cause,
+            UpdateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2966,11 +3029,12 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateBrokerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateBrokerError::from_response(response))),
+                )
             }
         })
     }
@@ -3005,11 +3069,11 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateConfigurationError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3047,11 +3111,12 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateUserError::from_response(response))),
+                )
             }
         })
     }
@@ -3082,11 +3147,12 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBrokerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteBrokerError::from_response(response))),
+                )
             }
         })
     }
@@ -3121,11 +3187,12 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteUserError::from_response(response))),
+                )
             }
         })
     }
@@ -3156,11 +3223,12 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeBrokerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeBrokerError::from_response(response))),
+                )
             }
         })
     }
@@ -3195,11 +3263,11 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeConfigurationError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3238,9 +3306,7 @@ impl MQ for MQClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationRevisionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeConfigurationRevisionError::from_response(response))
                 }))
             }
         })
@@ -3276,11 +3342,12 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeUserError::from_response(response))),
+                )
             }
         })
     }
@@ -3320,11 +3387,12 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListBrokersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListBrokersError::from_response(response))),
+                )
             }
         })
     }
@@ -3370,9 +3438,7 @@ impl MQ for MQClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListConfigurationRevisionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListConfigurationRevisionsError::from_response(response))
                 }))
             }
         })
@@ -3414,11 +3480,12 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListConfigurationsError::from_response(response))),
+                )
             }
         })
     }
@@ -3458,11 +3525,12 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListUsersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListUsersError::from_response(response))),
+                )
             }
         })
     }
@@ -3496,11 +3564,12 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RebootBrokerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RebootBrokerError::from_response(response))),
+                )
             }
         })
     }
@@ -3534,11 +3603,12 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateBrokerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateBrokerError::from_response(response))),
+                )
             }
         })
     }
@@ -3576,11 +3646,11 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateConfigurationError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3618,11 +3688,12 @@ impl MQ for MQClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateUserError::from_response(response))),
+                )
             }
         })
     }

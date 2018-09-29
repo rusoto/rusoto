@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents an option to be shown on the client platform (Facebook, Slack, etc.)</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -84,7 +84,7 @@ pub struct PostContentRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub input_stream: Vec<u8>,
     /// <p>You pass this value as the <code>x-amz-lex-request-attributes</code> HTTP header.</p> <p>Request-specific information passed between Amazon Lex and a client application. The value must be a JSON serialized and base64 encoded map with string keys and values. The total size of the <code>requestAttributes</code> and <code>sessionAttributes</code> headers is limited to 12 KB.</p> <p>The namespace <code>x-amz-lex:</code> is reserved for special attributes. Don't create any request attributes with the prefix <code>x-amz-lex:</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html#context-mgmt-request-attribs">Setting Request Attributes</a>.</p>
@@ -232,67 +232,71 @@ pub enum PostContentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PostContentError {
-    pub fn from_body(body: &str) -> PostContentError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PostContentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadGatewayException" => {
-                        PostContentError::BadGateway(String::from(error_message))
-                    }
-                    "BadRequestException" => {
-                        PostContentError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => PostContentError::Conflict(String::from(error_message)),
-                    "DependencyFailedException" => {
-                        PostContentError::DependencyFailed(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        PostContentError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PostContentError::LimitExceeded(String::from(error_message))
-                    }
-                    "LoopDetectedException" => {
-                        PostContentError::LoopDetected(String::from(error_message))
-                    }
-                    "NotAcceptableException" => {
-                        PostContentError::NotAcceptable(String::from(error_message))
-                    }
-                    "NotFoundException" => PostContentError::NotFound(String::from(error_message)),
-                    "RequestTimeoutException" => {
-                        PostContentError::RequestTimeout(String::from(error_message))
-                    }
-                    "UnsupportedMediaTypeException" => {
-                        PostContentError::UnsupportedMediaType(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PostContentError::Validation(error_message.to_string())
-                    }
-                    _ => PostContentError::Unknown(String::from(body)),
+            match *error_type {
+                "BadGatewayException" => {
+                    return PostContentError::BadGateway(String::from(error_message))
                 }
+                "BadRequestException" => {
+                    return PostContentError::BadRequest(String::from(error_message))
+                }
+                "ConflictException" => {
+                    return PostContentError::Conflict(String::from(error_message))
+                }
+                "DependencyFailedException" => {
+                    return PostContentError::DependencyFailed(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return PostContentError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PostContentError::LimitExceeded(String::from(error_message))
+                }
+                "LoopDetectedException" => {
+                    return PostContentError::LoopDetected(String::from(error_message))
+                }
+                "NotAcceptableException" => {
+                    return PostContentError::NotAcceptable(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return PostContentError::NotFound(String::from(error_message))
+                }
+                "RequestTimeoutException" => {
+                    return PostContentError::RequestTimeout(String::from(error_message))
+                }
+                "UnsupportedMediaTypeException" => {
+                    return PostContentError::UnsupportedMediaType(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PostContentError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PostContentError::Unknown(String::from(body)),
         }
+        return PostContentError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PostContentError {
     fn from(err: serde_json::error::Error) -> PostContentError {
-        PostContentError::Unknown(err.description().to_string())
+        PostContentError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PostContentError {
@@ -332,7 +336,8 @@ impl Error for PostContentError {
             PostContentError::Validation(ref cause) => cause,
             PostContentError::Credentials(ref err) => err.description(),
             PostContentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PostContentError::Unknown(ref cause) => cause,
+            PostContentError::ParseError(ref cause) => cause,
+            PostContentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -361,52 +366,58 @@ pub enum PostTextError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PostTextError {
-    pub fn from_body(body: &str) -> PostTextError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PostTextError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadGatewayException" => PostTextError::BadGateway(String::from(error_message)),
-                    "BadRequestException" => PostTextError::BadRequest(String::from(error_message)),
-                    "ConflictException" => PostTextError::Conflict(String::from(error_message)),
-                    "DependencyFailedException" => {
-                        PostTextError::DependencyFailed(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        PostTextError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PostTextError::LimitExceeded(String::from(error_message))
-                    }
-                    "LoopDetectedException" => {
-                        PostTextError::LoopDetected(String::from(error_message))
-                    }
-                    "NotFoundException" => PostTextError::NotFound(String::from(error_message)),
-                    "ValidationException" => PostTextError::Validation(error_message.to_string()),
-                    _ => PostTextError::Unknown(String::from(body)),
+            match *error_type {
+                "BadGatewayException" => {
+                    return PostTextError::BadGateway(String::from(error_message))
                 }
+                "BadRequestException" => {
+                    return PostTextError::BadRequest(String::from(error_message))
+                }
+                "ConflictException" => return PostTextError::Conflict(String::from(error_message)),
+                "DependencyFailedException" => {
+                    return PostTextError::DependencyFailed(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return PostTextError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PostTextError::LimitExceeded(String::from(error_message))
+                }
+                "LoopDetectedException" => {
+                    return PostTextError::LoopDetected(String::from(error_message))
+                }
+                "NotFoundException" => return PostTextError::NotFound(String::from(error_message)),
+                "ValidationException" => {
+                    return PostTextError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PostTextError::Unknown(String::from(body)),
         }
+        return PostTextError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PostTextError {
     fn from(err: serde_json::error::Error) -> PostTextError {
-        PostTextError::Unknown(err.description().to_string())
+        PostTextError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PostTextError {
@@ -443,7 +454,8 @@ impl Error for PostTextError {
             PostTextError::Validation(ref cause) => cause,
             PostTextError::Credentials(ref err) => err.description(),
             PostTextError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PostTextError::Unknown(ref cause) => cause,
+            PostTextError::ParseError(ref cause) => cause,
+            PostTextError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -582,11 +594,12 @@ impl LexRuntime for LexRuntimeClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PostContentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PostContentError::from_response(response))),
+                )
             }
         })
     }
@@ -623,11 +636,12 @@ impl LexRuntime for LexRuntimeClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PostTextError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PostTextError::from_response(response))),
+                )
             }
         })
     }

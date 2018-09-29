@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -11779,56 +11779,60 @@ pub enum AcceptReservedNodeExchangeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AcceptReservedNodeExchangeError {
-    pub fn from_body(body: &str) -> AcceptReservedNodeExchangeError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DependentServiceUnavailableFault" => {
-                    AcceptReservedNodeExchangeError::DependentServiceUnavailableFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> AcceptReservedNodeExchangeError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DependentServiceUnavailableFault" => {
+                        return AcceptReservedNodeExchangeError::DependentServiceUnavailableFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidReservedNodeState" => {
+                        return AcceptReservedNodeExchangeError::InvalidReservedNodeStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ReservedNodeAlreadyExists" => {
+                        return AcceptReservedNodeExchangeError::ReservedNodeAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ReservedNodeAlreadyMigrated" => {
+                        return AcceptReservedNodeExchangeError::ReservedNodeAlreadyMigratedFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ReservedNodeNotFound" => {
+                        return AcceptReservedNodeExchangeError::ReservedNodeNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ReservedNodeOfferingNotFound" => {
+                        return AcceptReservedNodeExchangeError::ReservedNodeOfferingNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "UnsupportedOperation" => {
+                        return AcceptReservedNodeExchangeError::UnsupportedOperationFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidReservedNodeState" => {
-                    AcceptReservedNodeExchangeError::InvalidReservedNodeStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReservedNodeAlreadyExists" => {
-                    AcceptReservedNodeExchangeError::ReservedNodeAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReservedNodeAlreadyMigrated" => {
-                    AcceptReservedNodeExchangeError::ReservedNodeAlreadyMigratedFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReservedNodeNotFound" => {
-                    AcceptReservedNodeExchangeError::ReservedNodeNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReservedNodeOfferingNotFound" => {
-                    AcceptReservedNodeExchangeError::ReservedNodeOfferingNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "UnsupportedOperation" => {
-                    AcceptReservedNodeExchangeError::UnsupportedOperationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => AcceptReservedNodeExchangeError::Unknown(String::from(body)),
-            },
-            Err(_) => AcceptReservedNodeExchangeError::Unknown(body.to_string()),
+            }
         }
+        AcceptReservedNodeExchangeError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11843,7 +11847,7 @@ impl AcceptReservedNodeExchangeError {
 impl From<XmlParseError> for AcceptReservedNodeExchangeError {
     fn from(err: XmlParseError) -> AcceptReservedNodeExchangeError {
         let XmlParseError(message) = err;
-        AcceptReservedNodeExchangeError::Unknown(message.to_string())
+        AcceptReservedNodeExchangeError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AcceptReservedNodeExchangeError {
@@ -11881,7 +11885,8 @@ impl Error for AcceptReservedNodeExchangeError {
             AcceptReservedNodeExchangeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AcceptReservedNodeExchangeError::Unknown(ref cause) => cause,
+            AcceptReservedNodeExchangeError::ParseError(ref cause) => cause,
+            AcceptReservedNodeExchangeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11902,41 +11907,25 @@ pub enum AuthorizeClusterSecurityGroupIngressError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AuthorizeClusterSecurityGroupIngressError {
-    pub fn from_body(body: &str) -> AuthorizeClusterSecurityGroupIngressError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationAlreadyExists" => {
-                    AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "AuthorizationQuotaExceeded" => {
-                    AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "ClusterSecurityGroupNotFound" => {
-                    AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidClusterSecurityGroupState" => {
-                    AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => AuthorizeClusterSecurityGroupIngressError::Unknown(String::from(body)),
-            },
-            Err(_) => AuthorizeClusterSecurityGroupIngressError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> AuthorizeClusterSecurityGroupIngressError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "AuthorizationAlreadyExists" => return AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"AuthorizationQuotaExceeded" => return AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFound" => return AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSecurityGroupState" => return AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        AuthorizeClusterSecurityGroupIngressError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11951,7 +11940,7 @@ impl AuthorizeClusterSecurityGroupIngressError {
 impl From<XmlParseError> for AuthorizeClusterSecurityGroupIngressError {
     fn from(err: XmlParseError) -> AuthorizeClusterSecurityGroupIngressError {
         let XmlParseError(message) = err;
-        AuthorizeClusterSecurityGroupIngressError::Unknown(message.to_string())
+        AuthorizeClusterSecurityGroupIngressError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AuthorizeClusterSecurityGroupIngressError {
@@ -11994,7 +11983,8 @@ impl Error for AuthorizeClusterSecurityGroupIngressError {
             AuthorizeClusterSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AuthorizeClusterSecurityGroupIngressError::Unknown(ref cause) => cause,
+            AuthorizeClusterSecurityGroupIngressError::ParseError(ref cause) => cause,
+            AuthorizeClusterSecurityGroupIngressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12019,49 +12009,55 @@ pub enum AuthorizeSnapshotAccessError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AuthorizeSnapshotAccessError {
-    pub fn from_body(body: &str) -> AuthorizeSnapshotAccessError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationAlreadyExists" => {
-                    AuthorizeSnapshotAccessError::AuthorizationAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> AuthorizeSnapshotAccessError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AuthorizationAlreadyExists" => {
+                        return AuthorizeSnapshotAccessError::AuthorizationAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "AuthorizationQuotaExceeded" => {
+                        return AuthorizeSnapshotAccessError::AuthorizationQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ClusterSnapshotNotFound" => {
+                        return AuthorizeSnapshotAccessError::ClusterSnapshotNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "DependentServiceRequestThrottlingFault" => {
+                        return AuthorizeSnapshotAccessError::DependentServiceRequestThrottlingFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterSnapshotState" => {
+                        return AuthorizeSnapshotAccessError::InvalidClusterSnapshotStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "LimitExceededFault" => {
+                        return AuthorizeSnapshotAccessError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "AuthorizationQuotaExceeded" => {
-                    AuthorizeSnapshotAccessError::AuthorizationQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterSnapshotNotFound" => {
-                    AuthorizeSnapshotAccessError::ClusterSnapshotNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DependentServiceRequestThrottlingFault" => {
-                    AuthorizeSnapshotAccessError::DependentServiceRequestThrottlingFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidClusterSnapshotState" => {
-                    AuthorizeSnapshotAccessError::InvalidClusterSnapshotStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "LimitExceededFault" => AuthorizeSnapshotAccessError::LimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => AuthorizeSnapshotAccessError::Unknown(String::from(body)),
-            },
-            Err(_) => AuthorizeSnapshotAccessError::Unknown(body.to_string()),
+            }
         }
+        AuthorizeSnapshotAccessError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12076,7 +12072,7 @@ impl AuthorizeSnapshotAccessError {
 impl From<XmlParseError> for AuthorizeSnapshotAccessError {
     fn from(err: XmlParseError) -> AuthorizeSnapshotAccessError {
         let XmlParseError(message) = err;
-        AuthorizeSnapshotAccessError::Unknown(message.to_string())
+        AuthorizeSnapshotAccessError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AuthorizeSnapshotAccessError {
@@ -12115,7 +12111,8 @@ impl Error for AuthorizeSnapshotAccessError {
             AuthorizeSnapshotAccessError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AuthorizeSnapshotAccessError::Unknown(ref cause) => cause,
+            AuthorizeSnapshotAccessError::ParseError(ref cause) => cause,
+            AuthorizeSnapshotAccessError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12136,41 +12133,45 @@ pub enum CopyClusterSnapshotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CopyClusterSnapshotError {
-    pub fn from_body(body: &str) -> CopyClusterSnapshotError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSnapshotAlreadyExists" => {
-                    CopyClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CopyClusterSnapshotError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterSnapshotAlreadyExists" => {
+                        return CopyClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ClusterSnapshotNotFound" => {
+                        return CopyClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterSnapshotQuotaExceeded" => {
+                        return CopyClusterSnapshotError::ClusterSnapshotQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterSnapshotState" => {
+                        return CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "ClusterSnapshotNotFound" => {
-                    CopyClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterSnapshotQuotaExceeded" => {
-                    CopyClusterSnapshotError::ClusterSnapshotQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidClusterSnapshotState" => {
-                    CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => CopyClusterSnapshotError::Unknown(String::from(body)),
-            },
-            Err(_) => CopyClusterSnapshotError::Unknown(body.to_string()),
+            }
         }
+        CopyClusterSnapshotError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12185,7 +12186,7 @@ impl CopyClusterSnapshotError {
 impl From<XmlParseError> for CopyClusterSnapshotError {
     fn from(err: XmlParseError) -> CopyClusterSnapshotError {
         let XmlParseError(message) = err;
-        CopyClusterSnapshotError::Unknown(message.to_string())
+        CopyClusterSnapshotError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CopyClusterSnapshotError {
@@ -12220,7 +12221,8 @@ impl Error for CopyClusterSnapshotError {
             CopyClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CopyClusterSnapshotError::Unknown(ref cause) => cause,
+            CopyClusterSnapshotError::ParseError(ref cause) => cause,
+            CopyClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12273,101 +12275,123 @@ pub enum CreateClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterError {
-    pub fn from_body(body: &str) -> CreateClusterError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterAlreadyExists" => CreateClusterError::ClusterAlreadyExistsFault(
-                    String::from(parsed_error.message),
-                ),
-                "ClusterParameterGroupNotFound" => {
-                    CreateClusterError::ClusterParameterGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterAlreadyExists" => {
+                        return CreateClusterError::ClusterAlreadyExistsFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterParameterGroupNotFound" => {
+                        return CreateClusterError::ClusterParameterGroupNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterQuotaExceeded" => {
+                        return CreateClusterError::ClusterQuotaExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterSecurityGroupNotFound" => {
+                        return CreateClusterError::ClusterSecurityGroupNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterSubnetGroupNotFoundFault" => {
+                        return CreateClusterError::ClusterSubnetGroupNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DependentServiceRequestThrottlingFault" => {
+                        return CreateClusterError::DependentServiceRequestThrottlingFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "HsmClientCertificateNotFoundFault" => {
+                        return CreateClusterError::HsmClientCertificateNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "HsmConfigurationNotFoundFault" => {
+                        return CreateClusterError::HsmConfigurationNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InsufficientClusterCapacity" => {
+                        return CreateClusterError::InsufficientClusterCapacityFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidClusterSubnetGroupStateFault" => {
+                        return CreateClusterError::InvalidClusterSubnetGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterTrack" => {
+                        return CreateClusterError::InvalidClusterTrackFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidElasticIpFault" => {
+                        return CreateClusterError::InvalidElasticIpFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidSubnet" => {
+                        return CreateClusterError::InvalidSubnet(String::from(parsed_error.message))
+                    }
+                    "InvalidTagFault" => {
+                        return CreateClusterError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidVPCNetworkStateFault" => {
+                        return CreateClusterError::InvalidVPCNetworkStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceededFault" => {
+                        return CreateClusterError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NumberOfNodesPerClusterLimitExceeded" => {
+                        return CreateClusterError::NumberOfNodesPerClusterLimitExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NumberOfNodesQuotaExceeded" => {
+                        return CreateClusterError::NumberOfNodesQuotaExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TagLimitExceededFault" => {
+                        return CreateClusterError::TagLimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnauthorizedOperation" => {
+                        return CreateClusterError::UnauthorizedOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ClusterQuotaExceeded" => CreateClusterError::ClusterQuotaExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                "ClusterSecurityGroupNotFound" => {
-                    CreateClusterError::ClusterSecurityGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterSubnetGroupNotFoundFault" => {
-                    CreateClusterError::ClusterSubnetGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DependentServiceRequestThrottlingFault" => {
-                    CreateClusterError::DependentServiceRequestThrottlingFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "HsmClientCertificateNotFoundFault" => {
-                    CreateClusterError::HsmClientCertificateNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "HsmConfigurationNotFoundFault" => {
-                    CreateClusterError::HsmConfigurationNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InsufficientClusterCapacity" => {
-                    CreateClusterError::InsufficientClusterCapacityFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidClusterSubnetGroupStateFault" => {
-                    CreateClusterError::InvalidClusterSubnetGroupStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidClusterTrack" => {
-                    CreateClusterError::InvalidClusterTrackFault(String::from(parsed_error.message))
-                }
-                "InvalidElasticIpFault" => {
-                    CreateClusterError::InvalidElasticIpFault(String::from(parsed_error.message))
-                }
-                "InvalidSubnet" => {
-                    CreateClusterError::InvalidSubnet(String::from(parsed_error.message))
-                }
-                "InvalidTagFault" => {
-                    CreateClusterError::InvalidTagFault(String::from(parsed_error.message))
-                }
-                "InvalidVPCNetworkStateFault" => CreateClusterError::InvalidVPCNetworkStateFault(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceededFault" => {
-                    CreateClusterError::LimitExceededFault(String::from(parsed_error.message))
-                }
-                "NumberOfNodesPerClusterLimitExceeded" => {
-                    CreateClusterError::NumberOfNodesPerClusterLimitExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NumberOfNodesQuotaExceeded" => {
-                    CreateClusterError::NumberOfNodesQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TagLimitExceededFault" => {
-                    CreateClusterError::TagLimitExceededFault(String::from(parsed_error.message))
-                }
-                "UnauthorizedOperation" => {
-                    CreateClusterError::UnauthorizedOperation(String::from(parsed_error.message))
-                }
-                _ => CreateClusterError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateClusterError::Unknown(body.to_string()),
+            }
         }
+        CreateClusterError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12382,7 +12406,7 @@ impl CreateClusterError {
 impl From<XmlParseError> for CreateClusterError {
     fn from(err: XmlParseError) -> CreateClusterError {
         let XmlParseError(message) = err;
-        CreateClusterError::Unknown(message.to_string())
+        CreateClusterError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateClusterError {
@@ -12431,7 +12455,8 @@ impl Error for CreateClusterError {
             CreateClusterError::Validation(ref cause) => cause,
             CreateClusterError::Credentials(ref err) => err.description(),
             CreateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateClusterError::Unknown(ref cause) => cause,
+            CreateClusterError::ParseError(ref cause) => cause,
+            CreateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12452,37 +12477,25 @@ pub enum CreateClusterParameterGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterParameterGroupError {
-    pub fn from_body(body: &str) -> CreateClusterParameterGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupAlreadyExists" => {
-                    CreateClusterParameterGroupError::ClusterParameterGroupAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "ClusterParameterGroupQuotaExceeded" => {
-                    CreateClusterParameterGroupError::ClusterParameterGroupQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidTagFault" => CreateClusterParameterGroupError::InvalidTagFault(
-                    String::from(parsed_error.message),
-                ),
-                "TagLimitExceededFault" => CreateClusterParameterGroupError::TagLimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateClusterParameterGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateClusterParameterGroupError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterParameterGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ClusterParameterGroupAlreadyExists" => return CreateClusterParameterGroupError::ClusterParameterGroupAlreadyExistsFault(String::from(parsed_error.message)),"ClusterParameterGroupQuotaExceeded" => return CreateClusterParameterGroupError::ClusterParameterGroupQuotaExceededFault(String::from(parsed_error.message)),"InvalidTagFault" => return CreateClusterParameterGroupError::InvalidTagFault(String::from(parsed_error.message)),"TagLimitExceededFault" => return CreateClusterParameterGroupError::TagLimitExceededFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        CreateClusterParameterGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12497,7 +12510,7 @@ impl CreateClusterParameterGroupError {
 impl From<XmlParseError> for CreateClusterParameterGroupError {
     fn from(err: XmlParseError) -> CreateClusterParameterGroupError {
         let XmlParseError(message) = err;
-        CreateClusterParameterGroupError::Unknown(message.to_string())
+        CreateClusterParameterGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateClusterParameterGroupError {
@@ -12536,7 +12549,8 @@ impl Error for CreateClusterParameterGroupError {
             CreateClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateClusterParameterGroupError::Unknown(ref cause) => cause,
+            CreateClusterParameterGroupError::ParseError(ref cause) => cause,
+            CreateClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12557,37 +12571,25 @@ pub enum CreateClusterSecurityGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterSecurityGroupError {
-    pub fn from_body(body: &str) -> CreateClusterSecurityGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSecurityGroupAlreadyExists" => {
-                    CreateClusterSecurityGroupError::ClusterSecurityGroupAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "QuotaExceeded.ClusterSecurityGroup" => {
-                    CreateClusterSecurityGroupError::ClusterSecurityGroupQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidTagFault" => CreateClusterSecurityGroupError::InvalidTagFault(
-                    String::from(parsed_error.message),
-                ),
-                "TagLimitExceededFault" => CreateClusterSecurityGroupError::TagLimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateClusterSecurityGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateClusterSecurityGroupError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterSecurityGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ClusterSecurityGroupAlreadyExists" => return CreateClusterSecurityGroupError::ClusterSecurityGroupAlreadyExistsFault(String::from(parsed_error.message)),"QuotaExceeded.ClusterSecurityGroup" => return CreateClusterSecurityGroupError::ClusterSecurityGroupQuotaExceededFault(String::from(parsed_error.message)),"InvalidTagFault" => return CreateClusterSecurityGroupError::InvalidTagFault(String::from(parsed_error.message)),"TagLimitExceededFault" => return CreateClusterSecurityGroupError::TagLimitExceededFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        CreateClusterSecurityGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12602,7 +12604,7 @@ impl CreateClusterSecurityGroupError {
 impl From<XmlParseError> for CreateClusterSecurityGroupError {
     fn from(err: XmlParseError) -> CreateClusterSecurityGroupError {
         let XmlParseError(message) = err;
-        CreateClusterSecurityGroupError::Unknown(message.to_string())
+        CreateClusterSecurityGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateClusterSecurityGroupError {
@@ -12641,7 +12643,8 @@ impl Error for CreateClusterSecurityGroupError {
             CreateClusterSecurityGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateClusterSecurityGroupError::Unknown(ref cause) => cause,
+            CreateClusterSecurityGroupError::ParseError(ref cause) => cause,
+            CreateClusterSecurityGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12666,43 +12669,55 @@ pub enum CreateClusterSnapshotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterSnapshotError {
-    pub fn from_body(body: &str) -> CreateClusterSnapshotError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => CreateClusterSnapshotError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "ClusterSnapshotAlreadyExists" => {
-                    CreateClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterSnapshotError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return CreateClusterSnapshotError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterSnapshotAlreadyExists" => {
+                        return CreateClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ClusterSnapshotQuotaExceeded" => {
+                        return CreateClusterSnapshotError::ClusterSnapshotQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterState" => {
+                        return CreateClusterSnapshotError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidTagFault" => {
+                        return CreateClusterSnapshotError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TagLimitExceededFault" => {
+                        return CreateClusterSnapshotError::TagLimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ClusterSnapshotQuotaExceeded" => {
-                    CreateClusterSnapshotError::ClusterSnapshotQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidClusterState" => CreateClusterSnapshotError::InvalidClusterStateFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidTagFault" => {
-                    CreateClusterSnapshotError::InvalidTagFault(String::from(parsed_error.message))
-                }
-                "TagLimitExceededFault" => CreateClusterSnapshotError::TagLimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateClusterSnapshotError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateClusterSnapshotError::Unknown(body.to_string()),
+            }
         }
+        CreateClusterSnapshotError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12717,7 +12732,7 @@ impl CreateClusterSnapshotError {
 impl From<XmlParseError> for CreateClusterSnapshotError {
     fn from(err: XmlParseError) -> CreateClusterSnapshotError {
         let XmlParseError(message) = err;
-        CreateClusterSnapshotError::Unknown(message.to_string())
+        CreateClusterSnapshotError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateClusterSnapshotError {
@@ -12754,7 +12769,8 @@ impl Error for CreateClusterSnapshotError {
             CreateClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateClusterSnapshotError::Unknown(ref cause) => cause,
+            CreateClusterSnapshotError::ParseError(ref cause) => cause,
+            CreateClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12783,53 +12799,65 @@ pub enum CreateClusterSubnetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterSubnetGroupError {
-    pub fn from_body(body: &str) -> CreateClusterSubnetGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSubnetGroupAlreadyExists" => {
-                    CreateClusterSubnetGroupError::ClusterSubnetGroupAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
+    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterSubnetGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterSubnetGroupAlreadyExists" => {
+                        return CreateClusterSubnetGroupError::ClusterSubnetGroupAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ClusterSubnetGroupQuotaExceeded" => {
+                        return CreateClusterSubnetGroupError::ClusterSubnetGroupQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ClusterSubnetQuotaExceededFault" => {
+                        return CreateClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "DependentServiceRequestThrottlingFault" => {
+                        return CreateClusterSubnetGroupError::DependentServiceRequestThrottlingFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidSubnet" => {
+                        return CreateClusterSubnetGroupError::InvalidSubnet(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidTagFault" => {
+                        return CreateClusterSubnetGroupError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TagLimitExceededFault" => {
+                        return CreateClusterSubnetGroupError::TagLimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnauthorizedOperation" => {
+                        return CreateClusterSubnetGroupError::UnauthorizedOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ClusterSubnetGroupQuotaExceeded" => {
-                    CreateClusterSubnetGroupError::ClusterSubnetGroupQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "ClusterSubnetQuotaExceededFault" => {
-                    CreateClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DependentServiceRequestThrottlingFault" => {
-                    CreateClusterSubnetGroupError::DependentServiceRequestThrottlingFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidSubnet" => {
-                    CreateClusterSubnetGroupError::InvalidSubnet(String::from(parsed_error.message))
-                }
-                "InvalidTagFault" => CreateClusterSubnetGroupError::InvalidTagFault(String::from(
-                    parsed_error.message,
-                )),
-                "TagLimitExceededFault" => CreateClusterSubnetGroupError::TagLimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                "UnauthorizedOperation" => CreateClusterSubnetGroupError::UnauthorizedOperation(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateClusterSubnetGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateClusterSubnetGroupError::Unknown(body.to_string()),
+            }
         }
+        CreateClusterSubnetGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12844,7 +12872,7 @@ impl CreateClusterSubnetGroupError {
 impl From<XmlParseError> for CreateClusterSubnetGroupError {
     fn from(err: XmlParseError) -> CreateClusterSubnetGroupError {
         let XmlParseError(message) = err;
-        CreateClusterSubnetGroupError::Unknown(message.to_string())
+        CreateClusterSubnetGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateClusterSubnetGroupError {
@@ -12885,7 +12913,8 @@ impl Error for CreateClusterSubnetGroupError {
             CreateClusterSubnetGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateClusterSubnetGroupError::Unknown(ref cause) => cause,
+            CreateClusterSubnetGroupError::ParseError(ref cause) => cause,
+            CreateClusterSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12920,64 +12949,80 @@ pub enum CreateEventSubscriptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateEventSubscriptionError {
-    pub fn from_body(body: &str) -> CreateEventSubscriptionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "EventSubscriptionQuotaExceeded" => {
-                    CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateEventSubscriptionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EventSubscriptionQuotaExceeded" => {
+                        return CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidTagFault" => {
+                        return CreateEventSubscriptionError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SNSInvalidTopic" => {
+                        return CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SNSNoAuthorization" => {
+                        return CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SNSTopicArnNotFound" => {
+                        return CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SourceNotFound" => {
+                        return CreateEventSubscriptionError::SourceNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SubscriptionAlreadyExist" => {
+                        return CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SubscriptionCategoryNotFound" => {
+                        return CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SubscriptionEventIdNotFound" => {
+                        return CreateEventSubscriptionError::SubscriptionEventIdNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SubscriptionSeverityNotFound" => {
+                        return CreateEventSubscriptionError::SubscriptionSeverityNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TagLimitExceededFault" => {
+                        return CreateEventSubscriptionError::TagLimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidTagFault" => CreateEventSubscriptionError::InvalidTagFault(String::from(
-                    parsed_error.message,
-                )),
-                "SNSInvalidTopic" => CreateEventSubscriptionError::SNSInvalidTopicFault(
-                    String::from(parsed_error.message),
-                ),
-                "SNSNoAuthorization" => CreateEventSubscriptionError::SNSNoAuthorizationFault(
-                    String::from(parsed_error.message),
-                ),
-                "SNSTopicArnNotFound" => CreateEventSubscriptionError::SNSTopicArnNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "SourceNotFound" => CreateEventSubscriptionError::SourceNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "SubscriptionAlreadyExist" => {
-                    CreateEventSubscriptionError::SubscriptionAlreadyExistFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SubscriptionCategoryNotFound" => {
-                    CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SubscriptionEventIdNotFound" => {
-                    CreateEventSubscriptionError::SubscriptionEventIdNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SubscriptionSeverityNotFound" => {
-                    CreateEventSubscriptionError::SubscriptionSeverityNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TagLimitExceededFault" => CreateEventSubscriptionError::TagLimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateEventSubscriptionError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateEventSubscriptionError::Unknown(body.to_string()),
+            }
         }
+        CreateEventSubscriptionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12992,7 +13037,7 @@ impl CreateEventSubscriptionError {
 impl From<XmlParseError> for CreateEventSubscriptionError {
     fn from(err: XmlParseError) -> CreateEventSubscriptionError {
         let XmlParseError(message) = err;
-        CreateEventSubscriptionError::Unknown(message.to_string())
+        CreateEventSubscriptionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateEventSubscriptionError {
@@ -13034,7 +13079,8 @@ impl Error for CreateEventSubscriptionError {
             CreateEventSubscriptionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateEventSubscriptionError::Unknown(ref cause) => cause,
+            CreateEventSubscriptionError::ParseError(ref cause) => cause,
+            CreateEventSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13055,37 +13101,25 @@ pub enum CreateHsmClientCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHsmClientCertificateError {
-    pub fn from_body(body: &str) -> CreateHsmClientCertificateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "HsmClientCertificateAlreadyExistsFault" => {
-                    CreateHsmClientCertificateError::HsmClientCertificateAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "HsmClientCertificateQuotaExceededFault" => {
-                    CreateHsmClientCertificateError::HsmClientCertificateQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidTagFault" => CreateHsmClientCertificateError::InvalidTagFault(
-                    String::from(parsed_error.message),
-                ),
-                "TagLimitExceededFault" => CreateHsmClientCertificateError::TagLimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateHsmClientCertificateError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateHsmClientCertificateError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateHsmClientCertificateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "HsmClientCertificateAlreadyExistsFault" => return CreateHsmClientCertificateError::HsmClientCertificateAlreadyExistsFault(String::from(parsed_error.message)),"HsmClientCertificateQuotaExceededFault" => return CreateHsmClientCertificateError::HsmClientCertificateQuotaExceededFault(String::from(parsed_error.message)),"InvalidTagFault" => return CreateHsmClientCertificateError::InvalidTagFault(String::from(parsed_error.message)),"TagLimitExceededFault" => return CreateHsmClientCertificateError::TagLimitExceededFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        CreateHsmClientCertificateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13100,7 +13134,7 @@ impl CreateHsmClientCertificateError {
 impl From<XmlParseError> for CreateHsmClientCertificateError {
     fn from(err: XmlParseError) -> CreateHsmClientCertificateError {
         let XmlParseError(message) = err;
-        CreateHsmClientCertificateError::Unknown(message.to_string())
+        CreateHsmClientCertificateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateHsmClientCertificateError {
@@ -13139,7 +13173,8 @@ impl Error for CreateHsmClientCertificateError {
             CreateHsmClientCertificateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateHsmClientCertificateError::Unknown(ref cause) => cause,
+            CreateHsmClientCertificateError::ParseError(ref cause) => cause,
+            CreateHsmClientCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13160,37 +13195,45 @@ pub enum CreateHsmConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHsmConfigurationError {
-    pub fn from_body(body: &str) -> CreateHsmConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "HsmConfigurationAlreadyExistsFault" => {
-                    CreateHsmConfigurationError::HsmConfigurationAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateHsmConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "HsmConfigurationAlreadyExistsFault" => {
+                        return CreateHsmConfigurationError::HsmConfigurationAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "HsmConfigurationQuotaExceededFault" => {
+                        return CreateHsmConfigurationError::HsmConfigurationQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidTagFault" => {
+                        return CreateHsmConfigurationError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TagLimitExceededFault" => {
+                        return CreateHsmConfigurationError::TagLimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "HsmConfigurationQuotaExceededFault" => {
-                    CreateHsmConfigurationError::HsmConfigurationQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidTagFault" => {
-                    CreateHsmConfigurationError::InvalidTagFault(String::from(parsed_error.message))
-                }
-                "TagLimitExceededFault" => CreateHsmConfigurationError::TagLimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateHsmConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateHsmConfigurationError::Unknown(body.to_string()),
+            }
         }
+        CreateHsmConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13205,7 +13248,7 @@ impl CreateHsmConfigurationError {
 impl From<XmlParseError> for CreateHsmConfigurationError {
     fn from(err: XmlParseError) -> CreateHsmConfigurationError {
         let XmlParseError(message) = err;
-        CreateHsmConfigurationError::Unknown(message.to_string())
+        CreateHsmConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateHsmConfigurationError {
@@ -13240,7 +13283,8 @@ impl Error for CreateHsmConfigurationError {
             CreateHsmConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateHsmConfigurationError::Unknown(ref cause) => cause,
+            CreateHsmConfigurationError::ParseError(ref cause) => cause,
+            CreateHsmConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13265,45 +13309,55 @@ pub enum CreateSnapshotCopyGrantError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSnapshotCopyGrantError {
-    pub fn from_body(body: &str) -> CreateSnapshotCopyGrantError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DependentServiceRequestThrottlingFault" => {
-                    CreateSnapshotCopyGrantError::DependentServiceRequestThrottlingFault(
-                        String::from(parsed_error.message),
-                    )
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSnapshotCopyGrantError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DependentServiceRequestThrottlingFault" => {
+                        return CreateSnapshotCopyGrantError::DependentServiceRequestThrottlingFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidTagFault" => {
+                        return CreateSnapshotCopyGrantError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceededFault" => {
+                        return CreateSnapshotCopyGrantError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotCopyGrantAlreadyExistsFault" => {
+                        return CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SnapshotCopyGrantQuotaExceededFault" => {
+                        return CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TagLimitExceededFault" => {
+                        return CreateSnapshotCopyGrantError::TagLimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidTagFault" => CreateSnapshotCopyGrantError::InvalidTagFault(String::from(
-                    parsed_error.message,
-                )),
-                "LimitExceededFault" => CreateSnapshotCopyGrantError::LimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                "SnapshotCopyGrantAlreadyExistsFault" => {
-                    CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotCopyGrantQuotaExceededFault" => {
-                    CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TagLimitExceededFault" => CreateSnapshotCopyGrantError::TagLimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateSnapshotCopyGrantError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateSnapshotCopyGrantError::Unknown(body.to_string()),
+            }
         }
+        CreateSnapshotCopyGrantError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13318,7 +13372,7 @@ impl CreateSnapshotCopyGrantError {
 impl From<XmlParseError> for CreateSnapshotCopyGrantError {
     fn from(err: XmlParseError) -> CreateSnapshotCopyGrantError {
         let XmlParseError(message) = err;
-        CreateSnapshotCopyGrantError::Unknown(message.to_string())
+        CreateSnapshotCopyGrantError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateSnapshotCopyGrantError {
@@ -13357,7 +13411,8 @@ impl Error for CreateSnapshotCopyGrantError {
             CreateSnapshotCopyGrantError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateSnapshotCopyGrantError::Unknown(ref cause) => cause,
+            CreateSnapshotCopyGrantError::ParseError(ref cause) => cause,
+            CreateSnapshotCopyGrantError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13376,30 +13431,38 @@ pub enum CreateTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTagsError {
-    pub fn from_body(body: &str) -> CreateTagsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidTagFault" => {
-                    CreateTagsError::InvalidTagFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidTagFault" => {
+                        return CreateTagsError::InvalidTagFault(String::from(parsed_error.message))
+                    }
+                    "ResourceNotFoundFault" => {
+                        return CreateTagsError::ResourceNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TagLimitExceededFault" => {
+                        return CreateTagsError::TagLimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResourceNotFoundFault" => {
-                    CreateTagsError::ResourceNotFoundFault(String::from(parsed_error.message))
-                }
-                "TagLimitExceededFault" => {
-                    CreateTagsError::TagLimitExceededFault(String::from(parsed_error.message))
-                }
-                _ => CreateTagsError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateTagsError::Unknown(body.to_string()),
+            }
         }
+        CreateTagsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13414,7 +13477,7 @@ impl CreateTagsError {
 impl From<XmlParseError> for CreateTagsError {
     fn from(err: XmlParseError) -> CreateTagsError {
         let XmlParseError(message) = err;
-        CreateTagsError::Unknown(message.to_string())
+        CreateTagsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateTagsError {
@@ -13446,7 +13509,8 @@ impl Error for CreateTagsError {
             CreateTagsError::Validation(ref cause) => cause,
             CreateTagsError::Credentials(ref err) => err.description(),
             CreateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTagsError::Unknown(ref cause) => cause,
+            CreateTagsError::ParseError(ref cause) => cause,
+            CreateTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13467,37 +13531,45 @@ pub enum DeleteClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterError {
-    pub fn from_body(body: &str) -> DeleteClusterError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => {
-                    DeleteClusterError::ClusterNotFoundFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return DeleteClusterError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterSnapshotAlreadyExists" => {
+                        return DeleteClusterError::ClusterSnapshotAlreadyExistsFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterSnapshotQuotaExceeded" => {
+                        return DeleteClusterError::ClusterSnapshotQuotaExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidClusterState" => {
+                        return DeleteClusterError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ClusterSnapshotAlreadyExists" => {
-                    DeleteClusterError::ClusterSnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterSnapshotQuotaExceeded" => {
-                    DeleteClusterError::ClusterSnapshotQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidClusterState" => {
-                    DeleteClusterError::InvalidClusterStateFault(String::from(parsed_error.message))
-                }
-                _ => DeleteClusterError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteClusterError::Unknown(body.to_string()),
+            }
         }
+        DeleteClusterError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13512,7 +13584,7 @@ impl DeleteClusterError {
 impl From<XmlParseError> for DeleteClusterError {
     fn from(err: XmlParseError) -> DeleteClusterError {
         let XmlParseError(message) = err;
-        DeleteClusterError::Unknown(message.to_string())
+        DeleteClusterError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteClusterError {
@@ -13545,7 +13617,8 @@ impl Error for DeleteClusterError {
             DeleteClusterError::Validation(ref cause) => cause,
             DeleteClusterError::Credentials(ref err) => err.description(),
             DeleteClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteClusterError::Unknown(ref cause) => cause,
+            DeleteClusterError::ParseError(ref cause) => cause,
+            DeleteClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13562,31 +13635,25 @@ pub enum DeleteClusterParameterGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterParameterGroupError {
-    pub fn from_body(body: &str) -> DeleteClusterParameterGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFound" => {
-                    DeleteClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidClusterParameterGroupState" => {
-                    DeleteClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => DeleteClusterParameterGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteClusterParameterGroupError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterParameterGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ClusterParameterGroupNotFound" => return DeleteClusterParameterGroupError::ClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterParameterGroupState" => return DeleteClusterParameterGroupError::InvalidClusterParameterGroupStateFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        DeleteClusterParameterGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13601,7 +13668,7 @@ impl DeleteClusterParameterGroupError {
 impl From<XmlParseError> for DeleteClusterParameterGroupError {
     fn from(err: XmlParseError) -> DeleteClusterParameterGroupError {
         let XmlParseError(message) = err;
-        DeleteClusterParameterGroupError::Unknown(message.to_string())
+        DeleteClusterParameterGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteClusterParameterGroupError {
@@ -13638,7 +13705,8 @@ impl Error for DeleteClusterParameterGroupError {
             DeleteClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteClusterParameterGroupError::Unknown(ref cause) => cause,
+            DeleteClusterParameterGroupError::ParseError(ref cause) => cause,
+            DeleteClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13655,31 +13723,25 @@ pub enum DeleteClusterSecurityGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterSecurityGroupError {
-    pub fn from_body(body: &str) -> DeleteClusterSecurityGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSecurityGroupNotFound" => {
-                    DeleteClusterSecurityGroupError::ClusterSecurityGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidClusterSecurityGroupState" => {
-                    DeleteClusterSecurityGroupError::InvalidClusterSecurityGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => DeleteClusterSecurityGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteClusterSecurityGroupError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterSecurityGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ClusterSecurityGroupNotFound" => return DeleteClusterSecurityGroupError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSecurityGroupState" => return DeleteClusterSecurityGroupError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        DeleteClusterSecurityGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13694,7 +13756,7 @@ impl DeleteClusterSecurityGroupError {
 impl From<XmlParseError> for DeleteClusterSecurityGroupError {
     fn from(err: XmlParseError) -> DeleteClusterSecurityGroupError {
         let XmlParseError(message) = err;
-        DeleteClusterSecurityGroupError::Unknown(message.to_string())
+        DeleteClusterSecurityGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteClusterSecurityGroupError {
@@ -13729,7 +13791,8 @@ impl Error for DeleteClusterSecurityGroupError {
             DeleteClusterSecurityGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteClusterSecurityGroupError::Unknown(ref cause) => cause,
+            DeleteClusterSecurityGroupError::ParseError(ref cause) => cause,
+            DeleteClusterSecurityGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13746,31 +13809,35 @@ pub enum DeleteClusterSnapshotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterSnapshotError {
-    pub fn from_body(body: &str) -> DeleteClusterSnapshotError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSnapshotNotFound" => {
-                    DeleteClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterSnapshotError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterSnapshotNotFound" => {
+                        return DeleteClusterSnapshotError::ClusterSnapshotNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterSnapshotState" => {
+                        return DeleteClusterSnapshotError::InvalidClusterSnapshotStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidClusterSnapshotState" => {
-                    DeleteClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DeleteClusterSnapshotError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteClusterSnapshotError::Unknown(body.to_string()),
+            }
         }
+        DeleteClusterSnapshotError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13785,7 +13852,7 @@ impl DeleteClusterSnapshotError {
 impl From<XmlParseError> for DeleteClusterSnapshotError {
     fn from(err: XmlParseError) -> DeleteClusterSnapshotError {
         let XmlParseError(message) = err;
-        DeleteClusterSnapshotError::Unknown(message.to_string())
+        DeleteClusterSnapshotError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteClusterSnapshotError {
@@ -13818,7 +13885,8 @@ impl Error for DeleteClusterSnapshotError {
             DeleteClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteClusterSnapshotError::Unknown(ref cause) => cause,
+            DeleteClusterSnapshotError::ParseError(ref cause) => cause,
+            DeleteClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13837,36 +13905,40 @@ pub enum DeleteClusterSubnetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterSubnetGroupError {
-    pub fn from_body(body: &str) -> DeleteClusterSubnetGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSubnetGroupNotFoundFault" => {
-                    DeleteClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterSubnetGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterSubnetGroupNotFoundFault" => {
+                        return DeleteClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterSubnetGroupStateFault" => {
+                        return DeleteClusterSubnetGroupError::InvalidClusterSubnetGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterSubnetStateFault" => {
+                        return DeleteClusterSubnetGroupError::InvalidClusterSubnetStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidClusterSubnetGroupStateFault" => {
-                    DeleteClusterSubnetGroupError::InvalidClusterSubnetGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidClusterSubnetStateFault" => {
-                    DeleteClusterSubnetGroupError::InvalidClusterSubnetStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DeleteClusterSubnetGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteClusterSubnetGroupError::Unknown(body.to_string()),
+            }
         }
+        DeleteClusterSubnetGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13881,7 +13953,7 @@ impl DeleteClusterSubnetGroupError {
 impl From<XmlParseError> for DeleteClusterSubnetGroupError {
     fn from(err: XmlParseError) -> DeleteClusterSubnetGroupError {
         let XmlParseError(message) = err;
-        DeleteClusterSubnetGroupError::Unknown(message.to_string())
+        DeleteClusterSubnetGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteClusterSubnetGroupError {
@@ -13915,7 +13987,8 @@ impl Error for DeleteClusterSubnetGroupError {
             DeleteClusterSubnetGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteClusterSubnetGroupError::Unknown(ref cause) => cause,
+            DeleteClusterSubnetGroupError::ParseError(ref cause) => cause,
+            DeleteClusterSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13932,29 +14005,35 @@ pub enum DeleteEventSubscriptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEventSubscriptionError {
-    pub fn from_body(body: &str) -> DeleteEventSubscriptionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidSubscriptionStateFault" => {
-                    DeleteEventSubscriptionError::InvalidSubscriptionStateFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteEventSubscriptionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidSubscriptionStateFault" => {
+                        return DeleteEventSubscriptionError::InvalidSubscriptionStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SubscriptionNotFound" => {
+                        return DeleteEventSubscriptionError::SubscriptionNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "SubscriptionNotFound" => DeleteEventSubscriptionError::SubscriptionNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DeleteEventSubscriptionError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteEventSubscriptionError::Unknown(body.to_string()),
+            }
         }
+        DeleteEventSubscriptionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13969,7 +14048,7 @@ impl DeleteEventSubscriptionError {
 impl From<XmlParseError> for DeleteEventSubscriptionError {
     fn from(err: XmlParseError) -> DeleteEventSubscriptionError {
         let XmlParseError(message) = err;
-        DeleteEventSubscriptionError::Unknown(message.to_string())
+        DeleteEventSubscriptionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteEventSubscriptionError {
@@ -14002,7 +14081,8 @@ impl Error for DeleteEventSubscriptionError {
             DeleteEventSubscriptionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteEventSubscriptionError::Unknown(ref cause) => cause,
+            DeleteEventSubscriptionError::ParseError(ref cause) => cause,
+            DeleteEventSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14019,31 +14099,25 @@ pub enum DeleteHsmClientCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHsmClientCertificateError {
-    pub fn from_body(body: &str) -> DeleteHsmClientCertificateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "HsmClientCertificateNotFoundFault" => {
-                    DeleteHsmClientCertificateError::HsmClientCertificateNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidHsmClientCertificateStateFault" => {
-                    DeleteHsmClientCertificateError::InvalidHsmClientCertificateStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => DeleteHsmClientCertificateError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteHsmClientCertificateError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteHsmClientCertificateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "HsmClientCertificateNotFoundFault" => return DeleteHsmClientCertificateError::HsmClientCertificateNotFoundFault(String::from(parsed_error.message)),"InvalidHsmClientCertificateStateFault" => return DeleteHsmClientCertificateError::InvalidHsmClientCertificateStateFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        DeleteHsmClientCertificateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14058,7 +14132,7 @@ impl DeleteHsmClientCertificateError {
 impl From<XmlParseError> for DeleteHsmClientCertificateError {
     fn from(err: XmlParseError) -> DeleteHsmClientCertificateError {
         let XmlParseError(message) = err;
-        DeleteHsmClientCertificateError::Unknown(message.to_string())
+        DeleteHsmClientCertificateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteHsmClientCertificateError {
@@ -14093,7 +14167,8 @@ impl Error for DeleteHsmClientCertificateError {
             DeleteHsmClientCertificateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteHsmClientCertificateError::Unknown(ref cause) => cause,
+            DeleteHsmClientCertificateError::ParseError(ref cause) => cause,
+            DeleteHsmClientCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14110,31 +14185,35 @@ pub enum DeleteHsmConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHsmConfigurationError {
-    pub fn from_body(body: &str) -> DeleteHsmConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "HsmConfigurationNotFoundFault" => {
-                    DeleteHsmConfigurationError::HsmConfigurationNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteHsmConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "HsmConfigurationNotFoundFault" => {
+                        return DeleteHsmConfigurationError::HsmConfigurationNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidHsmConfigurationStateFault" => {
+                        return DeleteHsmConfigurationError::InvalidHsmConfigurationStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidHsmConfigurationStateFault" => {
-                    DeleteHsmConfigurationError::InvalidHsmConfigurationStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DeleteHsmConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteHsmConfigurationError::Unknown(body.to_string()),
+            }
         }
+        DeleteHsmConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14149,7 +14228,7 @@ impl DeleteHsmConfigurationError {
 impl From<XmlParseError> for DeleteHsmConfigurationError {
     fn from(err: XmlParseError) -> DeleteHsmConfigurationError {
         let XmlParseError(message) = err;
-        DeleteHsmConfigurationError::Unknown(message.to_string())
+        DeleteHsmConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteHsmConfigurationError {
@@ -14182,7 +14261,8 @@ impl Error for DeleteHsmConfigurationError {
             DeleteHsmConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteHsmConfigurationError::Unknown(ref cause) => cause,
+            DeleteHsmConfigurationError::ParseError(ref cause) => cause,
+            DeleteHsmConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14199,31 +14279,35 @@ pub enum DeleteSnapshotCopyGrantError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSnapshotCopyGrantError {
-    pub fn from_body(body: &str) -> DeleteSnapshotCopyGrantError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidSnapshotCopyGrantStateFault" => {
-                    DeleteSnapshotCopyGrantError::InvalidSnapshotCopyGrantStateFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSnapshotCopyGrantError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidSnapshotCopyGrantStateFault" => {
+                        return DeleteSnapshotCopyGrantError::InvalidSnapshotCopyGrantStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SnapshotCopyGrantNotFoundFault" => {
+                        return DeleteSnapshotCopyGrantError::SnapshotCopyGrantNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "SnapshotCopyGrantNotFoundFault" => {
-                    DeleteSnapshotCopyGrantError::SnapshotCopyGrantNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DeleteSnapshotCopyGrantError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteSnapshotCopyGrantError::Unknown(body.to_string()),
+            }
         }
+        DeleteSnapshotCopyGrantError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14238,7 +14322,7 @@ impl DeleteSnapshotCopyGrantError {
 impl From<XmlParseError> for DeleteSnapshotCopyGrantError {
     fn from(err: XmlParseError) -> DeleteSnapshotCopyGrantError {
         let XmlParseError(message) = err;
-        DeleteSnapshotCopyGrantError::Unknown(message.to_string())
+        DeleteSnapshotCopyGrantError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteSnapshotCopyGrantError {
@@ -14271,7 +14355,8 @@ impl Error for DeleteSnapshotCopyGrantError {
             DeleteSnapshotCopyGrantError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteSnapshotCopyGrantError::Unknown(ref cause) => cause,
+            DeleteSnapshotCopyGrantError::ParseError(ref cause) => cause,
+            DeleteSnapshotCopyGrantError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14288,27 +14373,33 @@ pub enum DeleteTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTagsError {
-    pub fn from_body(body: &str) -> DeleteTagsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidTagFault" => {
-                    DeleteTagsError::InvalidTagFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidTagFault" => {
+                        return DeleteTagsError::InvalidTagFault(String::from(parsed_error.message))
+                    }
+                    "ResourceNotFoundFault" => {
+                        return DeleteTagsError::ResourceNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResourceNotFoundFault" => {
-                    DeleteTagsError::ResourceNotFoundFault(String::from(parsed_error.message))
-                }
-                _ => DeleteTagsError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteTagsError::Unknown(body.to_string()),
+            }
         }
+        DeleteTagsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14323,7 +14414,7 @@ impl DeleteTagsError {
 impl From<XmlParseError> for DeleteTagsError {
     fn from(err: XmlParseError) -> DeleteTagsError {
         let XmlParseError(message) = err;
-        DeleteTagsError::Unknown(message.to_string())
+        DeleteTagsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteTagsError {
@@ -14354,7 +14445,8 @@ impl Error for DeleteTagsError {
             DeleteTagsError::Validation(ref cause) => cause,
             DeleteTagsError::Credentials(ref err) => err.description(),
             DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTagsError::Unknown(ref cause) => cause,
+            DeleteTagsError::ParseError(ref cause) => cause,
+            DeleteTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14369,24 +14461,30 @@ pub enum DescribeClusterDbRevisionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterDbRevisionsError {
-    pub fn from_body(body: &str) -> DescribeClusterDbRevisionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => DescribeClusterDbRevisionsError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeClusterDbRevisionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeClusterDbRevisionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterDbRevisionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return DescribeClusterDbRevisionsError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeClusterDbRevisionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14401,7 +14499,7 @@ impl DescribeClusterDbRevisionsError {
 impl From<XmlParseError> for DescribeClusterDbRevisionsError {
     fn from(err: XmlParseError) -> DescribeClusterDbRevisionsError {
         let XmlParseError(message) = err;
-        DescribeClusterDbRevisionsError::Unknown(message.to_string())
+        DescribeClusterDbRevisionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeClusterDbRevisionsError {
@@ -14433,7 +14531,8 @@ impl Error for DescribeClusterDbRevisionsError {
             DescribeClusterDbRevisionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeClusterDbRevisionsError::Unknown(ref cause) => cause,
+            DescribeClusterDbRevisionsError::ParseError(ref cause) => cause,
+            DescribeClusterDbRevisionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14450,29 +14549,25 @@ pub enum DescribeClusterParameterGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterParameterGroupsError {
-    pub fn from_body(body: &str) -> DescribeClusterParameterGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFound" => {
-                    DescribeClusterParameterGroupsError::ClusterParameterGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidTagFault" => DescribeClusterParameterGroupsError::InvalidTagFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeClusterParameterGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeClusterParameterGroupsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterParameterGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ClusterParameterGroupNotFound" => return DescribeClusterParameterGroupsError::ClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidTagFault" => return DescribeClusterParameterGroupsError::InvalidTagFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        DescribeClusterParameterGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14487,7 +14582,7 @@ impl DescribeClusterParameterGroupsError {
 impl From<XmlParseError> for DescribeClusterParameterGroupsError {
     fn from(err: XmlParseError) -> DescribeClusterParameterGroupsError {
         let XmlParseError(message) = err;
-        DescribeClusterParameterGroupsError::Unknown(message.to_string())
+        DescribeClusterParameterGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeClusterParameterGroupsError {
@@ -14522,7 +14617,8 @@ impl Error for DescribeClusterParameterGroupsError {
             DescribeClusterParameterGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeClusterParameterGroupsError::Unknown(ref cause) => cause,
+            DescribeClusterParameterGroupsError::ParseError(ref cause) => cause,
+            DescribeClusterParameterGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14537,26 +14633,30 @@ pub enum DescribeClusterParametersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterParametersError {
-    pub fn from_body(body: &str) -> DescribeClusterParametersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFound" => {
-                    DescribeClusterParametersError::ClusterParameterGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterParametersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterParameterGroupNotFound" => {
+                        return DescribeClusterParametersError::ClusterParameterGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeClusterParametersError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeClusterParametersError::Unknown(body.to_string()),
+            }
         }
+        DescribeClusterParametersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14571,7 +14671,7 @@ impl DescribeClusterParametersError {
 impl From<XmlParseError> for DescribeClusterParametersError {
     fn from(err: XmlParseError) -> DescribeClusterParametersError {
         let XmlParseError(message) = err;
-        DescribeClusterParametersError::Unknown(message.to_string())
+        DescribeClusterParametersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeClusterParametersError {
@@ -14603,7 +14703,8 @@ impl Error for DescribeClusterParametersError {
             DescribeClusterParametersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeClusterParametersError::Unknown(ref cause) => cause,
+            DescribeClusterParametersError::ParseError(ref cause) => cause,
+            DescribeClusterParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14620,29 +14721,35 @@ pub enum DescribeClusterSecurityGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterSecurityGroupsError {
-    pub fn from_body(body: &str) -> DescribeClusterSecurityGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSecurityGroupNotFound" => {
-                    DescribeClusterSecurityGroupsError::ClusterSecurityGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterSecurityGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterSecurityGroupNotFound" => {
+                        return DescribeClusterSecurityGroupsError::ClusterSecurityGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidTagFault" => {
+                        return DescribeClusterSecurityGroupsError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidTagFault" => DescribeClusterSecurityGroupsError::InvalidTagFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeClusterSecurityGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeClusterSecurityGroupsError::Unknown(body.to_string()),
+            }
         }
+        DescribeClusterSecurityGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14657,7 +14764,7 @@ impl DescribeClusterSecurityGroupsError {
 impl From<XmlParseError> for DescribeClusterSecurityGroupsError {
     fn from(err: XmlParseError) -> DescribeClusterSecurityGroupsError {
         let XmlParseError(message) = err;
-        DescribeClusterSecurityGroupsError::Unknown(message.to_string())
+        DescribeClusterSecurityGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeClusterSecurityGroupsError {
@@ -14692,7 +14799,8 @@ impl Error for DescribeClusterSecurityGroupsError {
             DescribeClusterSecurityGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeClusterSecurityGroupsError::Unknown(ref cause) => cause,
+            DescribeClusterSecurityGroupsError::ParseError(ref cause) => cause,
+            DescribeClusterSecurityGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14711,32 +14819,40 @@ pub enum DescribeClusterSnapshotsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterSnapshotsError {
-    pub fn from_body(body: &str) -> DescribeClusterSnapshotsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => DescribeClusterSnapshotsError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "ClusterSnapshotNotFound" => {
-                    DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterSnapshotsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return DescribeClusterSnapshotsError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterSnapshotNotFound" => {
+                        return DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidTagFault" => {
+                        return DescribeClusterSnapshotsError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidTagFault" => DescribeClusterSnapshotsError::InvalidTagFault(String::from(
-                    parsed_error.message,
-                )),
-                _ => DescribeClusterSnapshotsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeClusterSnapshotsError::Unknown(body.to_string()),
+            }
         }
+        DescribeClusterSnapshotsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14751,7 +14867,7 @@ impl DescribeClusterSnapshotsError {
 impl From<XmlParseError> for DescribeClusterSnapshotsError {
     fn from(err: XmlParseError) -> DescribeClusterSnapshotsError {
         let XmlParseError(message) = err;
-        DescribeClusterSnapshotsError::Unknown(message.to_string())
+        DescribeClusterSnapshotsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeClusterSnapshotsError {
@@ -14785,7 +14901,8 @@ impl Error for DescribeClusterSnapshotsError {
             DescribeClusterSnapshotsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeClusterSnapshotsError::Unknown(ref cause) => cause,
+            DescribeClusterSnapshotsError::ParseError(ref cause) => cause,
+            DescribeClusterSnapshotsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14802,29 +14919,35 @@ pub enum DescribeClusterSubnetGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterSubnetGroupsError {
-    pub fn from_body(body: &str) -> DescribeClusterSubnetGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSubnetGroupNotFoundFault" => {
-                    DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterSubnetGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterSubnetGroupNotFoundFault" => {
+                        return DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidTagFault" => {
+                        return DescribeClusterSubnetGroupsError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidTagFault" => DescribeClusterSubnetGroupsError::InvalidTagFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeClusterSubnetGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeClusterSubnetGroupsError::Unknown(body.to_string()),
+            }
         }
+        DescribeClusterSubnetGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14839,7 +14962,7 @@ impl DescribeClusterSubnetGroupsError {
 impl From<XmlParseError> for DescribeClusterSubnetGroupsError {
     fn from(err: XmlParseError) -> DescribeClusterSubnetGroupsError {
         let XmlParseError(message) = err;
-        DescribeClusterSubnetGroupsError::Unknown(message.to_string())
+        DescribeClusterSubnetGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeClusterSubnetGroupsError {
@@ -14872,7 +14995,8 @@ impl Error for DescribeClusterSubnetGroupsError {
             DescribeClusterSubnetGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeClusterSubnetGroupsError::Unknown(ref cause) => cause,
+            DescribeClusterSubnetGroupsError::ParseError(ref cause) => cause,
+            DescribeClusterSubnetGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14889,27 +15013,35 @@ pub enum DescribeClusterTracksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterTracksError {
-    pub fn from_body(body: &str) -> DescribeClusterTracksError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidClusterTrack" => DescribeClusterTracksError::InvalidClusterTrackFault(
-                    String::from(parsed_error.message),
-                ),
-                "UnauthorizedOperation" => DescribeClusterTracksError::UnauthorizedOperation(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeClusterTracksError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeClusterTracksError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterTracksError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidClusterTrack" => {
+                        return DescribeClusterTracksError::InvalidClusterTrackFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnauthorizedOperation" => {
+                        return DescribeClusterTracksError::UnauthorizedOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeClusterTracksError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14924,7 +15056,7 @@ impl DescribeClusterTracksError {
 impl From<XmlParseError> for DescribeClusterTracksError {
     fn from(err: XmlParseError) -> DescribeClusterTracksError {
         let XmlParseError(message) = err;
-        DescribeClusterTracksError::Unknown(message.to_string())
+        DescribeClusterTracksError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeClusterTracksError {
@@ -14957,7 +15089,8 @@ impl Error for DescribeClusterTracksError {
             DescribeClusterTracksError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeClusterTracksError::Unknown(ref cause) => cause,
+            DescribeClusterTracksError::ParseError(ref cause) => cause,
+            DescribeClusterTracksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14970,21 +15103,25 @@ pub enum DescribeClusterVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterVersionsError {
-    pub fn from_body(body: &str) -> DescribeClusterVersionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeClusterVersionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeClusterVersionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterVersionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeClusterVersionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14999,7 +15136,7 @@ impl DescribeClusterVersionsError {
 impl From<XmlParseError> for DescribeClusterVersionsError {
     fn from(err: XmlParseError) -> DescribeClusterVersionsError {
         let XmlParseError(message) = err;
-        DescribeClusterVersionsError::Unknown(message.to_string())
+        DescribeClusterVersionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeClusterVersionsError {
@@ -15030,7 +15167,8 @@ impl Error for DescribeClusterVersionsError {
             DescribeClusterVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeClusterVersionsError::Unknown(ref cause) => cause,
+            DescribeClusterVersionsError::ParseError(ref cause) => cause,
+            DescribeClusterVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15047,27 +15185,35 @@ pub enum DescribeClustersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClustersError {
-    pub fn from_body(body: &str) -> DescribeClustersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => {
-                    DescribeClustersError::ClusterNotFoundFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClustersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return DescribeClustersError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidTagFault" => {
+                        return DescribeClustersError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidTagFault" => {
-                    DescribeClustersError::InvalidTagFault(String::from(parsed_error.message))
-                }
-                _ => DescribeClustersError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeClustersError::Unknown(body.to_string()),
+            }
         }
+        DescribeClustersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15082,7 +15228,7 @@ impl DescribeClustersError {
 impl From<XmlParseError> for DescribeClustersError {
     fn from(err: XmlParseError) -> DescribeClustersError {
         let XmlParseError(message) = err;
-        DescribeClustersError::Unknown(message.to_string())
+        DescribeClustersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeClustersError {
@@ -15113,7 +15259,8 @@ impl Error for DescribeClustersError {
             DescribeClustersError::Validation(ref cause) => cause,
             DescribeClustersError::Credentials(ref err) => err.description(),
             DescribeClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeClustersError::Unknown(ref cause) => cause,
+            DescribeClustersError::ParseError(ref cause) => cause,
+            DescribeClustersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15126,21 +15273,25 @@ pub enum DescribeDefaultClusterParametersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDefaultClusterParametersError {
-    pub fn from_body(body: &str) -> DescribeDefaultClusterParametersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeDefaultClusterParametersError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeDefaultClusterParametersError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeDefaultClusterParametersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeDefaultClusterParametersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15155,7 +15306,7 @@ impl DescribeDefaultClusterParametersError {
 impl From<XmlParseError> for DescribeDefaultClusterParametersError {
     fn from(err: XmlParseError) -> DescribeDefaultClusterParametersError {
         let XmlParseError(message) = err;
-        DescribeDefaultClusterParametersError::Unknown(message.to_string())
+        DescribeDefaultClusterParametersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeDefaultClusterParametersError {
@@ -15186,7 +15337,8 @@ impl Error for DescribeDefaultClusterParametersError {
             DescribeDefaultClusterParametersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeDefaultClusterParametersError::Unknown(ref cause) => cause,
+            DescribeDefaultClusterParametersError::ParseError(ref cause) => cause,
+            DescribeDefaultClusterParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15199,21 +15351,25 @@ pub enum DescribeEventCategoriesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventCategoriesError {
-    pub fn from_body(body: &str) -> DescribeEventCategoriesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeEventCategoriesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeEventCategoriesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventCategoriesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeEventCategoriesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15228,7 +15384,7 @@ impl DescribeEventCategoriesError {
 impl From<XmlParseError> for DescribeEventCategoriesError {
     fn from(err: XmlParseError) -> DescribeEventCategoriesError {
         let XmlParseError(message) = err;
-        DescribeEventCategoriesError::Unknown(message.to_string())
+        DescribeEventCategoriesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeEventCategoriesError {
@@ -15259,7 +15415,8 @@ impl Error for DescribeEventCategoriesError {
             DescribeEventCategoriesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEventCategoriesError::Unknown(ref cause) => cause,
+            DescribeEventCategoriesError::ParseError(ref cause) => cause,
+            DescribeEventCategoriesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15276,29 +15433,35 @@ pub enum DescribeEventSubscriptionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventSubscriptionsError {
-    pub fn from_body(body: &str) -> DescribeEventSubscriptionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidTagFault" => DescribeEventSubscriptionsError::InvalidTagFault(
-                    String::from(parsed_error.message),
-                ),
-                "SubscriptionNotFound" => {
-                    DescribeEventSubscriptionsError::SubscriptionNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventSubscriptionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidTagFault" => {
+                        return DescribeEventSubscriptionsError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SubscriptionNotFound" => {
+                        return DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeEventSubscriptionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeEventSubscriptionsError::Unknown(body.to_string()),
+            }
         }
+        DescribeEventSubscriptionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15313,7 +15476,7 @@ impl DescribeEventSubscriptionsError {
 impl From<XmlParseError> for DescribeEventSubscriptionsError {
     fn from(err: XmlParseError) -> DescribeEventSubscriptionsError {
         let XmlParseError(message) = err;
-        DescribeEventSubscriptionsError::Unknown(message.to_string())
+        DescribeEventSubscriptionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeEventSubscriptionsError {
@@ -15346,7 +15509,8 @@ impl Error for DescribeEventSubscriptionsError {
             DescribeEventSubscriptionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEventSubscriptionsError::Unknown(ref cause) => cause,
+            DescribeEventSubscriptionsError::ParseError(ref cause) => cause,
+            DescribeEventSubscriptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15359,21 +15523,25 @@ pub enum DescribeEventsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventsError {
-    pub fn from_body(body: &str) -> DescribeEventsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeEventsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeEventsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeEventsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15388,7 +15556,7 @@ impl DescribeEventsError {
 impl From<XmlParseError> for DescribeEventsError {
     fn from(err: XmlParseError) -> DescribeEventsError {
         let XmlParseError(message) = err;
-        DescribeEventsError::Unknown(message.to_string())
+        DescribeEventsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeEventsError {
@@ -15417,7 +15585,8 @@ impl Error for DescribeEventsError {
             DescribeEventsError::Validation(ref cause) => cause,
             DescribeEventsError::Credentials(ref err) => err.description(),
             DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeEventsError::Unknown(ref cause) => cause,
+            DescribeEventsError::ParseError(ref cause) => cause,
+            DescribeEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15434,29 +15603,35 @@ pub enum DescribeHsmClientCertificatesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeHsmClientCertificatesError {
-    pub fn from_body(body: &str) -> DescribeHsmClientCertificatesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "HsmClientCertificateNotFoundFault" => {
-                    DescribeHsmClientCertificatesError::HsmClientCertificateNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeHsmClientCertificatesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "HsmClientCertificateNotFoundFault" => {
+                        return DescribeHsmClientCertificatesError::HsmClientCertificateNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidTagFault" => {
+                        return DescribeHsmClientCertificatesError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidTagFault" => DescribeHsmClientCertificatesError::InvalidTagFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeHsmClientCertificatesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeHsmClientCertificatesError::Unknown(body.to_string()),
+            }
         }
+        DescribeHsmClientCertificatesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15471,7 +15646,7 @@ impl DescribeHsmClientCertificatesError {
 impl From<XmlParseError> for DescribeHsmClientCertificatesError {
     fn from(err: XmlParseError) -> DescribeHsmClientCertificatesError {
         let XmlParseError(message) = err;
-        DescribeHsmClientCertificatesError::Unknown(message.to_string())
+        DescribeHsmClientCertificatesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeHsmClientCertificatesError {
@@ -15506,7 +15681,8 @@ impl Error for DescribeHsmClientCertificatesError {
             DescribeHsmClientCertificatesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeHsmClientCertificatesError::Unknown(ref cause) => cause,
+            DescribeHsmClientCertificatesError::ParseError(ref cause) => cause,
+            DescribeHsmClientCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15523,29 +15699,35 @@ pub enum DescribeHsmConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeHsmConfigurationsError {
-    pub fn from_body(body: &str) -> DescribeHsmConfigurationsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "HsmConfigurationNotFoundFault" => {
-                    DescribeHsmConfigurationsError::HsmConfigurationNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeHsmConfigurationsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "HsmConfigurationNotFoundFault" => {
+                        return DescribeHsmConfigurationsError::HsmConfigurationNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidTagFault" => {
+                        return DescribeHsmConfigurationsError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidTagFault" => DescribeHsmConfigurationsError::InvalidTagFault(String::from(
-                    parsed_error.message,
-                )),
-                _ => DescribeHsmConfigurationsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeHsmConfigurationsError::Unknown(body.to_string()),
+            }
         }
+        DescribeHsmConfigurationsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15560,7 +15742,7 @@ impl DescribeHsmConfigurationsError {
 impl From<XmlParseError> for DescribeHsmConfigurationsError {
     fn from(err: XmlParseError) -> DescribeHsmConfigurationsError {
         let XmlParseError(message) = err;
-        DescribeHsmConfigurationsError::Unknown(message.to_string())
+        DescribeHsmConfigurationsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeHsmConfigurationsError {
@@ -15593,7 +15775,8 @@ impl Error for DescribeHsmConfigurationsError {
             DescribeHsmConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeHsmConfigurationsError::Unknown(ref cause) => cause,
+            DescribeHsmConfigurationsError::ParseError(ref cause) => cause,
+            DescribeHsmConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15608,24 +15791,30 @@ pub enum DescribeLoggingStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoggingStatusError {
-    pub fn from_body(body: &str) -> DescribeLoggingStatusError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => DescribeLoggingStatusError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeLoggingStatusError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeLoggingStatusError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoggingStatusError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return DescribeLoggingStatusError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeLoggingStatusError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15640,7 +15829,7 @@ impl DescribeLoggingStatusError {
 impl From<XmlParseError> for DescribeLoggingStatusError {
     fn from(err: XmlParseError) -> DescribeLoggingStatusError {
         let XmlParseError(message) = err;
-        DescribeLoggingStatusError::Unknown(message.to_string())
+        DescribeLoggingStatusError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeLoggingStatusError {
@@ -15672,7 +15861,8 @@ impl Error for DescribeLoggingStatusError {
             DescribeLoggingStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeLoggingStatusError::Unknown(ref cause) => cause,
+            DescribeLoggingStatusError::ParseError(ref cause) => cause,
+            DescribeLoggingStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15685,21 +15875,25 @@ pub enum DescribeOrderableClusterOptionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeOrderableClusterOptionsError {
-    pub fn from_body(body: &str) -> DescribeOrderableClusterOptionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeOrderableClusterOptionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeOrderableClusterOptionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeOrderableClusterOptionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeOrderableClusterOptionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15714,7 +15908,7 @@ impl DescribeOrderableClusterOptionsError {
 impl From<XmlParseError> for DescribeOrderableClusterOptionsError {
     fn from(err: XmlParseError) -> DescribeOrderableClusterOptionsError {
         let XmlParseError(message) = err;
-        DescribeOrderableClusterOptionsError::Unknown(message.to_string())
+        DescribeOrderableClusterOptionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeOrderableClusterOptionsError {
@@ -15745,7 +15939,8 @@ impl Error for DescribeOrderableClusterOptionsError {
             DescribeOrderableClusterOptionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeOrderableClusterOptionsError::Unknown(ref cause) => cause,
+            DescribeOrderableClusterOptionsError::ParseError(ref cause) => cause,
+            DescribeOrderableClusterOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15764,36 +15959,40 @@ pub enum DescribeReservedNodeOfferingsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReservedNodeOfferingsError {
-    pub fn from_body(body: &str) -> DescribeReservedNodeOfferingsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DependentServiceUnavailableFault" => {
-                    DescribeReservedNodeOfferingsError::DependentServiceUnavailableFault(
-                        String::from(parsed_error.message),
-                    )
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeReservedNodeOfferingsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DependentServiceUnavailableFault" => {
+                        return DescribeReservedNodeOfferingsError::DependentServiceUnavailableFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ReservedNodeOfferingNotFound" => {
+                        return DescribeReservedNodeOfferingsError::ReservedNodeOfferingNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "UnsupportedOperation" => {
+                        return DescribeReservedNodeOfferingsError::UnsupportedOperationFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "ReservedNodeOfferingNotFound" => {
-                    DescribeReservedNodeOfferingsError::ReservedNodeOfferingNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "UnsupportedOperation" => {
-                    DescribeReservedNodeOfferingsError::UnsupportedOperationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DescribeReservedNodeOfferingsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeReservedNodeOfferingsError::Unknown(body.to_string()),
+            }
         }
+        DescribeReservedNodeOfferingsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15808,7 +16007,7 @@ impl DescribeReservedNodeOfferingsError {
 impl From<XmlParseError> for DescribeReservedNodeOfferingsError {
     fn from(err: XmlParseError) -> DescribeReservedNodeOfferingsError {
         let XmlParseError(message) = err;
-        DescribeReservedNodeOfferingsError::Unknown(message.to_string())
+        DescribeReservedNodeOfferingsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeReservedNodeOfferingsError {
@@ -15846,7 +16045,8 @@ impl Error for DescribeReservedNodeOfferingsError {
             DescribeReservedNodeOfferingsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeReservedNodeOfferingsError::Unknown(ref cause) => cause,
+            DescribeReservedNodeOfferingsError::ParseError(ref cause) => cause,
+            DescribeReservedNodeOfferingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15863,29 +16063,35 @@ pub enum DescribeReservedNodesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReservedNodesError {
-    pub fn from_body(body: &str) -> DescribeReservedNodesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DependentServiceUnavailableFault" => {
-                    DescribeReservedNodesError::DependentServiceUnavailableFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeReservedNodesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DependentServiceUnavailableFault" => {
+                        return DescribeReservedNodesError::DependentServiceUnavailableFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ReservedNodeNotFound" => {
+                        return DescribeReservedNodesError::ReservedNodeNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ReservedNodeNotFound" => DescribeReservedNodesError::ReservedNodeNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeReservedNodesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeReservedNodesError::Unknown(body.to_string()),
+            }
         }
+        DescribeReservedNodesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15900,7 +16106,7 @@ impl DescribeReservedNodesError {
 impl From<XmlParseError> for DescribeReservedNodesError {
     fn from(err: XmlParseError) -> DescribeReservedNodesError {
         let XmlParseError(message) = err;
-        DescribeReservedNodesError::Unknown(message.to_string())
+        DescribeReservedNodesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeReservedNodesError {
@@ -15933,7 +16139,8 @@ impl Error for DescribeReservedNodesError {
             DescribeReservedNodesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeReservedNodesError::Unknown(ref cause) => cause,
+            DescribeReservedNodesError::ParseError(ref cause) => cause,
+            DescribeReservedNodesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15950,27 +16157,35 @@ pub enum DescribeResizeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeResizeError {
-    pub fn from_body(body: &str) -> DescribeResizeError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => {
-                    DescribeResizeError::ClusterNotFoundFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeResizeError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return DescribeResizeError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResizeNotFound" => {
+                        return DescribeResizeError::ResizeNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResizeNotFound" => {
-                    DescribeResizeError::ResizeNotFoundFault(String::from(parsed_error.message))
-                }
-                _ => DescribeResizeError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeResizeError::Unknown(body.to_string()),
+            }
         }
+        DescribeResizeError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15985,7 +16200,7 @@ impl DescribeResizeError {
 impl From<XmlParseError> for DescribeResizeError {
     fn from(err: XmlParseError) -> DescribeResizeError {
         let XmlParseError(message) = err;
-        DescribeResizeError::Unknown(message.to_string())
+        DescribeResizeError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeResizeError {
@@ -16016,7 +16231,8 @@ impl Error for DescribeResizeError {
             DescribeResizeError::Validation(ref cause) => cause,
             DescribeResizeError::Credentials(ref err) => err.description(),
             DescribeResizeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeResizeError::Unknown(ref cause) => cause,
+            DescribeResizeError::ParseError(ref cause) => cause,
+            DescribeResizeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16033,29 +16249,35 @@ pub enum DescribeSnapshotCopyGrantsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSnapshotCopyGrantsError {
-    pub fn from_body(body: &str) -> DescribeSnapshotCopyGrantsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidTagFault" => DescribeSnapshotCopyGrantsError::InvalidTagFault(
-                    String::from(parsed_error.message),
-                ),
-                "SnapshotCopyGrantNotFoundFault" => {
-                    DescribeSnapshotCopyGrantsError::SnapshotCopyGrantNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSnapshotCopyGrantsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidTagFault" => {
+                        return DescribeSnapshotCopyGrantsError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotCopyGrantNotFoundFault" => {
+                        return DescribeSnapshotCopyGrantsError::SnapshotCopyGrantNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeSnapshotCopyGrantsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeSnapshotCopyGrantsError::Unknown(body.to_string()),
+            }
         }
+        DescribeSnapshotCopyGrantsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16070,7 +16292,7 @@ impl DescribeSnapshotCopyGrantsError {
 impl From<XmlParseError> for DescribeSnapshotCopyGrantsError {
     fn from(err: XmlParseError) -> DescribeSnapshotCopyGrantsError {
         let XmlParseError(message) = err;
-        DescribeSnapshotCopyGrantsError::Unknown(message.to_string())
+        DescribeSnapshotCopyGrantsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeSnapshotCopyGrantsError {
@@ -16103,7 +16325,8 @@ impl Error for DescribeSnapshotCopyGrantsError {
             DescribeSnapshotCopyGrantsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeSnapshotCopyGrantsError::Unknown(ref cause) => cause,
+            DescribeSnapshotCopyGrantsError::ParseError(ref cause) => cause,
+            DescribeSnapshotCopyGrantsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16120,29 +16343,35 @@ pub enum DescribeTableRestoreStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTableRestoreStatusError {
-    pub fn from_body(body: &str) -> DescribeTableRestoreStatusError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => DescribeTableRestoreStatusError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "TableRestoreNotFoundFault" => {
-                    DescribeTableRestoreStatusError::TableRestoreNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTableRestoreStatusError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return DescribeTableRestoreStatusError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TableRestoreNotFoundFault" => {
+                        return DescribeTableRestoreStatusError::TableRestoreNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeTableRestoreStatusError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeTableRestoreStatusError::Unknown(body.to_string()),
+            }
         }
+        DescribeTableRestoreStatusError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16157,7 +16386,7 @@ impl DescribeTableRestoreStatusError {
 impl From<XmlParseError> for DescribeTableRestoreStatusError {
     fn from(err: XmlParseError) -> DescribeTableRestoreStatusError {
         let XmlParseError(message) = err;
-        DescribeTableRestoreStatusError::Unknown(message.to_string())
+        DescribeTableRestoreStatusError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeTableRestoreStatusError {
@@ -16190,7 +16419,8 @@ impl Error for DescribeTableRestoreStatusError {
             DescribeTableRestoreStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeTableRestoreStatusError::Unknown(ref cause) => cause,
+            DescribeTableRestoreStatusError::ParseError(ref cause) => cause,
+            DescribeTableRestoreStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16207,27 +16437,35 @@ pub enum DescribeTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_body(body: &str) -> DescribeTagsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidTagFault" => {
-                    DescribeTagsError::InvalidTagFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidTagFault" => {
+                        return DescribeTagsError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => {
+                        return DescribeTagsError::ResourceNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResourceNotFoundFault" => {
-                    DescribeTagsError::ResourceNotFoundFault(String::from(parsed_error.message))
-                }
-                _ => DescribeTagsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeTagsError::Unknown(body.to_string()),
+            }
         }
+        DescribeTagsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16242,7 +16480,7 @@ impl DescribeTagsError {
 impl From<XmlParseError> for DescribeTagsError {
     fn from(err: XmlParseError) -> DescribeTagsError {
         let XmlParseError(message) = err;
-        DescribeTagsError::Unknown(message.to_string())
+        DescribeTagsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeTagsError {
@@ -16273,7 +16511,8 @@ impl Error for DescribeTagsError {
             DescribeTagsError::Validation(ref cause) => cause,
             DescribeTagsError::Credentials(ref err) => err.description(),
             DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::Unknown(ref cause) => cause,
+            DescribeTagsError::ParseError(ref cause) => cause,
+            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16288,24 +16527,30 @@ pub enum DisableLoggingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisableLoggingError {
-    pub fn from_body(body: &str) -> DisableLoggingError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => {
-                    DisableLoggingError::ClusterNotFoundFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DisableLoggingError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return DisableLoggingError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DisableLoggingError::Unknown(String::from(body)),
-            },
-            Err(_) => DisableLoggingError::Unknown(body.to_string()),
+            }
         }
+        DisableLoggingError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16320,7 +16565,7 @@ impl DisableLoggingError {
 impl From<XmlParseError> for DisableLoggingError {
     fn from(err: XmlParseError) -> DisableLoggingError {
         let XmlParseError(message) = err;
-        DisableLoggingError::Unknown(message.to_string())
+        DisableLoggingError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DisableLoggingError {
@@ -16350,7 +16595,8 @@ impl Error for DisableLoggingError {
             DisableLoggingError::Validation(ref cause) => cause,
             DisableLoggingError::Credentials(ref err) => err.description(),
             DisableLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DisableLoggingError::Unknown(ref cause) => cause,
+            DisableLoggingError::ParseError(ref cause) => cause,
+            DisableLoggingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16371,35 +16617,45 @@ pub enum DisableSnapshotCopyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisableSnapshotCopyError {
-    pub fn from_body(body: &str) -> DisableSnapshotCopyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => DisableSnapshotCopyError::ClusterNotFoundFault(String::from(
-                    parsed_error.message,
-                )),
-                "InvalidClusterState" => DisableSnapshotCopyError::InvalidClusterStateFault(
-                    String::from(parsed_error.message),
-                ),
-                "SnapshotCopyAlreadyDisabledFault" => {
-                    DisableSnapshotCopyError::SnapshotCopyAlreadyDisabledFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DisableSnapshotCopyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return DisableSnapshotCopyError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidClusterState" => {
+                        return DisableSnapshotCopyError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotCopyAlreadyDisabledFault" => {
+                        return DisableSnapshotCopyError::SnapshotCopyAlreadyDisabledFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return DisableSnapshotCopyError::UnauthorizedOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "UnauthorizedOperation" => DisableSnapshotCopyError::UnauthorizedOperation(
-                    String::from(parsed_error.message),
-                ),
-                _ => DisableSnapshotCopyError::Unknown(String::from(body)),
-            },
-            Err(_) => DisableSnapshotCopyError::Unknown(body.to_string()),
+            }
         }
+        DisableSnapshotCopyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16414,7 +16670,7 @@ impl DisableSnapshotCopyError {
 impl From<XmlParseError> for DisableSnapshotCopyError {
     fn from(err: XmlParseError) -> DisableSnapshotCopyError {
         let XmlParseError(message) = err;
-        DisableSnapshotCopyError::Unknown(message.to_string())
+        DisableSnapshotCopyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DisableSnapshotCopyError {
@@ -16449,7 +16705,8 @@ impl Error for DisableSnapshotCopyError {
             DisableSnapshotCopyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisableSnapshotCopyError::Unknown(ref cause) => cause,
+            DisableSnapshotCopyError::ParseError(ref cause) => cause,
+            DisableSnapshotCopyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16472,38 +16729,50 @@ pub enum EnableLoggingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EnableLoggingError {
-    pub fn from_body(body: &str) -> EnableLoggingError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BucketNotFoundFault" => {
-                    EnableLoggingError::BucketNotFoundFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> EnableLoggingError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BucketNotFoundFault" => {
+                        return EnableLoggingError::BucketNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterNotFound" => {
+                        return EnableLoggingError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InsufficientS3BucketPolicyFault" => {
+                        return EnableLoggingError::InsufficientS3BucketPolicyFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidS3BucketNameFault" => {
+                        return EnableLoggingError::InvalidS3BucketNameFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidS3KeyPrefixFault" => {
+                        return EnableLoggingError::InvalidS3KeyPrefixFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ClusterNotFound" => {
-                    EnableLoggingError::ClusterNotFoundFault(String::from(parsed_error.message))
-                }
-                "InsufficientS3BucketPolicyFault" => {
-                    EnableLoggingError::InsufficientS3BucketPolicyFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidS3BucketNameFault" => {
-                    EnableLoggingError::InvalidS3BucketNameFault(String::from(parsed_error.message))
-                }
-                "InvalidS3KeyPrefixFault" => {
-                    EnableLoggingError::InvalidS3KeyPrefixFault(String::from(parsed_error.message))
-                }
-                _ => EnableLoggingError::Unknown(String::from(body)),
-            },
-            Err(_) => EnableLoggingError::Unknown(body.to_string()),
+            }
         }
+        EnableLoggingError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16518,7 +16787,7 @@ impl EnableLoggingError {
 impl From<XmlParseError> for EnableLoggingError {
     fn from(err: XmlParseError) -> EnableLoggingError {
         let XmlParseError(message) = err;
-        EnableLoggingError::Unknown(message.to_string())
+        EnableLoggingError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for EnableLoggingError {
@@ -16552,7 +16821,8 @@ impl Error for EnableLoggingError {
             EnableLoggingError::Validation(ref cause) => cause,
             EnableLoggingError::Credentials(ref err) => err.description(),
             EnableLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EnableLoggingError::Unknown(ref cause) => cause,
+            EnableLoggingError::ParseError(ref cause) => cause,
+            EnableLoggingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16585,61 +16855,75 @@ pub enum EnableSnapshotCopyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EnableSnapshotCopyError {
-    pub fn from_body(body: &str) -> EnableSnapshotCopyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => EnableSnapshotCopyError::ClusterNotFoundFault(String::from(
-                    parsed_error.message,
-                )),
-                "CopyToRegionDisabledFault" => EnableSnapshotCopyError::CopyToRegionDisabledFault(
-                    String::from(parsed_error.message),
-                ),
-                "DependentServiceRequestThrottlingFault" => {
-                    EnableSnapshotCopyError::DependentServiceRequestThrottlingFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> EnableSnapshotCopyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return EnableSnapshotCopyError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "CopyToRegionDisabledFault" => {
+                        return EnableSnapshotCopyError::CopyToRegionDisabledFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DependentServiceRequestThrottlingFault" => {
+                        return EnableSnapshotCopyError::DependentServiceRequestThrottlingFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "IncompatibleOrderableOptions" => {
+                        return EnableSnapshotCopyError::IncompatibleOrderableOptions(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidClusterState" => {
+                        return EnableSnapshotCopyError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceededFault" => {
+                        return EnableSnapshotCopyError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotCopyAlreadyEnabledFault" => {
+                        return EnableSnapshotCopyError::SnapshotCopyAlreadyEnabledFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SnapshotCopyGrantNotFoundFault" => {
+                        return EnableSnapshotCopyError::SnapshotCopyGrantNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return EnableSnapshotCopyError::UnauthorizedOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnknownSnapshotCopyRegionFault" => {
+                        return EnableSnapshotCopyError::UnknownSnapshotCopyRegionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "IncompatibleOrderableOptions" => {
-                    EnableSnapshotCopyError::IncompatibleOrderableOptions(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidClusterState" => EnableSnapshotCopyError::InvalidClusterStateFault(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceededFault" => {
-                    EnableSnapshotCopyError::LimitExceededFault(String::from(parsed_error.message))
-                }
-                "SnapshotCopyAlreadyEnabledFault" => {
-                    EnableSnapshotCopyError::SnapshotCopyAlreadyEnabledFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotCopyGrantNotFoundFault" => {
-                    EnableSnapshotCopyError::SnapshotCopyGrantNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "UnauthorizedOperation" => EnableSnapshotCopyError::UnauthorizedOperation(
-                    String::from(parsed_error.message),
-                ),
-                "UnknownSnapshotCopyRegionFault" => {
-                    EnableSnapshotCopyError::UnknownSnapshotCopyRegionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => EnableSnapshotCopyError::Unknown(String::from(body)),
-            },
-            Err(_) => EnableSnapshotCopyError::Unknown(body.to_string()),
+            }
         }
+        EnableSnapshotCopyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16654,7 +16938,7 @@ impl EnableSnapshotCopyError {
 impl From<XmlParseError> for EnableSnapshotCopyError {
     fn from(err: XmlParseError) -> EnableSnapshotCopyError {
         let XmlParseError(message) = err;
-        EnableSnapshotCopyError::Unknown(message.to_string())
+        EnableSnapshotCopyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for EnableSnapshotCopyError {
@@ -16695,7 +16979,8 @@ impl Error for EnableSnapshotCopyError {
             EnableSnapshotCopyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            EnableSnapshotCopyError::Unknown(ref cause) => cause,
+            EnableSnapshotCopyError::ParseError(ref cause) => cause,
+            EnableSnapshotCopyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16712,27 +16997,35 @@ pub enum GetClusterCredentialsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetClusterCredentialsError {
-    pub fn from_body(body: &str) -> GetClusterCredentialsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => GetClusterCredentialsError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "UnsupportedOperation" => GetClusterCredentialsError::UnsupportedOperationFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => GetClusterCredentialsError::Unknown(String::from(body)),
-            },
-            Err(_) => GetClusterCredentialsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetClusterCredentialsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return GetClusterCredentialsError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnsupportedOperation" => {
+                        return GetClusterCredentialsError::UnsupportedOperationFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        GetClusterCredentialsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16747,7 +17040,7 @@ impl GetClusterCredentialsError {
 impl From<XmlParseError> for GetClusterCredentialsError {
     fn from(err: XmlParseError) -> GetClusterCredentialsError {
         let XmlParseError(message) = err;
-        GetClusterCredentialsError::Unknown(message.to_string())
+        GetClusterCredentialsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetClusterCredentialsError {
@@ -16780,7 +17073,8 @@ impl Error for GetClusterCredentialsError {
             GetClusterCredentialsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetClusterCredentialsError::Unknown(ref cause) => cause,
+            GetClusterCredentialsError::ParseError(ref cause) => cause,
+            GetClusterCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16805,51 +17099,25 @@ pub enum GetReservedNodeExchangeOfferingsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetReservedNodeExchangeOfferingsError {
-    pub fn from_body(body: &str) -> GetReservedNodeExchangeOfferingsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DependentServiceUnavailableFault" => {
-                    GetReservedNodeExchangeOfferingsError::DependentServiceUnavailableFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidReservedNodeState" => {
-                    GetReservedNodeExchangeOfferingsError::InvalidReservedNodeStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "ReservedNodeAlreadyMigrated" => {
-                    GetReservedNodeExchangeOfferingsError::ReservedNodeAlreadyMigratedFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "ReservedNodeNotFound" => {
-                    GetReservedNodeExchangeOfferingsError::ReservedNodeNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReservedNodeOfferingNotFound" => {
-                    GetReservedNodeExchangeOfferingsError::ReservedNodeOfferingNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "UnsupportedOperation" => {
-                    GetReservedNodeExchangeOfferingsError::UnsupportedOperationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => GetReservedNodeExchangeOfferingsError::Unknown(String::from(body)),
-            },
-            Err(_) => GetReservedNodeExchangeOfferingsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetReservedNodeExchangeOfferingsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "DependentServiceUnavailableFault" => return GetReservedNodeExchangeOfferingsError::DependentServiceUnavailableFault(String::from(parsed_error.message)),"InvalidReservedNodeState" => return GetReservedNodeExchangeOfferingsError::InvalidReservedNodeStateFault(String::from(parsed_error.message)),"ReservedNodeAlreadyMigrated" => return GetReservedNodeExchangeOfferingsError::ReservedNodeAlreadyMigratedFault(String::from(parsed_error.message)),"ReservedNodeNotFound" => return GetReservedNodeExchangeOfferingsError::ReservedNodeNotFoundFault(String::from(parsed_error.message)),"ReservedNodeOfferingNotFound" => return GetReservedNodeExchangeOfferingsError::ReservedNodeOfferingNotFoundFault(String::from(parsed_error.message)),"UnsupportedOperation" => return GetReservedNodeExchangeOfferingsError::UnsupportedOperationFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        GetReservedNodeExchangeOfferingsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16864,7 +17132,7 @@ impl GetReservedNodeExchangeOfferingsError {
 impl From<XmlParseError> for GetReservedNodeExchangeOfferingsError {
     fn from(err: XmlParseError) -> GetReservedNodeExchangeOfferingsError {
         let XmlParseError(message) = err;
-        GetReservedNodeExchangeOfferingsError::Unknown(message.to_string())
+        GetReservedNodeExchangeOfferingsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetReservedNodeExchangeOfferingsError {
@@ -16909,7 +17177,8 @@ impl Error for GetReservedNodeExchangeOfferingsError {
             GetReservedNodeExchangeOfferingsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetReservedNodeExchangeOfferingsError::Unknown(ref cause) => cause,
+            GetReservedNodeExchangeOfferingsError::ParseError(ref cause) => cause,
+            GetReservedNodeExchangeOfferingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16958,93 +17227,115 @@ pub enum ModifyClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterError {
-    pub fn from_body(body: &str) -> ModifyClusterError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterAlreadyExists" => ModifyClusterError::ClusterAlreadyExistsFault(
-                    String::from(parsed_error.message),
-                ),
-                "ClusterNotFound" => {
-                    ModifyClusterError::ClusterNotFoundFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterAlreadyExists" => {
+                        return ModifyClusterError::ClusterAlreadyExistsFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterNotFound" => {
+                        return ModifyClusterError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterParameterGroupNotFound" => {
+                        return ModifyClusterError::ClusterParameterGroupNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterSecurityGroupNotFound" => {
+                        return ModifyClusterError::ClusterSecurityGroupNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DependentServiceRequestThrottlingFault" => {
+                        return ModifyClusterError::DependentServiceRequestThrottlingFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "HsmClientCertificateNotFoundFault" => {
+                        return ModifyClusterError::HsmClientCertificateNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "HsmConfigurationNotFoundFault" => {
+                        return ModifyClusterError::HsmConfigurationNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InsufficientClusterCapacity" => {
+                        return ModifyClusterError::InsufficientClusterCapacityFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidClusterSecurityGroupState" => {
+                        return ModifyClusterError::InvalidClusterSecurityGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterState" => {
+                        return ModifyClusterError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidClusterTrack" => {
+                        return ModifyClusterError::InvalidClusterTrackFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidElasticIpFault" => {
+                        return ModifyClusterError::InvalidElasticIpFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceededFault" => {
+                        return ModifyClusterError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NumberOfNodesPerClusterLimitExceeded" => {
+                        return ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NumberOfNodesQuotaExceeded" => {
+                        return ModifyClusterError::NumberOfNodesQuotaExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TableLimitExceeded" => {
+                        return ModifyClusterError::TableLimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnauthorizedOperation" => {
+                        return ModifyClusterError::UnauthorizedOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnsupportedOptionFault" => {
+                        return ModifyClusterError::UnsupportedOptionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ClusterParameterGroupNotFound" => {
-                    ModifyClusterError::ClusterParameterGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterSecurityGroupNotFound" => {
-                    ModifyClusterError::ClusterSecurityGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DependentServiceRequestThrottlingFault" => {
-                    ModifyClusterError::DependentServiceRequestThrottlingFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "HsmClientCertificateNotFoundFault" => {
-                    ModifyClusterError::HsmClientCertificateNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "HsmConfigurationNotFoundFault" => {
-                    ModifyClusterError::HsmConfigurationNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InsufficientClusterCapacity" => {
-                    ModifyClusterError::InsufficientClusterCapacityFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidClusterSecurityGroupState" => {
-                    ModifyClusterError::InvalidClusterSecurityGroupStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidClusterState" => {
-                    ModifyClusterError::InvalidClusterStateFault(String::from(parsed_error.message))
-                }
-                "InvalidClusterTrack" => {
-                    ModifyClusterError::InvalidClusterTrackFault(String::from(parsed_error.message))
-                }
-                "InvalidElasticIpFault" => {
-                    ModifyClusterError::InvalidElasticIpFault(String::from(parsed_error.message))
-                }
-                "LimitExceededFault" => {
-                    ModifyClusterError::LimitExceededFault(String::from(parsed_error.message))
-                }
-                "NumberOfNodesPerClusterLimitExceeded" => {
-                    ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NumberOfNodesQuotaExceeded" => {
-                    ModifyClusterError::NumberOfNodesQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TableLimitExceeded" => {
-                    ModifyClusterError::TableLimitExceededFault(String::from(parsed_error.message))
-                }
-                "UnauthorizedOperation" => {
-                    ModifyClusterError::UnauthorizedOperation(String::from(parsed_error.message))
-                }
-                "UnsupportedOptionFault" => {
-                    ModifyClusterError::UnsupportedOptionFault(String::from(parsed_error.message))
-                }
-                _ => ModifyClusterError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyClusterError::Unknown(body.to_string()),
+            }
         }
+        ModifyClusterError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17059,7 +17350,7 @@ impl ModifyClusterError {
 impl From<XmlParseError> for ModifyClusterError {
     fn from(err: XmlParseError) -> ModifyClusterError {
         let XmlParseError(message) = err;
-        ModifyClusterError::Unknown(message.to_string())
+        ModifyClusterError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyClusterError {
@@ -17106,7 +17397,8 @@ impl Error for ModifyClusterError {
             ModifyClusterError::Validation(ref cause) => cause,
             ModifyClusterError::Credentials(ref err) => err.description(),
             ModifyClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyClusterError::Unknown(ref cause) => cause,
+            ModifyClusterError::ParseError(ref cause) => cause,
+            ModifyClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17125,32 +17417,40 @@ pub enum ModifyClusterDbRevisionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterDbRevisionError {
-    pub fn from_body(body: &str) -> ModifyClusterDbRevisionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => ModifyClusterDbRevisionError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "ClusterOnLatestRevision" => {
-                    ModifyClusterDbRevisionError::ClusterOnLatestRevisionFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterDbRevisionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return ModifyClusterDbRevisionError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterOnLatestRevision" => {
+                        return ModifyClusterDbRevisionError::ClusterOnLatestRevisionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterState" => {
+                        return ModifyClusterDbRevisionError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidClusterState" => ModifyClusterDbRevisionError::InvalidClusterStateFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => ModifyClusterDbRevisionError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyClusterDbRevisionError::Unknown(body.to_string()),
+            }
         }
+        ModifyClusterDbRevisionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17165,7 +17465,7 @@ impl ModifyClusterDbRevisionError {
 impl From<XmlParseError> for ModifyClusterDbRevisionError {
     fn from(err: XmlParseError) -> ModifyClusterDbRevisionError {
         let XmlParseError(message) = err;
-        ModifyClusterDbRevisionError::Unknown(message.to_string())
+        ModifyClusterDbRevisionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyClusterDbRevisionError {
@@ -17199,7 +17499,8 @@ impl Error for ModifyClusterDbRevisionError {
             ModifyClusterDbRevisionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyClusterDbRevisionError::Unknown(ref cause) => cause,
+            ModifyClusterDbRevisionError::ParseError(ref cause) => cause,
+            ModifyClusterDbRevisionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17216,27 +17517,35 @@ pub enum ModifyClusterIamRolesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterIamRolesError {
-    pub fn from_body(body: &str) -> ModifyClusterIamRolesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => ModifyClusterIamRolesError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidClusterState" => ModifyClusterIamRolesError::InvalidClusterStateFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => ModifyClusterIamRolesError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyClusterIamRolesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterIamRolesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return ModifyClusterIamRolesError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidClusterState" => {
+                        return ModifyClusterIamRolesError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        ModifyClusterIamRolesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17251,7 +17560,7 @@ impl ModifyClusterIamRolesError {
 impl From<XmlParseError> for ModifyClusterIamRolesError {
     fn from(err: XmlParseError) -> ModifyClusterIamRolesError {
         let XmlParseError(message) = err;
-        ModifyClusterIamRolesError::Unknown(message.to_string())
+        ModifyClusterIamRolesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyClusterIamRolesError {
@@ -17284,7 +17593,8 @@ impl Error for ModifyClusterIamRolesError {
             ModifyClusterIamRolesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyClusterIamRolesError::Unknown(ref cause) => cause,
+            ModifyClusterIamRolesError::ParseError(ref cause) => cause,
+            ModifyClusterIamRolesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17301,31 +17611,25 @@ pub enum ModifyClusterParameterGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterParameterGroupError {
-    pub fn from_body(body: &str) -> ModifyClusterParameterGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFound" => {
-                    ModifyClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidClusterParameterGroupState" => {
-                    ModifyClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => ModifyClusterParameterGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyClusterParameterGroupError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterParameterGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ClusterParameterGroupNotFound" => return ModifyClusterParameterGroupError::ClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterParameterGroupState" => return ModifyClusterParameterGroupError::InvalidClusterParameterGroupStateFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        ModifyClusterParameterGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17340,7 +17644,7 @@ impl ModifyClusterParameterGroupError {
 impl From<XmlParseError> for ModifyClusterParameterGroupError {
     fn from(err: XmlParseError) -> ModifyClusterParameterGroupError {
         let XmlParseError(message) = err;
-        ModifyClusterParameterGroupError::Unknown(message.to_string())
+        ModifyClusterParameterGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyClusterParameterGroupError {
@@ -17377,7 +17681,8 @@ impl Error for ModifyClusterParameterGroupError {
             ModifyClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyClusterParameterGroupError::Unknown(ref cause) => cause,
+            ModifyClusterParameterGroupError::ParseError(ref cause) => cause,
+            ModifyClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17402,45 +17707,55 @@ pub enum ModifyClusterSubnetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterSubnetGroupError {
-    pub fn from_body(body: &str) -> ModifyClusterSubnetGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSubnetGroupNotFoundFault" => {
-                    ModifyClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterSubnetGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterSubnetGroupNotFoundFault" => {
+                        return ModifyClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ClusterSubnetQuotaExceededFault" => {
+                        return ModifyClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "DependentServiceRequestThrottlingFault" => {
+                        return ModifyClusterSubnetGroupError::DependentServiceRequestThrottlingFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidSubnet" => {
+                        return ModifyClusterSubnetGroupError::InvalidSubnet(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SubnetAlreadyInUse" => {
+                        return ModifyClusterSubnetGroupError::SubnetAlreadyInUse(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnauthorizedOperation" => {
+                        return ModifyClusterSubnetGroupError::UnauthorizedOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ClusterSubnetQuotaExceededFault" => {
-                    ModifyClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DependentServiceRequestThrottlingFault" => {
-                    ModifyClusterSubnetGroupError::DependentServiceRequestThrottlingFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidSubnet" => {
-                    ModifyClusterSubnetGroupError::InvalidSubnet(String::from(parsed_error.message))
-                }
-                "SubnetAlreadyInUse" => ModifyClusterSubnetGroupError::SubnetAlreadyInUse(
-                    String::from(parsed_error.message),
-                ),
-                "UnauthorizedOperation" => ModifyClusterSubnetGroupError::UnauthorizedOperation(
-                    String::from(parsed_error.message),
-                ),
-                _ => ModifyClusterSubnetGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyClusterSubnetGroupError::Unknown(body.to_string()),
+            }
         }
+        ModifyClusterSubnetGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17455,7 +17770,7 @@ impl ModifyClusterSubnetGroupError {
 impl From<XmlParseError> for ModifyClusterSubnetGroupError {
     fn from(err: XmlParseError) -> ModifyClusterSubnetGroupError {
         let XmlParseError(message) = err;
-        ModifyClusterSubnetGroupError::Unknown(message.to_string())
+        ModifyClusterSubnetGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyClusterSubnetGroupError {
@@ -17494,7 +17809,8 @@ impl Error for ModifyClusterSubnetGroupError {
             ModifyClusterSubnetGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyClusterSubnetGroupError::Unknown(ref cause) => cause,
+            ModifyClusterSubnetGroupError::ParseError(ref cause) => cause,
+            ModifyClusterSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17525,56 +17841,70 @@ pub enum ModifyEventSubscriptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyEventSubscriptionError {
-    pub fn from_body(body: &str) -> ModifyEventSubscriptionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidSubscriptionStateFault" => {
-                    ModifyEventSubscriptionError::InvalidSubscriptionStateFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyEventSubscriptionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidSubscriptionStateFault" => {
+                        return ModifyEventSubscriptionError::InvalidSubscriptionStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SNSInvalidTopic" => {
+                        return ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SNSNoAuthorization" => {
+                        return ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SNSTopicArnNotFound" => {
+                        return ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SourceNotFound" => {
+                        return ModifyEventSubscriptionError::SourceNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SubscriptionCategoryNotFound" => {
+                        return ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SubscriptionEventIdNotFound" => {
+                        return ModifyEventSubscriptionError::SubscriptionEventIdNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SubscriptionNotFound" => {
+                        return ModifyEventSubscriptionError::SubscriptionNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SubscriptionSeverityNotFound" => {
+                        return ModifyEventSubscriptionError::SubscriptionSeverityNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "SNSInvalidTopic" => ModifyEventSubscriptionError::SNSInvalidTopicFault(
-                    String::from(parsed_error.message),
-                ),
-                "SNSNoAuthorization" => ModifyEventSubscriptionError::SNSNoAuthorizationFault(
-                    String::from(parsed_error.message),
-                ),
-                "SNSTopicArnNotFound" => ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "SourceNotFound" => ModifyEventSubscriptionError::SourceNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "SubscriptionCategoryNotFound" => {
-                    ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SubscriptionEventIdNotFound" => {
-                    ModifyEventSubscriptionError::SubscriptionEventIdNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SubscriptionNotFound" => ModifyEventSubscriptionError::SubscriptionNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "SubscriptionSeverityNotFound" => {
-                    ModifyEventSubscriptionError::SubscriptionSeverityNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => ModifyEventSubscriptionError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyEventSubscriptionError::Unknown(body.to_string()),
+            }
         }
+        ModifyEventSubscriptionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17589,7 +17919,7 @@ impl ModifyEventSubscriptionError {
 impl From<XmlParseError> for ModifyEventSubscriptionError {
     fn from(err: XmlParseError) -> ModifyEventSubscriptionError {
         let XmlParseError(message) = err;
-        ModifyEventSubscriptionError::Unknown(message.to_string())
+        ModifyEventSubscriptionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyEventSubscriptionError {
@@ -17629,7 +17959,8 @@ impl Error for ModifyEventSubscriptionError {
             ModifyEventSubscriptionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyEventSubscriptionError::Unknown(ref cause) => cause,
+            ModifyEventSubscriptionError::ParseError(ref cause) => cause,
+            ModifyEventSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17650,39 +17981,45 @@ pub enum ModifySnapshotCopyRetentionPeriodError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifySnapshotCopyRetentionPeriodError {
-    pub fn from_body(body: &str) -> ModifySnapshotCopyRetentionPeriodError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidClusterState" => {
-                    ModifySnapshotCopyRetentionPeriodError::InvalidClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifySnapshotCopyRetentionPeriodError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterState" => {
+                        return ModifySnapshotCopyRetentionPeriodError::InvalidClusterStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SnapshotCopyDisabledFault" => {
+                        return ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return ModifySnapshotCopyRetentionPeriodError::UnauthorizedOperation(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "SnapshotCopyDisabledFault" => {
-                    ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "UnauthorizedOperation" => {
-                    ModifySnapshotCopyRetentionPeriodError::UnauthorizedOperation(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => ModifySnapshotCopyRetentionPeriodError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifySnapshotCopyRetentionPeriodError::Unknown(body.to_string()),
+            }
         }
+        ModifySnapshotCopyRetentionPeriodError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17697,7 +18034,7 @@ impl ModifySnapshotCopyRetentionPeriodError {
 impl From<XmlParseError> for ModifySnapshotCopyRetentionPeriodError {
     fn from(err: XmlParseError) -> ModifySnapshotCopyRetentionPeriodError {
         let XmlParseError(message) = err;
-        ModifySnapshotCopyRetentionPeriodError::Unknown(message.to_string())
+        ModifySnapshotCopyRetentionPeriodError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifySnapshotCopyRetentionPeriodError {
@@ -17732,7 +18069,8 @@ impl Error for ModifySnapshotCopyRetentionPeriodError {
             ModifySnapshotCopyRetentionPeriodError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifySnapshotCopyRetentionPeriodError::Unknown(ref cause) => cause,
+            ModifySnapshotCopyRetentionPeriodError::ParseError(ref cause) => cause,
+            ModifySnapshotCopyRetentionPeriodError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17753,41 +18091,45 @@ pub enum PurchaseReservedNodeOfferingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PurchaseReservedNodeOfferingError {
-    pub fn from_body(body: &str) -> PurchaseReservedNodeOfferingError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ReservedNodeAlreadyExists" => {
-                    PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> PurchaseReservedNodeOfferingError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ReservedNodeAlreadyExists" => {
+                        return PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ReservedNodeOfferingNotFound" => {
+                        return PurchaseReservedNodeOfferingError::ReservedNodeOfferingNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ReservedNodeQuotaExceeded" => {
+                        return PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "UnsupportedOperation" => {
+                        return PurchaseReservedNodeOfferingError::UnsupportedOperationFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "ReservedNodeOfferingNotFound" => {
-                    PurchaseReservedNodeOfferingError::ReservedNodeOfferingNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "ReservedNodeQuotaExceeded" => {
-                    PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "UnsupportedOperation" => {
-                    PurchaseReservedNodeOfferingError::UnsupportedOperationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => PurchaseReservedNodeOfferingError::Unknown(String::from(body)),
-            },
-            Err(_) => PurchaseReservedNodeOfferingError::Unknown(body.to_string()),
+            }
         }
+        PurchaseReservedNodeOfferingError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17802,7 +18144,7 @@ impl PurchaseReservedNodeOfferingError {
 impl From<XmlParseError> for PurchaseReservedNodeOfferingError {
     fn from(err: XmlParseError) -> PurchaseReservedNodeOfferingError {
         let XmlParseError(message) = err;
-        PurchaseReservedNodeOfferingError::Unknown(message.to_string())
+        PurchaseReservedNodeOfferingError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PurchaseReservedNodeOfferingError {
@@ -17839,7 +18181,8 @@ impl Error for PurchaseReservedNodeOfferingError {
             PurchaseReservedNodeOfferingError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PurchaseReservedNodeOfferingError::Unknown(ref cause) => cause,
+            PurchaseReservedNodeOfferingError::ParseError(ref cause) => cause,
+            PurchaseReservedNodeOfferingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17856,27 +18199,35 @@ pub enum RebootClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RebootClusterError {
-    pub fn from_body(body: &str) -> RebootClusterError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => {
-                    RebootClusterError::ClusterNotFoundFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> RebootClusterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RebootClusterError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidClusterState" => {
+                        return RebootClusterError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidClusterState" => {
-                    RebootClusterError::InvalidClusterStateFault(String::from(parsed_error.message))
-                }
-                _ => RebootClusterError::Unknown(String::from(body)),
-            },
-            Err(_) => RebootClusterError::Unknown(body.to_string()),
+            }
         }
+        RebootClusterError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17891,7 +18242,7 @@ impl RebootClusterError {
 impl From<XmlParseError> for RebootClusterError {
     fn from(err: XmlParseError) -> RebootClusterError {
         let XmlParseError(message) = err;
-        RebootClusterError::Unknown(message.to_string())
+        RebootClusterError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RebootClusterError {
@@ -17922,7 +18273,8 @@ impl Error for RebootClusterError {
             RebootClusterError::Validation(ref cause) => cause,
             RebootClusterError::Credentials(ref err) => err.description(),
             RebootClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RebootClusterError::Unknown(ref cause) => cause,
+            RebootClusterError::ParseError(ref cause) => cause,
+            RebootClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17939,31 +18291,25 @@ pub enum ResetClusterParameterGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ResetClusterParameterGroupError {
-    pub fn from_body(body: &str) -> ResetClusterParameterGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFound" => {
-                    ResetClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidClusterParameterGroupState" => {
-                    ResetClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => ResetClusterParameterGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => ResetClusterParameterGroupError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ResetClusterParameterGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ClusterParameterGroupNotFound" => return ResetClusterParameterGroupError::ClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterParameterGroupState" => return ResetClusterParameterGroupError::InvalidClusterParameterGroupStateFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        ResetClusterParameterGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17978,7 +18324,7 @@ impl ResetClusterParameterGroupError {
 impl From<XmlParseError> for ResetClusterParameterGroupError {
     fn from(err: XmlParseError) -> ResetClusterParameterGroupError {
         let XmlParseError(message) = err;
-        ResetClusterParameterGroupError::Unknown(message.to_string())
+        ResetClusterParameterGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ResetClusterParameterGroupError {
@@ -18013,7 +18359,8 @@ impl Error for ResetClusterParameterGroupError {
             ResetClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ResetClusterParameterGroupError::Unknown(ref cause) => cause,
+            ResetClusterParameterGroupError::ParseError(ref cause) => cause,
+            ResetClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18070,119 +18417,25 @@ pub enum RestoreFromClusterSnapshotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreFromClusterSnapshotError {
-    pub fn from_body(body: &str) -> RestoreFromClusterSnapshotError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessToSnapshotDenied" => {
-                    RestoreFromClusterSnapshotError::AccessToSnapshotDeniedFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterAlreadyExists" => {
-                    RestoreFromClusterSnapshotError::ClusterAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterParameterGroupNotFound" => {
-                    RestoreFromClusterSnapshotError::ClusterParameterGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "ClusterQuotaExceeded" => {
-                    RestoreFromClusterSnapshotError::ClusterQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterSecurityGroupNotFound" => {
-                    RestoreFromClusterSnapshotError::ClusterSecurityGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "ClusterSnapshotNotFound" => {
-                    RestoreFromClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterSubnetGroupNotFoundFault" => {
-                    RestoreFromClusterSnapshotError::ClusterSubnetGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DependentServiceRequestThrottlingFault" => {
-                    RestoreFromClusterSnapshotError::DependentServiceRequestThrottlingFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "HsmClientCertificateNotFoundFault" => {
-                    RestoreFromClusterSnapshotError::HsmClientCertificateNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "HsmConfigurationNotFoundFault" => {
-                    RestoreFromClusterSnapshotError::HsmConfigurationNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InsufficientClusterCapacity" => {
-                    RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidClusterSnapshotState" => {
-                    RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidClusterSubnetGroupStateFault" => {
-                    RestoreFromClusterSnapshotError::InvalidClusterSubnetGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidClusterTrack" => RestoreFromClusterSnapshotError::InvalidClusterTrackFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidElasticIpFault" => RestoreFromClusterSnapshotError::InvalidElasticIpFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidRestore" => RestoreFromClusterSnapshotError::InvalidRestoreFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidSubnet" => RestoreFromClusterSnapshotError::InvalidSubnet(String::from(
-                    parsed_error.message,
-                )),
-                "InvalidVPCNetworkStateFault" => {
-                    RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "LimitExceededFault" => RestoreFromClusterSnapshotError::LimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                "NumberOfNodesPerClusterLimitExceeded" => {
-                    RestoreFromClusterSnapshotError::NumberOfNodesPerClusterLimitExceededFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "NumberOfNodesQuotaExceeded" => {
-                    RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "UnauthorizedOperation" => RestoreFromClusterSnapshotError::UnauthorizedOperation(
-                    String::from(parsed_error.message),
-                ),
-                _ => RestoreFromClusterSnapshotError::Unknown(String::from(body)),
-            },
-            Err(_) => RestoreFromClusterSnapshotError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> RestoreFromClusterSnapshotError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "AccessToSnapshotDenied" => return RestoreFromClusterSnapshotError::AccessToSnapshotDeniedFault(String::from(parsed_error.message)),"ClusterAlreadyExists" => return RestoreFromClusterSnapshotError::ClusterAlreadyExistsFault(String::from(parsed_error.message)),"ClusterParameterGroupNotFound" => return RestoreFromClusterSnapshotError::ClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"ClusterQuotaExceeded" => return RestoreFromClusterSnapshotError::ClusterQuotaExceededFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RestoreFromClusterSnapshotError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"ClusterSnapshotNotFound" => return RestoreFromClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"ClusterSubnetGroupNotFoundFault" => return RestoreFromClusterSnapshotError::ClusterSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DependentServiceRequestThrottlingFault" => return RestoreFromClusterSnapshotError::DependentServiceRequestThrottlingFault(String::from(parsed_error.message)),"HsmClientCertificateNotFoundFault" => return RestoreFromClusterSnapshotError::HsmClientCertificateNotFoundFault(String::from(parsed_error.message)),"HsmConfigurationNotFoundFault" => return RestoreFromClusterSnapshotError::HsmConfigurationNotFoundFault(String::from(parsed_error.message)),"InsufficientClusterCapacity" => return RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(String::from(parsed_error.message)),"InvalidClusterSnapshotState" => return RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidClusterSubnetGroupStateFault" => return RestoreFromClusterSnapshotError::InvalidClusterSubnetGroupStateFault(String::from(parsed_error.message)),"InvalidClusterTrack" => return RestoreFromClusterSnapshotError::InvalidClusterTrackFault(String::from(parsed_error.message)),"InvalidElasticIpFault" => return RestoreFromClusterSnapshotError::InvalidElasticIpFault(String::from(parsed_error.message)),"InvalidRestore" => return RestoreFromClusterSnapshotError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidSubnet" => return RestoreFromClusterSnapshotError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"LimitExceededFault" => return RestoreFromClusterSnapshotError::LimitExceededFault(String::from(parsed_error.message)),"NumberOfNodesPerClusterLimitExceeded" => return RestoreFromClusterSnapshotError::NumberOfNodesPerClusterLimitExceededFault(String::from(parsed_error.message)),"NumberOfNodesQuotaExceeded" => return RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(String::from(parsed_error.message)),"UnauthorizedOperation" => return RestoreFromClusterSnapshotError::UnauthorizedOperation(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        RestoreFromClusterSnapshotError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18197,7 +18450,7 @@ impl RestoreFromClusterSnapshotError {
 impl From<XmlParseError> for RestoreFromClusterSnapshotError {
     fn from(err: XmlParseError) -> RestoreFromClusterSnapshotError {
         let XmlParseError(message) = err;
-        RestoreFromClusterSnapshotError::Unknown(message.to_string())
+        RestoreFromClusterSnapshotError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RestoreFromClusterSnapshotError {
@@ -18256,7 +18509,8 @@ impl Error for RestoreFromClusterSnapshotError {
             RestoreFromClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RestoreFromClusterSnapshotError::Unknown(ref cause) => cause,
+            RestoreFromClusterSnapshotError::ParseError(ref cause) => cause,
+            RestoreFromClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18283,54 +18537,25 @@ pub enum RestoreTableFromClusterSnapshotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreTableFromClusterSnapshotError {
-    pub fn from_body(body: &str) -> RestoreTableFromClusterSnapshotError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "ClusterSnapshotNotFound" => {
-                    RestoreTableFromClusterSnapshotError::ClusterSnapshotNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InProgressTableRestoreQuotaExceededFault" => {
-                    RestoreTableFromClusterSnapshotError::InProgressTableRestoreQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidClusterSnapshotState" => {
-                    RestoreTableFromClusterSnapshotError::InvalidClusterSnapshotStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidClusterState" => {
-                    RestoreTableFromClusterSnapshotError::InvalidClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidTableRestoreArgument" => {
-                    RestoreTableFromClusterSnapshotError::InvalidTableRestoreArgumentFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "UnsupportedOperation" => {
-                    RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => RestoreTableFromClusterSnapshotError::Unknown(String::from(body)),
-            },
-            Err(_) => RestoreTableFromClusterSnapshotError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> RestoreTableFromClusterSnapshotError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ClusterNotFound" => return RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(String::from(parsed_error.message)),"ClusterSnapshotNotFound" => return RestoreTableFromClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"InProgressTableRestoreQuotaExceededFault" => return RestoreTableFromClusterSnapshotError::InProgressTableRestoreQuotaExceededFault(String::from(parsed_error.message)),"InvalidClusterSnapshotState" => return RestoreTableFromClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidClusterState" => return RestoreTableFromClusterSnapshotError::InvalidClusterStateFault(String::from(parsed_error.message)),"InvalidTableRestoreArgument" => return RestoreTableFromClusterSnapshotError::InvalidTableRestoreArgumentFault(String::from(parsed_error.message)),"UnsupportedOperation" => return RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        RestoreTableFromClusterSnapshotError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18345,7 +18570,7 @@ impl RestoreTableFromClusterSnapshotError {
 impl From<XmlParseError> for RestoreTableFromClusterSnapshotError {
     fn from(err: XmlParseError) -> RestoreTableFromClusterSnapshotError {
         let XmlParseError(message) = err;
-        RestoreTableFromClusterSnapshotError::Unknown(message.to_string())
+        RestoreTableFromClusterSnapshotError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RestoreTableFromClusterSnapshotError {
@@ -18389,7 +18614,8 @@ impl Error for RestoreTableFromClusterSnapshotError {
             RestoreTableFromClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RestoreTableFromClusterSnapshotError::Unknown(ref cause) => cause,
+            RestoreTableFromClusterSnapshotError::ParseError(ref cause) => cause,
+            RestoreTableFromClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18408,36 +18634,25 @@ pub enum RevokeClusterSecurityGroupIngressError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RevokeClusterSecurityGroupIngressError {
-    pub fn from_body(body: &str) -> RevokeClusterSecurityGroupIngressError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFound" => {
-                    RevokeClusterSecurityGroupIngressError::AuthorizationNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "ClusterSecurityGroupNotFound" => {
-                    RevokeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidClusterSecurityGroupState" => {
-                    RevokeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => RevokeClusterSecurityGroupIngressError::Unknown(String::from(body)),
-            },
-            Err(_) => RevokeClusterSecurityGroupIngressError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> RevokeClusterSecurityGroupIngressError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "AuthorizationNotFound" => return RevokeClusterSecurityGroupIngressError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RevokeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSecurityGroupState" => return RevokeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        RevokeClusterSecurityGroupIngressError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18452,7 +18667,7 @@ impl RevokeClusterSecurityGroupIngressError {
 impl From<XmlParseError> for RevokeClusterSecurityGroupIngressError {
     fn from(err: XmlParseError) -> RevokeClusterSecurityGroupIngressError {
         let XmlParseError(message) = err;
-        RevokeClusterSecurityGroupIngressError::Unknown(message.to_string())
+        RevokeClusterSecurityGroupIngressError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RevokeClusterSecurityGroupIngressError {
@@ -18490,7 +18705,8 @@ impl Error for RevokeClusterSecurityGroupIngressError {
             RevokeClusterSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RevokeClusterSecurityGroupIngressError::Unknown(ref cause) => cause,
+            RevokeClusterSecurityGroupIngressError::ParseError(ref cause) => cause,
+            RevokeClusterSecurityGroupIngressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18509,32 +18725,40 @@ pub enum RevokeSnapshotAccessError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RevokeSnapshotAccessError {
-    pub fn from_body(body: &str) -> RevokeSnapshotAccessError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessToSnapshotDenied" => RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(
-                    String::from(parsed_error.message),
-                ),
-                "AuthorizationNotFound" => RevokeSnapshotAccessError::AuthorizationNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "ClusterSnapshotNotFound" => {
-                    RevokeSnapshotAccessError::ClusterSnapshotNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> RevokeSnapshotAccessError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessToSnapshotDenied" => {
+                        return RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AuthorizationNotFound" => {
+                        return RevokeSnapshotAccessError::AuthorizationNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterSnapshotNotFound" => {
+                        return RevokeSnapshotAccessError::ClusterSnapshotNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => RevokeSnapshotAccessError::Unknown(String::from(body)),
-            },
-            Err(_) => RevokeSnapshotAccessError::Unknown(body.to_string()),
+            }
         }
+        RevokeSnapshotAccessError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18549,7 +18773,7 @@ impl RevokeSnapshotAccessError {
 impl From<XmlParseError> for RevokeSnapshotAccessError {
     fn from(err: XmlParseError) -> RevokeSnapshotAccessError {
         let XmlParseError(message) = err;
-        RevokeSnapshotAccessError::Unknown(message.to_string())
+        RevokeSnapshotAccessError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RevokeSnapshotAccessError {
@@ -18583,7 +18807,8 @@ impl Error for RevokeSnapshotAccessError {
             RevokeSnapshotAccessError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RevokeSnapshotAccessError::Unknown(ref cause) => cause,
+            RevokeSnapshotAccessError::ParseError(ref cause) => cause,
+            RevokeSnapshotAccessError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18602,32 +18827,40 @@ pub enum RotateEncryptionKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RotateEncryptionKeyError {
-    pub fn from_body(body: &str) -> RotateEncryptionKeyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFound" => RotateEncryptionKeyError::ClusterNotFoundFault(String::from(
-                    parsed_error.message,
-                )),
-                "DependentServiceRequestThrottlingFault" => {
-                    RotateEncryptionKeyError::DependentServiceRequestThrottlingFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> RotateEncryptionKeyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RotateEncryptionKeyError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DependentServiceRequestThrottlingFault" => {
+                        return RotateEncryptionKeyError::DependentServiceRequestThrottlingFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterState" => {
+                        return RotateEncryptionKeyError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidClusterState" => RotateEncryptionKeyError::InvalidClusterStateFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => RotateEncryptionKeyError::Unknown(String::from(body)),
-            },
-            Err(_) => RotateEncryptionKeyError::Unknown(body.to_string()),
+            }
         }
+        RotateEncryptionKeyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18642,7 +18875,7 @@ impl RotateEncryptionKeyError {
 impl From<XmlParseError> for RotateEncryptionKeyError {
     fn from(err: XmlParseError) -> RotateEncryptionKeyError {
         let XmlParseError(message) = err;
-        RotateEncryptionKeyError::Unknown(message.to_string())
+        RotateEncryptionKeyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RotateEncryptionKeyError {
@@ -18676,7 +18909,8 @@ impl Error for RotateEncryptionKeyError {
             RotateEncryptionKeyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RotateEncryptionKeyError::Unknown(ref cause) => cause,
+            RotateEncryptionKeyError::ParseError(ref cause) => cause,
+            RotateEncryptionKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19146,9 +19380,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AcceptReservedNodeExchangeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AcceptReservedNodeExchangeError::from_response(response))
                 }));
             }
 
@@ -19203,8 +19435,8 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AuthorizeClusterSecurityGroupIngressError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(AuthorizeClusterSecurityGroupIngressError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -19257,9 +19489,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AuthorizeSnapshotAccessError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AuthorizeSnapshotAccessError::from_response(response))
                 }));
             }
 
@@ -19308,11 +19538,11 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CopyClusterSnapshotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CopyClusterSnapshotError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19360,11 +19590,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateClusterError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19413,9 +19644,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterParameterGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateClusterParameterGroupError::from_response(response))
                 }));
             }
 
@@ -19465,9 +19694,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterSecurityGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateClusterSecurityGroupError::from_response(response))
                 }));
             }
 
@@ -19516,11 +19743,11 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterSnapshotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateClusterSnapshotError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19569,9 +19796,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterSubnetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateClusterSubnetGroupError::from_response(response))
                 }));
             }
 
@@ -19621,9 +19846,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateEventSubscriptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateEventSubscriptionError::from_response(response))
                 }));
             }
 
@@ -19673,9 +19896,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateHsmClientCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateHsmClientCertificateError::from_response(response))
                 }));
             }
 
@@ -19725,9 +19946,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateHsmConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateHsmConfigurationError::from_response(response))
                 }));
             }
 
@@ -19777,9 +19996,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSnapshotCopyGrantError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateSnapshotCopyGrantError::from_response(response))
                 }));
             }
 
@@ -19825,11 +20042,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateTagsError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -19854,11 +20072,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteClusterError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -19907,9 +20126,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteClusterParameterGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteClusterParameterGroupError::from_response(response))
                 }));
             }
 
@@ -19936,9 +20153,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteClusterSecurityGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteClusterSecurityGroupError::from_response(response))
                 }));
             }
 
@@ -19964,11 +20179,11 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteClusterSnapshotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteClusterSnapshotError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20017,9 +20232,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteClusterSubnetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteClusterSubnetGroupError::from_response(response))
                 }));
             }
 
@@ -20046,9 +20259,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteEventSubscriptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteEventSubscriptionError::from_response(response))
                 }));
             }
 
@@ -20075,9 +20286,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteHsmClientCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteHsmClientCertificateError::from_response(response))
                 }));
             }
 
@@ -20104,9 +20313,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteHsmConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteHsmConfigurationError::from_response(response))
                 }));
             }
 
@@ -20133,9 +20340,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSnapshotCopyGrantError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteSnapshotCopyGrantError::from_response(response))
                 }));
             }
 
@@ -20158,11 +20363,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -20188,9 +20394,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterDbRevisionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeClusterDbRevisionsError::from_response(response))
                 }));
             }
 
@@ -20240,9 +20444,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterParameterGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeClusterParameterGroupsError::from_response(response))
                 }));
             }
 
@@ -20292,9 +20494,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterParametersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeClusterParametersError::from_response(response))
                 }));
             }
 
@@ -20344,9 +20544,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterSecurityGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeClusterSecurityGroupsError::from_response(response))
                 }));
             }
 
@@ -20396,9 +20594,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterSnapshotsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeClusterSnapshotsError::from_response(response))
                 }));
             }
 
@@ -20448,9 +20644,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterSubnetGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeClusterSubnetGroupsError::from_response(response))
                 }));
             }
 
@@ -20499,11 +20693,11 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterTracksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeClusterTracksError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20552,9 +20746,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClusterVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeClusterVersionsError::from_response(response))
                 }));
             }
 
@@ -20603,11 +20795,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClustersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeClustersError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20657,8 +20850,8 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDefaultClusterParametersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeDefaultClusterParametersError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -20711,9 +20904,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventCategoriesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeEventCategoriesError::from_response(response))
                 }));
             }
 
@@ -20763,9 +20954,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventSubscriptionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeEventSubscriptionsError::from_response(response))
                 }));
             }
 
@@ -20814,11 +21003,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeEventsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -20867,9 +21057,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeHsmClientCertificatesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeHsmClientCertificatesError::from_response(response))
                 }));
             }
 
@@ -20919,9 +21107,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeHsmConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeHsmConfigurationsError::from_response(response))
                 }));
             }
 
@@ -20970,11 +21156,11 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoggingStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeLoggingStatusError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21023,8 +21209,8 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeOrderableClusterOptionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeOrderableClusterOptionsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -21075,9 +21261,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReservedNodeOfferingsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeReservedNodeOfferingsError::from_response(response))
                 }));
             }
 
@@ -21126,11 +21310,11 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReservedNodesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeReservedNodesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21178,11 +21362,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeResizeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeResizeError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21231,9 +21416,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSnapshotCopyGrantsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeSnapshotCopyGrantsError::from_response(response))
                 }));
             }
 
@@ -21283,9 +21466,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTableRestoreStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeTableRestoreStatusError::from_response(response))
                 }));
             }
 
@@ -21334,11 +21515,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21386,11 +21568,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableLoggingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DisableLoggingError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21438,11 +21621,11 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableSnapshotCopyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DisableSnapshotCopyError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21490,11 +21673,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableLoggingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(EnableLoggingError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21542,11 +21726,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableSnapshotCopyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(EnableSnapshotCopyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21594,11 +21779,11 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetClusterCredentialsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetClusterCredentialsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21650,8 +21835,8 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReservedNodeExchangeOfferingsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetReservedNodeExchangeOfferingsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -21703,11 +21888,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ModifyClusterError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21756,9 +21942,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyClusterDbRevisionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ModifyClusterDbRevisionError::from_response(response))
                 }));
             }
 
@@ -21807,11 +21991,11 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyClusterIamRolesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ModifyClusterIamRolesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21860,9 +22044,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyClusterParameterGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ModifyClusterParameterGroupError::from_response(response))
                 }));
             }
 
@@ -21912,9 +22094,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyClusterSubnetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ModifyClusterSubnetGroupError::from_response(response))
                 }));
             }
 
@@ -21964,9 +22144,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyEventSubscriptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ModifyEventSubscriptionError::from_response(response))
                 }));
             }
 
@@ -22017,8 +22195,8 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifySnapshotCopyRetentionPeriodError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ModifySnapshotCopyRetentionPeriodError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -22071,9 +22249,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PurchaseReservedNodeOfferingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PurchaseReservedNodeOfferingError::from_response(response))
                 }));
             }
 
@@ -22122,11 +22298,12 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RebootClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RebootClusterError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -22175,9 +22352,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResetClusterParameterGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ResetClusterParameterGroupError::from_response(response))
                 }));
             }
 
@@ -22227,9 +22402,7 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreFromClusterSnapshotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RestoreFromClusterSnapshotError::from_response(response))
                 }));
             }
 
@@ -22280,8 +22453,8 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreTableFromClusterSnapshotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(RestoreTableFromClusterSnapshotError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -22335,8 +22508,8 @@ impl Redshift for RedshiftClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RevokeClusterSecurityGroupIngressError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(RevokeClusterSecurityGroupIngressError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -22388,11 +22561,11 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RevokeSnapshotAccessError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RevokeSnapshotAccessError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -22440,11 +22613,11 @@ impl Redshift for RedshiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RotateEncryptionKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RotateEncryptionKeyError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

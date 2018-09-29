@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -8661,30 +8661,40 @@ pub enum CloneReceiptRuleSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CloneReceiptRuleSetError {
-    pub fn from_body(body: &str) -> CloneReceiptRuleSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExists" => {
-                    CloneReceiptRuleSetError::AlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CloneReceiptRuleSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AlreadyExists" => {
+                        return CloneReceiptRuleSetError::AlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CloneReceiptRuleSetError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleSetDoesNotExist" => {
+                        return CloneReceiptRuleSetError::RuleSetDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    CloneReceiptRuleSetError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "RuleSetDoesNotExist" => CloneReceiptRuleSetError::RuleSetDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
-                _ => CloneReceiptRuleSetError::Unknown(String::from(body)),
-            },
-            Err(_) => CloneReceiptRuleSetError::Unknown(body.to_string()),
+            }
         }
+        CloneReceiptRuleSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8699,7 +8709,7 @@ impl CloneReceiptRuleSetError {
 impl From<XmlParseError> for CloneReceiptRuleSetError {
     fn from(err: XmlParseError) -> CloneReceiptRuleSetError {
         let XmlParseError(message) = err;
-        CloneReceiptRuleSetError::Unknown(message.to_string())
+        CloneReceiptRuleSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CloneReceiptRuleSetError {
@@ -8733,7 +8743,8 @@ impl Error for CloneReceiptRuleSetError {
             CloneReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CloneReceiptRuleSetError::Unknown(ref cause) => cause,
+            CloneReceiptRuleSetError::ParseError(ref cause) => cause,
+            CloneReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8752,32 +8763,40 @@ pub enum CreateConfigurationSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConfigurationSetError {
-    pub fn from_body(body: &str) -> CreateConfigurationSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetAlreadyExists" => {
-                    CreateConfigurationSetError::ConfigurationSetAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateConfigurationSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConfigurationSetAlreadyExists" => {
+                        return CreateConfigurationSetError::ConfigurationSetAlreadyExists(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidConfigurationSet" => {
+                        return CreateConfigurationSetError::InvalidConfigurationSet(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateConfigurationSetError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidConfigurationSet" => CreateConfigurationSetError::InvalidConfigurationSet(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceeded" => {
-                    CreateConfigurationSetError::LimitExceeded(String::from(parsed_error.message))
-                }
-                _ => CreateConfigurationSetError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateConfigurationSetError::Unknown(body.to_string()),
+            }
         }
+        CreateConfigurationSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8792,7 +8811,7 @@ impl CreateConfigurationSetError {
 impl From<XmlParseError> for CreateConfigurationSetError {
     fn from(err: XmlParseError) -> CreateConfigurationSetError {
         let XmlParseError(message) = err;
-        CreateConfigurationSetError::Unknown(message.to_string())
+        CreateConfigurationSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateConfigurationSetError {
@@ -8826,7 +8845,8 @@ impl Error for CreateConfigurationSetError {
             CreateConfigurationSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateConfigurationSetError::Unknown(ref cause) => cause,
+            CreateConfigurationSetError::ParseError(ref cause) => cause,
+            CreateConfigurationSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8851,49 +8871,25 @@ pub enum CreateConfigurationSetEventDestinationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConfigurationSetEventDestinationError {
-    pub fn from_body(body: &str) -> CreateConfigurationSetEventDestinationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExist" => {
-                    CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "EventDestinationAlreadyExists" => {
-                    CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidCloudWatchDestination" => {
-                    CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidFirehoseDestination" => {
-                    CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidSNSDestination" => {
-                    CreateConfigurationSetEventDestinationError::InvalidSNSDestination(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "LimitExceeded" => CreateConfigurationSetEventDestinationError::LimitExceeded(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateConfigurationSetEventDestinationError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateConfigurationSetEventDestinationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateConfigurationSetEventDestinationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConfigurationSetDoesNotExist" => return CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"EventDestinationAlreadyExists" => return CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(String::from(parsed_error.message)),"InvalidCloudWatchDestination" => return CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(String::from(parsed_error.message)),"InvalidFirehoseDestination" => return CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(String::from(parsed_error.message)),"InvalidSNSDestination" => return CreateConfigurationSetEventDestinationError::InvalidSNSDestination(String::from(parsed_error.message)),"LimitExceeded" => return CreateConfigurationSetEventDestinationError::LimitExceeded(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        CreateConfigurationSetEventDestinationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8908,7 +8904,7 @@ impl CreateConfigurationSetEventDestinationError {
 impl From<XmlParseError> for CreateConfigurationSetEventDestinationError {
     fn from(err: XmlParseError) -> CreateConfigurationSetEventDestinationError {
         let XmlParseError(message) = err;
-        CreateConfigurationSetEventDestinationError::Unknown(message.to_string())
+        CreateConfigurationSetEventDestinationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateConfigurationSetEventDestinationError {
@@ -8953,7 +8949,8 @@ impl Error for CreateConfigurationSetEventDestinationError {
             CreateConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateConfigurationSetEventDestinationError::Unknown(ref cause) => cause,
+            CreateConfigurationSetEventDestinationError::ParseError(ref cause) => cause,
+            CreateConfigurationSetEventDestinationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8972,36 +8969,25 @@ pub enum CreateConfigurationSetTrackingOptionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConfigurationSetTrackingOptionsError {
-    pub fn from_body(body: &str) -> CreateConfigurationSetTrackingOptionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExist" => {
-                    CreateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidTrackingOptions" => {
-                    CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TrackingOptionsAlreadyExistsException" => {
-                    CreateConfigurationSetTrackingOptionsError::TrackingOptionsAlreadyExists(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => CreateConfigurationSetTrackingOptionsError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateConfigurationSetTrackingOptionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateConfigurationSetTrackingOptionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConfigurationSetDoesNotExist" => return CreateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"InvalidTrackingOptions" => return CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(String::from(parsed_error.message)),"TrackingOptionsAlreadyExistsException" => return CreateConfigurationSetTrackingOptionsError::TrackingOptionsAlreadyExists(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        CreateConfigurationSetTrackingOptionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9016,7 +9002,7 @@ impl CreateConfigurationSetTrackingOptionsError {
 impl From<XmlParseError> for CreateConfigurationSetTrackingOptionsError {
     fn from(err: XmlParseError) -> CreateConfigurationSetTrackingOptionsError {
         let XmlParseError(message) = err;
-        CreateConfigurationSetTrackingOptionsError::Unknown(message.to_string())
+        CreateConfigurationSetTrackingOptionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateConfigurationSetTrackingOptionsError {
@@ -9054,7 +9040,8 @@ impl Error for CreateConfigurationSetTrackingOptionsError {
             CreateConfigurationSetTrackingOptionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateConfigurationSetTrackingOptionsError::Unknown(ref cause) => cause,
+            CreateConfigurationSetTrackingOptionsError::ParseError(ref cause) => cause,
+            CreateConfigurationSetTrackingOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9075,23 +9062,25 @@ pub enum CreateCustomVerificationEmailTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCustomVerificationEmailTemplateError {
-    pub fn from_body(body: &str) -> CreateCustomVerificationEmailTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContent" => CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),"LimitExceeded" => CreateCustomVerificationEmailTemplateError::LimitExceeded(String::from(parsed_error.message)),_ => CreateCustomVerificationEmailTemplateError::Unknown(String::from(body))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCustomVerificationEmailTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "CustomVerificationEmailInvalidContent" => return CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => return CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => return CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),"LimitExceeded" => return CreateCustomVerificationEmailTemplateError::LimitExceeded(String::from(parsed_error.message)),_ => {}
                                 }
-                           },
-                           Err(_) => CreateCustomVerificationEmailTemplateError::Unknown(body.to_string())
-                       }
+            }
+        }
+        CreateCustomVerificationEmailTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9106,7 +9095,7 @@ impl CreateCustomVerificationEmailTemplateError {
 impl From<XmlParseError> for CreateCustomVerificationEmailTemplateError {
     fn from(err: XmlParseError) -> CreateCustomVerificationEmailTemplateError {
         let XmlParseError(message) = err;
-        CreateCustomVerificationEmailTemplateError::Unknown(message.to_string())
+        CreateCustomVerificationEmailTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateCustomVerificationEmailTemplateError {
@@ -9139,7 +9128,8 @@ CreateCustomVerificationEmailTemplateError::LimitExceeded(ref cause) => cause,
 CreateCustomVerificationEmailTemplateError::Validation(ref cause) => cause,
 CreateCustomVerificationEmailTemplateError::Credentials(ref err) => err.description(),
 CreateCustomVerificationEmailTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-CreateCustomVerificationEmailTemplateError::Unknown(ref cause) => cause
+CreateCustomVerificationEmailTemplateError::ParseError(ref cause) => cause,
+CreateCustomVerificationEmailTemplateError::Unknown(_) => "unknown error"
                         }
     }
 }
@@ -9156,27 +9146,35 @@ pub enum CreateReceiptFilterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateReceiptFilterError {
-    pub fn from_body(body: &str) -> CreateReceiptFilterError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExists" => {
-                    CreateReceiptFilterError::AlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateReceiptFilterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AlreadyExists" => {
+                        return CreateReceiptFilterError::AlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateReceiptFilterError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    CreateReceiptFilterError::LimitExceeded(String::from(parsed_error.message))
-                }
-                _ => CreateReceiptFilterError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateReceiptFilterError::Unknown(body.to_string()),
+            }
         }
+        CreateReceiptFilterError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9191,7 +9189,7 @@ impl CreateReceiptFilterError {
 impl From<XmlParseError> for CreateReceiptFilterError {
     fn from(err: XmlParseError) -> CreateReceiptFilterError {
         let XmlParseError(message) = err;
-        CreateReceiptFilterError::Unknown(message.to_string())
+        CreateReceiptFilterError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateReceiptFilterError {
@@ -9224,7 +9222,8 @@ impl Error for CreateReceiptFilterError {
             CreateReceiptFilterError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateReceiptFilterError::Unknown(ref cause) => cause,
+            CreateReceiptFilterError::ParseError(ref cause) => cause,
+            CreateReceiptFilterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9251,42 +9250,60 @@ pub enum CreateReceiptRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateReceiptRuleError {
-    pub fn from_body(body: &str) -> CreateReceiptRuleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExists" => {
-                    CreateReceiptRuleError::AlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateReceiptRuleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AlreadyExists" => {
+                        return CreateReceiptRuleError::AlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidLambdaFunction" => {
+                        return CreateReceiptRuleError::InvalidLambdaFunction(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidS3Configuration" => {
+                        return CreateReceiptRuleError::InvalidS3Configuration(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidSnsTopic" => {
+                        return CreateReceiptRuleError::InvalidSnsTopic(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateReceiptRuleError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleDoesNotExist" => {
+                        return CreateReceiptRuleError::RuleDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleSetDoesNotExist" => {
+                        return CreateReceiptRuleError::RuleSetDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidLambdaFunction" => CreateReceiptRuleError::InvalidLambdaFunction(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidS3Configuration" => CreateReceiptRuleError::InvalidS3Configuration(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidSnsTopic" => {
-                    CreateReceiptRuleError::InvalidSnsTopic(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => {
-                    CreateReceiptRuleError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "RuleDoesNotExist" => {
-                    CreateReceiptRuleError::RuleDoesNotExist(String::from(parsed_error.message))
-                }
-                "RuleSetDoesNotExist" => {
-                    CreateReceiptRuleError::RuleSetDoesNotExist(String::from(parsed_error.message))
-                }
-                _ => CreateReceiptRuleError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateReceiptRuleError::Unknown(body.to_string()),
+            }
         }
+        CreateReceiptRuleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9301,7 +9318,7 @@ impl CreateReceiptRuleError {
 impl From<XmlParseError> for CreateReceiptRuleError {
     fn from(err: XmlParseError) -> CreateReceiptRuleError {
         let XmlParseError(message) = err;
-        CreateReceiptRuleError::Unknown(message.to_string())
+        CreateReceiptRuleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateReceiptRuleError {
@@ -9339,7 +9356,8 @@ impl Error for CreateReceiptRuleError {
             CreateReceiptRuleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateReceiptRuleError::Unknown(ref cause) => cause,
+            CreateReceiptRuleError::ParseError(ref cause) => cause,
+            CreateReceiptRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9356,27 +9374,35 @@ pub enum CreateReceiptRuleSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateReceiptRuleSetError {
-    pub fn from_body(body: &str) -> CreateReceiptRuleSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExists" => {
-                    CreateReceiptRuleSetError::AlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateReceiptRuleSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AlreadyExists" => {
+                        return CreateReceiptRuleSetError::AlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateReceiptRuleSetError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    CreateReceiptRuleSetError::LimitExceeded(String::from(parsed_error.message))
-                }
-                _ => CreateReceiptRuleSetError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateReceiptRuleSetError::Unknown(body.to_string()),
+            }
         }
+        CreateReceiptRuleSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9391,7 +9417,7 @@ impl CreateReceiptRuleSetError {
 impl From<XmlParseError> for CreateReceiptRuleSetError {
     fn from(err: XmlParseError) -> CreateReceiptRuleSetError {
         let XmlParseError(message) = err;
-        CreateReceiptRuleSetError::Unknown(message.to_string())
+        CreateReceiptRuleSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateReceiptRuleSetError {
@@ -9424,7 +9450,8 @@ impl Error for CreateReceiptRuleSetError {
             CreateReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateReceiptRuleSetError::Unknown(ref cause) => cause,
+            CreateReceiptRuleSetError::ParseError(ref cause) => cause,
+            CreateReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9443,30 +9470,40 @@ pub enum CreateTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTemplateError {
-    pub fn from_body(body: &str) -> CreateTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExists" => {
-                    CreateTemplateError::AlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AlreadyExists" => {
+                        return CreateTemplateError::AlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidTemplate" => {
+                        return CreateTemplateError::InvalidTemplate(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateTemplateError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidTemplate" => {
-                    CreateTemplateError::InvalidTemplate(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => {
-                    CreateTemplateError::LimitExceeded(String::from(parsed_error.message))
-                }
-                _ => CreateTemplateError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateTemplateError::Unknown(body.to_string()),
+            }
         }
+        CreateTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9481,7 +9518,7 @@ impl CreateTemplateError {
 impl From<XmlParseError> for CreateTemplateError {
     fn from(err: XmlParseError) -> CreateTemplateError {
         let XmlParseError(message) = err;
-        CreateTemplateError::Unknown(message.to_string())
+        CreateTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateTemplateError {
@@ -9513,7 +9550,8 @@ impl Error for CreateTemplateError {
             CreateTemplateError::Validation(ref cause) => cause,
             CreateTemplateError::Credentials(ref err) => err.description(),
             CreateTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTemplateError::Unknown(ref cause) => cause,
+            CreateTemplateError::ParseError(ref cause) => cause,
+            CreateTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9528,26 +9566,30 @@ pub enum DeleteConfigurationSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigurationSetError {
-    pub fn from_body(body: &str) -> DeleteConfigurationSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExist" => {
-                    DeleteConfigurationSetError::ConfigurationSetDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigurationSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConfigurationSetDoesNotExist" => {
+                        return DeleteConfigurationSetError::ConfigurationSetDoesNotExist(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DeleteConfigurationSetError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteConfigurationSetError::Unknown(body.to_string()),
+            }
         }
+        DeleteConfigurationSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9562,7 +9604,7 @@ impl DeleteConfigurationSetError {
 impl From<XmlParseError> for DeleteConfigurationSetError {
     fn from(err: XmlParseError) -> DeleteConfigurationSetError {
         let XmlParseError(message) = err;
-        DeleteConfigurationSetError::Unknown(message.to_string())
+        DeleteConfigurationSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteConfigurationSetError {
@@ -9594,7 +9636,8 @@ impl Error for DeleteConfigurationSetError {
             DeleteConfigurationSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteConfigurationSetError::Unknown(ref cause) => cause,
+            DeleteConfigurationSetError::ParseError(ref cause) => cause,
+            DeleteConfigurationSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9611,31 +9654,25 @@ pub enum DeleteConfigurationSetEventDestinationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigurationSetEventDestinationError {
-    pub fn from_body(body: &str) -> DeleteConfigurationSetEventDestinationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExist" => {
-                    DeleteConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "EventDestinationDoesNotExist" => {
-                    DeleteConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => DeleteConfigurationSetEventDestinationError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteConfigurationSetEventDestinationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigurationSetEventDestinationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConfigurationSetDoesNotExist" => return DeleteConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"EventDestinationDoesNotExist" => return DeleteConfigurationSetEventDestinationError::EventDestinationDoesNotExist(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        DeleteConfigurationSetEventDestinationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9650,7 +9687,7 @@ impl DeleteConfigurationSetEventDestinationError {
 impl From<XmlParseError> for DeleteConfigurationSetEventDestinationError {
     fn from(err: XmlParseError) -> DeleteConfigurationSetEventDestinationError {
         let XmlParseError(message) = err;
-        DeleteConfigurationSetEventDestinationError::Unknown(message.to_string())
+        DeleteConfigurationSetEventDestinationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteConfigurationSetEventDestinationError {
@@ -9687,7 +9724,8 @@ impl Error for DeleteConfigurationSetEventDestinationError {
             DeleteConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteConfigurationSetEventDestinationError::Unknown(ref cause) => cause,
+            DeleteConfigurationSetEventDestinationError::ParseError(ref cause) => cause,
+            DeleteConfigurationSetEventDestinationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9704,31 +9742,25 @@ pub enum DeleteConfigurationSetTrackingOptionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigurationSetTrackingOptionsError {
-    pub fn from_body(body: &str) -> DeleteConfigurationSetTrackingOptionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExist" => {
-                    DeleteConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TrackingOptionsDoesNotExistException" => {
-                    DeleteConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => DeleteConfigurationSetTrackingOptionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteConfigurationSetTrackingOptionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigurationSetTrackingOptionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConfigurationSetDoesNotExist" => return DeleteConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"TrackingOptionsDoesNotExistException" => return DeleteConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        DeleteConfigurationSetTrackingOptionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9743,7 +9775,7 @@ impl DeleteConfigurationSetTrackingOptionsError {
 impl From<XmlParseError> for DeleteConfigurationSetTrackingOptionsError {
     fn from(err: XmlParseError) -> DeleteConfigurationSetTrackingOptionsError {
         let XmlParseError(message) = err;
-        DeleteConfigurationSetTrackingOptionsError::Unknown(message.to_string())
+        DeleteConfigurationSetTrackingOptionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteConfigurationSetTrackingOptionsError {
@@ -9780,7 +9812,8 @@ impl Error for DeleteConfigurationSetTrackingOptionsError {
             DeleteConfigurationSetTrackingOptionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteConfigurationSetTrackingOptionsError::Unknown(ref cause) => cause,
+            DeleteConfigurationSetTrackingOptionsError::ParseError(ref cause) => cause,
+            DeleteConfigurationSetTrackingOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9793,21 +9826,25 @@ pub enum DeleteCustomVerificationEmailTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCustomVerificationEmailTemplateError {
-    pub fn from_body(body: &str) -> DeleteCustomVerificationEmailTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteCustomVerificationEmailTemplateError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteCustomVerificationEmailTemplateError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteCustomVerificationEmailTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteCustomVerificationEmailTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9822,7 +9859,7 @@ impl DeleteCustomVerificationEmailTemplateError {
 impl From<XmlParseError> for DeleteCustomVerificationEmailTemplateError {
     fn from(err: XmlParseError) -> DeleteCustomVerificationEmailTemplateError {
         let XmlParseError(message) = err;
-        DeleteCustomVerificationEmailTemplateError::Unknown(message.to_string())
+        DeleteCustomVerificationEmailTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteCustomVerificationEmailTemplateError {
@@ -9853,7 +9890,8 @@ impl Error for DeleteCustomVerificationEmailTemplateError {
             DeleteCustomVerificationEmailTemplateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteCustomVerificationEmailTemplateError::Unknown(ref cause) => cause,
+            DeleteCustomVerificationEmailTemplateError::ParseError(ref cause) => cause,
+            DeleteCustomVerificationEmailTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9866,21 +9904,25 @@ pub enum DeleteIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIdentityError {
-    pub fn from_body(body: &str) -> DeleteIdentityError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteIdentityError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteIdentityError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteIdentityError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteIdentityError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9895,7 +9937,7 @@ impl DeleteIdentityError {
 impl From<XmlParseError> for DeleteIdentityError {
     fn from(err: XmlParseError) -> DeleteIdentityError {
         let XmlParseError(message) = err;
-        DeleteIdentityError::Unknown(message.to_string())
+        DeleteIdentityError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteIdentityError {
@@ -9924,7 +9966,8 @@ impl Error for DeleteIdentityError {
             DeleteIdentityError::Validation(ref cause) => cause,
             DeleteIdentityError::Credentials(ref err) => err.description(),
             DeleteIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteIdentityError::Unknown(ref cause) => cause,
+            DeleteIdentityError::ParseError(ref cause) => cause,
+            DeleteIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9937,21 +9980,25 @@ pub enum DeleteIdentityPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIdentityPolicyError {
-    pub fn from_body(body: &str) -> DeleteIdentityPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteIdentityPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteIdentityPolicyError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteIdentityPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteIdentityPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9966,7 +10013,7 @@ impl DeleteIdentityPolicyError {
 impl From<XmlParseError> for DeleteIdentityPolicyError {
     fn from(err: XmlParseError) -> DeleteIdentityPolicyError {
         let XmlParseError(message) = err;
-        DeleteIdentityPolicyError::Unknown(message.to_string())
+        DeleteIdentityPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteIdentityPolicyError {
@@ -9997,7 +10044,8 @@ impl Error for DeleteIdentityPolicyError {
             DeleteIdentityPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteIdentityPolicyError::Unknown(ref cause) => cause,
+            DeleteIdentityPolicyError::ParseError(ref cause) => cause,
+            DeleteIdentityPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10010,21 +10058,25 @@ pub enum DeleteReceiptFilterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteReceiptFilterError {
-    pub fn from_body(body: &str) -> DeleteReceiptFilterError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteReceiptFilterError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteReceiptFilterError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteReceiptFilterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteReceiptFilterError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10039,7 +10091,7 @@ impl DeleteReceiptFilterError {
 impl From<XmlParseError> for DeleteReceiptFilterError {
     fn from(err: XmlParseError) -> DeleteReceiptFilterError {
         let XmlParseError(message) = err;
-        DeleteReceiptFilterError::Unknown(message.to_string())
+        DeleteReceiptFilterError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteReceiptFilterError {
@@ -10070,7 +10122,8 @@ impl Error for DeleteReceiptFilterError {
             DeleteReceiptFilterError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteReceiptFilterError::Unknown(ref cause) => cause,
+            DeleteReceiptFilterError::ParseError(ref cause) => cause,
+            DeleteReceiptFilterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10085,24 +10138,30 @@ pub enum DeleteReceiptRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteReceiptRuleError {
-    pub fn from_body(body: &str) -> DeleteReceiptRuleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "RuleSetDoesNotExist" => {
-                    DeleteReceiptRuleError::RuleSetDoesNotExist(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteReceiptRuleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "RuleSetDoesNotExist" => {
+                        return DeleteReceiptRuleError::RuleSetDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DeleteReceiptRuleError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteReceiptRuleError::Unknown(body.to_string()),
+            }
         }
+        DeleteReceiptRuleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10117,7 +10176,7 @@ impl DeleteReceiptRuleError {
 impl From<XmlParseError> for DeleteReceiptRuleError {
     fn from(err: XmlParseError) -> DeleteReceiptRuleError {
         let XmlParseError(message) = err;
-        DeleteReceiptRuleError::Unknown(message.to_string())
+        DeleteReceiptRuleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteReceiptRuleError {
@@ -10149,7 +10208,8 @@ impl Error for DeleteReceiptRuleError {
             DeleteReceiptRuleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteReceiptRuleError::Unknown(ref cause) => cause,
+            DeleteReceiptRuleError::ParseError(ref cause) => cause,
+            DeleteReceiptRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10164,24 +10224,30 @@ pub enum DeleteReceiptRuleSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteReceiptRuleSetError {
-    pub fn from_body(body: &str) -> DeleteReceiptRuleSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CannotDelete" => {
-                    DeleteReceiptRuleSetError::CannotDelete(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteReceiptRuleSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CannotDelete" => {
+                        return DeleteReceiptRuleSetError::CannotDelete(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DeleteReceiptRuleSetError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteReceiptRuleSetError::Unknown(body.to_string()),
+            }
         }
+        DeleteReceiptRuleSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10196,7 +10262,7 @@ impl DeleteReceiptRuleSetError {
 impl From<XmlParseError> for DeleteReceiptRuleSetError {
     fn from(err: XmlParseError) -> DeleteReceiptRuleSetError {
         let XmlParseError(message) = err;
-        DeleteReceiptRuleSetError::Unknown(message.to_string())
+        DeleteReceiptRuleSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteReceiptRuleSetError {
@@ -10228,7 +10294,8 @@ impl Error for DeleteReceiptRuleSetError {
             DeleteReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteReceiptRuleSetError::Unknown(ref cause) => cause,
+            DeleteReceiptRuleSetError::ParseError(ref cause) => cause,
+            DeleteReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10241,21 +10308,25 @@ pub enum DeleteTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTemplateError {
-    pub fn from_body(body: &str) -> DeleteTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteTemplateError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteTemplateError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10270,7 +10341,7 @@ impl DeleteTemplateError {
 impl From<XmlParseError> for DeleteTemplateError {
     fn from(err: XmlParseError) -> DeleteTemplateError {
         let XmlParseError(message) = err;
-        DeleteTemplateError::Unknown(message.to_string())
+        DeleteTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteTemplateError {
@@ -10299,7 +10370,8 @@ impl Error for DeleteTemplateError {
             DeleteTemplateError::Validation(ref cause) => cause,
             DeleteTemplateError::Credentials(ref err) => err.description(),
             DeleteTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTemplateError::Unknown(ref cause) => cause,
+            DeleteTemplateError::ParseError(ref cause) => cause,
+            DeleteTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10312,21 +10384,25 @@ pub enum DeleteVerifiedEmailAddressError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVerifiedEmailAddressError {
-    pub fn from_body(body: &str) -> DeleteVerifiedEmailAddressError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteVerifiedEmailAddressError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteVerifiedEmailAddressError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteVerifiedEmailAddressError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteVerifiedEmailAddressError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10341,7 +10417,7 @@ impl DeleteVerifiedEmailAddressError {
 impl From<XmlParseError> for DeleteVerifiedEmailAddressError {
     fn from(err: XmlParseError) -> DeleteVerifiedEmailAddressError {
         let XmlParseError(message) = err;
-        DeleteVerifiedEmailAddressError::Unknown(message.to_string())
+        DeleteVerifiedEmailAddressError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteVerifiedEmailAddressError {
@@ -10372,7 +10448,8 @@ impl Error for DeleteVerifiedEmailAddressError {
             DeleteVerifiedEmailAddressError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteVerifiedEmailAddressError::Unknown(ref cause) => cause,
+            DeleteVerifiedEmailAddressError::ParseError(ref cause) => cause,
+            DeleteVerifiedEmailAddressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10385,21 +10462,25 @@ pub enum DescribeActiveReceiptRuleSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeActiveReceiptRuleSetError {
-    pub fn from_body(body: &str) -> DescribeActiveReceiptRuleSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeActiveReceiptRuleSetError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeActiveReceiptRuleSetError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeActiveReceiptRuleSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeActiveReceiptRuleSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10414,7 +10495,7 @@ impl DescribeActiveReceiptRuleSetError {
 impl From<XmlParseError> for DescribeActiveReceiptRuleSetError {
     fn from(err: XmlParseError) -> DescribeActiveReceiptRuleSetError {
         let XmlParseError(message) = err;
-        DescribeActiveReceiptRuleSetError::Unknown(message.to_string())
+        DescribeActiveReceiptRuleSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeActiveReceiptRuleSetError {
@@ -10445,7 +10526,8 @@ impl Error for DescribeActiveReceiptRuleSetError {
             DescribeActiveReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeActiveReceiptRuleSetError::Unknown(ref cause) => cause,
+            DescribeActiveReceiptRuleSetError::ParseError(ref cause) => cause,
+            DescribeActiveReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10460,26 +10542,30 @@ pub enum DescribeConfigurationSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationSetError {
-    pub fn from_body(body: &str) -> DescribeConfigurationSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExist" => {
-                    DescribeConfigurationSetError::ConfigurationSetDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConfigurationSetDoesNotExist" => {
+                        return DescribeConfigurationSetError::ConfigurationSetDoesNotExist(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeConfigurationSetError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeConfigurationSetError::Unknown(body.to_string()),
+            }
         }
+        DescribeConfigurationSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10494,7 +10580,7 @@ impl DescribeConfigurationSetError {
 impl From<XmlParseError> for DescribeConfigurationSetError {
     fn from(err: XmlParseError) -> DescribeConfigurationSetError {
         let XmlParseError(message) = err;
-        DescribeConfigurationSetError::Unknown(message.to_string())
+        DescribeConfigurationSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeConfigurationSetError {
@@ -10526,7 +10612,8 @@ impl Error for DescribeConfigurationSetError {
             DescribeConfigurationSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConfigurationSetError::Unknown(ref cause) => cause,
+            DescribeConfigurationSetError::ParseError(ref cause) => cause,
+            DescribeConfigurationSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10543,27 +10630,35 @@ pub enum DescribeReceiptRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReceiptRuleError {
-    pub fn from_body(body: &str) -> DescribeReceiptRuleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "RuleDoesNotExist" => {
-                    DescribeReceiptRuleError::RuleDoesNotExist(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeReceiptRuleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "RuleDoesNotExist" => {
+                        return DescribeReceiptRuleError::RuleDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleSetDoesNotExist" => {
+                        return DescribeReceiptRuleError::RuleSetDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "RuleSetDoesNotExist" => DescribeReceiptRuleError::RuleSetDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeReceiptRuleError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeReceiptRuleError::Unknown(body.to_string()),
+            }
         }
+        DescribeReceiptRuleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10578,7 +10673,7 @@ impl DescribeReceiptRuleError {
 impl From<XmlParseError> for DescribeReceiptRuleError {
     fn from(err: XmlParseError) -> DescribeReceiptRuleError {
         let XmlParseError(message) = err;
-        DescribeReceiptRuleError::Unknown(message.to_string())
+        DescribeReceiptRuleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeReceiptRuleError {
@@ -10611,7 +10706,8 @@ impl Error for DescribeReceiptRuleError {
             DescribeReceiptRuleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeReceiptRuleError::Unknown(ref cause) => cause,
+            DescribeReceiptRuleError::ParseError(ref cause) => cause,
+            DescribeReceiptRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10626,24 +10722,30 @@ pub enum DescribeReceiptRuleSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReceiptRuleSetError {
-    pub fn from_body(body: &str) -> DescribeReceiptRuleSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "RuleSetDoesNotExist" => DescribeReceiptRuleSetError::RuleSetDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeReceiptRuleSetError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeReceiptRuleSetError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeReceiptRuleSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "RuleSetDoesNotExist" => {
+                        return DescribeReceiptRuleSetError::RuleSetDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeReceiptRuleSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10658,7 +10760,7 @@ impl DescribeReceiptRuleSetError {
 impl From<XmlParseError> for DescribeReceiptRuleSetError {
     fn from(err: XmlParseError) -> DescribeReceiptRuleSetError {
         let XmlParseError(message) = err;
-        DescribeReceiptRuleSetError::Unknown(message.to_string())
+        DescribeReceiptRuleSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeReceiptRuleSetError {
@@ -10690,7 +10792,8 @@ impl Error for DescribeReceiptRuleSetError {
             DescribeReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeReceiptRuleSetError::Unknown(ref cause) => cause,
+            DescribeReceiptRuleSetError::ParseError(ref cause) => cause,
+            DescribeReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10703,21 +10806,25 @@ pub enum GetAccountSendingEnabledError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccountSendingEnabledError {
-    pub fn from_body(body: &str) -> GetAccountSendingEnabledError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetAccountSendingEnabledError::Unknown(String::from(body)),
-            },
-            Err(_) => GetAccountSendingEnabledError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetAccountSendingEnabledError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetAccountSendingEnabledError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10732,7 +10839,7 @@ impl GetAccountSendingEnabledError {
 impl From<XmlParseError> for GetAccountSendingEnabledError {
     fn from(err: XmlParseError) -> GetAccountSendingEnabledError {
         let XmlParseError(message) = err;
-        GetAccountSendingEnabledError::Unknown(message.to_string())
+        GetAccountSendingEnabledError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetAccountSendingEnabledError {
@@ -10763,7 +10870,8 @@ impl Error for GetAccountSendingEnabledError {
             GetAccountSendingEnabledError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetAccountSendingEnabledError::Unknown(ref cause) => cause,
+            GetAccountSendingEnabledError::ParseError(ref cause) => cause,
+            GetAccountSendingEnabledError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10778,23 +10886,25 @@ pub enum GetCustomVerificationEmailTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCustomVerificationEmailTemplateError {
-    pub fn from_body(body: &str) -> GetCustomVerificationEmailTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "CustomVerificationEmailTemplateDoesNotExist" => GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),_ => GetCustomVerificationEmailTemplateError::Unknown(String::from(body))
+    pub fn from_response(res: BufferedHttpResponse) -> GetCustomVerificationEmailTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "CustomVerificationEmailTemplateDoesNotExist" => return GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),_ => {}
                                 }
-                           },
-                           Err(_) => GetCustomVerificationEmailTemplateError::Unknown(body.to_string())
-                       }
+            }
+        }
+        GetCustomVerificationEmailTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10809,7 +10919,7 @@ impl GetCustomVerificationEmailTemplateError {
 impl From<XmlParseError> for GetCustomVerificationEmailTemplateError {
     fn from(err: XmlParseError) -> GetCustomVerificationEmailTemplateError {
         let XmlParseError(message) = err;
-        GetCustomVerificationEmailTemplateError::Unknown(message.to_string())
+        GetCustomVerificationEmailTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetCustomVerificationEmailTemplateError {
@@ -10839,7 +10949,8 @@ impl Error for GetCustomVerificationEmailTemplateError {
 GetCustomVerificationEmailTemplateError::Validation(ref cause) => cause,
 GetCustomVerificationEmailTemplateError::Credentials(ref err) => err.description(),
 GetCustomVerificationEmailTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-GetCustomVerificationEmailTemplateError::Unknown(ref cause) => cause
+GetCustomVerificationEmailTemplateError::ParseError(ref cause) => cause,
+GetCustomVerificationEmailTemplateError::Unknown(_) => "unknown error"
                         }
     }
 }
@@ -10852,21 +10963,25 @@ pub enum GetIdentityDkimAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetIdentityDkimAttributesError {
-    pub fn from_body(body: &str) -> GetIdentityDkimAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetIdentityDkimAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => GetIdentityDkimAttributesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityDkimAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetIdentityDkimAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10881,7 +10996,7 @@ impl GetIdentityDkimAttributesError {
 impl From<XmlParseError> for GetIdentityDkimAttributesError {
     fn from(err: XmlParseError) -> GetIdentityDkimAttributesError {
         let XmlParseError(message) = err;
-        GetIdentityDkimAttributesError::Unknown(message.to_string())
+        GetIdentityDkimAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetIdentityDkimAttributesError {
@@ -10912,7 +11027,8 @@ impl Error for GetIdentityDkimAttributesError {
             GetIdentityDkimAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetIdentityDkimAttributesError::Unknown(ref cause) => cause,
+            GetIdentityDkimAttributesError::ParseError(ref cause) => cause,
+            GetIdentityDkimAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10925,21 +11041,25 @@ pub enum GetIdentityMailFromDomainAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetIdentityMailFromDomainAttributesError {
-    pub fn from_body(body: &str) -> GetIdentityMailFromDomainAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetIdentityMailFromDomainAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => GetIdentityMailFromDomainAttributesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityMailFromDomainAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetIdentityMailFromDomainAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10954,7 +11074,7 @@ impl GetIdentityMailFromDomainAttributesError {
 impl From<XmlParseError> for GetIdentityMailFromDomainAttributesError {
     fn from(err: XmlParseError) -> GetIdentityMailFromDomainAttributesError {
         let XmlParseError(message) = err;
-        GetIdentityMailFromDomainAttributesError::Unknown(message.to_string())
+        GetIdentityMailFromDomainAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetIdentityMailFromDomainAttributesError {
@@ -10985,7 +11105,8 @@ impl Error for GetIdentityMailFromDomainAttributesError {
             GetIdentityMailFromDomainAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetIdentityMailFromDomainAttributesError::Unknown(ref cause) => cause,
+            GetIdentityMailFromDomainAttributesError::ParseError(ref cause) => cause,
+            GetIdentityMailFromDomainAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10998,21 +11119,25 @@ pub enum GetIdentityNotificationAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetIdentityNotificationAttributesError {
-    pub fn from_body(body: &str) -> GetIdentityNotificationAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetIdentityNotificationAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => GetIdentityNotificationAttributesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityNotificationAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetIdentityNotificationAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11027,7 +11152,7 @@ impl GetIdentityNotificationAttributesError {
 impl From<XmlParseError> for GetIdentityNotificationAttributesError {
     fn from(err: XmlParseError) -> GetIdentityNotificationAttributesError {
         let XmlParseError(message) = err;
-        GetIdentityNotificationAttributesError::Unknown(message.to_string())
+        GetIdentityNotificationAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetIdentityNotificationAttributesError {
@@ -11058,7 +11183,8 @@ impl Error for GetIdentityNotificationAttributesError {
             GetIdentityNotificationAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetIdentityNotificationAttributesError::Unknown(ref cause) => cause,
+            GetIdentityNotificationAttributesError::ParseError(ref cause) => cause,
+            GetIdentityNotificationAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11071,21 +11197,25 @@ pub enum GetIdentityPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetIdentityPoliciesError {
-    pub fn from_body(body: &str) -> GetIdentityPoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetIdentityPoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => GetIdentityPoliciesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityPoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetIdentityPoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11100,7 +11230,7 @@ impl GetIdentityPoliciesError {
 impl From<XmlParseError> for GetIdentityPoliciesError {
     fn from(err: XmlParseError) -> GetIdentityPoliciesError {
         let XmlParseError(message) = err;
-        GetIdentityPoliciesError::Unknown(message.to_string())
+        GetIdentityPoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetIdentityPoliciesError {
@@ -11131,7 +11261,8 @@ impl Error for GetIdentityPoliciesError {
             GetIdentityPoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetIdentityPoliciesError::Unknown(ref cause) => cause,
+            GetIdentityPoliciesError::ParseError(ref cause) => cause,
+            GetIdentityPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11144,21 +11275,25 @@ pub enum GetIdentityVerificationAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetIdentityVerificationAttributesError {
-    pub fn from_body(body: &str) -> GetIdentityVerificationAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetIdentityVerificationAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => GetIdentityVerificationAttributesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityVerificationAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetIdentityVerificationAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11173,7 +11308,7 @@ impl GetIdentityVerificationAttributesError {
 impl From<XmlParseError> for GetIdentityVerificationAttributesError {
     fn from(err: XmlParseError) -> GetIdentityVerificationAttributesError {
         let XmlParseError(message) = err;
-        GetIdentityVerificationAttributesError::Unknown(message.to_string())
+        GetIdentityVerificationAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetIdentityVerificationAttributesError {
@@ -11204,7 +11339,8 @@ impl Error for GetIdentityVerificationAttributesError {
             GetIdentityVerificationAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetIdentityVerificationAttributesError::Unknown(ref cause) => cause,
+            GetIdentityVerificationAttributesError::ParseError(ref cause) => cause,
+            GetIdentityVerificationAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11217,21 +11353,25 @@ pub enum GetSendQuotaError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSendQuotaError {
-    pub fn from_body(body: &str) -> GetSendQuotaError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetSendQuotaError::Unknown(String::from(body)),
-            },
-            Err(_) => GetSendQuotaError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetSendQuotaError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetSendQuotaError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11246,7 +11386,7 @@ impl GetSendQuotaError {
 impl From<XmlParseError> for GetSendQuotaError {
     fn from(err: XmlParseError) -> GetSendQuotaError {
         let XmlParseError(message) = err;
-        GetSendQuotaError::Unknown(message.to_string())
+        GetSendQuotaError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetSendQuotaError {
@@ -11275,7 +11415,8 @@ impl Error for GetSendQuotaError {
             GetSendQuotaError::Validation(ref cause) => cause,
             GetSendQuotaError::Credentials(ref err) => err.description(),
             GetSendQuotaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSendQuotaError::Unknown(ref cause) => cause,
+            GetSendQuotaError::ParseError(ref cause) => cause,
+            GetSendQuotaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11288,21 +11429,25 @@ pub enum GetSendStatisticsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSendStatisticsError {
-    pub fn from_body(body: &str) -> GetSendStatisticsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetSendStatisticsError::Unknown(String::from(body)),
-            },
-            Err(_) => GetSendStatisticsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetSendStatisticsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetSendStatisticsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11317,7 +11462,7 @@ impl GetSendStatisticsError {
 impl From<XmlParseError> for GetSendStatisticsError {
     fn from(err: XmlParseError) -> GetSendStatisticsError {
         let XmlParseError(message) = err;
-        GetSendStatisticsError::Unknown(message.to_string())
+        GetSendStatisticsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetSendStatisticsError {
@@ -11348,7 +11493,8 @@ impl Error for GetSendStatisticsError {
             GetSendStatisticsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetSendStatisticsError::Unknown(ref cause) => cause,
+            GetSendStatisticsError::ParseError(ref cause) => cause,
+            GetSendStatisticsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11363,24 +11509,30 @@ pub enum GetTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetTemplateError {
-    pub fn from_body(body: &str) -> GetTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "TemplateDoesNotExist" => {
-                    GetTemplateError::TemplateDoesNotExist(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "TemplateDoesNotExist" => {
+                        return GetTemplateError::TemplateDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => GetTemplateError::Unknown(String::from(body)),
-            },
-            Err(_) => GetTemplateError::Unknown(body.to_string()),
+            }
         }
+        GetTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11395,7 +11547,7 @@ impl GetTemplateError {
 impl From<XmlParseError> for GetTemplateError {
     fn from(err: XmlParseError) -> GetTemplateError {
         let XmlParseError(message) = err;
-        GetTemplateError::Unknown(message.to_string())
+        GetTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetTemplateError {
@@ -11425,7 +11577,8 @@ impl Error for GetTemplateError {
             GetTemplateError::Validation(ref cause) => cause,
             GetTemplateError::Credentials(ref err) => err.description(),
             GetTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTemplateError::Unknown(ref cause) => cause,
+            GetTemplateError::ParseError(ref cause) => cause,
+            GetTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11438,21 +11591,25 @@ pub enum ListConfigurationSetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListConfigurationSetsError {
-    pub fn from_body(body: &str) -> ListConfigurationSetsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListConfigurationSetsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListConfigurationSetsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListConfigurationSetsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListConfigurationSetsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11467,7 +11624,7 @@ impl ListConfigurationSetsError {
 impl From<XmlParseError> for ListConfigurationSetsError {
     fn from(err: XmlParseError) -> ListConfigurationSetsError {
         let XmlParseError(message) = err;
-        ListConfigurationSetsError::Unknown(message.to_string())
+        ListConfigurationSetsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListConfigurationSetsError {
@@ -11498,7 +11655,8 @@ impl Error for ListConfigurationSetsError {
             ListConfigurationSetsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListConfigurationSetsError::Unknown(ref cause) => cause,
+            ListConfigurationSetsError::ParseError(ref cause) => cause,
+            ListConfigurationSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11511,21 +11669,25 @@ pub enum ListCustomVerificationEmailTemplatesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListCustomVerificationEmailTemplatesError {
-    pub fn from_body(body: &str) -> ListCustomVerificationEmailTemplatesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListCustomVerificationEmailTemplatesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListCustomVerificationEmailTemplatesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListCustomVerificationEmailTemplatesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListCustomVerificationEmailTemplatesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11540,7 +11702,7 @@ impl ListCustomVerificationEmailTemplatesError {
 impl From<XmlParseError> for ListCustomVerificationEmailTemplatesError {
     fn from(err: XmlParseError) -> ListCustomVerificationEmailTemplatesError {
         let XmlParseError(message) = err;
-        ListCustomVerificationEmailTemplatesError::Unknown(message.to_string())
+        ListCustomVerificationEmailTemplatesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListCustomVerificationEmailTemplatesError {
@@ -11571,7 +11733,8 @@ impl Error for ListCustomVerificationEmailTemplatesError {
             ListCustomVerificationEmailTemplatesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListCustomVerificationEmailTemplatesError::Unknown(ref cause) => cause,
+            ListCustomVerificationEmailTemplatesError::ParseError(ref cause) => cause,
+            ListCustomVerificationEmailTemplatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11584,21 +11747,25 @@ pub enum ListIdentitiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListIdentitiesError {
-    pub fn from_body(body: &str) -> ListIdentitiesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListIdentitiesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListIdentitiesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListIdentitiesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListIdentitiesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11613,7 +11780,7 @@ impl ListIdentitiesError {
 impl From<XmlParseError> for ListIdentitiesError {
     fn from(err: XmlParseError) -> ListIdentitiesError {
         let XmlParseError(message) = err;
-        ListIdentitiesError::Unknown(message.to_string())
+        ListIdentitiesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListIdentitiesError {
@@ -11642,7 +11809,8 @@ impl Error for ListIdentitiesError {
             ListIdentitiesError::Validation(ref cause) => cause,
             ListIdentitiesError::Credentials(ref err) => err.description(),
             ListIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListIdentitiesError::Unknown(ref cause) => cause,
+            ListIdentitiesError::ParseError(ref cause) => cause,
+            ListIdentitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11655,21 +11823,25 @@ pub enum ListIdentityPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListIdentityPoliciesError {
-    pub fn from_body(body: &str) -> ListIdentityPoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListIdentityPoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListIdentityPoliciesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListIdentityPoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListIdentityPoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11684,7 +11856,7 @@ impl ListIdentityPoliciesError {
 impl From<XmlParseError> for ListIdentityPoliciesError {
     fn from(err: XmlParseError) -> ListIdentityPoliciesError {
         let XmlParseError(message) = err;
-        ListIdentityPoliciesError::Unknown(message.to_string())
+        ListIdentityPoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListIdentityPoliciesError {
@@ -11715,7 +11887,8 @@ impl Error for ListIdentityPoliciesError {
             ListIdentityPoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListIdentityPoliciesError::Unknown(ref cause) => cause,
+            ListIdentityPoliciesError::ParseError(ref cause) => cause,
+            ListIdentityPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11728,21 +11901,25 @@ pub enum ListReceiptFiltersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListReceiptFiltersError {
-    pub fn from_body(body: &str) -> ListReceiptFiltersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListReceiptFiltersError::Unknown(String::from(body)),
-            },
-            Err(_) => ListReceiptFiltersError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListReceiptFiltersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListReceiptFiltersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11757,7 +11934,7 @@ impl ListReceiptFiltersError {
 impl From<XmlParseError> for ListReceiptFiltersError {
     fn from(err: XmlParseError) -> ListReceiptFiltersError {
         let XmlParseError(message) = err;
-        ListReceiptFiltersError::Unknown(message.to_string())
+        ListReceiptFiltersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListReceiptFiltersError {
@@ -11788,7 +11965,8 @@ impl Error for ListReceiptFiltersError {
             ListReceiptFiltersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListReceiptFiltersError::Unknown(ref cause) => cause,
+            ListReceiptFiltersError::ParseError(ref cause) => cause,
+            ListReceiptFiltersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11801,21 +11979,25 @@ pub enum ListReceiptRuleSetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListReceiptRuleSetsError {
-    pub fn from_body(body: &str) -> ListReceiptRuleSetsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListReceiptRuleSetsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListReceiptRuleSetsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListReceiptRuleSetsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListReceiptRuleSetsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11830,7 +12012,7 @@ impl ListReceiptRuleSetsError {
 impl From<XmlParseError> for ListReceiptRuleSetsError {
     fn from(err: XmlParseError) -> ListReceiptRuleSetsError {
         let XmlParseError(message) = err;
-        ListReceiptRuleSetsError::Unknown(message.to_string())
+        ListReceiptRuleSetsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListReceiptRuleSetsError {
@@ -11861,7 +12043,8 @@ impl Error for ListReceiptRuleSetsError {
             ListReceiptRuleSetsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListReceiptRuleSetsError::Unknown(ref cause) => cause,
+            ListReceiptRuleSetsError::ParseError(ref cause) => cause,
+            ListReceiptRuleSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11874,21 +12057,25 @@ pub enum ListTemplatesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTemplatesError {
-    pub fn from_body(body: &str) -> ListTemplatesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListTemplatesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListTemplatesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListTemplatesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListTemplatesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11903,7 +12090,7 @@ impl ListTemplatesError {
 impl From<XmlParseError> for ListTemplatesError {
     fn from(err: XmlParseError) -> ListTemplatesError {
         let XmlParseError(message) = err;
-        ListTemplatesError::Unknown(message.to_string())
+        ListTemplatesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListTemplatesError {
@@ -11932,7 +12119,8 @@ impl Error for ListTemplatesError {
             ListTemplatesError::Validation(ref cause) => cause,
             ListTemplatesError::Credentials(ref err) => err.description(),
             ListTemplatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTemplatesError::Unknown(ref cause) => cause,
+            ListTemplatesError::ParseError(ref cause) => cause,
+            ListTemplatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11945,21 +12133,25 @@ pub enum ListVerifiedEmailAddressesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListVerifiedEmailAddressesError {
-    pub fn from_body(body: &str) -> ListVerifiedEmailAddressesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListVerifiedEmailAddressesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListVerifiedEmailAddressesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListVerifiedEmailAddressesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListVerifiedEmailAddressesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11974,7 +12166,7 @@ impl ListVerifiedEmailAddressesError {
 impl From<XmlParseError> for ListVerifiedEmailAddressesError {
     fn from(err: XmlParseError) -> ListVerifiedEmailAddressesError {
         let XmlParseError(message) = err;
-        ListVerifiedEmailAddressesError::Unknown(message.to_string())
+        ListVerifiedEmailAddressesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListVerifiedEmailAddressesError {
@@ -12005,7 +12197,8 @@ impl Error for ListVerifiedEmailAddressesError {
             ListVerifiedEmailAddressesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListVerifiedEmailAddressesError::Unknown(ref cause) => cause,
+            ListVerifiedEmailAddressesError::ParseError(ref cause) => cause,
+            ListVerifiedEmailAddressesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12020,24 +12213,30 @@ pub enum PutIdentityPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutIdentityPolicyError {
-    pub fn from_body(body: &str) -> PutIdentityPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidPolicy" => {
-                    PutIdentityPolicyError::InvalidPolicy(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> PutIdentityPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidPolicy" => {
+                        return PutIdentityPolicyError::InvalidPolicy(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => PutIdentityPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => PutIdentityPolicyError::Unknown(body.to_string()),
+            }
         }
+        PutIdentityPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12052,7 +12251,7 @@ impl PutIdentityPolicyError {
 impl From<XmlParseError> for PutIdentityPolicyError {
     fn from(err: XmlParseError) -> PutIdentityPolicyError {
         let XmlParseError(message) = err;
-        PutIdentityPolicyError::Unknown(message.to_string())
+        PutIdentityPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutIdentityPolicyError {
@@ -12084,7 +12283,8 @@ impl Error for PutIdentityPolicyError {
             PutIdentityPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutIdentityPolicyError::Unknown(ref cause) => cause,
+            PutIdentityPolicyError::ParseError(ref cause) => cause,
+            PutIdentityPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12101,27 +12301,35 @@ pub enum ReorderReceiptRuleSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ReorderReceiptRuleSetError {
-    pub fn from_body(body: &str) -> ReorderReceiptRuleSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "RuleDoesNotExist" => {
-                    ReorderReceiptRuleSetError::RuleDoesNotExist(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ReorderReceiptRuleSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "RuleDoesNotExist" => {
+                        return ReorderReceiptRuleSetError::RuleDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleSetDoesNotExist" => {
+                        return ReorderReceiptRuleSetError::RuleSetDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "RuleSetDoesNotExist" => ReorderReceiptRuleSetError::RuleSetDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
-                _ => ReorderReceiptRuleSetError::Unknown(String::from(body)),
-            },
-            Err(_) => ReorderReceiptRuleSetError::Unknown(body.to_string()),
+            }
         }
+        ReorderReceiptRuleSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12136,7 +12344,7 @@ impl ReorderReceiptRuleSetError {
 impl From<XmlParseError> for ReorderReceiptRuleSetError {
     fn from(err: XmlParseError) -> ReorderReceiptRuleSetError {
         let XmlParseError(message) = err;
-        ReorderReceiptRuleSetError::Unknown(message.to_string())
+        ReorderReceiptRuleSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ReorderReceiptRuleSetError {
@@ -12169,7 +12377,8 @@ impl Error for ReorderReceiptRuleSetError {
             ReorderReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ReorderReceiptRuleSetError::Unknown(ref cause) => cause,
+            ReorderReceiptRuleSetError::ParseError(ref cause) => cause,
+            ReorderReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12184,24 +12393,28 @@ pub enum SendBounceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SendBounceError {
-    pub fn from_body(body: &str) -> SendBounceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "MessageRejected" => {
-                    SendBounceError::MessageRejected(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> SendBounceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "MessageRejected" => {
+                        return SendBounceError::MessageRejected(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => SendBounceError::Unknown(String::from(body)),
-            },
-            Err(_) => SendBounceError::Unknown(body.to_string()),
+            }
         }
+        SendBounceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12216,7 +12429,7 @@ impl SendBounceError {
 impl From<XmlParseError> for SendBounceError {
     fn from(err: XmlParseError) -> SendBounceError {
         let XmlParseError(message) = err;
-        SendBounceError::Unknown(message.to_string())
+        SendBounceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SendBounceError {
@@ -12246,7 +12459,8 @@ impl Error for SendBounceError {
             SendBounceError::Validation(ref cause) => cause,
             SendBounceError::Credentials(ref err) => err.description(),
             SendBounceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SendBounceError::Unknown(ref cause) => cause,
+            SendBounceError::ParseError(ref cause) => cause,
+            SendBounceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12271,47 +12485,55 @@ pub enum SendBulkTemplatedEmailError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SendBulkTemplatedEmailError {
-    pub fn from_body(body: &str) -> SendBulkTemplatedEmailError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccountSendingPausedException" => {
-                    SendBulkTemplatedEmailError::AccountSendingPaused(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> SendBulkTemplatedEmailError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccountSendingPausedException" => {
+                        return SendBulkTemplatedEmailError::AccountSendingPaused(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ConfigurationSetDoesNotExist" => {
+                        return SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ConfigurationSetSendingPausedException" => {
+                        return SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "MailFromDomainNotVerifiedException" => {
+                        return SendBulkTemplatedEmailError::MailFromDomainNotVerified(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MessageRejected" => {
+                        return SendBulkTemplatedEmailError::MessageRejected(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TemplateDoesNotExist" => {
+                        return SendBulkTemplatedEmailError::TemplateDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ConfigurationSetDoesNotExist" => {
-                    SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ConfigurationSetSendingPausedException" => {
-                    SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MailFromDomainNotVerifiedException" => {
-                    SendBulkTemplatedEmailError::MailFromDomainNotVerified(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MessageRejected" => {
-                    SendBulkTemplatedEmailError::MessageRejected(String::from(parsed_error.message))
-                }
-                "TemplateDoesNotExist" => SendBulkTemplatedEmailError::TemplateDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
-                _ => SendBulkTemplatedEmailError::Unknown(String::from(body)),
-            },
-            Err(_) => SendBulkTemplatedEmailError::Unknown(body.to_string()),
+            }
         }
+        SendBulkTemplatedEmailError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12326,7 +12548,7 @@ impl SendBulkTemplatedEmailError {
 impl From<XmlParseError> for SendBulkTemplatedEmailError {
     fn from(err: XmlParseError) -> SendBulkTemplatedEmailError {
         let XmlParseError(message) = err;
-        SendBulkTemplatedEmailError::Unknown(message.to_string())
+        SendBulkTemplatedEmailError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SendBulkTemplatedEmailError {
@@ -12363,7 +12585,8 @@ impl Error for SendBulkTemplatedEmailError {
             SendBulkTemplatedEmailError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SendBulkTemplatedEmailError::Unknown(ref cause) => cause,
+            SendBulkTemplatedEmailError::ParseError(ref cause) => cause,
+            SendBulkTemplatedEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12386,44 +12609,25 @@ pub enum SendCustomVerificationEmailError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SendCustomVerificationEmailError {
-    pub fn from_body(body: &str) -> SendCustomVerificationEmailError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExist" => {
-                    SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CustomVerificationEmailTemplateDoesNotExist" => {
-                    SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "FromEmailAddressNotVerified" => {
-                    SendCustomVerificationEmailError::FromEmailAddressNotVerified(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MessageRejected" => SendCustomVerificationEmailError::MessageRejected(
-                    String::from(parsed_error.message),
-                ),
-                "ProductionAccessNotGranted" => {
-                    SendCustomVerificationEmailError::ProductionAccessNotGranted(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => SendCustomVerificationEmailError::Unknown(String::from(body)),
-            },
-            Err(_) => SendCustomVerificationEmailError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SendCustomVerificationEmailError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConfigurationSetDoesNotExist" => return SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => return SendCustomVerificationEmailError::FromEmailAddressNotVerified(String::from(parsed_error.message)),"MessageRejected" => return SendCustomVerificationEmailError::MessageRejected(String::from(parsed_error.message)),"ProductionAccessNotGranted" => return SendCustomVerificationEmailError::ProductionAccessNotGranted(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        SendCustomVerificationEmailError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12438,7 +12642,7 @@ impl SendCustomVerificationEmailError {
 impl From<XmlParseError> for SendCustomVerificationEmailError {
     fn from(err: XmlParseError) -> SendCustomVerificationEmailError {
         let XmlParseError(message) = err;
-        SendCustomVerificationEmailError::Unknown(message.to_string())
+        SendCustomVerificationEmailError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SendCustomVerificationEmailError {
@@ -12476,7 +12680,8 @@ impl Error for SendCustomVerificationEmailError {
             SendCustomVerificationEmailError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SendCustomVerificationEmailError::Unknown(ref cause) => cause,
+            SendCustomVerificationEmailError::ParseError(ref cause) => cause,
+            SendCustomVerificationEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12499,38 +12704,48 @@ pub enum SendEmailError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SendEmailError {
-    pub fn from_body(body: &str) -> SendEmailError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccountSendingPausedException" => {
-                    SendEmailError::AccountSendingPaused(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> SendEmailError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccountSendingPausedException" => {
+                        return SendEmailError::AccountSendingPaused(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ConfigurationSetDoesNotExist" => {
+                        return SendEmailError::ConfigurationSetDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ConfigurationSetSendingPausedException" => {
+                        return SendEmailError::ConfigurationSetSendingPaused(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MailFromDomainNotVerifiedException" => {
+                        return SendEmailError::MailFromDomainNotVerified(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MessageRejected" => {
+                        return SendEmailError::MessageRejected(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "ConfigurationSetDoesNotExist" => {
-                    SendEmailError::ConfigurationSetDoesNotExist(String::from(parsed_error.message))
-                }
-                "ConfigurationSetSendingPausedException" => {
-                    SendEmailError::ConfigurationSetSendingPaused(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MailFromDomainNotVerifiedException" => {
-                    SendEmailError::MailFromDomainNotVerified(String::from(parsed_error.message))
-                }
-                "MessageRejected" => {
-                    SendEmailError::MessageRejected(String::from(parsed_error.message))
-                }
-                _ => SendEmailError::Unknown(String::from(body)),
-            },
-            Err(_) => SendEmailError::Unknown(body.to_string()),
+            }
         }
+        SendEmailError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12545,7 +12760,7 @@ impl SendEmailError {
 impl From<XmlParseError> for SendEmailError {
     fn from(err: XmlParseError) -> SendEmailError {
         let XmlParseError(message) = err;
-        SendEmailError::Unknown(message.to_string())
+        SendEmailError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SendEmailError {
@@ -12579,7 +12794,8 @@ impl Error for SendEmailError {
             SendEmailError::Validation(ref cause) => cause,
             SendEmailError::Credentials(ref err) => err.description(),
             SendEmailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SendEmailError::Unknown(ref cause) => cause,
+            SendEmailError::ParseError(ref cause) => cause,
+            SendEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12602,38 +12818,50 @@ pub enum SendRawEmailError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SendRawEmailError {
-    pub fn from_body(body: &str) -> SendRawEmailError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccountSendingPausedException" => {
-                    SendRawEmailError::AccountSendingPaused(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> SendRawEmailError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccountSendingPausedException" => {
+                        return SendRawEmailError::AccountSendingPaused(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ConfigurationSetDoesNotExist" => {
+                        return SendRawEmailError::ConfigurationSetDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ConfigurationSetSendingPausedException" => {
+                        return SendRawEmailError::ConfigurationSetSendingPaused(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MailFromDomainNotVerifiedException" => {
+                        return SendRawEmailError::MailFromDomainNotVerified(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MessageRejected" => {
+                        return SendRawEmailError::MessageRejected(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ConfigurationSetDoesNotExist" => SendRawEmailError::ConfigurationSetDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
-                "ConfigurationSetSendingPausedException" => {
-                    SendRawEmailError::ConfigurationSetSendingPaused(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MailFromDomainNotVerifiedException" => {
-                    SendRawEmailError::MailFromDomainNotVerified(String::from(parsed_error.message))
-                }
-                "MessageRejected" => {
-                    SendRawEmailError::MessageRejected(String::from(parsed_error.message))
-                }
-                _ => SendRawEmailError::Unknown(String::from(body)),
-            },
-            Err(_) => SendRawEmailError::Unknown(body.to_string()),
+            }
         }
+        SendRawEmailError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12648,7 +12876,7 @@ impl SendRawEmailError {
 impl From<XmlParseError> for SendRawEmailError {
     fn from(err: XmlParseError) -> SendRawEmailError {
         let XmlParseError(message) = err;
-        SendRawEmailError::Unknown(message.to_string())
+        SendRawEmailError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SendRawEmailError {
@@ -12682,7 +12910,8 @@ impl Error for SendRawEmailError {
             SendRawEmailError::Validation(ref cause) => cause,
             SendRawEmailError::Credentials(ref err) => err.description(),
             SendRawEmailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SendRawEmailError::Unknown(ref cause) => cause,
+            SendRawEmailError::ParseError(ref cause) => cause,
+            SendRawEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12707,45 +12936,55 @@ pub enum SendTemplatedEmailError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SendTemplatedEmailError {
-    pub fn from_body(body: &str) -> SendTemplatedEmailError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccountSendingPausedException" => SendTemplatedEmailError::AccountSendingPaused(
-                    String::from(parsed_error.message),
-                ),
-                "ConfigurationSetDoesNotExist" => {
-                    SendTemplatedEmailError::ConfigurationSetDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> SendTemplatedEmailError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccountSendingPausedException" => {
+                        return SendTemplatedEmailError::AccountSendingPaused(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ConfigurationSetDoesNotExist" => {
+                        return SendTemplatedEmailError::ConfigurationSetDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ConfigurationSetSendingPausedException" => {
+                        return SendTemplatedEmailError::ConfigurationSetSendingPaused(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MailFromDomainNotVerifiedException" => {
+                        return SendTemplatedEmailError::MailFromDomainNotVerified(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MessageRejected" => {
+                        return SendTemplatedEmailError::MessageRejected(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TemplateDoesNotExist" => {
+                        return SendTemplatedEmailError::TemplateDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ConfigurationSetSendingPausedException" => {
-                    SendTemplatedEmailError::ConfigurationSetSendingPaused(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MailFromDomainNotVerifiedException" => {
-                    SendTemplatedEmailError::MailFromDomainNotVerified(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MessageRejected" => {
-                    SendTemplatedEmailError::MessageRejected(String::from(parsed_error.message))
-                }
-                "TemplateDoesNotExist" => SendTemplatedEmailError::TemplateDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
-                _ => SendTemplatedEmailError::Unknown(String::from(body)),
-            },
-            Err(_) => SendTemplatedEmailError::Unknown(body.to_string()),
+            }
         }
+        SendTemplatedEmailError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12760,7 +12999,7 @@ impl SendTemplatedEmailError {
 impl From<XmlParseError> for SendTemplatedEmailError {
     fn from(err: XmlParseError) -> SendTemplatedEmailError {
         let XmlParseError(message) = err;
-        SendTemplatedEmailError::Unknown(message.to_string())
+        SendTemplatedEmailError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SendTemplatedEmailError {
@@ -12797,7 +13036,8 @@ impl Error for SendTemplatedEmailError {
             SendTemplatedEmailError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SendTemplatedEmailError::Unknown(ref cause) => cause,
+            SendTemplatedEmailError::ParseError(ref cause) => cause,
+            SendTemplatedEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12812,24 +13052,30 @@ pub enum SetActiveReceiptRuleSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetActiveReceiptRuleSetError {
-    pub fn from_body(body: &str) -> SetActiveReceiptRuleSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "RuleSetDoesNotExist" => SetActiveReceiptRuleSetError::RuleSetDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
-                _ => SetActiveReceiptRuleSetError::Unknown(String::from(body)),
-            },
-            Err(_) => SetActiveReceiptRuleSetError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SetActiveReceiptRuleSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "RuleSetDoesNotExist" => {
+                        return SetActiveReceiptRuleSetError::RuleSetDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        SetActiveReceiptRuleSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12844,7 +13090,7 @@ impl SetActiveReceiptRuleSetError {
 impl From<XmlParseError> for SetActiveReceiptRuleSetError {
     fn from(err: XmlParseError) -> SetActiveReceiptRuleSetError {
         let XmlParseError(message) = err;
-        SetActiveReceiptRuleSetError::Unknown(message.to_string())
+        SetActiveReceiptRuleSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetActiveReceiptRuleSetError {
@@ -12876,7 +13122,8 @@ impl Error for SetActiveReceiptRuleSetError {
             SetActiveReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetActiveReceiptRuleSetError::Unknown(ref cause) => cause,
+            SetActiveReceiptRuleSetError::ParseError(ref cause) => cause,
+            SetActiveReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12889,21 +13136,25 @@ pub enum SetIdentityDkimEnabledError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetIdentityDkimEnabledError {
-    pub fn from_body(body: &str) -> SetIdentityDkimEnabledError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => SetIdentityDkimEnabledError::Unknown(String::from(body)),
-            },
-            Err(_) => SetIdentityDkimEnabledError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SetIdentityDkimEnabledError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        SetIdentityDkimEnabledError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12918,7 +13169,7 @@ impl SetIdentityDkimEnabledError {
 impl From<XmlParseError> for SetIdentityDkimEnabledError {
     fn from(err: XmlParseError) -> SetIdentityDkimEnabledError {
         let XmlParseError(message) = err;
-        SetIdentityDkimEnabledError::Unknown(message.to_string())
+        SetIdentityDkimEnabledError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetIdentityDkimEnabledError {
@@ -12949,7 +13200,8 @@ impl Error for SetIdentityDkimEnabledError {
             SetIdentityDkimEnabledError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetIdentityDkimEnabledError::Unknown(ref cause) => cause,
+            SetIdentityDkimEnabledError::ParseError(ref cause) => cause,
+            SetIdentityDkimEnabledError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12962,21 +13214,25 @@ pub enum SetIdentityFeedbackForwardingEnabledError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetIdentityFeedbackForwardingEnabledError {
-    pub fn from_body(body: &str) -> SetIdentityFeedbackForwardingEnabledError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => SetIdentityFeedbackForwardingEnabledError::Unknown(String::from(body)),
-            },
-            Err(_) => SetIdentityFeedbackForwardingEnabledError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SetIdentityFeedbackForwardingEnabledError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        SetIdentityFeedbackForwardingEnabledError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12991,7 +13247,7 @@ impl SetIdentityFeedbackForwardingEnabledError {
 impl From<XmlParseError> for SetIdentityFeedbackForwardingEnabledError {
     fn from(err: XmlParseError) -> SetIdentityFeedbackForwardingEnabledError {
         let XmlParseError(message) = err;
-        SetIdentityFeedbackForwardingEnabledError::Unknown(message.to_string())
+        SetIdentityFeedbackForwardingEnabledError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetIdentityFeedbackForwardingEnabledError {
@@ -13022,7 +13278,8 @@ impl Error for SetIdentityFeedbackForwardingEnabledError {
             SetIdentityFeedbackForwardingEnabledError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetIdentityFeedbackForwardingEnabledError::Unknown(ref cause) => cause,
+            SetIdentityFeedbackForwardingEnabledError::ParseError(ref cause) => cause,
+            SetIdentityFeedbackForwardingEnabledError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13035,21 +13292,27 @@ pub enum SetIdentityHeadersInNotificationsEnabledError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetIdentityHeadersInNotificationsEnabledError {
-    pub fn from_body(body: &str) -> SetIdentityHeadersInNotificationsEnabledError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => SetIdentityHeadersInNotificationsEnabledError::Unknown(String::from(body)),
-            },
-            Err(_) => SetIdentityHeadersInNotificationsEnabledError::Unknown(body.to_string()),
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> SetIdentityHeadersInNotificationsEnabledError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        SetIdentityHeadersInNotificationsEnabledError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13064,7 +13327,7 @@ impl SetIdentityHeadersInNotificationsEnabledError {
 impl From<XmlParseError> for SetIdentityHeadersInNotificationsEnabledError {
     fn from(err: XmlParseError) -> SetIdentityHeadersInNotificationsEnabledError {
         let XmlParseError(message) = err;
-        SetIdentityHeadersInNotificationsEnabledError::Unknown(message.to_string())
+        SetIdentityHeadersInNotificationsEnabledError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetIdentityHeadersInNotificationsEnabledError {
@@ -13097,7 +13360,8 @@ impl Error for SetIdentityHeadersInNotificationsEnabledError {
             SetIdentityHeadersInNotificationsEnabledError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetIdentityHeadersInNotificationsEnabledError::Unknown(ref cause) => cause,
+            SetIdentityHeadersInNotificationsEnabledError::ParseError(ref cause) => cause,
+            SetIdentityHeadersInNotificationsEnabledError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13110,21 +13374,25 @@ pub enum SetIdentityMailFromDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetIdentityMailFromDomainError {
-    pub fn from_body(body: &str) -> SetIdentityMailFromDomainError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => SetIdentityMailFromDomainError::Unknown(String::from(body)),
-            },
-            Err(_) => SetIdentityMailFromDomainError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SetIdentityMailFromDomainError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        SetIdentityMailFromDomainError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13139,7 +13407,7 @@ impl SetIdentityMailFromDomainError {
 impl From<XmlParseError> for SetIdentityMailFromDomainError {
     fn from(err: XmlParseError) -> SetIdentityMailFromDomainError {
         let XmlParseError(message) = err;
-        SetIdentityMailFromDomainError::Unknown(message.to_string())
+        SetIdentityMailFromDomainError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetIdentityMailFromDomainError {
@@ -13170,7 +13438,8 @@ impl Error for SetIdentityMailFromDomainError {
             SetIdentityMailFromDomainError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetIdentityMailFromDomainError::Unknown(ref cause) => cause,
+            SetIdentityMailFromDomainError::ParseError(ref cause) => cause,
+            SetIdentityMailFromDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13183,21 +13452,25 @@ pub enum SetIdentityNotificationTopicError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetIdentityNotificationTopicError {
-    pub fn from_body(body: &str) -> SetIdentityNotificationTopicError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => SetIdentityNotificationTopicError::Unknown(String::from(body)),
-            },
-            Err(_) => SetIdentityNotificationTopicError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SetIdentityNotificationTopicError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        SetIdentityNotificationTopicError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13212,7 +13485,7 @@ impl SetIdentityNotificationTopicError {
 impl From<XmlParseError> for SetIdentityNotificationTopicError {
     fn from(err: XmlParseError) -> SetIdentityNotificationTopicError {
         let XmlParseError(message) = err;
-        SetIdentityNotificationTopicError::Unknown(message.to_string())
+        SetIdentityNotificationTopicError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetIdentityNotificationTopicError {
@@ -13243,7 +13516,8 @@ impl Error for SetIdentityNotificationTopicError {
             SetIdentityNotificationTopicError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetIdentityNotificationTopicError::Unknown(ref cause) => cause,
+            SetIdentityNotificationTopicError::ParseError(ref cause) => cause,
+            SetIdentityNotificationTopicError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13260,27 +13534,35 @@ pub enum SetReceiptRulePositionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetReceiptRulePositionError {
-    pub fn from_body(body: &str) -> SetReceiptRulePositionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "RuleDoesNotExist" => SetReceiptRulePositionError::RuleDoesNotExist(String::from(
-                    parsed_error.message,
-                )),
-                "RuleSetDoesNotExist" => SetReceiptRulePositionError::RuleSetDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
-                _ => SetReceiptRulePositionError::Unknown(String::from(body)),
-            },
-            Err(_) => SetReceiptRulePositionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SetReceiptRulePositionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "RuleDoesNotExist" => {
+                        return SetReceiptRulePositionError::RuleDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleSetDoesNotExist" => {
+                        return SetReceiptRulePositionError::RuleSetDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        SetReceiptRulePositionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13295,7 +13577,7 @@ impl SetReceiptRulePositionError {
 impl From<XmlParseError> for SetReceiptRulePositionError {
     fn from(err: XmlParseError) -> SetReceiptRulePositionError {
         let XmlParseError(message) = err;
-        SetReceiptRulePositionError::Unknown(message.to_string())
+        SetReceiptRulePositionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetReceiptRulePositionError {
@@ -13328,7 +13610,8 @@ impl Error for SetReceiptRulePositionError {
             SetReceiptRulePositionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetReceiptRulePositionError::Unknown(ref cause) => cause,
+            SetReceiptRulePositionError::ParseError(ref cause) => cause,
+            SetReceiptRulePositionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13347,30 +13630,40 @@ pub enum TestRenderTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TestRenderTemplateError {
-    pub fn from_body(body: &str) -> TestRenderTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidRenderingParameter" => TestRenderTemplateError::InvalidRenderingParameter(
-                    String::from(parsed_error.message),
-                ),
-                "MissingRenderingAttribute" => TestRenderTemplateError::MissingRenderingAttribute(
-                    String::from(parsed_error.message),
-                ),
-                "TemplateDoesNotExist" => TestRenderTemplateError::TemplateDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
-                _ => TestRenderTemplateError::Unknown(String::from(body)),
-            },
-            Err(_) => TestRenderTemplateError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> TestRenderTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidRenderingParameter" => {
+                        return TestRenderTemplateError::InvalidRenderingParameter(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingRenderingAttribute" => {
+                        return TestRenderTemplateError::MissingRenderingAttribute(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TemplateDoesNotExist" => {
+                        return TestRenderTemplateError::TemplateDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        TestRenderTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13385,7 +13678,7 @@ impl TestRenderTemplateError {
 impl From<XmlParseError> for TestRenderTemplateError {
     fn from(err: XmlParseError) -> TestRenderTemplateError {
         let XmlParseError(message) = err;
-        TestRenderTemplateError::Unknown(message.to_string())
+        TestRenderTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for TestRenderTemplateError {
@@ -13419,7 +13712,8 @@ impl Error for TestRenderTemplateError {
             TestRenderTemplateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            TestRenderTemplateError::Unknown(ref cause) => cause,
+            TestRenderTemplateError::ParseError(ref cause) => cause,
+            TestRenderTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13432,21 +13726,25 @@ pub enum UpdateAccountSendingEnabledError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAccountSendingEnabledError {
-    pub fn from_body(body: &str) -> UpdateAccountSendingEnabledError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => UpdateAccountSendingEnabledError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateAccountSendingEnabledError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateAccountSendingEnabledError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        UpdateAccountSendingEnabledError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13461,7 +13759,7 @@ impl UpdateAccountSendingEnabledError {
 impl From<XmlParseError> for UpdateAccountSendingEnabledError {
     fn from(err: XmlParseError) -> UpdateAccountSendingEnabledError {
         let XmlParseError(message) = err;
-        UpdateAccountSendingEnabledError::Unknown(message.to_string())
+        UpdateAccountSendingEnabledError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateAccountSendingEnabledError {
@@ -13492,7 +13790,8 @@ impl Error for UpdateAccountSendingEnabledError {
             UpdateAccountSendingEnabledError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateAccountSendingEnabledError::Unknown(ref cause) => cause,
+            UpdateAccountSendingEnabledError::ParseError(ref cause) => cause,
+            UpdateAccountSendingEnabledError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13515,46 +13814,25 @@ pub enum UpdateConfigurationSetEventDestinationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConfigurationSetEventDestinationError {
-    pub fn from_body(body: &str) -> UpdateConfigurationSetEventDestinationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExist" => {
-                    UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "EventDestinationDoesNotExist" => {
-                    UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidCloudWatchDestination" => {
-                    UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidFirehoseDestination" => {
-                    UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidSNSDestination" => {
-                    UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => UpdateConfigurationSetEventDestinationError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateConfigurationSetEventDestinationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateConfigurationSetEventDestinationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConfigurationSetDoesNotExist" => return UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"EventDestinationDoesNotExist" => return UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(String::from(parsed_error.message)),"InvalidCloudWatchDestination" => return UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(String::from(parsed_error.message)),"InvalidFirehoseDestination" => return UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(String::from(parsed_error.message)),"InvalidSNSDestination" => return UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        UpdateConfigurationSetEventDestinationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13569,7 +13847,7 @@ impl UpdateConfigurationSetEventDestinationError {
 impl From<XmlParseError> for UpdateConfigurationSetEventDestinationError {
     fn from(err: XmlParseError) -> UpdateConfigurationSetEventDestinationError {
         let XmlParseError(message) = err;
-        UpdateConfigurationSetEventDestinationError::Unknown(message.to_string())
+        UpdateConfigurationSetEventDestinationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateConfigurationSetEventDestinationError {
@@ -13613,7 +13891,8 @@ impl Error for UpdateConfigurationSetEventDestinationError {
             UpdateConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateConfigurationSetEventDestinationError::Unknown(ref cause) => cause,
+            UpdateConfigurationSetEventDestinationError::ParseError(ref cause) => cause,
+            UpdateConfigurationSetEventDestinationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13628,23 +13907,27 @@ pub enum UpdateConfigurationSetReputationMetricsEnabledError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConfigurationSetReputationMetricsEnabledError {
-    pub fn from_body(body: &str) -> UpdateConfigurationSetReputationMetricsEnabledError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),_ => UpdateConfigurationSetReputationMetricsEnabledError::Unknown(String::from(body))
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> UpdateConfigurationSetReputationMetricsEnabledError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConfigurationSetDoesNotExist" => return UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),_ => {}
                                 }
-                           },
-                           Err(_) => UpdateConfigurationSetReputationMetricsEnabledError::Unknown(body.to_string())
-                       }
+            }
+        }
+        UpdateConfigurationSetReputationMetricsEnabledError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13659,7 +13942,7 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
 impl From<XmlParseError> for UpdateConfigurationSetReputationMetricsEnabledError {
     fn from(err: XmlParseError) -> UpdateConfigurationSetReputationMetricsEnabledError {
         let XmlParseError(message) = err;
-        UpdateConfigurationSetReputationMetricsEnabledError::Unknown(message.to_string())
+        UpdateConfigurationSetReputationMetricsEnabledError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateConfigurationSetReputationMetricsEnabledError {
@@ -13697,7 +13980,8 @@ impl Error for UpdateConfigurationSetReputationMetricsEnabledError {
             UpdateConfigurationSetReputationMetricsEnabledError::HttpDispatch(
                 ref dispatch_error,
             ) => dispatch_error.description(),
-            UpdateConfigurationSetReputationMetricsEnabledError::Unknown(ref cause) => cause,
+            UpdateConfigurationSetReputationMetricsEnabledError::ParseError(ref cause) => cause,
+            UpdateConfigurationSetReputationMetricsEnabledError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13712,26 +13996,25 @@ pub enum UpdateConfigurationSetSendingEnabledError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConfigurationSetSendingEnabledError {
-    pub fn from_body(body: &str) -> UpdateConfigurationSetSendingEnabledError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExist" => {
-                    UpdateConfigurationSetSendingEnabledError::ConfigurationSetDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => UpdateConfigurationSetSendingEnabledError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateConfigurationSetSendingEnabledError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateConfigurationSetSendingEnabledError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConfigurationSetDoesNotExist" => return UpdateConfigurationSetSendingEnabledError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        UpdateConfigurationSetSendingEnabledError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13746,7 +14029,7 @@ impl UpdateConfigurationSetSendingEnabledError {
 impl From<XmlParseError> for UpdateConfigurationSetSendingEnabledError {
     fn from(err: XmlParseError) -> UpdateConfigurationSetSendingEnabledError {
         let XmlParseError(message) = err;
-        UpdateConfigurationSetSendingEnabledError::Unknown(message.to_string())
+        UpdateConfigurationSetSendingEnabledError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateConfigurationSetSendingEnabledError {
@@ -13780,7 +14063,8 @@ impl Error for UpdateConfigurationSetSendingEnabledError {
             UpdateConfigurationSetSendingEnabledError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateConfigurationSetSendingEnabledError::Unknown(ref cause) => cause,
+            UpdateConfigurationSetSendingEnabledError::ParseError(ref cause) => cause,
+            UpdateConfigurationSetSendingEnabledError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13799,36 +14083,25 @@ pub enum UpdateConfigurationSetTrackingOptionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConfigurationSetTrackingOptionsError {
-    pub fn from_body(body: &str) -> UpdateConfigurationSetTrackingOptionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExist" => {
-                    UpdateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidTrackingOptions" => {
-                    UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TrackingOptionsDoesNotExistException" => {
-                    UpdateConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => UpdateConfigurationSetTrackingOptionsError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateConfigurationSetTrackingOptionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateConfigurationSetTrackingOptionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ConfigurationSetDoesNotExist" => return UpdateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"InvalidTrackingOptions" => return UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(String::from(parsed_error.message)),"TrackingOptionsDoesNotExistException" => return UpdateConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        UpdateConfigurationSetTrackingOptionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13843,7 +14116,7 @@ impl UpdateConfigurationSetTrackingOptionsError {
 impl From<XmlParseError> for UpdateConfigurationSetTrackingOptionsError {
     fn from(err: XmlParseError) -> UpdateConfigurationSetTrackingOptionsError {
         let XmlParseError(message) = err;
-        UpdateConfigurationSetTrackingOptionsError::Unknown(message.to_string())
+        UpdateConfigurationSetTrackingOptionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateConfigurationSetTrackingOptionsError {
@@ -13881,7 +14154,8 @@ impl Error for UpdateConfigurationSetTrackingOptionsError {
             UpdateConfigurationSetTrackingOptionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateConfigurationSetTrackingOptionsError::Unknown(ref cause) => cause,
+            UpdateConfigurationSetTrackingOptionsError::ParseError(ref cause) => cause,
+            UpdateConfigurationSetTrackingOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13900,23 +14174,25 @@ pub enum UpdateCustomVerificationEmailTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateCustomVerificationEmailTemplateError {
-    pub fn from_body(body: &str) -> UpdateCustomVerificationEmailTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContent" => UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),_ => UpdateCustomVerificationEmailTemplateError::Unknown(String::from(body))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateCustomVerificationEmailTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "CustomVerificationEmailInvalidContent" => return UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => return UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),_ => {}
                                 }
-                           },
-                           Err(_) => UpdateCustomVerificationEmailTemplateError::Unknown(body.to_string())
-                       }
+            }
+        }
+        UpdateCustomVerificationEmailTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13931,7 +14207,7 @@ impl UpdateCustomVerificationEmailTemplateError {
 impl From<XmlParseError> for UpdateCustomVerificationEmailTemplateError {
     fn from(err: XmlParseError) -> UpdateCustomVerificationEmailTemplateError {
         let XmlParseError(message) = err;
-        UpdateCustomVerificationEmailTemplateError::Unknown(message.to_string())
+        UpdateCustomVerificationEmailTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateCustomVerificationEmailTemplateError {
@@ -13963,7 +14239,8 @@ UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(ref caus
 UpdateCustomVerificationEmailTemplateError::Validation(ref cause) => cause,
 UpdateCustomVerificationEmailTemplateError::Credentials(ref err) => err.description(),
 UpdateCustomVerificationEmailTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-UpdateCustomVerificationEmailTemplateError::Unknown(ref cause) => cause
+UpdateCustomVerificationEmailTemplateError::ParseError(ref cause) => cause,
+UpdateCustomVerificationEmailTemplateError::Unknown(_) => "unknown error"
                         }
     }
 }
@@ -13988,39 +14265,55 @@ pub enum UpdateReceiptRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateReceiptRuleError {
-    pub fn from_body(body: &str) -> UpdateReceiptRuleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidLambdaFunction" => UpdateReceiptRuleError::InvalidLambdaFunction(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidS3Configuration" => UpdateReceiptRuleError::InvalidS3Configuration(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidSnsTopic" => {
-                    UpdateReceiptRuleError::InvalidSnsTopic(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateReceiptRuleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidLambdaFunction" => {
+                        return UpdateReceiptRuleError::InvalidLambdaFunction(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidS3Configuration" => {
+                        return UpdateReceiptRuleError::InvalidS3Configuration(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidSnsTopic" => {
+                        return UpdateReceiptRuleError::InvalidSnsTopic(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return UpdateReceiptRuleError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleDoesNotExist" => {
+                        return UpdateReceiptRuleError::RuleDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleSetDoesNotExist" => {
+                        return UpdateReceiptRuleError::RuleSetDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    UpdateReceiptRuleError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "RuleDoesNotExist" => {
-                    UpdateReceiptRuleError::RuleDoesNotExist(String::from(parsed_error.message))
-                }
-                "RuleSetDoesNotExist" => {
-                    UpdateReceiptRuleError::RuleSetDoesNotExist(String::from(parsed_error.message))
-                }
-                _ => UpdateReceiptRuleError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateReceiptRuleError::Unknown(body.to_string()),
+            }
         }
+        UpdateReceiptRuleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14035,7 +14328,7 @@ impl UpdateReceiptRuleError {
 impl From<XmlParseError> for UpdateReceiptRuleError {
     fn from(err: XmlParseError) -> UpdateReceiptRuleError {
         let XmlParseError(message) = err;
-        UpdateReceiptRuleError::Unknown(message.to_string())
+        UpdateReceiptRuleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateReceiptRuleError {
@@ -14072,7 +14365,8 @@ impl Error for UpdateReceiptRuleError {
             UpdateReceiptRuleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateReceiptRuleError::Unknown(ref cause) => cause,
+            UpdateReceiptRuleError::ParseError(ref cause) => cause,
+            UpdateReceiptRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14089,27 +14383,35 @@ pub enum UpdateTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTemplateError {
-    pub fn from_body(body: &str) -> UpdateTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidTemplate" => {
-                    UpdateTemplateError::InvalidTemplate(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidTemplate" => {
+                        return UpdateTemplateError::InvalidTemplate(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TemplateDoesNotExist" => {
+                        return UpdateTemplateError::TemplateDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TemplateDoesNotExist" => {
-                    UpdateTemplateError::TemplateDoesNotExist(String::from(parsed_error.message))
-                }
-                _ => UpdateTemplateError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateTemplateError::Unknown(body.to_string()),
+            }
         }
+        UpdateTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14124,7 +14426,7 @@ impl UpdateTemplateError {
 impl From<XmlParseError> for UpdateTemplateError {
     fn from(err: XmlParseError) -> UpdateTemplateError {
         let XmlParseError(message) = err;
-        UpdateTemplateError::Unknown(message.to_string())
+        UpdateTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateTemplateError {
@@ -14155,7 +14457,8 @@ impl Error for UpdateTemplateError {
             UpdateTemplateError::Validation(ref cause) => cause,
             UpdateTemplateError::Credentials(ref err) => err.description(),
             UpdateTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateTemplateError::Unknown(ref cause) => cause,
+            UpdateTemplateError::ParseError(ref cause) => cause,
+            UpdateTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14168,21 +14471,25 @@ pub enum VerifyDomainDkimError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl VerifyDomainDkimError {
-    pub fn from_body(body: &str) -> VerifyDomainDkimError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => VerifyDomainDkimError::Unknown(String::from(body)),
-            },
-            Err(_) => VerifyDomainDkimError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> VerifyDomainDkimError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        VerifyDomainDkimError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14197,7 +14504,7 @@ impl VerifyDomainDkimError {
 impl From<XmlParseError> for VerifyDomainDkimError {
     fn from(err: XmlParseError) -> VerifyDomainDkimError {
         let XmlParseError(message) = err;
-        VerifyDomainDkimError::Unknown(message.to_string())
+        VerifyDomainDkimError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for VerifyDomainDkimError {
@@ -14226,7 +14533,8 @@ impl Error for VerifyDomainDkimError {
             VerifyDomainDkimError::Validation(ref cause) => cause,
             VerifyDomainDkimError::Credentials(ref err) => err.description(),
             VerifyDomainDkimError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            VerifyDomainDkimError::Unknown(ref cause) => cause,
+            VerifyDomainDkimError::ParseError(ref cause) => cause,
+            VerifyDomainDkimError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14239,21 +14547,25 @@ pub enum VerifyDomainIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl VerifyDomainIdentityError {
-    pub fn from_body(body: &str) -> VerifyDomainIdentityError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => VerifyDomainIdentityError::Unknown(String::from(body)),
-            },
-            Err(_) => VerifyDomainIdentityError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> VerifyDomainIdentityError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        VerifyDomainIdentityError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14268,7 +14580,7 @@ impl VerifyDomainIdentityError {
 impl From<XmlParseError> for VerifyDomainIdentityError {
     fn from(err: XmlParseError) -> VerifyDomainIdentityError {
         let XmlParseError(message) = err;
-        VerifyDomainIdentityError::Unknown(message.to_string())
+        VerifyDomainIdentityError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for VerifyDomainIdentityError {
@@ -14299,7 +14611,8 @@ impl Error for VerifyDomainIdentityError {
             VerifyDomainIdentityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            VerifyDomainIdentityError::Unknown(ref cause) => cause,
+            VerifyDomainIdentityError::ParseError(ref cause) => cause,
+            VerifyDomainIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14312,21 +14625,25 @@ pub enum VerifyEmailAddressError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl VerifyEmailAddressError {
-    pub fn from_body(body: &str) -> VerifyEmailAddressError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => VerifyEmailAddressError::Unknown(String::from(body)),
-            },
-            Err(_) => VerifyEmailAddressError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> VerifyEmailAddressError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        VerifyEmailAddressError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14341,7 +14658,7 @@ impl VerifyEmailAddressError {
 impl From<XmlParseError> for VerifyEmailAddressError {
     fn from(err: XmlParseError) -> VerifyEmailAddressError {
         let XmlParseError(message) = err;
-        VerifyEmailAddressError::Unknown(message.to_string())
+        VerifyEmailAddressError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for VerifyEmailAddressError {
@@ -14372,7 +14689,8 @@ impl Error for VerifyEmailAddressError {
             VerifyEmailAddressError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            VerifyEmailAddressError::Unknown(ref cause) => cause,
+            VerifyEmailAddressError::ParseError(ref cause) => cause,
+            VerifyEmailAddressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14385,21 +14703,25 @@ pub enum VerifyEmailIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl VerifyEmailIdentityError {
-    pub fn from_body(body: &str) -> VerifyEmailIdentityError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => VerifyEmailIdentityError::Unknown(String::from(body)),
-            },
-            Err(_) => VerifyEmailIdentityError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> VerifyEmailIdentityError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        VerifyEmailIdentityError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14414,7 +14736,7 @@ impl VerifyEmailIdentityError {
 impl From<XmlParseError> for VerifyEmailIdentityError {
     fn from(err: XmlParseError) -> VerifyEmailIdentityError {
         let XmlParseError(message) = err;
-        VerifyEmailIdentityError::Unknown(message.to_string())
+        VerifyEmailIdentityError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for VerifyEmailIdentityError {
@@ -14445,7 +14767,8 @@ impl Error for VerifyEmailIdentityError {
             VerifyEmailIdentityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            VerifyEmailIdentityError::Unknown(ref cause) => cause,
+            VerifyEmailIdentityError::ParseError(ref cause) => cause,
+            VerifyEmailIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14958,11 +15281,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CloneReceiptRuleSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CloneReceiptRuleSetError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15011,9 +15334,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateConfigurationSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateConfigurationSetError::from_response(response))
                 }));
             }
 
@@ -15066,8 +15387,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateConfigurationSetEventDestinationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateConfigurationSetEventDestinationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -15123,8 +15444,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateConfigurationSetTrackingOptionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateConfigurationSetTrackingOptionsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -15177,8 +15498,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCustomVerificationEmailTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateCustomVerificationEmailTemplateError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -15205,11 +15526,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReceiptFilterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateReceiptFilterError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15257,11 +15578,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReceiptRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateReceiptRuleError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15309,11 +15631,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReceiptRuleSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateReceiptRuleSetError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15361,11 +15683,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateTemplateError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15414,9 +15737,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConfigurationSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteConfigurationSetError::from_response(response))
                 }));
             }
 
@@ -15469,8 +15790,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConfigurationSetEventDestinationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeleteConfigurationSetEventDestinationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -15526,8 +15847,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConfigurationSetTrackingOptionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeleteConfigurationSetTrackingOptionsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -15580,8 +15901,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCustomVerificationEmailTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeleteCustomVerificationEmailTemplateError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -15608,11 +15929,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteIdentityError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15660,11 +15982,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteIdentityPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteIdentityPolicyError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15712,11 +16034,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReceiptFilterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteReceiptFilterError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15764,11 +16086,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReceiptRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteReceiptRuleError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15816,11 +16139,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReceiptRuleSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteReceiptRuleSetError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15868,11 +16191,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTemplateError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15921,9 +16245,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVerifiedEmailAddressError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteVerifiedEmailAddressError::from_response(response))
                 }));
             }
 
@@ -15950,9 +16272,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeActiveReceiptRuleSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeActiveReceiptRuleSetError::from_response(response))
                 }));
             }
 
@@ -16004,9 +16324,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeConfigurationSetError::from_response(response))
                 }));
             }
 
@@ -16055,11 +16373,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReceiptRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeReceiptRuleError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16108,9 +16426,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReceiptRuleSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeReceiptRuleSetError::from_response(response))
                 }));
             }
 
@@ -16159,9 +16475,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAccountSendingEnabledError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetAccountSendingEnabledError::from_response(response))
                 }));
             }
 
@@ -16214,8 +16528,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCustomVerificationEmailTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetCustomVerificationEmailTemplateError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -16268,9 +16582,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetIdentityDkimAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetIdentityDkimAttributesError::from_response(response))
                 }));
             }
 
@@ -16323,8 +16635,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetIdentityMailFromDomainAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetIdentityMailFromDomainAttributesError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -16380,8 +16692,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetIdentityNotificationAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetIdentityNotificationAttributesError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -16433,11 +16745,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetIdentityPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetIdentityPoliciesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16489,8 +16801,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetIdentityVerificationAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetIdentityVerificationAttributesError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -16539,11 +16851,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSendQuotaError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetSendQuotaError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16590,11 +16903,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSendStatisticsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetSendStatisticsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16642,11 +16956,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetTemplateError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16694,11 +17009,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListConfigurationSetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListConfigurationSetsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16750,8 +17065,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListCustomVerificationEmailTemplatesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ListCustomVerificationEmailTemplatesError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -16803,11 +17118,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListIdentitiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListIdentitiesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16855,11 +17171,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListIdentityPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListIdentityPoliciesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16907,11 +17223,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListReceiptFiltersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListReceiptFiltersError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -16959,11 +17276,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListReceiptRuleSetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListReceiptRuleSetsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17011,11 +17328,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTemplatesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTemplatesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17063,9 +17381,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVerifiedEmailAddressesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListVerifiedEmailAddressesError::from_response(response))
                 }));
             }
 
@@ -17114,11 +17430,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutIdentityPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutIdentityPolicyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17166,11 +17483,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ReorderReceiptRuleSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ReorderReceiptRuleSetError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17218,11 +17535,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SendBounceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SendBounceError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17271,9 +17589,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SendBulkTemplatedEmailError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SendBulkTemplatedEmailError::from_response(response))
                 }));
             }
 
@@ -17323,9 +17639,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SendCustomVerificationEmailError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SendCustomVerificationEmailError::from_response(response))
                 }));
             }
 
@@ -17376,11 +17690,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SendEmailError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SendEmailError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17428,11 +17743,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SendRawEmailError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SendRawEmailError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17480,11 +17796,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SendTemplatedEmailError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SendTemplatedEmailError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17533,9 +17850,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetActiveReceiptRuleSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SetActiveReceiptRuleSetError::from_response(response))
                 }));
             }
 
@@ -17585,9 +17900,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetIdentityDkimEnabledError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SetIdentityDkimEnabledError::from_response(response))
                 }));
             }
 
@@ -17640,8 +17953,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetIdentityFeedbackForwardingEnabledError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(SetIdentityFeedbackForwardingEnabledError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -17701,9 +18014,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetIdentityHeadersInNotificationsEnabledError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SetIdentityHeadersInNotificationsEnabledError::from_response(response))
                 }));
             }
 
@@ -17755,9 +18066,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetIdentityMailFromDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SetIdentityMailFromDomainError::from_response(response))
                 }));
             }
 
@@ -17807,9 +18116,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetIdentityNotificationTopicError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SetIdentityNotificationTopicError::from_response(response))
                 }));
             }
 
@@ -17861,9 +18168,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetReceiptRulePositionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SetReceiptRulePositionError::from_response(response))
                 }));
             }
 
@@ -17912,11 +18217,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TestRenderTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TestRenderTemplateError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -17965,9 +18271,7 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateAccountSendingEnabledError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateAccountSendingEnabledError::from_response(response))
                 }));
             }
 
@@ -17997,8 +18301,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateConfigurationSetEventDestinationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(UpdateConfigurationSetEventDestinationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -18056,8 +18360,8 @@ impl Ses for SesClient {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(
-                        UpdateConfigurationSetReputationMetricsEnabledError::from_body(
-                            String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        UpdateConfigurationSetReputationMetricsEnabledError::from_response(
+                            response,
                         ),
                     )
                 }));
@@ -18086,8 +18390,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateConfigurationSetSendingEnabledError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(UpdateConfigurationSetSendingEnabledError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -18118,8 +18422,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateConfigurationSetTrackingOptionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(UpdateConfigurationSetTrackingOptionsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -18172,8 +18476,8 @@ impl Ses for SesClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateCustomVerificationEmailTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(UpdateCustomVerificationEmailTemplateError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -18200,11 +18504,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateReceiptRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateReceiptRuleError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18252,11 +18557,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateTemplateError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18304,11 +18610,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(VerifyDomainDkimError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(VerifyDomainDkimError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18356,11 +18663,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(VerifyDomainIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(VerifyDomainIdentityError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -18408,11 +18715,12 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(VerifyEmailAddressError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(VerifyEmailAddressError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -18437,11 +18745,11 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(VerifyEmailIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(VerifyEmailIdentityError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

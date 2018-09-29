@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptPortfolioShareInput {
@@ -2651,47 +2651,47 @@ pub enum AcceptPortfolioShareError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AcceptPortfolioShareError {
-    pub fn from_body(body: &str) -> AcceptPortfolioShareError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AcceptPortfolioShareError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        AcceptPortfolioShareError::InvalidParameters(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        AcceptPortfolioShareError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        AcceptPortfolioShareError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AcceptPortfolioShareError::Validation(error_message.to_string())
-                    }
-                    _ => AcceptPortfolioShareError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return AcceptPortfolioShareError::InvalidParameters(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return AcceptPortfolioShareError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return AcceptPortfolioShareError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AcceptPortfolioShareError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AcceptPortfolioShareError::Unknown(String::from(body)),
         }
+        return AcceptPortfolioShareError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AcceptPortfolioShareError {
     fn from(err: serde_json::error::Error) -> AcceptPortfolioShareError {
-        AcceptPortfolioShareError::Unknown(err.description().to_string())
+        AcceptPortfolioShareError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AcceptPortfolioShareError {
@@ -2725,7 +2725,8 @@ impl Error for AcceptPortfolioShareError {
             AcceptPortfolioShareError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AcceptPortfolioShareError::Unknown(ref cause) => cause,
+            AcceptPortfolioShareError::ParseError(ref cause) => cause,
+            AcceptPortfolioShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2744,53 +2745,55 @@ pub enum AssociatePrincipalWithPortfolioError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociatePrincipalWithPortfolioError {
-    pub fn from_body(body: &str) -> AssociatePrincipalWithPortfolioError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociatePrincipalWithPortfolioError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        AssociatePrincipalWithPortfolioError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        AssociatePrincipalWithPortfolioError::LimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        AssociatePrincipalWithPortfolioError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AssociatePrincipalWithPortfolioError::Validation(error_message.to_string())
-                    }
-                    _ => AssociatePrincipalWithPortfolioError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return AssociatePrincipalWithPortfolioError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "LimitExceededException" => {
+                    return AssociatePrincipalWithPortfolioError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return AssociatePrincipalWithPortfolioError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AssociatePrincipalWithPortfolioError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => AssociatePrincipalWithPortfolioError::Unknown(String::from(body)),
         }
+        return AssociatePrincipalWithPortfolioError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociatePrincipalWithPortfolioError {
     fn from(err: serde_json::error::Error) -> AssociatePrincipalWithPortfolioError {
-        AssociatePrincipalWithPortfolioError::Unknown(err.description().to_string())
+        AssociatePrincipalWithPortfolioError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociatePrincipalWithPortfolioError {
@@ -2824,7 +2827,8 @@ impl Error for AssociatePrincipalWithPortfolioError {
             AssociatePrincipalWithPortfolioError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociatePrincipalWithPortfolioError::Unknown(ref cause) => cause,
+            AssociatePrincipalWithPortfolioError::ParseError(ref cause) => cause,
+            AssociatePrincipalWithPortfolioError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2843,51 +2847,53 @@ pub enum AssociateProductWithPortfolioError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateProductWithPortfolioError {
-    pub fn from_body(body: &str) -> AssociateProductWithPortfolioError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateProductWithPortfolioError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        AssociateProductWithPortfolioError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => AssociateProductWithPortfolioError::LimitExceeded(
-                        String::from(error_message),
-                    ),
-                    "ResourceNotFoundException" => {
-                        AssociateProductWithPortfolioError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AssociateProductWithPortfolioError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateProductWithPortfolioError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return AssociateProductWithPortfolioError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "LimitExceededException" => {
+                    return AssociateProductWithPortfolioError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return AssociateProductWithPortfolioError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AssociateProductWithPortfolioError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AssociateProductWithPortfolioError::Unknown(String::from(body)),
         }
+        return AssociateProductWithPortfolioError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateProductWithPortfolioError {
     fn from(err: serde_json::error::Error) -> AssociateProductWithPortfolioError {
-        AssociateProductWithPortfolioError::Unknown(err.description().to_string())
+        AssociateProductWithPortfolioError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateProductWithPortfolioError {
@@ -2921,7 +2927,8 @@ impl Error for AssociateProductWithPortfolioError {
             AssociateProductWithPortfolioError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateProductWithPortfolioError::Unknown(ref cause) => cause,
+            AssociateProductWithPortfolioError::ParseError(ref cause) => cause,
+            AssociateProductWithPortfolioError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2946,64 +2953,70 @@ pub enum AssociateTagOptionWithResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateTagOptionWithResourceError {
-    pub fn from_body(body: &str) -> AssociateTagOptionWithResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateTagOptionWithResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateResourceException" => {
-                        AssociateTagOptionWithResourceError::DuplicateResource(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParametersException" => {
-                        AssociateTagOptionWithResourceError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidStateException" => AssociateTagOptionWithResourceError::InvalidState(
-                        String::from(error_message),
-                    ),
-                    "LimitExceededException" => AssociateTagOptionWithResourceError::LimitExceeded(
-                        String::from(error_message),
-                    ),
-                    "ResourceNotFoundException" => {
-                        AssociateTagOptionWithResourceError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        AssociateTagOptionWithResourceError::TagOptionNotMigrated(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AssociateTagOptionWithResourceError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateTagOptionWithResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateResourceException" => {
+                    return AssociateTagOptionWithResourceError::DuplicateResource(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParametersException" => {
+                    return AssociateTagOptionWithResourceError::InvalidParameters(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidStateException" => {
+                    return AssociateTagOptionWithResourceError::InvalidState(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return AssociateTagOptionWithResourceError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return AssociateTagOptionWithResourceError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TagOptionNotMigratedException" => {
+                    return AssociateTagOptionWithResourceError::TagOptionNotMigrated(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AssociateTagOptionWithResourceError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => AssociateTagOptionWithResourceError::Unknown(String::from(body)),
         }
+        return AssociateTagOptionWithResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateTagOptionWithResourceError {
     fn from(err: serde_json::error::Error) -> AssociateTagOptionWithResourceError {
-        AssociateTagOptionWithResourceError::Unknown(err.description().to_string())
+        AssociateTagOptionWithResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateTagOptionWithResourceError {
@@ -3040,7 +3053,8 @@ impl Error for AssociateTagOptionWithResourceError {
             AssociateTagOptionWithResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateTagOptionWithResourceError::Unknown(ref cause) => cause,
+            AssociateTagOptionWithResourceError::ParseError(ref cause) => cause,
+            AssociateTagOptionWithResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3057,44 +3071,44 @@ pub enum CopyProductError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CopyProductError {
-    pub fn from_body(body: &str) -> CopyProductError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CopyProductError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        CopyProductError::InvalidParameters(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CopyProductError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CopyProductError::Validation(error_message.to_string())
-                    }
-                    _ => CopyProductError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return CopyProductError::InvalidParameters(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return CopyProductError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CopyProductError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CopyProductError::Unknown(String::from(body)),
         }
+        return CopyProductError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CopyProductError {
     fn from(err: serde_json::error::Error) -> CopyProductError {
-        CopyProductError::Unknown(err.description().to_string())
+        CopyProductError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CopyProductError {
@@ -3125,7 +3139,8 @@ impl Error for CopyProductError {
             CopyProductError::Validation(ref cause) => cause,
             CopyProductError::Credentials(ref err) => err.description(),
             CopyProductError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CopyProductError::Unknown(ref cause) => cause,
+            CopyProductError::ParseError(ref cause) => cause,
+            CopyProductError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3146,50 +3161,50 @@ pub enum CreateConstraintError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConstraintError {
-    pub fn from_body(body: &str) -> CreateConstraintError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateConstraintError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateResourceException" => {
-                        CreateConstraintError::DuplicateResource(String::from(error_message))
-                    }
-                    "InvalidParametersException" => {
-                        CreateConstraintError::InvalidParameters(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateConstraintError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateConstraintError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateConstraintError::Validation(error_message.to_string())
-                    }
-                    _ => CreateConstraintError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateResourceException" => {
+                    return CreateConstraintError::DuplicateResource(String::from(error_message))
                 }
+                "InvalidParametersException" => {
+                    return CreateConstraintError::InvalidParameters(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateConstraintError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateConstraintError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateConstraintError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateConstraintError::Unknown(String::from(body)),
         }
+        return CreateConstraintError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateConstraintError {
     fn from(err: serde_json::error::Error) -> CreateConstraintError {
-        CreateConstraintError::Unknown(err.description().to_string())
+        CreateConstraintError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateConstraintError {
@@ -3222,7 +3237,8 @@ impl Error for CreateConstraintError {
             CreateConstraintError::Validation(ref cause) => cause,
             CreateConstraintError::Credentials(ref err) => err.description(),
             CreateConstraintError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateConstraintError::Unknown(ref cause) => cause,
+            CreateConstraintError::ParseError(ref cause) => cause,
+            CreateConstraintError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3241,47 +3257,47 @@ pub enum CreatePortfolioError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePortfolioError {
-    pub fn from_body(body: &str) -> CreatePortfolioError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePortfolioError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        CreatePortfolioError::InvalidParameters(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreatePortfolioError::LimitExceeded(String::from(error_message))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        CreatePortfolioError::TagOptionNotMigrated(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreatePortfolioError::Validation(error_message.to_string())
-                    }
-                    _ => CreatePortfolioError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return CreatePortfolioError::InvalidParameters(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return CreatePortfolioError::LimitExceeded(String::from(error_message))
+                }
+                "TagOptionNotMigratedException" => {
+                    return CreatePortfolioError::TagOptionNotMigrated(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreatePortfolioError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreatePortfolioError::Unknown(String::from(body)),
         }
+        return CreatePortfolioError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreatePortfolioError {
     fn from(err: serde_json::error::Error) -> CreatePortfolioError {
-        CreatePortfolioError::Unknown(err.description().to_string())
+        CreatePortfolioError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreatePortfolioError {
@@ -3313,7 +3329,8 @@ impl Error for CreatePortfolioError {
             CreatePortfolioError::Validation(ref cause) => cause,
             CreatePortfolioError::Credentials(ref err) => err.description(),
             CreatePortfolioError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePortfolioError::Unknown(ref cause) => cause,
+            CreatePortfolioError::ParseError(ref cause) => cause,
+            CreatePortfolioError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3332,47 +3349,47 @@ pub enum CreatePortfolioShareError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePortfolioShareError {
-    pub fn from_body(body: &str) -> CreatePortfolioShareError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePortfolioShareError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        CreatePortfolioShareError::InvalidParameters(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreatePortfolioShareError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreatePortfolioShareError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreatePortfolioShareError::Validation(error_message.to_string())
-                    }
-                    _ => CreatePortfolioShareError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return CreatePortfolioShareError::InvalidParameters(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return CreatePortfolioShareError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreatePortfolioShareError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreatePortfolioShareError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreatePortfolioShareError::Unknown(String::from(body)),
         }
+        return CreatePortfolioShareError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreatePortfolioShareError {
     fn from(err: serde_json::error::Error) -> CreatePortfolioShareError {
-        CreatePortfolioShareError::Unknown(err.description().to_string())
+        CreatePortfolioShareError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreatePortfolioShareError {
@@ -3406,7 +3423,8 @@ impl Error for CreatePortfolioShareError {
             CreatePortfolioShareError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreatePortfolioShareError::Unknown(ref cause) => cause,
+            CreatePortfolioShareError::ParseError(ref cause) => cause,
+            CreatePortfolioShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3425,47 +3443,47 @@ pub enum CreateProductError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateProductError {
-    pub fn from_body(body: &str) -> CreateProductError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateProductError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        CreateProductError::InvalidParameters(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateProductError::LimitExceeded(String::from(error_message))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        CreateProductError::TagOptionNotMigrated(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateProductError::Validation(error_message.to_string())
-                    }
-                    _ => CreateProductError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return CreateProductError::InvalidParameters(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return CreateProductError::LimitExceeded(String::from(error_message))
+                }
+                "TagOptionNotMigratedException" => {
+                    return CreateProductError::TagOptionNotMigrated(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateProductError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateProductError::Unknown(String::from(body)),
         }
+        return CreateProductError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateProductError {
     fn from(err: serde_json::error::Error) -> CreateProductError {
-        CreateProductError::Unknown(err.description().to_string())
+        CreateProductError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateProductError {
@@ -3497,7 +3515,8 @@ impl Error for CreateProductError {
             CreateProductError::Validation(ref cause) => cause,
             CreateProductError::Credentials(ref err) => err.description(),
             CreateProductError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateProductError::Unknown(ref cause) => cause,
+            CreateProductError::ParseError(ref cause) => cause,
+            CreateProductError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3516,51 +3535,53 @@ pub enum CreateProvisionedProductPlanError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateProvisionedProductPlanError {
-    pub fn from_body(body: &str) -> CreateProvisionedProductPlanError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateProvisionedProductPlanError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        CreateProvisionedProductPlanError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidStateException" => {
-                        CreateProvisionedProductPlanError::InvalidState(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateProvisionedProductPlanError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateProvisionedProductPlanError::Validation(error_message.to_string())
-                    }
-                    _ => CreateProvisionedProductPlanError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return CreateProvisionedProductPlanError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidStateException" => {
+                    return CreateProvisionedProductPlanError::InvalidState(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateProvisionedProductPlanError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateProvisionedProductPlanError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateProvisionedProductPlanError::Unknown(String::from(body)),
         }
+        return CreateProvisionedProductPlanError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateProvisionedProductPlanError {
     fn from(err: serde_json::error::Error) -> CreateProvisionedProductPlanError {
-        CreateProvisionedProductPlanError::Unknown(err.description().to_string())
+        CreateProvisionedProductPlanError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateProvisionedProductPlanError {
@@ -3594,7 +3615,8 @@ impl Error for CreateProvisionedProductPlanError {
             CreateProvisionedProductPlanError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateProvisionedProductPlanError::Unknown(ref cause) => cause,
+            CreateProvisionedProductPlanError::ParseError(ref cause) => cause,
+            CreateProvisionedProductPlanError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3613,51 +3635,53 @@ pub enum CreateProvisioningArtifactError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateProvisioningArtifactError {
-    pub fn from_body(body: &str) -> CreateProvisioningArtifactError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateProvisioningArtifactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        CreateProvisioningArtifactError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        CreateProvisioningArtifactError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateProvisioningArtifactError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateProvisioningArtifactError::Validation(error_message.to_string())
-                    }
-                    _ => CreateProvisioningArtifactError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return CreateProvisioningArtifactError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "LimitExceededException" => {
+                    return CreateProvisioningArtifactError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateProvisioningArtifactError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateProvisioningArtifactError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateProvisioningArtifactError::Unknown(String::from(body)),
         }
+        return CreateProvisioningArtifactError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateProvisioningArtifactError {
     fn from(err: serde_json::error::Error) -> CreateProvisioningArtifactError {
-        CreateProvisioningArtifactError::Unknown(err.description().to_string())
+        CreateProvisioningArtifactError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateProvisioningArtifactError {
@@ -3691,7 +3715,8 @@ impl Error for CreateProvisioningArtifactError {
             CreateProvisioningArtifactError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateProvisioningArtifactError::Unknown(ref cause) => cause,
+            CreateProvisioningArtifactError::ParseError(ref cause) => cause,
+            CreateProvisioningArtifactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3710,47 +3735,47 @@ pub enum CreateTagOptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTagOptionError {
-    pub fn from_body(body: &str) -> CreateTagOptionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTagOptionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateResourceException" => {
-                        CreateTagOptionError::DuplicateResource(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateTagOptionError::LimitExceeded(String::from(error_message))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        CreateTagOptionError::TagOptionNotMigrated(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateTagOptionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateTagOptionError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateResourceException" => {
+                    return CreateTagOptionError::DuplicateResource(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return CreateTagOptionError::LimitExceeded(String::from(error_message))
+                }
+                "TagOptionNotMigratedException" => {
+                    return CreateTagOptionError::TagOptionNotMigrated(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateTagOptionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateTagOptionError::Unknown(String::from(body)),
         }
+        return CreateTagOptionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateTagOptionError {
     fn from(err: serde_json::error::Error) -> CreateTagOptionError {
-        CreateTagOptionError::Unknown(err.description().to_string())
+        CreateTagOptionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateTagOptionError {
@@ -3782,7 +3807,8 @@ impl Error for CreateTagOptionError {
             CreateTagOptionError::Validation(ref cause) => cause,
             CreateTagOptionError::Credentials(ref err) => err.description(),
             CreateTagOptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTagOptionError::Unknown(ref cause) => cause,
+            CreateTagOptionError::ParseError(ref cause) => cause,
+            CreateTagOptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3799,44 +3825,44 @@ pub enum DeleteConstraintError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConstraintError {
-    pub fn from_body(body: &str) -> DeleteConstraintError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteConstraintError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        DeleteConstraintError::InvalidParameters(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteConstraintError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteConstraintError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteConstraintError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return DeleteConstraintError::InvalidParameters(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return DeleteConstraintError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteConstraintError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteConstraintError::Unknown(String::from(body)),
         }
+        return DeleteConstraintError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteConstraintError {
     fn from(err: serde_json::error::Error) -> DeleteConstraintError {
-        DeleteConstraintError::Unknown(err.description().to_string())
+        DeleteConstraintError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteConstraintError {
@@ -3867,7 +3893,8 @@ impl Error for DeleteConstraintError {
             DeleteConstraintError::Validation(ref cause) => cause,
             DeleteConstraintError::Credentials(ref err) => err.description(),
             DeleteConstraintError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteConstraintError::Unknown(ref cause) => cause,
+            DeleteConstraintError::ParseError(ref cause) => cause,
+            DeleteConstraintError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3888,50 +3915,50 @@ pub enum DeletePortfolioError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePortfolioError {
-    pub fn from_body(body: &str) -> DeletePortfolioError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePortfolioError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        DeletePortfolioError::InvalidParameters(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        DeletePortfolioError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeletePortfolioError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        DeletePortfolioError::TagOptionNotMigrated(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeletePortfolioError::Validation(error_message.to_string())
-                    }
-                    _ => DeletePortfolioError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return DeletePortfolioError::InvalidParameters(String::from(error_message))
                 }
+                "ResourceInUseException" => {
+                    return DeletePortfolioError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeletePortfolioError::ResourceNotFound(String::from(error_message))
+                }
+                "TagOptionNotMigratedException" => {
+                    return DeletePortfolioError::TagOptionNotMigrated(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeletePortfolioError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeletePortfolioError::Unknown(String::from(body)),
         }
+        return DeletePortfolioError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeletePortfolioError {
     fn from(err: serde_json::error::Error) -> DeletePortfolioError {
-        DeletePortfolioError::Unknown(err.description().to_string())
+        DeletePortfolioError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeletePortfolioError {
@@ -3964,7 +3991,8 @@ impl Error for DeletePortfolioError {
             DeletePortfolioError::Validation(ref cause) => cause,
             DeletePortfolioError::Credentials(ref err) => err.description(),
             DeletePortfolioError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePortfolioError::Unknown(ref cause) => cause,
+            DeletePortfolioError::ParseError(ref cause) => cause,
+            DeletePortfolioError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3979,41 +4007,41 @@ pub enum DeletePortfolioShareError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePortfolioShareError {
-    pub fn from_body(body: &str) -> DeletePortfolioShareError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePortfolioShareError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        DeletePortfolioShareError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeletePortfolioShareError::Validation(error_message.to_string())
-                    }
-                    _ => DeletePortfolioShareError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DeletePortfolioShareError::ResourceNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeletePortfolioShareError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeletePortfolioShareError::Unknown(String::from(body)),
         }
+        return DeletePortfolioShareError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeletePortfolioShareError {
     fn from(err: serde_json::error::Error) -> DeletePortfolioShareError {
-        DeletePortfolioShareError::Unknown(err.description().to_string())
+        DeletePortfolioShareError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeletePortfolioShareError {
@@ -4045,7 +4073,8 @@ impl Error for DeletePortfolioShareError {
             DeletePortfolioShareError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeletePortfolioShareError::Unknown(ref cause) => cause,
+            DeletePortfolioShareError::ParseError(ref cause) => cause,
+            DeletePortfolioShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4066,50 +4095,50 @@ pub enum DeleteProductError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteProductError {
-    pub fn from_body(body: &str) -> DeleteProductError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteProductError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        DeleteProductError::InvalidParameters(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        DeleteProductError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteProductError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        DeleteProductError::TagOptionNotMigrated(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteProductError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteProductError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return DeleteProductError::InvalidParameters(String::from(error_message))
                 }
+                "ResourceInUseException" => {
+                    return DeleteProductError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteProductError::ResourceNotFound(String::from(error_message))
+                }
+                "TagOptionNotMigratedException" => {
+                    return DeleteProductError::TagOptionNotMigrated(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteProductError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteProductError::Unknown(String::from(body)),
         }
+        return DeleteProductError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteProductError {
     fn from(err: serde_json::error::Error) -> DeleteProductError {
-        DeleteProductError::Unknown(err.description().to_string())
+        DeleteProductError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteProductError {
@@ -4142,7 +4171,8 @@ impl Error for DeleteProductError {
             DeleteProductError::Validation(ref cause) => cause,
             DeleteProductError::Credentials(ref err) => err.description(),
             DeleteProductError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteProductError::Unknown(ref cause) => cause,
+            DeleteProductError::ParseError(ref cause) => cause,
+            DeleteProductError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4159,48 +4189,48 @@ pub enum DeleteProvisionedProductPlanError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteProvisionedProductPlanError {
-    pub fn from_body(body: &str) -> DeleteProvisionedProductPlanError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteProvisionedProductPlanError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        DeleteProvisionedProductPlanError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteProvisionedProductPlanError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteProvisionedProductPlanError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteProvisionedProductPlanError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return DeleteProvisionedProductPlanError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return DeleteProvisionedProductPlanError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteProvisionedProductPlanError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteProvisionedProductPlanError::Unknown(String::from(body)),
         }
+        return DeleteProvisionedProductPlanError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteProvisionedProductPlanError {
     fn from(err: serde_json::error::Error) -> DeleteProvisionedProductPlanError {
-        DeleteProvisionedProductPlanError::Unknown(err.description().to_string())
+        DeleteProvisionedProductPlanError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteProvisionedProductPlanError {
@@ -4233,7 +4263,8 @@ impl Error for DeleteProvisionedProductPlanError {
             DeleteProvisionedProductPlanError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteProvisionedProductPlanError::Unknown(ref cause) => cause,
+            DeleteProvisionedProductPlanError::ParseError(ref cause) => cause,
+            DeleteProvisionedProductPlanError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4252,51 +4283,53 @@ pub enum DeleteProvisioningArtifactError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteProvisioningArtifactError {
-    pub fn from_body(body: &str) -> DeleteProvisioningArtifactError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteProvisioningArtifactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        DeleteProvisioningArtifactError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceInUseException" => {
-                        DeleteProvisioningArtifactError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteProvisioningArtifactError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteProvisioningArtifactError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteProvisioningArtifactError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return DeleteProvisioningArtifactError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceInUseException" => {
+                    return DeleteProvisioningArtifactError::ResourceInUse(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteProvisioningArtifactError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteProvisioningArtifactError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteProvisioningArtifactError::Unknown(String::from(body)),
         }
+        return DeleteProvisioningArtifactError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteProvisioningArtifactError {
     fn from(err: serde_json::error::Error) -> DeleteProvisioningArtifactError {
-        DeleteProvisioningArtifactError::Unknown(err.description().to_string())
+        DeleteProvisioningArtifactError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteProvisioningArtifactError {
@@ -4330,7 +4363,8 @@ impl Error for DeleteProvisioningArtifactError {
             DeleteProvisioningArtifactError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteProvisioningArtifactError::Unknown(ref cause) => cause,
+            DeleteProvisioningArtifactError::ParseError(ref cause) => cause,
+            DeleteProvisioningArtifactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4349,47 +4383,47 @@ pub enum DeleteTagOptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTagOptionError {
-    pub fn from_body(body: &str) -> DeleteTagOptionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagOptionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceInUseException" => {
-                        DeleteTagOptionError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteTagOptionError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        DeleteTagOptionError::TagOptionNotMigrated(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteTagOptionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteTagOptionError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceInUseException" => {
+                    return DeleteTagOptionError::ResourceInUse(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return DeleteTagOptionError::ResourceNotFound(String::from(error_message))
+                }
+                "TagOptionNotMigratedException" => {
+                    return DeleteTagOptionError::TagOptionNotMigrated(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteTagOptionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteTagOptionError::Unknown(String::from(body)),
         }
+        return DeleteTagOptionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteTagOptionError {
     fn from(err: serde_json::error::Error) -> DeleteTagOptionError {
-        DeleteTagOptionError::Unknown(err.description().to_string())
+        DeleteTagOptionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteTagOptionError {
@@ -4421,7 +4455,8 @@ impl Error for DeleteTagOptionError {
             DeleteTagOptionError::Validation(ref cause) => cause,
             DeleteTagOptionError::Credentials(ref err) => err.description(),
             DeleteTagOptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTagOptionError::Unknown(ref cause) => cause,
+            DeleteTagOptionError::ParseError(ref cause) => cause,
+            DeleteTagOptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4436,41 +4471,41 @@ pub enum DescribeConstraintError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConstraintError {
-    pub fn from_body(body: &str) -> DescribeConstraintError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConstraintError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        DescribeConstraintError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeConstraintError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeConstraintError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DescribeConstraintError::ResourceNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DescribeConstraintError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeConstraintError::Unknown(String::from(body)),
         }
+        return DescribeConstraintError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConstraintError {
     fn from(err: serde_json::error::Error) -> DescribeConstraintError {
-        DescribeConstraintError::Unknown(err.description().to_string())
+        DescribeConstraintError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConstraintError {
@@ -4502,7 +4537,8 @@ impl Error for DescribeConstraintError {
             DescribeConstraintError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConstraintError::Unknown(ref cause) => cause,
+            DescribeConstraintError::ParseError(ref cause) => cause,
+            DescribeConstraintError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4517,43 +4553,43 @@ pub enum DescribeCopyProductStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCopyProductStatusError {
-    pub fn from_body(body: &str) -> DescribeCopyProductStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeCopyProductStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        DescribeCopyProductStatusError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeCopyProductStatusError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeCopyProductStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DescribeCopyProductStatusError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DescribeCopyProductStatusError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeCopyProductStatusError::Unknown(String::from(body)),
         }
+        return DescribeCopyProductStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeCopyProductStatusError {
     fn from(err: serde_json::error::Error) -> DescribeCopyProductStatusError {
-        DescribeCopyProductStatusError::Unknown(err.description().to_string())
+        DescribeCopyProductStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeCopyProductStatusError {
@@ -4585,7 +4621,8 @@ impl Error for DescribeCopyProductStatusError {
             DescribeCopyProductStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeCopyProductStatusError::Unknown(ref cause) => cause,
+            DescribeCopyProductStatusError::ParseError(ref cause) => cause,
+            DescribeCopyProductStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4600,41 +4637,41 @@ pub enum DescribePortfolioError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribePortfolioError {
-    pub fn from_body(body: &str) -> DescribePortfolioError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribePortfolioError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        DescribePortfolioError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribePortfolioError::Validation(error_message.to_string())
-                    }
-                    _ => DescribePortfolioError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DescribePortfolioError::ResourceNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DescribePortfolioError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribePortfolioError::Unknown(String::from(body)),
         }
+        return DescribePortfolioError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribePortfolioError {
     fn from(err: serde_json::error::Error) -> DescribePortfolioError {
-        DescribePortfolioError::Unknown(err.description().to_string())
+        DescribePortfolioError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribePortfolioError {
@@ -4666,7 +4703,8 @@ impl Error for DescribePortfolioError {
             DescribePortfolioError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribePortfolioError::Unknown(ref cause) => cause,
+            DescribePortfolioError::ParseError(ref cause) => cause,
+            DescribePortfolioError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4683,44 +4721,44 @@ pub enum DescribeProductError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeProductError {
-    pub fn from_body(body: &str) -> DescribeProductError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeProductError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        DescribeProductError::InvalidParameters(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeProductError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeProductError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeProductError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return DescribeProductError::InvalidParameters(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return DescribeProductError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeProductError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeProductError::Unknown(String::from(body)),
         }
+        return DescribeProductError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeProductError {
     fn from(err: serde_json::error::Error) -> DescribeProductError {
-        DescribeProductError::Unknown(err.description().to_string())
+        DescribeProductError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeProductError {
@@ -4751,7 +4789,8 @@ impl Error for DescribeProductError {
             DescribeProductError::Validation(ref cause) => cause,
             DescribeProductError::Credentials(ref err) => err.description(),
             DescribeProductError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeProductError::Unknown(ref cause) => cause,
+            DescribeProductError::ParseError(ref cause) => cause,
+            DescribeProductError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4766,41 +4805,43 @@ pub enum DescribeProductAsAdminError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeProductAsAdminError {
-    pub fn from_body(body: &str) -> DescribeProductAsAdminError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeProductAsAdminError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        DescribeProductAsAdminError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeProductAsAdminError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeProductAsAdminError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DescribeProductAsAdminError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DescribeProductAsAdminError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeProductAsAdminError::Unknown(String::from(body)),
         }
+        return DescribeProductAsAdminError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeProductAsAdminError {
     fn from(err: serde_json::error::Error) -> DescribeProductAsAdminError {
-        DescribeProductAsAdminError::Unknown(err.description().to_string())
+        DescribeProductAsAdminError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeProductAsAdminError {
@@ -4832,7 +4873,8 @@ impl Error for DescribeProductAsAdminError {
             DescribeProductAsAdminError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeProductAsAdminError::Unknown(ref cause) => cause,
+            DescribeProductAsAdminError::ParseError(ref cause) => cause,
+            DescribeProductAsAdminError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4849,44 +4891,44 @@ pub enum DescribeProductViewError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeProductViewError {
-    pub fn from_body(body: &str) -> DescribeProductViewError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeProductViewError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        DescribeProductViewError::InvalidParameters(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeProductViewError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeProductViewError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeProductViewError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return DescribeProductViewError::InvalidParameters(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return DescribeProductViewError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeProductViewError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeProductViewError::Unknown(String::from(body)),
         }
+        return DescribeProductViewError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeProductViewError {
     fn from(err: serde_json::error::Error) -> DescribeProductViewError {
-        DescribeProductViewError::Unknown(err.description().to_string())
+        DescribeProductViewError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeProductViewError {
@@ -4919,7 +4961,8 @@ impl Error for DescribeProductViewError {
             DescribeProductViewError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeProductViewError::Unknown(ref cause) => cause,
+            DescribeProductViewError::ParseError(ref cause) => cause,
+            DescribeProductViewError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4934,43 +4977,43 @@ pub enum DescribeProvisionedProductError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeProvisionedProductError {
-    pub fn from_body(body: &str) -> DescribeProvisionedProductError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeProvisionedProductError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        DescribeProvisionedProductError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeProvisionedProductError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeProvisionedProductError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DescribeProvisionedProductError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DescribeProvisionedProductError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeProvisionedProductError::Unknown(String::from(body)),
         }
+        return DescribeProvisionedProductError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeProvisionedProductError {
     fn from(err: serde_json::error::Error) -> DescribeProvisionedProductError {
-        DescribeProvisionedProductError::Unknown(err.description().to_string())
+        DescribeProvisionedProductError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeProvisionedProductError {
@@ -5002,7 +5045,8 @@ impl Error for DescribeProvisionedProductError {
             DescribeProvisionedProductError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeProvisionedProductError::Unknown(ref cause) => cause,
+            DescribeProvisionedProductError::ParseError(ref cause) => cause,
+            DescribeProvisionedProductError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5019,48 +5063,50 @@ pub enum DescribeProvisionedProductPlanError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeProvisionedProductPlanError {
-    pub fn from_body(body: &str) -> DescribeProvisionedProductPlanError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeProvisionedProductPlanError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        DescribeProvisionedProductPlanError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeProvisionedProductPlanError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeProvisionedProductPlanError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeProvisionedProductPlanError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return DescribeProvisionedProductPlanError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return DescribeProvisionedProductPlanError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeProvisionedProductPlanError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeProvisionedProductPlanError::Unknown(String::from(body)),
         }
+        return DescribeProvisionedProductPlanError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeProvisionedProductPlanError {
     fn from(err: serde_json::error::Error) -> DescribeProvisionedProductPlanError {
-        DescribeProvisionedProductPlanError::Unknown(err.description().to_string())
+        DescribeProvisionedProductPlanError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeProvisionedProductPlanError {
@@ -5093,7 +5139,8 @@ impl Error for DescribeProvisionedProductPlanError {
             DescribeProvisionedProductPlanError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeProvisionedProductPlanError::Unknown(ref cause) => cause,
+            DescribeProvisionedProductPlanError::ParseError(ref cause) => cause,
+            DescribeProvisionedProductPlanError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5108,43 +5155,43 @@ pub enum DescribeProvisioningArtifactError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeProvisioningArtifactError {
-    pub fn from_body(body: &str) -> DescribeProvisioningArtifactError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeProvisioningArtifactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        DescribeProvisioningArtifactError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeProvisioningArtifactError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeProvisioningArtifactError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DescribeProvisioningArtifactError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DescribeProvisioningArtifactError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeProvisioningArtifactError::Unknown(String::from(body)),
         }
+        return DescribeProvisioningArtifactError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeProvisioningArtifactError {
     fn from(err: serde_json::error::Error) -> DescribeProvisioningArtifactError {
-        DescribeProvisioningArtifactError::Unknown(err.description().to_string())
+        DescribeProvisioningArtifactError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeProvisioningArtifactError {
@@ -5176,7 +5223,8 @@ impl Error for DescribeProvisioningArtifactError {
             DescribeProvisioningArtifactError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeProvisioningArtifactError::Unknown(ref cause) => cause,
+            DescribeProvisioningArtifactError::ParseError(ref cause) => cause,
+            DescribeProvisioningArtifactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5193,48 +5241,50 @@ pub enum DescribeProvisioningParametersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeProvisioningParametersError {
-    pub fn from_body(body: &str) -> DescribeProvisioningParametersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeProvisioningParametersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        DescribeProvisioningParametersError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeProvisioningParametersError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeProvisioningParametersError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeProvisioningParametersError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return DescribeProvisioningParametersError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return DescribeProvisioningParametersError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeProvisioningParametersError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeProvisioningParametersError::Unknown(String::from(body)),
         }
+        return DescribeProvisioningParametersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeProvisioningParametersError {
     fn from(err: serde_json::error::Error) -> DescribeProvisioningParametersError {
-        DescribeProvisioningParametersError::Unknown(err.description().to_string())
+        DescribeProvisioningParametersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeProvisioningParametersError {
@@ -5267,7 +5317,8 @@ impl Error for DescribeProvisioningParametersError {
             DescribeProvisioningParametersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeProvisioningParametersError::Unknown(ref cause) => cause,
+            DescribeProvisioningParametersError::ParseError(ref cause) => cause,
+            DescribeProvisioningParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5282,41 +5333,41 @@ pub enum DescribeRecordError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeRecordError {
-    pub fn from_body(body: &str) -> DescribeRecordError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeRecordError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        DescribeRecordError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeRecordError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeRecordError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DescribeRecordError::ResourceNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DescribeRecordError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeRecordError::Unknown(String::from(body)),
         }
+        return DescribeRecordError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeRecordError {
     fn from(err: serde_json::error::Error) -> DescribeRecordError {
-        DescribeRecordError::Unknown(err.description().to_string())
+        DescribeRecordError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeRecordError {
@@ -5346,7 +5397,8 @@ impl Error for DescribeRecordError {
             DescribeRecordError::Validation(ref cause) => cause,
             DescribeRecordError::Credentials(ref err) => err.description(),
             DescribeRecordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeRecordError::Unknown(ref cause) => cause,
+            DescribeRecordError::ParseError(ref cause) => cause,
+            DescribeRecordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5363,44 +5415,44 @@ pub enum DescribeTagOptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagOptionError {
-    pub fn from_body(body: &str) -> DescribeTagOptionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagOptionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        DescribeTagOptionError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        DescribeTagOptionError::TagOptionNotMigrated(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeTagOptionError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTagOptionError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DescribeTagOptionError::ResourceNotFound(String::from(error_message))
                 }
+                "TagOptionNotMigratedException" => {
+                    return DescribeTagOptionError::TagOptionNotMigrated(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeTagOptionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTagOptionError::Unknown(String::from(body)),
         }
+        return DescribeTagOptionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTagOptionError {
     fn from(err: serde_json::error::Error) -> DescribeTagOptionError {
-        DescribeTagOptionError::Unknown(err.description().to_string())
+        DescribeTagOptionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTagOptionError {
@@ -5433,7 +5485,8 @@ impl Error for DescribeTagOptionError {
             DescribeTagOptionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeTagOptionError::Unknown(ref cause) => cause,
+            DescribeTagOptionError::ParseError(ref cause) => cause,
+            DescribeTagOptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5450,48 +5503,50 @@ pub enum DisassociatePrincipalFromPortfolioError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociatePrincipalFromPortfolioError {
-    pub fn from_body(body: &str) -> DisassociatePrincipalFromPortfolioError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociatePrincipalFromPortfolioError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        DisassociatePrincipalFromPortfolioError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DisassociatePrincipalFromPortfolioError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => DisassociatePrincipalFromPortfolioError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DisassociatePrincipalFromPortfolioError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return DisassociatePrincipalFromPortfolioError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return DisassociatePrincipalFromPortfolioError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DisassociatePrincipalFromPortfolioError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DisassociatePrincipalFromPortfolioError::Unknown(String::from(body)),
         }
+        return DisassociatePrincipalFromPortfolioError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociatePrincipalFromPortfolioError {
     fn from(err: serde_json::error::Error) -> DisassociatePrincipalFromPortfolioError {
-        DisassociatePrincipalFromPortfolioError::Unknown(err.description().to_string())
+        DisassociatePrincipalFromPortfolioError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociatePrincipalFromPortfolioError {
@@ -5524,7 +5579,8 @@ impl Error for DisassociatePrincipalFromPortfolioError {
             DisassociatePrincipalFromPortfolioError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociatePrincipalFromPortfolioError::Unknown(ref cause) => cause,
+            DisassociatePrincipalFromPortfolioError::ParseError(ref cause) => cause,
+            DisassociatePrincipalFromPortfolioError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5543,53 +5599,55 @@ pub enum DisassociateProductFromPortfolioError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateProductFromPortfolioError {
-    pub fn from_body(body: &str) -> DisassociateProductFromPortfolioError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateProductFromPortfolioError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        DisassociateProductFromPortfolioError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceInUseException" => {
-                        DisassociateProductFromPortfolioError::ResourceInUse(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DisassociateProductFromPortfolioError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DisassociateProductFromPortfolioError::Validation(error_message.to_string())
-                    }
-                    _ => DisassociateProductFromPortfolioError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return DisassociateProductFromPortfolioError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceInUseException" => {
+                    return DisassociateProductFromPortfolioError::ResourceInUse(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DisassociateProductFromPortfolioError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DisassociateProductFromPortfolioError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DisassociateProductFromPortfolioError::Unknown(String::from(body)),
         }
+        return DisassociateProductFromPortfolioError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateProductFromPortfolioError {
     fn from(err: serde_json::error::Error) -> DisassociateProductFromPortfolioError {
-        DisassociateProductFromPortfolioError::Unknown(err.description().to_string())
+        DisassociateProductFromPortfolioError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateProductFromPortfolioError {
@@ -5623,7 +5681,8 @@ impl Error for DisassociateProductFromPortfolioError {
             DisassociateProductFromPortfolioError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateProductFromPortfolioError::Unknown(ref cause) => cause,
+            DisassociateProductFromPortfolioError::ParseError(ref cause) => cause,
+            DisassociateProductFromPortfolioError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5640,48 +5699,50 @@ pub enum DisassociateTagOptionFromResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateTagOptionFromResourceError {
-    pub fn from_body(body: &str) -> DisassociateTagOptionFromResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateTagOptionFromResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        DisassociateTagOptionFromResourceError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        DisassociateTagOptionFromResourceError::TagOptionNotMigrated(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => DisassociateTagOptionFromResourceError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DisassociateTagOptionFromResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DisassociateTagOptionFromResourceError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "TagOptionNotMigratedException" => {
+                    return DisassociateTagOptionFromResourceError::TagOptionNotMigrated(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DisassociateTagOptionFromResourceError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DisassociateTagOptionFromResourceError::Unknown(String::from(body)),
         }
+        return DisassociateTagOptionFromResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateTagOptionFromResourceError {
     fn from(err: serde_json::error::Error) -> DisassociateTagOptionFromResourceError {
-        DisassociateTagOptionFromResourceError::Unknown(err.description().to_string())
+        DisassociateTagOptionFromResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateTagOptionFromResourceError {
@@ -5714,7 +5775,8 @@ impl Error for DisassociateTagOptionFromResourceError {
             DisassociateTagOptionFromResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateTagOptionFromResourceError::Unknown(ref cause) => cause,
+            DisassociateTagOptionFromResourceError::ParseError(ref cause) => cause,
+            DisassociateTagOptionFromResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5733,51 +5795,53 @@ pub enum ExecuteProvisionedProductPlanError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ExecuteProvisionedProductPlanError {
-    pub fn from_body(body: &str) -> ExecuteProvisionedProductPlanError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ExecuteProvisionedProductPlanError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ExecuteProvisionedProductPlanError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidStateException" => ExecuteProvisionedProductPlanError::InvalidState(
-                        String::from(error_message),
-                    ),
-                    "ResourceNotFoundException" => {
-                        ExecuteProvisionedProductPlanError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ExecuteProvisionedProductPlanError::Validation(error_message.to_string())
-                    }
-                    _ => ExecuteProvisionedProductPlanError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ExecuteProvisionedProductPlanError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidStateException" => {
+                    return ExecuteProvisionedProductPlanError::InvalidState(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return ExecuteProvisionedProductPlanError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ExecuteProvisionedProductPlanError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ExecuteProvisionedProductPlanError::Unknown(String::from(body)),
         }
+        return ExecuteProvisionedProductPlanError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ExecuteProvisionedProductPlanError {
     fn from(err: serde_json::error::Error) -> ExecuteProvisionedProductPlanError {
-        ExecuteProvisionedProductPlanError::Unknown(err.description().to_string())
+        ExecuteProvisionedProductPlanError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ExecuteProvisionedProductPlanError {
@@ -5811,7 +5875,8 @@ impl Error for ExecuteProvisionedProductPlanError {
             ExecuteProvisionedProductPlanError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ExecuteProvisionedProductPlanError::Unknown(ref cause) => cause,
+            ExecuteProvisionedProductPlanError::ParseError(ref cause) => cause,
+            ExecuteProvisionedProductPlanError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5826,43 +5891,43 @@ pub enum ListAcceptedPortfolioSharesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAcceptedPortfolioSharesError {
-    pub fn from_body(body: &str) -> ListAcceptedPortfolioSharesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListAcceptedPortfolioSharesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ListAcceptedPortfolioSharesError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListAcceptedPortfolioSharesError::Validation(error_message.to_string())
-                    }
-                    _ => ListAcceptedPortfolioSharesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListAcceptedPortfolioSharesError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return ListAcceptedPortfolioSharesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListAcceptedPortfolioSharesError::Unknown(String::from(body)),
         }
+        return ListAcceptedPortfolioSharesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListAcceptedPortfolioSharesError {
     fn from(err: serde_json::error::Error) -> ListAcceptedPortfolioSharesError {
-        ListAcceptedPortfolioSharesError::Unknown(err.description().to_string())
+        ListAcceptedPortfolioSharesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListAcceptedPortfolioSharesError {
@@ -5894,7 +5959,8 @@ impl Error for ListAcceptedPortfolioSharesError {
             ListAcceptedPortfolioSharesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListAcceptedPortfolioSharesError::Unknown(ref cause) => cause,
+            ListAcceptedPortfolioSharesError::ParseError(ref cause) => cause,
+            ListAcceptedPortfolioSharesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5911,48 +5977,48 @@ pub enum ListConstraintsForPortfolioError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListConstraintsForPortfolioError {
-    pub fn from_body(body: &str) -> ListConstraintsForPortfolioError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListConstraintsForPortfolioError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ListConstraintsForPortfolioError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListConstraintsForPortfolioError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListConstraintsForPortfolioError::Validation(error_message.to_string())
-                    }
-                    _ => ListConstraintsForPortfolioError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListConstraintsForPortfolioError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return ListConstraintsForPortfolioError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListConstraintsForPortfolioError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListConstraintsForPortfolioError::Unknown(String::from(body)),
         }
+        return ListConstraintsForPortfolioError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListConstraintsForPortfolioError {
     fn from(err: serde_json::error::Error) -> ListConstraintsForPortfolioError {
-        ListConstraintsForPortfolioError::Unknown(err.description().to_string())
+        ListConstraintsForPortfolioError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListConstraintsForPortfolioError {
@@ -5985,7 +6051,8 @@ impl Error for ListConstraintsForPortfolioError {
             ListConstraintsForPortfolioError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListConstraintsForPortfolioError::Unknown(ref cause) => cause,
+            ListConstraintsForPortfolioError::ParseError(ref cause) => cause,
+            ListConstraintsForPortfolioError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6002,44 +6069,44 @@ pub enum ListLaunchPathsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListLaunchPathsError {
-    pub fn from_body(body: &str) -> ListLaunchPathsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListLaunchPathsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ListLaunchPathsError::InvalidParameters(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListLaunchPathsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListLaunchPathsError::Validation(error_message.to_string())
-                    }
-                    _ => ListLaunchPathsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListLaunchPathsError::InvalidParameters(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return ListLaunchPathsError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListLaunchPathsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListLaunchPathsError::Unknown(String::from(body)),
         }
+        return ListLaunchPathsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListLaunchPathsError {
     fn from(err: serde_json::error::Error) -> ListLaunchPathsError {
-        ListLaunchPathsError::Unknown(err.description().to_string())
+        ListLaunchPathsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListLaunchPathsError {
@@ -6070,7 +6137,8 @@ impl Error for ListLaunchPathsError {
             ListLaunchPathsError::Validation(ref cause) => cause,
             ListLaunchPathsError::Credentials(ref err) => err.description(),
             ListLaunchPathsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListLaunchPathsError::Unknown(ref cause) => cause,
+            ListLaunchPathsError::ParseError(ref cause) => cause,
+            ListLaunchPathsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6085,41 +6153,41 @@ pub enum ListPortfolioAccessError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPortfolioAccessError {
-    pub fn from_body(body: &str) -> ListPortfolioAccessError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListPortfolioAccessError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        ListPortfolioAccessError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListPortfolioAccessError::Validation(error_message.to_string())
-                    }
-                    _ => ListPortfolioAccessError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return ListPortfolioAccessError::ResourceNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListPortfolioAccessError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListPortfolioAccessError::Unknown(String::from(body)),
         }
+        return ListPortfolioAccessError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPortfolioAccessError {
     fn from(err: serde_json::error::Error) -> ListPortfolioAccessError {
-        ListPortfolioAccessError::Unknown(err.description().to_string())
+        ListPortfolioAccessError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPortfolioAccessError {
@@ -6151,7 +6219,8 @@ impl Error for ListPortfolioAccessError {
             ListPortfolioAccessError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListPortfolioAccessError::Unknown(ref cause) => cause,
+            ListPortfolioAccessError::ParseError(ref cause) => cause,
+            ListPortfolioAccessError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6166,41 +6235,41 @@ pub enum ListPortfoliosError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPortfoliosError {
-    pub fn from_body(body: &str) -> ListPortfoliosError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListPortfoliosError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ListPortfoliosError::InvalidParameters(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListPortfoliosError::Validation(error_message.to_string())
-                    }
-                    _ => ListPortfoliosError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListPortfoliosError::InvalidParameters(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListPortfoliosError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListPortfoliosError::Unknown(String::from(body)),
         }
+        return ListPortfoliosError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPortfoliosError {
     fn from(err: serde_json::error::Error) -> ListPortfoliosError {
-        ListPortfoliosError::Unknown(err.description().to_string())
+        ListPortfoliosError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPortfoliosError {
@@ -6230,7 +6299,8 @@ impl Error for ListPortfoliosError {
             ListPortfoliosError::Validation(ref cause) => cause,
             ListPortfoliosError::Credentials(ref err) => err.description(),
             ListPortfoliosError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPortfoliosError::Unknown(ref cause) => cause,
+            ListPortfoliosError::ParseError(ref cause) => cause,
+            ListPortfoliosError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6247,46 +6317,48 @@ pub enum ListPortfoliosForProductError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPortfoliosForProductError {
-    pub fn from_body(body: &str) -> ListPortfoliosForProductError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListPortfoliosForProductError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ListPortfoliosForProductError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListPortfoliosForProductError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListPortfoliosForProductError::Validation(error_message.to_string())
-                    }
-                    _ => ListPortfoliosForProductError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListPortfoliosForProductError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return ListPortfoliosForProductError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListPortfoliosForProductError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListPortfoliosForProductError::Unknown(String::from(body)),
         }
+        return ListPortfoliosForProductError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPortfoliosForProductError {
     fn from(err: serde_json::error::Error) -> ListPortfoliosForProductError {
-        ListPortfoliosForProductError::Unknown(err.description().to_string())
+        ListPortfoliosForProductError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPortfoliosForProductError {
@@ -6319,7 +6391,8 @@ impl Error for ListPortfoliosForProductError {
             ListPortfoliosForProductError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListPortfoliosForProductError::Unknown(ref cause) => cause,
+            ListPortfoliosForProductError::ParseError(ref cause) => cause,
+            ListPortfoliosForProductError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6336,48 +6409,48 @@ pub enum ListPrincipalsForPortfolioError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPrincipalsForPortfolioError {
-    pub fn from_body(body: &str) -> ListPrincipalsForPortfolioError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListPrincipalsForPortfolioError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ListPrincipalsForPortfolioError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListPrincipalsForPortfolioError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListPrincipalsForPortfolioError::Validation(error_message.to_string())
-                    }
-                    _ => ListPrincipalsForPortfolioError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListPrincipalsForPortfolioError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return ListPrincipalsForPortfolioError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListPrincipalsForPortfolioError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListPrincipalsForPortfolioError::Unknown(String::from(body)),
         }
+        return ListPrincipalsForPortfolioError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPrincipalsForPortfolioError {
     fn from(err: serde_json::error::Error) -> ListPrincipalsForPortfolioError {
-        ListPrincipalsForPortfolioError::Unknown(err.description().to_string())
+        ListPrincipalsForPortfolioError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPrincipalsForPortfolioError {
@@ -6410,7 +6483,8 @@ impl Error for ListPrincipalsForPortfolioError {
             ListPrincipalsForPortfolioError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListPrincipalsForPortfolioError::Unknown(ref cause) => cause,
+            ListPrincipalsForPortfolioError::ParseError(ref cause) => cause,
+            ListPrincipalsForPortfolioError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6427,48 +6501,48 @@ pub enum ListProvisionedProductPlansError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListProvisionedProductPlansError {
-    pub fn from_body(body: &str) -> ListProvisionedProductPlansError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListProvisionedProductPlansError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ListProvisionedProductPlansError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListProvisionedProductPlansError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListProvisionedProductPlansError::Validation(error_message.to_string())
-                    }
-                    _ => ListProvisionedProductPlansError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListProvisionedProductPlansError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return ListProvisionedProductPlansError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListProvisionedProductPlansError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListProvisionedProductPlansError::Unknown(String::from(body)),
         }
+        return ListProvisionedProductPlansError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListProvisionedProductPlansError {
     fn from(err: serde_json::error::Error) -> ListProvisionedProductPlansError {
-        ListProvisionedProductPlansError::Unknown(err.description().to_string())
+        ListProvisionedProductPlansError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListProvisionedProductPlansError {
@@ -6501,7 +6575,8 @@ impl Error for ListProvisionedProductPlansError {
             ListProvisionedProductPlansError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListProvisionedProductPlansError::Unknown(ref cause) => cause,
+            ListProvisionedProductPlansError::ParseError(ref cause) => cause,
+            ListProvisionedProductPlansError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6518,48 +6593,48 @@ pub enum ListProvisioningArtifactsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListProvisioningArtifactsError {
-    pub fn from_body(body: &str) -> ListProvisioningArtifactsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListProvisioningArtifactsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ListProvisioningArtifactsError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListProvisioningArtifactsError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListProvisioningArtifactsError::Validation(error_message.to_string())
-                    }
-                    _ => ListProvisioningArtifactsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListProvisioningArtifactsError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return ListProvisioningArtifactsError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListProvisioningArtifactsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListProvisioningArtifactsError::Unknown(String::from(body)),
         }
+        return ListProvisioningArtifactsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListProvisioningArtifactsError {
     fn from(err: serde_json::error::Error) -> ListProvisioningArtifactsError {
-        ListProvisioningArtifactsError::Unknown(err.description().to_string())
+        ListProvisioningArtifactsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListProvisioningArtifactsError {
@@ -6592,7 +6667,8 @@ impl Error for ListProvisioningArtifactsError {
             ListProvisioningArtifactsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListProvisioningArtifactsError::Unknown(ref cause) => cause,
+            ListProvisioningArtifactsError::ParseError(ref cause) => cause,
+            ListProvisioningArtifactsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6607,41 +6683,41 @@ pub enum ListRecordHistoryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListRecordHistoryError {
-    pub fn from_body(body: &str) -> ListRecordHistoryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListRecordHistoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ListRecordHistoryError::InvalidParameters(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListRecordHistoryError::Validation(error_message.to_string())
-                    }
-                    _ => ListRecordHistoryError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListRecordHistoryError::InvalidParameters(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListRecordHistoryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListRecordHistoryError::Unknown(String::from(body)),
         }
+        return ListRecordHistoryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListRecordHistoryError {
     fn from(err: serde_json::error::Error) -> ListRecordHistoryError {
-        ListRecordHistoryError::Unknown(err.description().to_string())
+        ListRecordHistoryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListRecordHistoryError {
@@ -6673,7 +6749,8 @@ impl Error for ListRecordHistoryError {
             ListRecordHistoryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListRecordHistoryError::Unknown(ref cause) => cause,
+            ListRecordHistoryError::ParseError(ref cause) => cause,
+            ListRecordHistoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6692,53 +6769,53 @@ pub enum ListResourcesForTagOptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourcesForTagOptionError {
-    pub fn from_body(body: &str) -> ListResourcesForTagOptionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListResourcesForTagOptionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ListResourcesForTagOptionError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListResourcesForTagOptionError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        ListResourcesForTagOptionError::TagOptionNotMigrated(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListResourcesForTagOptionError::Validation(error_message.to_string())
-                    }
-                    _ => ListResourcesForTagOptionError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListResourcesForTagOptionError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return ListResourcesForTagOptionError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TagOptionNotMigratedException" => {
+                    return ListResourcesForTagOptionError::TagOptionNotMigrated(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListResourcesForTagOptionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListResourcesForTagOptionError::Unknown(String::from(body)),
         }
+        return ListResourcesForTagOptionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListResourcesForTagOptionError {
     fn from(err: serde_json::error::Error) -> ListResourcesForTagOptionError {
-        ListResourcesForTagOptionError::Unknown(err.description().to_string())
+        ListResourcesForTagOptionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListResourcesForTagOptionError {
@@ -6772,7 +6849,8 @@ impl Error for ListResourcesForTagOptionError {
             ListResourcesForTagOptionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListResourcesForTagOptionError::Unknown(ref cause) => cause,
+            ListResourcesForTagOptionError::ParseError(ref cause) => cause,
+            ListResourcesForTagOptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6789,44 +6867,44 @@ pub enum ListTagOptionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagOptionsError {
-    pub fn from_body(body: &str) -> ListTagOptionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagOptionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ListTagOptionsError::InvalidParameters(String::from(error_message))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        ListTagOptionsError::TagOptionNotMigrated(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTagOptionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListTagOptionsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListTagOptionsError::InvalidParameters(String::from(error_message))
                 }
+                "TagOptionNotMigratedException" => {
+                    return ListTagOptionsError::TagOptionNotMigrated(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTagOptionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTagOptionsError::Unknown(String::from(body)),
         }
+        return ListTagOptionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTagOptionsError {
     fn from(err: serde_json::error::Error) -> ListTagOptionsError {
-        ListTagOptionsError::Unknown(err.description().to_string())
+        ListTagOptionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTagOptionsError {
@@ -6857,7 +6935,8 @@ impl Error for ListTagOptionsError {
             ListTagOptionsError::Validation(ref cause) => cause,
             ListTagOptionsError::Credentials(ref err) => err.description(),
             ListTagOptionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTagOptionsError::Unknown(ref cause) => cause,
+            ListTagOptionsError::ParseError(ref cause) => cause,
+            ListTagOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6876,47 +6955,47 @@ pub enum ProvisionProductError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ProvisionProductError {
-    pub fn from_body(body: &str) -> ProvisionProductError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ProvisionProductError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateResourceException" => {
-                        ProvisionProductError::DuplicateResource(String::from(error_message))
-                    }
-                    "InvalidParametersException" => {
-                        ProvisionProductError::InvalidParameters(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ProvisionProductError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ProvisionProductError::Validation(error_message.to_string())
-                    }
-                    _ => ProvisionProductError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateResourceException" => {
+                    return ProvisionProductError::DuplicateResource(String::from(error_message))
                 }
+                "InvalidParametersException" => {
+                    return ProvisionProductError::InvalidParameters(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ProvisionProductError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ProvisionProductError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ProvisionProductError::Unknown(String::from(body)),
         }
+        return ProvisionProductError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ProvisionProductError {
     fn from(err: serde_json::error::Error) -> ProvisionProductError {
-        ProvisionProductError::Unknown(err.description().to_string())
+        ProvisionProductError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ProvisionProductError {
@@ -6948,7 +7027,8 @@ impl Error for ProvisionProductError {
             ProvisionProductError::Validation(ref cause) => cause,
             ProvisionProductError::Credentials(ref err) => err.description(),
             ProvisionProductError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ProvisionProductError::Unknown(ref cause) => cause,
+            ProvisionProductError::ParseError(ref cause) => cause,
+            ProvisionProductError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6963,41 +7043,41 @@ pub enum RejectPortfolioShareError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RejectPortfolioShareError {
-    pub fn from_body(body: &str) -> RejectPortfolioShareError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RejectPortfolioShareError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        RejectPortfolioShareError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RejectPortfolioShareError::Validation(error_message.to_string())
-                    }
-                    _ => RejectPortfolioShareError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return RejectPortfolioShareError::ResourceNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return RejectPortfolioShareError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RejectPortfolioShareError::Unknown(String::from(body)),
         }
+        return RejectPortfolioShareError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RejectPortfolioShareError {
     fn from(err: serde_json::error::Error) -> RejectPortfolioShareError {
-        RejectPortfolioShareError::Unknown(err.description().to_string())
+        RejectPortfolioShareError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RejectPortfolioShareError {
@@ -7029,7 +7109,8 @@ impl Error for RejectPortfolioShareError {
             RejectPortfolioShareError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RejectPortfolioShareError::Unknown(ref cause) => cause,
+            RejectPortfolioShareError::ParseError(ref cause) => cause,
+            RejectPortfolioShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7044,41 +7125,43 @@ pub enum ScanProvisionedProductsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ScanProvisionedProductsError {
-    pub fn from_body(body: &str) -> ScanProvisionedProductsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ScanProvisionedProductsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        ScanProvisionedProductsError::InvalidParameters(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ScanProvisionedProductsError::Validation(error_message.to_string())
-                    }
-                    _ => ScanProvisionedProductsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ScanProvisionedProductsError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return ScanProvisionedProductsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ScanProvisionedProductsError::Unknown(String::from(body)),
         }
+        return ScanProvisionedProductsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ScanProvisionedProductsError {
     fn from(err: serde_json::error::Error) -> ScanProvisionedProductsError {
-        ScanProvisionedProductsError::Unknown(err.description().to_string())
+        ScanProvisionedProductsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ScanProvisionedProductsError {
@@ -7110,7 +7193,8 @@ impl Error for ScanProvisionedProductsError {
             ScanProvisionedProductsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ScanProvisionedProductsError::Unknown(ref cause) => cause,
+            ScanProvisionedProductsError::ParseError(ref cause) => cause,
+            ScanProvisionedProductsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7125,41 +7209,41 @@ pub enum SearchProductsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchProductsError {
-    pub fn from_body(body: &str) -> SearchProductsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchProductsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        SearchProductsError::InvalidParameters(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SearchProductsError::Validation(error_message.to_string())
-                    }
-                    _ => SearchProductsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return SearchProductsError::InvalidParameters(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return SearchProductsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SearchProductsError::Unknown(String::from(body)),
         }
+        return SearchProductsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchProductsError {
     fn from(err: serde_json::error::Error) -> SearchProductsError {
-        SearchProductsError::Unknown(err.description().to_string())
+        SearchProductsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchProductsError {
@@ -7189,7 +7273,8 @@ impl Error for SearchProductsError {
             SearchProductsError::Validation(ref cause) => cause,
             SearchProductsError::Credentials(ref err) => err.description(),
             SearchProductsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SearchProductsError::Unknown(ref cause) => cause,
+            SearchProductsError::ParseError(ref cause) => cause,
+            SearchProductsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7206,44 +7291,46 @@ pub enum SearchProductsAsAdminError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchProductsAsAdminError {
-    pub fn from_body(body: &str) -> SearchProductsAsAdminError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchProductsAsAdminError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        SearchProductsAsAdminError::InvalidParameters(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        SearchProductsAsAdminError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SearchProductsAsAdminError::Validation(error_message.to_string())
-                    }
-                    _ => SearchProductsAsAdminError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return SearchProductsAsAdminError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return SearchProductsAsAdminError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return SearchProductsAsAdminError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SearchProductsAsAdminError::Unknown(String::from(body)),
         }
+        return SearchProductsAsAdminError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchProductsAsAdminError {
     fn from(err: serde_json::error::Error) -> SearchProductsAsAdminError {
-        SearchProductsAsAdminError::Unknown(err.description().to_string())
+        SearchProductsAsAdminError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchProductsAsAdminError {
@@ -7276,7 +7363,8 @@ impl Error for SearchProductsAsAdminError {
             SearchProductsAsAdminError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SearchProductsAsAdminError::Unknown(ref cause) => cause,
+            SearchProductsAsAdminError::ParseError(ref cause) => cause,
+            SearchProductsAsAdminError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7291,43 +7379,43 @@ pub enum SearchProvisionedProductsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchProvisionedProductsError {
-    pub fn from_body(body: &str) -> SearchProvisionedProductsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchProvisionedProductsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        SearchProvisionedProductsError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        SearchProvisionedProductsError::Validation(error_message.to_string())
-                    }
-                    _ => SearchProvisionedProductsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return SearchProvisionedProductsError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return SearchProvisionedProductsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SearchProvisionedProductsError::Unknown(String::from(body)),
         }
+        return SearchProvisionedProductsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchProvisionedProductsError {
     fn from(err: serde_json::error::Error) -> SearchProvisionedProductsError {
-        SearchProvisionedProductsError::Unknown(err.description().to_string())
+        SearchProvisionedProductsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchProvisionedProductsError {
@@ -7359,7 +7447,8 @@ impl Error for SearchProvisionedProductsError {
             SearchProvisionedProductsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SearchProvisionedProductsError::Unknown(ref cause) => cause,
+            SearchProvisionedProductsError::ParseError(ref cause) => cause,
+            SearchProvisionedProductsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7374,43 +7463,43 @@ pub enum TerminateProvisionedProductError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TerminateProvisionedProductError {
-    pub fn from_body(body: &str) -> TerminateProvisionedProductError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TerminateProvisionedProductError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        TerminateProvisionedProductError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        TerminateProvisionedProductError::Validation(error_message.to_string())
-                    }
-                    _ => TerminateProvisionedProductError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return TerminateProvisionedProductError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return TerminateProvisionedProductError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TerminateProvisionedProductError::Unknown(String::from(body)),
         }
+        return TerminateProvisionedProductError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TerminateProvisionedProductError {
     fn from(err: serde_json::error::Error) -> TerminateProvisionedProductError {
-        TerminateProvisionedProductError::Unknown(err.description().to_string())
+        TerminateProvisionedProductError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TerminateProvisionedProductError {
@@ -7442,7 +7531,8 @@ impl Error for TerminateProvisionedProductError {
             TerminateProvisionedProductError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            TerminateProvisionedProductError::Unknown(ref cause) => cause,
+            TerminateProvisionedProductError::ParseError(ref cause) => cause,
+            TerminateProvisionedProductError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7459,44 +7549,44 @@ pub enum UpdateConstraintError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConstraintError {
-    pub fn from_body(body: &str) -> UpdateConstraintError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateConstraintError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        UpdateConstraintError::InvalidParameters(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateConstraintError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateConstraintError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateConstraintError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return UpdateConstraintError::InvalidParameters(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return UpdateConstraintError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateConstraintError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateConstraintError::Unknown(String::from(body)),
         }
+        return UpdateConstraintError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateConstraintError {
     fn from(err: serde_json::error::Error) -> UpdateConstraintError {
-        UpdateConstraintError::Unknown(err.description().to_string())
+        UpdateConstraintError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateConstraintError {
@@ -7527,7 +7617,8 @@ impl Error for UpdateConstraintError {
             UpdateConstraintError::Validation(ref cause) => cause,
             UpdateConstraintError::Credentials(ref err) => err.description(),
             UpdateConstraintError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateConstraintError::Unknown(ref cause) => cause,
+            UpdateConstraintError::ParseError(ref cause) => cause,
+            UpdateConstraintError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7548,50 +7639,50 @@ pub enum UpdatePortfolioError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePortfolioError {
-    pub fn from_body(body: &str) -> UpdatePortfolioError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdatePortfolioError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        UpdatePortfolioError::InvalidParameters(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdatePortfolioError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdatePortfolioError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        UpdatePortfolioError::TagOptionNotMigrated(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdatePortfolioError::Validation(error_message.to_string())
-                    }
-                    _ => UpdatePortfolioError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return UpdatePortfolioError::InvalidParameters(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return UpdatePortfolioError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdatePortfolioError::ResourceNotFound(String::from(error_message))
+                }
+                "TagOptionNotMigratedException" => {
+                    return UpdatePortfolioError::TagOptionNotMigrated(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdatePortfolioError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdatePortfolioError::Unknown(String::from(body)),
         }
+        return UpdatePortfolioError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdatePortfolioError {
     fn from(err: serde_json::error::Error) -> UpdatePortfolioError {
-        UpdatePortfolioError::Unknown(err.description().to_string())
+        UpdatePortfolioError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdatePortfolioError {
@@ -7624,7 +7715,8 @@ impl Error for UpdatePortfolioError {
             UpdatePortfolioError::Validation(ref cause) => cause,
             UpdatePortfolioError::Credentials(ref err) => err.description(),
             UpdatePortfolioError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdatePortfolioError::Unknown(ref cause) => cause,
+            UpdatePortfolioError::ParseError(ref cause) => cause,
+            UpdatePortfolioError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7643,47 +7735,47 @@ pub enum UpdateProductError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateProductError {
-    pub fn from_body(body: &str) -> UpdateProductError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateProductError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        UpdateProductError::InvalidParameters(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateProductError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        UpdateProductError::TagOptionNotMigrated(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateProductError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateProductError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return UpdateProductError::InvalidParameters(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return UpdateProductError::ResourceNotFound(String::from(error_message))
+                }
+                "TagOptionNotMigratedException" => {
+                    return UpdateProductError::TagOptionNotMigrated(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateProductError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateProductError::Unknown(String::from(body)),
         }
+        return UpdateProductError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateProductError {
     fn from(err: serde_json::error::Error) -> UpdateProductError {
-        UpdateProductError::Unknown(err.description().to_string())
+        UpdateProductError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateProductError {
@@ -7715,7 +7807,8 @@ impl Error for UpdateProductError {
             UpdateProductError::Validation(ref cause) => cause,
             UpdateProductError::Credentials(ref err) => err.description(),
             UpdateProductError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateProductError::Unknown(ref cause) => cause,
+            UpdateProductError::ParseError(ref cause) => cause,
+            UpdateProductError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7732,46 +7825,48 @@ pub enum UpdateProvisionedProductError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateProvisionedProductError {
-    pub fn from_body(body: &str) -> UpdateProvisionedProductError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateProvisionedProductError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        UpdateProvisionedProductError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateProvisionedProductError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateProvisionedProductError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateProvisionedProductError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return UpdateProvisionedProductError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return UpdateProvisionedProductError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateProvisionedProductError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateProvisionedProductError::Unknown(String::from(body)),
         }
+        return UpdateProvisionedProductError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateProvisionedProductError {
     fn from(err: serde_json::error::Error) -> UpdateProvisionedProductError {
-        UpdateProvisionedProductError::Unknown(err.description().to_string())
+        UpdateProvisionedProductError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateProvisionedProductError {
@@ -7804,7 +7899,8 @@ impl Error for UpdateProvisionedProductError {
             UpdateProvisionedProductError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateProvisionedProductError::Unknown(ref cause) => cause,
+            UpdateProvisionedProductError::ParseError(ref cause) => cause,
+            UpdateProvisionedProductError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7821,48 +7917,48 @@ pub enum UpdateProvisioningArtifactError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateProvisioningArtifactError {
-    pub fn from_body(body: &str) -> UpdateProvisioningArtifactError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateProvisioningArtifactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParametersException" => {
-                        UpdateProvisioningArtifactError::InvalidParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateProvisioningArtifactError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateProvisioningArtifactError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateProvisioningArtifactError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParametersException" => {
+                    return UpdateProvisioningArtifactError::InvalidParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return UpdateProvisioningArtifactError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateProvisioningArtifactError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateProvisioningArtifactError::Unknown(String::from(body)),
         }
+        return UpdateProvisioningArtifactError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateProvisioningArtifactError {
     fn from(err: serde_json::error::Error) -> UpdateProvisioningArtifactError {
-        UpdateProvisioningArtifactError::Unknown(err.description().to_string())
+        UpdateProvisioningArtifactError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateProvisioningArtifactError {
@@ -7895,7 +7991,8 @@ impl Error for UpdateProvisioningArtifactError {
             UpdateProvisioningArtifactError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateProvisioningArtifactError::Unknown(ref cause) => cause,
+            UpdateProvisioningArtifactError::ParseError(ref cause) => cause,
+            UpdateProvisioningArtifactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7916,50 +8013,50 @@ pub enum UpdateTagOptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTagOptionError {
-    pub fn from_body(body: &str) -> UpdateTagOptionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateTagOptionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateResourceException" => {
-                        UpdateTagOptionError::DuplicateResource(String::from(error_message))
-                    }
-                    "InvalidParametersException" => {
-                        UpdateTagOptionError::InvalidParameters(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateTagOptionError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TagOptionNotMigratedException" => {
-                        UpdateTagOptionError::TagOptionNotMigrated(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateTagOptionError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateTagOptionError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateResourceException" => {
+                    return UpdateTagOptionError::DuplicateResource(String::from(error_message))
                 }
+                "InvalidParametersException" => {
+                    return UpdateTagOptionError::InvalidParameters(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateTagOptionError::ResourceNotFound(String::from(error_message))
+                }
+                "TagOptionNotMigratedException" => {
+                    return UpdateTagOptionError::TagOptionNotMigrated(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateTagOptionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateTagOptionError::Unknown(String::from(body)),
         }
+        return UpdateTagOptionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateTagOptionError {
     fn from(err: serde_json::error::Error) -> UpdateTagOptionError {
-        UpdateTagOptionError::Unknown(err.description().to_string())
+        UpdateTagOptionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateTagOptionError {
@@ -7992,7 +8089,8 @@ impl Error for UpdateTagOptionError {
             UpdateTagOptionError::Validation(ref cause) => cause,
             UpdateTagOptionError::Credentials(ref err) => err.description(),
             UpdateTagOptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateTagOptionError::Unknown(ref cause) => cause,
+            UpdateTagOptionError::ParseError(ref cause) => cause,
+            UpdateTagOptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8423,14 +8521,15 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<AcceptPortfolioShareOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AcceptPortfolioShareError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AcceptPortfolioShareError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -8462,12 +8561,13 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<AssociatePrincipalWithPortfolioOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociatePrincipalWithPortfolioError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(AssociatePrincipalWithPortfolioError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -8500,13 +8600,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<AssociateProductWithPortfolioOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateProductWithPortfolioError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AssociateProductWithPortfolioError::from_response(response))
                 }))
             }
         })
@@ -8539,13 +8638,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<AssociateTagOptionWithResourceOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateTagOptionWithResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AssociateTagOptionWithResourceError::from_response(response))
                 }))
             }
         })
@@ -8574,14 +8672,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<CopyProductOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CopyProductError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CopyProductError::from_response(response))),
+                )
             }
         })
     }
@@ -8612,14 +8712,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<CreateConstraintOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateConstraintError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateConstraintError::from_response(response))),
+                )
             }
         })
     }
@@ -8650,14 +8752,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<CreatePortfolioOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePortfolioError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreatePortfolioError::from_response(response))),
+                )
             }
         })
     }
@@ -8688,14 +8792,15 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<CreatePortfolioShareOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePortfolioShareError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreatePortfolioShareError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -8723,14 +8828,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<CreateProductOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateProductError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateProductError::from_response(response))),
+                )
             }
         })
     }
@@ -8761,13 +8868,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<CreateProvisionedProductPlanOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateProvisionedProductPlanError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateProvisionedProductPlanError::from_response(response))
                 }))
             }
         })
@@ -8799,13 +8905,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<CreateProvisioningArtifactOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateProvisioningArtifactError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateProvisioningArtifactError::from_response(response))
                 }))
             }
         })
@@ -8837,14 +8942,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<CreateTagOptionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTagOptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateTagOptionError::from_response(response))),
+                )
             }
         })
     }
@@ -8875,14 +8982,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DeleteConstraintOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConstraintError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteConstraintError::from_response(response))),
+                )
             }
         })
     }
@@ -8913,14 +9022,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DeletePortfolioOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePortfolioError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeletePortfolioError::from_response(response))),
+                )
             }
         })
     }
@@ -8951,14 +9062,15 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DeletePortfolioShareOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePortfolioShareError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeletePortfolioShareError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -8986,14 +9098,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DeleteProductOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteProductError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteProductError::from_response(response))),
+                )
             }
         })
     }
@@ -9024,13 +9138,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DeleteProvisionedProductPlanOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteProvisionedProductPlanError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteProvisionedProductPlanError::from_response(response))
                 }))
             }
         })
@@ -9062,13 +9175,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DeleteProvisioningArtifactOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteProvisioningArtifactError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteProvisioningArtifactError::from_response(response))
                 }))
             }
         })
@@ -9100,14 +9212,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DeleteTagOptionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTagOptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTagOptionError::from_response(response))),
+                )
             }
         })
     }
@@ -9138,14 +9252,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DescribeConstraintOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConstraintError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeConstraintError::from_response(response))),
+                )
             }
         })
     }
@@ -9176,13 +9292,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DescribeCopyProductStatusOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCopyProductStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeCopyProductStatusError::from_response(response))
                 }))
             }
         })
@@ -9214,14 +9329,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DescribePortfolioOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribePortfolioError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribePortfolioError::from_response(response))),
+                )
             }
         })
     }
@@ -9252,14 +9369,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DescribeProductOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProductError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeProductError::from_response(response))),
+                )
             }
         })
     }
@@ -9290,14 +9409,15 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DescribeProductAsAdminOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProductAsAdminError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeProductAsAdminError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9328,14 +9448,15 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DescribeProductViewOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProductViewError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeProductViewError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9366,13 +9487,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DescribeProvisionedProductOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProvisionedProductError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeProvisionedProductError::from_response(response))
                 }))
             }
         })
@@ -9405,13 +9525,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DescribeProvisionedProductPlanOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProvisionedProductPlanError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeProvisionedProductPlanError::from_response(response))
                 }))
             }
         })
@@ -9443,13 +9562,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DescribeProvisioningArtifactOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProvisioningArtifactError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeProvisioningArtifactError::from_response(response))
                 }))
             }
         })
@@ -9482,13 +9600,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DescribeProvisioningParametersOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProvisioningParametersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeProvisioningParametersError::from_response(response))
                 }))
             }
         })
@@ -9517,14 +9634,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DescribeRecordOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeRecordError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeRecordError::from_response(response))),
+                )
             }
         })
     }
@@ -9555,14 +9674,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DescribeTagOptionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTagOptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTagOptionError::from_response(response))),
+                )
             }
         })
     }
@@ -9596,12 +9717,13 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DisassociatePrincipalFromPortfolioOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociatePrincipalFromPortfolioError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DisassociatePrincipalFromPortfolioError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -9635,12 +9757,13 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DisassociateProductFromPortfolioOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateProductFromPortfolioError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DisassociateProductFromPortfolioError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -9674,12 +9797,13 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<DisassociateTagOptionFromResourceOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateTagOptionFromResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DisassociateTagOptionFromResourceError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -9712,13 +9836,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ExecuteProvisionedProductPlanOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ExecuteProvisionedProductPlanError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ExecuteProvisionedProductPlanError::from_response(response))
                 }))
             }
         })
@@ -9750,13 +9873,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ListAcceptedPortfolioSharesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAcceptedPortfolioSharesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListAcceptedPortfolioSharesError::from_response(response))
                 }))
             }
         })
@@ -9788,13 +9910,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ListConstraintsForPortfolioOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListConstraintsForPortfolioError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListConstraintsForPortfolioError::from_response(response))
                 }))
             }
         })
@@ -9826,14 +9947,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ListLaunchPathsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListLaunchPathsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListLaunchPathsError::from_response(response))),
+                )
             }
         })
     }
@@ -9864,14 +9987,15 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ListPortfolioAccessOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPortfolioAccessError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListPortfolioAccessError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9899,14 +10023,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ListPortfoliosOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPortfoliosError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListPortfoliosError::from_response(response))),
+                )
             }
         })
     }
@@ -9937,13 +10063,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ListPortfoliosForProductOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPortfoliosForProductError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListPortfoliosForProductError::from_response(response))
                 }))
             }
         })
@@ -9975,13 +10100,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ListPrincipalsForPortfolioOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPrincipalsForPortfolioError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListPrincipalsForPortfolioError::from_response(response))
                 }))
             }
         })
@@ -10013,13 +10137,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ListProvisionedProductPlansOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListProvisionedProductPlansError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListProvisionedProductPlansError::from_response(response))
                 }))
             }
         })
@@ -10051,13 +10174,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ListProvisioningArtifactsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListProvisioningArtifactsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListProvisioningArtifactsError::from_response(response))
                 }))
             }
         })
@@ -10089,14 +10211,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ListRecordHistoryOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListRecordHistoryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListRecordHistoryError::from_response(response))),
+                )
             }
         })
     }
@@ -10127,13 +10251,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ListResourcesForTagOptionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListResourcesForTagOptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListResourcesForTagOptionError::from_response(response))
                 }))
             }
         })
@@ -10162,14 +10285,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ListTagOptionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagOptionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTagOptionsError::from_response(response))),
+                )
             }
         })
     }
@@ -10200,14 +10325,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ProvisionProductOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ProvisionProductError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ProvisionProductError::from_response(response))),
+                )
             }
         })
     }
@@ -10238,14 +10365,15 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<RejectPortfolioShareOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RejectPortfolioShareError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RejectPortfolioShareError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10276,13 +10404,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<ScanProvisionedProductsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ScanProvisionedProductsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ScanProvisionedProductsError::from_response(response))
                 }))
             }
         })
@@ -10311,14 +10438,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<SearchProductsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchProductsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchProductsError::from_response(response))),
+                )
             }
         })
     }
@@ -10349,14 +10478,15 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<SearchProductsAsAdminOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchProductsAsAdminError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(SearchProductsAsAdminError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10387,13 +10517,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<SearchProvisionedProductsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchProvisionedProductsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SearchProvisionedProductsError::from_response(response))
                 }))
             }
         })
@@ -10425,13 +10554,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<TerminateProvisionedProductOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TerminateProvisionedProductError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(TerminateProvisionedProductError::from_response(response))
                 }))
             }
         })
@@ -10463,14 +10591,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<UpdateConstraintOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateConstraintError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateConstraintError::from_response(response))),
+                )
             }
         })
     }
@@ -10501,14 +10631,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<UpdatePortfolioOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdatePortfolioError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdatePortfolioError::from_response(response))),
+                )
             }
         })
     }
@@ -10536,14 +10668,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<UpdateProductOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateProductError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateProductError::from_response(response))),
+                )
             }
         })
     }
@@ -10574,13 +10708,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<UpdateProvisionedProductOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateProvisionedProductError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateProvisionedProductError::from_response(response))
                 }))
             }
         })
@@ -10612,13 +10745,12 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<UpdateProvisioningArtifactOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateProvisioningArtifactError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateProvisioningArtifactError::from_response(response))
                 }))
             }
         })
@@ -10650,14 +10782,16 @@ impl ServiceCatalog for ServiceCatalogClient {
 
                     serde_json::from_str::<UpdateTagOptionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTagOptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateTagOptionError::from_response(response))),
+                )
             }
         })
     }

@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -8334,27 +8334,35 @@ pub enum AttachInstancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AttachInstancesError {
-    pub fn from_body(body: &str) -> AttachInstancesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => AttachInstancesError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceLinkedRoleFailure" => AttachInstancesError::ServiceLinkedRoleFailure(
-                    String::from(parsed_error.message),
-                ),
-                _ => AttachInstancesError::Unknown(String::from(body)),
-            },
-            Err(_) => AttachInstancesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> AttachInstancesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return AttachInstancesError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceLinkedRoleFailure" => {
+                        return AttachInstancesError::ServiceLinkedRoleFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        AttachInstancesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8369,7 +8377,7 @@ impl AttachInstancesError {
 impl From<XmlParseError> for AttachInstancesError {
     fn from(err: XmlParseError) -> AttachInstancesError {
         let XmlParseError(message) = err;
-        AttachInstancesError::Unknown(message.to_string())
+        AttachInstancesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AttachInstancesError {
@@ -8400,7 +8408,8 @@ impl Error for AttachInstancesError {
             AttachInstancesError::Validation(ref cause) => cause,
             AttachInstancesError::Credentials(ref err) => err.description(),
             AttachInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachInstancesError::Unknown(ref cause) => cause,
+            AttachInstancesError::ParseError(ref cause) => cause,
+            AttachInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8417,31 +8426,35 @@ pub enum AttachLoadBalancerTargetGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AttachLoadBalancerTargetGroupsError {
-    pub fn from_body(body: &str) -> AttachLoadBalancerTargetGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    AttachLoadBalancerTargetGroupsError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> AttachLoadBalancerTargetGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return AttachLoadBalancerTargetGroupsError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ServiceLinkedRoleFailure" => {
+                        return AttachLoadBalancerTargetGroupsError::ServiceLinkedRoleFailure(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "ServiceLinkedRoleFailure" => {
-                    AttachLoadBalancerTargetGroupsError::ServiceLinkedRoleFailure(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => AttachLoadBalancerTargetGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => AttachLoadBalancerTargetGroupsError::Unknown(body.to_string()),
+            }
         }
+        AttachLoadBalancerTargetGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8456,7 +8469,7 @@ impl AttachLoadBalancerTargetGroupsError {
 impl From<XmlParseError> for AttachLoadBalancerTargetGroupsError {
     fn from(err: XmlParseError) -> AttachLoadBalancerTargetGroupsError {
         let XmlParseError(message) = err;
-        AttachLoadBalancerTargetGroupsError::Unknown(message.to_string())
+        AttachLoadBalancerTargetGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AttachLoadBalancerTargetGroupsError {
@@ -8489,7 +8502,8 @@ impl Error for AttachLoadBalancerTargetGroupsError {
             AttachLoadBalancerTargetGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AttachLoadBalancerTargetGroupsError::Unknown(ref cause) => cause,
+            AttachLoadBalancerTargetGroupsError::ParseError(ref cause) => cause,
+            AttachLoadBalancerTargetGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8506,27 +8520,35 @@ pub enum AttachLoadBalancersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AttachLoadBalancersError {
-    pub fn from_body(body: &str) -> AttachLoadBalancersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => AttachLoadBalancersError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceLinkedRoleFailure" => AttachLoadBalancersError::ServiceLinkedRoleFailure(
-                    String::from(parsed_error.message),
-                ),
-                _ => AttachLoadBalancersError::Unknown(String::from(body)),
-            },
-            Err(_) => AttachLoadBalancersError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> AttachLoadBalancersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return AttachLoadBalancersError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceLinkedRoleFailure" => {
+                        return AttachLoadBalancersError::ServiceLinkedRoleFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        AttachLoadBalancersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8541,7 +8563,7 @@ impl AttachLoadBalancersError {
 impl From<XmlParseError> for AttachLoadBalancersError {
     fn from(err: XmlParseError) -> AttachLoadBalancersError {
         let XmlParseError(message) = err;
-        AttachLoadBalancersError::Unknown(message.to_string())
+        AttachLoadBalancersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AttachLoadBalancersError {
@@ -8574,7 +8596,8 @@ impl Error for AttachLoadBalancersError {
             AttachLoadBalancersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AttachLoadBalancersError::Unknown(ref cause) => cause,
+            AttachLoadBalancersError::ParseError(ref cause) => cause,
+            AttachLoadBalancersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8589,24 +8612,30 @@ pub enum CompleteLifecycleActionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CompleteLifecycleActionError {
-    pub fn from_body(body: &str) -> CompleteLifecycleActionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => CompleteLifecycleActionError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => CompleteLifecycleActionError::Unknown(String::from(body)),
-            },
-            Err(_) => CompleteLifecycleActionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CompleteLifecycleActionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return CompleteLifecycleActionError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        CompleteLifecycleActionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8621,7 +8650,7 @@ impl CompleteLifecycleActionError {
 impl From<XmlParseError> for CompleteLifecycleActionError {
     fn from(err: XmlParseError) -> CompleteLifecycleActionError {
         let XmlParseError(message) = err;
-        CompleteLifecycleActionError::Unknown(message.to_string())
+        CompleteLifecycleActionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CompleteLifecycleActionError {
@@ -8653,7 +8682,8 @@ impl Error for CompleteLifecycleActionError {
             CompleteLifecycleActionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CompleteLifecycleActionError::Unknown(ref cause) => cause,
+            CompleteLifecycleActionError::ParseError(ref cause) => cause,
+            CompleteLifecycleActionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8674,35 +8704,45 @@ pub enum CreateAutoScalingGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAutoScalingGroupError {
-    pub fn from_body(body: &str) -> CreateAutoScalingGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExists" => CreateAutoScalingGroupError::AlreadyExistsFault(String::from(
-                    parsed_error.message,
-                )),
-                "LimitExceeded" => CreateAutoScalingGroupError::LimitExceededFault(String::from(
-                    parsed_error.message,
-                )),
-                "ResourceContention" => CreateAutoScalingGroupError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceLinkedRoleFailure" => {
-                    CreateAutoScalingGroupError::ServiceLinkedRoleFailure(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateAutoScalingGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AlreadyExists" => {
+                        return CreateAutoScalingGroupError::AlreadyExistsFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateAutoScalingGroupError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return CreateAutoScalingGroupError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceLinkedRoleFailure" => {
+                        return CreateAutoScalingGroupError::ServiceLinkedRoleFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => CreateAutoScalingGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateAutoScalingGroupError::Unknown(body.to_string()),
+            }
         }
+        CreateAutoScalingGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8717,7 +8757,7 @@ impl CreateAutoScalingGroupError {
 impl From<XmlParseError> for CreateAutoScalingGroupError {
     fn from(err: XmlParseError) -> CreateAutoScalingGroupError {
         let XmlParseError(message) = err;
-        CreateAutoScalingGroupError::Unknown(message.to_string())
+        CreateAutoScalingGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateAutoScalingGroupError {
@@ -8752,7 +8792,8 @@ impl Error for CreateAutoScalingGroupError {
             CreateAutoScalingGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateAutoScalingGroupError::Unknown(ref cause) => cause,
+            CreateAutoScalingGroupError::ParseError(ref cause) => cause,
+            CreateAutoScalingGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8771,30 +8812,40 @@ pub enum CreateLaunchConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLaunchConfigurationError {
-    pub fn from_body(body: &str) -> CreateLaunchConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExists" => CreateLaunchConfigurationError::AlreadyExistsFault(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceeded" => CreateLaunchConfigurationError::LimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContention" => CreateLaunchConfigurationError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateLaunchConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateLaunchConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateLaunchConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AlreadyExists" => {
+                        return CreateLaunchConfigurationError::AlreadyExistsFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateLaunchConfigurationError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return CreateLaunchConfigurationError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        CreateLaunchConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8809,7 +8860,7 @@ impl CreateLaunchConfigurationError {
 impl From<XmlParseError> for CreateLaunchConfigurationError {
     fn from(err: XmlParseError) -> CreateLaunchConfigurationError {
         let XmlParseError(message) = err;
-        CreateLaunchConfigurationError::Unknown(message.to_string())
+        CreateLaunchConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateLaunchConfigurationError {
@@ -8843,7 +8894,8 @@ impl Error for CreateLaunchConfigurationError {
             CreateLaunchConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateLaunchConfigurationError::Unknown(ref cause) => cause,
+            CreateLaunchConfigurationError::ParseError(ref cause) => cause,
+            CreateLaunchConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8864,33 +8916,45 @@ pub enum CreateOrUpdateTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateOrUpdateTagsError {
-    pub fn from_body(body: &str) -> CreateOrUpdateTagsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExists" => {
-                    CreateOrUpdateTagsError::AlreadyExistsFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateOrUpdateTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AlreadyExists" => {
+                        return CreateOrUpdateTagsError::AlreadyExistsFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return CreateOrUpdateTagsError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return CreateOrUpdateTagsError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceInUse" => {
+                        return CreateOrUpdateTagsError::ResourceInUseFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    CreateOrUpdateTagsError::LimitExceededFault(String::from(parsed_error.message))
-                }
-                "ResourceContention" => CreateOrUpdateTagsError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceInUse" => {
-                    CreateOrUpdateTagsError::ResourceInUseFault(String::from(parsed_error.message))
-                }
-                _ => CreateOrUpdateTagsError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateOrUpdateTagsError::Unknown(body.to_string()),
+            }
         }
+        CreateOrUpdateTagsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8905,7 +8969,7 @@ impl CreateOrUpdateTagsError {
 impl From<XmlParseError> for CreateOrUpdateTagsError {
     fn from(err: XmlParseError) -> CreateOrUpdateTagsError {
         let XmlParseError(message) = err;
-        CreateOrUpdateTagsError::Unknown(message.to_string())
+        CreateOrUpdateTagsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateOrUpdateTagsError {
@@ -8940,7 +9004,8 @@ impl Error for CreateOrUpdateTagsError {
             CreateOrUpdateTagsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateOrUpdateTagsError::Unknown(ref cause) => cause,
+            CreateOrUpdateTagsError::ParseError(ref cause) => cause,
+            CreateOrUpdateTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8959,32 +9024,40 @@ pub enum DeleteAutoScalingGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAutoScalingGroupError {
-    pub fn from_body(body: &str) -> DeleteAutoScalingGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DeleteAutoScalingGroupError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceInUse" => DeleteAutoScalingGroupError::ResourceInUseFault(String::from(
-                    parsed_error.message,
-                )),
-                "ScalingActivityInProgress" => {
-                    DeleteAutoScalingGroupError::ScalingActivityInProgressFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteAutoScalingGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DeleteAutoScalingGroupError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceInUse" => {
+                        return DeleteAutoScalingGroupError::ResourceInUseFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ScalingActivityInProgress" => {
+                        return DeleteAutoScalingGroupError::ScalingActivityInProgressFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DeleteAutoScalingGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteAutoScalingGroupError::Unknown(body.to_string()),
+            }
         }
+        DeleteAutoScalingGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8999,7 +9072,7 @@ impl DeleteAutoScalingGroupError {
 impl From<XmlParseError> for DeleteAutoScalingGroupError {
     fn from(err: XmlParseError) -> DeleteAutoScalingGroupError {
         let XmlParseError(message) = err;
-        DeleteAutoScalingGroupError::Unknown(message.to_string())
+        DeleteAutoScalingGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteAutoScalingGroupError {
@@ -9033,7 +9106,8 @@ impl Error for DeleteAutoScalingGroupError {
             DeleteAutoScalingGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteAutoScalingGroupError::Unknown(ref cause) => cause,
+            DeleteAutoScalingGroupError::ParseError(ref cause) => cause,
+            DeleteAutoScalingGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9050,27 +9124,35 @@ pub enum DeleteLaunchConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLaunchConfigurationError {
-    pub fn from_body(body: &str) -> DeleteLaunchConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DeleteLaunchConfigurationError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceInUse" => DeleteLaunchConfigurationError::ResourceInUseFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DeleteLaunchConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteLaunchConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteLaunchConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DeleteLaunchConfigurationError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ResourceInUse" => {
+                        return DeleteLaunchConfigurationError::ResourceInUseFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DeleteLaunchConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9085,7 +9167,7 @@ impl DeleteLaunchConfigurationError {
 impl From<XmlParseError> for DeleteLaunchConfigurationError {
     fn from(err: XmlParseError) -> DeleteLaunchConfigurationError {
         let XmlParseError(message) = err;
-        DeleteLaunchConfigurationError::Unknown(message.to_string())
+        DeleteLaunchConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteLaunchConfigurationError {
@@ -9118,7 +9200,8 @@ impl Error for DeleteLaunchConfigurationError {
             DeleteLaunchConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteLaunchConfigurationError::Unknown(ref cause) => cause,
+            DeleteLaunchConfigurationError::ParseError(ref cause) => cause,
+            DeleteLaunchConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9133,24 +9216,30 @@ pub enum DeleteLifecycleHookError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLifecycleHookError {
-    pub fn from_body(body: &str) -> DeleteLifecycleHookError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DeleteLifecycleHookError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DeleteLifecycleHookError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteLifecycleHookError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteLifecycleHookError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DeleteLifecycleHookError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DeleteLifecycleHookError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9165,7 +9254,7 @@ impl DeleteLifecycleHookError {
 impl From<XmlParseError> for DeleteLifecycleHookError {
     fn from(err: XmlParseError) -> DeleteLifecycleHookError {
         let XmlParseError(message) = err;
-        DeleteLifecycleHookError::Unknown(message.to_string())
+        DeleteLifecycleHookError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteLifecycleHookError {
@@ -9197,7 +9286,8 @@ impl Error for DeleteLifecycleHookError {
             DeleteLifecycleHookError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteLifecycleHookError::Unknown(ref cause) => cause,
+            DeleteLifecycleHookError::ParseError(ref cause) => cause,
+            DeleteLifecycleHookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9212,26 +9302,30 @@ pub enum DeleteNotificationConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteNotificationConfigurationError {
-    pub fn from_body(body: &str) -> DeleteNotificationConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    DeleteNotificationConfigurationError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteNotificationConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DeleteNotificationConfigurationError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DeleteNotificationConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteNotificationConfigurationError::Unknown(body.to_string()),
+            }
         }
+        DeleteNotificationConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9246,7 +9340,7 @@ impl DeleteNotificationConfigurationError {
 impl From<XmlParseError> for DeleteNotificationConfigurationError {
     fn from(err: XmlParseError) -> DeleteNotificationConfigurationError {
         let XmlParseError(message) = err;
-        DeleteNotificationConfigurationError::Unknown(message.to_string())
+        DeleteNotificationConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteNotificationConfigurationError {
@@ -9278,7 +9372,8 @@ impl Error for DeleteNotificationConfigurationError {
             DeleteNotificationConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteNotificationConfigurationError::Unknown(ref cause) => cause,
+            DeleteNotificationConfigurationError::ParseError(ref cause) => cause,
+            DeleteNotificationConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9295,27 +9390,35 @@ pub enum DeletePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePolicyError {
-    pub fn from_body(body: &str) -> DeletePolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    DeletePolicyError::ResourceContentionFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DeletePolicyError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceLinkedRoleFailure" => {
+                        return DeletePolicyError::ServiceLinkedRoleFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceLinkedRoleFailure" => {
-                    DeletePolicyError::ServiceLinkedRoleFailure(String::from(parsed_error.message))
-                }
-                _ => DeletePolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => DeletePolicyError::Unknown(body.to_string()),
+            }
         }
+        DeletePolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9330,7 +9433,7 @@ impl DeletePolicyError {
 impl From<XmlParseError> for DeletePolicyError {
     fn from(err: XmlParseError) -> DeletePolicyError {
         let XmlParseError(message) = err;
-        DeletePolicyError::Unknown(message.to_string())
+        DeletePolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeletePolicyError {
@@ -9361,7 +9464,8 @@ impl Error for DeletePolicyError {
             DeletePolicyError::Validation(ref cause) => cause,
             DeletePolicyError::Credentials(ref err) => err.description(),
             DeletePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePolicyError::Unknown(ref cause) => cause,
+            DeletePolicyError::ParseError(ref cause) => cause,
+            DeletePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9376,24 +9480,30 @@ pub enum DeleteScheduledActionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteScheduledActionError {
-    pub fn from_body(body: &str) -> DeleteScheduledActionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DeleteScheduledActionError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DeleteScheduledActionError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteScheduledActionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteScheduledActionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DeleteScheduledActionError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DeleteScheduledActionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9408,7 +9518,7 @@ impl DeleteScheduledActionError {
 impl From<XmlParseError> for DeleteScheduledActionError {
     fn from(err: XmlParseError) -> DeleteScheduledActionError {
         let XmlParseError(message) = err;
-        DeleteScheduledActionError::Unknown(message.to_string())
+        DeleteScheduledActionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteScheduledActionError {
@@ -9440,7 +9550,8 @@ impl Error for DeleteScheduledActionError {
             DeleteScheduledActionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteScheduledActionError::Unknown(ref cause) => cause,
+            DeleteScheduledActionError::ParseError(ref cause) => cause,
+            DeleteScheduledActionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9457,27 +9568,35 @@ pub enum DeleteTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTagsError {
-    pub fn from_body(body: &str) -> DeleteTagsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    DeleteTagsError::ResourceContentionFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DeleteTagsError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceInUse" => {
+                        return DeleteTagsError::ResourceInUseFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResourceInUse" => {
-                    DeleteTagsError::ResourceInUseFault(String::from(parsed_error.message))
-                }
-                _ => DeleteTagsError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteTagsError::Unknown(body.to_string()),
+            }
         }
+        DeleteTagsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9492,7 +9611,7 @@ impl DeleteTagsError {
 impl From<XmlParseError> for DeleteTagsError {
     fn from(err: XmlParseError) -> DeleteTagsError {
         let XmlParseError(message) = err;
-        DeleteTagsError::Unknown(message.to_string())
+        DeleteTagsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteTagsError {
@@ -9523,7 +9642,8 @@ impl Error for DeleteTagsError {
             DeleteTagsError::Validation(ref cause) => cause,
             DeleteTagsError::Credentials(ref err) => err.description(),
             DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTagsError::Unknown(ref cause) => cause,
+            DeleteTagsError::ParseError(ref cause) => cause,
+            DeleteTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9538,24 +9658,30 @@ pub enum DescribeAccountLimitsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAccountLimitsError {
-    pub fn from_body(body: &str) -> DescribeAccountLimitsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DescribeAccountLimitsError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeAccountLimitsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAccountLimitsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountLimitsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DescribeAccountLimitsError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeAccountLimitsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9570,7 +9696,7 @@ impl DescribeAccountLimitsError {
 impl From<XmlParseError> for DescribeAccountLimitsError {
     fn from(err: XmlParseError) -> DescribeAccountLimitsError {
         let XmlParseError(message) = err;
-        DescribeAccountLimitsError::Unknown(message.to_string())
+        DescribeAccountLimitsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAccountLimitsError {
@@ -9602,7 +9728,8 @@ impl Error for DescribeAccountLimitsError {
             DescribeAccountLimitsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAccountLimitsError::Unknown(ref cause) => cause,
+            DescribeAccountLimitsError::ParseError(ref cause) => cause,
+            DescribeAccountLimitsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9617,24 +9744,30 @@ pub enum DescribeAdjustmentTypesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAdjustmentTypesError {
-    pub fn from_body(body: &str) -> DescribeAdjustmentTypesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DescribeAdjustmentTypesError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeAdjustmentTypesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAdjustmentTypesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAdjustmentTypesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DescribeAdjustmentTypesError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeAdjustmentTypesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9649,7 +9782,7 @@ impl DescribeAdjustmentTypesError {
 impl From<XmlParseError> for DescribeAdjustmentTypesError {
     fn from(err: XmlParseError) -> DescribeAdjustmentTypesError {
         let XmlParseError(message) = err;
-        DescribeAdjustmentTypesError::Unknown(message.to_string())
+        DescribeAdjustmentTypesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAdjustmentTypesError {
@@ -9681,7 +9814,8 @@ impl Error for DescribeAdjustmentTypesError {
             DescribeAdjustmentTypesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAdjustmentTypesError::Unknown(ref cause) => cause,
+            DescribeAdjustmentTypesError::ParseError(ref cause) => cause,
+            DescribeAdjustmentTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9698,27 +9832,35 @@ pub enum DescribeAutoScalingGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAutoScalingGroupsError {
-    pub fn from_body(body: &str) -> DescribeAutoScalingGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => DescribeAutoScalingGroupsError::InvalidNextToken(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContention" => DescribeAutoScalingGroupsError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeAutoScalingGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAutoScalingGroupsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAutoScalingGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return DescribeAutoScalingGroupsError::InvalidNextToken(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return DescribeAutoScalingGroupsError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeAutoScalingGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9733,7 +9875,7 @@ impl DescribeAutoScalingGroupsError {
 impl From<XmlParseError> for DescribeAutoScalingGroupsError {
     fn from(err: XmlParseError) -> DescribeAutoScalingGroupsError {
         let XmlParseError(message) = err;
-        DescribeAutoScalingGroupsError::Unknown(message.to_string())
+        DescribeAutoScalingGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAutoScalingGroupsError {
@@ -9766,7 +9908,8 @@ impl Error for DescribeAutoScalingGroupsError {
             DescribeAutoScalingGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAutoScalingGroupsError::Unknown(ref cause) => cause,
+            DescribeAutoScalingGroupsError::ParseError(ref cause) => cause,
+            DescribeAutoScalingGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9783,27 +9926,35 @@ pub enum DescribeAutoScalingInstancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAutoScalingInstancesError {
-    pub fn from_body(body: &str) -> DescribeAutoScalingInstancesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => DescribeAutoScalingInstancesError::InvalidNextToken(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContention" => DescribeAutoScalingInstancesError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeAutoScalingInstancesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAutoScalingInstancesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAutoScalingInstancesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return DescribeAutoScalingInstancesError::InvalidNextToken(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return DescribeAutoScalingInstancesError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeAutoScalingInstancesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9818,7 +9969,7 @@ impl DescribeAutoScalingInstancesError {
 impl From<XmlParseError> for DescribeAutoScalingInstancesError {
     fn from(err: XmlParseError) -> DescribeAutoScalingInstancesError {
         let XmlParseError(message) = err;
-        DescribeAutoScalingInstancesError::Unknown(message.to_string())
+        DescribeAutoScalingInstancesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAutoScalingInstancesError {
@@ -9851,7 +10002,8 @@ impl Error for DescribeAutoScalingInstancesError {
             DescribeAutoScalingInstancesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAutoScalingInstancesError::Unknown(ref cause) => cause,
+            DescribeAutoScalingInstancesError::ParseError(ref cause) => cause,
+            DescribeAutoScalingInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9866,26 +10018,30 @@ pub enum DescribeAutoScalingNotificationTypesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAutoScalingNotificationTypesError {
-    pub fn from_body(body: &str) -> DescribeAutoScalingNotificationTypesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    DescribeAutoScalingNotificationTypesError::ResourceContentionFault(
-                        String::from(parsed_error.message),
-                    )
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAutoScalingNotificationTypesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DescribeAutoScalingNotificationTypesError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeAutoScalingNotificationTypesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAutoScalingNotificationTypesError::Unknown(body.to_string()),
+            }
         }
+        DescribeAutoScalingNotificationTypesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9900,7 +10056,7 @@ impl DescribeAutoScalingNotificationTypesError {
 impl From<XmlParseError> for DescribeAutoScalingNotificationTypesError {
     fn from(err: XmlParseError) -> DescribeAutoScalingNotificationTypesError {
         let XmlParseError(message) = err;
-        DescribeAutoScalingNotificationTypesError::Unknown(message.to_string())
+        DescribeAutoScalingNotificationTypesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAutoScalingNotificationTypesError {
@@ -9932,7 +10088,8 @@ impl Error for DescribeAutoScalingNotificationTypesError {
             DescribeAutoScalingNotificationTypesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAutoScalingNotificationTypesError::Unknown(ref cause) => cause,
+            DescribeAutoScalingNotificationTypesError::ParseError(ref cause) => cause,
+            DescribeAutoScalingNotificationTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9949,27 +10106,35 @@ pub enum DescribeLaunchConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLaunchConfigurationsError {
-    pub fn from_body(body: &str) -> DescribeLaunchConfigurationsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => DescribeLaunchConfigurationsError::InvalidNextToken(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContention" => DescribeLaunchConfigurationsError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeLaunchConfigurationsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeLaunchConfigurationsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLaunchConfigurationsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return DescribeLaunchConfigurationsError::InvalidNextToken(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return DescribeLaunchConfigurationsError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeLaunchConfigurationsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9984,7 +10149,7 @@ impl DescribeLaunchConfigurationsError {
 impl From<XmlParseError> for DescribeLaunchConfigurationsError {
     fn from(err: XmlParseError) -> DescribeLaunchConfigurationsError {
         let XmlParseError(message) = err;
-        DescribeLaunchConfigurationsError::Unknown(message.to_string())
+        DescribeLaunchConfigurationsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeLaunchConfigurationsError {
@@ -10017,7 +10182,8 @@ impl Error for DescribeLaunchConfigurationsError {
             DescribeLaunchConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeLaunchConfigurationsError::Unknown(ref cause) => cause,
+            DescribeLaunchConfigurationsError::ParseError(ref cause) => cause,
+            DescribeLaunchConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10032,24 +10198,30 @@ pub enum DescribeLifecycleHookTypesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLifecycleHookTypesError {
-    pub fn from_body(body: &str) -> DescribeLifecycleHookTypesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DescribeLifecycleHookTypesError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeLifecycleHookTypesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeLifecycleHookTypesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLifecycleHookTypesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DescribeLifecycleHookTypesError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeLifecycleHookTypesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10064,7 +10236,7 @@ impl DescribeLifecycleHookTypesError {
 impl From<XmlParseError> for DescribeLifecycleHookTypesError {
     fn from(err: XmlParseError) -> DescribeLifecycleHookTypesError {
         let XmlParseError(message) = err;
-        DescribeLifecycleHookTypesError::Unknown(message.to_string())
+        DescribeLifecycleHookTypesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeLifecycleHookTypesError {
@@ -10096,7 +10268,8 @@ impl Error for DescribeLifecycleHookTypesError {
             DescribeLifecycleHookTypesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeLifecycleHookTypesError::Unknown(ref cause) => cause,
+            DescribeLifecycleHookTypesError::ParseError(ref cause) => cause,
+            DescribeLifecycleHookTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10111,24 +10284,30 @@ pub enum DescribeLifecycleHooksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLifecycleHooksError {
-    pub fn from_body(body: &str) -> DescribeLifecycleHooksError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DescribeLifecycleHooksError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeLifecycleHooksError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeLifecycleHooksError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLifecycleHooksError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DescribeLifecycleHooksError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeLifecycleHooksError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10143,7 +10322,7 @@ impl DescribeLifecycleHooksError {
 impl From<XmlParseError> for DescribeLifecycleHooksError {
     fn from(err: XmlParseError) -> DescribeLifecycleHooksError {
         let XmlParseError(message) = err;
-        DescribeLifecycleHooksError::Unknown(message.to_string())
+        DescribeLifecycleHooksError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeLifecycleHooksError {
@@ -10175,7 +10354,8 @@ impl Error for DescribeLifecycleHooksError {
             DescribeLifecycleHooksError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeLifecycleHooksError::Unknown(ref cause) => cause,
+            DescribeLifecycleHooksError::ParseError(ref cause) => cause,
+            DescribeLifecycleHooksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10190,26 +10370,30 @@ pub enum DescribeLoadBalancerTargetGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoadBalancerTargetGroupsError {
-    pub fn from_body(body: &str) -> DescribeLoadBalancerTargetGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    DescribeLoadBalancerTargetGroupsError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoadBalancerTargetGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DescribeLoadBalancerTargetGroupsError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeLoadBalancerTargetGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeLoadBalancerTargetGroupsError::Unknown(body.to_string()),
+            }
         }
+        DescribeLoadBalancerTargetGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10224,7 +10408,7 @@ impl DescribeLoadBalancerTargetGroupsError {
 impl From<XmlParseError> for DescribeLoadBalancerTargetGroupsError {
     fn from(err: XmlParseError) -> DescribeLoadBalancerTargetGroupsError {
         let XmlParseError(message) = err;
-        DescribeLoadBalancerTargetGroupsError::Unknown(message.to_string())
+        DescribeLoadBalancerTargetGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeLoadBalancerTargetGroupsError {
@@ -10256,7 +10440,8 @@ impl Error for DescribeLoadBalancerTargetGroupsError {
             DescribeLoadBalancerTargetGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeLoadBalancerTargetGroupsError::Unknown(ref cause) => cause,
+            DescribeLoadBalancerTargetGroupsError::ParseError(ref cause) => cause,
+            DescribeLoadBalancerTargetGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10271,24 +10456,30 @@ pub enum DescribeLoadBalancersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoadBalancersError {
-    pub fn from_body(body: &str) -> DescribeLoadBalancersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DescribeLoadBalancersError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeLoadBalancersError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeLoadBalancersError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoadBalancersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DescribeLoadBalancersError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeLoadBalancersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10303,7 +10494,7 @@ impl DescribeLoadBalancersError {
 impl From<XmlParseError> for DescribeLoadBalancersError {
     fn from(err: XmlParseError) -> DescribeLoadBalancersError {
         let XmlParseError(message) = err;
-        DescribeLoadBalancersError::Unknown(message.to_string())
+        DescribeLoadBalancersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeLoadBalancersError {
@@ -10335,7 +10526,8 @@ impl Error for DescribeLoadBalancersError {
             DescribeLoadBalancersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeLoadBalancersError::Unknown(ref cause) => cause,
+            DescribeLoadBalancersError::ParseError(ref cause) => cause,
+            DescribeLoadBalancersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10350,26 +10542,30 @@ pub enum DescribeMetricCollectionTypesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeMetricCollectionTypesError {
-    pub fn from_body(body: &str) -> DescribeMetricCollectionTypesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    DescribeMetricCollectionTypesError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeMetricCollectionTypesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DescribeMetricCollectionTypesError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeMetricCollectionTypesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeMetricCollectionTypesError::Unknown(body.to_string()),
+            }
         }
+        DescribeMetricCollectionTypesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10384,7 +10580,7 @@ impl DescribeMetricCollectionTypesError {
 impl From<XmlParseError> for DescribeMetricCollectionTypesError {
     fn from(err: XmlParseError) -> DescribeMetricCollectionTypesError {
         let XmlParseError(message) = err;
-        DescribeMetricCollectionTypesError::Unknown(message.to_string())
+        DescribeMetricCollectionTypesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeMetricCollectionTypesError {
@@ -10416,7 +10612,8 @@ impl Error for DescribeMetricCollectionTypesError {
             DescribeMetricCollectionTypesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeMetricCollectionTypesError::Unknown(ref cause) => cause,
+            DescribeMetricCollectionTypesError::ParseError(ref cause) => cause,
+            DescribeMetricCollectionTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10433,29 +10630,35 @@ pub enum DescribeNotificationConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeNotificationConfigurationsError {
-    pub fn from_body(body: &str) -> DescribeNotificationConfigurationsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => DescribeNotificationConfigurationsError::InvalidNextToken(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContention" => {
-                    DescribeNotificationConfigurationsError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeNotificationConfigurationsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return DescribeNotificationConfigurationsError::InvalidNextToken(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ResourceContention" => {
+                        return DescribeNotificationConfigurationsError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeNotificationConfigurationsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeNotificationConfigurationsError::Unknown(body.to_string()),
+            }
         }
+        DescribeNotificationConfigurationsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10470,7 +10673,7 @@ impl DescribeNotificationConfigurationsError {
 impl From<XmlParseError> for DescribeNotificationConfigurationsError {
     fn from(err: XmlParseError) -> DescribeNotificationConfigurationsError {
         let XmlParseError(message) = err;
-        DescribeNotificationConfigurationsError::Unknown(message.to_string())
+        DescribeNotificationConfigurationsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeNotificationConfigurationsError {
@@ -10503,7 +10706,8 @@ impl Error for DescribeNotificationConfigurationsError {
             DescribeNotificationConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeNotificationConfigurationsError::Unknown(ref cause) => cause,
+            DescribeNotificationConfigurationsError::ParseError(ref cause) => cause,
+            DescribeNotificationConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10522,30 +10726,40 @@ pub enum DescribePoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribePoliciesError {
-    pub fn from_body(body: &str) -> DescribePoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => {
-                    DescribePoliciesError::InvalidNextToken(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribePoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return DescribePoliciesError::InvalidNextToken(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return DescribePoliciesError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceLinkedRoleFailure" => {
+                        return DescribePoliciesError::ServiceLinkedRoleFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResourceContention" => DescribePoliciesError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceLinkedRoleFailure" => DescribePoliciesError::ServiceLinkedRoleFailure(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribePoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribePoliciesError::Unknown(body.to_string()),
+            }
         }
+        DescribePoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10560,7 +10774,7 @@ impl DescribePoliciesError {
 impl From<XmlParseError> for DescribePoliciesError {
     fn from(err: XmlParseError) -> DescribePoliciesError {
         let XmlParseError(message) = err;
-        DescribePoliciesError::Unknown(message.to_string())
+        DescribePoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribePoliciesError {
@@ -10592,7 +10806,8 @@ impl Error for DescribePoliciesError {
             DescribePoliciesError::Validation(ref cause) => cause,
             DescribePoliciesError::Credentials(ref err) => err.description(),
             DescribePoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribePoliciesError::Unknown(ref cause) => cause,
+            DescribePoliciesError::ParseError(ref cause) => cause,
+            DescribePoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10609,27 +10824,35 @@ pub enum DescribeScalingActivitiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalingActivitiesError {
-    pub fn from_body(body: &str) -> DescribeScalingActivitiesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => DescribeScalingActivitiesError::InvalidNextToken(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContention" => DescribeScalingActivitiesError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeScalingActivitiesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeScalingActivitiesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalingActivitiesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return DescribeScalingActivitiesError::InvalidNextToken(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return DescribeScalingActivitiesError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeScalingActivitiesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10644,7 +10867,7 @@ impl DescribeScalingActivitiesError {
 impl From<XmlParseError> for DescribeScalingActivitiesError {
     fn from(err: XmlParseError) -> DescribeScalingActivitiesError {
         let XmlParseError(message) = err;
-        DescribeScalingActivitiesError::Unknown(message.to_string())
+        DescribeScalingActivitiesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeScalingActivitiesError {
@@ -10677,7 +10900,8 @@ impl Error for DescribeScalingActivitiesError {
             DescribeScalingActivitiesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeScalingActivitiesError::Unknown(ref cause) => cause,
+            DescribeScalingActivitiesError::ParseError(ref cause) => cause,
+            DescribeScalingActivitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10692,24 +10916,30 @@ pub enum DescribeScalingProcessTypesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalingProcessTypesError {
-    pub fn from_body(body: &str) -> DescribeScalingProcessTypesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DescribeScalingProcessTypesError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeScalingProcessTypesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeScalingProcessTypesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalingProcessTypesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DescribeScalingProcessTypesError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeScalingProcessTypesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10724,7 +10954,7 @@ impl DescribeScalingProcessTypesError {
 impl From<XmlParseError> for DescribeScalingProcessTypesError {
     fn from(err: XmlParseError) -> DescribeScalingProcessTypesError {
         let XmlParseError(message) = err;
-        DescribeScalingProcessTypesError::Unknown(message.to_string())
+        DescribeScalingProcessTypesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeScalingProcessTypesError {
@@ -10756,7 +10986,8 @@ impl Error for DescribeScalingProcessTypesError {
             DescribeScalingProcessTypesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeScalingProcessTypesError::Unknown(ref cause) => cause,
+            DescribeScalingProcessTypesError::ParseError(ref cause) => cause,
+            DescribeScalingProcessTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10773,27 +11004,35 @@ pub enum DescribeScheduledActionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScheduledActionsError {
-    pub fn from_body(body: &str) -> DescribeScheduledActionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => DescribeScheduledActionsError::InvalidNextToken(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContention" => DescribeScheduledActionsError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeScheduledActionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeScheduledActionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeScheduledActionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return DescribeScheduledActionsError::InvalidNextToken(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return DescribeScheduledActionsError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeScheduledActionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10808,7 +11047,7 @@ impl DescribeScheduledActionsError {
 impl From<XmlParseError> for DescribeScheduledActionsError {
     fn from(err: XmlParseError) -> DescribeScheduledActionsError {
         let XmlParseError(message) = err;
-        DescribeScheduledActionsError::Unknown(message.to_string())
+        DescribeScheduledActionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeScheduledActionsError {
@@ -10841,7 +11080,8 @@ impl Error for DescribeScheduledActionsError {
             DescribeScheduledActionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeScheduledActionsError::Unknown(ref cause) => cause,
+            DescribeScheduledActionsError::ParseError(ref cause) => cause,
+            DescribeScheduledActionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10858,27 +11098,35 @@ pub enum DescribeTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_body(body: &str) -> DescribeTagsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => {
-                    DescribeTagsError::InvalidNextToken(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return DescribeTagsError::InvalidNextToken(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return DescribeTagsError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResourceContention" => {
-                    DescribeTagsError::ResourceContentionFault(String::from(parsed_error.message))
-                }
-                _ => DescribeTagsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeTagsError::Unknown(body.to_string()),
+            }
         }
+        DescribeTagsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10893,7 +11141,7 @@ impl DescribeTagsError {
 impl From<XmlParseError> for DescribeTagsError {
     fn from(err: XmlParseError) -> DescribeTagsError {
         let XmlParseError(message) = err;
-        DescribeTagsError::Unknown(message.to_string())
+        DescribeTagsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeTagsError {
@@ -10924,7 +11172,8 @@ impl Error for DescribeTagsError {
             DescribeTagsError::Validation(ref cause) => cause,
             DescribeTagsError::Credentials(ref err) => err.description(),
             DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::Unknown(ref cause) => cause,
+            DescribeTagsError::ParseError(ref cause) => cause,
+            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10939,26 +11188,30 @@ pub enum DescribeTerminationPolicyTypesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTerminationPolicyTypesError {
-    pub fn from_body(body: &str) -> DescribeTerminationPolicyTypesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    DescribeTerminationPolicyTypesError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTerminationPolicyTypesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DescribeTerminationPolicyTypesError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeTerminationPolicyTypesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeTerminationPolicyTypesError::Unknown(body.to_string()),
+            }
         }
+        DescribeTerminationPolicyTypesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10973,7 +11226,7 @@ impl DescribeTerminationPolicyTypesError {
 impl From<XmlParseError> for DescribeTerminationPolicyTypesError {
     fn from(err: XmlParseError) -> DescribeTerminationPolicyTypesError {
         let XmlParseError(message) = err;
-        DescribeTerminationPolicyTypesError::Unknown(message.to_string())
+        DescribeTerminationPolicyTypesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeTerminationPolicyTypesError {
@@ -11005,7 +11258,8 @@ impl Error for DescribeTerminationPolicyTypesError {
             DescribeTerminationPolicyTypesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeTerminationPolicyTypesError::Unknown(ref cause) => cause,
+            DescribeTerminationPolicyTypesError::ParseError(ref cause) => cause,
+            DescribeTerminationPolicyTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11020,24 +11274,30 @@ pub enum DetachInstancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetachInstancesError {
-    pub fn from_body(body: &str) -> DetachInstancesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DetachInstancesError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DetachInstancesError::Unknown(String::from(body)),
-            },
-            Err(_) => DetachInstancesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DetachInstancesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DetachInstancesError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DetachInstancesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11052,7 +11312,7 @@ impl DetachInstancesError {
 impl From<XmlParseError> for DetachInstancesError {
     fn from(err: XmlParseError) -> DetachInstancesError {
         let XmlParseError(message) = err;
-        DetachInstancesError::Unknown(message.to_string())
+        DetachInstancesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DetachInstancesError {
@@ -11082,7 +11342,8 @@ impl Error for DetachInstancesError {
             DetachInstancesError::Validation(ref cause) => cause,
             DetachInstancesError::Credentials(ref err) => err.description(),
             DetachInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachInstancesError::Unknown(ref cause) => cause,
+            DetachInstancesError::ParseError(ref cause) => cause,
+            DetachInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11097,26 +11358,30 @@ pub enum DetachLoadBalancerTargetGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetachLoadBalancerTargetGroupsError {
-    pub fn from_body(body: &str) -> DetachLoadBalancerTargetGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    DetachLoadBalancerTargetGroupsError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DetachLoadBalancerTargetGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DetachLoadBalancerTargetGroupsError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DetachLoadBalancerTargetGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => DetachLoadBalancerTargetGroupsError::Unknown(body.to_string()),
+            }
         }
+        DetachLoadBalancerTargetGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11131,7 +11396,7 @@ impl DetachLoadBalancerTargetGroupsError {
 impl From<XmlParseError> for DetachLoadBalancerTargetGroupsError {
     fn from(err: XmlParseError) -> DetachLoadBalancerTargetGroupsError {
         let XmlParseError(message) = err;
-        DetachLoadBalancerTargetGroupsError::Unknown(message.to_string())
+        DetachLoadBalancerTargetGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DetachLoadBalancerTargetGroupsError {
@@ -11163,7 +11428,8 @@ impl Error for DetachLoadBalancerTargetGroupsError {
             DetachLoadBalancerTargetGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DetachLoadBalancerTargetGroupsError::Unknown(ref cause) => cause,
+            DetachLoadBalancerTargetGroupsError::ParseError(ref cause) => cause,
+            DetachLoadBalancerTargetGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11178,24 +11444,30 @@ pub enum DetachLoadBalancersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetachLoadBalancersError {
-    pub fn from_body(body: &str) -> DetachLoadBalancersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DetachLoadBalancersError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DetachLoadBalancersError::Unknown(String::from(body)),
-            },
-            Err(_) => DetachLoadBalancersError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DetachLoadBalancersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DetachLoadBalancersError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DetachLoadBalancersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11210,7 +11482,7 @@ impl DetachLoadBalancersError {
 impl From<XmlParseError> for DetachLoadBalancersError {
     fn from(err: XmlParseError) -> DetachLoadBalancersError {
         let XmlParseError(message) = err;
-        DetachLoadBalancersError::Unknown(message.to_string())
+        DetachLoadBalancersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DetachLoadBalancersError {
@@ -11242,7 +11514,8 @@ impl Error for DetachLoadBalancersError {
             DetachLoadBalancersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DetachLoadBalancersError::Unknown(ref cause) => cause,
+            DetachLoadBalancersError::ParseError(ref cause) => cause,
+            DetachLoadBalancersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11257,24 +11530,30 @@ pub enum DisableMetricsCollectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisableMetricsCollectionError {
-    pub fn from_body(body: &str) -> DisableMetricsCollectionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => DisableMetricsCollectionError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DisableMetricsCollectionError::Unknown(String::from(body)),
-            },
-            Err(_) => DisableMetricsCollectionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DisableMetricsCollectionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return DisableMetricsCollectionError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DisableMetricsCollectionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11289,7 +11568,7 @@ impl DisableMetricsCollectionError {
 impl From<XmlParseError> for DisableMetricsCollectionError {
     fn from(err: XmlParseError) -> DisableMetricsCollectionError {
         let XmlParseError(message) = err;
-        DisableMetricsCollectionError::Unknown(message.to_string())
+        DisableMetricsCollectionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DisableMetricsCollectionError {
@@ -11321,7 +11600,8 @@ impl Error for DisableMetricsCollectionError {
             DisableMetricsCollectionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisableMetricsCollectionError::Unknown(ref cause) => cause,
+            DisableMetricsCollectionError::ParseError(ref cause) => cause,
+            DisableMetricsCollectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11336,24 +11616,30 @@ pub enum EnableMetricsCollectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EnableMetricsCollectionError {
-    pub fn from_body(body: &str) -> EnableMetricsCollectionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => EnableMetricsCollectionError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => EnableMetricsCollectionError::Unknown(String::from(body)),
-            },
-            Err(_) => EnableMetricsCollectionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> EnableMetricsCollectionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return EnableMetricsCollectionError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        EnableMetricsCollectionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11368,7 +11654,7 @@ impl EnableMetricsCollectionError {
 impl From<XmlParseError> for EnableMetricsCollectionError {
     fn from(err: XmlParseError) -> EnableMetricsCollectionError {
         let XmlParseError(message) = err;
-        EnableMetricsCollectionError::Unknown(message.to_string())
+        EnableMetricsCollectionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for EnableMetricsCollectionError {
@@ -11400,7 +11686,8 @@ impl Error for EnableMetricsCollectionError {
             EnableMetricsCollectionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            EnableMetricsCollectionError::Unknown(ref cause) => cause,
+            EnableMetricsCollectionError::ParseError(ref cause) => cause,
+            EnableMetricsCollectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11415,24 +11702,30 @@ pub enum EnterStandbyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EnterStandbyError {
-    pub fn from_body(body: &str) -> EnterStandbyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    EnterStandbyError::ResourceContentionFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> EnterStandbyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return EnterStandbyError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => EnterStandbyError::Unknown(String::from(body)),
-            },
-            Err(_) => EnterStandbyError::Unknown(body.to_string()),
+            }
         }
+        EnterStandbyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11447,7 +11740,7 @@ impl EnterStandbyError {
 impl From<XmlParseError> for EnterStandbyError {
     fn from(err: XmlParseError) -> EnterStandbyError {
         let XmlParseError(message) = err;
-        EnterStandbyError::Unknown(message.to_string())
+        EnterStandbyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for EnterStandbyError {
@@ -11477,7 +11770,8 @@ impl Error for EnterStandbyError {
             EnterStandbyError::Validation(ref cause) => cause,
             EnterStandbyError::Credentials(ref err) => err.description(),
             EnterStandbyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EnterStandbyError::Unknown(ref cause) => cause,
+            EnterStandbyError::ParseError(ref cause) => cause,
+            EnterStandbyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11494,27 +11788,35 @@ pub enum ExecutePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ExecutePolicyError {
-    pub fn from_body(body: &str) -> ExecutePolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    ExecutePolicyError::ResourceContentionFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ExecutePolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return ExecutePolicyError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ScalingActivityInProgress" => {
+                        return ExecutePolicyError::ScalingActivityInProgressFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ScalingActivityInProgress" => ExecutePolicyError::ScalingActivityInProgressFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => ExecutePolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => ExecutePolicyError::Unknown(body.to_string()),
+            }
         }
+        ExecutePolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11529,7 +11831,7 @@ impl ExecutePolicyError {
 impl From<XmlParseError> for ExecutePolicyError {
     fn from(err: XmlParseError) -> ExecutePolicyError {
         let XmlParseError(message) = err;
-        ExecutePolicyError::Unknown(message.to_string())
+        ExecutePolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ExecutePolicyError {
@@ -11560,7 +11862,8 @@ impl Error for ExecutePolicyError {
             ExecutePolicyError::Validation(ref cause) => cause,
             ExecutePolicyError::Credentials(ref err) => err.description(),
             ExecutePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ExecutePolicyError::Unknown(ref cause) => cause,
+            ExecutePolicyError::ParseError(ref cause) => cause,
+            ExecutePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11575,24 +11878,30 @@ pub enum ExitStandbyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ExitStandbyError {
-    pub fn from_body(body: &str) -> ExitStandbyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    ExitStandbyError::ResourceContentionFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ExitStandbyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return ExitStandbyError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ExitStandbyError::Unknown(String::from(body)),
-            },
-            Err(_) => ExitStandbyError::Unknown(body.to_string()),
+            }
         }
+        ExitStandbyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11607,7 +11916,7 @@ impl ExitStandbyError {
 impl From<XmlParseError> for ExitStandbyError {
     fn from(err: XmlParseError) -> ExitStandbyError {
         let XmlParseError(message) = err;
-        ExitStandbyError::Unknown(message.to_string())
+        ExitStandbyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ExitStandbyError {
@@ -11637,7 +11946,8 @@ impl Error for ExitStandbyError {
             ExitStandbyError::Validation(ref cause) => cause,
             ExitStandbyError::Credentials(ref err) => err.description(),
             ExitStandbyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ExitStandbyError::Unknown(ref cause) => cause,
+            ExitStandbyError::ParseError(ref cause) => cause,
+            ExitStandbyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11654,27 +11964,35 @@ pub enum PutLifecycleHookError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutLifecycleHookError {
-    pub fn from_body(body: &str) -> PutLifecycleHookError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    PutLifecycleHookError::LimitExceededFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> PutLifecycleHookError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return PutLifecycleHookError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return PutLifecycleHookError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResourceContention" => PutLifecycleHookError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => PutLifecycleHookError::Unknown(String::from(body)),
-            },
-            Err(_) => PutLifecycleHookError::Unknown(body.to_string()),
+            }
         }
+        PutLifecycleHookError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11689,7 +12007,7 @@ impl PutLifecycleHookError {
 impl From<XmlParseError> for PutLifecycleHookError {
     fn from(err: XmlParseError) -> PutLifecycleHookError {
         let XmlParseError(message) = err;
-        PutLifecycleHookError::Unknown(message.to_string())
+        PutLifecycleHookError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutLifecycleHookError {
@@ -11720,7 +12038,8 @@ impl Error for PutLifecycleHookError {
             PutLifecycleHookError::Validation(ref cause) => cause,
             PutLifecycleHookError::Credentials(ref err) => err.description(),
             PutLifecycleHookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutLifecycleHookError::Unknown(ref cause) => cause,
+            PutLifecycleHookError::ParseError(ref cause) => cause,
+            PutLifecycleHookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11739,32 +12058,40 @@ pub enum PutNotificationConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutNotificationConfigurationError {
-    pub fn from_body(body: &str) -> PutNotificationConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => PutNotificationConfigurationError::LimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContention" => PutNotificationConfigurationError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceLinkedRoleFailure" => {
-                    PutNotificationConfigurationError::ServiceLinkedRoleFailure(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> PutNotificationConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return PutNotificationConfigurationError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return PutNotificationConfigurationError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ServiceLinkedRoleFailure" => {
+                        return PutNotificationConfigurationError::ServiceLinkedRoleFailure(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => PutNotificationConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => PutNotificationConfigurationError::Unknown(body.to_string()),
+            }
         }
+        PutNotificationConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11779,7 +12106,7 @@ impl PutNotificationConfigurationError {
 impl From<XmlParseError> for PutNotificationConfigurationError {
     fn from(err: XmlParseError) -> PutNotificationConfigurationError {
         let XmlParseError(message) = err;
-        PutNotificationConfigurationError::Unknown(message.to_string())
+        PutNotificationConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutNotificationConfigurationError {
@@ -11813,7 +12140,8 @@ impl Error for PutNotificationConfigurationError {
             PutNotificationConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutNotificationConfigurationError::Unknown(ref cause) => cause,
+            PutNotificationConfigurationError::ParseError(ref cause) => cause,
+            PutNotificationConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11832,30 +12160,40 @@ pub enum PutScalingPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutScalingPolicyError {
-    pub fn from_body(body: &str) -> PutScalingPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    PutScalingPolicyError::LimitExceededFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> PutScalingPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return PutScalingPolicyError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return PutScalingPolicyError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ServiceLinkedRoleFailure" => {
+                        return PutScalingPolicyError::ServiceLinkedRoleFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResourceContention" => PutScalingPolicyError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceLinkedRoleFailure" => PutScalingPolicyError::ServiceLinkedRoleFailure(
-                    String::from(parsed_error.message),
-                ),
-                _ => PutScalingPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => PutScalingPolicyError::Unknown(body.to_string()),
+            }
         }
+        PutScalingPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11870,7 +12208,7 @@ impl PutScalingPolicyError {
 impl From<XmlParseError> for PutScalingPolicyError {
     fn from(err: XmlParseError) -> PutScalingPolicyError {
         let XmlParseError(message) = err;
-        PutScalingPolicyError::Unknown(message.to_string())
+        PutScalingPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutScalingPolicyError {
@@ -11902,7 +12240,8 @@ impl Error for PutScalingPolicyError {
             PutScalingPolicyError::Validation(ref cause) => cause,
             PutScalingPolicyError::Credentials(ref err) => err.description(),
             PutScalingPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutScalingPolicyError::Unknown(ref cause) => cause,
+            PutScalingPolicyError::ParseError(ref cause) => cause,
+            PutScalingPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11921,32 +12260,40 @@ pub enum PutScheduledUpdateGroupActionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutScheduledUpdateGroupActionError {
-    pub fn from_body(body: &str) -> PutScheduledUpdateGroupActionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExists" => PutScheduledUpdateGroupActionError::AlreadyExistsFault(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceeded" => PutScheduledUpdateGroupActionError::LimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContention" => {
-                    PutScheduledUpdateGroupActionError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> PutScheduledUpdateGroupActionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AlreadyExists" => {
+                        return PutScheduledUpdateGroupActionError::AlreadyExistsFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return PutScheduledUpdateGroupActionError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return PutScheduledUpdateGroupActionError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => PutScheduledUpdateGroupActionError::Unknown(String::from(body)),
-            },
-            Err(_) => PutScheduledUpdateGroupActionError::Unknown(body.to_string()),
+            }
         }
+        PutScheduledUpdateGroupActionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11961,7 +12308,7 @@ impl PutScheduledUpdateGroupActionError {
 impl From<XmlParseError> for PutScheduledUpdateGroupActionError {
     fn from(err: XmlParseError) -> PutScheduledUpdateGroupActionError {
         let XmlParseError(message) = err;
-        PutScheduledUpdateGroupActionError::Unknown(message.to_string())
+        PutScheduledUpdateGroupActionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutScheduledUpdateGroupActionError {
@@ -11995,7 +12342,8 @@ impl Error for PutScheduledUpdateGroupActionError {
             PutScheduledUpdateGroupActionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutScheduledUpdateGroupActionError::Unknown(ref cause) => cause,
+            PutScheduledUpdateGroupActionError::ParseError(ref cause) => cause,
+            PutScheduledUpdateGroupActionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12010,26 +12358,30 @@ pub enum RecordLifecycleActionHeartbeatError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RecordLifecycleActionHeartbeatError {
-    pub fn from_body(body: &str) -> RecordLifecycleActionHeartbeatError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    RecordLifecycleActionHeartbeatError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> RecordLifecycleActionHeartbeatError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return RecordLifecycleActionHeartbeatError::ResourceContentionFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => RecordLifecycleActionHeartbeatError::Unknown(String::from(body)),
-            },
-            Err(_) => RecordLifecycleActionHeartbeatError::Unknown(body.to_string()),
+            }
         }
+        RecordLifecycleActionHeartbeatError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12044,7 +12396,7 @@ impl RecordLifecycleActionHeartbeatError {
 impl From<XmlParseError> for RecordLifecycleActionHeartbeatError {
     fn from(err: XmlParseError) -> RecordLifecycleActionHeartbeatError {
         let XmlParseError(message) = err;
-        RecordLifecycleActionHeartbeatError::Unknown(message.to_string())
+        RecordLifecycleActionHeartbeatError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RecordLifecycleActionHeartbeatError {
@@ -12076,7 +12428,8 @@ impl Error for RecordLifecycleActionHeartbeatError {
             RecordLifecycleActionHeartbeatError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RecordLifecycleActionHeartbeatError::Unknown(ref cause) => cause,
+            RecordLifecycleActionHeartbeatError::ParseError(ref cause) => cause,
+            RecordLifecycleActionHeartbeatError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12093,27 +12446,35 @@ pub enum ResumeProcessesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ResumeProcessesError {
-    pub fn from_body(body: &str) -> ResumeProcessesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => ResumeProcessesError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceInUse" => {
-                    ResumeProcessesError::ResourceInUseFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ResumeProcessesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return ResumeProcessesError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceInUse" => {
+                        return ResumeProcessesError::ResourceInUseFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ResumeProcessesError::Unknown(String::from(body)),
-            },
-            Err(_) => ResumeProcessesError::Unknown(body.to_string()),
+            }
         }
+        ResumeProcessesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12128,7 +12489,7 @@ impl ResumeProcessesError {
 impl From<XmlParseError> for ResumeProcessesError {
     fn from(err: XmlParseError) -> ResumeProcessesError {
         let XmlParseError(message) = err;
-        ResumeProcessesError::Unknown(message.to_string())
+        ResumeProcessesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ResumeProcessesError {
@@ -12159,7 +12520,8 @@ impl Error for ResumeProcessesError {
             ResumeProcessesError::Validation(ref cause) => cause,
             ResumeProcessesError::Credentials(ref err) => err.description(),
             ResumeProcessesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResumeProcessesError::Unknown(ref cause) => cause,
+            ResumeProcessesError::ParseError(ref cause) => cause,
+            ResumeProcessesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12176,29 +12538,35 @@ pub enum SetDesiredCapacityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetDesiredCapacityError {
-    pub fn from_body(body: &str) -> SetDesiredCapacityError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => SetDesiredCapacityError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ScalingActivityInProgress" => {
-                    SetDesiredCapacityError::ScalingActivityInProgressFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> SetDesiredCapacityError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return SetDesiredCapacityError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ScalingActivityInProgress" => {
+                        return SetDesiredCapacityError::ScalingActivityInProgressFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => SetDesiredCapacityError::Unknown(String::from(body)),
-            },
-            Err(_) => SetDesiredCapacityError::Unknown(body.to_string()),
+            }
         }
+        SetDesiredCapacityError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12213,7 +12581,7 @@ impl SetDesiredCapacityError {
 impl From<XmlParseError> for SetDesiredCapacityError {
     fn from(err: XmlParseError) -> SetDesiredCapacityError {
         let XmlParseError(message) = err;
-        SetDesiredCapacityError::Unknown(message.to_string())
+        SetDesiredCapacityError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetDesiredCapacityError {
@@ -12246,7 +12614,8 @@ impl Error for SetDesiredCapacityError {
             SetDesiredCapacityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetDesiredCapacityError::Unknown(ref cause) => cause,
+            SetDesiredCapacityError::ParseError(ref cause) => cause,
+            SetDesiredCapacityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12261,24 +12630,30 @@ pub enum SetInstanceHealthError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetInstanceHealthError {
-    pub fn from_body(body: &str) -> SetInstanceHealthError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => SetInstanceHealthError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => SetInstanceHealthError::Unknown(String::from(body)),
-            },
-            Err(_) => SetInstanceHealthError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SetInstanceHealthError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return SetInstanceHealthError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        SetInstanceHealthError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12293,7 +12668,7 @@ impl SetInstanceHealthError {
 impl From<XmlParseError> for SetInstanceHealthError {
     fn from(err: XmlParseError) -> SetInstanceHealthError {
         let XmlParseError(message) = err;
-        SetInstanceHealthError::Unknown(message.to_string())
+        SetInstanceHealthError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetInstanceHealthError {
@@ -12325,7 +12700,8 @@ impl Error for SetInstanceHealthError {
             SetInstanceHealthError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetInstanceHealthError::Unknown(ref cause) => cause,
+            SetInstanceHealthError::ParseError(ref cause) => cause,
+            SetInstanceHealthError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12342,27 +12718,35 @@ pub enum SetInstanceProtectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetInstanceProtectionError {
-    pub fn from_body(body: &str) -> SetInstanceProtectionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => SetInstanceProtectionError::LimitExceededFault(String::from(
-                    parsed_error.message,
-                )),
-                "ResourceContention" => SetInstanceProtectionError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => SetInstanceProtectionError::Unknown(String::from(body)),
-            },
-            Err(_) => SetInstanceProtectionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SetInstanceProtectionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return SetInstanceProtectionError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return SetInstanceProtectionError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        SetInstanceProtectionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12377,7 +12761,7 @@ impl SetInstanceProtectionError {
 impl From<XmlParseError> for SetInstanceProtectionError {
     fn from(err: XmlParseError) -> SetInstanceProtectionError {
         let XmlParseError(message) = err;
-        SetInstanceProtectionError::Unknown(message.to_string())
+        SetInstanceProtectionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetInstanceProtectionError {
@@ -12410,7 +12794,8 @@ impl Error for SetInstanceProtectionError {
             SetInstanceProtectionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetInstanceProtectionError::Unknown(ref cause) => cause,
+            SetInstanceProtectionError::ParseError(ref cause) => cause,
+            SetInstanceProtectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12427,27 +12812,35 @@ pub enum SuspendProcessesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SuspendProcessesError {
-    pub fn from_body(body: &str) -> SuspendProcessesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => SuspendProcessesError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceInUse" => {
-                    SuspendProcessesError::ResourceInUseFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> SuspendProcessesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return SuspendProcessesError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceInUse" => {
+                        return SuspendProcessesError::ResourceInUseFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => SuspendProcessesError::Unknown(String::from(body)),
-            },
-            Err(_) => SuspendProcessesError::Unknown(body.to_string()),
+            }
         }
+        SuspendProcessesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12462,7 +12855,7 @@ impl SuspendProcessesError {
 impl From<XmlParseError> for SuspendProcessesError {
     fn from(err: XmlParseError) -> SuspendProcessesError {
         let XmlParseError(message) = err;
-        SuspendProcessesError::Unknown(message.to_string())
+        SuspendProcessesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SuspendProcessesError {
@@ -12493,7 +12886,8 @@ impl Error for SuspendProcessesError {
             SuspendProcessesError::Validation(ref cause) => cause,
             SuspendProcessesError::Credentials(ref err) => err.description(),
             SuspendProcessesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SuspendProcessesError::Unknown(ref cause) => cause,
+            SuspendProcessesError::ParseError(ref cause) => cause,
+            SuspendProcessesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12510,31 +12904,25 @@ pub enum TerminateInstanceInAutoScalingGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TerminateInstanceInAutoScalingGroupError {
-    pub fn from_body(body: &str) -> TerminateInstanceInAutoScalingGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => {
-                    TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ScalingActivityInProgress" => {
-                    TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => TerminateInstanceInAutoScalingGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => TerminateInstanceInAutoScalingGroupError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> TerminateInstanceInAutoScalingGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ResourceContention" => return TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(String::from(parsed_error.message)),"ScalingActivityInProgress" => return TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        TerminateInstanceInAutoScalingGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12549,7 +12937,7 @@ impl TerminateInstanceInAutoScalingGroupError {
 impl From<XmlParseError> for TerminateInstanceInAutoScalingGroupError {
     fn from(err: XmlParseError) -> TerminateInstanceInAutoScalingGroupError {
         let XmlParseError(message) = err;
-        TerminateInstanceInAutoScalingGroupError::Unknown(message.to_string())
+        TerminateInstanceInAutoScalingGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for TerminateInstanceInAutoScalingGroupError {
@@ -12584,7 +12972,8 @@ impl Error for TerminateInstanceInAutoScalingGroupError {
             TerminateInstanceInAutoScalingGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            TerminateInstanceInAutoScalingGroupError::Unknown(ref cause) => cause,
+            TerminateInstanceInAutoScalingGroupError::ParseError(ref cause) => cause,
+            TerminateInstanceInAutoScalingGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12603,34 +12992,40 @@ pub enum UpdateAutoScalingGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAutoScalingGroupError {
-    pub fn from_body(body: &str) -> UpdateAutoScalingGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContention" => UpdateAutoScalingGroupError::ResourceContentionFault(
-                    String::from(parsed_error.message),
-                ),
-                "ScalingActivityInProgress" => {
-                    UpdateAutoScalingGroupError::ScalingActivityInProgressFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateAutoScalingGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return UpdateAutoScalingGroupError::ResourceContentionFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ScalingActivityInProgress" => {
+                        return UpdateAutoScalingGroupError::ScalingActivityInProgressFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ServiceLinkedRoleFailure" => {
+                        return UpdateAutoScalingGroupError::ServiceLinkedRoleFailure(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ServiceLinkedRoleFailure" => {
-                    UpdateAutoScalingGroupError::ServiceLinkedRoleFailure(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => UpdateAutoScalingGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateAutoScalingGroupError::Unknown(body.to_string()),
+            }
         }
+        UpdateAutoScalingGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12645,7 +13040,7 @@ impl UpdateAutoScalingGroupError {
 impl From<XmlParseError> for UpdateAutoScalingGroupError {
     fn from(err: XmlParseError) -> UpdateAutoScalingGroupError {
         let XmlParseError(message) = err;
-        UpdateAutoScalingGroupError::Unknown(message.to_string())
+        UpdateAutoScalingGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateAutoScalingGroupError {
@@ -12679,7 +13074,8 @@ impl Error for UpdateAutoScalingGroupError {
             UpdateAutoScalingGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateAutoScalingGroupError::Unknown(ref cause) => cause,
+            UpdateAutoScalingGroupError::ParseError(ref cause) => cause,
+            UpdateAutoScalingGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13038,11 +13434,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AttachInstancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AttachInstancesError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -13069,9 +13466,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AttachLoadBalancerTargetGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AttachLoadBalancerTargetGroupsError::from_response(response))
                 }));
             }
 
@@ -13122,11 +13517,11 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AttachLoadBalancersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AttachLoadBalancersError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13175,9 +13570,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CompleteLifecycleActionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CompleteLifecycleActionError::from_response(response))
                 }));
             }
 
@@ -13227,9 +13620,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateAutoScalingGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateAutoScalingGroupError::from_response(response))
                 }));
             }
 
@@ -13256,9 +13647,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateLaunchConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateLaunchConfigurationError::from_response(response))
                 }));
             }
 
@@ -13284,11 +13673,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateOrUpdateTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateOrUpdateTagsError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -13314,9 +13704,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAutoScalingGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteAutoScalingGroupError::from_response(response))
                 }));
             }
 
@@ -13343,9 +13731,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteLaunchConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteLaunchConfigurationError::from_response(response))
                 }));
             }
 
@@ -13371,11 +13757,11 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteLifecycleHookError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteLifecycleHookError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13424,8 +13810,8 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteNotificationConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeleteNotificationConfigurationError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -13449,11 +13835,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeletePolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -13478,11 +13865,11 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteScheduledActionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteScheduledActionError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -13504,11 +13891,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -13532,11 +13920,11 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAccountLimitsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeAccountLimitsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13584,9 +13972,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAdjustmentTypesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeAdjustmentTypesError::from_response(response))
                 }));
             }
 
@@ -13636,9 +14022,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAutoScalingGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeAutoScalingGroupsError::from_response(response))
                 }));
             }
 
@@ -13688,9 +14072,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAutoScalingInstancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeAutoScalingInstancesError::from_response(response))
                 }));
             }
 
@@ -13742,8 +14124,8 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAutoScalingNotificationTypesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeAutoScalingNotificationTypesError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -13796,9 +14178,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLaunchConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeLaunchConfigurationsError::from_response(response))
                 }));
             }
 
@@ -13847,9 +14227,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLifecycleHookTypesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeLifecycleHookTypesError::from_response(response))
                 }));
             }
 
@@ -13899,9 +14277,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLifecycleHooksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeLifecycleHooksError::from_response(response))
                 }));
             }
 
@@ -13952,8 +14328,8 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoadBalancerTargetGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeLoadBalancerTargetGroupsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -14005,11 +14381,11 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoadBalancersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeLoadBalancersError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14057,9 +14433,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeMetricCollectionTypesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeMetricCollectionTypesError::from_response(response))
                 }));
             }
 
@@ -14114,8 +14488,8 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeNotificationConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeNotificationConfigurationsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -14167,11 +14541,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribePoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribePoliciesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14220,9 +14595,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScalingActivitiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeScalingActivitiesError::from_response(response))
                 }));
             }
 
@@ -14271,9 +14644,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScalingProcessTypesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeScalingProcessTypesError::from_response(response))
                 }));
             }
 
@@ -14323,9 +14694,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScheduledActionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeScheduledActionsError::from_response(response))
                 }));
             }
 
@@ -14371,11 +14740,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14424,9 +14794,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTerminationPolicyTypesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeTerminationPolicyTypesError::from_response(response))
                 }));
             }
 
@@ -14477,11 +14845,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetachInstancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetachInstancesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14531,9 +14900,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetachLoadBalancerTargetGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DetachLoadBalancerTargetGroupsError::from_response(response))
                 }));
             }
 
@@ -14584,11 +14951,11 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetachLoadBalancersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DetachLoadBalancersError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14637,9 +15004,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableMetricsCollectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DisableMetricsCollectionError::from_response(response))
                 }));
             }
 
@@ -14666,9 +15031,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableMetricsCollectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(EnableMetricsCollectionError::from_response(response))
                 }));
             }
 
@@ -14694,11 +15057,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnterStandbyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(EnterStandbyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14743,11 +15107,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ExecutePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ExecutePolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -14772,11 +15137,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ExitStandbyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ExitStandbyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14824,11 +15190,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutLifecycleHookError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutLifecycleHookError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14877,9 +15244,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutNotificationConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutNotificationConfigurationError::from_response(response))
                 }));
             }
 
@@ -14905,11 +15270,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutScalingPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutScalingPolicyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14958,9 +15324,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutScheduledUpdateGroupActionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutScheduledUpdateGroupActionError::from_response(response))
                 }));
             }
 
@@ -14988,9 +15352,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RecordLifecycleActionHeartbeatError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RecordLifecycleActionHeartbeatError::from_response(response))
                 }));
             }
 
@@ -15041,11 +15403,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResumeProcessesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ResumeProcessesError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -15070,11 +15433,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetDesiredCapacityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SetDesiredCapacityError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -15099,11 +15463,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetInstanceHealthError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SetInstanceHealthError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -15128,11 +15493,11 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetInstanceProtectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(SetInstanceProtectionError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15180,11 +15545,12 @@ impl Autoscaling for AutoscalingClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SuspendProcessesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SuspendProcessesError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -15210,8 +15576,8 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TerminateInstanceInAutoScalingGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(TerminateInstanceInAutoScalingGroupError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -15262,9 +15628,7 @@ impl Autoscaling for AutoscalingClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateAutoScalingGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateAutoScalingGroupError::from_response(response))
                 }));
             }
 

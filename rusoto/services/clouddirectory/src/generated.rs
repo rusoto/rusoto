@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddFacetToObjectRequest {
@@ -2630,7 +2630,7 @@ pub struct TypedAttributeValue {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub binary_value: Option<Vec<u8>>,
     /// <p>A Boolean data value.</p>
@@ -2945,62 +2945,62 @@ pub enum AddFacetToObjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddFacetToObjectError {
-    pub fn from_body(body: &str) -> AddFacetToObjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AddFacetToObjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        AddFacetToObjectError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        AddFacetToObjectError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        AddFacetToObjectError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        AddFacetToObjectError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        AddFacetToObjectError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        AddFacetToObjectError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        AddFacetToObjectError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        AddFacetToObjectError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AddFacetToObjectError::Validation(error_message.to_string())
-                    }
-                    _ => AddFacetToObjectError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return AddFacetToObjectError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return AddFacetToObjectError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "FacetValidationException" => {
+                    return AddFacetToObjectError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return AddFacetToObjectError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return AddFacetToObjectError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return AddFacetToObjectError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return AddFacetToObjectError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return AddFacetToObjectError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AddFacetToObjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AddFacetToObjectError::Unknown(String::from(body)),
         }
+        return AddFacetToObjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AddFacetToObjectError {
     fn from(err: serde_json::error::Error) -> AddFacetToObjectError {
-        AddFacetToObjectError::Unknown(err.description().to_string())
+        AddFacetToObjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AddFacetToObjectError {
@@ -3037,7 +3037,8 @@ impl Error for AddFacetToObjectError {
             AddFacetToObjectError::Validation(ref cause) => cause,
             AddFacetToObjectError::Credentials(ref err) => err.description(),
             AddFacetToObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddFacetToObjectError::Unknown(ref cause) => cause,
+            AddFacetToObjectError::ParseError(ref cause) => cause,
+            AddFacetToObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3064,59 +3065,59 @@ pub enum ApplySchemaError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ApplySchemaError {
-    pub fn from_body(body: &str) -> ApplySchemaError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ApplySchemaError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ApplySchemaError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ApplySchemaError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ApplySchemaError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidAttachmentException" => {
-                        ApplySchemaError::InvalidAttachment(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ApplySchemaError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ApplySchemaError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ApplySchemaError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ApplySchemaError::Validation(error_message.to_string())
-                    }
-                    _ => ApplySchemaError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ApplySchemaError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return ApplySchemaError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ApplySchemaError::InvalidArn(String::from(error_message))
+                }
+                "InvalidAttachmentException" => {
+                    return ApplySchemaError::InvalidAttachment(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ApplySchemaError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ApplySchemaError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ApplySchemaError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ApplySchemaError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ApplySchemaError::Unknown(String::from(body)),
         }
+        return ApplySchemaError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ApplySchemaError {
     fn from(err: serde_json::error::Error) -> ApplySchemaError {
-        ApplySchemaError::Unknown(err.description().to_string())
+        ApplySchemaError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ApplySchemaError {
@@ -3152,7 +3153,8 @@ impl Error for ApplySchemaError {
             ApplySchemaError::Validation(ref cause) => cause,
             ApplySchemaError::Credentials(ref err) => err.description(),
             ApplySchemaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ApplySchemaError::Unknown(ref cause) => cause,
+            ApplySchemaError::ParseError(ref cause) => cause,
+            ApplySchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3185,68 +3187,68 @@ pub enum AttachObjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AttachObjectError {
-    pub fn from_body(body: &str) -> AttachObjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AttachObjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        AttachObjectError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        AttachObjectError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        AttachObjectError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        AttachObjectError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        AttachObjectError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidAttachmentException" => {
-                        AttachObjectError::InvalidAttachment(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        AttachObjectError::LimitExceeded(String::from(error_message))
-                    }
-                    "LinkNameAlreadyInUseException" => {
-                        AttachObjectError::LinkNameAlreadyInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        AttachObjectError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        AttachObjectError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AttachObjectError::Validation(error_message.to_string())
-                    }
-                    _ => AttachObjectError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return AttachObjectError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return AttachObjectError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "FacetValidationException" => {
+                    return AttachObjectError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return AttachObjectError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return AttachObjectError::InvalidArn(String::from(error_message))
+                }
+                "InvalidAttachmentException" => {
+                    return AttachObjectError::InvalidAttachment(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return AttachObjectError::LimitExceeded(String::from(error_message))
+                }
+                "LinkNameAlreadyInUseException" => {
+                    return AttachObjectError::LinkNameAlreadyInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return AttachObjectError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return AttachObjectError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AttachObjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AttachObjectError::Unknown(String::from(body)),
         }
+        return AttachObjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AttachObjectError {
     fn from(err: serde_json::error::Error) -> AttachObjectError {
-        AttachObjectError::Unknown(err.description().to_string())
+        AttachObjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AttachObjectError {
@@ -3285,7 +3287,8 @@ impl Error for AttachObjectError {
             AttachObjectError::Validation(ref cause) => cause,
             AttachObjectError::Credentials(ref err) => err.description(),
             AttachObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachObjectError::Unknown(ref cause) => cause,
+            AttachObjectError::ParseError(ref cause) => cause,
+            AttachObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3314,62 +3317,62 @@ pub enum AttachPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AttachPolicyError {
-    pub fn from_body(body: &str) -> AttachPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AttachPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        AttachPolicyError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        AttachPolicyError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        AttachPolicyError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        AttachPolicyError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        AttachPolicyError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotPolicyException" => {
-                        AttachPolicyError::NotPolicy(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        AttachPolicyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        AttachPolicyError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AttachPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => AttachPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return AttachPolicyError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return AttachPolicyError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return AttachPolicyError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return AttachPolicyError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return AttachPolicyError::LimitExceeded(String::from(error_message))
+                }
+                "NotPolicyException" => {
+                    return AttachPolicyError::NotPolicy(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return AttachPolicyError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return AttachPolicyError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AttachPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AttachPolicyError::Unknown(String::from(body)),
         }
+        return AttachPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AttachPolicyError {
     fn from(err: serde_json::error::Error) -> AttachPolicyError {
-        AttachPolicyError::Unknown(err.description().to_string())
+        AttachPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AttachPolicyError {
@@ -3406,7 +3409,8 @@ impl Error for AttachPolicyError {
             AttachPolicyError::Validation(ref cause) => cause,
             AttachPolicyError::Credentials(ref err) => err.description(),
             AttachPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachPolicyError::Unknown(ref cause) => cause,
+            AttachPolicyError::ParseError(ref cause) => cause,
+            AttachPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3441,71 +3445,71 @@ pub enum AttachToIndexError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AttachToIndexError {
-    pub fn from_body(body: &str) -> AttachToIndexError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AttachToIndexError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        AttachToIndexError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        AttachToIndexError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "IndexedAttributeMissingException" => {
-                        AttachToIndexError::IndexedAttributeMissing(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        AttachToIndexError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        AttachToIndexError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidAttachmentException" => {
-                        AttachToIndexError::InvalidAttachment(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        AttachToIndexError::LimitExceeded(String::from(error_message))
-                    }
-                    "LinkNameAlreadyInUseException" => {
-                        AttachToIndexError::LinkNameAlreadyInUse(String::from(error_message))
-                    }
-                    "NotIndexException" => {
-                        AttachToIndexError::NotIndex(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        AttachToIndexError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        AttachToIndexError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AttachToIndexError::Validation(error_message.to_string())
-                    }
-                    _ => AttachToIndexError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return AttachToIndexError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return AttachToIndexError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "IndexedAttributeMissingException" => {
+                    return AttachToIndexError::IndexedAttributeMissing(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return AttachToIndexError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return AttachToIndexError::InvalidArn(String::from(error_message))
+                }
+                "InvalidAttachmentException" => {
+                    return AttachToIndexError::InvalidAttachment(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return AttachToIndexError::LimitExceeded(String::from(error_message))
+                }
+                "LinkNameAlreadyInUseException" => {
+                    return AttachToIndexError::LinkNameAlreadyInUse(String::from(error_message))
+                }
+                "NotIndexException" => {
+                    return AttachToIndexError::NotIndex(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return AttachToIndexError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return AttachToIndexError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AttachToIndexError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AttachToIndexError::Unknown(String::from(body)),
         }
+        return AttachToIndexError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AttachToIndexError {
     fn from(err: serde_json::error::Error) -> AttachToIndexError {
-        AttachToIndexError::Unknown(err.description().to_string())
+        AttachToIndexError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AttachToIndexError {
@@ -3545,7 +3549,8 @@ impl Error for AttachToIndexError {
             AttachToIndexError::Validation(ref cause) => cause,
             AttachToIndexError::Credentials(ref err) => err.description(),
             AttachToIndexError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachToIndexError::Unknown(ref cause) => cause,
+            AttachToIndexError::ParseError(ref cause) => cause,
+            AttachToIndexError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3576,65 +3581,65 @@ pub enum AttachTypedLinkError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AttachTypedLinkError {
-    pub fn from_body(body: &str) -> AttachTypedLinkError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AttachTypedLinkError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        AttachTypedLinkError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        AttachTypedLinkError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        AttachTypedLinkError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        AttachTypedLinkError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        AttachTypedLinkError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidAttachmentException" => {
-                        AttachTypedLinkError::InvalidAttachment(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        AttachTypedLinkError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        AttachTypedLinkError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        AttachTypedLinkError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AttachTypedLinkError::Validation(error_message.to_string())
-                    }
-                    _ => AttachTypedLinkError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return AttachTypedLinkError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return AttachTypedLinkError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "FacetValidationException" => {
+                    return AttachTypedLinkError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return AttachTypedLinkError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return AttachTypedLinkError::InvalidArn(String::from(error_message))
+                }
+                "InvalidAttachmentException" => {
+                    return AttachTypedLinkError::InvalidAttachment(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return AttachTypedLinkError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return AttachTypedLinkError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return AttachTypedLinkError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AttachTypedLinkError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AttachTypedLinkError::Unknown(String::from(body)),
         }
+        return AttachTypedLinkError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AttachTypedLinkError {
     fn from(err: serde_json::error::Error) -> AttachTypedLinkError {
-        AttachTypedLinkError::Unknown(err.description().to_string())
+        AttachTypedLinkError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AttachTypedLinkError {
@@ -3672,7 +3677,8 @@ impl Error for AttachTypedLinkError {
             AttachTypedLinkError::Validation(ref cause) => cause,
             AttachTypedLinkError::Credentials(ref err) => err.description(),
             AttachTypedLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachTypedLinkError::Unknown(ref cause) => cause,
+            AttachTypedLinkError::ParseError(ref cause) => cause,
+            AttachTypedLinkError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3697,54 +3703,56 @@ pub enum BatchReadError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchReadError {
-    pub fn from_body(body: &str) -> BatchReadError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchReadError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        BatchReadError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        BatchReadError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        BatchReadError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        BatchReadError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        BatchReadError::LimitExceeded(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        BatchReadError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => BatchReadError::Validation(error_message.to_string()),
-                    _ => BatchReadError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return BatchReadError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return BatchReadError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return BatchReadError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return BatchReadError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return BatchReadError::LimitExceeded(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return BatchReadError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return BatchReadError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchReadError::Unknown(String::from(body)),
         }
+        return BatchReadError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchReadError {
     fn from(err: serde_json::error::Error) -> BatchReadError {
-        BatchReadError::Unknown(err.description().to_string())
+        BatchReadError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchReadError {
@@ -3779,7 +3787,8 @@ impl Error for BatchReadError {
             BatchReadError::Validation(ref cause) => cause,
             BatchReadError::Credentials(ref err) => err.description(),
             BatchReadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchReadError::Unknown(ref cause) => cause,
+            BatchReadError::ParseError(ref cause) => cause,
+            BatchReadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3806,57 +3815,59 @@ pub enum BatchWriteError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchWriteError {
-    pub fn from_body(body: &str) -> BatchWriteError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchWriteError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        BatchWriteError::AccessDenied(String::from(error_message))
-                    }
-                    "BatchWriteException" => {
-                        BatchWriteError::BatchWrite(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        BatchWriteError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        BatchWriteError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        BatchWriteError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        BatchWriteError::LimitExceeded(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        BatchWriteError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => BatchWriteError::Validation(error_message.to_string()),
-                    _ => BatchWriteError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return BatchWriteError::AccessDenied(String::from(error_message))
                 }
+                "BatchWriteException" => {
+                    return BatchWriteError::BatchWrite(String::from(error_message))
+                }
+                "DirectoryNotEnabledException" => {
+                    return BatchWriteError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return BatchWriteError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return BatchWriteError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return BatchWriteError::LimitExceeded(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return BatchWriteError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return BatchWriteError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchWriteError::Unknown(String::from(body)),
         }
+        return BatchWriteError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchWriteError {
     fn from(err: serde_json::error::Error) -> BatchWriteError {
-        BatchWriteError::Unknown(err.description().to_string())
+        BatchWriteError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchWriteError {
@@ -3892,7 +3903,8 @@ impl Error for BatchWriteError {
             BatchWriteError::Validation(ref cause) => cause,
             BatchWriteError::Credentials(ref err) => err.description(),
             BatchWriteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchWriteError::Unknown(ref cause) => cause,
+            BatchWriteError::ParseError(ref cause) => cause,
+            BatchWriteError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3919,59 +3931,59 @@ pub enum CreateDirectoryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDirectoryError {
-    pub fn from_body(body: &str) -> CreateDirectoryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDirectoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreateDirectoryError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryAlreadyExistsException" => {
-                        CreateDirectoryError::DirectoryAlreadyExists(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CreateDirectoryError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        CreateDirectoryError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateDirectoryError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateDirectoryError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        CreateDirectoryError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateDirectoryError::Validation(error_message.to_string())
-                    }
-                    _ => CreateDirectoryError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateDirectoryError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryAlreadyExistsException" => {
+                    return CreateDirectoryError::DirectoryAlreadyExists(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return CreateDirectoryError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return CreateDirectoryError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateDirectoryError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateDirectoryError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return CreateDirectoryError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateDirectoryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateDirectoryError::Unknown(String::from(body)),
         }
+        return CreateDirectoryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateDirectoryError {
     fn from(err: serde_json::error::Error) -> CreateDirectoryError {
-        CreateDirectoryError::Unknown(err.description().to_string())
+        CreateDirectoryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateDirectoryError {
@@ -4007,7 +4019,8 @@ impl Error for CreateDirectoryError {
             CreateDirectoryError::Validation(ref cause) => cause,
             CreateDirectoryError::Credentials(ref err) => err.description(),
             CreateDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDirectoryError::Unknown(ref cause) => cause,
+            CreateDirectoryError::ParseError(ref cause) => cause,
+            CreateDirectoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4038,65 +4051,65 @@ pub enum CreateFacetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateFacetError {
-    pub fn from_body(body: &str) -> CreateFacetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateFacetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreateFacetError::AccessDenied(String::from(error_message))
-                    }
-                    "FacetAlreadyExistsException" => {
-                        CreateFacetError::FacetAlreadyExists(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        CreateFacetError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CreateFacetError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        CreateFacetError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidRuleException" => {
-                        CreateFacetError::InvalidRule(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateFacetError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateFacetError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        CreateFacetError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateFacetError::Validation(error_message.to_string())
-                    }
-                    _ => CreateFacetError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateFacetError::AccessDenied(String::from(error_message))
                 }
+                "FacetAlreadyExistsException" => {
+                    return CreateFacetError::FacetAlreadyExists(String::from(error_message))
+                }
+                "FacetValidationException" => {
+                    return CreateFacetError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return CreateFacetError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return CreateFacetError::InvalidArn(String::from(error_message))
+                }
+                "InvalidRuleException" => {
+                    return CreateFacetError::InvalidRule(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateFacetError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateFacetError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return CreateFacetError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateFacetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateFacetError::Unknown(String::from(body)),
         }
+        return CreateFacetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateFacetError {
     fn from(err: serde_json::error::Error) -> CreateFacetError {
-        CreateFacetError::Unknown(err.description().to_string())
+        CreateFacetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateFacetError {
@@ -4134,7 +4147,8 @@ impl Error for CreateFacetError {
             CreateFacetError::Validation(ref cause) => cause,
             CreateFacetError::Credentials(ref err) => err.description(),
             CreateFacetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateFacetError::Unknown(ref cause) => cause,
+            CreateFacetError::ParseError(ref cause) => cause,
+            CreateFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4167,68 +4181,68 @@ pub enum CreateIndexError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateIndexError {
-    pub fn from_body(body: &str) -> CreateIndexError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateIndexError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreateIndexError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        CreateIndexError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        CreateIndexError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CreateIndexError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        CreateIndexError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateIndexError::LimitExceeded(String::from(error_message))
-                    }
-                    "LinkNameAlreadyInUseException" => {
-                        CreateIndexError::LinkNameAlreadyInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateIndexError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        CreateIndexError::RetryableConflict(String::from(error_message))
-                    }
-                    "UnsupportedIndexTypeException" => {
-                        CreateIndexError::UnsupportedIndexType(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateIndexError::Validation(error_message.to_string())
-                    }
-                    _ => CreateIndexError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateIndexError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return CreateIndexError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "FacetValidationException" => {
+                    return CreateIndexError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return CreateIndexError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return CreateIndexError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateIndexError::LimitExceeded(String::from(error_message))
+                }
+                "LinkNameAlreadyInUseException" => {
+                    return CreateIndexError::LinkNameAlreadyInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateIndexError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return CreateIndexError::RetryableConflict(String::from(error_message))
+                }
+                "UnsupportedIndexTypeException" => {
+                    return CreateIndexError::UnsupportedIndexType(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateIndexError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateIndexError::Unknown(String::from(body)),
         }
+        return CreateIndexError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateIndexError {
     fn from(err: serde_json::error::Error) -> CreateIndexError {
-        CreateIndexError::Unknown(err.description().to_string())
+        CreateIndexError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateIndexError {
@@ -4267,7 +4281,8 @@ impl Error for CreateIndexError {
             CreateIndexError::Validation(ref cause) => cause,
             CreateIndexError::Credentials(ref err) => err.description(),
             CreateIndexError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateIndexError::Unknown(ref cause) => cause,
+            CreateIndexError::ParseError(ref cause) => cause,
+            CreateIndexError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4300,68 +4315,68 @@ pub enum CreateObjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateObjectError {
-    pub fn from_body(body: &str) -> CreateObjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateObjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreateObjectError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        CreateObjectError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        CreateObjectError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CreateObjectError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        CreateObjectError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateObjectError::LimitExceeded(String::from(error_message))
-                    }
-                    "LinkNameAlreadyInUseException" => {
-                        CreateObjectError::LinkNameAlreadyInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateObjectError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        CreateObjectError::RetryableConflict(String::from(error_message))
-                    }
-                    "UnsupportedIndexTypeException" => {
-                        CreateObjectError::UnsupportedIndexType(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateObjectError::Validation(error_message.to_string())
-                    }
-                    _ => CreateObjectError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateObjectError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return CreateObjectError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "FacetValidationException" => {
+                    return CreateObjectError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return CreateObjectError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return CreateObjectError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateObjectError::LimitExceeded(String::from(error_message))
+                }
+                "LinkNameAlreadyInUseException" => {
+                    return CreateObjectError::LinkNameAlreadyInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateObjectError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return CreateObjectError::RetryableConflict(String::from(error_message))
+                }
+                "UnsupportedIndexTypeException" => {
+                    return CreateObjectError::UnsupportedIndexType(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateObjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateObjectError::Unknown(String::from(body)),
         }
+        return CreateObjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateObjectError {
     fn from(err: serde_json::error::Error) -> CreateObjectError {
-        CreateObjectError::Unknown(err.description().to_string())
+        CreateObjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateObjectError {
@@ -4400,7 +4415,8 @@ impl Error for CreateObjectError {
             CreateObjectError::Validation(ref cause) => cause,
             CreateObjectError::Credentials(ref err) => err.description(),
             CreateObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateObjectError::Unknown(ref cause) => cause,
+            CreateObjectError::ParseError(ref cause) => cause,
+            CreateObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4425,56 +4441,56 @@ pub enum CreateSchemaError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSchemaError {
-    pub fn from_body(body: &str) -> CreateSchemaError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSchemaError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreateSchemaError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CreateSchemaError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        CreateSchemaError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateSchemaError::LimitExceeded(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        CreateSchemaError::RetryableConflict(String::from(error_message))
-                    }
-                    "SchemaAlreadyExistsException" => {
-                        CreateSchemaError::SchemaAlreadyExists(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateSchemaError::Validation(error_message.to_string())
-                    }
-                    _ => CreateSchemaError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateSchemaError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return CreateSchemaError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return CreateSchemaError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateSchemaError::LimitExceeded(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return CreateSchemaError::RetryableConflict(String::from(error_message))
+                }
+                "SchemaAlreadyExistsException" => {
+                    return CreateSchemaError::SchemaAlreadyExists(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateSchemaError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateSchemaError::Unknown(String::from(body)),
         }
+        return CreateSchemaError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateSchemaError {
     fn from(err: serde_json::error::Error) -> CreateSchemaError {
-        CreateSchemaError::Unknown(err.description().to_string())
+        CreateSchemaError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateSchemaError {
@@ -4509,7 +4525,8 @@ impl Error for CreateSchemaError {
             CreateSchemaError::Validation(ref cause) => cause,
             CreateSchemaError::Credentials(ref err) => err.description(),
             CreateSchemaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateSchemaError::Unknown(ref cause) => cause,
+            CreateSchemaError::ParseError(ref cause) => cause,
+            CreateSchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4540,65 +4557,67 @@ pub enum CreateTypedLinkFacetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTypedLinkFacetError {
-    pub fn from_body(body: &str) -> CreateTypedLinkFacetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTypedLinkFacetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreateTypedLinkFacetError::AccessDenied(String::from(error_message))
-                    }
-                    "FacetAlreadyExistsException" => {
-                        CreateTypedLinkFacetError::FacetAlreadyExists(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        CreateTypedLinkFacetError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CreateTypedLinkFacetError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        CreateTypedLinkFacetError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidRuleException" => {
-                        CreateTypedLinkFacetError::InvalidRule(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateTypedLinkFacetError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateTypedLinkFacetError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        CreateTypedLinkFacetError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateTypedLinkFacetError::Validation(error_message.to_string())
-                    }
-                    _ => CreateTypedLinkFacetError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateTypedLinkFacetError::AccessDenied(String::from(error_message))
                 }
+                "FacetAlreadyExistsException" => {
+                    return CreateTypedLinkFacetError::FacetAlreadyExists(String::from(
+                        error_message,
+                    ))
+                }
+                "FacetValidationException" => {
+                    return CreateTypedLinkFacetError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return CreateTypedLinkFacetError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return CreateTypedLinkFacetError::InvalidArn(String::from(error_message))
+                }
+                "InvalidRuleException" => {
+                    return CreateTypedLinkFacetError::InvalidRule(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateTypedLinkFacetError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateTypedLinkFacetError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return CreateTypedLinkFacetError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateTypedLinkFacetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateTypedLinkFacetError::Unknown(String::from(body)),
         }
+        return CreateTypedLinkFacetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateTypedLinkFacetError {
     fn from(err: serde_json::error::Error) -> CreateTypedLinkFacetError {
-        CreateTypedLinkFacetError::Unknown(err.description().to_string())
+        CreateTypedLinkFacetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateTypedLinkFacetError {
@@ -4638,7 +4657,8 @@ impl Error for CreateTypedLinkFacetError {
             CreateTypedLinkFacetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateTypedLinkFacetError::Unknown(ref cause) => cause,
+            CreateTypedLinkFacetError::ParseError(ref cause) => cause,
+            CreateTypedLinkFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4667,62 +4687,62 @@ pub enum DeleteDirectoryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDirectoryError {
-    pub fn from_body(body: &str) -> DeleteDirectoryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDirectoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DeleteDirectoryError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryDeletedException" => {
-                        DeleteDirectoryError::DirectoryDeleted(String::from(error_message))
-                    }
-                    "DirectoryNotDisabledException" => {
-                        DeleteDirectoryError::DirectoryNotDisabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DeleteDirectoryError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DeleteDirectoryError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteDirectoryError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteDirectoryError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        DeleteDirectoryError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteDirectoryError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteDirectoryError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeleteDirectoryError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryDeletedException" => {
+                    return DeleteDirectoryError::DirectoryDeleted(String::from(error_message))
+                }
+                "DirectoryNotDisabledException" => {
+                    return DeleteDirectoryError::DirectoryNotDisabled(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return DeleteDirectoryError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return DeleteDirectoryError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteDirectoryError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteDirectoryError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return DeleteDirectoryError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteDirectoryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteDirectoryError::Unknown(String::from(body)),
         }
+        return DeleteDirectoryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteDirectoryError {
     fn from(err: serde_json::error::Error) -> DeleteDirectoryError {
-        DeleteDirectoryError::Unknown(err.description().to_string())
+        DeleteDirectoryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteDirectoryError {
@@ -4759,7 +4779,8 @@ impl Error for DeleteDirectoryError {
             DeleteDirectoryError::Validation(ref cause) => cause,
             DeleteDirectoryError::Credentials(ref err) => err.description(),
             DeleteDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDirectoryError::Unknown(ref cause) => cause,
+            DeleteDirectoryError::ParseError(ref cause) => cause,
+            DeleteDirectoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4788,62 +4809,62 @@ pub enum DeleteFacetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFacetError {
-    pub fn from_body(body: &str) -> DeleteFacetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteFacetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DeleteFacetError::AccessDenied(String::from(error_message))
-                    }
-                    "FacetInUseException" => {
-                        DeleteFacetError::FacetInUse(String::from(error_message))
-                    }
-                    "FacetNotFoundException" => {
-                        DeleteFacetError::FacetNotFound(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DeleteFacetError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DeleteFacetError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteFacetError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteFacetError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        DeleteFacetError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteFacetError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteFacetError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeleteFacetError::AccessDenied(String::from(error_message))
                 }
+                "FacetInUseException" => {
+                    return DeleteFacetError::FacetInUse(String::from(error_message))
+                }
+                "FacetNotFoundException" => {
+                    return DeleteFacetError::FacetNotFound(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return DeleteFacetError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return DeleteFacetError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteFacetError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteFacetError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return DeleteFacetError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteFacetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteFacetError::Unknown(String::from(body)),
         }
+        return DeleteFacetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteFacetError {
     fn from(err: serde_json::error::Error) -> DeleteFacetError {
-        DeleteFacetError::Unknown(err.description().to_string())
+        DeleteFacetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteFacetError {
@@ -4880,7 +4901,8 @@ impl Error for DeleteFacetError {
             DeleteFacetError::Validation(ref cause) => cause,
             DeleteFacetError::Credentials(ref err) => err.description(),
             DeleteFacetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFacetError::Unknown(ref cause) => cause,
+            DeleteFacetError::ParseError(ref cause) => cause,
+            DeleteFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4909,62 +4931,62 @@ pub enum DeleteObjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteObjectError {
-    pub fn from_body(body: &str) -> DeleteObjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteObjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DeleteObjectError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        DeleteObjectError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DeleteObjectError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DeleteObjectError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteObjectError::LimitExceeded(String::from(error_message))
-                    }
-                    "ObjectNotDetachedException" => {
-                        DeleteObjectError::ObjectNotDetached(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteObjectError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        DeleteObjectError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteObjectError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteObjectError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeleteObjectError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return DeleteObjectError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return DeleteObjectError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return DeleteObjectError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteObjectError::LimitExceeded(String::from(error_message))
+                }
+                "ObjectNotDetachedException" => {
+                    return DeleteObjectError::ObjectNotDetached(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteObjectError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return DeleteObjectError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteObjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteObjectError::Unknown(String::from(body)),
         }
+        return DeleteObjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteObjectError {
     fn from(err: serde_json::error::Error) -> DeleteObjectError {
-        DeleteObjectError::Unknown(err.description().to_string())
+        DeleteObjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteObjectError {
@@ -5001,7 +5023,8 @@ impl Error for DeleteObjectError {
             DeleteObjectError::Validation(ref cause) => cause,
             DeleteObjectError::Credentials(ref err) => err.description(),
             DeleteObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteObjectError::Unknown(ref cause) => cause,
+            DeleteObjectError::ParseError(ref cause) => cause,
+            DeleteObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5028,59 +5051,59 @@ pub enum DeleteSchemaError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSchemaError {
-    pub fn from_body(body: &str) -> DeleteSchemaError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSchemaError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DeleteSchemaError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DeleteSchemaError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DeleteSchemaError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteSchemaError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteSchemaError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        DeleteSchemaError::RetryableConflict(String::from(error_message))
-                    }
-                    "StillContainsLinksException" => {
-                        DeleteSchemaError::StillContainsLinks(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteSchemaError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteSchemaError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeleteSchemaError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return DeleteSchemaError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return DeleteSchemaError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteSchemaError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteSchemaError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return DeleteSchemaError::RetryableConflict(String::from(error_message))
+                }
+                "StillContainsLinksException" => {
+                    return DeleteSchemaError::StillContainsLinks(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteSchemaError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteSchemaError::Unknown(String::from(body)),
         }
+        return DeleteSchemaError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteSchemaError {
     fn from(err: serde_json::error::Error) -> DeleteSchemaError {
-        DeleteSchemaError::Unknown(err.description().to_string())
+        DeleteSchemaError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteSchemaError {
@@ -5116,7 +5139,8 @@ impl Error for DeleteSchemaError {
             DeleteSchemaError::Validation(ref cause) => cause,
             DeleteSchemaError::Credentials(ref err) => err.description(),
             DeleteSchemaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteSchemaError::Unknown(ref cause) => cause,
+            DeleteSchemaError::ParseError(ref cause) => cause,
+            DeleteSchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5143,59 +5167,59 @@ pub enum DeleteTypedLinkFacetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTypedLinkFacetError {
-    pub fn from_body(body: &str) -> DeleteTypedLinkFacetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTypedLinkFacetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DeleteTypedLinkFacetError::AccessDenied(String::from(error_message))
-                    }
-                    "FacetNotFoundException" => {
-                        DeleteTypedLinkFacetError::FacetNotFound(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DeleteTypedLinkFacetError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DeleteTypedLinkFacetError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteTypedLinkFacetError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteTypedLinkFacetError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        DeleteTypedLinkFacetError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteTypedLinkFacetError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteTypedLinkFacetError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeleteTypedLinkFacetError::AccessDenied(String::from(error_message))
                 }
+                "FacetNotFoundException" => {
+                    return DeleteTypedLinkFacetError::FacetNotFound(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return DeleteTypedLinkFacetError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return DeleteTypedLinkFacetError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteTypedLinkFacetError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteTypedLinkFacetError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return DeleteTypedLinkFacetError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteTypedLinkFacetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteTypedLinkFacetError::Unknown(String::from(body)),
         }
+        return DeleteTypedLinkFacetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteTypedLinkFacetError {
     fn from(err: serde_json::error::Error) -> DeleteTypedLinkFacetError {
-        DeleteTypedLinkFacetError::Unknown(err.description().to_string())
+        DeleteTypedLinkFacetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteTypedLinkFacetError {
@@ -5233,7 +5257,8 @@ impl Error for DeleteTypedLinkFacetError {
             DeleteTypedLinkFacetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteTypedLinkFacetError::Unknown(ref cause) => cause,
+            DeleteTypedLinkFacetError::ParseError(ref cause) => cause,
+            DeleteTypedLinkFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5264,65 +5289,65 @@ pub enum DetachFromIndexError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetachFromIndexError {
-    pub fn from_body(body: &str) -> DetachFromIndexError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetachFromIndexError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DetachFromIndexError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        DetachFromIndexError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DetachFromIndexError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DetachFromIndexError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DetachFromIndexError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotIndexException" => {
-                        DetachFromIndexError::NotIndex(String::from(error_message))
-                    }
-                    "ObjectAlreadyDetachedException" => {
-                        DetachFromIndexError::ObjectAlreadyDetached(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DetachFromIndexError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        DetachFromIndexError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DetachFromIndexError::Validation(error_message.to_string())
-                    }
-                    _ => DetachFromIndexError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DetachFromIndexError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return DetachFromIndexError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return DetachFromIndexError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return DetachFromIndexError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DetachFromIndexError::LimitExceeded(String::from(error_message))
+                }
+                "NotIndexException" => {
+                    return DetachFromIndexError::NotIndex(String::from(error_message))
+                }
+                "ObjectAlreadyDetachedException" => {
+                    return DetachFromIndexError::ObjectAlreadyDetached(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DetachFromIndexError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return DetachFromIndexError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DetachFromIndexError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetachFromIndexError::Unknown(String::from(body)),
         }
+        return DetachFromIndexError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetachFromIndexError {
     fn from(err: serde_json::error::Error) -> DetachFromIndexError {
-        DetachFromIndexError::Unknown(err.description().to_string())
+        DetachFromIndexError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetachFromIndexError {
@@ -5360,7 +5385,8 @@ impl Error for DetachFromIndexError {
             DetachFromIndexError::Validation(ref cause) => cause,
             DetachFromIndexError::Credentials(ref err) => err.description(),
             DetachFromIndexError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachFromIndexError::Unknown(ref cause) => cause,
+            DetachFromIndexError::ParseError(ref cause) => cause,
+            DetachFromIndexError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5389,60 +5415,62 @@ pub enum DetachObjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetachObjectError {
-    pub fn from_body(body: &str) -> DetachObjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetachObjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DetachObjectError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        DetachObjectError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DetachObjectError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DetachObjectError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DetachObjectError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotNodeException" => DetachObjectError::NotNode(String::from(error_message)),
-                    "ResourceNotFoundException" => {
-                        DetachObjectError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        DetachObjectError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DetachObjectError::Validation(error_message.to_string())
-                    }
-                    _ => DetachObjectError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DetachObjectError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return DetachObjectError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return DetachObjectError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return DetachObjectError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DetachObjectError::LimitExceeded(String::from(error_message))
+                }
+                "NotNodeException" => {
+                    return DetachObjectError::NotNode(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DetachObjectError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return DetachObjectError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DetachObjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetachObjectError::Unknown(String::from(body)),
         }
+        return DetachObjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetachObjectError {
     fn from(err: serde_json::error::Error) -> DetachObjectError {
-        DetachObjectError::Unknown(err.description().to_string())
+        DetachObjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetachObjectError {
@@ -5479,7 +5507,8 @@ impl Error for DetachObjectError {
             DetachObjectError::Validation(ref cause) => cause,
             DetachObjectError::Credentials(ref err) => err.description(),
             DetachObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachObjectError::Unknown(ref cause) => cause,
+            DetachObjectError::ParseError(ref cause) => cause,
+            DetachObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5508,62 +5537,62 @@ pub enum DetachPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetachPolicyError {
-    pub fn from_body(body: &str) -> DetachPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetachPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DetachPolicyError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        DetachPolicyError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DetachPolicyError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DetachPolicyError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DetachPolicyError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotPolicyException" => {
-                        DetachPolicyError::NotPolicy(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DetachPolicyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        DetachPolicyError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DetachPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => DetachPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DetachPolicyError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return DetachPolicyError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return DetachPolicyError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return DetachPolicyError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DetachPolicyError::LimitExceeded(String::from(error_message))
+                }
+                "NotPolicyException" => {
+                    return DetachPolicyError::NotPolicy(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DetachPolicyError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return DetachPolicyError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DetachPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetachPolicyError::Unknown(String::from(body)),
         }
+        return DetachPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetachPolicyError {
     fn from(err: serde_json::error::Error) -> DetachPolicyError {
-        DetachPolicyError::Unknown(err.description().to_string())
+        DetachPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetachPolicyError {
@@ -5600,7 +5629,8 @@ impl Error for DetachPolicyError {
             DetachPolicyError::Validation(ref cause) => cause,
             DetachPolicyError::Credentials(ref err) => err.description(),
             DetachPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachPolicyError::Unknown(ref cause) => cause,
+            DetachPolicyError::ParseError(ref cause) => cause,
+            DetachPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5629,62 +5659,62 @@ pub enum DetachTypedLinkError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetachTypedLinkError {
-    pub fn from_body(body: &str) -> DetachTypedLinkError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetachTypedLinkError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DetachTypedLinkError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        DetachTypedLinkError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        DetachTypedLinkError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DetachTypedLinkError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DetachTypedLinkError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DetachTypedLinkError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DetachTypedLinkError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        DetachTypedLinkError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DetachTypedLinkError::Validation(error_message.to_string())
-                    }
-                    _ => DetachTypedLinkError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DetachTypedLinkError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return DetachTypedLinkError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "FacetValidationException" => {
+                    return DetachTypedLinkError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return DetachTypedLinkError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return DetachTypedLinkError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DetachTypedLinkError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DetachTypedLinkError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return DetachTypedLinkError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DetachTypedLinkError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetachTypedLinkError::Unknown(String::from(body)),
         }
+        return DetachTypedLinkError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetachTypedLinkError {
     fn from(err: serde_json::error::Error) -> DetachTypedLinkError {
-        DetachTypedLinkError::Unknown(err.description().to_string())
+        DetachTypedLinkError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetachTypedLinkError {
@@ -5721,7 +5751,8 @@ impl Error for DetachTypedLinkError {
             DetachTypedLinkError::Validation(ref cause) => cause,
             DetachTypedLinkError::Credentials(ref err) => err.description(),
             DetachTypedLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachTypedLinkError::Unknown(ref cause) => cause,
+            DetachTypedLinkError::ParseError(ref cause) => cause,
+            DetachTypedLinkError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5748,59 +5779,59 @@ pub enum DisableDirectoryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisableDirectoryError {
-    pub fn from_body(body: &str) -> DisableDirectoryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisableDirectoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DisableDirectoryError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryDeletedException" => {
-                        DisableDirectoryError::DirectoryDeleted(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DisableDirectoryError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DisableDirectoryError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DisableDirectoryError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DisableDirectoryError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        DisableDirectoryError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DisableDirectoryError::Validation(error_message.to_string())
-                    }
-                    _ => DisableDirectoryError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DisableDirectoryError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryDeletedException" => {
+                    return DisableDirectoryError::DirectoryDeleted(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return DisableDirectoryError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return DisableDirectoryError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DisableDirectoryError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DisableDirectoryError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return DisableDirectoryError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DisableDirectoryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisableDirectoryError::Unknown(String::from(body)),
         }
+        return DisableDirectoryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisableDirectoryError {
     fn from(err: serde_json::error::Error) -> DisableDirectoryError {
-        DisableDirectoryError::Unknown(err.description().to_string())
+        DisableDirectoryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisableDirectoryError {
@@ -5836,7 +5867,8 @@ impl Error for DisableDirectoryError {
             DisableDirectoryError::Validation(ref cause) => cause,
             DisableDirectoryError::Credentials(ref err) => err.description(),
             DisableDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DisableDirectoryError::Unknown(ref cause) => cause,
+            DisableDirectoryError::ParseError(ref cause) => cause,
+            DisableDirectoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5863,59 +5895,59 @@ pub enum EnableDirectoryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EnableDirectoryError {
-    pub fn from_body(body: &str) -> EnableDirectoryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> EnableDirectoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        EnableDirectoryError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryDeletedException" => {
-                        EnableDirectoryError::DirectoryDeleted(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        EnableDirectoryError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        EnableDirectoryError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        EnableDirectoryError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        EnableDirectoryError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        EnableDirectoryError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        EnableDirectoryError::Validation(error_message.to_string())
-                    }
-                    _ => EnableDirectoryError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return EnableDirectoryError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryDeletedException" => {
+                    return EnableDirectoryError::DirectoryDeleted(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return EnableDirectoryError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return EnableDirectoryError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return EnableDirectoryError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return EnableDirectoryError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return EnableDirectoryError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return EnableDirectoryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => EnableDirectoryError::Unknown(String::from(body)),
         }
+        return EnableDirectoryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for EnableDirectoryError {
     fn from(err: serde_json::error::Error) -> EnableDirectoryError {
-        EnableDirectoryError::Unknown(err.description().to_string())
+        EnableDirectoryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for EnableDirectoryError {
@@ -5951,7 +5983,8 @@ impl Error for EnableDirectoryError {
             EnableDirectoryError::Validation(ref cause) => cause,
             EnableDirectoryError::Credentials(ref err) => err.description(),
             EnableDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EnableDirectoryError::Unknown(ref cause) => cause,
+            EnableDirectoryError::ParseError(ref cause) => cause,
+            EnableDirectoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5976,56 +6009,62 @@ pub enum GetAppliedSchemaVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAppliedSchemaVersionError {
-    pub fn from_body(body: &str) -> GetAppliedSchemaVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetAppliedSchemaVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetAppliedSchemaVersionError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        GetAppliedSchemaVersionError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        GetAppliedSchemaVersionError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetAppliedSchemaVersionError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetAppliedSchemaVersionError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        GetAppliedSchemaVersionError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetAppliedSchemaVersionError::Validation(error_message.to_string())
-                    }
-                    _ => GetAppliedSchemaVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetAppliedSchemaVersionError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return GetAppliedSchemaVersionError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidArnException" => {
+                    return GetAppliedSchemaVersionError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetAppliedSchemaVersionError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetAppliedSchemaVersionError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "RetryableConflictException" => {
+                    return GetAppliedSchemaVersionError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetAppliedSchemaVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetAppliedSchemaVersionError::Unknown(String::from(body)),
         }
+        return GetAppliedSchemaVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetAppliedSchemaVersionError {
     fn from(err: serde_json::error::Error) -> GetAppliedSchemaVersionError {
-        GetAppliedSchemaVersionError::Unknown(err.description().to_string())
+        GetAppliedSchemaVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetAppliedSchemaVersionError {
@@ -6062,7 +6101,8 @@ impl Error for GetAppliedSchemaVersionError {
             GetAppliedSchemaVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetAppliedSchemaVersionError::Unknown(ref cause) => cause,
+            GetAppliedSchemaVersionError::ParseError(ref cause) => cause,
+            GetAppliedSchemaVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6085,53 +6125,53 @@ pub enum GetDirectoryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDirectoryError {
-    pub fn from_body(body: &str) -> GetDirectoryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetDirectoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetDirectoryError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        GetDirectoryError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        GetDirectoryError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetDirectoryError::LimitExceeded(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        GetDirectoryError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetDirectoryError::Validation(error_message.to_string())
-                    }
-                    _ => GetDirectoryError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetDirectoryError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return GetDirectoryError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return GetDirectoryError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetDirectoryError::LimitExceeded(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return GetDirectoryError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetDirectoryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetDirectoryError::Unknown(String::from(body)),
         }
+        return GetDirectoryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetDirectoryError {
     fn from(err: serde_json::error::Error) -> GetDirectoryError {
-        GetDirectoryError::Unknown(err.description().to_string())
+        GetDirectoryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetDirectoryError {
@@ -6165,7 +6205,8 @@ impl Error for GetDirectoryError {
             GetDirectoryError::Validation(ref cause) => cause,
             GetDirectoryError::Credentials(ref err) => err.description(),
             GetDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDirectoryError::Unknown(ref cause) => cause,
+            GetDirectoryError::ParseError(ref cause) => cause,
+            GetDirectoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6192,55 +6233,59 @@ pub enum GetFacetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetFacetError {
-    pub fn from_body(body: &str) -> GetFacetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetFacetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetFacetError::AccessDenied(String::from(error_message))
-                    }
-                    "FacetNotFoundException" => {
-                        GetFacetError::FacetNotFound(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        GetFacetError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => GetFacetError::InvalidArn(String::from(error_message)),
-                    "LimitExceededException" => {
-                        GetFacetError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetFacetError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        GetFacetError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => GetFacetError::Validation(error_message.to_string()),
-                    _ => GetFacetError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetFacetError::AccessDenied(String::from(error_message))
                 }
+                "FacetNotFoundException" => {
+                    return GetFacetError::FacetNotFound(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return GetFacetError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return GetFacetError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetFacetError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetFacetError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return GetFacetError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetFacetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetFacetError::Unknown(String::from(body)),
         }
+        return GetFacetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetFacetError {
     fn from(err: serde_json::error::Error) -> GetFacetError {
-        GetFacetError::Unknown(err.description().to_string())
+        GetFacetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetFacetError {
@@ -6276,7 +6321,8 @@ impl Error for GetFacetError {
             GetFacetError::Validation(ref cause) => cause,
             GetFacetError::Credentials(ref err) => err.description(),
             GetFacetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFacetError::Unknown(ref cause) => cause,
+            GetFacetError::ParseError(ref cause) => cause,
+            GetFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6305,62 +6351,62 @@ pub enum GetLinkAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetLinkAttributesError {
-    pub fn from_body(body: &str) -> GetLinkAttributesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetLinkAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetLinkAttributesError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        GetLinkAttributesError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        GetLinkAttributesError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        GetLinkAttributesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        GetLinkAttributesError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetLinkAttributesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetLinkAttributesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        GetLinkAttributesError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetLinkAttributesError::Validation(error_message.to_string())
-                    }
-                    _ => GetLinkAttributesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetLinkAttributesError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return GetLinkAttributesError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "FacetValidationException" => {
+                    return GetLinkAttributesError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return GetLinkAttributesError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return GetLinkAttributesError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetLinkAttributesError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetLinkAttributesError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return GetLinkAttributesError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetLinkAttributesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetLinkAttributesError::Unknown(String::from(body)),
         }
+        return GetLinkAttributesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetLinkAttributesError {
     fn from(err: serde_json::error::Error) -> GetLinkAttributesError {
-        GetLinkAttributesError::Unknown(err.description().to_string())
+        GetLinkAttributesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetLinkAttributesError {
@@ -6399,7 +6445,8 @@ impl Error for GetLinkAttributesError {
             GetLinkAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetLinkAttributesError::Unknown(ref cause) => cause,
+            GetLinkAttributesError::ParseError(ref cause) => cause,
+            GetLinkAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6428,62 +6475,64 @@ pub enum GetObjectAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetObjectAttributesError {
-    pub fn from_body(body: &str) -> GetObjectAttributesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetObjectAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetObjectAttributesError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        GetObjectAttributesError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        GetObjectAttributesError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        GetObjectAttributesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        GetObjectAttributesError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetObjectAttributesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetObjectAttributesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        GetObjectAttributesError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetObjectAttributesError::Validation(error_message.to_string())
-                    }
-                    _ => GetObjectAttributesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetObjectAttributesError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return GetObjectAttributesError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    ))
+                }
+                "FacetValidationException" => {
+                    return GetObjectAttributesError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return GetObjectAttributesError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return GetObjectAttributesError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetObjectAttributesError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetObjectAttributesError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return GetObjectAttributesError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetObjectAttributesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetObjectAttributesError::Unknown(String::from(body)),
         }
+        return GetObjectAttributesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetObjectAttributesError {
     fn from(err: serde_json::error::Error) -> GetObjectAttributesError {
-        GetObjectAttributesError::Unknown(err.description().to_string())
+        GetObjectAttributesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetObjectAttributesError {
@@ -6522,7 +6571,8 @@ impl Error for GetObjectAttributesError {
             GetObjectAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetObjectAttributesError::Unknown(ref cause) => cause,
+            GetObjectAttributesError::ParseError(ref cause) => cause,
+            GetObjectAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6549,59 +6599,61 @@ pub enum GetObjectInformationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetObjectInformationError {
-    pub fn from_body(body: &str) -> GetObjectInformationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetObjectInformationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetObjectInformationError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        GetObjectInformationError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        GetObjectInformationError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        GetObjectInformationError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetObjectInformationError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetObjectInformationError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        GetObjectInformationError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetObjectInformationError::Validation(error_message.to_string())
-                    }
-                    _ => GetObjectInformationError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetObjectInformationError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return GetObjectInformationError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return GetObjectInformationError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return GetObjectInformationError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetObjectInformationError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetObjectInformationError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return GetObjectInformationError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetObjectInformationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetObjectInformationError::Unknown(String::from(body)),
         }
+        return GetObjectInformationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetObjectInformationError {
     fn from(err: serde_json::error::Error) -> GetObjectInformationError {
-        GetObjectInformationError::Unknown(err.description().to_string())
+        GetObjectInformationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetObjectInformationError {
@@ -6639,7 +6691,8 @@ impl Error for GetObjectInformationError {
             GetObjectInformationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetObjectInformationError::Unknown(ref cause) => cause,
+            GetObjectInformationError::ParseError(ref cause) => cause,
+            GetObjectInformationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6664,56 +6717,56 @@ pub enum GetSchemaAsJsonError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSchemaAsJsonError {
-    pub fn from_body(body: &str) -> GetSchemaAsJsonError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetSchemaAsJsonError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetSchemaAsJsonError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        GetSchemaAsJsonError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        GetSchemaAsJsonError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetSchemaAsJsonError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetSchemaAsJsonError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        GetSchemaAsJsonError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetSchemaAsJsonError::Validation(error_message.to_string())
-                    }
-                    _ => GetSchemaAsJsonError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetSchemaAsJsonError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return GetSchemaAsJsonError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return GetSchemaAsJsonError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetSchemaAsJsonError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetSchemaAsJsonError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return GetSchemaAsJsonError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetSchemaAsJsonError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetSchemaAsJsonError::Unknown(String::from(body)),
         }
+        return GetSchemaAsJsonError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetSchemaAsJsonError {
     fn from(err: serde_json::error::Error) -> GetSchemaAsJsonError {
-        GetSchemaAsJsonError::Unknown(err.description().to_string())
+        GetSchemaAsJsonError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetSchemaAsJsonError {
@@ -6748,7 +6801,8 @@ impl Error for GetSchemaAsJsonError {
             GetSchemaAsJsonError::Validation(ref cause) => cause,
             GetSchemaAsJsonError::Credentials(ref err) => err.description(),
             GetSchemaAsJsonError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSchemaAsJsonError::Unknown(ref cause) => cause,
+            GetSchemaAsJsonError::ParseError(ref cause) => cause,
+            GetSchemaAsJsonError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6777,70 +6831,78 @@ pub enum GetTypedLinkFacetInformationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetTypedLinkFacetInformationError {
-    pub fn from_body(body: &str) -> GetTypedLinkFacetInformationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetTypedLinkFacetInformationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetTypedLinkFacetInformationError::AccessDenied(String::from(error_message))
-                    }
-                    "FacetNotFoundException" => GetTypedLinkFacetInformationError::FacetNotFound(
-                        String::from(error_message),
-                    ),
-                    "InternalServiceException" => {
-                        GetTypedLinkFacetInformationError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidArnException" => {
-                        GetTypedLinkFacetInformationError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        GetTypedLinkFacetInformationError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => GetTypedLinkFacetInformationError::LimitExceeded(
-                        String::from(error_message),
-                    ),
-                    "ResourceNotFoundException" => {
-                        GetTypedLinkFacetInformationError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "RetryableConflictException" => {
-                        GetTypedLinkFacetInformationError::RetryableConflict(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        GetTypedLinkFacetInformationError::Validation(error_message.to_string())
-                    }
-                    _ => GetTypedLinkFacetInformationError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetTypedLinkFacetInformationError::AccessDenied(String::from(
+                        error_message,
+                    ))
                 }
+                "FacetNotFoundException" => {
+                    return GetTypedLinkFacetInformationError::FacetNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return GetTypedLinkFacetInformationError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidArnException" => {
+                    return GetTypedLinkFacetInformationError::InvalidArn(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return GetTypedLinkFacetInformationError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return GetTypedLinkFacetInformationError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetTypedLinkFacetInformationError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "RetryableConflictException" => {
+                    return GetTypedLinkFacetInformationError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetTypedLinkFacetInformationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetTypedLinkFacetInformationError::Unknown(String::from(body)),
         }
+        return GetTypedLinkFacetInformationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetTypedLinkFacetInformationError {
     fn from(err: serde_json::error::Error) -> GetTypedLinkFacetInformationError {
-        GetTypedLinkFacetInformationError::Unknown(err.description().to_string())
+        GetTypedLinkFacetInformationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetTypedLinkFacetInformationError {
@@ -6879,7 +6941,8 @@ impl Error for GetTypedLinkFacetInformationError {
             GetTypedLinkFacetInformationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetTypedLinkFacetInformationError::Unknown(ref cause) => cause,
+            GetTypedLinkFacetInformationError::ParseError(ref cause) => cause,
+            GetTypedLinkFacetInformationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6906,59 +6969,61 @@ pub enum ListAppliedSchemaArnsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAppliedSchemaArnsError {
-    pub fn from_body(body: &str) -> ListAppliedSchemaArnsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListAppliedSchemaArnsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListAppliedSchemaArnsError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListAppliedSchemaArnsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListAppliedSchemaArnsError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListAppliedSchemaArnsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListAppliedSchemaArnsError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListAppliedSchemaArnsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListAppliedSchemaArnsError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListAppliedSchemaArnsError::Validation(error_message.to_string())
-                    }
-                    _ => ListAppliedSchemaArnsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListAppliedSchemaArnsError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return ListAppliedSchemaArnsError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListAppliedSchemaArnsError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListAppliedSchemaArnsError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListAppliedSchemaArnsError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListAppliedSchemaArnsError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListAppliedSchemaArnsError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListAppliedSchemaArnsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListAppliedSchemaArnsError::Unknown(String::from(body)),
         }
+        return ListAppliedSchemaArnsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListAppliedSchemaArnsError {
     fn from(err: serde_json::error::Error) -> ListAppliedSchemaArnsError {
-        ListAppliedSchemaArnsError::Unknown(err.description().to_string())
+        ListAppliedSchemaArnsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListAppliedSchemaArnsError {
@@ -6996,7 +7061,8 @@ impl Error for ListAppliedSchemaArnsError {
             ListAppliedSchemaArnsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListAppliedSchemaArnsError::Unknown(ref cause) => cause,
+            ListAppliedSchemaArnsError::ParseError(ref cause) => cause,
+            ListAppliedSchemaArnsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7023,59 +7089,61 @@ pub enum ListAttachedIndicesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAttachedIndicesError {
-    pub fn from_body(body: &str) -> ListAttachedIndicesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListAttachedIndicesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListAttachedIndicesError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        ListAttachedIndicesError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListAttachedIndicesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListAttachedIndicesError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListAttachedIndicesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListAttachedIndicesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListAttachedIndicesError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListAttachedIndicesError::Validation(error_message.to_string())
-                    }
-                    _ => ListAttachedIndicesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListAttachedIndicesError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return ListAttachedIndicesError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return ListAttachedIndicesError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListAttachedIndicesError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListAttachedIndicesError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListAttachedIndicesError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListAttachedIndicesError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListAttachedIndicesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListAttachedIndicesError::Unknown(String::from(body)),
         }
+        return ListAttachedIndicesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListAttachedIndicesError {
     fn from(err: serde_json::error::Error) -> ListAttachedIndicesError {
-        ListAttachedIndicesError::Unknown(err.description().to_string())
+        ListAttachedIndicesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListAttachedIndicesError {
@@ -7113,7 +7181,8 @@ impl Error for ListAttachedIndicesError {
             ListAttachedIndicesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListAttachedIndicesError::Unknown(ref cause) => cause,
+            ListAttachedIndicesError::ParseError(ref cause) => cause,
+            ListAttachedIndicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7140,65 +7209,69 @@ pub enum ListDevelopmentSchemaArnsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDevelopmentSchemaArnsError {
-    pub fn from_body(body: &str) -> ListDevelopmentSchemaArnsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListDevelopmentSchemaArnsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListDevelopmentSchemaArnsError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListDevelopmentSchemaArnsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListDevelopmentSchemaArnsError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListDevelopmentSchemaArnsError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        ListDevelopmentSchemaArnsError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListDevelopmentSchemaArnsError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "RetryableConflictException" => {
-                        ListDevelopmentSchemaArnsError::RetryableConflict(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListDevelopmentSchemaArnsError::Validation(error_message.to_string())
-                    }
-                    _ => ListDevelopmentSchemaArnsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListDevelopmentSchemaArnsError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return ListDevelopmentSchemaArnsError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidArnException" => {
+                    return ListDevelopmentSchemaArnsError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListDevelopmentSchemaArnsError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return ListDevelopmentSchemaArnsError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return ListDevelopmentSchemaArnsError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "RetryableConflictException" => {
+                    return ListDevelopmentSchemaArnsError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListDevelopmentSchemaArnsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListDevelopmentSchemaArnsError::Unknown(String::from(body)),
         }
+        return ListDevelopmentSchemaArnsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListDevelopmentSchemaArnsError {
     fn from(err: serde_json::error::Error) -> ListDevelopmentSchemaArnsError {
-        ListDevelopmentSchemaArnsError::Unknown(err.description().to_string())
+        ListDevelopmentSchemaArnsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListDevelopmentSchemaArnsError {
@@ -7236,7 +7309,8 @@ impl Error for ListDevelopmentSchemaArnsError {
             ListDevelopmentSchemaArnsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListDevelopmentSchemaArnsError::Unknown(ref cause) => cause,
+            ListDevelopmentSchemaArnsError::ParseError(ref cause) => cause,
+            ListDevelopmentSchemaArnsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7261,56 +7335,56 @@ pub enum ListDirectoriesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDirectoriesError {
-    pub fn from_body(body: &str) -> ListDirectoriesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListDirectoriesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListDirectoriesError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListDirectoriesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListDirectoriesError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListDirectoriesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListDirectoriesError::LimitExceeded(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListDirectoriesError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListDirectoriesError::Validation(error_message.to_string())
-                    }
-                    _ => ListDirectoriesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListDirectoriesError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return ListDirectoriesError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListDirectoriesError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListDirectoriesError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListDirectoriesError::LimitExceeded(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListDirectoriesError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListDirectoriesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListDirectoriesError::Unknown(String::from(body)),
         }
+        return ListDirectoriesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListDirectoriesError {
     fn from(err: serde_json::error::Error) -> ListDirectoriesError {
-        ListDirectoriesError::Unknown(err.description().to_string())
+        ListDirectoriesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListDirectoriesError {
@@ -7345,7 +7419,8 @@ impl Error for ListDirectoriesError {
             ListDirectoriesError::Validation(ref cause) => cause,
             ListDirectoriesError::Credentials(ref err) => err.description(),
             ListDirectoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDirectoriesError::Unknown(ref cause) => cause,
+            ListDirectoriesError::ParseError(ref cause) => cause,
+            ListDirectoriesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7374,62 +7449,62 @@ pub enum ListFacetAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListFacetAttributesError {
-    pub fn from_body(body: &str) -> ListFacetAttributesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListFacetAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListFacetAttributesError::AccessDenied(String::from(error_message))
-                    }
-                    "FacetNotFoundException" => {
-                        ListFacetAttributesError::FacetNotFound(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListFacetAttributesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListFacetAttributesError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListFacetAttributesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListFacetAttributesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListFacetAttributesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListFacetAttributesError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListFacetAttributesError::Validation(error_message.to_string())
-                    }
-                    _ => ListFacetAttributesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListFacetAttributesError::AccessDenied(String::from(error_message))
                 }
+                "FacetNotFoundException" => {
+                    return ListFacetAttributesError::FacetNotFound(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ListFacetAttributesError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListFacetAttributesError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListFacetAttributesError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListFacetAttributesError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListFacetAttributesError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListFacetAttributesError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListFacetAttributesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListFacetAttributesError::Unknown(String::from(body)),
         }
+        return ListFacetAttributesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListFacetAttributesError {
     fn from(err: serde_json::error::Error) -> ListFacetAttributesError {
-        ListFacetAttributesError::Unknown(err.description().to_string())
+        ListFacetAttributesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListFacetAttributesError {
@@ -7468,7 +7543,8 @@ impl Error for ListFacetAttributesError {
             ListFacetAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListFacetAttributesError::Unknown(ref cause) => cause,
+            ListFacetAttributesError::ParseError(ref cause) => cause,
+            ListFacetAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7495,59 +7571,59 @@ pub enum ListFacetNamesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListFacetNamesError {
-    pub fn from_body(body: &str) -> ListFacetNamesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListFacetNamesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListFacetNamesError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListFacetNamesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListFacetNamesError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListFacetNamesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListFacetNamesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListFacetNamesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListFacetNamesError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListFacetNamesError::Validation(error_message.to_string())
-                    }
-                    _ => ListFacetNamesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListFacetNamesError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return ListFacetNamesError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListFacetNamesError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListFacetNamesError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListFacetNamesError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListFacetNamesError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListFacetNamesError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListFacetNamesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListFacetNamesError::Unknown(String::from(body)),
         }
+        return ListFacetNamesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListFacetNamesError {
     fn from(err: serde_json::error::Error) -> ListFacetNamesError {
-        ListFacetNamesError::Unknown(err.description().to_string())
+        ListFacetNamesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListFacetNamesError {
@@ -7583,7 +7659,8 @@ impl Error for ListFacetNamesError {
             ListFacetNamesError::Validation(ref cause) => cause,
             ListFacetNamesError::Credentials(ref err) => err.description(),
             ListFacetNamesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListFacetNamesError::Unknown(ref cause) => cause,
+            ListFacetNamesError::ParseError(ref cause) => cause,
+            ListFacetNamesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7614,67 +7691,73 @@ pub enum ListIncomingTypedLinksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListIncomingTypedLinksError {
-    pub fn from_body(body: &str) -> ListIncomingTypedLinksError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListIncomingTypedLinksError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListIncomingTypedLinksError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        ListIncomingTypedLinksError::DirectoryNotEnabled(String::from(
-                            error_message,
-                        ))
-                    }
-                    "FacetValidationException" => {
-                        ListIncomingTypedLinksError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListIncomingTypedLinksError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListIncomingTypedLinksError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListIncomingTypedLinksError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListIncomingTypedLinksError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListIncomingTypedLinksError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListIncomingTypedLinksError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListIncomingTypedLinksError::Validation(error_message.to_string())
-                    }
-                    _ => ListIncomingTypedLinksError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListIncomingTypedLinksError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return ListIncomingTypedLinksError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    ))
+                }
+                "FacetValidationException" => {
+                    return ListIncomingTypedLinksError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ListIncomingTypedLinksError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListIncomingTypedLinksError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListIncomingTypedLinksError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return ListIncomingTypedLinksError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListIncomingTypedLinksError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "RetryableConflictException" => {
+                    return ListIncomingTypedLinksError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListIncomingTypedLinksError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListIncomingTypedLinksError::Unknown(String::from(body)),
         }
+        return ListIncomingTypedLinksError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListIncomingTypedLinksError {
     fn from(err: serde_json::error::Error) -> ListIncomingTypedLinksError {
-        ListIncomingTypedLinksError::Unknown(err.description().to_string())
+        ListIncomingTypedLinksError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListIncomingTypedLinksError {
@@ -7714,7 +7797,8 @@ impl Error for ListIncomingTypedLinksError {
             ListIncomingTypedLinksError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListIncomingTypedLinksError::Unknown(ref cause) => cause,
+            ListIncomingTypedLinksError::ParseError(ref cause) => cause,
+            ListIncomingTypedLinksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7747,64 +7831,66 @@ pub enum ListIndexError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListIndexError {
-    pub fn from_body(body: &str) -> ListIndexError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListIndexError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListIndexError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        ListIndexError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        ListIndexError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListIndexError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListIndexError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListIndexError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListIndexError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotIndexException" => ListIndexError::NotIndex(String::from(error_message)),
-                    "ResourceNotFoundException" => {
-                        ListIndexError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListIndexError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => ListIndexError::Validation(error_message.to_string()),
-                    _ => ListIndexError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListIndexError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return ListIndexError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "FacetValidationException" => {
+                    return ListIndexError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ListIndexError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListIndexError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListIndexError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListIndexError::LimitExceeded(String::from(error_message))
+                }
+                "NotIndexException" => return ListIndexError::NotIndex(String::from(error_message)),
+                "ResourceNotFoundException" => {
+                    return ListIndexError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListIndexError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListIndexError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListIndexError::Unknown(String::from(body)),
         }
+        return ListIndexError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListIndexError {
     fn from(err: serde_json::error::Error) -> ListIndexError {
-        ListIndexError::Unknown(err.description().to_string())
+        ListIndexError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListIndexError {
@@ -7843,7 +7929,8 @@ impl Error for ListIndexError {
             ListIndexError::Validation(ref cause) => cause,
             ListIndexError::Credentials(ref err) => err.description(),
             ListIndexError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListIndexError::Unknown(ref cause) => cause,
+            ListIndexError::ParseError(ref cause) => cause,
+            ListIndexError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7874,65 +7961,67 @@ pub enum ListObjectAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectAttributesError {
-    pub fn from_body(body: &str) -> ListObjectAttributesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListObjectAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListObjectAttributesError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        ListObjectAttributesError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        ListObjectAttributesError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListObjectAttributesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListObjectAttributesError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListObjectAttributesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListObjectAttributesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListObjectAttributesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListObjectAttributesError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListObjectAttributesError::Validation(error_message.to_string())
-                    }
-                    _ => ListObjectAttributesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListObjectAttributesError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return ListObjectAttributesError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    ))
+                }
+                "FacetValidationException" => {
+                    return ListObjectAttributesError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ListObjectAttributesError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListObjectAttributesError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListObjectAttributesError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListObjectAttributesError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListObjectAttributesError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListObjectAttributesError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListObjectAttributesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListObjectAttributesError::Unknown(String::from(body)),
         }
+        return ListObjectAttributesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListObjectAttributesError {
     fn from(err: serde_json::error::Error) -> ListObjectAttributesError {
-        ListObjectAttributesError::Unknown(err.description().to_string())
+        ListObjectAttributesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListObjectAttributesError {
@@ -7972,7 +8061,8 @@ impl Error for ListObjectAttributesError {
             ListObjectAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListObjectAttributesError::Unknown(ref cause) => cause,
+            ListObjectAttributesError::ParseError(ref cause) => cause,
+            ListObjectAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8003,65 +8093,65 @@ pub enum ListObjectChildrenError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectChildrenError {
-    pub fn from_body(body: &str) -> ListObjectChildrenError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListObjectChildrenError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListObjectChildrenError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        ListObjectChildrenError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListObjectChildrenError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListObjectChildrenError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListObjectChildrenError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListObjectChildrenError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotNodeException" => {
-                        ListObjectChildrenError::NotNode(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListObjectChildrenError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListObjectChildrenError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListObjectChildrenError::Validation(error_message.to_string())
-                    }
-                    _ => ListObjectChildrenError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListObjectChildrenError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return ListObjectChildrenError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ListObjectChildrenError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListObjectChildrenError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListObjectChildrenError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListObjectChildrenError::LimitExceeded(String::from(error_message))
+                }
+                "NotNodeException" => {
+                    return ListObjectChildrenError::NotNode(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListObjectChildrenError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListObjectChildrenError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListObjectChildrenError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListObjectChildrenError::Unknown(String::from(body)),
         }
+        return ListObjectChildrenError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListObjectChildrenError {
     fn from(err: serde_json::error::Error) -> ListObjectChildrenError {
-        ListObjectChildrenError::Unknown(err.description().to_string())
+        ListObjectChildrenError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListObjectChildrenError {
@@ -8101,7 +8191,8 @@ impl Error for ListObjectChildrenError {
             ListObjectChildrenError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListObjectChildrenError::Unknown(ref cause) => cause,
+            ListObjectChildrenError::ParseError(ref cause) => cause,
+            ListObjectChildrenError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8130,62 +8221,66 @@ pub enum ListObjectParentPathsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectParentPathsError {
-    pub fn from_body(body: &str) -> ListObjectParentPathsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListObjectParentPathsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListObjectParentPathsError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        ListObjectParentPathsError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListObjectParentPathsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListObjectParentPathsError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListObjectParentPathsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListObjectParentPathsError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListObjectParentPathsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListObjectParentPathsError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListObjectParentPathsError::Validation(error_message.to_string())
-                    }
-                    _ => ListObjectParentPathsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListObjectParentPathsError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return ListObjectParentPathsError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return ListObjectParentPathsError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListObjectParentPathsError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListObjectParentPathsError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListObjectParentPathsError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListObjectParentPathsError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListObjectParentPathsError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListObjectParentPathsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListObjectParentPathsError::Unknown(String::from(body)),
         }
+        return ListObjectParentPathsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListObjectParentPathsError {
     fn from(err: serde_json::error::Error) -> ListObjectParentPathsError {
-        ListObjectParentPathsError::Unknown(err.description().to_string())
+        ListObjectParentPathsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListObjectParentPathsError {
@@ -8224,7 +8319,8 @@ impl Error for ListObjectParentPathsError {
             ListObjectParentPathsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListObjectParentPathsError::Unknown(ref cause) => cause,
+            ListObjectParentPathsError::ParseError(ref cause) => cause,
+            ListObjectParentPathsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8255,65 +8351,67 @@ pub enum ListObjectParentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectParentsError {
-    pub fn from_body(body: &str) -> ListObjectParentsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListObjectParentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListObjectParentsError::AccessDenied(String::from(error_message))
-                    }
-                    "CannotListParentOfRootException" => {
-                        ListObjectParentsError::CannotListParentOfRoot(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        ListObjectParentsError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListObjectParentsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListObjectParentsError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListObjectParentsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListObjectParentsError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListObjectParentsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListObjectParentsError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListObjectParentsError::Validation(error_message.to_string())
-                    }
-                    _ => ListObjectParentsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListObjectParentsError::AccessDenied(String::from(error_message))
                 }
+                "CannotListParentOfRootException" => {
+                    return ListObjectParentsError::CannotListParentOfRoot(String::from(
+                        error_message,
+                    ))
+                }
+                "DirectoryNotEnabledException" => {
+                    return ListObjectParentsError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ListObjectParentsError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListObjectParentsError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListObjectParentsError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListObjectParentsError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListObjectParentsError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListObjectParentsError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListObjectParentsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListObjectParentsError::Unknown(String::from(body)),
         }
+        return ListObjectParentsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListObjectParentsError {
     fn from(err: serde_json::error::Error) -> ListObjectParentsError {
-        ListObjectParentsError::Unknown(err.description().to_string())
+        ListObjectParentsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListObjectParentsError {
@@ -8353,7 +8451,8 @@ impl Error for ListObjectParentsError {
             ListObjectParentsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListObjectParentsError::Unknown(ref cause) => cause,
+            ListObjectParentsError::ParseError(ref cause) => cause,
+            ListObjectParentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8382,62 +8481,62 @@ pub enum ListObjectPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectPoliciesError {
-    pub fn from_body(body: &str) -> ListObjectPoliciesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListObjectPoliciesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListObjectPoliciesError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        ListObjectPoliciesError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListObjectPoliciesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListObjectPoliciesError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListObjectPoliciesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListObjectPoliciesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListObjectPoliciesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListObjectPoliciesError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListObjectPoliciesError::Validation(error_message.to_string())
-                    }
-                    _ => ListObjectPoliciesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListObjectPoliciesError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return ListObjectPoliciesError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ListObjectPoliciesError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListObjectPoliciesError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListObjectPoliciesError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListObjectPoliciesError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListObjectPoliciesError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListObjectPoliciesError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListObjectPoliciesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListObjectPoliciesError::Unknown(String::from(body)),
         }
+        return ListObjectPoliciesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListObjectPoliciesError {
     fn from(err: serde_json::error::Error) -> ListObjectPoliciesError {
-        ListObjectPoliciesError::Unknown(err.description().to_string())
+        ListObjectPoliciesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListObjectPoliciesError {
@@ -8476,7 +8575,8 @@ impl Error for ListObjectPoliciesError {
             ListObjectPoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListObjectPoliciesError::Unknown(ref cause) => cause,
+            ListObjectPoliciesError::ParseError(ref cause) => cause,
+            ListObjectPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8507,67 +8607,73 @@ pub enum ListOutgoingTypedLinksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListOutgoingTypedLinksError {
-    pub fn from_body(body: &str) -> ListOutgoingTypedLinksError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListOutgoingTypedLinksError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListOutgoingTypedLinksError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        ListOutgoingTypedLinksError::DirectoryNotEnabled(String::from(
-                            error_message,
-                        ))
-                    }
-                    "FacetValidationException" => {
-                        ListOutgoingTypedLinksError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListOutgoingTypedLinksError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListOutgoingTypedLinksError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListOutgoingTypedLinksError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListOutgoingTypedLinksError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListOutgoingTypedLinksError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListOutgoingTypedLinksError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListOutgoingTypedLinksError::Validation(error_message.to_string())
-                    }
-                    _ => ListOutgoingTypedLinksError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListOutgoingTypedLinksError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return ListOutgoingTypedLinksError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    ))
+                }
+                "FacetValidationException" => {
+                    return ListOutgoingTypedLinksError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ListOutgoingTypedLinksError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListOutgoingTypedLinksError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListOutgoingTypedLinksError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return ListOutgoingTypedLinksError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListOutgoingTypedLinksError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "RetryableConflictException" => {
+                    return ListOutgoingTypedLinksError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListOutgoingTypedLinksError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListOutgoingTypedLinksError::Unknown(String::from(body)),
         }
+        return ListOutgoingTypedLinksError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListOutgoingTypedLinksError {
     fn from(err: serde_json::error::Error) -> ListOutgoingTypedLinksError {
-        ListOutgoingTypedLinksError::Unknown(err.description().to_string())
+        ListOutgoingTypedLinksError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListOutgoingTypedLinksError {
@@ -8607,7 +8713,8 @@ impl Error for ListOutgoingTypedLinksError {
             ListOutgoingTypedLinksError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListOutgoingTypedLinksError::Unknown(ref cause) => cause,
+            ListOutgoingTypedLinksError::ParseError(ref cause) => cause,
+            ListOutgoingTypedLinksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8638,65 +8745,69 @@ pub enum ListPolicyAttachmentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPolicyAttachmentsError {
-    pub fn from_body(body: &str) -> ListPolicyAttachmentsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListPolicyAttachmentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListPolicyAttachmentsError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        ListPolicyAttachmentsError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListPolicyAttachmentsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListPolicyAttachmentsError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListPolicyAttachmentsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListPolicyAttachmentsError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotPolicyException" => {
-                        ListPolicyAttachmentsError::NotPolicy(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListPolicyAttachmentsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListPolicyAttachmentsError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListPolicyAttachmentsError::Validation(error_message.to_string())
-                    }
-                    _ => ListPolicyAttachmentsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListPolicyAttachmentsError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return ListPolicyAttachmentsError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return ListPolicyAttachmentsError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListPolicyAttachmentsError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListPolicyAttachmentsError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListPolicyAttachmentsError::LimitExceeded(String::from(error_message))
+                }
+                "NotPolicyException" => {
+                    return ListPolicyAttachmentsError::NotPolicy(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListPolicyAttachmentsError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListPolicyAttachmentsError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListPolicyAttachmentsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListPolicyAttachmentsError::Unknown(String::from(body)),
         }
+        return ListPolicyAttachmentsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPolicyAttachmentsError {
     fn from(err: serde_json::error::Error) -> ListPolicyAttachmentsError {
-        ListPolicyAttachmentsError::Unknown(err.description().to_string())
+        ListPolicyAttachmentsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPolicyAttachmentsError {
@@ -8736,7 +8847,8 @@ impl Error for ListPolicyAttachmentsError {
             ListPolicyAttachmentsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListPolicyAttachmentsError::Unknown(ref cause) => cause,
+            ListPolicyAttachmentsError::ParseError(ref cause) => cause,
+            ListPolicyAttachmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8763,59 +8875,67 @@ pub enum ListPublishedSchemaArnsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPublishedSchemaArnsError {
-    pub fn from_body(body: &str) -> ListPublishedSchemaArnsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListPublishedSchemaArnsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListPublishedSchemaArnsError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListPublishedSchemaArnsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListPublishedSchemaArnsError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListPublishedSchemaArnsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListPublishedSchemaArnsError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListPublishedSchemaArnsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListPublishedSchemaArnsError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListPublishedSchemaArnsError::Validation(error_message.to_string())
-                    }
-                    _ => ListPublishedSchemaArnsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListPublishedSchemaArnsError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return ListPublishedSchemaArnsError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidArnException" => {
+                    return ListPublishedSchemaArnsError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListPublishedSchemaArnsError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return ListPublishedSchemaArnsError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListPublishedSchemaArnsError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "RetryableConflictException" => {
+                    return ListPublishedSchemaArnsError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListPublishedSchemaArnsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListPublishedSchemaArnsError::Unknown(String::from(body)),
         }
+        return ListPublishedSchemaArnsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPublishedSchemaArnsError {
     fn from(err: serde_json::error::Error) -> ListPublishedSchemaArnsError {
-        ListPublishedSchemaArnsError::Unknown(err.description().to_string())
+        ListPublishedSchemaArnsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPublishedSchemaArnsError {
@@ -8853,7 +8973,8 @@ impl Error for ListPublishedSchemaArnsError {
             ListPublishedSchemaArnsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListPublishedSchemaArnsError::Unknown(ref cause) => cause,
+            ListPublishedSchemaArnsError::ParseError(ref cause) => cause,
+            ListPublishedSchemaArnsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8880,59 +9001,61 @@ pub enum ListTagsForResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_body(body: &str) -> ListTagsForResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListTagsForResourceError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListTagsForResourceError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListTagsForResourceError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidTaggingRequestException" => {
-                        ListTagsForResourceError::InvalidTaggingRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListTagsForResourceError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListTagsForResourceError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListTagsForResourceError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTagsForResourceError::Validation(error_message.to_string())
-                    }
-                    _ => ListTagsForResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListTagsForResourceError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return ListTagsForResourceError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ListTagsForResourceError::InvalidArn(String::from(error_message))
+                }
+                "InvalidTaggingRequestException" => {
+                    return ListTagsForResourceError::InvalidTaggingRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return ListTagsForResourceError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListTagsForResourceError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return ListTagsForResourceError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTagsForResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTagsForResourceError::Unknown(String::from(body)),
         }
+        return ListTagsForResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTagsForResourceError {
     fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::Unknown(err.description().to_string())
+        ListTagsForResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTagsForResourceError {
@@ -8970,7 +9093,8 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTagsForResourceError::Unknown(ref cause) => cause,
+            ListTagsForResourceError::ParseError(ref cause) => cause,
+            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8999,70 +9123,78 @@ pub enum ListTypedLinkFacetAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTypedLinkFacetAttributesError {
-    pub fn from_body(body: &str) -> ListTypedLinkFacetAttributesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTypedLinkFacetAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListTypedLinkFacetAttributesError::AccessDenied(String::from(error_message))
-                    }
-                    "FacetNotFoundException" => ListTypedLinkFacetAttributesError::FacetNotFound(
-                        String::from(error_message),
-                    ),
-                    "InternalServiceException" => {
-                        ListTypedLinkFacetAttributesError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidArnException" => {
-                        ListTypedLinkFacetAttributesError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListTypedLinkFacetAttributesError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => ListTypedLinkFacetAttributesError::LimitExceeded(
-                        String::from(error_message),
-                    ),
-                    "ResourceNotFoundException" => {
-                        ListTypedLinkFacetAttributesError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "RetryableConflictException" => {
-                        ListTypedLinkFacetAttributesError::RetryableConflict(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListTypedLinkFacetAttributesError::Validation(error_message.to_string())
-                    }
-                    _ => ListTypedLinkFacetAttributesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListTypedLinkFacetAttributesError::AccessDenied(String::from(
+                        error_message,
+                    ))
                 }
+                "FacetNotFoundException" => {
+                    return ListTypedLinkFacetAttributesError::FacetNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return ListTypedLinkFacetAttributesError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidArnException" => {
+                    return ListTypedLinkFacetAttributesError::InvalidArn(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return ListTypedLinkFacetAttributesError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return ListTypedLinkFacetAttributesError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return ListTypedLinkFacetAttributesError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "RetryableConflictException" => {
+                    return ListTypedLinkFacetAttributesError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListTypedLinkFacetAttributesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTypedLinkFacetAttributesError::Unknown(String::from(body)),
         }
+        return ListTypedLinkFacetAttributesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTypedLinkFacetAttributesError {
     fn from(err: serde_json::error::Error) -> ListTypedLinkFacetAttributesError {
-        ListTypedLinkFacetAttributesError::Unknown(err.description().to_string())
+        ListTypedLinkFacetAttributesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTypedLinkFacetAttributesError {
@@ -9101,7 +9233,8 @@ impl Error for ListTypedLinkFacetAttributesError {
             ListTypedLinkFacetAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTypedLinkFacetAttributesError::Unknown(ref cause) => cause,
+            ListTypedLinkFacetAttributesError::ParseError(ref cause) => cause,
+            ListTypedLinkFacetAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9128,59 +9261,67 @@ pub enum ListTypedLinkFacetNamesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTypedLinkFacetNamesError {
-    pub fn from_body(body: &str) -> ListTypedLinkFacetNamesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTypedLinkFacetNamesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListTypedLinkFacetNamesError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListTypedLinkFacetNamesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListTypedLinkFacetNamesError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListTypedLinkFacetNamesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListTypedLinkFacetNamesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListTypedLinkFacetNamesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        ListTypedLinkFacetNamesError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTypedLinkFacetNamesError::Validation(error_message.to_string())
-                    }
-                    _ => ListTypedLinkFacetNamesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListTypedLinkFacetNamesError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return ListTypedLinkFacetNamesError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidArnException" => {
+                    return ListTypedLinkFacetNamesError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return ListTypedLinkFacetNamesError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return ListTypedLinkFacetNamesError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListTypedLinkFacetNamesError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "RetryableConflictException" => {
+                    return ListTypedLinkFacetNamesError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListTypedLinkFacetNamesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTypedLinkFacetNamesError::Unknown(String::from(body)),
         }
+        return ListTypedLinkFacetNamesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTypedLinkFacetNamesError {
     fn from(err: serde_json::error::Error) -> ListTypedLinkFacetNamesError {
-        ListTypedLinkFacetNamesError::Unknown(err.description().to_string())
+        ListTypedLinkFacetNamesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTypedLinkFacetNamesError {
@@ -9218,7 +9359,8 @@ impl Error for ListTypedLinkFacetNamesError {
             ListTypedLinkFacetNamesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTypedLinkFacetNamesError::Unknown(ref cause) => cause,
+            ListTypedLinkFacetNamesError::ParseError(ref cause) => cause,
+            ListTypedLinkFacetNamesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9247,62 +9389,62 @@ pub enum LookupPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl LookupPolicyError {
-    pub fn from_body(body: &str) -> LookupPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> LookupPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        LookupPolicyError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        LookupPolicyError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        LookupPolicyError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        LookupPolicyError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        LookupPolicyError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        LookupPolicyError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        LookupPolicyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        LookupPolicyError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        LookupPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => LookupPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return LookupPolicyError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return LookupPolicyError::DirectoryNotEnabled(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return LookupPolicyError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return LookupPolicyError::InvalidArn(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return LookupPolicyError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return LookupPolicyError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return LookupPolicyError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return LookupPolicyError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return LookupPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => LookupPolicyError::Unknown(String::from(body)),
         }
+        return LookupPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for LookupPolicyError {
     fn from(err: serde_json::error::Error) -> LookupPolicyError {
-        LookupPolicyError::Unknown(err.description().to_string())
+        LookupPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for LookupPolicyError {
@@ -9339,7 +9481,8 @@ impl Error for LookupPolicyError {
             LookupPolicyError::Validation(ref cause) => cause,
             LookupPolicyError::Credentials(ref err) => err.description(),
             LookupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            LookupPolicyError::Unknown(ref cause) => cause,
+            LookupPolicyError::ParseError(ref cause) => cause,
+            LookupPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9366,59 +9509,59 @@ pub enum PublishSchemaError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PublishSchemaError {
-    pub fn from_body(body: &str) -> PublishSchemaError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PublishSchemaError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        PublishSchemaError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        PublishSchemaError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        PublishSchemaError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PublishSchemaError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        PublishSchemaError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        PublishSchemaError::RetryableConflict(String::from(error_message))
-                    }
-                    "SchemaAlreadyPublishedException" => {
-                        PublishSchemaError::SchemaAlreadyPublished(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PublishSchemaError::Validation(error_message.to_string())
-                    }
-                    _ => PublishSchemaError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return PublishSchemaError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return PublishSchemaError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return PublishSchemaError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PublishSchemaError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return PublishSchemaError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return PublishSchemaError::RetryableConflict(String::from(error_message))
+                }
+                "SchemaAlreadyPublishedException" => {
+                    return PublishSchemaError::SchemaAlreadyPublished(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PublishSchemaError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PublishSchemaError::Unknown(String::from(body)),
         }
+        return PublishSchemaError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PublishSchemaError {
     fn from(err: serde_json::error::Error) -> PublishSchemaError {
-        PublishSchemaError::Unknown(err.description().to_string())
+        PublishSchemaError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PublishSchemaError {
@@ -9454,7 +9597,8 @@ impl Error for PublishSchemaError {
             PublishSchemaError::Validation(ref cause) => cause,
             PublishSchemaError::Credentials(ref err) => err.description(),
             PublishSchemaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PublishSchemaError::Unknown(ref cause) => cause,
+            PublishSchemaError::ParseError(ref cause) => cause,
+            PublishSchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9481,59 +9625,59 @@ pub enum PutSchemaFromJsonError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutSchemaFromJsonError {
-    pub fn from_body(body: &str) -> PutSchemaFromJsonError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutSchemaFromJsonError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        PutSchemaFromJsonError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        PutSchemaFromJsonError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        PutSchemaFromJsonError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidRuleException" => {
-                        PutSchemaFromJsonError::InvalidRule(String::from(error_message))
-                    }
-                    "InvalidSchemaDocException" => {
-                        PutSchemaFromJsonError::InvalidSchemaDoc(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PutSchemaFromJsonError::LimitExceeded(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        PutSchemaFromJsonError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutSchemaFromJsonError::Validation(error_message.to_string())
-                    }
-                    _ => PutSchemaFromJsonError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return PutSchemaFromJsonError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return PutSchemaFromJsonError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return PutSchemaFromJsonError::InvalidArn(String::from(error_message))
+                }
+                "InvalidRuleException" => {
+                    return PutSchemaFromJsonError::InvalidRule(String::from(error_message))
+                }
+                "InvalidSchemaDocException" => {
+                    return PutSchemaFromJsonError::InvalidSchemaDoc(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PutSchemaFromJsonError::LimitExceeded(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return PutSchemaFromJsonError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutSchemaFromJsonError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutSchemaFromJsonError::Unknown(String::from(body)),
         }
+        return PutSchemaFromJsonError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutSchemaFromJsonError {
     fn from(err: serde_json::error::Error) -> PutSchemaFromJsonError {
-        PutSchemaFromJsonError::Unknown(err.description().to_string())
+        PutSchemaFromJsonError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutSchemaFromJsonError {
@@ -9571,7 +9715,8 @@ impl Error for PutSchemaFromJsonError {
             PutSchemaFromJsonError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutSchemaFromJsonError::Unknown(ref cause) => cause,
+            PutSchemaFromJsonError::ParseError(ref cause) => cause,
+            PutSchemaFromJsonError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9600,62 +9745,66 @@ pub enum RemoveFacetFromObjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveFacetFromObjectError {
-    pub fn from_body(body: &str) -> RemoveFacetFromObjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RemoveFacetFromObjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        RemoveFacetFromObjectError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        RemoveFacetFromObjectError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        RemoveFacetFromObjectError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        RemoveFacetFromObjectError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        RemoveFacetFromObjectError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        RemoveFacetFromObjectError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        RemoveFacetFromObjectError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        RemoveFacetFromObjectError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RemoveFacetFromObjectError::Validation(error_message.to_string())
-                    }
-                    _ => RemoveFacetFromObjectError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return RemoveFacetFromObjectError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return RemoveFacetFromObjectError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    ))
+                }
+                "FacetValidationException" => {
+                    return RemoveFacetFromObjectError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return RemoveFacetFromObjectError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return RemoveFacetFromObjectError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return RemoveFacetFromObjectError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return RemoveFacetFromObjectError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return RemoveFacetFromObjectError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RemoveFacetFromObjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RemoveFacetFromObjectError::Unknown(String::from(body)),
         }
+        return RemoveFacetFromObjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RemoveFacetFromObjectError {
     fn from(err: serde_json::error::Error) -> RemoveFacetFromObjectError {
-        RemoveFacetFromObjectError::Unknown(err.description().to_string())
+        RemoveFacetFromObjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RemoveFacetFromObjectError {
@@ -9694,7 +9843,8 @@ impl Error for RemoveFacetFromObjectError {
             RemoveFacetFromObjectError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RemoveFacetFromObjectError::Unknown(ref cause) => cause,
+            RemoveFacetFromObjectError::ParseError(ref cause) => cause,
+            RemoveFacetFromObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9721,59 +9871,59 @@ pub enum TagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_body(body: &str) -> TagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        TagResourceError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        TagResourceError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        TagResourceError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidTaggingRequestException" => {
-                        TagResourceError::InvalidTaggingRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        TagResourceError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        TagResourceError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        TagResourceError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        TagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => TagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return TagResourceError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return TagResourceError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return TagResourceError::InvalidArn(String::from(error_message))
+                }
+                "InvalidTaggingRequestException" => {
+                    return TagResourceError::InvalidTaggingRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return TagResourceError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return TagResourceError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return TagResourceError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return TagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TagResourceError::Unknown(String::from(body)),
         }
+        return TagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TagResourceError {
     fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::Unknown(err.description().to_string())
+        TagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TagResourceError {
@@ -9809,7 +9959,8 @@ impl Error for TagResourceError {
             TagResourceError::Validation(ref cause) => cause,
             TagResourceError::Credentials(ref err) => err.description(),
             TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::Unknown(ref cause) => cause,
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9836,59 +9987,59 @@ pub enum UntagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_body(body: &str) -> UntagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UntagResourceError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UntagResourceError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        UntagResourceError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidTaggingRequestException" => {
-                        UntagResourceError::InvalidTaggingRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UntagResourceError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UntagResourceError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        UntagResourceError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UntagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => UntagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UntagResourceError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return UntagResourceError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return UntagResourceError::InvalidArn(String::from(error_message))
+                }
+                "InvalidTaggingRequestException" => {
+                    return UntagResourceError::InvalidTaggingRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UntagResourceError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UntagResourceError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return UntagResourceError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UntagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UntagResourceError::Unknown(String::from(body)),
         }
+        return UntagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UntagResourceError {
     fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::Unknown(err.description().to_string())
+        UntagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UntagResourceError {
@@ -9924,7 +10075,8 @@ impl Error for UntagResourceError {
             UntagResourceError::Validation(ref cause) => cause,
             UntagResourceError::Credentials(ref err) => err.description(),
             UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::Unknown(ref cause) => cause,
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9955,65 +10107,65 @@ pub enum UpdateFacetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFacetError {
-    pub fn from_body(body: &str) -> UpdateFacetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateFacetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpdateFacetError::AccessDenied(String::from(error_message))
-                    }
-                    "FacetNotFoundException" => {
-                        UpdateFacetError::FacetNotFound(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpdateFacetError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        UpdateFacetError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidFacetUpdateException" => {
-                        UpdateFacetError::InvalidFacetUpdate(String::from(error_message))
-                    }
-                    "InvalidRuleException" => {
-                        UpdateFacetError::InvalidRule(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateFacetError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateFacetError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        UpdateFacetError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateFacetError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateFacetError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdateFacetError::AccessDenied(String::from(error_message))
                 }
+                "FacetNotFoundException" => {
+                    return UpdateFacetError::FacetNotFound(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return UpdateFacetError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return UpdateFacetError::InvalidArn(String::from(error_message))
+                }
+                "InvalidFacetUpdateException" => {
+                    return UpdateFacetError::InvalidFacetUpdate(String::from(error_message))
+                }
+                "InvalidRuleException" => {
+                    return UpdateFacetError::InvalidRule(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateFacetError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateFacetError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return UpdateFacetError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateFacetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateFacetError::Unknown(String::from(body)),
         }
+        return UpdateFacetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateFacetError {
     fn from(err: serde_json::error::Error) -> UpdateFacetError {
-        UpdateFacetError::Unknown(err.description().to_string())
+        UpdateFacetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateFacetError {
@@ -10051,7 +10203,8 @@ impl Error for UpdateFacetError {
             UpdateFacetError::Validation(ref cause) => cause,
             UpdateFacetError::Credentials(ref err) => err.description(),
             UpdateFacetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateFacetError::Unknown(ref cause) => cause,
+            UpdateFacetError::ParseError(ref cause) => cause,
+            UpdateFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10080,62 +10233,64 @@ pub enum UpdateLinkAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateLinkAttributesError {
-    pub fn from_body(body: &str) -> UpdateLinkAttributesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateLinkAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpdateLinkAttributesError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        UpdateLinkAttributesError::DirectoryNotEnabled(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        UpdateLinkAttributesError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpdateLinkAttributesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        UpdateLinkAttributesError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateLinkAttributesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateLinkAttributesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        UpdateLinkAttributesError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateLinkAttributesError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateLinkAttributesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdateLinkAttributesError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return UpdateLinkAttributesError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    ))
+                }
+                "FacetValidationException" => {
+                    return UpdateLinkAttributesError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return UpdateLinkAttributesError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return UpdateLinkAttributesError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateLinkAttributesError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateLinkAttributesError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return UpdateLinkAttributesError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateLinkAttributesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateLinkAttributesError::Unknown(String::from(body)),
         }
+        return UpdateLinkAttributesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateLinkAttributesError {
     fn from(err: serde_json::error::Error) -> UpdateLinkAttributesError {
-        UpdateLinkAttributesError::Unknown(err.description().to_string())
+        UpdateLinkAttributesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateLinkAttributesError {
@@ -10174,7 +10329,8 @@ impl Error for UpdateLinkAttributesError {
             UpdateLinkAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateLinkAttributesError::Unknown(ref cause) => cause,
+            UpdateLinkAttributesError::ParseError(ref cause) => cause,
+            UpdateLinkAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10205,69 +10361,73 @@ pub enum UpdateObjectAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateObjectAttributesError {
-    pub fn from_body(body: &str) -> UpdateObjectAttributesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateObjectAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpdateObjectAttributesError::AccessDenied(String::from(error_message))
-                    }
-                    "DirectoryNotEnabledException" => {
-                        UpdateObjectAttributesError::DirectoryNotEnabled(String::from(
-                            error_message,
-                        ))
-                    }
-                    "FacetValidationException" => {
-                        UpdateObjectAttributesError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpdateObjectAttributesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        UpdateObjectAttributesError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateObjectAttributesError::LimitExceeded(String::from(error_message))
-                    }
-                    "LinkNameAlreadyInUseException" => {
-                        UpdateObjectAttributesError::LinkNameAlreadyInUse(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateObjectAttributesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        UpdateObjectAttributesError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateObjectAttributesError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateObjectAttributesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdateObjectAttributesError::AccessDenied(String::from(error_message))
                 }
+                "DirectoryNotEnabledException" => {
+                    return UpdateObjectAttributesError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    ))
+                }
+                "FacetValidationException" => {
+                    return UpdateObjectAttributesError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return UpdateObjectAttributesError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return UpdateObjectAttributesError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateObjectAttributesError::LimitExceeded(String::from(error_message))
+                }
+                "LinkNameAlreadyInUseException" => {
+                    return UpdateObjectAttributesError::LinkNameAlreadyInUse(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateObjectAttributesError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "RetryableConflictException" => {
+                    return UpdateObjectAttributesError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateObjectAttributesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateObjectAttributesError::Unknown(String::from(body)),
         }
+        return UpdateObjectAttributesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateObjectAttributesError {
     fn from(err: serde_json::error::Error) -> UpdateObjectAttributesError {
-        UpdateObjectAttributesError::Unknown(err.description().to_string())
+        UpdateObjectAttributesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateObjectAttributesError {
@@ -10307,7 +10467,8 @@ impl Error for UpdateObjectAttributesError {
             UpdateObjectAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateObjectAttributesError::Unknown(ref cause) => cause,
+            UpdateObjectAttributesError::ParseError(ref cause) => cause,
+            UpdateObjectAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10332,56 +10493,56 @@ pub enum UpdateSchemaError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSchemaError {
-    pub fn from_body(body: &str) -> UpdateSchemaError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSchemaError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpdateSchemaError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpdateSchemaError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        UpdateSchemaError::InvalidArn(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateSchemaError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateSchemaError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        UpdateSchemaError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateSchemaError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateSchemaError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdateSchemaError::AccessDenied(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return UpdateSchemaError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return UpdateSchemaError::InvalidArn(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateSchemaError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateSchemaError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return UpdateSchemaError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateSchemaError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateSchemaError::Unknown(String::from(body)),
         }
+        return UpdateSchemaError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateSchemaError {
     fn from(err: serde_json::error::Error) -> UpdateSchemaError {
-        UpdateSchemaError::Unknown(err.description().to_string())
+        UpdateSchemaError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateSchemaError {
@@ -10416,7 +10577,8 @@ impl Error for UpdateSchemaError {
             UpdateSchemaError::Validation(ref cause) => cause,
             UpdateSchemaError::Credentials(ref err) => err.description(),
             UpdateSchemaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateSchemaError::Unknown(ref cause) => cause,
+            UpdateSchemaError::ParseError(ref cause) => cause,
+            UpdateSchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10449,68 +10611,70 @@ pub enum UpdateTypedLinkFacetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTypedLinkFacetError {
-    pub fn from_body(body: &str) -> UpdateTypedLinkFacetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateTypedLinkFacetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpdateTypedLinkFacetError::AccessDenied(String::from(error_message))
-                    }
-                    "FacetNotFoundException" => {
-                        UpdateTypedLinkFacetError::FacetNotFound(String::from(error_message))
-                    }
-                    "FacetValidationException" => {
-                        UpdateTypedLinkFacetError::FacetValidation(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpdateTypedLinkFacetError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        UpdateTypedLinkFacetError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidFacetUpdateException" => {
-                        UpdateTypedLinkFacetError::InvalidFacetUpdate(String::from(error_message))
-                    }
-                    "InvalidRuleException" => {
-                        UpdateTypedLinkFacetError::InvalidRule(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateTypedLinkFacetError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateTypedLinkFacetError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        UpdateTypedLinkFacetError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateTypedLinkFacetError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateTypedLinkFacetError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdateTypedLinkFacetError::AccessDenied(String::from(error_message))
                 }
+                "FacetNotFoundException" => {
+                    return UpdateTypedLinkFacetError::FacetNotFound(String::from(error_message))
+                }
+                "FacetValidationException" => {
+                    return UpdateTypedLinkFacetError::FacetValidation(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return UpdateTypedLinkFacetError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return UpdateTypedLinkFacetError::InvalidArn(String::from(error_message))
+                }
+                "InvalidFacetUpdateException" => {
+                    return UpdateTypedLinkFacetError::InvalidFacetUpdate(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRuleException" => {
+                    return UpdateTypedLinkFacetError::InvalidRule(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateTypedLinkFacetError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateTypedLinkFacetError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return UpdateTypedLinkFacetError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateTypedLinkFacetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateTypedLinkFacetError::Unknown(String::from(body)),
         }
+        return UpdateTypedLinkFacetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateTypedLinkFacetError {
     fn from(err: serde_json::error::Error) -> UpdateTypedLinkFacetError {
-        UpdateTypedLinkFacetError::Unknown(err.description().to_string())
+        UpdateTypedLinkFacetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateTypedLinkFacetError {
@@ -10551,7 +10715,8 @@ impl Error for UpdateTypedLinkFacetError {
             UpdateTypedLinkFacetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateTypedLinkFacetError::Unknown(ref cause) => cause,
+            UpdateTypedLinkFacetError::ParseError(ref cause) => cause,
+            UpdateTypedLinkFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10578,59 +10743,61 @@ pub enum UpgradeAppliedSchemaError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpgradeAppliedSchemaError {
-    pub fn from_body(body: &str) -> UpgradeAppliedSchemaError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpgradeAppliedSchemaError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpgradeAppliedSchemaError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleSchemaException" => {
-                        UpgradeAppliedSchemaError::IncompatibleSchema(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpgradeAppliedSchemaError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        UpgradeAppliedSchemaError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidAttachmentException" => {
-                        UpgradeAppliedSchemaError::InvalidAttachment(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpgradeAppliedSchemaError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        UpgradeAppliedSchemaError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpgradeAppliedSchemaError::Validation(error_message.to_string())
-                    }
-                    _ => UpgradeAppliedSchemaError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpgradeAppliedSchemaError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleSchemaException" => {
+                    return UpgradeAppliedSchemaError::IncompatibleSchema(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return UpgradeAppliedSchemaError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return UpgradeAppliedSchemaError::InvalidArn(String::from(error_message))
+                }
+                "InvalidAttachmentException" => {
+                    return UpgradeAppliedSchemaError::InvalidAttachment(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpgradeAppliedSchemaError::ResourceNotFound(String::from(error_message))
+                }
+                "RetryableConflictException" => {
+                    return UpgradeAppliedSchemaError::RetryableConflict(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpgradeAppliedSchemaError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpgradeAppliedSchemaError::Unknown(String::from(body)),
         }
+        return UpgradeAppliedSchemaError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpgradeAppliedSchemaError {
     fn from(err: serde_json::error::Error) -> UpgradeAppliedSchemaError {
-        UpgradeAppliedSchemaError::Unknown(err.description().to_string())
+        UpgradeAppliedSchemaError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpgradeAppliedSchemaError {
@@ -10668,7 +10835,8 @@ impl Error for UpgradeAppliedSchemaError {
             UpgradeAppliedSchemaError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpgradeAppliedSchemaError::Unknown(ref cause) => cause,
+            UpgradeAppliedSchemaError::ParseError(ref cause) => cause,
+            UpgradeAppliedSchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10697,62 +10865,70 @@ pub enum UpgradePublishedSchemaError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpgradePublishedSchemaError {
-    pub fn from_body(body: &str) -> UpgradePublishedSchemaError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpgradePublishedSchemaError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpgradePublishedSchemaError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleSchemaException" => {
-                        UpgradePublishedSchemaError::IncompatibleSchema(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpgradePublishedSchemaError::InternalService(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        UpgradePublishedSchemaError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidAttachmentException" => {
-                        UpgradePublishedSchemaError::InvalidAttachment(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpgradePublishedSchemaError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpgradePublishedSchemaError::ResourceNotFound(String::from(error_message))
-                    }
-                    "RetryableConflictException" => {
-                        UpgradePublishedSchemaError::RetryableConflict(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpgradePublishedSchemaError::Validation(error_message.to_string())
-                    }
-                    _ => UpgradePublishedSchemaError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpgradePublishedSchemaError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleSchemaException" => {
+                    return UpgradePublishedSchemaError::IncompatibleSchema(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return UpgradePublishedSchemaError::InternalService(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return UpgradePublishedSchemaError::InvalidArn(String::from(error_message))
+                }
+                "InvalidAttachmentException" => {
+                    return UpgradePublishedSchemaError::InvalidAttachment(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return UpgradePublishedSchemaError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpgradePublishedSchemaError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "RetryableConflictException" => {
+                    return UpgradePublishedSchemaError::RetryableConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpgradePublishedSchemaError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpgradePublishedSchemaError::Unknown(String::from(body)),
         }
+        return UpgradePublishedSchemaError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpgradePublishedSchemaError {
     fn from(err: serde_json::error::Error) -> UpgradePublishedSchemaError {
-        UpgradePublishedSchemaError::Unknown(err.description().to_string())
+        UpgradePublishedSchemaError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpgradePublishedSchemaError {
@@ -10791,7 +10967,8 @@ impl Error for UpgradePublishedSchemaError {
             UpgradePublishedSchemaError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpgradePublishedSchemaError::Unknown(ref cause) => cause,
+            UpgradePublishedSchemaError::ParseError(ref cause) => cause,
+            UpgradePublishedSchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11250,11 +11427,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddFacetToObjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AddFacetToObjectError::from_response(response))),
+                )
             }
         })
     }
@@ -11289,11 +11467,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ApplySchemaError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ApplySchemaError::from_response(response))),
+                )
             }
         })
     }
@@ -11328,11 +11507,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AttachObjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AttachObjectError::from_response(response))),
+                )
             }
         })
     }
@@ -11367,11 +11547,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AttachPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AttachPolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -11406,11 +11587,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AttachToIndexError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AttachToIndexError::from_response(response))),
+                )
             }
         })
     }
@@ -11445,11 +11627,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AttachTypedLinkError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AttachTypedLinkError::from_response(response))),
+                )
             }
         })
     }
@@ -11488,11 +11671,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchReadError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchReadError::from_response(response))),
+                )
             }
         })
     }
@@ -11527,11 +11711,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchWriteError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchWriteError::from_response(response))),
+                )
             }
         })
     }
@@ -11566,11 +11751,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDirectoryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateDirectoryError::from_response(response))),
+                )
             }
         })
     }
@@ -11605,11 +11791,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateFacetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateFacetError::from_response(response))),
+                )
             }
         })
     }
@@ -11644,11 +11831,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateIndexError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateIndexError::from_response(response))),
+                )
             }
         })
     }
@@ -11683,11 +11871,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateObjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateObjectError::from_response(response))),
+                )
             }
         })
     }
@@ -11721,11 +11910,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSchemaError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateSchemaError::from_response(response))),
+                )
             }
         })
     }
@@ -11761,11 +11951,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTypedLinkFacetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateTypedLinkFacetError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -11798,11 +11988,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDirectoryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteDirectoryError::from_response(response))),
+                )
             }
         })
     }
@@ -11837,11 +12028,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteFacetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteFacetError::from_response(response))),
+                )
             }
         })
     }
@@ -11876,11 +12068,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteObjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteObjectError::from_response(response))),
+                )
             }
         })
     }
@@ -11913,11 +12106,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSchemaError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteSchemaError::from_response(response))),
+                )
             }
         })
     }
@@ -11953,11 +12147,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTypedLinkFacetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteTypedLinkFacetError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -11992,11 +12186,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetachFromIndexError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetachFromIndexError::from_response(response))),
+                )
             }
         })
     }
@@ -12031,11 +12226,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetachObjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetachObjectError::from_response(response))),
+                )
             }
         })
     }
@@ -12070,11 +12266,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetachPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetachPolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -12101,11 +12298,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetachTypedLinkError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetachTypedLinkError::from_response(response))),
+                )
             }
         })
     }
@@ -12138,11 +12336,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableDirectoryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DisableDirectoryError::from_response(response))),
+                )
             }
         })
     }
@@ -12175,11 +12374,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableDirectoryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(EnableDirectoryError::from_response(response))),
+                )
             }
         })
     }
@@ -12215,9 +12415,7 @@ impl CloudDirectory for CloudDirectoryClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAppliedSchemaVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetAppliedSchemaVersionError::from_response(response))
                 }))
             }
         })
@@ -12251,11 +12449,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDirectoryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetDirectoryError::from_response(response))),
+                )
             }
         })
     }
@@ -12287,11 +12486,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFacetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetFacetError::from_response(response))),
+                )
             }
         })
     }
@@ -12327,11 +12527,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetLinkAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetLinkAttributesError::from_response(response))),
+                )
             }
         })
     }
@@ -12371,11 +12572,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetObjectAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetObjectAttributesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12415,11 +12616,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetObjectInformationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetObjectInformationError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12452,11 +12653,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSchemaAsJsonError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetSchemaAsJsonError::from_response(response))),
+                )
             }
         })
     }
@@ -12494,9 +12696,7 @@ impl CloudDirectory for CloudDirectoryClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTypedLinkFacetInformationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetTypedLinkFacetInformationError::from_response(response))
                 }))
             }
         })
@@ -12532,11 +12732,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAppliedSchemaArnsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListAppliedSchemaArnsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12576,11 +12776,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAttachedIndicesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListAttachedIndicesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12616,9 +12816,7 @@ impl CloudDirectory for CloudDirectoryClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDevelopmentSchemaArnsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListDevelopmentSchemaArnsError::from_response(response))
                 }))
             }
         })
@@ -12653,11 +12851,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDirectoriesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListDirectoriesError::from_response(response))),
+                )
             }
         })
     }
@@ -12693,11 +12892,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListFacetAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListFacetAttributesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12732,11 +12931,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListFacetNamesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListFacetNamesError::from_response(response))),
+                )
             }
         })
     }
@@ -12772,11 +12972,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListIncomingTypedLinksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListIncomingTypedLinksError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12815,11 +13015,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListIndexError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListIndexError::from_response(response))),
+                )
             }
         })
     }
@@ -12859,11 +13060,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListObjectAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListObjectAttributesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12903,11 +13104,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListObjectChildrenError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListObjectChildrenError::from_response(response))),
+                )
             }
         })
     }
@@ -12943,11 +13145,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListObjectParentPathsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListObjectParentPathsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12987,11 +13189,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListObjectParentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListObjectParentsError::from_response(response))),
+                )
             }
         })
     }
@@ -13031,11 +13234,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListObjectPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListObjectPoliciesError::from_response(response))),
+                )
             }
         })
     }
@@ -13071,11 +13275,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListOutgoingTypedLinksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListOutgoingTypedLinksError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -13115,11 +13319,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPolicyAttachmentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListPolicyAttachmentsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -13155,9 +13359,7 @@ impl CloudDirectory for CloudDirectoryClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPublishedSchemaArnsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListPublishedSchemaArnsError::from_response(response))
                 }))
             }
         })
@@ -13193,11 +13395,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsForResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -13235,9 +13437,7 @@ impl CloudDirectory for CloudDirectoryClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTypedLinkFacetAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListTypedLinkFacetAttributesError::from_response(response))
                 }))
             }
         })
@@ -13275,9 +13475,7 @@ impl CloudDirectory for CloudDirectoryClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTypedLinkFacetNamesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListTypedLinkFacetNamesError::from_response(response))
                 }))
             }
         })
@@ -13313,11 +13511,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(LookupPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(LookupPolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -13352,11 +13551,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PublishSchemaError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PublishSchemaError::from_response(response))),
+                )
             }
         })
     }
@@ -13392,11 +13592,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutSchemaFromJsonError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutSchemaFromJsonError::from_response(response))),
+                )
             }
         })
     }
@@ -13432,11 +13633,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveFacetFromObjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RemoveFacetFromObjectError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -13470,11 +13671,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -13508,11 +13710,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -13547,11 +13750,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateFacetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateFacetError::from_response(response))),
+                )
             }
         })
     }
@@ -13587,11 +13791,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateLinkAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateLinkAttributesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -13627,11 +13831,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateObjectAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateObjectAttributesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -13666,11 +13870,12 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSchemaError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateSchemaError::from_response(response))),
+                )
             }
         })
     }
@@ -13706,11 +13911,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTypedLinkFacetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateTypedLinkFacetError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -13745,11 +13950,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpgradeAppliedSchemaError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpgradeAppliedSchemaError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -13784,11 +13989,11 @@ impl CloudDirectory for CloudDirectoryClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpgradePublishedSchemaError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpgradePublishedSchemaError::from_response(response))
+                    }),
+                )
             }
         })
     }

@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsToResourceRequest {
@@ -591,47 +591,47 @@ pub enum AddTagsToResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsToResourceError {
-    pub fn from_body(body: &str) -> AddTagsToResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AddTagsToResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        AddTagsToResourceError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        AddTagsToResourceError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        AddTagsToResourceError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AddTagsToResourceError::Validation(error_message.to_string())
-                    }
-                    _ => AddTagsToResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return AddTagsToResourceError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return AddTagsToResourceError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return AddTagsToResourceError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AddTagsToResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AddTagsToResourceError::Unknown(String::from(body)),
         }
+        return AddTagsToResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AddTagsToResourceError {
     fn from(err: serde_json::error::Error) -> AddTagsToResourceError {
-        AddTagsToResourceError::Unknown(err.description().to_string())
+        AddTagsToResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AddTagsToResourceError {
@@ -665,7 +665,8 @@ impl Error for AddTagsToResourceError {
             AddTagsToResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AddTagsToResourceError::Unknown(ref cause) => cause,
+            AddTagsToResourceError::ParseError(ref cause) => cause,
+            AddTagsToResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -684,45 +685,47 @@ pub enum CreateHapgError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHapgError {
-    pub fn from_body(body: &str) -> CreateHapgError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateHapgError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        CreateHapgError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        CreateHapgError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreateHapgError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => CreateHapgError::Validation(error_message.to_string()),
-                    _ => CreateHapgError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return CreateHapgError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return CreateHapgError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return CreateHapgError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateHapgError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateHapgError::Unknown(String::from(body)),
         }
+        return CreateHapgError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateHapgError {
     fn from(err: serde_json::error::Error) -> CreateHapgError {
-        CreateHapgError::Unknown(err.description().to_string())
+        CreateHapgError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateHapgError {
@@ -754,7 +757,8 @@ impl Error for CreateHapgError {
             CreateHapgError::Validation(ref cause) => cause,
             CreateHapgError::Credentials(ref err) => err.description(),
             CreateHapgError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateHapgError::Unknown(ref cause) => cause,
+            CreateHapgError::ParseError(ref cause) => cause,
+            CreateHapgError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -773,45 +777,47 @@ pub enum CreateHsmError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHsmError {
-    pub fn from_body(body: &str) -> CreateHsmError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateHsmError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        CreateHsmError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        CreateHsmError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreateHsmError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => CreateHsmError::Validation(error_message.to_string()),
-                    _ => CreateHsmError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return CreateHsmError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return CreateHsmError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return CreateHsmError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateHsmError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateHsmError::Unknown(String::from(body)),
         }
+        return CreateHsmError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateHsmError {
     fn from(err: serde_json::error::Error) -> CreateHsmError {
-        CreateHsmError::Unknown(err.description().to_string())
+        CreateHsmError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateHsmError {
@@ -843,7 +849,8 @@ impl Error for CreateHsmError {
             CreateHsmError::Validation(ref cause) => cause,
             CreateHsmError::Credentials(ref err) => err.description(),
             CreateHsmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateHsmError::Unknown(ref cause) => cause,
+            CreateHsmError::ParseError(ref cause) => cause,
+            CreateHsmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -862,47 +869,47 @@ pub enum CreateLunaClientError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLunaClientError {
-    pub fn from_body(body: &str) -> CreateLunaClientError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateLunaClientError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        CreateLunaClientError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        CreateLunaClientError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreateLunaClientError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateLunaClientError::Validation(error_message.to_string())
-                    }
-                    _ => CreateLunaClientError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return CreateLunaClientError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return CreateLunaClientError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return CreateLunaClientError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateLunaClientError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateLunaClientError::Unknown(String::from(body)),
         }
+        return CreateLunaClientError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateLunaClientError {
     fn from(err: serde_json::error::Error) -> CreateLunaClientError {
-        CreateLunaClientError::Unknown(err.description().to_string())
+        CreateLunaClientError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateLunaClientError {
@@ -934,7 +941,8 @@ impl Error for CreateLunaClientError {
             CreateLunaClientError::Validation(ref cause) => cause,
             CreateLunaClientError::Credentials(ref err) => err.description(),
             CreateLunaClientError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateLunaClientError::Unknown(ref cause) => cause,
+            CreateLunaClientError::ParseError(ref cause) => cause,
+            CreateLunaClientError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -953,45 +961,47 @@ pub enum DeleteHapgError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHapgError {
-    pub fn from_body(body: &str) -> DeleteHapgError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteHapgError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        DeleteHapgError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        DeleteHapgError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteHapgError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => DeleteHapgError::Validation(error_message.to_string()),
-                    _ => DeleteHapgError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return DeleteHapgError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return DeleteHapgError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return DeleteHapgError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteHapgError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteHapgError::Unknown(String::from(body)),
         }
+        return DeleteHapgError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteHapgError {
     fn from(err: serde_json::error::Error) -> DeleteHapgError {
-        DeleteHapgError::Unknown(err.description().to_string())
+        DeleteHapgError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteHapgError {
@@ -1023,7 +1033,8 @@ impl Error for DeleteHapgError {
             DeleteHapgError::Validation(ref cause) => cause,
             DeleteHapgError::Credentials(ref err) => err.description(),
             DeleteHapgError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteHapgError::Unknown(ref cause) => cause,
+            DeleteHapgError::ParseError(ref cause) => cause,
+            DeleteHapgError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1042,45 +1053,47 @@ pub enum DeleteHsmError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHsmError {
-    pub fn from_body(body: &str) -> DeleteHsmError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteHsmError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        DeleteHsmError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        DeleteHsmError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteHsmError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => DeleteHsmError::Validation(error_message.to_string()),
-                    _ => DeleteHsmError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return DeleteHsmError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return DeleteHsmError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return DeleteHsmError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteHsmError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteHsmError::Unknown(String::from(body)),
         }
+        return DeleteHsmError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteHsmError {
     fn from(err: serde_json::error::Error) -> DeleteHsmError {
-        DeleteHsmError::Unknown(err.description().to_string())
+        DeleteHsmError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteHsmError {
@@ -1112,7 +1125,8 @@ impl Error for DeleteHsmError {
             DeleteHsmError::Validation(ref cause) => cause,
             DeleteHsmError::Credentials(ref err) => err.description(),
             DeleteHsmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteHsmError::Unknown(ref cause) => cause,
+            DeleteHsmError::ParseError(ref cause) => cause,
+            DeleteHsmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1131,47 +1145,47 @@ pub enum DeleteLunaClientError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLunaClientError {
-    pub fn from_body(body: &str) -> DeleteLunaClientError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteLunaClientError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        DeleteLunaClientError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        DeleteLunaClientError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteLunaClientError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteLunaClientError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteLunaClientError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return DeleteLunaClientError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return DeleteLunaClientError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return DeleteLunaClientError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteLunaClientError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteLunaClientError::Unknown(String::from(body)),
         }
+        return DeleteLunaClientError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteLunaClientError {
     fn from(err: serde_json::error::Error) -> DeleteLunaClientError {
-        DeleteLunaClientError::Unknown(err.description().to_string())
+        DeleteLunaClientError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteLunaClientError {
@@ -1203,7 +1217,8 @@ impl Error for DeleteLunaClientError {
             DeleteLunaClientError::Validation(ref cause) => cause,
             DeleteLunaClientError::Credentials(ref err) => err.description(),
             DeleteLunaClientError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteLunaClientError::Unknown(ref cause) => cause,
+            DeleteLunaClientError::ParseError(ref cause) => cause,
+            DeleteLunaClientError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1222,47 +1237,47 @@ pub enum DescribeHapgError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeHapgError {
-    pub fn from_body(body: &str) -> DescribeHapgError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeHapgError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        DescribeHapgError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        DescribeHapgError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeHapgError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeHapgError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeHapgError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return DescribeHapgError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return DescribeHapgError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return DescribeHapgError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeHapgError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeHapgError::Unknown(String::from(body)),
         }
+        return DescribeHapgError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeHapgError {
     fn from(err: serde_json::error::Error) -> DescribeHapgError {
-        DescribeHapgError::Unknown(err.description().to_string())
+        DescribeHapgError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeHapgError {
@@ -1294,7 +1309,8 @@ impl Error for DescribeHapgError {
             DescribeHapgError::Validation(ref cause) => cause,
             DescribeHapgError::Credentials(ref err) => err.description(),
             DescribeHapgError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeHapgError::Unknown(ref cause) => cause,
+            DescribeHapgError::ParseError(ref cause) => cause,
+            DescribeHapgError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1313,47 +1329,47 @@ pub enum DescribeHsmError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeHsmError {
-    pub fn from_body(body: &str) -> DescribeHsmError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeHsmError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        DescribeHsmError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        DescribeHsmError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeHsmError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeHsmError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeHsmError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return DescribeHsmError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return DescribeHsmError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return DescribeHsmError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeHsmError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeHsmError::Unknown(String::from(body)),
         }
+        return DescribeHsmError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeHsmError {
     fn from(err: serde_json::error::Error) -> DescribeHsmError {
-        DescribeHsmError::Unknown(err.description().to_string())
+        DescribeHsmError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeHsmError {
@@ -1385,7 +1401,8 @@ impl Error for DescribeHsmError {
             DescribeHsmError::Validation(ref cause) => cause,
             DescribeHsmError::Credentials(ref err) => err.description(),
             DescribeHsmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeHsmError::Unknown(ref cause) => cause,
+            DescribeHsmError::ParseError(ref cause) => cause,
+            DescribeHsmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1404,47 +1421,47 @@ pub enum DescribeLunaClientError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLunaClientError {
-    pub fn from_body(body: &str) -> DescribeLunaClientError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLunaClientError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        DescribeLunaClientError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        DescribeLunaClientError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeLunaClientError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeLunaClientError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeLunaClientError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return DescribeLunaClientError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return DescribeLunaClientError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return DescribeLunaClientError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeLunaClientError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeLunaClientError::Unknown(String::from(body)),
         }
+        return DescribeLunaClientError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeLunaClientError {
     fn from(err: serde_json::error::Error) -> DescribeLunaClientError {
-        DescribeLunaClientError::Unknown(err.description().to_string())
+        DescribeLunaClientError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeLunaClientError {
@@ -1478,7 +1495,8 @@ impl Error for DescribeLunaClientError {
             DescribeLunaClientError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeLunaClientError::Unknown(ref cause) => cause,
+            DescribeLunaClientError::ParseError(ref cause) => cause,
+            DescribeLunaClientError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1497,45 +1515,47 @@ pub enum GetConfigError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetConfigError {
-    pub fn from_body(body: &str) -> GetConfigError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetConfigError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        GetConfigError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        GetConfigError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        GetConfigError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => GetConfigError::Validation(error_message.to_string()),
-                    _ => GetConfigError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return GetConfigError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return GetConfigError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return GetConfigError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetConfigError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetConfigError::Unknown(String::from(body)),
         }
+        return GetConfigError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetConfigError {
     fn from(err: serde_json::error::Error) -> GetConfigError {
-        GetConfigError::Unknown(err.description().to_string())
+        GetConfigError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetConfigError {
@@ -1567,7 +1587,8 @@ impl Error for GetConfigError {
             GetConfigError::Validation(ref cause) => cause,
             GetConfigError::Credentials(ref err) => err.description(),
             GetConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetConfigError::Unknown(ref cause) => cause,
+            GetConfigError::ParseError(ref cause) => cause,
+            GetConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1586,47 +1607,47 @@ pub enum ListAvailableZonesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAvailableZonesError {
-    pub fn from_body(body: &str) -> ListAvailableZonesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListAvailableZonesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        ListAvailableZonesError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        ListAvailableZonesError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListAvailableZonesError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListAvailableZonesError::Validation(error_message.to_string())
-                    }
-                    _ => ListAvailableZonesError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return ListAvailableZonesError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return ListAvailableZonesError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return ListAvailableZonesError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListAvailableZonesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListAvailableZonesError::Unknown(String::from(body)),
         }
+        return ListAvailableZonesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListAvailableZonesError {
     fn from(err: serde_json::error::Error) -> ListAvailableZonesError {
-        ListAvailableZonesError::Unknown(err.description().to_string())
+        ListAvailableZonesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListAvailableZonesError {
@@ -1660,7 +1681,8 @@ impl Error for ListAvailableZonesError {
             ListAvailableZonesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListAvailableZonesError::Unknown(ref cause) => cause,
+            ListAvailableZonesError::ParseError(ref cause) => cause,
+            ListAvailableZonesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1679,45 +1701,47 @@ pub enum ListHapgsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListHapgsError {
-    pub fn from_body(body: &str) -> ListHapgsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListHapgsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        ListHapgsError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        ListHapgsError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListHapgsError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => ListHapgsError::Validation(error_message.to_string()),
-                    _ => ListHapgsError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return ListHapgsError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return ListHapgsError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return ListHapgsError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListHapgsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListHapgsError::Unknown(String::from(body)),
         }
+        return ListHapgsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListHapgsError {
     fn from(err: serde_json::error::Error) -> ListHapgsError {
-        ListHapgsError::Unknown(err.description().to_string())
+        ListHapgsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListHapgsError {
@@ -1749,7 +1773,8 @@ impl Error for ListHapgsError {
             ListHapgsError::Validation(ref cause) => cause,
             ListHapgsError::Credentials(ref err) => err.description(),
             ListHapgsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListHapgsError::Unknown(ref cause) => cause,
+            ListHapgsError::ParseError(ref cause) => cause,
+            ListHapgsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1768,45 +1793,47 @@ pub enum ListHsmsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListHsmsError {
-    pub fn from_body(body: &str) -> ListHsmsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListHsmsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        ListHsmsError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        ListHsmsError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListHsmsError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => ListHsmsError::Validation(error_message.to_string()),
-                    _ => ListHsmsError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return ListHsmsError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return ListHsmsError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return ListHsmsError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListHsmsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListHsmsError::Unknown(String::from(body)),
         }
+        return ListHsmsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListHsmsError {
     fn from(err: serde_json::error::Error) -> ListHsmsError {
-        ListHsmsError::Unknown(err.description().to_string())
+        ListHsmsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListHsmsError {
@@ -1838,7 +1865,8 @@ impl Error for ListHsmsError {
             ListHsmsError::Validation(ref cause) => cause,
             ListHsmsError::Credentials(ref err) => err.description(),
             ListHsmsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListHsmsError::Unknown(ref cause) => cause,
+            ListHsmsError::ParseError(ref cause) => cause,
+            ListHsmsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1857,47 +1885,47 @@ pub enum ListLunaClientsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListLunaClientsError {
-    pub fn from_body(body: &str) -> ListLunaClientsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListLunaClientsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        ListLunaClientsError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        ListLunaClientsError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListLunaClientsError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListLunaClientsError::Validation(error_message.to_string())
-                    }
-                    _ => ListLunaClientsError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return ListLunaClientsError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return ListLunaClientsError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return ListLunaClientsError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListLunaClientsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListLunaClientsError::Unknown(String::from(body)),
         }
+        return ListLunaClientsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListLunaClientsError {
     fn from(err: serde_json::error::Error) -> ListLunaClientsError {
-        ListLunaClientsError::Unknown(err.description().to_string())
+        ListLunaClientsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListLunaClientsError {
@@ -1929,7 +1957,8 @@ impl Error for ListLunaClientsError {
             ListLunaClientsError::Validation(ref cause) => cause,
             ListLunaClientsError::Credentials(ref err) => err.description(),
             ListLunaClientsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListLunaClientsError::Unknown(ref cause) => cause,
+            ListLunaClientsError::ParseError(ref cause) => cause,
+            ListLunaClientsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1948,47 +1977,47 @@ pub enum ListTagsForResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_body(body: &str) -> ListTagsForResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        ListTagsForResourceError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        ListTagsForResourceError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListTagsForResourceError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTagsForResourceError::Validation(error_message.to_string())
-                    }
-                    _ => ListTagsForResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return ListTagsForResourceError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return ListTagsForResourceError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return ListTagsForResourceError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTagsForResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTagsForResourceError::Unknown(String::from(body)),
         }
+        return ListTagsForResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTagsForResourceError {
     fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::Unknown(err.description().to_string())
+        ListTagsForResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTagsForResourceError {
@@ -2022,7 +2051,8 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTagsForResourceError::Unknown(ref cause) => cause,
+            ListTagsForResourceError::ParseError(ref cause) => cause,
+            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2041,45 +2071,47 @@ pub enum ModifyHapgError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyHapgError {
-    pub fn from_body(body: &str) -> ModifyHapgError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyHapgError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        ModifyHapgError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        ModifyHapgError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ModifyHapgError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => ModifyHapgError::Validation(error_message.to_string()),
-                    _ => ModifyHapgError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return ModifyHapgError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return ModifyHapgError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return ModifyHapgError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ModifyHapgError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ModifyHapgError::Unknown(String::from(body)),
         }
+        return ModifyHapgError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ModifyHapgError {
     fn from(err: serde_json::error::Error) -> ModifyHapgError {
-        ModifyHapgError::Unknown(err.description().to_string())
+        ModifyHapgError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ModifyHapgError {
@@ -2111,7 +2143,8 @@ impl Error for ModifyHapgError {
             ModifyHapgError::Validation(ref cause) => cause,
             ModifyHapgError::Credentials(ref err) => err.description(),
             ModifyHapgError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyHapgError::Unknown(ref cause) => cause,
+            ModifyHapgError::ParseError(ref cause) => cause,
+            ModifyHapgError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2130,45 +2163,47 @@ pub enum ModifyHsmError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyHsmError {
-    pub fn from_body(body: &str) -> ModifyHsmError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyHsmError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        ModifyHsmError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        ModifyHsmError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ModifyHsmError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => ModifyHsmError::Validation(error_message.to_string()),
-                    _ => ModifyHsmError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return ModifyHsmError::CloudHsmInternal(String::from(error_message))
                 }
+                "CloudHsmServiceException" => {
+                    return ModifyHsmError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return ModifyHsmError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ModifyHsmError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ModifyHsmError::Unknown(String::from(body)),
         }
+        return ModifyHsmError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ModifyHsmError {
     fn from(err: serde_json::error::Error) -> ModifyHsmError {
-        ModifyHsmError::Unknown(err.description().to_string())
+        ModifyHsmError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ModifyHsmError {
@@ -2200,7 +2235,8 @@ impl Error for ModifyHsmError {
             ModifyHsmError::Validation(ref cause) => cause,
             ModifyHsmError::Credentials(ref err) => err.description(),
             ModifyHsmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyHsmError::Unknown(ref cause) => cause,
+            ModifyHsmError::ParseError(ref cause) => cause,
+            ModifyHsmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2215,41 +2251,41 @@ pub enum ModifyLunaClientError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyLunaClientError {
-    pub fn from_body(body: &str) -> ModifyLunaClientError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyLunaClientError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmServiceException" => {
-                        ModifyLunaClientError::CloudHsmService(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ModifyLunaClientError::Validation(error_message.to_string())
-                    }
-                    _ => ModifyLunaClientError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmServiceException" => {
+                    return ModifyLunaClientError::CloudHsmService(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ModifyLunaClientError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ModifyLunaClientError::Unknown(String::from(body)),
         }
+        return ModifyLunaClientError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ModifyLunaClientError {
     fn from(err: serde_json::error::Error) -> ModifyLunaClientError {
-        ModifyLunaClientError::Unknown(err.description().to_string())
+        ModifyLunaClientError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ModifyLunaClientError {
@@ -2279,7 +2315,8 @@ impl Error for ModifyLunaClientError {
             ModifyLunaClientError::Validation(ref cause) => cause,
             ModifyLunaClientError::Credentials(ref err) => err.description(),
             ModifyLunaClientError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyLunaClientError::Unknown(ref cause) => cause,
+            ModifyLunaClientError::ParseError(ref cause) => cause,
+            ModifyLunaClientError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2298,47 +2335,49 @@ pub enum RemoveTagsFromResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsFromResourceError {
-    pub fn from_body(body: &str) -> RemoveTagsFromResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsFromResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmInternalException" => {
-                        RemoveTagsFromResourceError::CloudHsmInternal(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        RemoveTagsFromResourceError::CloudHsmService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        RemoveTagsFromResourceError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RemoveTagsFromResourceError::Validation(error_message.to_string())
-                    }
-                    _ => RemoveTagsFromResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmInternalException" => {
+                    return RemoveTagsFromResourceError::CloudHsmInternal(String::from(
+                        error_message,
+                    ))
                 }
+                "CloudHsmServiceException" => {
+                    return RemoveTagsFromResourceError::CloudHsmService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return RemoveTagsFromResourceError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RemoveTagsFromResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RemoveTagsFromResourceError::Unknown(String::from(body)),
         }
+        return RemoveTagsFromResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RemoveTagsFromResourceError {
     fn from(err: serde_json::error::Error) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::Unknown(err.description().to_string())
+        RemoveTagsFromResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RemoveTagsFromResourceError {
@@ -2372,7 +2411,8 @@ impl Error for RemoveTagsFromResourceError {
             RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RemoveTagsFromResourceError::Unknown(ref cause) => cause,
+            RemoveTagsFromResourceError::ParseError(ref cause) => cause,
+            RemoveTagsFromResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2553,14 +2593,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<AddTagsToResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddTagsToResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AddTagsToResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -2588,14 +2630,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<CreateHapgResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateHapgError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateHapgError::from_response(response))),
+                )
             }
         })
     }
@@ -2623,14 +2667,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<CreateHsmResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateHsmError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateHsmError::from_response(response))),
+                )
             }
         })
     }
@@ -2658,14 +2704,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<CreateLunaClientResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateLunaClientError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateLunaClientError::from_response(response))),
+                )
             }
         })
     }
@@ -2693,14 +2741,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<DeleteHapgResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteHapgError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteHapgError::from_response(response))),
+                )
             }
         })
     }
@@ -2728,14 +2778,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<DeleteHsmResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteHsmError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteHsmError::from_response(response))),
+                )
             }
         })
     }
@@ -2763,14 +2815,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<DeleteLunaClientResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteLunaClientError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteLunaClientError::from_response(response))),
+                )
             }
         })
     }
@@ -2798,14 +2852,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<DescribeHapgResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeHapgError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeHapgError::from_response(response))),
+                )
             }
         })
     }
@@ -2833,14 +2889,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<DescribeHsmResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeHsmError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeHsmError::from_response(response))),
+                )
             }
         })
     }
@@ -2868,14 +2926,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<DescribeLunaClientResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLunaClientError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeLunaClientError::from_response(response))),
+                )
             }
         })
     }
@@ -2903,14 +2963,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<GetConfigResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetConfigError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetConfigError::from_response(response))),
+                )
             }
         })
     }
@@ -2936,14 +2998,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<ListAvailableZonesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAvailableZonesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListAvailableZonesError::from_response(response))),
+                )
             }
         })
     }
@@ -2971,14 +3035,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<ListHapgsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListHapgsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListHapgsError::from_response(response))),
+                )
             }
         })
     }
@@ -3003,14 +3069,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<ListHsmsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListHsmsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListHsmsError::from_response(response))),
+                )
             }
         })
     }
@@ -3038,14 +3106,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<ListLunaClientsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListLunaClientsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListLunaClientsError::from_response(response))),
+                )
             }
         })
     }
@@ -3076,14 +3146,15 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<ListTagsForResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsForResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3111,14 +3182,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<ModifyHapgResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyHapgError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ModifyHapgError::from_response(response))),
+                )
             }
         })
     }
@@ -3146,14 +3219,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<ModifyHsmResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyHsmError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ModifyHsmError::from_response(response))),
+                )
             }
         })
     }
@@ -3181,14 +3256,16 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<ModifyLunaClientResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyLunaClientError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ModifyLunaClientError::from_response(response))),
+                )
             }
         })
     }
@@ -3219,14 +3296,15 @@ impl CloudHsm for CloudHsmClient {
 
                     serde_json::from_str::<RemoveTagsFromResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveTagsFromResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RemoveTagsFromResourceError::from_response(response))
+                    }),
+                )
             }
         })
     }

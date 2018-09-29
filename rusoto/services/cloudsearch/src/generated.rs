@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -5338,28 +5338,36 @@ pub enum BuildSuggestersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BuildSuggestersError {
-    pub fn from_body(body: &str) -> BuildSuggestersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => BuildSuggestersError::Base(String::from(parsed_error.message)),
-                "InternalException" => {
-                    BuildSuggestersError::Internal(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> BuildSuggestersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return BuildSuggestersError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return BuildSuggestersError::Internal(String::from(parsed_error.message))
+                    }
+                    "ResourceNotFound" => {
+                        return BuildSuggestersError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResourceNotFound" => {
-                    BuildSuggestersError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => BuildSuggestersError::Unknown(String::from(body)),
-            },
-            Err(_) => BuildSuggestersError::Unknown(body.to_string()),
+            }
         }
+        BuildSuggestersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5374,7 +5382,7 @@ impl BuildSuggestersError {
 impl From<XmlParseError> for BuildSuggestersError {
     fn from(err: XmlParseError) -> BuildSuggestersError {
         let XmlParseError(message) = err;
-        BuildSuggestersError::Unknown(message.to_string())
+        BuildSuggestersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for BuildSuggestersError {
@@ -5406,7 +5414,8 @@ impl Error for BuildSuggestersError {
             BuildSuggestersError::Validation(ref cause) => cause,
             BuildSuggestersError::Credentials(ref err) => err.description(),
             BuildSuggestersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BuildSuggestersError::Unknown(ref cause) => cause,
+            BuildSuggestersError::ParseError(ref cause) => cause,
+            BuildSuggestersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5425,28 +5434,34 @@ pub enum CreateDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDomainError {
-    pub fn from_body(body: &str) -> CreateDomainError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => CreateDomainError::Base(String::from(parsed_error.message)),
-                "InternalException" => {
-                    CreateDomainError::Internal(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDomainError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return CreateDomainError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return CreateDomainError::Internal(String::from(parsed_error.message))
+                    }
+                    "LimitExceeded" => {
+                        return CreateDomainError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "LimitExceeded" => {
-                    CreateDomainError::LimitExceeded(String::from(parsed_error.message))
-                }
-                _ => CreateDomainError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateDomainError::Unknown(body.to_string()),
+            }
         }
+        CreateDomainError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5461,7 +5476,7 @@ impl CreateDomainError {
 impl From<XmlParseError> for CreateDomainError {
     fn from(err: XmlParseError) -> CreateDomainError {
         let XmlParseError(message) = err;
-        CreateDomainError::Unknown(message.to_string())
+        CreateDomainError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateDomainError {
@@ -5493,7 +5508,8 @@ impl Error for CreateDomainError {
             CreateDomainError::Validation(ref cause) => cause,
             CreateDomainError::Credentials(ref err) => err.description(),
             CreateDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDomainError::Unknown(ref cause) => cause,
+            CreateDomainError::ParseError(ref cause) => cause,
+            CreateDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5516,36 +5532,48 @@ pub enum DefineAnalysisSchemeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DefineAnalysisSchemeError {
-    pub fn from_body(body: &str) -> DefineAnalysisSchemeError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => {
-                    DefineAnalysisSchemeError::Base(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DefineAnalysisSchemeError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DefineAnalysisSchemeError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DefineAnalysisSchemeError::Internal(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidType" => {
+                        return DefineAnalysisSchemeError::InvalidType(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DefineAnalysisSchemeError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DefineAnalysisSchemeError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InternalException" => {
-                    DefineAnalysisSchemeError::Internal(String::from(parsed_error.message))
-                }
-                "InvalidType" => {
-                    DefineAnalysisSchemeError::InvalidType(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => {
-                    DefineAnalysisSchemeError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => {
-                    DefineAnalysisSchemeError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => DefineAnalysisSchemeError::Unknown(String::from(body)),
-            },
-            Err(_) => DefineAnalysisSchemeError::Unknown(body.to_string()),
+            }
         }
+        DefineAnalysisSchemeError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5560,7 +5588,7 @@ impl DefineAnalysisSchemeError {
 impl From<XmlParseError> for DefineAnalysisSchemeError {
     fn from(err: XmlParseError) -> DefineAnalysisSchemeError {
         let XmlParseError(message) = err;
-        DefineAnalysisSchemeError::Unknown(message.to_string())
+        DefineAnalysisSchemeError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DefineAnalysisSchemeError {
@@ -5596,7 +5624,8 @@ impl Error for DefineAnalysisSchemeError {
             DefineAnalysisSchemeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DefineAnalysisSchemeError::Unknown(ref cause) => cause,
+            DefineAnalysisSchemeError::ParseError(ref cause) => cause,
+            DefineAnalysisSchemeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5619,34 +5648,46 @@ pub enum DefineExpressionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DefineExpressionError {
-    pub fn from_body(body: &str) -> DefineExpressionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => DefineExpressionError::Base(String::from(parsed_error.message)),
-                "InternalException" => {
-                    DefineExpressionError::Internal(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DefineExpressionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DefineExpressionError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DefineExpressionError::Internal(String::from(parsed_error.message))
+                    }
+                    "InvalidType" => {
+                        return DefineExpressionError::InvalidType(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DefineExpressionError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DefineExpressionError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidType" => {
-                    DefineExpressionError::InvalidType(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => {
-                    DefineExpressionError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => {
-                    DefineExpressionError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => DefineExpressionError::Unknown(String::from(body)),
-            },
-            Err(_) => DefineExpressionError::Unknown(body.to_string()),
+            }
         }
+        DefineExpressionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5661,7 +5702,7 @@ impl DefineExpressionError {
 impl From<XmlParseError> for DefineExpressionError {
     fn from(err: XmlParseError) -> DefineExpressionError {
         let XmlParseError(message) = err;
-        DefineExpressionError::Unknown(message.to_string())
+        DefineExpressionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DefineExpressionError {
@@ -5695,7 +5736,8 @@ impl Error for DefineExpressionError {
             DefineExpressionError::Validation(ref cause) => cause,
             DefineExpressionError::Credentials(ref err) => err.description(),
             DefineExpressionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DefineExpressionError::Unknown(ref cause) => cause,
+            DefineExpressionError::ParseError(ref cause) => cause,
+            DefineExpressionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5718,34 +5760,46 @@ pub enum DefineIndexFieldError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DefineIndexFieldError {
-    pub fn from_body(body: &str) -> DefineIndexFieldError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => DefineIndexFieldError::Base(String::from(parsed_error.message)),
-                "InternalException" => {
-                    DefineIndexFieldError::Internal(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DefineIndexFieldError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DefineIndexFieldError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DefineIndexFieldError::Internal(String::from(parsed_error.message))
+                    }
+                    "InvalidType" => {
+                        return DefineIndexFieldError::InvalidType(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DefineIndexFieldError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DefineIndexFieldError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidType" => {
-                    DefineIndexFieldError::InvalidType(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => {
-                    DefineIndexFieldError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => {
-                    DefineIndexFieldError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => DefineIndexFieldError::Unknown(String::from(body)),
-            },
-            Err(_) => DefineIndexFieldError::Unknown(body.to_string()),
+            }
         }
+        DefineIndexFieldError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5760,7 +5814,7 @@ impl DefineIndexFieldError {
 impl From<XmlParseError> for DefineIndexFieldError {
     fn from(err: XmlParseError) -> DefineIndexFieldError {
         let XmlParseError(message) = err;
-        DefineIndexFieldError::Unknown(message.to_string())
+        DefineIndexFieldError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DefineIndexFieldError {
@@ -5794,7 +5848,8 @@ impl Error for DefineIndexFieldError {
             DefineIndexFieldError::Validation(ref cause) => cause,
             DefineIndexFieldError::Credentials(ref err) => err.description(),
             DefineIndexFieldError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DefineIndexFieldError::Unknown(ref cause) => cause,
+            DefineIndexFieldError::ParseError(ref cause) => cause,
+            DefineIndexFieldError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5817,34 +5872,44 @@ pub enum DefineSuggesterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DefineSuggesterError {
-    pub fn from_body(body: &str) -> DefineSuggesterError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => DefineSuggesterError::Base(String::from(parsed_error.message)),
-                "InternalException" => {
-                    DefineSuggesterError::Internal(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DefineSuggesterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DefineSuggesterError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DefineSuggesterError::Internal(String::from(parsed_error.message))
+                    }
+                    "InvalidType" => {
+                        return DefineSuggesterError::InvalidType(String::from(parsed_error.message))
+                    }
+                    "LimitExceeded" => {
+                        return DefineSuggesterError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DefineSuggesterError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidType" => {
-                    DefineSuggesterError::InvalidType(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => {
-                    DefineSuggesterError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => {
-                    DefineSuggesterError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => DefineSuggesterError::Unknown(String::from(body)),
-            },
-            Err(_) => DefineSuggesterError::Unknown(body.to_string()),
+            }
         }
+        DefineSuggesterError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5859,7 +5924,7 @@ impl DefineSuggesterError {
 impl From<XmlParseError> for DefineSuggesterError {
     fn from(err: XmlParseError) -> DefineSuggesterError {
         let XmlParseError(message) = err;
-        DefineSuggesterError::Unknown(message.to_string())
+        DefineSuggesterError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DefineSuggesterError {
@@ -5893,7 +5958,8 @@ impl Error for DefineSuggesterError {
             DefineSuggesterError::Validation(ref cause) => cause,
             DefineSuggesterError::Credentials(ref err) => err.description(),
             DefineSuggesterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DefineSuggesterError::Unknown(ref cause) => cause,
+            DefineSuggesterError::ParseError(ref cause) => cause,
+            DefineSuggesterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5914,33 +5980,43 @@ pub enum DeleteAnalysisSchemeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAnalysisSchemeError {
-    pub fn from_body(body: &str) -> DeleteAnalysisSchemeError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => {
-                    DeleteAnalysisSchemeError::Base(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteAnalysisSchemeError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DeleteAnalysisSchemeError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DeleteAnalysisSchemeError::Internal(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidType" => {
+                        return DeleteAnalysisSchemeError::InvalidType(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DeleteAnalysisSchemeError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InternalException" => {
-                    DeleteAnalysisSchemeError::Internal(String::from(parsed_error.message))
-                }
-                "InvalidType" => {
-                    DeleteAnalysisSchemeError::InvalidType(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => {
-                    DeleteAnalysisSchemeError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => DeleteAnalysisSchemeError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteAnalysisSchemeError::Unknown(body.to_string()),
+            }
         }
+        DeleteAnalysisSchemeError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5955,7 +6031,7 @@ impl DeleteAnalysisSchemeError {
 impl From<XmlParseError> for DeleteAnalysisSchemeError {
     fn from(err: XmlParseError) -> DeleteAnalysisSchemeError {
         let XmlParseError(message) = err;
-        DeleteAnalysisSchemeError::Unknown(message.to_string())
+        DeleteAnalysisSchemeError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteAnalysisSchemeError {
@@ -5990,7 +6066,8 @@ impl Error for DeleteAnalysisSchemeError {
             DeleteAnalysisSchemeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteAnalysisSchemeError::Unknown(ref cause) => cause,
+            DeleteAnalysisSchemeError::ParseError(ref cause) => cause,
+            DeleteAnalysisSchemeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6007,25 +6084,31 @@ pub enum DeleteDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDomainError {
-    pub fn from_body(body: &str) -> DeleteDomainError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => DeleteDomainError::Base(String::from(parsed_error.message)),
-                "InternalException" => {
-                    DeleteDomainError::Internal(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDomainError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DeleteDomainError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DeleteDomainError::Internal(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => DeleteDomainError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteDomainError::Unknown(body.to_string()),
+            }
         }
+        DeleteDomainError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6040,7 +6123,7 @@ impl DeleteDomainError {
 impl From<XmlParseError> for DeleteDomainError {
     fn from(err: XmlParseError) -> DeleteDomainError {
         let XmlParseError(message) = err;
-        DeleteDomainError::Unknown(message.to_string())
+        DeleteDomainError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteDomainError {
@@ -6071,7 +6154,8 @@ impl Error for DeleteDomainError {
             DeleteDomainError::Validation(ref cause) => cause,
             DeleteDomainError::Credentials(ref err) => err.description(),
             DeleteDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDomainError::Unknown(ref cause) => cause,
+            DeleteDomainError::ParseError(ref cause) => cause,
+            DeleteDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6092,31 +6176,41 @@ pub enum DeleteExpressionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteExpressionError {
-    pub fn from_body(body: &str) -> DeleteExpressionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => DeleteExpressionError::Base(String::from(parsed_error.message)),
-                "InternalException" => {
-                    DeleteExpressionError::Internal(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteExpressionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DeleteExpressionError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DeleteExpressionError::Internal(String::from(parsed_error.message))
+                    }
+                    "InvalidType" => {
+                        return DeleteExpressionError::InvalidType(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DeleteExpressionError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidType" => {
-                    DeleteExpressionError::InvalidType(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => {
-                    DeleteExpressionError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => DeleteExpressionError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteExpressionError::Unknown(body.to_string()),
+            }
         }
+        DeleteExpressionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6131,7 +6225,7 @@ impl DeleteExpressionError {
 impl From<XmlParseError> for DeleteExpressionError {
     fn from(err: XmlParseError) -> DeleteExpressionError {
         let XmlParseError(message) = err;
-        DeleteExpressionError::Unknown(message.to_string())
+        DeleteExpressionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteExpressionError {
@@ -6164,7 +6258,8 @@ impl Error for DeleteExpressionError {
             DeleteExpressionError::Validation(ref cause) => cause,
             DeleteExpressionError::Credentials(ref err) => err.description(),
             DeleteExpressionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteExpressionError::Unknown(ref cause) => cause,
+            DeleteExpressionError::ParseError(ref cause) => cause,
+            DeleteExpressionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6185,31 +6280,41 @@ pub enum DeleteIndexFieldError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIndexFieldError {
-    pub fn from_body(body: &str) -> DeleteIndexFieldError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => DeleteIndexFieldError::Base(String::from(parsed_error.message)),
-                "InternalException" => {
-                    DeleteIndexFieldError::Internal(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteIndexFieldError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DeleteIndexFieldError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DeleteIndexFieldError::Internal(String::from(parsed_error.message))
+                    }
+                    "InvalidType" => {
+                        return DeleteIndexFieldError::InvalidType(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DeleteIndexFieldError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidType" => {
-                    DeleteIndexFieldError::InvalidType(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => {
-                    DeleteIndexFieldError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => DeleteIndexFieldError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteIndexFieldError::Unknown(body.to_string()),
+            }
         }
+        DeleteIndexFieldError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6224,7 +6329,7 @@ impl DeleteIndexFieldError {
 impl From<XmlParseError> for DeleteIndexFieldError {
     fn from(err: XmlParseError) -> DeleteIndexFieldError {
         let XmlParseError(message) = err;
-        DeleteIndexFieldError::Unknown(message.to_string())
+        DeleteIndexFieldError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteIndexFieldError {
@@ -6257,7 +6362,8 @@ impl Error for DeleteIndexFieldError {
             DeleteIndexFieldError::Validation(ref cause) => cause,
             DeleteIndexFieldError::Credentials(ref err) => err.description(),
             DeleteIndexFieldError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteIndexFieldError::Unknown(ref cause) => cause,
+            DeleteIndexFieldError::ParseError(ref cause) => cause,
+            DeleteIndexFieldError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6278,31 +6384,39 @@ pub enum DeleteSuggesterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSuggesterError {
-    pub fn from_body(body: &str) -> DeleteSuggesterError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => DeleteSuggesterError::Base(String::from(parsed_error.message)),
-                "InternalException" => {
-                    DeleteSuggesterError::Internal(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSuggesterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DeleteSuggesterError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DeleteSuggesterError::Internal(String::from(parsed_error.message))
+                    }
+                    "InvalidType" => {
+                        return DeleteSuggesterError::InvalidType(String::from(parsed_error.message))
+                    }
+                    "ResourceNotFound" => {
+                        return DeleteSuggesterError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidType" => {
-                    DeleteSuggesterError::InvalidType(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => {
-                    DeleteSuggesterError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => DeleteSuggesterError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteSuggesterError::Unknown(body.to_string()),
+            }
         }
+        DeleteSuggesterError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6317,7 +6431,7 @@ impl DeleteSuggesterError {
 impl From<XmlParseError> for DeleteSuggesterError {
     fn from(err: XmlParseError) -> DeleteSuggesterError {
         let XmlParseError(message) = err;
-        DeleteSuggesterError::Unknown(message.to_string())
+        DeleteSuggesterError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteSuggesterError {
@@ -6350,7 +6464,8 @@ impl Error for DeleteSuggesterError {
             DeleteSuggesterError::Validation(ref cause) => cause,
             DeleteSuggesterError::Credentials(ref err) => err.description(),
             DeleteSuggesterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteSuggesterError::Unknown(ref cause) => cause,
+            DeleteSuggesterError::ParseError(ref cause) => cause,
+            DeleteSuggesterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6369,30 +6484,40 @@ pub enum DescribeAnalysisSchemesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAnalysisSchemesError {
-    pub fn from_body(body: &str) -> DescribeAnalysisSchemesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => {
-                    DescribeAnalysisSchemesError::Base(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAnalysisSchemesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DescribeAnalysisSchemesError::Base(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InternalException" => {
+                        return DescribeAnalysisSchemesError::Internal(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DescribeAnalysisSchemesError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InternalException" => {
-                    DescribeAnalysisSchemesError::Internal(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => DescribeAnalysisSchemesError::ResourceNotFound(String::from(
-                    parsed_error.message,
-                )),
-                _ => DescribeAnalysisSchemesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAnalysisSchemesError::Unknown(body.to_string()),
+            }
         }
+        DescribeAnalysisSchemesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6407,7 +6532,7 @@ impl DescribeAnalysisSchemesError {
 impl From<XmlParseError> for DescribeAnalysisSchemesError {
     fn from(err: XmlParseError) -> DescribeAnalysisSchemesError {
         let XmlParseError(message) = err;
-        DescribeAnalysisSchemesError::Unknown(message.to_string())
+        DescribeAnalysisSchemesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAnalysisSchemesError {
@@ -6441,7 +6566,8 @@ impl Error for DescribeAnalysisSchemesError {
             DescribeAnalysisSchemesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAnalysisSchemesError::Unknown(ref cause) => cause,
+            DescribeAnalysisSchemesError::ParseError(ref cause) => cause,
+            DescribeAnalysisSchemesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6466,39 +6592,55 @@ pub enum DescribeAvailabilityOptionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAvailabilityOptionsError {
-    pub fn from_body(body: &str) -> DescribeAvailabilityOptionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => {
-                    DescribeAvailabilityOptionsError::Base(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAvailabilityOptionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DescribeAvailabilityOptionsError::Base(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DisabledAction" => {
+                        return DescribeAvailabilityOptionsError::DisabledOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InternalException" => {
+                        return DescribeAvailabilityOptionsError::Internal(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidType" => {
+                        return DescribeAvailabilityOptionsError::InvalidType(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return DescribeAvailabilityOptionsError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DescribeAvailabilityOptionsError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "DisabledAction" => DescribeAvailabilityOptionsError::DisabledOperation(
-                    String::from(parsed_error.message),
-                ),
-                "InternalException" => {
-                    DescribeAvailabilityOptionsError::Internal(String::from(parsed_error.message))
-                }
-                "InvalidType" => DescribeAvailabilityOptionsError::InvalidType(String::from(
-                    parsed_error.message,
-                )),
-                "LimitExceeded" => DescribeAvailabilityOptionsError::LimitExceeded(String::from(
-                    parsed_error.message,
-                )),
-                "ResourceNotFound" => DescribeAvailabilityOptionsError::ResourceNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeAvailabilityOptionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAvailabilityOptionsError::Unknown(body.to_string()),
+            }
         }
+        DescribeAvailabilityOptionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6513,7 +6655,7 @@ impl DescribeAvailabilityOptionsError {
 impl From<XmlParseError> for DescribeAvailabilityOptionsError {
     fn from(err: XmlParseError) -> DescribeAvailabilityOptionsError {
         let XmlParseError(message) = err;
-        DescribeAvailabilityOptionsError::Unknown(message.to_string())
+        DescribeAvailabilityOptionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAvailabilityOptionsError {
@@ -6550,7 +6692,8 @@ impl Error for DescribeAvailabilityOptionsError {
             DescribeAvailabilityOptionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAvailabilityOptionsError::Unknown(ref cause) => cause,
+            DescribeAvailabilityOptionsError::ParseError(ref cause) => cause,
+            DescribeAvailabilityOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6567,25 +6710,31 @@ pub enum DescribeDomainsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDomainsError {
-    pub fn from_body(body: &str) -> DescribeDomainsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => DescribeDomainsError::Base(String::from(parsed_error.message)),
-                "InternalException" => {
-                    DescribeDomainsError::Internal(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeDomainsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DescribeDomainsError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DescribeDomainsError::Internal(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                _ => DescribeDomainsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeDomainsError::Unknown(body.to_string()),
+            }
         }
+        DescribeDomainsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6600,7 +6749,7 @@ impl DescribeDomainsError {
 impl From<XmlParseError> for DescribeDomainsError {
     fn from(err: XmlParseError) -> DescribeDomainsError {
         let XmlParseError(message) = err;
-        DescribeDomainsError::Unknown(message.to_string())
+        DescribeDomainsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeDomainsError {
@@ -6631,7 +6780,8 @@ impl Error for DescribeDomainsError {
             DescribeDomainsError::Validation(ref cause) => cause,
             DescribeDomainsError::Credentials(ref err) => err.description(),
             DescribeDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeDomainsError::Unknown(ref cause) => cause,
+            DescribeDomainsError::ParseError(ref cause) => cause,
+            DescribeDomainsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6650,30 +6800,38 @@ pub enum DescribeExpressionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeExpressionsError {
-    pub fn from_body(body: &str) -> DescribeExpressionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => {
-                    DescribeExpressionsError::Base(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeExpressionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DescribeExpressionsError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DescribeExpressionsError::Internal(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DescribeExpressionsError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InternalException" => {
-                    DescribeExpressionsError::Internal(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => {
-                    DescribeExpressionsError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => DescribeExpressionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeExpressionsError::Unknown(body.to_string()),
+            }
         }
+        DescribeExpressionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6688,7 +6846,7 @@ impl DescribeExpressionsError {
 impl From<XmlParseError> for DescribeExpressionsError {
     fn from(err: XmlParseError) -> DescribeExpressionsError {
         let XmlParseError(message) = err;
-        DescribeExpressionsError::Unknown(message.to_string())
+        DescribeExpressionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeExpressionsError {
@@ -6722,7 +6880,8 @@ impl Error for DescribeExpressionsError {
             DescribeExpressionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeExpressionsError::Unknown(ref cause) => cause,
+            DescribeExpressionsError::ParseError(ref cause) => cause,
+            DescribeExpressionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6741,30 +6900,38 @@ pub enum DescribeIndexFieldsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeIndexFieldsError {
-    pub fn from_body(body: &str) -> DescribeIndexFieldsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => {
-                    DescribeIndexFieldsError::Base(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeIndexFieldsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DescribeIndexFieldsError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DescribeIndexFieldsError::Internal(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DescribeIndexFieldsError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InternalException" => {
-                    DescribeIndexFieldsError::Internal(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => {
-                    DescribeIndexFieldsError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => DescribeIndexFieldsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeIndexFieldsError::Unknown(body.to_string()),
+            }
         }
+        DescribeIndexFieldsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6779,7 +6946,7 @@ impl DescribeIndexFieldsError {
 impl From<XmlParseError> for DescribeIndexFieldsError {
     fn from(err: XmlParseError) -> DescribeIndexFieldsError {
         let XmlParseError(message) = err;
-        DescribeIndexFieldsError::Unknown(message.to_string())
+        DescribeIndexFieldsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeIndexFieldsError {
@@ -6813,7 +6980,8 @@ impl Error for DescribeIndexFieldsError {
             DescribeIndexFieldsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeIndexFieldsError::Unknown(ref cause) => cause,
+            DescribeIndexFieldsError::ParseError(ref cause) => cause,
+            DescribeIndexFieldsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6832,30 +7000,40 @@ pub enum DescribeScalingParametersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalingParametersError {
-    pub fn from_body(body: &str) -> DescribeScalingParametersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => {
-                    DescribeScalingParametersError::Base(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalingParametersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DescribeScalingParametersError::Base(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InternalException" => {
+                        return DescribeScalingParametersError::Internal(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DescribeScalingParametersError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InternalException" => {
-                    DescribeScalingParametersError::Internal(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => DescribeScalingParametersError::ResourceNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeScalingParametersError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeScalingParametersError::Unknown(body.to_string()),
+            }
         }
+        DescribeScalingParametersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6870,7 +7048,7 @@ impl DescribeScalingParametersError {
 impl From<XmlParseError> for DescribeScalingParametersError {
     fn from(err: XmlParseError) -> DescribeScalingParametersError {
         let XmlParseError(message) = err;
-        DescribeScalingParametersError::Unknown(message.to_string())
+        DescribeScalingParametersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeScalingParametersError {
@@ -6904,7 +7082,8 @@ impl Error for DescribeScalingParametersError {
             DescribeScalingParametersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeScalingParametersError::Unknown(ref cause) => cause,
+            DescribeScalingParametersError::ParseError(ref cause) => cause,
+            DescribeScalingParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6923,30 +7102,40 @@ pub enum DescribeServiceAccessPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeServiceAccessPoliciesError {
-    pub fn from_body(body: &str) -> DescribeServiceAccessPoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => {
-                    DescribeServiceAccessPoliciesError::Base(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeServiceAccessPoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DescribeServiceAccessPoliciesError::Base(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InternalException" => {
+                        return DescribeServiceAccessPoliciesError::Internal(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return DescribeServiceAccessPoliciesError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InternalException" => {
-                    DescribeServiceAccessPoliciesError::Internal(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => DescribeServiceAccessPoliciesError::ResourceNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeServiceAccessPoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeServiceAccessPoliciesError::Unknown(body.to_string()),
+            }
         }
+        DescribeServiceAccessPoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6961,7 +7150,7 @@ impl DescribeServiceAccessPoliciesError {
 impl From<XmlParseError> for DescribeServiceAccessPoliciesError {
     fn from(err: XmlParseError) -> DescribeServiceAccessPoliciesError {
         let XmlParseError(message) = err;
-        DescribeServiceAccessPoliciesError::Unknown(message.to_string())
+        DescribeServiceAccessPoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeServiceAccessPoliciesError {
@@ -6995,7 +7184,8 @@ impl Error for DescribeServiceAccessPoliciesError {
             DescribeServiceAccessPoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeServiceAccessPoliciesError::Unknown(ref cause) => cause,
+            DescribeServiceAccessPoliciesError::ParseError(ref cause) => cause,
+            DescribeServiceAccessPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7014,30 +7204,36 @@ pub enum DescribeSuggestersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSuggestersError {
-    pub fn from_body(body: &str) -> DescribeSuggestersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => {
-                    DescribeSuggestersError::Base(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSuggestersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return DescribeSuggestersError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return DescribeSuggestersError::Internal(String::from(parsed_error.message))
+                    }
+                    "ResourceNotFound" => {
+                        return DescribeSuggestersError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InternalException" => {
-                    DescribeSuggestersError::Internal(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => {
-                    DescribeSuggestersError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => DescribeSuggestersError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeSuggestersError::Unknown(body.to_string()),
+            }
         }
+        DescribeSuggestersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7052,7 +7248,7 @@ impl DescribeSuggestersError {
 impl From<XmlParseError> for DescribeSuggestersError {
     fn from(err: XmlParseError) -> DescribeSuggestersError {
         let XmlParseError(message) = err;
-        DescribeSuggestersError::Unknown(message.to_string())
+        DescribeSuggestersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeSuggestersError {
@@ -7086,7 +7282,8 @@ impl Error for DescribeSuggestersError {
             DescribeSuggestersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeSuggestersError::Unknown(ref cause) => cause,
+            DescribeSuggestersError::ParseError(ref cause) => cause,
+            DescribeSuggestersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7105,28 +7302,36 @@ pub enum IndexDocumentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl IndexDocumentsError {
-    pub fn from_body(body: &str) -> IndexDocumentsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => IndexDocumentsError::Base(String::from(parsed_error.message)),
-                "InternalException" => {
-                    IndexDocumentsError::Internal(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> IndexDocumentsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return IndexDocumentsError::Base(String::from(parsed_error.message))
+                    }
+                    "InternalException" => {
+                        return IndexDocumentsError::Internal(String::from(parsed_error.message))
+                    }
+                    "ResourceNotFound" => {
+                        return IndexDocumentsError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResourceNotFound" => {
-                    IndexDocumentsError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => IndexDocumentsError::Unknown(String::from(body)),
-            },
-            Err(_) => IndexDocumentsError::Unknown(body.to_string()),
+            }
         }
+        IndexDocumentsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7141,7 +7346,7 @@ impl IndexDocumentsError {
 impl From<XmlParseError> for IndexDocumentsError {
     fn from(err: XmlParseError) -> IndexDocumentsError {
         let XmlParseError(message) = err;
-        IndexDocumentsError::Unknown(message.to_string())
+        IndexDocumentsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for IndexDocumentsError {
@@ -7173,7 +7378,8 @@ impl Error for IndexDocumentsError {
             IndexDocumentsError::Validation(ref cause) => cause,
             IndexDocumentsError::Credentials(ref err) => err.description(),
             IndexDocumentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            IndexDocumentsError::Unknown(ref cause) => cause,
+            IndexDocumentsError::ParseError(ref cause) => cause,
+            IndexDocumentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7188,22 +7394,28 @@ pub enum ListDomainNamesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDomainNamesError {
-    pub fn from_body(body: &str) -> ListDomainNamesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => ListDomainNamesError::Base(String::from(parsed_error.message)),
-                _ => ListDomainNamesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListDomainNamesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListDomainNamesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return ListDomainNamesError::Base(String::from(parsed_error.message))
+                    }
+                    _ => {}
+                }
+            }
         }
+        ListDomainNamesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7218,7 +7430,7 @@ impl ListDomainNamesError {
 impl From<XmlParseError> for ListDomainNamesError {
     fn from(err: XmlParseError) -> ListDomainNamesError {
         let XmlParseError(message) = err;
-        ListDomainNamesError::Unknown(message.to_string())
+        ListDomainNamesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListDomainNamesError {
@@ -7248,7 +7460,8 @@ impl Error for ListDomainNamesError {
             ListDomainNamesError::Validation(ref cause) => cause,
             ListDomainNamesError::Credentials(ref err) => err.description(),
             ListDomainNamesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDomainNamesError::Unknown(ref cause) => cause,
+            ListDomainNamesError::ParseError(ref cause) => cause,
+            ListDomainNamesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7273,39 +7486,55 @@ pub enum UpdateAvailabilityOptionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAvailabilityOptionsError {
-    pub fn from_body(body: &str) -> UpdateAvailabilityOptionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => {
-                    UpdateAvailabilityOptionsError::Base(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateAvailabilityOptionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return UpdateAvailabilityOptionsError::Base(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DisabledAction" => {
+                        return UpdateAvailabilityOptionsError::DisabledOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InternalException" => {
+                        return UpdateAvailabilityOptionsError::Internal(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidType" => {
+                        return UpdateAvailabilityOptionsError::InvalidType(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return UpdateAvailabilityOptionsError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return UpdateAvailabilityOptionsError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "DisabledAction" => UpdateAvailabilityOptionsError::DisabledOperation(
-                    String::from(parsed_error.message),
-                ),
-                "InternalException" => {
-                    UpdateAvailabilityOptionsError::Internal(String::from(parsed_error.message))
-                }
-                "InvalidType" => {
-                    UpdateAvailabilityOptionsError::InvalidType(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => UpdateAvailabilityOptionsError::LimitExceeded(String::from(
-                    parsed_error.message,
-                )),
-                "ResourceNotFound" => UpdateAvailabilityOptionsError::ResourceNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => UpdateAvailabilityOptionsError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateAvailabilityOptionsError::Unknown(body.to_string()),
+            }
         }
+        UpdateAvailabilityOptionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7320,7 +7549,7 @@ impl UpdateAvailabilityOptionsError {
 impl From<XmlParseError> for UpdateAvailabilityOptionsError {
     fn from(err: XmlParseError) -> UpdateAvailabilityOptionsError {
         let XmlParseError(message) = err;
-        UpdateAvailabilityOptionsError::Unknown(message.to_string())
+        UpdateAvailabilityOptionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateAvailabilityOptionsError {
@@ -7357,7 +7586,8 @@ impl Error for UpdateAvailabilityOptionsError {
             UpdateAvailabilityOptionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateAvailabilityOptionsError::Unknown(ref cause) => cause,
+            UpdateAvailabilityOptionsError::ParseError(ref cause) => cause,
+            UpdateAvailabilityOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7380,36 +7610,50 @@ pub enum UpdateScalingParametersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateScalingParametersError {
-    pub fn from_body(body: &str) -> UpdateScalingParametersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => {
-                    UpdateScalingParametersError::Base(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateScalingParametersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return UpdateScalingParametersError::Base(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InternalException" => {
+                        return UpdateScalingParametersError::Internal(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidType" => {
+                        return UpdateScalingParametersError::InvalidType(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return UpdateScalingParametersError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return UpdateScalingParametersError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InternalException" => {
-                    UpdateScalingParametersError::Internal(String::from(parsed_error.message))
-                }
-                "InvalidType" => {
-                    UpdateScalingParametersError::InvalidType(String::from(parsed_error.message))
-                }
-                "LimitExceeded" => {
-                    UpdateScalingParametersError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "ResourceNotFound" => UpdateScalingParametersError::ResourceNotFound(String::from(
-                    parsed_error.message,
-                )),
-                _ => UpdateScalingParametersError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateScalingParametersError::Unknown(body.to_string()),
+            }
         }
+        UpdateScalingParametersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7424,7 +7668,7 @@ impl UpdateScalingParametersError {
 impl From<XmlParseError> for UpdateScalingParametersError {
     fn from(err: XmlParseError) -> UpdateScalingParametersError {
         let XmlParseError(message) = err;
-        UpdateScalingParametersError::Unknown(message.to_string())
+        UpdateScalingParametersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateScalingParametersError {
@@ -7460,7 +7704,8 @@ impl Error for UpdateScalingParametersError {
             UpdateScalingParametersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateScalingParametersError::Unknown(ref cause) => cause,
+            UpdateScalingParametersError::ParseError(ref cause) => cause,
+            UpdateScalingParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7483,36 +7728,50 @@ pub enum UpdateServiceAccessPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateServiceAccessPoliciesError {
-    pub fn from_body(body: &str) -> UpdateServiceAccessPoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BaseException" => {
-                    UpdateServiceAccessPoliciesError::Base(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateServiceAccessPoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BaseException" => {
+                        return UpdateServiceAccessPoliciesError::Base(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InternalException" => {
+                        return UpdateServiceAccessPoliciesError::Internal(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidType" => {
+                        return UpdateServiceAccessPoliciesError::InvalidType(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return UpdateServiceAccessPoliciesError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return UpdateServiceAccessPoliciesError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InternalException" => {
-                    UpdateServiceAccessPoliciesError::Internal(String::from(parsed_error.message))
-                }
-                "InvalidType" => UpdateServiceAccessPoliciesError::InvalidType(String::from(
-                    parsed_error.message,
-                )),
-                "LimitExceeded" => UpdateServiceAccessPoliciesError::LimitExceeded(String::from(
-                    parsed_error.message,
-                )),
-                "ResourceNotFound" => UpdateServiceAccessPoliciesError::ResourceNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => UpdateServiceAccessPoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateServiceAccessPoliciesError::Unknown(body.to_string()),
+            }
         }
+        UpdateServiceAccessPoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7527,7 +7786,7 @@ impl UpdateServiceAccessPoliciesError {
 impl From<XmlParseError> for UpdateServiceAccessPoliciesError {
     fn from(err: XmlParseError) -> UpdateServiceAccessPoliciesError {
         let XmlParseError(message) = err;
-        UpdateServiceAccessPoliciesError::Unknown(message.to_string())
+        UpdateServiceAccessPoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateServiceAccessPoliciesError {
@@ -7563,7 +7822,8 @@ impl Error for UpdateServiceAccessPoliciesError {
             UpdateServiceAccessPoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateServiceAccessPoliciesError::Unknown(ref cause) => cause,
+            UpdateServiceAccessPoliciesError::ParseError(ref cause) => cause,
+            UpdateServiceAccessPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7764,11 +8024,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BuildSuggestersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BuildSuggestersError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7816,11 +8077,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateDomainError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7868,11 +8130,11 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DefineAnalysisSchemeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DefineAnalysisSchemeError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7920,11 +8182,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DefineExpressionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DefineExpressionError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -7972,11 +8235,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DefineIndexFieldError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DefineIndexFieldError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8024,11 +8288,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DefineSuggesterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DefineSuggesterError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8076,11 +8341,11 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAnalysisSchemeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteAnalysisSchemeError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8128,11 +8393,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteDomainError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8180,11 +8446,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteExpressionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteExpressionError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8232,11 +8499,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteIndexFieldError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteIndexFieldError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8284,11 +8552,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSuggesterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteSuggesterError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8337,9 +8606,7 @@ impl CloudSearch for CloudSearchClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAnalysisSchemesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeAnalysisSchemesError::from_response(response))
                 }));
             }
 
@@ -8389,9 +8656,7 @@ impl CloudSearch for CloudSearchClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAvailabilityOptionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeAvailabilityOptionsError::from_response(response))
                 }));
             }
 
@@ -8442,11 +8707,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDomainsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeDomainsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8494,11 +8760,11 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeExpressionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeExpressionsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8546,11 +8812,11 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeIndexFieldsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeIndexFieldsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8599,9 +8865,7 @@ impl CloudSearch for CloudSearchClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScalingParametersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeScalingParametersError::from_response(response))
                 }));
             }
 
@@ -8652,9 +8916,7 @@ impl CloudSearch for CloudSearchClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeServiceAccessPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeServiceAccessPoliciesError::from_response(response))
                 }));
             }
 
@@ -8705,11 +8967,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSuggestersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeSuggestersError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8757,11 +9020,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(IndexDocumentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(IndexDocumentsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8806,11 +9070,12 @@ impl CloudSearch for CloudSearchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDomainNamesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListDomainNamesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -8859,9 +9124,7 @@ impl CloudSearch for CloudSearchClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateAvailabilityOptionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateAvailabilityOptionsError::from_response(response))
                 }));
             }
 
@@ -8911,9 +9174,7 @@ impl CloudSearch for CloudSearchClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateScalingParametersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateScalingParametersError::from_response(response))
                 }));
             }
 
@@ -8963,9 +9224,7 @@ impl CloudSearch for CloudSearchClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateServiceAccessPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateServiceAccessPoliciesError::from_response(response))
                 }));
             }
 

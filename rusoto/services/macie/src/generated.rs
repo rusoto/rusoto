@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateMemberAccountRequest {
@@ -258,47 +258,47 @@ pub enum AssociateMemberAccountError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateMemberAccountError {
-    pub fn from_body(body: &str) -> AssociateMemberAccountError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateMemberAccountError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalException" => {
-                        AssociateMemberAccountError::Internal(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        AssociateMemberAccountError::InvalidInput(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        AssociateMemberAccountError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AssociateMemberAccountError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateMemberAccountError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalException" => {
+                    return AssociateMemberAccountError::Internal(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return AssociateMemberAccountError::InvalidInput(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return AssociateMemberAccountError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AssociateMemberAccountError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AssociateMemberAccountError::Unknown(String::from(body)),
         }
+        return AssociateMemberAccountError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateMemberAccountError {
     fn from(err: serde_json::error::Error) -> AssociateMemberAccountError {
-        AssociateMemberAccountError::Unknown(err.description().to_string())
+        AssociateMemberAccountError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateMemberAccountError {
@@ -332,7 +332,8 @@ impl Error for AssociateMemberAccountError {
             AssociateMemberAccountError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateMemberAccountError::Unknown(ref cause) => cause,
+            AssociateMemberAccountError::ParseError(ref cause) => cause,
+            AssociateMemberAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -353,50 +354,50 @@ pub enum AssociateS3ResourcesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateS3ResourcesError {
-    pub fn from_body(body: &str) -> AssociateS3ResourcesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateS3ResourcesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        AssociateS3ResourcesError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalException" => {
-                        AssociateS3ResourcesError::Internal(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        AssociateS3ResourcesError::InvalidInput(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        AssociateS3ResourcesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AssociateS3ResourcesError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateS3ResourcesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return AssociateS3ResourcesError::AccessDenied(String::from(error_message))
                 }
+                "InternalException" => {
+                    return AssociateS3ResourcesError::Internal(String::from(error_message))
+                }
+                "InvalidInputException" => {
+                    return AssociateS3ResourcesError::InvalidInput(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return AssociateS3ResourcesError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AssociateS3ResourcesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AssociateS3ResourcesError::Unknown(String::from(body)),
         }
+        return AssociateS3ResourcesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateS3ResourcesError {
     fn from(err: serde_json::error::Error) -> AssociateS3ResourcesError {
-        AssociateS3ResourcesError::Unknown(err.description().to_string())
+        AssociateS3ResourcesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateS3ResourcesError {
@@ -431,7 +432,8 @@ impl Error for AssociateS3ResourcesError {
             AssociateS3ResourcesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateS3ResourcesError::Unknown(ref cause) => cause,
+            AssociateS3ResourcesError::ParseError(ref cause) => cause,
+            AssociateS3ResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -448,44 +450,44 @@ pub enum DisassociateMemberAccountError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateMemberAccountError {
-    pub fn from_body(body: &str) -> DisassociateMemberAccountError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateMemberAccountError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalException" => {
-                        DisassociateMemberAccountError::Internal(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DisassociateMemberAccountError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DisassociateMemberAccountError::Validation(error_message.to_string())
-                    }
-                    _ => DisassociateMemberAccountError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalException" => {
+                    return DisassociateMemberAccountError::Internal(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return DisassociateMemberAccountError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DisassociateMemberAccountError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisassociateMemberAccountError::Unknown(String::from(body)),
         }
+        return DisassociateMemberAccountError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateMemberAccountError {
     fn from(err: serde_json::error::Error) -> DisassociateMemberAccountError {
-        DisassociateMemberAccountError::Unknown(err.description().to_string())
+        DisassociateMemberAccountError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateMemberAccountError {
@@ -518,7 +520,8 @@ impl Error for DisassociateMemberAccountError {
             DisassociateMemberAccountError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateMemberAccountError::Unknown(ref cause) => cause,
+            DisassociateMemberAccountError::ParseError(ref cause) => cause,
+            DisassociateMemberAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -537,47 +540,47 @@ pub enum DisassociateS3ResourcesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateS3ResourcesError {
-    pub fn from_body(body: &str) -> DisassociateS3ResourcesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateS3ResourcesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DisassociateS3ResourcesError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalException" => {
-                        DisassociateS3ResourcesError::Internal(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DisassociateS3ResourcesError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DisassociateS3ResourcesError::Validation(error_message.to_string())
-                    }
-                    _ => DisassociateS3ResourcesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DisassociateS3ResourcesError::AccessDenied(String::from(error_message))
                 }
+                "InternalException" => {
+                    return DisassociateS3ResourcesError::Internal(String::from(error_message))
+                }
+                "InvalidInputException" => {
+                    return DisassociateS3ResourcesError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DisassociateS3ResourcesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisassociateS3ResourcesError::Unknown(String::from(body)),
         }
+        return DisassociateS3ResourcesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateS3ResourcesError {
     fn from(err: serde_json::error::Error) -> DisassociateS3ResourcesError {
-        DisassociateS3ResourcesError::Unknown(err.description().to_string())
+        DisassociateS3ResourcesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateS3ResourcesError {
@@ -611,7 +614,8 @@ impl Error for DisassociateS3ResourcesError {
             DisassociateS3ResourcesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateS3ResourcesError::Unknown(ref cause) => cause,
+            DisassociateS3ResourcesError::ParseError(ref cause) => cause,
+            DisassociateS3ResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -628,44 +632,44 @@ pub enum ListMemberAccountsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListMemberAccountsError {
-    pub fn from_body(body: &str) -> ListMemberAccountsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListMemberAccountsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalException" => {
-                        ListMemberAccountsError::Internal(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        ListMemberAccountsError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListMemberAccountsError::Validation(error_message.to_string())
-                    }
-                    _ => ListMemberAccountsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalException" => {
+                    return ListMemberAccountsError::Internal(String::from(error_message))
                 }
+                "InvalidInputException" => {
+                    return ListMemberAccountsError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListMemberAccountsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListMemberAccountsError::Unknown(String::from(body)),
         }
+        return ListMemberAccountsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListMemberAccountsError {
     fn from(err: serde_json::error::Error) -> ListMemberAccountsError {
-        ListMemberAccountsError::Unknown(err.description().to_string())
+        ListMemberAccountsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListMemberAccountsError {
@@ -698,7 +702,8 @@ impl Error for ListMemberAccountsError {
             ListMemberAccountsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListMemberAccountsError::Unknown(ref cause) => cause,
+            ListMemberAccountsError::ParseError(ref cause) => cause,
+            ListMemberAccountsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -717,47 +722,47 @@ pub enum ListS3ResourcesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListS3ResourcesError {
-    pub fn from_body(body: &str) -> ListS3ResourcesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListS3ResourcesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListS3ResourcesError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalException" => {
-                        ListS3ResourcesError::Internal(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        ListS3ResourcesError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListS3ResourcesError::Validation(error_message.to_string())
-                    }
-                    _ => ListS3ResourcesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListS3ResourcesError::AccessDenied(String::from(error_message))
                 }
+                "InternalException" => {
+                    return ListS3ResourcesError::Internal(String::from(error_message))
+                }
+                "InvalidInputException" => {
+                    return ListS3ResourcesError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListS3ResourcesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListS3ResourcesError::Unknown(String::from(body)),
         }
+        return ListS3ResourcesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListS3ResourcesError {
     fn from(err: serde_json::error::Error) -> ListS3ResourcesError {
-        ListS3ResourcesError::Unknown(err.description().to_string())
+        ListS3ResourcesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListS3ResourcesError {
@@ -789,7 +794,8 @@ impl Error for ListS3ResourcesError {
             ListS3ResourcesError::Validation(ref cause) => cause,
             ListS3ResourcesError::Credentials(ref err) => err.description(),
             ListS3ResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListS3ResourcesError::Unknown(ref cause) => cause,
+            ListS3ResourcesError::ParseError(ref cause) => cause,
+            ListS3ResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -808,47 +814,47 @@ pub enum UpdateS3ResourcesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateS3ResourcesError {
-    pub fn from_body(body: &str) -> UpdateS3ResourcesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateS3ResourcesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpdateS3ResourcesError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalException" => {
-                        UpdateS3ResourcesError::Internal(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        UpdateS3ResourcesError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateS3ResourcesError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateS3ResourcesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdateS3ResourcesError::AccessDenied(String::from(error_message))
                 }
+                "InternalException" => {
+                    return UpdateS3ResourcesError::Internal(String::from(error_message))
+                }
+                "InvalidInputException" => {
+                    return UpdateS3ResourcesError::InvalidInput(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateS3ResourcesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateS3ResourcesError::Unknown(String::from(body)),
         }
+        return UpdateS3ResourcesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateS3ResourcesError {
     fn from(err: serde_json::error::Error) -> UpdateS3ResourcesError {
-        UpdateS3ResourcesError::Unknown(err.description().to_string())
+        UpdateS3ResourcesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateS3ResourcesError {
@@ -882,7 +888,8 @@ impl Error for UpdateS3ResourcesError {
             UpdateS3ResourcesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateS3ResourcesError::Unknown(ref cause) => cause,
+            UpdateS3ResourcesError::ParseError(ref cause) => cause,
+            UpdateS3ResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -982,11 +989,11 @@ impl Macie for MacieClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateMemberAccountError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AssociateMemberAccountError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1014,14 +1021,15 @@ impl Macie for MacieClient {
 
                     serde_json::from_str::<AssociateS3ResourcesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateS3ResourcesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AssociateS3ResourcesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1043,9 +1051,7 @@ impl Macie for MacieClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateMemberAccountError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DisassociateMemberAccountError::from_response(response))
                 }))
             }
         })
@@ -1074,13 +1080,12 @@ impl Macie for MacieClient {
 
                     serde_json::from_str::<DisassociateS3ResourcesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateS3ResourcesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DisassociateS3ResourcesError::from_response(response))
                 }))
             }
         })
@@ -1109,14 +1114,16 @@ impl Macie for MacieClient {
 
                     serde_json::from_str::<ListMemberAccountsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListMemberAccountsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListMemberAccountsError::from_response(response))),
+                )
             }
         })
     }
@@ -1144,14 +1151,16 @@ impl Macie for MacieClient {
 
                     serde_json::from_str::<ListS3ResourcesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListS3ResourcesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListS3ResourcesError::from_response(response))),
+                )
             }
         })
     }
@@ -1179,14 +1188,16 @@ impl Macie for MacieClient {
 
                     serde_json::from_str::<UpdateS3ResourcesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateS3ResourcesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateS3ResourcesError::from_response(response))),
+                )
             }
         })
     }

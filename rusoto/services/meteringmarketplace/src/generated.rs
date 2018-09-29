@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>A BatchMeterUsageRequest contains UsageRecords, which indicate quantities of usage within your application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -154,56 +154,58 @@ pub enum BatchMeterUsageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchMeterUsageError {
-    pub fn from_body(body: &str) -> BatchMeterUsageError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchMeterUsageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceErrorException" => {
-                        BatchMeterUsageError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidCustomerIdentifierException" => {
-                        BatchMeterUsageError::InvalidCustomerIdentifier(String::from(error_message))
-                    }
-                    "InvalidProductCodeException" => {
-                        BatchMeterUsageError::InvalidProductCode(String::from(error_message))
-                    }
-                    "InvalidUsageDimensionException" => {
-                        BatchMeterUsageError::InvalidUsageDimension(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        BatchMeterUsageError::Throttling(String::from(error_message))
-                    }
-                    "TimestampOutOfBoundsException" => {
-                        BatchMeterUsageError::TimestampOutOfBounds(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        BatchMeterUsageError::Validation(error_message.to_string())
-                    }
-                    _ => BatchMeterUsageError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceErrorException" => {
+                    return BatchMeterUsageError::InternalServiceError(String::from(error_message))
                 }
+                "InvalidCustomerIdentifierException" => {
+                    return BatchMeterUsageError::InvalidCustomerIdentifier(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidProductCodeException" => {
+                    return BatchMeterUsageError::InvalidProductCode(String::from(error_message))
+                }
+                "InvalidUsageDimensionException" => {
+                    return BatchMeterUsageError::InvalidUsageDimension(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return BatchMeterUsageError::Throttling(String::from(error_message))
+                }
+                "TimestampOutOfBoundsException" => {
+                    return BatchMeterUsageError::TimestampOutOfBounds(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return BatchMeterUsageError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchMeterUsageError::Unknown(String::from(body)),
         }
+        return BatchMeterUsageError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchMeterUsageError {
     fn from(err: serde_json::error::Error) -> BatchMeterUsageError {
-        BatchMeterUsageError::Unknown(err.description().to_string())
+        BatchMeterUsageError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchMeterUsageError {
@@ -238,7 +240,8 @@ impl Error for BatchMeterUsageError {
             BatchMeterUsageError::Validation(ref cause) => cause,
             BatchMeterUsageError::Credentials(ref err) => err.description(),
             BatchMeterUsageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchMeterUsageError::Unknown(ref cause) => cause,
+            BatchMeterUsageError::ParseError(ref cause) => cause,
+            BatchMeterUsageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -265,57 +268,59 @@ pub enum MeterUsageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl MeterUsageError {
-    pub fn from_body(body: &str) -> MeterUsageError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> MeterUsageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequestException" => {
-                        MeterUsageError::DuplicateRequest(String::from(error_message))
-                    }
-                    "InternalServiceErrorException" => {
-                        MeterUsageError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidEndpointRegionException" => {
-                        MeterUsageError::InvalidEndpointRegion(String::from(error_message))
-                    }
-                    "InvalidProductCodeException" => {
-                        MeterUsageError::InvalidProductCode(String::from(error_message))
-                    }
-                    "InvalidUsageDimensionException" => {
-                        MeterUsageError::InvalidUsageDimension(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        MeterUsageError::Throttling(String::from(error_message))
-                    }
-                    "TimestampOutOfBoundsException" => {
-                        MeterUsageError::TimestampOutOfBounds(String::from(error_message))
-                    }
-                    "ValidationException" => MeterUsageError::Validation(error_message.to_string()),
-                    _ => MeterUsageError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequestException" => {
+                    return MeterUsageError::DuplicateRequest(String::from(error_message))
                 }
+                "InternalServiceErrorException" => {
+                    return MeterUsageError::InternalServiceError(String::from(error_message))
+                }
+                "InvalidEndpointRegionException" => {
+                    return MeterUsageError::InvalidEndpointRegion(String::from(error_message))
+                }
+                "InvalidProductCodeException" => {
+                    return MeterUsageError::InvalidProductCode(String::from(error_message))
+                }
+                "InvalidUsageDimensionException" => {
+                    return MeterUsageError::InvalidUsageDimension(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return MeterUsageError::Throttling(String::from(error_message))
+                }
+                "TimestampOutOfBoundsException" => {
+                    return MeterUsageError::TimestampOutOfBounds(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return MeterUsageError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => MeterUsageError::Unknown(String::from(body)),
         }
+        return MeterUsageError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for MeterUsageError {
     fn from(err: serde_json::error::Error) -> MeterUsageError {
-        MeterUsageError::Unknown(err.description().to_string())
+        MeterUsageError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for MeterUsageError {
@@ -351,7 +356,8 @@ impl Error for MeterUsageError {
             MeterUsageError::Validation(ref cause) => cause,
             MeterUsageError::Credentials(ref err) => err.description(),
             MeterUsageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            MeterUsageError::Unknown(ref cause) => cause,
+            MeterUsageError::ParseError(ref cause) => cause,
+            MeterUsageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -372,50 +378,50 @@ pub enum ResolveCustomerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ResolveCustomerError {
-    pub fn from_body(body: &str) -> ResolveCustomerError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ResolveCustomerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ExpiredTokenException" => {
-                        ResolveCustomerError::ExpiredToken(String::from(error_message))
-                    }
-                    "InternalServiceErrorException" => {
-                        ResolveCustomerError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidTokenException" => {
-                        ResolveCustomerError::InvalidToken(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        ResolveCustomerError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ResolveCustomerError::Validation(error_message.to_string())
-                    }
-                    _ => ResolveCustomerError::Unknown(String::from(body)),
+            match *error_type {
+                "ExpiredTokenException" => {
+                    return ResolveCustomerError::ExpiredToken(String::from(error_message))
                 }
+                "InternalServiceErrorException" => {
+                    return ResolveCustomerError::InternalServiceError(String::from(error_message))
+                }
+                "InvalidTokenException" => {
+                    return ResolveCustomerError::InvalidToken(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return ResolveCustomerError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ResolveCustomerError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ResolveCustomerError::Unknown(String::from(body)),
         }
+        return ResolveCustomerError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ResolveCustomerError {
     fn from(err: serde_json::error::Error) -> ResolveCustomerError {
-        ResolveCustomerError::Unknown(err.description().to_string())
+        ResolveCustomerError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ResolveCustomerError {
@@ -448,7 +454,8 @@ impl Error for ResolveCustomerError {
             ResolveCustomerError::Validation(ref cause) => cause,
             ResolveCustomerError::Credentials(ref err) => err.description(),
             ResolveCustomerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResolveCustomerError::Unknown(ref cause) => cause,
+            ResolveCustomerError::ParseError(ref cause) => cause,
+            ResolveCustomerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -531,14 +538,16 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
 
                     serde_json::from_str::<BatchMeterUsageResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchMeterUsageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchMeterUsageError::from_response(response))),
+                )
             }
         })
     }
@@ -566,14 +575,16 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
 
                     serde_json::from_str::<MeterUsageResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(MeterUsageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(MeterUsageError::from_response(response))),
+                )
             }
         })
     }
@@ -601,14 +612,16 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
 
                     serde_json::from_str::<ResolveCustomerResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResolveCustomerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ResolveCustomerError::from_response(response))),
+                )
             }
         })
     }

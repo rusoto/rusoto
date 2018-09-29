@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1557,44 +1557,44 @@ pub enum AcknowledgeJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AcknowledgeJobError {
-    pub fn from_body(body: &str) -> AcknowledgeJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AcknowledgeJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNonceException" => {
-                        AcknowledgeJobError::InvalidNonce(String::from(error_message))
-                    }
-                    "JobNotFoundException" => {
-                        AcknowledgeJobError::JobNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AcknowledgeJobError::Validation(error_message.to_string())
-                    }
-                    _ => AcknowledgeJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNonceException" => {
+                    return AcknowledgeJobError::InvalidNonce(String::from(error_message))
                 }
+                "JobNotFoundException" => {
+                    return AcknowledgeJobError::JobNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AcknowledgeJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AcknowledgeJobError::Unknown(String::from(body)),
         }
+        return AcknowledgeJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AcknowledgeJobError {
     fn from(err: serde_json::error::Error) -> AcknowledgeJobError {
-        AcknowledgeJobError::Unknown(err.description().to_string())
+        AcknowledgeJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AcknowledgeJobError {
@@ -1625,7 +1625,8 @@ impl Error for AcknowledgeJobError {
             AcknowledgeJobError::Validation(ref cause) => cause,
             AcknowledgeJobError::Credentials(ref err) => err.description(),
             AcknowledgeJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AcknowledgeJobError::Unknown(ref cause) => cause,
+            AcknowledgeJobError::ParseError(ref cause) => cause,
+            AcknowledgeJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1644,49 +1645,49 @@ pub enum AcknowledgeThirdPartyJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AcknowledgeThirdPartyJobError {
-    pub fn from_body(body: &str) -> AcknowledgeThirdPartyJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AcknowledgeThirdPartyJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidClientTokenException" => {
-                        AcknowledgeThirdPartyJobError::InvalidClientToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidNonceException" => {
-                        AcknowledgeThirdPartyJobError::InvalidNonce(String::from(error_message))
-                    }
-                    "JobNotFoundException" => {
-                        AcknowledgeThirdPartyJobError::JobNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AcknowledgeThirdPartyJobError::Validation(error_message.to_string())
-                    }
-                    _ => AcknowledgeThirdPartyJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidClientTokenException" => {
+                    return AcknowledgeThirdPartyJobError::InvalidClientToken(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidNonceException" => {
+                    return AcknowledgeThirdPartyJobError::InvalidNonce(String::from(error_message))
+                }
+                "JobNotFoundException" => {
+                    return AcknowledgeThirdPartyJobError::JobNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AcknowledgeThirdPartyJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AcknowledgeThirdPartyJobError::Unknown(String::from(body)),
         }
+        return AcknowledgeThirdPartyJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AcknowledgeThirdPartyJobError {
     fn from(err: serde_json::error::Error) -> AcknowledgeThirdPartyJobError {
-        AcknowledgeThirdPartyJobError::Unknown(err.description().to_string())
+        AcknowledgeThirdPartyJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AcknowledgeThirdPartyJobError {
@@ -1720,7 +1721,8 @@ impl Error for AcknowledgeThirdPartyJobError {
             AcknowledgeThirdPartyJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AcknowledgeThirdPartyJobError::Unknown(ref cause) => cause,
+            AcknowledgeThirdPartyJobError::ParseError(ref cause) => cause,
+            AcknowledgeThirdPartyJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1735,41 +1737,41 @@ pub enum CreateCustomActionTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCustomActionTypeError {
-    pub fn from_body(body: &str) -> CreateCustomActionTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCustomActionTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "LimitExceededException" => {
-                        CreateCustomActionTypeError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateCustomActionTypeError::Validation(error_message.to_string())
-                    }
-                    _ => CreateCustomActionTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "LimitExceededException" => {
+                    return CreateCustomActionTypeError::LimitExceeded(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return CreateCustomActionTypeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateCustomActionTypeError::Unknown(String::from(body)),
         }
+        return CreateCustomActionTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateCustomActionTypeError {
     fn from(err: serde_json::error::Error) -> CreateCustomActionTypeError {
-        CreateCustomActionTypeError::Unknown(err.description().to_string())
+        CreateCustomActionTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateCustomActionTypeError {
@@ -1801,7 +1803,8 @@ impl Error for CreateCustomActionTypeError {
             CreateCustomActionTypeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateCustomActionTypeError::Unknown(ref cause) => cause,
+            CreateCustomActionTypeError::ParseError(ref cause) => cause,
+            CreateCustomActionTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1826,56 +1829,60 @@ pub enum CreatePipelineError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePipelineError {
-    pub fn from_body(body: &str) -> CreatePipelineError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePipelineError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidActionDeclarationException" => {
-                        CreatePipelineError::InvalidActionDeclaration(String::from(error_message))
-                    }
-                    "InvalidBlockerDeclarationException" => {
-                        CreatePipelineError::InvalidBlockerDeclaration(String::from(error_message))
-                    }
-                    "InvalidStageDeclarationException" => {
-                        CreatePipelineError::InvalidStageDeclaration(String::from(error_message))
-                    }
-                    "InvalidStructureException" => {
-                        CreatePipelineError::InvalidStructure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreatePipelineError::LimitExceeded(String::from(error_message))
-                    }
-                    "PipelineNameInUseException" => {
-                        CreatePipelineError::PipelineNameInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreatePipelineError::Validation(error_message.to_string())
-                    }
-                    _ => CreatePipelineError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidActionDeclarationException" => {
+                    return CreatePipelineError::InvalidActionDeclaration(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidBlockerDeclarationException" => {
+                    return CreatePipelineError::InvalidBlockerDeclaration(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidStageDeclarationException" => {
+                    return CreatePipelineError::InvalidStageDeclaration(String::from(error_message))
+                }
+                "InvalidStructureException" => {
+                    return CreatePipelineError::InvalidStructure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreatePipelineError::LimitExceeded(String::from(error_message))
+                }
+                "PipelineNameInUseException" => {
+                    return CreatePipelineError::PipelineNameInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreatePipelineError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreatePipelineError::Unknown(String::from(body)),
         }
+        return CreatePipelineError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreatePipelineError {
     fn from(err: serde_json::error::Error) -> CreatePipelineError {
-        CreatePipelineError::Unknown(err.description().to_string())
+        CreatePipelineError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreatePipelineError {
@@ -1910,7 +1917,8 @@ impl Error for CreatePipelineError {
             CreatePipelineError::Validation(ref cause) => cause,
             CreatePipelineError::Credentials(ref err) => err.description(),
             CreatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePipelineError::Unknown(ref cause) => cause,
+            CreatePipelineError::ParseError(ref cause) => cause,
+            CreatePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1923,38 +1931,38 @@ pub enum DeleteCustomActionTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCustomActionTypeError {
-    pub fn from_body(body: &str) -> DeleteCustomActionTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteCustomActionTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        DeleteCustomActionTypeError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteCustomActionTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return DeleteCustomActionTypeError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => DeleteCustomActionTypeError::Unknown(String::from(body)),
         }
+        return DeleteCustomActionTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteCustomActionTypeError {
     fn from(err: serde_json::error::Error) -> DeleteCustomActionTypeError {
-        DeleteCustomActionTypeError::Unknown(err.description().to_string())
+        DeleteCustomActionTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteCustomActionTypeError {
@@ -1985,7 +1993,8 @@ impl Error for DeleteCustomActionTypeError {
             DeleteCustomActionTypeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteCustomActionTypeError::Unknown(ref cause) => cause,
+            DeleteCustomActionTypeError::ParseError(ref cause) => cause,
+            DeleteCustomActionTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1998,38 +2007,38 @@ pub enum DeletePipelineError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePipelineError {
-    pub fn from_body(body: &str) -> DeletePipelineError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePipelineError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        DeletePipelineError::Validation(error_message.to_string())
-                    }
-                    _ => DeletePipelineError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return DeletePipelineError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => DeletePipelineError::Unknown(String::from(body)),
         }
+        return DeletePipelineError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeletePipelineError {
     fn from(err: serde_json::error::Error) -> DeletePipelineError {
-        DeletePipelineError::Unknown(err.description().to_string())
+        DeletePipelineError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeletePipelineError {
@@ -2058,7 +2067,8 @@ impl Error for DeletePipelineError {
             DeletePipelineError::Validation(ref cause) => cause,
             DeletePipelineError::Credentials(ref err) => err.description(),
             DeletePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePipelineError::Unknown(ref cause) => cause,
+            DeletePipelineError::ParseError(ref cause) => cause,
+            DeletePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2071,38 +2081,38 @@ pub enum DeleteWebhookError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteWebhookError {
-    pub fn from_body(body: &str) -> DeleteWebhookError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteWebhookError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        DeleteWebhookError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteWebhookError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return DeleteWebhookError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => DeleteWebhookError::Unknown(String::from(body)),
         }
+        return DeleteWebhookError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteWebhookError {
     fn from(err: serde_json::error::Error) -> DeleteWebhookError {
-        DeleteWebhookError::Unknown(err.description().to_string())
+        DeleteWebhookError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteWebhookError {
@@ -2131,7 +2141,8 @@ impl Error for DeleteWebhookError {
             DeleteWebhookError::Validation(ref cause) => cause,
             DeleteWebhookError::Credentials(ref err) => err.description(),
             DeleteWebhookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteWebhookError::Unknown(ref cause) => cause,
+            DeleteWebhookError::ParseError(ref cause) => cause,
+            DeleteWebhookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2146,43 +2157,45 @@ pub enum DeregisterWebhookWithThirdPartyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterWebhookWithThirdPartyError {
-    pub fn from_body(body: &str) -> DeregisterWebhookWithThirdPartyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeregisterWebhookWithThirdPartyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "WebhookNotFoundException" => {
-                        DeregisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeregisterWebhookWithThirdPartyError::Validation(error_message.to_string())
-                    }
-                    _ => DeregisterWebhookWithThirdPartyError::Unknown(String::from(body)),
+            match *error_type {
+                "WebhookNotFoundException" => {
+                    return DeregisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DeregisterWebhookWithThirdPartyError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DeregisterWebhookWithThirdPartyError::Unknown(String::from(body)),
         }
+        return DeregisterWebhookWithThirdPartyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeregisterWebhookWithThirdPartyError {
     fn from(err: serde_json::error::Error) -> DeregisterWebhookWithThirdPartyError {
-        DeregisterWebhookWithThirdPartyError::Unknown(err.description().to_string())
+        DeregisterWebhookWithThirdPartyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeregisterWebhookWithThirdPartyError {
@@ -2214,7 +2227,8 @@ impl Error for DeregisterWebhookWithThirdPartyError {
             DeregisterWebhookWithThirdPartyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeregisterWebhookWithThirdPartyError::Unknown(ref cause) => cause,
+            DeregisterWebhookWithThirdPartyError::ParseError(ref cause) => cause,
+            DeregisterWebhookWithThirdPartyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2231,44 +2245,46 @@ pub enum DisableStageTransitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisableStageTransitionError {
-    pub fn from_body(body: &str) -> DisableStageTransitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisableStageTransitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "PipelineNotFoundException" => {
-                        DisableStageTransitionError::PipelineNotFound(String::from(error_message))
-                    }
-                    "StageNotFoundException" => {
-                        DisableStageTransitionError::StageNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DisableStageTransitionError::Validation(error_message.to_string())
-                    }
-                    _ => DisableStageTransitionError::Unknown(String::from(body)),
+            match *error_type {
+                "PipelineNotFoundException" => {
+                    return DisableStageTransitionError::PipelineNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "StageNotFoundException" => {
+                    return DisableStageTransitionError::StageNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DisableStageTransitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisableStageTransitionError::Unknown(String::from(body)),
         }
+        return DisableStageTransitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisableStageTransitionError {
     fn from(err: serde_json::error::Error) -> DisableStageTransitionError {
-        DisableStageTransitionError::Unknown(err.description().to_string())
+        DisableStageTransitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisableStageTransitionError {
@@ -2301,7 +2317,8 @@ impl Error for DisableStageTransitionError {
             DisableStageTransitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisableStageTransitionError::Unknown(ref cause) => cause,
+            DisableStageTransitionError::ParseError(ref cause) => cause,
+            DisableStageTransitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2318,44 +2335,44 @@ pub enum EnableStageTransitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EnableStageTransitionError {
-    pub fn from_body(body: &str) -> EnableStageTransitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> EnableStageTransitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "PipelineNotFoundException" => {
-                        EnableStageTransitionError::PipelineNotFound(String::from(error_message))
-                    }
-                    "StageNotFoundException" => {
-                        EnableStageTransitionError::StageNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        EnableStageTransitionError::Validation(error_message.to_string())
-                    }
-                    _ => EnableStageTransitionError::Unknown(String::from(body)),
+            match *error_type {
+                "PipelineNotFoundException" => {
+                    return EnableStageTransitionError::PipelineNotFound(String::from(error_message))
                 }
+                "StageNotFoundException" => {
+                    return EnableStageTransitionError::StageNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return EnableStageTransitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => EnableStageTransitionError::Unknown(String::from(body)),
         }
+        return EnableStageTransitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for EnableStageTransitionError {
     fn from(err: serde_json::error::Error) -> EnableStageTransitionError {
-        EnableStageTransitionError::Unknown(err.description().to_string())
+        EnableStageTransitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for EnableStageTransitionError {
@@ -2388,7 +2405,8 @@ impl Error for EnableStageTransitionError {
             EnableStageTransitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            EnableStageTransitionError::Unknown(ref cause) => cause,
+            EnableStageTransitionError::ParseError(ref cause) => cause,
+            EnableStageTransitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2403,41 +2421,41 @@ pub enum GetJobDetailsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobDetailsError {
-    pub fn from_body(body: &str) -> GetJobDetailsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetJobDetailsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "JobNotFoundException" => {
-                        GetJobDetailsError::JobNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetJobDetailsError::Validation(error_message.to_string())
-                    }
-                    _ => GetJobDetailsError::Unknown(String::from(body)),
+            match *error_type {
+                "JobNotFoundException" => {
+                    return GetJobDetailsError::JobNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetJobDetailsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetJobDetailsError::Unknown(String::from(body)),
         }
+        return GetJobDetailsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetJobDetailsError {
     fn from(err: serde_json::error::Error) -> GetJobDetailsError {
-        GetJobDetailsError::Unknown(err.description().to_string())
+        GetJobDetailsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetJobDetailsError {
@@ -2467,7 +2485,8 @@ impl Error for GetJobDetailsError {
             GetJobDetailsError::Validation(ref cause) => cause,
             GetJobDetailsError::Credentials(ref err) => err.description(),
             GetJobDetailsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobDetailsError::Unknown(ref cause) => cause,
+            GetJobDetailsError::ParseError(ref cause) => cause,
+            GetJobDetailsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2484,44 +2503,44 @@ pub enum GetPipelineError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetPipelineError {
-    pub fn from_body(body: &str) -> GetPipelineError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetPipelineError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "PipelineNotFoundException" => {
-                        GetPipelineError::PipelineNotFound(String::from(error_message))
-                    }
-                    "PipelineVersionNotFoundException" => {
-                        GetPipelineError::PipelineVersionNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetPipelineError::Validation(error_message.to_string())
-                    }
-                    _ => GetPipelineError::Unknown(String::from(body)),
+            match *error_type {
+                "PipelineNotFoundException" => {
+                    return GetPipelineError::PipelineNotFound(String::from(error_message))
                 }
+                "PipelineVersionNotFoundException" => {
+                    return GetPipelineError::PipelineVersionNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetPipelineError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetPipelineError::Unknown(String::from(body)),
         }
+        return GetPipelineError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetPipelineError {
     fn from(err: serde_json::error::Error) -> GetPipelineError {
-        GetPipelineError::Unknown(err.description().to_string())
+        GetPipelineError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetPipelineError {
@@ -2552,7 +2571,8 @@ impl Error for GetPipelineError {
             GetPipelineError::Validation(ref cause) => cause,
             GetPipelineError::Credentials(ref err) => err.description(),
             GetPipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPipelineError::Unknown(ref cause) => cause,
+            GetPipelineError::ParseError(ref cause) => cause,
+            GetPipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2569,46 +2589,46 @@ pub enum GetPipelineExecutionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetPipelineExecutionError {
-    pub fn from_body(body: &str) -> GetPipelineExecutionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetPipelineExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "PipelineExecutionNotFoundException" => {
-                        GetPipelineExecutionError::PipelineExecutionNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "PipelineNotFoundException" => {
-                        GetPipelineExecutionError::PipelineNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetPipelineExecutionError::Validation(error_message.to_string())
-                    }
-                    _ => GetPipelineExecutionError::Unknown(String::from(body)),
+            match *error_type {
+                "PipelineExecutionNotFoundException" => {
+                    return GetPipelineExecutionError::PipelineExecutionNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "PipelineNotFoundException" => {
+                    return GetPipelineExecutionError::PipelineNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetPipelineExecutionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetPipelineExecutionError::Unknown(String::from(body)),
         }
+        return GetPipelineExecutionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetPipelineExecutionError {
     fn from(err: serde_json::error::Error) -> GetPipelineExecutionError {
-        GetPipelineExecutionError::Unknown(err.description().to_string())
+        GetPipelineExecutionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetPipelineExecutionError {
@@ -2641,7 +2661,8 @@ impl Error for GetPipelineExecutionError {
             GetPipelineExecutionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetPipelineExecutionError::Unknown(ref cause) => cause,
+            GetPipelineExecutionError::ParseError(ref cause) => cause,
+            GetPipelineExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2656,41 +2677,41 @@ pub enum GetPipelineStateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetPipelineStateError {
-    pub fn from_body(body: &str) -> GetPipelineStateError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetPipelineStateError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "PipelineNotFoundException" => {
-                        GetPipelineStateError::PipelineNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetPipelineStateError::Validation(error_message.to_string())
-                    }
-                    _ => GetPipelineStateError::Unknown(String::from(body)),
+            match *error_type {
+                "PipelineNotFoundException" => {
+                    return GetPipelineStateError::PipelineNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetPipelineStateError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetPipelineStateError::Unknown(String::from(body)),
         }
+        return GetPipelineStateError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetPipelineStateError {
     fn from(err: serde_json::error::Error) -> GetPipelineStateError {
-        GetPipelineStateError::Unknown(err.description().to_string())
+        GetPipelineStateError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetPipelineStateError {
@@ -2720,7 +2741,8 @@ impl Error for GetPipelineStateError {
             GetPipelineStateError::Validation(ref cause) => cause,
             GetPipelineStateError::Credentials(ref err) => err.description(),
             GetPipelineStateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPipelineStateError::Unknown(ref cause) => cause,
+            GetPipelineStateError::ParseError(ref cause) => cause,
+            GetPipelineStateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2739,49 +2761,49 @@ pub enum GetThirdPartyJobDetailsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetThirdPartyJobDetailsError {
-    pub fn from_body(body: &str) -> GetThirdPartyJobDetailsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetThirdPartyJobDetailsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidClientTokenException" => {
-                        GetThirdPartyJobDetailsError::InvalidClientToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidJobException" => {
-                        GetThirdPartyJobDetailsError::InvalidJob(String::from(error_message))
-                    }
-                    "JobNotFoundException" => {
-                        GetThirdPartyJobDetailsError::JobNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetThirdPartyJobDetailsError::Validation(error_message.to_string())
-                    }
-                    _ => GetThirdPartyJobDetailsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidClientTokenException" => {
+                    return GetThirdPartyJobDetailsError::InvalidClientToken(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidJobException" => {
+                    return GetThirdPartyJobDetailsError::InvalidJob(String::from(error_message))
+                }
+                "JobNotFoundException" => {
+                    return GetThirdPartyJobDetailsError::JobNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetThirdPartyJobDetailsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetThirdPartyJobDetailsError::Unknown(String::from(body)),
         }
+        return GetThirdPartyJobDetailsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetThirdPartyJobDetailsError {
     fn from(err: serde_json::error::Error) -> GetThirdPartyJobDetailsError {
-        GetThirdPartyJobDetailsError::Unknown(err.description().to_string())
+        GetThirdPartyJobDetailsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetThirdPartyJobDetailsError {
@@ -2815,7 +2837,8 @@ impl Error for GetThirdPartyJobDetailsError {
             GetThirdPartyJobDetailsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetThirdPartyJobDetailsError::Unknown(ref cause) => cause,
+            GetThirdPartyJobDetailsError::ParseError(ref cause) => cause,
+            GetThirdPartyJobDetailsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2830,41 +2853,41 @@ pub enum ListActionTypesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListActionTypesError {
-    pub fn from_body(body: &str) -> ListActionTypesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListActionTypesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListActionTypesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListActionTypesError::Validation(error_message.to_string())
-                    }
-                    _ => ListActionTypesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListActionTypesError::InvalidNextToken(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListActionTypesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListActionTypesError::Unknown(String::from(body)),
         }
+        return ListActionTypesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListActionTypesError {
     fn from(err: serde_json::error::Error) -> ListActionTypesError {
-        ListActionTypesError::Unknown(err.description().to_string())
+        ListActionTypesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListActionTypesError {
@@ -2894,7 +2917,8 @@ impl Error for ListActionTypesError {
             ListActionTypesError::Validation(ref cause) => cause,
             ListActionTypesError::Credentials(ref err) => err.description(),
             ListActionTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListActionTypesError::Unknown(ref cause) => cause,
+            ListActionTypesError::ParseError(ref cause) => cause,
+            ListActionTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2911,44 +2935,48 @@ pub enum ListPipelineExecutionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPipelineExecutionsError {
-    pub fn from_body(body: &str) -> ListPipelineExecutionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListPipelineExecutionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListPipelineExecutionsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "PipelineNotFoundException" => {
-                        ListPipelineExecutionsError::PipelineNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListPipelineExecutionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListPipelineExecutionsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListPipelineExecutionsError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
                 }
+                "PipelineNotFoundException" => {
+                    return ListPipelineExecutionsError::PipelineNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListPipelineExecutionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListPipelineExecutionsError::Unknown(String::from(body)),
         }
+        return ListPipelineExecutionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPipelineExecutionsError {
     fn from(err: serde_json::error::Error) -> ListPipelineExecutionsError {
-        ListPipelineExecutionsError::Unknown(err.description().to_string())
+        ListPipelineExecutionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPipelineExecutionsError {
@@ -2981,7 +3009,8 @@ impl Error for ListPipelineExecutionsError {
             ListPipelineExecutionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListPipelineExecutionsError::Unknown(ref cause) => cause,
+            ListPipelineExecutionsError::ParseError(ref cause) => cause,
+            ListPipelineExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2996,41 +3025,41 @@ pub enum ListPipelinesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPipelinesError {
-    pub fn from_body(body: &str) -> ListPipelinesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListPipelinesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListPipelinesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListPipelinesError::Validation(error_message.to_string())
-                    }
-                    _ => ListPipelinesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListPipelinesError::InvalidNextToken(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListPipelinesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListPipelinesError::Unknown(String::from(body)),
         }
+        return ListPipelinesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPipelinesError {
     fn from(err: serde_json::error::Error) -> ListPipelinesError {
-        ListPipelinesError::Unknown(err.description().to_string())
+        ListPipelinesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPipelinesError {
@@ -3060,7 +3089,8 @@ impl Error for ListPipelinesError {
             ListPipelinesError::Validation(ref cause) => cause,
             ListPipelinesError::Credentials(ref err) => err.description(),
             ListPipelinesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPipelinesError::Unknown(ref cause) => cause,
+            ListPipelinesError::ParseError(ref cause) => cause,
+            ListPipelinesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3075,41 +3105,41 @@ pub enum ListWebhooksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListWebhooksError {
-    pub fn from_body(body: &str) -> ListWebhooksError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListWebhooksError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListWebhooksError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListWebhooksError::Validation(error_message.to_string())
-                    }
-                    _ => ListWebhooksError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListWebhooksError::InvalidNextToken(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListWebhooksError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListWebhooksError::Unknown(String::from(body)),
         }
+        return ListWebhooksError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListWebhooksError {
     fn from(err: serde_json::error::Error) -> ListWebhooksError {
-        ListWebhooksError::Unknown(err.description().to_string())
+        ListWebhooksError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListWebhooksError {
@@ -3139,7 +3169,8 @@ impl Error for ListWebhooksError {
             ListWebhooksError::Validation(ref cause) => cause,
             ListWebhooksError::Credentials(ref err) => err.description(),
             ListWebhooksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListWebhooksError::Unknown(ref cause) => cause,
+            ListWebhooksError::ParseError(ref cause) => cause,
+            ListWebhooksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3154,41 +3185,41 @@ pub enum PollForJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PollForJobsError {
-    pub fn from_body(body: &str) -> PollForJobsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PollForJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ActionTypeNotFoundException" => {
-                        PollForJobsError::ActionTypeNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PollForJobsError::Validation(error_message.to_string())
-                    }
-                    _ => PollForJobsError::Unknown(String::from(body)),
+            match *error_type {
+                "ActionTypeNotFoundException" => {
+                    return PollForJobsError::ActionTypeNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return PollForJobsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PollForJobsError::Unknown(String::from(body)),
         }
+        return PollForJobsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PollForJobsError {
     fn from(err: serde_json::error::Error) -> PollForJobsError {
-        PollForJobsError::Unknown(err.description().to_string())
+        PollForJobsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PollForJobsError {
@@ -3218,7 +3249,8 @@ impl Error for PollForJobsError {
             PollForJobsError::Validation(ref cause) => cause,
             PollForJobsError::Credentials(ref err) => err.description(),
             PollForJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PollForJobsError::Unknown(ref cause) => cause,
+            PollForJobsError::ParseError(ref cause) => cause,
+            PollForJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3233,41 +3265,43 @@ pub enum PollForThirdPartyJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PollForThirdPartyJobsError {
-    pub fn from_body(body: &str) -> PollForThirdPartyJobsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PollForThirdPartyJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ActionTypeNotFoundException" => {
-                        PollForThirdPartyJobsError::ActionTypeNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PollForThirdPartyJobsError::Validation(error_message.to_string())
-                    }
-                    _ => PollForThirdPartyJobsError::Unknown(String::from(body)),
+            match *error_type {
+                "ActionTypeNotFoundException" => {
+                    return PollForThirdPartyJobsError::ActionTypeNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return PollForThirdPartyJobsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PollForThirdPartyJobsError::Unknown(String::from(body)),
         }
+        return PollForThirdPartyJobsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PollForThirdPartyJobsError {
     fn from(err: serde_json::error::Error) -> PollForThirdPartyJobsError {
-        PollForThirdPartyJobsError::Unknown(err.description().to_string())
+        PollForThirdPartyJobsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PollForThirdPartyJobsError {
@@ -3299,7 +3333,8 @@ impl Error for PollForThirdPartyJobsError {
             PollForThirdPartyJobsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PollForThirdPartyJobsError::Unknown(ref cause) => cause,
+            PollForThirdPartyJobsError::ParseError(ref cause) => cause,
+            PollForThirdPartyJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3318,47 +3353,47 @@ pub enum PutActionRevisionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutActionRevisionError {
-    pub fn from_body(body: &str) -> PutActionRevisionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutActionRevisionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ActionNotFoundException" => {
-                        PutActionRevisionError::ActionNotFound(String::from(error_message))
-                    }
-                    "PipelineNotFoundException" => {
-                        PutActionRevisionError::PipelineNotFound(String::from(error_message))
-                    }
-                    "StageNotFoundException" => {
-                        PutActionRevisionError::StageNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutActionRevisionError::Validation(error_message.to_string())
-                    }
-                    _ => PutActionRevisionError::Unknown(String::from(body)),
+            match *error_type {
+                "ActionNotFoundException" => {
+                    return PutActionRevisionError::ActionNotFound(String::from(error_message))
                 }
+                "PipelineNotFoundException" => {
+                    return PutActionRevisionError::PipelineNotFound(String::from(error_message))
+                }
+                "StageNotFoundException" => {
+                    return PutActionRevisionError::StageNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutActionRevisionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutActionRevisionError::Unknown(String::from(body)),
         }
+        return PutActionRevisionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutActionRevisionError {
     fn from(err: serde_json::error::Error) -> PutActionRevisionError {
-        PutActionRevisionError::Unknown(err.description().to_string())
+        PutActionRevisionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutActionRevisionError {
@@ -3392,7 +3427,8 @@ impl Error for PutActionRevisionError {
             PutActionRevisionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutActionRevisionError::Unknown(ref cause) => cause,
+            PutActionRevisionError::ParseError(ref cause) => cause,
+            PutActionRevisionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3415,55 +3451,55 @@ pub enum PutApprovalResultError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutApprovalResultError {
-    pub fn from_body(body: &str) -> PutApprovalResultError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutApprovalResultError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ActionNotFoundException" => {
-                        PutApprovalResultError::ActionNotFound(String::from(error_message))
-                    }
-                    "ApprovalAlreadyCompletedException" => {
-                        PutApprovalResultError::ApprovalAlreadyCompleted(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidApprovalTokenException" => {
-                        PutApprovalResultError::InvalidApprovalToken(String::from(error_message))
-                    }
-                    "PipelineNotFoundException" => {
-                        PutApprovalResultError::PipelineNotFound(String::from(error_message))
-                    }
-                    "StageNotFoundException" => {
-                        PutApprovalResultError::StageNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutApprovalResultError::Validation(error_message.to_string())
-                    }
-                    _ => PutApprovalResultError::Unknown(String::from(body)),
+            match *error_type {
+                "ActionNotFoundException" => {
+                    return PutApprovalResultError::ActionNotFound(String::from(error_message))
                 }
+                "ApprovalAlreadyCompletedException" => {
+                    return PutApprovalResultError::ApprovalAlreadyCompleted(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidApprovalTokenException" => {
+                    return PutApprovalResultError::InvalidApprovalToken(String::from(error_message))
+                }
+                "PipelineNotFoundException" => {
+                    return PutApprovalResultError::PipelineNotFound(String::from(error_message))
+                }
+                "StageNotFoundException" => {
+                    return PutApprovalResultError::StageNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutApprovalResultError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutApprovalResultError::Unknown(String::from(body)),
         }
+        return PutApprovalResultError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutApprovalResultError {
     fn from(err: serde_json::error::Error) -> PutApprovalResultError {
-        PutApprovalResultError::Unknown(err.description().to_string())
+        PutApprovalResultError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutApprovalResultError {
@@ -3499,7 +3535,8 @@ impl Error for PutApprovalResultError {
             PutApprovalResultError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutApprovalResultError::Unknown(ref cause) => cause,
+            PutApprovalResultError::ParseError(ref cause) => cause,
+            PutApprovalResultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3516,44 +3553,44 @@ pub enum PutJobFailureResultError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutJobFailureResultError {
-    pub fn from_body(body: &str) -> PutJobFailureResultError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutJobFailureResultError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidJobStateException" => {
-                        PutJobFailureResultError::InvalidJobState(String::from(error_message))
-                    }
-                    "JobNotFoundException" => {
-                        PutJobFailureResultError::JobNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutJobFailureResultError::Validation(error_message.to_string())
-                    }
-                    _ => PutJobFailureResultError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidJobStateException" => {
+                    return PutJobFailureResultError::InvalidJobState(String::from(error_message))
                 }
+                "JobNotFoundException" => {
+                    return PutJobFailureResultError::JobNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutJobFailureResultError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutJobFailureResultError::Unknown(String::from(body)),
         }
+        return PutJobFailureResultError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutJobFailureResultError {
     fn from(err: serde_json::error::Error) -> PutJobFailureResultError {
-        PutJobFailureResultError::Unknown(err.description().to_string())
+        PutJobFailureResultError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutJobFailureResultError {
@@ -3586,7 +3623,8 @@ impl Error for PutJobFailureResultError {
             PutJobFailureResultError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutJobFailureResultError::Unknown(ref cause) => cause,
+            PutJobFailureResultError::ParseError(ref cause) => cause,
+            PutJobFailureResultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3603,44 +3641,44 @@ pub enum PutJobSuccessResultError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutJobSuccessResultError {
-    pub fn from_body(body: &str) -> PutJobSuccessResultError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutJobSuccessResultError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidJobStateException" => {
-                        PutJobSuccessResultError::InvalidJobState(String::from(error_message))
-                    }
-                    "JobNotFoundException" => {
-                        PutJobSuccessResultError::JobNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutJobSuccessResultError::Validation(error_message.to_string())
-                    }
-                    _ => PutJobSuccessResultError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidJobStateException" => {
+                    return PutJobSuccessResultError::InvalidJobState(String::from(error_message))
                 }
+                "JobNotFoundException" => {
+                    return PutJobSuccessResultError::JobNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutJobSuccessResultError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutJobSuccessResultError::Unknown(String::from(body)),
         }
+        return PutJobSuccessResultError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutJobSuccessResultError {
     fn from(err: serde_json::error::Error) -> PutJobSuccessResultError {
-        PutJobSuccessResultError::Unknown(err.description().to_string())
+        PutJobSuccessResultError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutJobSuccessResultError {
@@ -3673,7 +3711,8 @@ impl Error for PutJobSuccessResultError {
             PutJobSuccessResultError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutJobSuccessResultError::Unknown(ref cause) => cause,
+            PutJobSuccessResultError::ParseError(ref cause) => cause,
+            PutJobSuccessResultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3692,51 +3731,53 @@ pub enum PutThirdPartyJobFailureResultError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutThirdPartyJobFailureResultError {
-    pub fn from_body(body: &str) -> PutThirdPartyJobFailureResultError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutThirdPartyJobFailureResultError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidClientTokenException" => {
-                        PutThirdPartyJobFailureResultError::InvalidClientToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidJobStateException" => {
-                        PutThirdPartyJobFailureResultError::InvalidJobState(String::from(
-                            error_message,
-                        ))
-                    }
-                    "JobNotFoundException" => {
-                        PutThirdPartyJobFailureResultError::JobNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutThirdPartyJobFailureResultError::Validation(error_message.to_string())
-                    }
-                    _ => PutThirdPartyJobFailureResultError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidClientTokenException" => {
+                    return PutThirdPartyJobFailureResultError::InvalidClientToken(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidJobStateException" => {
+                    return PutThirdPartyJobFailureResultError::InvalidJobState(String::from(
+                        error_message,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return PutThirdPartyJobFailureResultError::JobNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return PutThirdPartyJobFailureResultError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutThirdPartyJobFailureResultError::Unknown(String::from(body)),
         }
+        return PutThirdPartyJobFailureResultError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutThirdPartyJobFailureResultError {
     fn from(err: serde_json::error::Error) -> PutThirdPartyJobFailureResultError {
-        PutThirdPartyJobFailureResultError::Unknown(err.description().to_string())
+        PutThirdPartyJobFailureResultError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutThirdPartyJobFailureResultError {
@@ -3770,7 +3811,8 @@ impl Error for PutThirdPartyJobFailureResultError {
             PutThirdPartyJobFailureResultError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutThirdPartyJobFailureResultError::Unknown(ref cause) => cause,
+            PutThirdPartyJobFailureResultError::ParseError(ref cause) => cause,
+            PutThirdPartyJobFailureResultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3789,51 +3831,53 @@ pub enum PutThirdPartyJobSuccessResultError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutThirdPartyJobSuccessResultError {
-    pub fn from_body(body: &str) -> PutThirdPartyJobSuccessResultError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutThirdPartyJobSuccessResultError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidClientTokenException" => {
-                        PutThirdPartyJobSuccessResultError::InvalidClientToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidJobStateException" => {
-                        PutThirdPartyJobSuccessResultError::InvalidJobState(String::from(
-                            error_message,
-                        ))
-                    }
-                    "JobNotFoundException" => {
-                        PutThirdPartyJobSuccessResultError::JobNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutThirdPartyJobSuccessResultError::Validation(error_message.to_string())
-                    }
-                    _ => PutThirdPartyJobSuccessResultError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidClientTokenException" => {
+                    return PutThirdPartyJobSuccessResultError::InvalidClientToken(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidJobStateException" => {
+                    return PutThirdPartyJobSuccessResultError::InvalidJobState(String::from(
+                        error_message,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return PutThirdPartyJobSuccessResultError::JobNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return PutThirdPartyJobSuccessResultError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutThirdPartyJobSuccessResultError::Unknown(String::from(body)),
         }
+        return PutThirdPartyJobSuccessResultError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutThirdPartyJobSuccessResultError {
     fn from(err: serde_json::error::Error) -> PutThirdPartyJobSuccessResultError {
-        PutThirdPartyJobSuccessResultError::Unknown(err.description().to_string())
+        PutThirdPartyJobSuccessResultError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutThirdPartyJobSuccessResultError {
@@ -3867,7 +3911,8 @@ impl Error for PutThirdPartyJobSuccessResultError {
             PutThirdPartyJobSuccessResultError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutThirdPartyJobSuccessResultError::Unknown(ref cause) => cause,
+            PutThirdPartyJobSuccessResultError::ParseError(ref cause) => cause,
+            PutThirdPartyJobSuccessResultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3888,50 +3933,52 @@ pub enum PutWebhookError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutWebhookError {
-    pub fn from_body(body: &str) -> PutWebhookError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutWebhookError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidWebhookAuthenticationParametersException" => {
-                        PutWebhookError::InvalidWebhookAuthenticationParameters(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidWebhookFilterPatternException" => {
-                        PutWebhookError::InvalidWebhookFilterPattern(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PutWebhookError::LimitExceeded(String::from(error_message))
-                    }
-                    "PipelineNotFoundException" => {
-                        PutWebhookError::PipelineNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => PutWebhookError::Validation(error_message.to_string()),
-                    _ => PutWebhookError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidWebhookAuthenticationParametersException" => {
+                    return PutWebhookError::InvalidWebhookAuthenticationParameters(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidWebhookFilterPatternException" => {
+                    return PutWebhookError::InvalidWebhookFilterPattern(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PutWebhookError::LimitExceeded(String::from(error_message))
+                }
+                "PipelineNotFoundException" => {
+                    return PutWebhookError::PipelineNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutWebhookError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutWebhookError::Unknown(String::from(body)),
         }
+        return PutWebhookError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutWebhookError {
     fn from(err: serde_json::error::Error) -> PutWebhookError {
-        PutWebhookError::Unknown(err.description().to_string())
+        PutWebhookError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutWebhookError {
@@ -3964,7 +4011,8 @@ impl Error for PutWebhookError {
             PutWebhookError::Validation(ref cause) => cause,
             PutWebhookError::Credentials(ref err) => err.description(),
             PutWebhookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutWebhookError::Unknown(ref cause) => cause,
+            PutWebhookError::ParseError(ref cause) => cause,
+            PutWebhookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3979,43 +4027,43 @@ pub enum RegisterWebhookWithThirdPartyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterWebhookWithThirdPartyError {
-    pub fn from_body(body: &str) -> RegisterWebhookWithThirdPartyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterWebhookWithThirdPartyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "WebhookNotFoundException" => {
-                        RegisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        RegisterWebhookWithThirdPartyError::Validation(error_message.to_string())
-                    }
-                    _ => RegisterWebhookWithThirdPartyError::Unknown(String::from(body)),
+            match *error_type {
+                "WebhookNotFoundException" => {
+                    return RegisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return RegisterWebhookWithThirdPartyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RegisterWebhookWithThirdPartyError::Unknown(String::from(body)),
         }
+        return RegisterWebhookWithThirdPartyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RegisterWebhookWithThirdPartyError {
     fn from(err: serde_json::error::Error) -> RegisterWebhookWithThirdPartyError {
-        RegisterWebhookWithThirdPartyError::Unknown(err.description().to_string())
+        RegisterWebhookWithThirdPartyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RegisterWebhookWithThirdPartyError {
@@ -4047,7 +4095,8 @@ impl Error for RegisterWebhookWithThirdPartyError {
             RegisterWebhookWithThirdPartyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RegisterWebhookWithThirdPartyError::Unknown(ref cause) => cause,
+            RegisterWebhookWithThirdPartyError::ParseError(ref cause) => cause,
+            RegisterWebhookWithThirdPartyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4068,52 +4117,52 @@ pub enum RetryStageExecutionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RetryStageExecutionError {
-    pub fn from_body(body: &str) -> RetryStageExecutionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RetryStageExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotLatestPipelineExecutionException" => {
-                        RetryStageExecutionError::NotLatestPipelineExecution(String::from(
-                            error_message,
-                        ))
-                    }
-                    "PipelineNotFoundException" => {
-                        RetryStageExecutionError::PipelineNotFound(String::from(error_message))
-                    }
-                    "StageNotFoundException" => {
-                        RetryStageExecutionError::StageNotFound(String::from(error_message))
-                    }
-                    "StageNotRetryableException" => {
-                        RetryStageExecutionError::StageNotRetryable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RetryStageExecutionError::Validation(error_message.to_string())
-                    }
-                    _ => RetryStageExecutionError::Unknown(String::from(body)),
+            match *error_type {
+                "NotLatestPipelineExecutionException" => {
+                    return RetryStageExecutionError::NotLatestPipelineExecution(String::from(
+                        error_message,
+                    ))
                 }
+                "PipelineNotFoundException" => {
+                    return RetryStageExecutionError::PipelineNotFound(String::from(error_message))
+                }
+                "StageNotFoundException" => {
+                    return RetryStageExecutionError::StageNotFound(String::from(error_message))
+                }
+                "StageNotRetryableException" => {
+                    return RetryStageExecutionError::StageNotRetryable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RetryStageExecutionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RetryStageExecutionError::Unknown(String::from(body)),
         }
+        return RetryStageExecutionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RetryStageExecutionError {
     fn from(err: serde_json::error::Error) -> RetryStageExecutionError {
-        RetryStageExecutionError::Unknown(err.description().to_string())
+        RetryStageExecutionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RetryStageExecutionError {
@@ -4148,7 +4197,8 @@ impl Error for RetryStageExecutionError {
             RetryStageExecutionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RetryStageExecutionError::Unknown(ref cause) => cause,
+            RetryStageExecutionError::ParseError(ref cause) => cause,
+            RetryStageExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4163,41 +4213,43 @@ pub enum StartPipelineExecutionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartPipelineExecutionError {
-    pub fn from_body(body: &str) -> StartPipelineExecutionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartPipelineExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "PipelineNotFoundException" => {
-                        StartPipelineExecutionError::PipelineNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartPipelineExecutionError::Validation(error_message.to_string())
-                    }
-                    _ => StartPipelineExecutionError::Unknown(String::from(body)),
+            match *error_type {
+                "PipelineNotFoundException" => {
+                    return StartPipelineExecutionError::PipelineNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return StartPipelineExecutionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartPipelineExecutionError::Unknown(String::from(body)),
         }
+        return StartPipelineExecutionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartPipelineExecutionError {
     fn from(err: serde_json::error::Error) -> StartPipelineExecutionError {
-        StartPipelineExecutionError::Unknown(err.description().to_string())
+        StartPipelineExecutionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartPipelineExecutionError {
@@ -4229,7 +4281,8 @@ impl Error for StartPipelineExecutionError {
             StartPipelineExecutionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartPipelineExecutionError::Unknown(ref cause) => cause,
+            StartPipelineExecutionError::ParseError(ref cause) => cause,
+            StartPipelineExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4252,53 +4305,57 @@ pub enum UpdatePipelineError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePipelineError {
-    pub fn from_body(body: &str) -> UpdatePipelineError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdatePipelineError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidActionDeclarationException" => {
-                        UpdatePipelineError::InvalidActionDeclaration(String::from(error_message))
-                    }
-                    "InvalidBlockerDeclarationException" => {
-                        UpdatePipelineError::InvalidBlockerDeclaration(String::from(error_message))
-                    }
-                    "InvalidStageDeclarationException" => {
-                        UpdatePipelineError::InvalidStageDeclaration(String::from(error_message))
-                    }
-                    "InvalidStructureException" => {
-                        UpdatePipelineError::InvalidStructure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdatePipelineError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdatePipelineError::Validation(error_message.to_string())
-                    }
-                    _ => UpdatePipelineError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidActionDeclarationException" => {
+                    return UpdatePipelineError::InvalidActionDeclaration(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidBlockerDeclarationException" => {
+                    return UpdatePipelineError::InvalidBlockerDeclaration(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidStageDeclarationException" => {
+                    return UpdatePipelineError::InvalidStageDeclaration(String::from(error_message))
+                }
+                "InvalidStructureException" => {
+                    return UpdatePipelineError::InvalidStructure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdatePipelineError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdatePipelineError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdatePipelineError::Unknown(String::from(body)),
         }
+        return UpdatePipelineError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdatePipelineError {
     fn from(err: serde_json::error::Error) -> UpdatePipelineError {
-        UpdatePipelineError::Unknown(err.description().to_string())
+        UpdatePipelineError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdatePipelineError {
@@ -4332,7 +4389,8 @@ impl Error for UpdatePipelineError {
             UpdatePipelineError::Validation(ref cause) => cause,
             UpdatePipelineError::Credentials(ref err) => err.description(),
             UpdatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdatePipelineError::Unknown(ref cause) => cause,
+            UpdatePipelineError::ParseError(ref cause) => cause,
+            UpdatePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4586,14 +4644,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<AcknowledgeJobOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AcknowledgeJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AcknowledgeJobError::from_response(response))),
+                )
             }
         })
     }
@@ -4624,13 +4684,12 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<AcknowledgeThirdPartyJobOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AcknowledgeThirdPartyJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AcknowledgeThirdPartyJobError::from_response(response))
                 }))
             }
         })
@@ -4662,14 +4721,15 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<CreateCustomActionTypeOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCustomActionTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateCustomActionTypeError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4697,14 +4757,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<CreatePipelineOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePipelineError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreatePipelineError::from_response(response))),
+                )
             }
         })
     }
@@ -4728,11 +4790,11 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCustomActionTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteCustomActionTypeError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4750,11 +4812,12 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePipelineError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeletePipelineError::from_response(response))),
+                )
             }
         })
     }
@@ -4782,14 +4845,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<DeleteWebhookOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteWebhookError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteWebhookError::from_response(response))),
+                )
             }
         })
     }
@@ -4821,12 +4886,13 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<DeregisterWebhookWithThirdPartyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeregisterWebhookWithThirdPartyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeregisterWebhookWithThirdPartyError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -4852,11 +4918,11 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableStageTransitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DisableStageTransitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4880,11 +4946,11 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableStageTransitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(EnableStageTransitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4912,14 +4978,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<GetJobDetailsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetJobDetailsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetJobDetailsError::from_response(response))),
+                )
             }
         })
     }
@@ -4947,14 +5015,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<GetPipelineOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetPipelineError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetPipelineError::from_response(response))),
+                )
             }
         })
     }
@@ -4982,14 +5052,15 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<GetPipelineExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetPipelineExecutionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetPipelineExecutionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5017,14 +5088,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<GetPipelineStateOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetPipelineStateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetPipelineStateError::from_response(response))),
+                )
             }
         })
     }
@@ -5055,13 +5128,12 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<GetThirdPartyJobDetailsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetThirdPartyJobDetailsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetThirdPartyJobDetailsError::from_response(response))
                 }))
             }
         })
@@ -5090,14 +5162,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<ListActionTypesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListActionTypesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListActionTypesError::from_response(response))),
+                )
             }
         })
     }
@@ -5128,14 +5202,15 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<ListPipelineExecutionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPipelineExecutionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListPipelineExecutionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5163,14 +5238,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<ListPipelinesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPipelinesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListPipelinesError::from_response(response))),
+                )
             }
         })
     }
@@ -5198,14 +5275,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<ListWebhooksOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListWebhooksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListWebhooksError::from_response(response))),
+                )
             }
         })
     }
@@ -5233,14 +5312,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<PollForJobsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PollForJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PollForJobsError::from_response(response))),
+                )
             }
         })
     }
@@ -5271,14 +5352,15 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<PollForThirdPartyJobsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PollForThirdPartyJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PollForThirdPartyJobsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5306,14 +5388,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<PutActionRevisionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutActionRevisionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutActionRevisionError::from_response(response))),
+                )
             }
         })
     }
@@ -5341,14 +5425,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<PutApprovalResultOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutApprovalResultError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutApprovalResultError::from_response(response))),
+                )
             }
         })
     }
@@ -5369,11 +5455,11 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutJobFailureResultError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutJobFailureResultError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5394,11 +5480,11 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutJobSuccessResultError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutJobSuccessResultError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5423,9 +5509,7 @@ impl CodePipeline for CodePipelineClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutThirdPartyJobFailureResultError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutThirdPartyJobFailureResultError::from_response(response))
                 }))
             }
         })
@@ -5451,9 +5535,7 @@ impl CodePipeline for CodePipelineClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutThirdPartyJobSuccessResultError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutThirdPartyJobSuccessResultError::from_response(response))
                 }))
             }
         })
@@ -5482,14 +5564,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<PutWebhookOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutWebhookError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutWebhookError::from_response(response))),
+                )
             }
         })
     }
@@ -5520,13 +5604,12 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<RegisterWebhookWithThirdPartyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterWebhookWithThirdPartyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RegisterWebhookWithThirdPartyError::from_response(response))
                 }))
             }
         })
@@ -5555,14 +5638,15 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<RetryStageExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RetryStageExecutionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RetryStageExecutionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5593,14 +5677,15 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<StartPipelineExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartPipelineExecutionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartPipelineExecutionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5628,14 +5713,16 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<UpdatePipelineOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdatePipelineError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdatePipelineError::from_response(response))),
+                )
             }
         })
     }

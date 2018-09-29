@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>The result of calling the operation. The operation returns one object for each document that is successfully processed by the operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1249,54 +1249,58 @@ pub enum BatchDetectDominantLanguageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDetectDominantLanguageError {
-    pub fn from_body(body: &str) -> BatchDetectDominantLanguageError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchDetectDominantLanguageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BatchSizeLimitExceededException" => {
-                        BatchDetectDominantLanguageError::BatchSizeLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerException" => BatchDetectDominantLanguageError::InternalServer(
-                        String::from(error_message),
-                    ),
-                    "InvalidRequestException" => BatchDetectDominantLanguageError::InvalidRequest(
-                        String::from(error_message),
-                    ),
-                    "TextSizeLimitExceededException" => {
-                        BatchDetectDominantLanguageError::TextSizeLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        BatchDetectDominantLanguageError::Validation(error_message.to_string())
-                    }
-                    _ => BatchDetectDominantLanguageError::Unknown(String::from(body)),
+            match *error_type {
+                "BatchSizeLimitExceededException" => {
+                    return BatchDetectDominantLanguageError::BatchSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerException" => {
+                    return BatchDetectDominantLanguageError::InternalServer(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return BatchDetectDominantLanguageError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "TextSizeLimitExceededException" => {
+                    return BatchDetectDominantLanguageError::TextSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return BatchDetectDominantLanguageError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchDetectDominantLanguageError::Unknown(String::from(body)),
         }
+        return BatchDetectDominantLanguageError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchDetectDominantLanguageError {
     fn from(err: serde_json::error::Error) -> BatchDetectDominantLanguageError {
-        BatchDetectDominantLanguageError::Unknown(err.description().to_string())
+        BatchDetectDominantLanguageError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchDetectDominantLanguageError {
@@ -1331,7 +1335,8 @@ impl Error for BatchDetectDominantLanguageError {
             BatchDetectDominantLanguageError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            BatchDetectDominantLanguageError::Unknown(ref cause) => cause,
+            BatchDetectDominantLanguageError::ParseError(ref cause) => cause,
+            BatchDetectDominantLanguageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1354,55 +1359,59 @@ pub enum BatchDetectEntitiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDetectEntitiesError {
-    pub fn from_body(body: &str) -> BatchDetectEntitiesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchDetectEntitiesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BatchSizeLimitExceededException" => {
-                        BatchDetectEntitiesError::BatchSizeLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerException" => {
-                        BatchDetectEntitiesError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        BatchDetectEntitiesError::InvalidRequest(String::from(error_message))
-                    }
-                    "TextSizeLimitExceededException" => {
-                        BatchDetectEntitiesError::TextSizeLimitExceeded(String::from(error_message))
-                    }
-                    "UnsupportedLanguageException" => {
-                        BatchDetectEntitiesError::UnsupportedLanguage(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        BatchDetectEntitiesError::Validation(error_message.to_string())
-                    }
-                    _ => BatchDetectEntitiesError::Unknown(String::from(body)),
+            match *error_type {
+                "BatchSizeLimitExceededException" => {
+                    return BatchDetectEntitiesError::BatchSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerException" => {
+                    return BatchDetectEntitiesError::InternalServer(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return BatchDetectEntitiesError::InvalidRequest(String::from(error_message))
+                }
+                "TextSizeLimitExceededException" => {
+                    return BatchDetectEntitiesError::TextSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedLanguageException" => {
+                    return BatchDetectEntitiesError::UnsupportedLanguage(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return BatchDetectEntitiesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchDetectEntitiesError::Unknown(String::from(body)),
         }
+        return BatchDetectEntitiesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchDetectEntitiesError {
     fn from(err: serde_json::error::Error) -> BatchDetectEntitiesError {
-        BatchDetectEntitiesError::Unknown(err.description().to_string())
+        BatchDetectEntitiesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchDetectEntitiesError {
@@ -1438,7 +1447,8 @@ impl Error for BatchDetectEntitiesError {
             BatchDetectEntitiesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            BatchDetectEntitiesError::Unknown(ref cause) => cause,
+            BatchDetectEntitiesError::ParseError(ref cause) => cause,
+            BatchDetectEntitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1461,57 +1471,59 @@ pub enum BatchDetectKeyPhrasesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDetectKeyPhrasesError {
-    pub fn from_body(body: &str) -> BatchDetectKeyPhrasesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchDetectKeyPhrasesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BatchSizeLimitExceededException" => {
-                        BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerException" => {
-                        BatchDetectKeyPhrasesError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        BatchDetectKeyPhrasesError::InvalidRequest(String::from(error_message))
-                    }
-                    "TextSizeLimitExceededException" => {
-                        BatchDetectKeyPhrasesError::TextSizeLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnsupportedLanguageException" => {
-                        BatchDetectKeyPhrasesError::UnsupportedLanguage(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        BatchDetectKeyPhrasesError::Validation(error_message.to_string())
-                    }
-                    _ => BatchDetectKeyPhrasesError::Unknown(String::from(body)),
+            match *error_type {
+                "BatchSizeLimitExceededException" => {
+                    return BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerException" => {
+                    return BatchDetectKeyPhrasesError::InternalServer(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return BatchDetectKeyPhrasesError::InvalidRequest(String::from(error_message))
+                }
+                "TextSizeLimitExceededException" => {
+                    return BatchDetectKeyPhrasesError::TextSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedLanguageException" => {
+                    return BatchDetectKeyPhrasesError::UnsupportedLanguage(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return BatchDetectKeyPhrasesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchDetectKeyPhrasesError::Unknown(String::from(body)),
         }
+        return BatchDetectKeyPhrasesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchDetectKeyPhrasesError {
     fn from(err: serde_json::error::Error) -> BatchDetectKeyPhrasesError {
-        BatchDetectKeyPhrasesError::Unknown(err.description().to_string())
+        BatchDetectKeyPhrasesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchDetectKeyPhrasesError {
@@ -1547,7 +1559,8 @@ impl Error for BatchDetectKeyPhrasesError {
             BatchDetectKeyPhrasesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            BatchDetectKeyPhrasesError::Unknown(ref cause) => cause,
+            BatchDetectKeyPhrasesError::ParseError(ref cause) => cause,
+            BatchDetectKeyPhrasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1570,57 +1583,59 @@ pub enum BatchDetectSentimentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDetectSentimentError {
-    pub fn from_body(body: &str) -> BatchDetectSentimentError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchDetectSentimentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BatchSizeLimitExceededException" => {
-                        BatchDetectSentimentError::BatchSizeLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerException" => {
-                        BatchDetectSentimentError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        BatchDetectSentimentError::InvalidRequest(String::from(error_message))
-                    }
-                    "TextSizeLimitExceededException" => {
-                        BatchDetectSentimentError::TextSizeLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnsupportedLanguageException" => {
-                        BatchDetectSentimentError::UnsupportedLanguage(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        BatchDetectSentimentError::Validation(error_message.to_string())
-                    }
-                    _ => BatchDetectSentimentError::Unknown(String::from(body)),
+            match *error_type {
+                "BatchSizeLimitExceededException" => {
+                    return BatchDetectSentimentError::BatchSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerException" => {
+                    return BatchDetectSentimentError::InternalServer(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return BatchDetectSentimentError::InvalidRequest(String::from(error_message))
+                }
+                "TextSizeLimitExceededException" => {
+                    return BatchDetectSentimentError::TextSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedLanguageException" => {
+                    return BatchDetectSentimentError::UnsupportedLanguage(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return BatchDetectSentimentError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchDetectSentimentError::Unknown(String::from(body)),
         }
+        return BatchDetectSentimentError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchDetectSentimentError {
     fn from(err: serde_json::error::Error) -> BatchDetectSentimentError {
-        BatchDetectSentimentError::Unknown(err.description().to_string())
+        BatchDetectSentimentError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchDetectSentimentError {
@@ -1656,7 +1671,8 @@ impl Error for BatchDetectSentimentError {
             BatchDetectSentimentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            BatchDetectSentimentError::Unknown(ref cause) => cause,
+            BatchDetectSentimentError::ParseError(ref cause) => cause,
+            BatchDetectSentimentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1679,53 +1695,57 @@ pub enum BatchDetectSyntaxError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDetectSyntaxError {
-    pub fn from_body(body: &str) -> BatchDetectSyntaxError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchDetectSyntaxError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BatchSizeLimitExceededException" => {
-                        BatchDetectSyntaxError::BatchSizeLimitExceeded(String::from(error_message))
-                    }
-                    "InternalServerException" => {
-                        BatchDetectSyntaxError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        BatchDetectSyntaxError::InvalidRequest(String::from(error_message))
-                    }
-                    "TextSizeLimitExceededException" => {
-                        BatchDetectSyntaxError::TextSizeLimitExceeded(String::from(error_message))
-                    }
-                    "UnsupportedLanguageException" => {
-                        BatchDetectSyntaxError::UnsupportedLanguage(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        BatchDetectSyntaxError::Validation(error_message.to_string())
-                    }
-                    _ => BatchDetectSyntaxError::Unknown(String::from(body)),
+            match *error_type {
+                "BatchSizeLimitExceededException" => {
+                    return BatchDetectSyntaxError::BatchSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerException" => {
+                    return BatchDetectSyntaxError::InternalServer(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return BatchDetectSyntaxError::InvalidRequest(String::from(error_message))
+                }
+                "TextSizeLimitExceededException" => {
+                    return BatchDetectSyntaxError::TextSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedLanguageException" => {
+                    return BatchDetectSyntaxError::UnsupportedLanguage(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return BatchDetectSyntaxError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchDetectSyntaxError::Unknown(String::from(body)),
         }
+        return BatchDetectSyntaxError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchDetectSyntaxError {
     fn from(err: serde_json::error::Error) -> BatchDetectSyntaxError {
-        BatchDetectSyntaxError::Unknown(err.description().to_string())
+        BatchDetectSyntaxError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchDetectSyntaxError {
@@ -1761,7 +1781,8 @@ impl Error for BatchDetectSyntaxError {
             BatchDetectSyntaxError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            BatchDetectSyntaxError::Unknown(ref cause) => cause,
+            BatchDetectSyntaxError::ParseError(ref cause) => cause,
+            BatchDetectSyntaxError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1782,58 +1803,60 @@ pub enum DescribeDominantLanguageDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDominantLanguageDetectionJobError {
-    pub fn from_body(body: &str) -> DescribeDominantLanguageDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeDominantLanguageDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DescribeDominantLanguageDetectionJobError::InternalServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeDominantLanguageDetectionJobError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "JobNotFoundException" => {
-                        DescribeDominantLanguageDetectionJobError::JobNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TooManyRequestsException" => {
-                        DescribeDominantLanguageDetectionJobError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => DescribeDominantLanguageDetectionJobError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DescribeDominantLanguageDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeDominantLanguageDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeDominantLanguageDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return DescribeDominantLanguageDetectionJobError::JobNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return DescribeDominantLanguageDetectionJobError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeDominantLanguageDetectionJobError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeDominantLanguageDetectionJobError::Unknown(String::from(body)),
         }
+        return DescribeDominantLanguageDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeDominantLanguageDetectionJobError {
     fn from(err: serde_json::error::Error) -> DescribeDominantLanguageDetectionJobError {
-        DescribeDominantLanguageDetectionJobError::Unknown(err.description().to_string())
+        DescribeDominantLanguageDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeDominantLanguageDetectionJobError {
@@ -1868,7 +1891,8 @@ impl Error for DescribeDominantLanguageDetectionJobError {
             DescribeDominantLanguageDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeDominantLanguageDetectionJobError::Unknown(ref cause) => cause,
+            DescribeDominantLanguageDetectionJobError::ParseError(ref cause) => cause,
+            DescribeDominantLanguageDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1889,52 +1913,58 @@ pub enum DescribeEntitiesDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEntitiesDetectionJobError {
-    pub fn from_body(body: &str) -> DescribeEntitiesDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEntitiesDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => DescribeEntitiesDetectionJobError::InternalServer(
-                        String::from(error_message),
-                    ),
-                    "InvalidRequestException" => DescribeEntitiesDetectionJobError::InvalidRequest(
-                        String::from(error_message),
-                    ),
-                    "JobNotFoundException" => {
-                        DescribeEntitiesDetectionJobError::JobNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        DescribeEntitiesDetectionJobError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeEntitiesDetectionJobError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeEntitiesDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeEntitiesDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeEntitiesDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return DescribeEntitiesDetectionJobError::JobNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return DescribeEntitiesDetectionJobError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeEntitiesDetectionJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeEntitiesDetectionJobError::Unknown(String::from(body)),
         }
+        return DescribeEntitiesDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeEntitiesDetectionJobError {
     fn from(err: serde_json::error::Error) -> DescribeEntitiesDetectionJobError {
-        DescribeEntitiesDetectionJobError::Unknown(err.description().to_string())
+        DescribeEntitiesDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeEntitiesDetectionJobError {
@@ -1969,7 +1999,8 @@ impl Error for DescribeEntitiesDetectionJobError {
             DescribeEntitiesDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEntitiesDetectionJobError::Unknown(ref cause) => cause,
+            DescribeEntitiesDetectionJobError::ParseError(ref cause) => cause,
+            DescribeEntitiesDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1990,56 +2021,60 @@ pub enum DescribeKeyPhrasesDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeKeyPhrasesDetectionJobError {
-    pub fn from_body(body: &str) -> DescribeKeyPhrasesDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeKeyPhrasesDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DescribeKeyPhrasesDetectionJobError::InternalServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeKeyPhrasesDetectionJobError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "JobNotFoundException" => DescribeKeyPhrasesDetectionJobError::JobNotFound(
-                        String::from(error_message),
-                    ),
-                    "TooManyRequestsException" => {
-                        DescribeKeyPhrasesDetectionJobError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeKeyPhrasesDetectionJobError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeKeyPhrasesDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeKeyPhrasesDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeKeyPhrasesDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return DescribeKeyPhrasesDetectionJobError::JobNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return DescribeKeyPhrasesDetectionJobError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeKeyPhrasesDetectionJobError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeKeyPhrasesDetectionJobError::Unknown(String::from(body)),
         }
+        return DescribeKeyPhrasesDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeKeyPhrasesDetectionJobError {
     fn from(err: serde_json::error::Error) -> DescribeKeyPhrasesDetectionJobError {
-        DescribeKeyPhrasesDetectionJobError::Unknown(err.description().to_string())
+        DescribeKeyPhrasesDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeKeyPhrasesDetectionJobError {
@@ -2074,7 +2109,8 @@ impl Error for DescribeKeyPhrasesDetectionJobError {
             DescribeKeyPhrasesDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeKeyPhrasesDetectionJobError::Unknown(ref cause) => cause,
+            DescribeKeyPhrasesDetectionJobError::ParseError(ref cause) => cause,
+            DescribeKeyPhrasesDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2095,56 +2131,58 @@ pub enum DescribeSentimentDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSentimentDetectionJobError {
-    pub fn from_body(body: &str) -> DescribeSentimentDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSentimentDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DescribeSentimentDetectionJobError::InternalServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeSentimentDetectionJobError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "JobNotFoundException" => {
-                        DescribeSentimentDetectionJobError::JobNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        DescribeSentimentDetectionJobError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeSentimentDetectionJobError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeSentimentDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeSentimentDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeSentimentDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return DescribeSentimentDetectionJobError::JobNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return DescribeSentimentDetectionJobError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeSentimentDetectionJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeSentimentDetectionJobError::Unknown(String::from(body)),
         }
+        return DescribeSentimentDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeSentimentDetectionJobError {
     fn from(err: serde_json::error::Error) -> DescribeSentimentDetectionJobError {
-        DescribeSentimentDetectionJobError::Unknown(err.description().to_string())
+        DescribeSentimentDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeSentimentDetectionJobError {
@@ -2179,7 +2217,8 @@ impl Error for DescribeSentimentDetectionJobError {
             DescribeSentimentDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeSentimentDetectionJobError::Unknown(ref cause) => cause,
+            DescribeSentimentDetectionJobError::ParseError(ref cause) => cause,
+            DescribeSentimentDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2200,50 +2239,56 @@ pub enum DescribeTopicsDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTopicsDetectionJobError {
-    pub fn from_body(body: &str) -> DescribeTopicsDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTopicsDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DescribeTopicsDetectionJobError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeTopicsDetectionJobError::InvalidRequest(String::from(error_message))
-                    }
-                    "JobNotFoundException" => {
-                        DescribeTopicsDetectionJobError::JobNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => DescribeTopicsDetectionJobError::TooManyRequests(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        DescribeTopicsDetectionJobError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTopicsDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeTopicsDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeTopicsDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return DescribeTopicsDetectionJobError::JobNotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return DescribeTopicsDetectionJobError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeTopicsDetectionJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTopicsDetectionJobError::Unknown(String::from(body)),
         }
+        return DescribeTopicsDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTopicsDetectionJobError {
     fn from(err: serde_json::error::Error) -> DescribeTopicsDetectionJobError {
-        DescribeTopicsDetectionJobError::Unknown(err.description().to_string())
+        DescribeTopicsDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTopicsDetectionJobError {
@@ -2278,7 +2323,8 @@ impl Error for DescribeTopicsDetectionJobError {
             DescribeTopicsDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeTopicsDetectionJobError::Unknown(ref cause) => cause,
+            DescribeTopicsDetectionJobError::ParseError(ref cause) => cause,
+            DescribeTopicsDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2297,49 +2343,49 @@ pub enum DetectDominantLanguageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetectDominantLanguageError {
-    pub fn from_body(body: &str) -> DetectDominantLanguageError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetectDominantLanguageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DetectDominantLanguageError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DetectDominantLanguageError::InvalidRequest(String::from(error_message))
-                    }
-                    "TextSizeLimitExceededException" => {
-                        DetectDominantLanguageError::TextSizeLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DetectDominantLanguageError::Validation(error_message.to_string())
-                    }
-                    _ => DetectDominantLanguageError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DetectDominantLanguageError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DetectDominantLanguageError::InvalidRequest(String::from(error_message))
+                }
+                "TextSizeLimitExceededException" => {
+                    return DetectDominantLanguageError::TextSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DetectDominantLanguageError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetectDominantLanguageError::Unknown(String::from(body)),
         }
+        return DetectDominantLanguageError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetectDominantLanguageError {
     fn from(err: serde_json::error::Error) -> DetectDominantLanguageError {
-        DetectDominantLanguageError::Unknown(err.description().to_string())
+        DetectDominantLanguageError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetectDominantLanguageError {
@@ -2373,7 +2419,8 @@ impl Error for DetectDominantLanguageError {
             DetectDominantLanguageError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DetectDominantLanguageError::Unknown(ref cause) => cause,
+            DetectDominantLanguageError::ParseError(ref cause) => cause,
+            DetectDominantLanguageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2394,50 +2441,50 @@ pub enum DetectEntitiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetectEntitiesError {
-    pub fn from_body(body: &str) -> DetectEntitiesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetectEntitiesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DetectEntitiesError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DetectEntitiesError::InvalidRequest(String::from(error_message))
-                    }
-                    "TextSizeLimitExceededException" => {
-                        DetectEntitiesError::TextSizeLimitExceeded(String::from(error_message))
-                    }
-                    "UnsupportedLanguageException" => {
-                        DetectEntitiesError::UnsupportedLanguage(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DetectEntitiesError::Validation(error_message.to_string())
-                    }
-                    _ => DetectEntitiesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DetectEntitiesError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DetectEntitiesError::InvalidRequest(String::from(error_message))
+                }
+                "TextSizeLimitExceededException" => {
+                    return DetectEntitiesError::TextSizeLimitExceeded(String::from(error_message))
+                }
+                "UnsupportedLanguageException" => {
+                    return DetectEntitiesError::UnsupportedLanguage(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DetectEntitiesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetectEntitiesError::Unknown(String::from(body)),
         }
+        return DetectEntitiesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetectEntitiesError {
     fn from(err: serde_json::error::Error) -> DetectEntitiesError {
-        DetectEntitiesError::Unknown(err.description().to_string())
+        DetectEntitiesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetectEntitiesError {
@@ -2470,7 +2517,8 @@ impl Error for DetectEntitiesError {
             DetectEntitiesError::Validation(ref cause) => cause,
             DetectEntitiesError::Credentials(ref err) => err.description(),
             DetectEntitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectEntitiesError::Unknown(ref cause) => cause,
+            DetectEntitiesError::ParseError(ref cause) => cause,
+            DetectEntitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2491,50 +2539,50 @@ pub enum DetectKeyPhrasesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetectKeyPhrasesError {
-    pub fn from_body(body: &str) -> DetectKeyPhrasesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetectKeyPhrasesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DetectKeyPhrasesError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DetectKeyPhrasesError::InvalidRequest(String::from(error_message))
-                    }
-                    "TextSizeLimitExceededException" => {
-                        DetectKeyPhrasesError::TextSizeLimitExceeded(String::from(error_message))
-                    }
-                    "UnsupportedLanguageException" => {
-                        DetectKeyPhrasesError::UnsupportedLanguage(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DetectKeyPhrasesError::Validation(error_message.to_string())
-                    }
-                    _ => DetectKeyPhrasesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DetectKeyPhrasesError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DetectKeyPhrasesError::InvalidRequest(String::from(error_message))
+                }
+                "TextSizeLimitExceededException" => {
+                    return DetectKeyPhrasesError::TextSizeLimitExceeded(String::from(error_message))
+                }
+                "UnsupportedLanguageException" => {
+                    return DetectKeyPhrasesError::UnsupportedLanguage(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DetectKeyPhrasesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetectKeyPhrasesError::Unknown(String::from(body)),
         }
+        return DetectKeyPhrasesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetectKeyPhrasesError {
     fn from(err: serde_json::error::Error) -> DetectKeyPhrasesError {
-        DetectKeyPhrasesError::Unknown(err.description().to_string())
+        DetectKeyPhrasesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetectKeyPhrasesError {
@@ -2567,7 +2615,8 @@ impl Error for DetectKeyPhrasesError {
             DetectKeyPhrasesError::Validation(ref cause) => cause,
             DetectKeyPhrasesError::Credentials(ref err) => err.description(),
             DetectKeyPhrasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectKeyPhrasesError::Unknown(ref cause) => cause,
+            DetectKeyPhrasesError::ParseError(ref cause) => cause,
+            DetectKeyPhrasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2588,50 +2637,50 @@ pub enum DetectSentimentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetectSentimentError {
-    pub fn from_body(body: &str) -> DetectSentimentError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetectSentimentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DetectSentimentError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DetectSentimentError::InvalidRequest(String::from(error_message))
-                    }
-                    "TextSizeLimitExceededException" => {
-                        DetectSentimentError::TextSizeLimitExceeded(String::from(error_message))
-                    }
-                    "UnsupportedLanguageException" => {
-                        DetectSentimentError::UnsupportedLanguage(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DetectSentimentError::Validation(error_message.to_string())
-                    }
-                    _ => DetectSentimentError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DetectSentimentError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DetectSentimentError::InvalidRequest(String::from(error_message))
+                }
+                "TextSizeLimitExceededException" => {
+                    return DetectSentimentError::TextSizeLimitExceeded(String::from(error_message))
+                }
+                "UnsupportedLanguageException" => {
+                    return DetectSentimentError::UnsupportedLanguage(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DetectSentimentError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetectSentimentError::Unknown(String::from(body)),
         }
+        return DetectSentimentError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetectSentimentError {
     fn from(err: serde_json::error::Error) -> DetectSentimentError {
-        DetectSentimentError::Unknown(err.description().to_string())
+        DetectSentimentError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetectSentimentError {
@@ -2664,7 +2713,8 @@ impl Error for DetectSentimentError {
             DetectSentimentError::Validation(ref cause) => cause,
             DetectSentimentError::Credentials(ref err) => err.description(),
             DetectSentimentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectSentimentError::Unknown(ref cause) => cause,
+            DetectSentimentError::ParseError(ref cause) => cause,
+            DetectSentimentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2685,50 +2735,50 @@ pub enum DetectSyntaxError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetectSyntaxError {
-    pub fn from_body(body: &str) -> DetectSyntaxError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetectSyntaxError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DetectSyntaxError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DetectSyntaxError::InvalidRequest(String::from(error_message))
-                    }
-                    "TextSizeLimitExceededException" => {
-                        DetectSyntaxError::TextSizeLimitExceeded(String::from(error_message))
-                    }
-                    "UnsupportedLanguageException" => {
-                        DetectSyntaxError::UnsupportedLanguage(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DetectSyntaxError::Validation(error_message.to_string())
-                    }
-                    _ => DetectSyntaxError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DetectSyntaxError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DetectSyntaxError::InvalidRequest(String::from(error_message))
+                }
+                "TextSizeLimitExceededException" => {
+                    return DetectSyntaxError::TextSizeLimitExceeded(String::from(error_message))
+                }
+                "UnsupportedLanguageException" => {
+                    return DetectSyntaxError::UnsupportedLanguage(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DetectSyntaxError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetectSyntaxError::Unknown(String::from(body)),
         }
+        return DetectSyntaxError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetectSyntaxError {
     fn from(err: serde_json::error::Error) -> DetectSyntaxError {
-        DetectSyntaxError::Unknown(err.description().to_string())
+        DetectSyntaxError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetectSyntaxError {
@@ -2761,7 +2811,8 @@ impl Error for DetectSyntaxError {
             DetectSyntaxError::Validation(ref cause) => cause,
             DetectSyntaxError::Credentials(ref err) => err.description(),
             DetectSyntaxError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectSyntaxError::Unknown(ref cause) => cause,
+            DetectSyntaxError::ParseError(ref cause) => cause,
+            DetectSyntaxError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2782,58 +2833,60 @@ pub enum ListDominantLanguageDetectionJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDominantLanguageDetectionJobsError {
-    pub fn from_body(body: &str) -> ListDominantLanguageDetectionJobsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListDominantLanguageDetectionJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        ListDominantLanguageDetectionJobsError::InternalServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidFilterException" => {
-                        ListDominantLanguageDetectionJobsError::InvalidFilter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        ListDominantLanguageDetectionJobsError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TooManyRequestsException" => {
-                        ListDominantLanguageDetectionJobsError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => ListDominantLanguageDetectionJobsError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => ListDominantLanguageDetectionJobsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return ListDominantLanguageDetectionJobsError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidFilterException" => {
+                    return ListDominantLanguageDetectionJobsError::InvalidFilter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return ListDominantLanguageDetectionJobsError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return ListDominantLanguageDetectionJobsError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListDominantLanguageDetectionJobsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => ListDominantLanguageDetectionJobsError::Unknown(String::from(body)),
         }
+        return ListDominantLanguageDetectionJobsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListDominantLanguageDetectionJobsError {
     fn from(err: serde_json::error::Error) -> ListDominantLanguageDetectionJobsError {
-        ListDominantLanguageDetectionJobsError::Unknown(err.description().to_string())
+        ListDominantLanguageDetectionJobsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListDominantLanguageDetectionJobsError {
@@ -2868,7 +2921,8 @@ impl Error for ListDominantLanguageDetectionJobsError {
             ListDominantLanguageDetectionJobsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListDominantLanguageDetectionJobsError::Unknown(ref cause) => cause,
+            ListDominantLanguageDetectionJobsError::ParseError(ref cause) => cause,
+            ListDominantLanguageDetectionJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2889,50 +2943,58 @@ pub enum ListEntitiesDetectionJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListEntitiesDetectionJobsError {
-    pub fn from_body(body: &str) -> ListEntitiesDetectionJobsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListEntitiesDetectionJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        ListEntitiesDetectionJobsError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidFilterException" => {
-                        ListEntitiesDetectionJobsError::InvalidFilter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListEntitiesDetectionJobsError::InvalidRequest(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        ListEntitiesDetectionJobsError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListEntitiesDetectionJobsError::Validation(error_message.to_string())
-                    }
-                    _ => ListEntitiesDetectionJobsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return ListEntitiesDetectionJobsError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidFilterException" => {
+                    return ListEntitiesDetectionJobsError::InvalidFilter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return ListEntitiesDetectionJobsError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return ListEntitiesDetectionJobsError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListEntitiesDetectionJobsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListEntitiesDetectionJobsError::Unknown(String::from(body)),
         }
+        return ListEntitiesDetectionJobsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListEntitiesDetectionJobsError {
     fn from(err: serde_json::error::Error) -> ListEntitiesDetectionJobsError {
-        ListEntitiesDetectionJobsError::Unknown(err.description().to_string())
+        ListEntitiesDetectionJobsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListEntitiesDetectionJobsError {
@@ -2967,7 +3029,8 @@ impl Error for ListEntitiesDetectionJobsError {
             ListEntitiesDetectionJobsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListEntitiesDetectionJobsError::Unknown(ref cause) => cause,
+            ListEntitiesDetectionJobsError::ParseError(ref cause) => cause,
+            ListEntitiesDetectionJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2988,52 +3051,58 @@ pub enum ListKeyPhrasesDetectionJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListKeyPhrasesDetectionJobsError {
-    pub fn from_body(body: &str) -> ListKeyPhrasesDetectionJobsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListKeyPhrasesDetectionJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => ListKeyPhrasesDetectionJobsError::InternalServer(
-                        String::from(error_message),
-                    ),
-                    "InvalidFilterException" => {
-                        ListKeyPhrasesDetectionJobsError::InvalidFilter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => ListKeyPhrasesDetectionJobsError::InvalidRequest(
-                        String::from(error_message),
-                    ),
-                    "TooManyRequestsException" => {
-                        ListKeyPhrasesDetectionJobsError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListKeyPhrasesDetectionJobsError::Validation(error_message.to_string())
-                    }
-                    _ => ListKeyPhrasesDetectionJobsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return ListKeyPhrasesDetectionJobsError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidFilterException" => {
+                    return ListKeyPhrasesDetectionJobsError::InvalidFilter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return ListKeyPhrasesDetectionJobsError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return ListKeyPhrasesDetectionJobsError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListKeyPhrasesDetectionJobsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListKeyPhrasesDetectionJobsError::Unknown(String::from(body)),
         }
+        return ListKeyPhrasesDetectionJobsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListKeyPhrasesDetectionJobsError {
     fn from(err: serde_json::error::Error) -> ListKeyPhrasesDetectionJobsError {
-        ListKeyPhrasesDetectionJobsError::Unknown(err.description().to_string())
+        ListKeyPhrasesDetectionJobsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListKeyPhrasesDetectionJobsError {
@@ -3068,7 +3137,8 @@ impl Error for ListKeyPhrasesDetectionJobsError {
             ListKeyPhrasesDetectionJobsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListKeyPhrasesDetectionJobsError::Unknown(ref cause) => cause,
+            ListKeyPhrasesDetectionJobsError::ParseError(ref cause) => cause,
+            ListKeyPhrasesDetectionJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3089,50 +3159,58 @@ pub enum ListSentimentDetectionJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListSentimentDetectionJobsError {
-    pub fn from_body(body: &str) -> ListSentimentDetectionJobsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListSentimentDetectionJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        ListSentimentDetectionJobsError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidFilterException" => {
-                        ListSentimentDetectionJobsError::InvalidFilter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListSentimentDetectionJobsError::InvalidRequest(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => ListSentimentDetectionJobsError::TooManyRequests(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        ListSentimentDetectionJobsError::Validation(error_message.to_string())
-                    }
-                    _ => ListSentimentDetectionJobsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return ListSentimentDetectionJobsError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidFilterException" => {
+                    return ListSentimentDetectionJobsError::InvalidFilter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return ListSentimentDetectionJobsError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return ListSentimentDetectionJobsError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListSentimentDetectionJobsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListSentimentDetectionJobsError::Unknown(String::from(body)),
         }
+        return ListSentimentDetectionJobsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListSentimentDetectionJobsError {
     fn from(err: serde_json::error::Error) -> ListSentimentDetectionJobsError {
-        ListSentimentDetectionJobsError::Unknown(err.description().to_string())
+        ListSentimentDetectionJobsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListSentimentDetectionJobsError {
@@ -3167,7 +3245,8 @@ impl Error for ListSentimentDetectionJobsError {
             ListSentimentDetectionJobsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListSentimentDetectionJobsError::Unknown(ref cause) => cause,
+            ListSentimentDetectionJobsError::ParseError(ref cause) => cause,
+            ListSentimentDetectionJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3188,50 +3267,52 @@ pub enum ListTopicsDetectionJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTopicsDetectionJobsError {
-    pub fn from_body(body: &str) -> ListTopicsDetectionJobsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTopicsDetectionJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        ListTopicsDetectionJobsError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidFilterException" => {
-                        ListTopicsDetectionJobsError::InvalidFilter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListTopicsDetectionJobsError::InvalidRequest(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        ListTopicsDetectionJobsError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTopicsDetectionJobsError::Validation(error_message.to_string())
-                    }
-                    _ => ListTopicsDetectionJobsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return ListTopicsDetectionJobsError::InternalServer(String::from(error_message))
                 }
+                "InvalidFilterException" => {
+                    return ListTopicsDetectionJobsError::InvalidFilter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return ListTopicsDetectionJobsError::InvalidRequest(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return ListTopicsDetectionJobsError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListTopicsDetectionJobsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTopicsDetectionJobsError::Unknown(String::from(body)),
         }
+        return ListTopicsDetectionJobsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTopicsDetectionJobsError {
     fn from(err: serde_json::error::Error) -> ListTopicsDetectionJobsError {
-        ListTopicsDetectionJobsError::Unknown(err.description().to_string())
+        ListTopicsDetectionJobsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTopicsDetectionJobsError {
@@ -3266,7 +3347,8 @@ impl Error for ListTopicsDetectionJobsError {
             ListTopicsDetectionJobsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTopicsDetectionJobsError::Unknown(ref cause) => cause,
+            ListTopicsDetectionJobsError::ParseError(ref cause) => cause,
+            ListTopicsDetectionJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3285,53 +3367,55 @@ pub enum StartDominantLanguageDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartDominantLanguageDetectionJobError {
-    pub fn from_body(body: &str) -> StartDominantLanguageDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartDominantLanguageDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        StartDominantLanguageDetectionJobError::InternalServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        StartDominantLanguageDetectionJobError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TooManyRequestsException" => {
-                        StartDominantLanguageDetectionJobError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => StartDominantLanguageDetectionJobError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => StartDominantLanguageDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return StartDominantLanguageDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return StartDominantLanguageDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return StartDominantLanguageDetectionJobError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return StartDominantLanguageDetectionJobError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => StartDominantLanguageDetectionJobError::Unknown(String::from(body)),
         }
+        return StartDominantLanguageDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartDominantLanguageDetectionJobError {
     fn from(err: serde_json::error::Error) -> StartDominantLanguageDetectionJobError {
-        StartDominantLanguageDetectionJobError::Unknown(err.description().to_string())
+        StartDominantLanguageDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartDominantLanguageDetectionJobError {
@@ -3365,7 +3449,8 @@ impl Error for StartDominantLanguageDetectionJobError {
             StartDominantLanguageDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartDominantLanguageDetectionJobError::Unknown(ref cause) => cause,
+            StartDominantLanguageDetectionJobError::ParseError(ref cause) => cause,
+            StartDominantLanguageDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3384,47 +3469,53 @@ pub enum StartEntitiesDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartEntitiesDetectionJobError {
-    pub fn from_body(body: &str) -> StartEntitiesDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartEntitiesDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        StartEntitiesDetectionJobError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StartEntitiesDetectionJobError::InvalidRequest(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        StartEntitiesDetectionJobError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartEntitiesDetectionJobError::Validation(error_message.to_string())
-                    }
-                    _ => StartEntitiesDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return StartEntitiesDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return StartEntitiesDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return StartEntitiesDetectionJobError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return StartEntitiesDetectionJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartEntitiesDetectionJobError::Unknown(String::from(body)),
         }
+        return StartEntitiesDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartEntitiesDetectionJobError {
     fn from(err: serde_json::error::Error) -> StartEntitiesDetectionJobError {
-        StartEntitiesDetectionJobError::Unknown(err.description().to_string())
+        StartEntitiesDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartEntitiesDetectionJobError {
@@ -3458,7 +3549,8 @@ impl Error for StartEntitiesDetectionJobError {
             StartEntitiesDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartEntitiesDetectionJobError::Unknown(ref cause) => cause,
+            StartEntitiesDetectionJobError::ParseError(ref cause) => cause,
+            StartEntitiesDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3477,49 +3569,53 @@ pub enum StartKeyPhrasesDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartKeyPhrasesDetectionJobError {
-    pub fn from_body(body: &str) -> StartKeyPhrasesDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartKeyPhrasesDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => StartKeyPhrasesDetectionJobError::InternalServer(
-                        String::from(error_message),
-                    ),
-                    "InvalidRequestException" => StartKeyPhrasesDetectionJobError::InvalidRequest(
-                        String::from(error_message),
-                    ),
-                    "TooManyRequestsException" => {
-                        StartKeyPhrasesDetectionJobError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        StartKeyPhrasesDetectionJobError::Validation(error_message.to_string())
-                    }
-                    _ => StartKeyPhrasesDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return StartKeyPhrasesDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return StartKeyPhrasesDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return StartKeyPhrasesDetectionJobError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return StartKeyPhrasesDetectionJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartKeyPhrasesDetectionJobError::Unknown(String::from(body)),
         }
+        return StartKeyPhrasesDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartKeyPhrasesDetectionJobError {
     fn from(err: serde_json::error::Error) -> StartKeyPhrasesDetectionJobError {
-        StartKeyPhrasesDetectionJobError::Unknown(err.description().to_string())
+        StartKeyPhrasesDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartKeyPhrasesDetectionJobError {
@@ -3553,7 +3649,8 @@ impl Error for StartKeyPhrasesDetectionJobError {
             StartKeyPhrasesDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartKeyPhrasesDetectionJobError::Unknown(ref cause) => cause,
+            StartKeyPhrasesDetectionJobError::ParseError(ref cause) => cause,
+            StartKeyPhrasesDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3572,47 +3669,53 @@ pub enum StartSentimentDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartSentimentDetectionJobError {
-    pub fn from_body(body: &str) -> StartSentimentDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartSentimentDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        StartSentimentDetectionJobError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StartSentimentDetectionJobError::InvalidRequest(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => StartSentimentDetectionJobError::TooManyRequests(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        StartSentimentDetectionJobError::Validation(error_message.to_string())
-                    }
-                    _ => StartSentimentDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return StartSentimentDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return StartSentimentDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return StartSentimentDetectionJobError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return StartSentimentDetectionJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartSentimentDetectionJobError::Unknown(String::from(body)),
         }
+        return StartSentimentDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartSentimentDetectionJobError {
     fn from(err: serde_json::error::Error) -> StartSentimentDetectionJobError {
-        StartSentimentDetectionJobError::Unknown(err.description().to_string())
+        StartSentimentDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartSentimentDetectionJobError {
@@ -3646,7 +3749,8 @@ impl Error for StartSentimentDetectionJobError {
             StartSentimentDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartSentimentDetectionJobError::Unknown(ref cause) => cause,
+            StartSentimentDetectionJobError::ParseError(ref cause) => cause,
+            StartSentimentDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3665,47 +3769,49 @@ pub enum StartTopicsDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartTopicsDetectionJobError {
-    pub fn from_body(body: &str) -> StartTopicsDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartTopicsDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        StartTopicsDetectionJobError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StartTopicsDetectionJobError::InvalidRequest(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        StartTopicsDetectionJobError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartTopicsDetectionJobError::Validation(error_message.to_string())
-                    }
-                    _ => StartTopicsDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return StartTopicsDetectionJobError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return StartTopicsDetectionJobError::InvalidRequest(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return StartTopicsDetectionJobError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return StartTopicsDetectionJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartTopicsDetectionJobError::Unknown(String::from(body)),
         }
+        return StartTopicsDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartTopicsDetectionJobError {
     fn from(err: serde_json::error::Error) -> StartTopicsDetectionJobError {
-        StartTopicsDetectionJobError::Unknown(err.description().to_string())
+        StartTopicsDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartTopicsDetectionJobError {
@@ -3739,7 +3845,8 @@ impl Error for StartTopicsDetectionJobError {
             StartTopicsDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartTopicsDetectionJobError::Unknown(ref cause) => cause,
+            StartTopicsDetectionJobError::ParseError(ref cause) => cause,
+            StartTopicsDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3758,51 +3865,55 @@ pub enum StopDominantLanguageDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopDominantLanguageDetectionJobError {
-    pub fn from_body(body: &str) -> StopDominantLanguageDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopDominantLanguageDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        StopDominantLanguageDetectionJobError::InternalServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        StopDominantLanguageDetectionJobError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "JobNotFoundException" => StopDominantLanguageDetectionJobError::JobNotFound(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        StopDominantLanguageDetectionJobError::Validation(error_message.to_string())
-                    }
-                    _ => StopDominantLanguageDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return StopDominantLanguageDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return StopDominantLanguageDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return StopDominantLanguageDetectionJobError::JobNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return StopDominantLanguageDetectionJobError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => StopDominantLanguageDetectionJobError::Unknown(String::from(body)),
         }
+        return StopDominantLanguageDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopDominantLanguageDetectionJobError {
     fn from(err: serde_json::error::Error) -> StopDominantLanguageDetectionJobError {
-        StopDominantLanguageDetectionJobError::Unknown(err.description().to_string())
+        StopDominantLanguageDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopDominantLanguageDetectionJobError {
@@ -3836,7 +3947,8 @@ impl Error for StopDominantLanguageDetectionJobError {
             StopDominantLanguageDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StopDominantLanguageDetectionJobError::Unknown(ref cause) => cause,
+            StopDominantLanguageDetectionJobError::ParseError(ref cause) => cause,
+            StopDominantLanguageDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3855,47 +3967,51 @@ pub enum StopEntitiesDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopEntitiesDetectionJobError {
-    pub fn from_body(body: &str) -> StopEntitiesDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopEntitiesDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        StopEntitiesDetectionJobError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StopEntitiesDetectionJobError::InvalidRequest(String::from(error_message))
-                    }
-                    "JobNotFoundException" => {
-                        StopEntitiesDetectionJobError::JobNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StopEntitiesDetectionJobError::Validation(error_message.to_string())
-                    }
-                    _ => StopEntitiesDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return StopEntitiesDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return StopEntitiesDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return StopEntitiesDetectionJobError::JobNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StopEntitiesDetectionJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StopEntitiesDetectionJobError::Unknown(String::from(body)),
         }
+        return StopEntitiesDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopEntitiesDetectionJobError {
     fn from(err: serde_json::error::Error) -> StopEntitiesDetectionJobError {
-        StopEntitiesDetectionJobError::Unknown(err.description().to_string())
+        StopEntitiesDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopEntitiesDetectionJobError {
@@ -3929,7 +4045,8 @@ impl Error for StopEntitiesDetectionJobError {
             StopEntitiesDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StopEntitiesDetectionJobError::Unknown(ref cause) => cause,
+            StopEntitiesDetectionJobError::ParseError(ref cause) => cause,
+            StopEntitiesDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3948,47 +4065,51 @@ pub enum StopKeyPhrasesDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopKeyPhrasesDetectionJobError {
-    pub fn from_body(body: &str) -> StopKeyPhrasesDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopKeyPhrasesDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        StopKeyPhrasesDetectionJobError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StopKeyPhrasesDetectionJobError::InvalidRequest(String::from(error_message))
-                    }
-                    "JobNotFoundException" => {
-                        StopKeyPhrasesDetectionJobError::JobNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StopKeyPhrasesDetectionJobError::Validation(error_message.to_string())
-                    }
-                    _ => StopKeyPhrasesDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return StopKeyPhrasesDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return StopKeyPhrasesDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return StopKeyPhrasesDetectionJobError::JobNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StopKeyPhrasesDetectionJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StopKeyPhrasesDetectionJobError::Unknown(String::from(body)),
         }
+        return StopKeyPhrasesDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopKeyPhrasesDetectionJobError {
     fn from(err: serde_json::error::Error) -> StopKeyPhrasesDetectionJobError {
-        StopKeyPhrasesDetectionJobError::Unknown(err.description().to_string())
+        StopKeyPhrasesDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopKeyPhrasesDetectionJobError {
@@ -4022,7 +4143,8 @@ impl Error for StopKeyPhrasesDetectionJobError {
             StopKeyPhrasesDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StopKeyPhrasesDetectionJobError::Unknown(ref cause) => cause,
+            StopKeyPhrasesDetectionJobError::ParseError(ref cause) => cause,
+            StopKeyPhrasesDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4041,47 +4163,51 @@ pub enum StopSentimentDetectionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopSentimentDetectionJobError {
-    pub fn from_body(body: &str) -> StopSentimentDetectionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopSentimentDetectionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        StopSentimentDetectionJobError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StopSentimentDetectionJobError::InvalidRequest(String::from(error_message))
-                    }
-                    "JobNotFoundException" => {
-                        StopSentimentDetectionJobError::JobNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StopSentimentDetectionJobError::Validation(error_message.to_string())
-                    }
-                    _ => StopSentimentDetectionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return StopSentimentDetectionJobError::InternalServer(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return StopSentimentDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "JobNotFoundException" => {
+                    return StopSentimentDetectionJobError::JobNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StopSentimentDetectionJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StopSentimentDetectionJobError::Unknown(String::from(body)),
         }
+        return StopSentimentDetectionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopSentimentDetectionJobError {
     fn from(err: serde_json::error::Error) -> StopSentimentDetectionJobError {
-        StopSentimentDetectionJobError::Unknown(err.description().to_string())
+        StopSentimentDetectionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopSentimentDetectionJobError {
@@ -4115,7 +4241,8 @@ impl Error for StopSentimentDetectionJobError {
             StopSentimentDetectionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StopSentimentDetectionJobError::Unknown(ref cause) => cause,
+            StopSentimentDetectionJobError::ParseError(ref cause) => cause,
+            StopSentimentDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4366,13 +4493,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<BatchDetectDominantLanguageResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchDetectDominantLanguageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(BatchDetectDominantLanguageError::from_response(response))
                 }))
             }
         })
@@ -4401,14 +4527,15 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<BatchDetectEntitiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchDetectEntitiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(BatchDetectEntitiesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4436,14 +4563,15 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<BatchDetectKeyPhrasesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchDetectKeyPhrasesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(BatchDetectKeyPhrasesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4471,14 +4599,15 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<BatchDetectSentimentResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchDetectSentimentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(BatchDetectSentimentError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4506,14 +4635,16 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<BatchDetectSyntaxResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchDetectSyntaxError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchDetectSyntaxError::from_response(response))),
+                )
             }
         })
     }
@@ -4547,12 +4678,13 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DescribeDominantLanguageDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDominantLanguageDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeDominantLanguageDetectionJobError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -4585,13 +4717,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DescribeEntitiesDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEntitiesDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeEntitiesDetectionJobError::from_response(response))
                 }))
             }
         })
@@ -4624,13 +4755,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DescribeKeyPhrasesDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeKeyPhrasesDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeKeyPhrasesDetectionJobError::from_response(response))
                 }))
             }
         })
@@ -4663,13 +4793,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DescribeSentimentDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSentimentDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeSentimentDetectionJobError::from_response(response))
                 }))
             }
         })
@@ -4701,13 +4830,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DescribeTopicsDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTopicsDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeTopicsDetectionJobError::from_response(response))
                 }))
             }
         })
@@ -4736,14 +4864,15 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DetectDominantLanguageResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetectDominantLanguageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DetectDominantLanguageError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4771,14 +4900,16 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DetectEntitiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetectEntitiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetectEntitiesError::from_response(response))),
+                )
             }
         })
     }
@@ -4806,14 +4937,16 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DetectKeyPhrasesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetectKeyPhrasesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetectKeyPhrasesError::from_response(response))),
+                )
             }
         })
     }
@@ -4841,14 +4974,16 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DetectSentimentResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetectSentimentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetectSentimentError::from_response(response))),
+                )
             }
         })
     }
@@ -4876,14 +5011,16 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<DetectSyntaxResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetectSyntaxError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetectSyntaxError::from_response(response))),
+                )
             }
         })
     }
@@ -4917,12 +5054,13 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<ListDominantLanguageDetectionJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDominantLanguageDetectionJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ListDominantLanguageDetectionJobsError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -4955,13 +5093,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<ListEntitiesDetectionJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListEntitiesDetectionJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListEntitiesDetectionJobsError::from_response(response))
                 }))
             }
         })
@@ -4993,13 +5130,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<ListKeyPhrasesDetectionJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListKeyPhrasesDetectionJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListKeyPhrasesDetectionJobsError::from_response(response))
                 }))
             }
         })
@@ -5031,13 +5167,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<ListSentimentDetectionJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSentimentDetectionJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListSentimentDetectionJobsError::from_response(response))
                 }))
             }
         })
@@ -5069,13 +5204,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<ListTopicsDetectionJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTopicsDetectionJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListTopicsDetectionJobsError::from_response(response))
                 }))
             }
         })
@@ -5110,12 +5244,13 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StartDominantLanguageDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartDominantLanguageDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(StartDominantLanguageDetectionJobError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -5148,13 +5283,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StartEntitiesDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartEntitiesDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StartEntitiesDetectionJobError::from_response(response))
                 }))
             }
         })
@@ -5186,13 +5320,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StartKeyPhrasesDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartKeyPhrasesDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StartKeyPhrasesDetectionJobError::from_response(response))
                 }))
             }
         })
@@ -5224,13 +5357,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StartSentimentDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartSentimentDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StartSentimentDetectionJobError::from_response(response))
                 }))
             }
         })
@@ -5262,13 +5394,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StartTopicsDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartTopicsDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StartTopicsDetectionJobError::from_response(response))
                 }))
             }
         })
@@ -5301,12 +5432,13 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StopDominantLanguageDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopDominantLanguageDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(StopDominantLanguageDetectionJobError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -5339,13 +5471,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StopEntitiesDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopEntitiesDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StopEntitiesDetectionJobError::from_response(response))
                 }))
             }
         })
@@ -5377,13 +5508,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StopKeyPhrasesDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopKeyPhrasesDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StopKeyPhrasesDetectionJobError::from_response(response))
                 }))
             }
         })
@@ -5415,13 +5545,12 @@ impl Comprehend for ComprehendClient {
 
                     serde_json::from_str::<StopSentimentDetectionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopSentimentDetectionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StopSentimentDetectionJobError::from_response(response))
                 }))
             }
         })

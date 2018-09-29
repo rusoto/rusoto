@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Contains information about a backup of an AWS CloudHSM cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -461,57 +461,61 @@ pub enum CopyBackupToRegionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CopyBackupToRegionError {
-    pub fn from_body(body: &str) -> CopyBackupToRegionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CopyBackupToRegionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmAccessDeniedException" => {
-                        CopyBackupToRegionError::CloudHsmAccessDenied(String::from(error_message))
-                    }
-                    "CloudHsmInternalFailureException" => {
-                        CopyBackupToRegionError::CloudHsmInternalFailure(String::from(
-                            error_message,
-                        ))
-                    }
-                    "CloudHsmInvalidRequestException" => {
-                        CopyBackupToRegionError::CloudHsmInvalidRequest(String::from(error_message))
-                    }
-                    "CloudHsmResourceNotFoundException" => {
-                        CopyBackupToRegionError::CloudHsmResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "CloudHsmServiceException" => {
-                        CopyBackupToRegionError::CloudHsmService(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CopyBackupToRegionError::Validation(error_message.to_string())
-                    }
-                    _ => CopyBackupToRegionError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmAccessDeniedException" => {
+                    return CopyBackupToRegionError::CloudHsmAccessDenied(String::from(
+                        error_message,
+                    ))
                 }
+                "CloudHsmInternalFailureException" => {
+                    return CopyBackupToRegionError::CloudHsmInternalFailure(String::from(
+                        error_message,
+                    ))
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return CopyBackupToRegionError::CloudHsmInvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "CloudHsmResourceNotFoundException" => {
+                    return CopyBackupToRegionError::CloudHsmResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "CloudHsmServiceException" => {
+                    return CopyBackupToRegionError::CloudHsmService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CopyBackupToRegionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CopyBackupToRegionError::Unknown(String::from(body)),
         }
+        return CopyBackupToRegionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CopyBackupToRegionError {
     fn from(err: serde_json::error::Error) -> CopyBackupToRegionError {
-        CopyBackupToRegionError::Unknown(err.description().to_string())
+        CopyBackupToRegionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CopyBackupToRegionError {
@@ -547,7 +551,8 @@ impl Error for CopyBackupToRegionError {
             CopyBackupToRegionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CopyBackupToRegionError::Unknown(ref cause) => cause,
+            CopyBackupToRegionError::ParseError(ref cause) => cause,
+            CopyBackupToRegionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -570,53 +575,53 @@ pub enum CreateClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterError {
-    pub fn from_body(body: &str) -> CreateClusterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmAccessDeniedException" => {
-                        CreateClusterError::CloudHsmAccessDenied(String::from(error_message))
-                    }
-                    "CloudHsmInternalFailureException" => {
-                        CreateClusterError::CloudHsmInternalFailure(String::from(error_message))
-                    }
-                    "CloudHsmInvalidRequestException" => {
-                        CreateClusterError::CloudHsmInvalidRequest(String::from(error_message))
-                    }
-                    "CloudHsmResourceNotFoundException" => {
-                        CreateClusterError::CloudHsmResourceNotFound(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        CreateClusterError::CloudHsmService(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateClusterError::Validation(error_message.to_string())
-                    }
-                    _ => CreateClusterError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmAccessDeniedException" => {
+                    return CreateClusterError::CloudHsmAccessDenied(String::from(error_message))
                 }
+                "CloudHsmInternalFailureException" => {
+                    return CreateClusterError::CloudHsmInternalFailure(String::from(error_message))
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return CreateClusterError::CloudHsmInvalidRequest(String::from(error_message))
+                }
+                "CloudHsmResourceNotFoundException" => {
+                    return CreateClusterError::CloudHsmResourceNotFound(String::from(error_message))
+                }
+                "CloudHsmServiceException" => {
+                    return CreateClusterError::CloudHsmService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateClusterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateClusterError::Unknown(String::from(body)),
         }
+        return CreateClusterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateClusterError {
     fn from(err: serde_json::error::Error) -> CreateClusterError {
-        CreateClusterError::Unknown(err.description().to_string())
+        CreateClusterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateClusterError {
@@ -650,7 +655,8 @@ impl Error for CreateClusterError {
             CreateClusterError::Validation(ref cause) => cause,
             CreateClusterError::Credentials(ref err) => err.description(),
             CreateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateClusterError::Unknown(ref cause) => cause,
+            CreateClusterError::ParseError(ref cause) => cause,
+            CreateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -673,51 +679,53 @@ pub enum CreateHsmError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHsmError {
-    pub fn from_body(body: &str) -> CreateHsmError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateHsmError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmAccessDeniedException" => {
-                        CreateHsmError::CloudHsmAccessDenied(String::from(error_message))
-                    }
-                    "CloudHsmInternalFailureException" => {
-                        CreateHsmError::CloudHsmInternalFailure(String::from(error_message))
-                    }
-                    "CloudHsmInvalidRequestException" => {
-                        CreateHsmError::CloudHsmInvalidRequest(String::from(error_message))
-                    }
-                    "CloudHsmResourceNotFoundException" => {
-                        CreateHsmError::CloudHsmResourceNotFound(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        CreateHsmError::CloudHsmService(String::from(error_message))
-                    }
-                    "ValidationException" => CreateHsmError::Validation(error_message.to_string()),
-                    _ => CreateHsmError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmAccessDeniedException" => {
+                    return CreateHsmError::CloudHsmAccessDenied(String::from(error_message))
                 }
+                "CloudHsmInternalFailureException" => {
+                    return CreateHsmError::CloudHsmInternalFailure(String::from(error_message))
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return CreateHsmError::CloudHsmInvalidRequest(String::from(error_message))
+                }
+                "CloudHsmResourceNotFoundException" => {
+                    return CreateHsmError::CloudHsmResourceNotFound(String::from(error_message))
+                }
+                "CloudHsmServiceException" => {
+                    return CreateHsmError::CloudHsmService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateHsmError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateHsmError::Unknown(String::from(body)),
         }
+        return CreateHsmError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateHsmError {
     fn from(err: serde_json::error::Error) -> CreateHsmError {
-        CreateHsmError::Unknown(err.description().to_string())
+        CreateHsmError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateHsmError {
@@ -751,7 +759,8 @@ impl Error for CreateHsmError {
             CreateHsmError::Validation(ref cause) => cause,
             CreateHsmError::Credentials(ref err) => err.description(),
             CreateHsmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateHsmError::Unknown(ref cause) => cause,
+            CreateHsmError::ParseError(ref cause) => cause,
+            CreateHsmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -774,53 +783,53 @@ pub enum DeleteClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterError {
-    pub fn from_body(body: &str) -> DeleteClusterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmAccessDeniedException" => {
-                        DeleteClusterError::CloudHsmAccessDenied(String::from(error_message))
-                    }
-                    "CloudHsmInternalFailureException" => {
-                        DeleteClusterError::CloudHsmInternalFailure(String::from(error_message))
-                    }
-                    "CloudHsmInvalidRequestException" => {
-                        DeleteClusterError::CloudHsmInvalidRequest(String::from(error_message))
-                    }
-                    "CloudHsmResourceNotFoundException" => {
-                        DeleteClusterError::CloudHsmResourceNotFound(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        DeleteClusterError::CloudHsmService(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteClusterError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteClusterError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmAccessDeniedException" => {
+                    return DeleteClusterError::CloudHsmAccessDenied(String::from(error_message))
                 }
+                "CloudHsmInternalFailureException" => {
+                    return DeleteClusterError::CloudHsmInternalFailure(String::from(error_message))
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return DeleteClusterError::CloudHsmInvalidRequest(String::from(error_message))
+                }
+                "CloudHsmResourceNotFoundException" => {
+                    return DeleteClusterError::CloudHsmResourceNotFound(String::from(error_message))
+                }
+                "CloudHsmServiceException" => {
+                    return DeleteClusterError::CloudHsmService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteClusterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteClusterError::Unknown(String::from(body)),
         }
+        return DeleteClusterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteClusterError {
     fn from(err: serde_json::error::Error) -> DeleteClusterError {
-        DeleteClusterError::Unknown(err.description().to_string())
+        DeleteClusterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteClusterError {
@@ -854,7 +863,8 @@ impl Error for DeleteClusterError {
             DeleteClusterError::Validation(ref cause) => cause,
             DeleteClusterError::Credentials(ref err) => err.description(),
             DeleteClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteClusterError::Unknown(ref cause) => cause,
+            DeleteClusterError::ParseError(ref cause) => cause,
+            DeleteClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -877,51 +887,53 @@ pub enum DeleteHsmError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHsmError {
-    pub fn from_body(body: &str) -> DeleteHsmError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteHsmError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmAccessDeniedException" => {
-                        DeleteHsmError::CloudHsmAccessDenied(String::from(error_message))
-                    }
-                    "CloudHsmInternalFailureException" => {
-                        DeleteHsmError::CloudHsmInternalFailure(String::from(error_message))
-                    }
-                    "CloudHsmInvalidRequestException" => {
-                        DeleteHsmError::CloudHsmInvalidRequest(String::from(error_message))
-                    }
-                    "CloudHsmResourceNotFoundException" => {
-                        DeleteHsmError::CloudHsmResourceNotFound(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        DeleteHsmError::CloudHsmService(String::from(error_message))
-                    }
-                    "ValidationException" => DeleteHsmError::Validation(error_message.to_string()),
-                    _ => DeleteHsmError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmAccessDeniedException" => {
+                    return DeleteHsmError::CloudHsmAccessDenied(String::from(error_message))
                 }
+                "CloudHsmInternalFailureException" => {
+                    return DeleteHsmError::CloudHsmInternalFailure(String::from(error_message))
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return DeleteHsmError::CloudHsmInvalidRequest(String::from(error_message))
+                }
+                "CloudHsmResourceNotFoundException" => {
+                    return DeleteHsmError::CloudHsmResourceNotFound(String::from(error_message))
+                }
+                "CloudHsmServiceException" => {
+                    return DeleteHsmError::CloudHsmService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteHsmError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteHsmError::Unknown(String::from(body)),
         }
+        return DeleteHsmError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteHsmError {
     fn from(err: serde_json::error::Error) -> DeleteHsmError {
-        DeleteHsmError::Unknown(err.description().to_string())
+        DeleteHsmError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteHsmError {
@@ -955,7 +967,8 @@ impl Error for DeleteHsmError {
             DeleteHsmError::Validation(ref cause) => cause,
             DeleteHsmError::Credentials(ref err) => err.description(),
             DeleteHsmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteHsmError::Unknown(ref cause) => cause,
+            DeleteHsmError::ParseError(ref cause) => cause,
+            DeleteHsmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -978,53 +991,57 @@ pub enum DescribeBackupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBackupsError {
-    pub fn from_body(body: &str) -> DescribeBackupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeBackupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmAccessDeniedException" => {
-                        DescribeBackupsError::CloudHsmAccessDenied(String::from(error_message))
-                    }
-                    "CloudHsmInternalFailureException" => {
-                        DescribeBackupsError::CloudHsmInternalFailure(String::from(error_message))
-                    }
-                    "CloudHsmInvalidRequestException" => {
-                        DescribeBackupsError::CloudHsmInvalidRequest(String::from(error_message))
-                    }
-                    "CloudHsmResourceNotFoundException" => {
-                        DescribeBackupsError::CloudHsmResourceNotFound(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        DescribeBackupsError::CloudHsmService(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeBackupsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeBackupsError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmAccessDeniedException" => {
+                    return DescribeBackupsError::CloudHsmAccessDenied(String::from(error_message))
                 }
+                "CloudHsmInternalFailureException" => {
+                    return DescribeBackupsError::CloudHsmInternalFailure(String::from(
+                        error_message,
+                    ))
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return DescribeBackupsError::CloudHsmInvalidRequest(String::from(error_message))
+                }
+                "CloudHsmResourceNotFoundException" => {
+                    return DescribeBackupsError::CloudHsmResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "CloudHsmServiceException" => {
+                    return DescribeBackupsError::CloudHsmService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeBackupsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeBackupsError::Unknown(String::from(body)),
         }
+        return DescribeBackupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeBackupsError {
     fn from(err: serde_json::error::Error) -> DescribeBackupsError {
-        DescribeBackupsError::Unknown(err.description().to_string())
+        DescribeBackupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeBackupsError {
@@ -1058,7 +1075,8 @@ impl Error for DescribeBackupsError {
             DescribeBackupsError::Validation(ref cause) => cause,
             DescribeBackupsError::Credentials(ref err) => err.description(),
             DescribeBackupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeBackupsError::Unknown(ref cause) => cause,
+            DescribeBackupsError::ParseError(ref cause) => cause,
+            DescribeBackupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1079,50 +1097,54 @@ pub enum DescribeClustersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClustersError {
-    pub fn from_body(body: &str) -> DescribeClustersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClustersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmAccessDeniedException" => {
-                        DescribeClustersError::CloudHsmAccessDenied(String::from(error_message))
-                    }
-                    "CloudHsmInternalFailureException" => {
-                        DescribeClustersError::CloudHsmInternalFailure(String::from(error_message))
-                    }
-                    "CloudHsmInvalidRequestException" => {
-                        DescribeClustersError::CloudHsmInvalidRequest(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        DescribeClustersError::CloudHsmService(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeClustersError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeClustersError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmAccessDeniedException" => {
+                    return DescribeClustersError::CloudHsmAccessDenied(String::from(error_message))
                 }
+                "CloudHsmInternalFailureException" => {
+                    return DescribeClustersError::CloudHsmInternalFailure(String::from(
+                        error_message,
+                    ))
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return DescribeClustersError::CloudHsmInvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "CloudHsmServiceException" => {
+                    return DescribeClustersError::CloudHsmService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeClustersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeClustersError::Unknown(String::from(body)),
         }
+        return DescribeClustersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeClustersError {
     fn from(err: serde_json::error::Error) -> DescribeClustersError {
-        DescribeClustersError::Unknown(err.description().to_string())
+        DescribeClustersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeClustersError {
@@ -1155,7 +1177,8 @@ impl Error for DescribeClustersError {
             DescribeClustersError::Validation(ref cause) => cause,
             DescribeClustersError::Credentials(ref err) => err.description(),
             DescribeClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeClustersError::Unknown(ref cause) => cause,
+            DescribeClustersError::ParseError(ref cause) => cause,
+            DescribeClustersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1178,55 +1201,59 @@ pub enum InitializeClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl InitializeClusterError {
-    pub fn from_body(body: &str) -> InitializeClusterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> InitializeClusterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmAccessDeniedException" => {
-                        InitializeClusterError::CloudHsmAccessDenied(String::from(error_message))
-                    }
-                    "CloudHsmInternalFailureException" => {
-                        InitializeClusterError::CloudHsmInternalFailure(String::from(error_message))
-                    }
-                    "CloudHsmInvalidRequestException" => {
-                        InitializeClusterError::CloudHsmInvalidRequest(String::from(error_message))
-                    }
-                    "CloudHsmResourceNotFoundException" => {
-                        InitializeClusterError::CloudHsmResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "CloudHsmServiceException" => {
-                        InitializeClusterError::CloudHsmService(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        InitializeClusterError::Validation(error_message.to_string())
-                    }
-                    _ => InitializeClusterError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmAccessDeniedException" => {
+                    return InitializeClusterError::CloudHsmAccessDenied(String::from(error_message))
                 }
+                "CloudHsmInternalFailureException" => {
+                    return InitializeClusterError::CloudHsmInternalFailure(String::from(
+                        error_message,
+                    ))
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return InitializeClusterError::CloudHsmInvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "CloudHsmResourceNotFoundException" => {
+                    return InitializeClusterError::CloudHsmResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "CloudHsmServiceException" => {
+                    return InitializeClusterError::CloudHsmService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return InitializeClusterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => InitializeClusterError::Unknown(String::from(body)),
         }
+        return InitializeClusterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for InitializeClusterError {
     fn from(err: serde_json::error::Error) -> InitializeClusterError {
-        InitializeClusterError::Unknown(err.description().to_string())
+        InitializeClusterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for InitializeClusterError {
@@ -1262,7 +1289,8 @@ impl Error for InitializeClusterError {
             InitializeClusterError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            InitializeClusterError::Unknown(ref cause) => cause,
+            InitializeClusterError::ParseError(ref cause) => cause,
+            InitializeClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1285,51 +1313,53 @@ pub enum ListTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsError {
-    pub fn from_body(body: &str) -> ListTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmAccessDeniedException" => {
-                        ListTagsError::CloudHsmAccessDenied(String::from(error_message))
-                    }
-                    "CloudHsmInternalFailureException" => {
-                        ListTagsError::CloudHsmInternalFailure(String::from(error_message))
-                    }
-                    "CloudHsmInvalidRequestException" => {
-                        ListTagsError::CloudHsmInvalidRequest(String::from(error_message))
-                    }
-                    "CloudHsmResourceNotFoundException" => {
-                        ListTagsError::CloudHsmResourceNotFound(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        ListTagsError::CloudHsmService(String::from(error_message))
-                    }
-                    "ValidationException" => ListTagsError::Validation(error_message.to_string()),
-                    _ => ListTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmAccessDeniedException" => {
+                    return ListTagsError::CloudHsmAccessDenied(String::from(error_message))
                 }
+                "CloudHsmInternalFailureException" => {
+                    return ListTagsError::CloudHsmInternalFailure(String::from(error_message))
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return ListTagsError::CloudHsmInvalidRequest(String::from(error_message))
+                }
+                "CloudHsmResourceNotFoundException" => {
+                    return ListTagsError::CloudHsmResourceNotFound(String::from(error_message))
+                }
+                "CloudHsmServiceException" => {
+                    return ListTagsError::CloudHsmService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTagsError::Unknown(String::from(body)),
         }
+        return ListTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTagsError {
     fn from(err: serde_json::error::Error) -> ListTagsError {
-        ListTagsError::Unknown(err.description().to_string())
+        ListTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTagsError {
@@ -1363,7 +1393,8 @@ impl Error for ListTagsError {
             ListTagsError::Validation(ref cause) => cause,
             ListTagsError::Credentials(ref err) => err.description(),
             ListTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTagsError::Unknown(ref cause) => cause,
+            ListTagsError::ParseError(ref cause) => cause,
+            ListTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1386,53 +1417,53 @@ pub enum TagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_body(body: &str) -> TagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmAccessDeniedException" => {
-                        TagResourceError::CloudHsmAccessDenied(String::from(error_message))
-                    }
-                    "CloudHsmInternalFailureException" => {
-                        TagResourceError::CloudHsmInternalFailure(String::from(error_message))
-                    }
-                    "CloudHsmInvalidRequestException" => {
-                        TagResourceError::CloudHsmInvalidRequest(String::from(error_message))
-                    }
-                    "CloudHsmResourceNotFoundException" => {
-                        TagResourceError::CloudHsmResourceNotFound(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        TagResourceError::CloudHsmService(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        TagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => TagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmAccessDeniedException" => {
+                    return TagResourceError::CloudHsmAccessDenied(String::from(error_message))
                 }
+                "CloudHsmInternalFailureException" => {
+                    return TagResourceError::CloudHsmInternalFailure(String::from(error_message))
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return TagResourceError::CloudHsmInvalidRequest(String::from(error_message))
+                }
+                "CloudHsmResourceNotFoundException" => {
+                    return TagResourceError::CloudHsmResourceNotFound(String::from(error_message))
+                }
+                "CloudHsmServiceException" => {
+                    return TagResourceError::CloudHsmService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return TagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TagResourceError::Unknown(String::from(body)),
         }
+        return TagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TagResourceError {
     fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::Unknown(err.description().to_string())
+        TagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TagResourceError {
@@ -1466,7 +1497,8 @@ impl Error for TagResourceError {
             TagResourceError::Validation(ref cause) => cause,
             TagResourceError::Credentials(ref err) => err.description(),
             TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::Unknown(ref cause) => cause,
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1489,53 +1521,53 @@ pub enum UntagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_body(body: &str) -> UntagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CloudHsmAccessDeniedException" => {
-                        UntagResourceError::CloudHsmAccessDenied(String::from(error_message))
-                    }
-                    "CloudHsmInternalFailureException" => {
-                        UntagResourceError::CloudHsmInternalFailure(String::from(error_message))
-                    }
-                    "CloudHsmInvalidRequestException" => {
-                        UntagResourceError::CloudHsmInvalidRequest(String::from(error_message))
-                    }
-                    "CloudHsmResourceNotFoundException" => {
-                        UntagResourceError::CloudHsmResourceNotFound(String::from(error_message))
-                    }
-                    "CloudHsmServiceException" => {
-                        UntagResourceError::CloudHsmService(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UntagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => UntagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "CloudHsmAccessDeniedException" => {
+                    return UntagResourceError::CloudHsmAccessDenied(String::from(error_message))
                 }
+                "CloudHsmInternalFailureException" => {
+                    return UntagResourceError::CloudHsmInternalFailure(String::from(error_message))
+                }
+                "CloudHsmInvalidRequestException" => {
+                    return UntagResourceError::CloudHsmInvalidRequest(String::from(error_message))
+                }
+                "CloudHsmResourceNotFoundException" => {
+                    return UntagResourceError::CloudHsmResourceNotFound(String::from(error_message))
+                }
+                "CloudHsmServiceException" => {
+                    return UntagResourceError::CloudHsmService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UntagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UntagResourceError::Unknown(String::from(body)),
         }
+        return UntagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UntagResourceError {
     fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::Unknown(err.description().to_string())
+        UntagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UntagResourceError {
@@ -1569,7 +1601,8 @@ impl Error for UntagResourceError {
             UntagResourceError::Validation(ref cause) => cause,
             UntagResourceError::Credentials(ref err) => err.description(),
             UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::Unknown(ref cause) => cause,
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1695,14 +1728,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
 
                     serde_json::from_str::<CopyBackupToRegionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CopyBackupToRegionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CopyBackupToRegionError::from_response(response))),
+                )
             }
         })
     }
@@ -1730,14 +1765,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
 
                     serde_json::from_str::<CreateClusterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateClusterError::from_response(response))),
+                )
             }
         })
     }
@@ -1765,14 +1802,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
 
                     serde_json::from_str::<CreateHsmResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateHsmError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateHsmError::from_response(response))),
+                )
             }
         })
     }
@@ -1800,14 +1839,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
 
                     serde_json::from_str::<DeleteClusterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteClusterError::from_response(response))),
+                )
             }
         })
     }
@@ -1835,14 +1876,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
 
                     serde_json::from_str::<DeleteHsmResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteHsmError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteHsmError::from_response(response))),
+                )
             }
         })
     }
@@ -1870,14 +1913,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
 
                     serde_json::from_str::<DescribeBackupsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeBackupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeBackupsError::from_response(response))),
+                )
             }
         })
     }
@@ -1905,14 +1950,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
 
                     serde_json::from_str::<DescribeClustersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClustersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeClustersError::from_response(response))),
+                )
             }
         })
     }
@@ -1940,14 +1987,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
 
                     serde_json::from_str::<InitializeClusterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(InitializeClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(InitializeClusterError::from_response(response))),
+                )
             }
         })
     }
@@ -1972,14 +2021,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
 
                     serde_json::from_str::<ListTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -2007,14 +2058,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
 
                     serde_json::from_str::<TagResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -2042,14 +2095,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
 
                     serde_json::from_str::<UntagResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
             }
         })
     }

@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -2345,22 +2345,28 @@ pub enum AddPermissionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddPermissionError {
-    pub fn from_body(body: &str) -> AddPermissionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "OverLimit" => AddPermissionError::OverLimit(String::from(parsed_error.message)),
-                _ => AddPermissionError::Unknown(String::from(body)),
-            },
-            Err(_) => AddPermissionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> AddPermissionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "OverLimit" => {
+                        return AddPermissionError::OverLimit(String::from(parsed_error.message))
+                    }
+                    _ => {}
+                }
+            }
         }
+        AddPermissionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2375,7 +2381,7 @@ impl AddPermissionError {
 impl From<XmlParseError> for AddPermissionError {
     fn from(err: XmlParseError) -> AddPermissionError {
         let XmlParseError(message) = err;
-        AddPermissionError::Unknown(message.to_string())
+        AddPermissionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AddPermissionError {
@@ -2405,7 +2411,8 @@ impl Error for AddPermissionError {
             AddPermissionError::Validation(ref cause) => cause,
             AddPermissionError::Credentials(ref err) => err.description(),
             AddPermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddPermissionError::Unknown(ref cause) => cause,
+            AddPermissionError::ParseError(ref cause) => cause,
+            AddPermissionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2422,29 +2429,35 @@ pub enum ChangeMessageVisibilityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ChangeMessageVisibilityError {
-    pub fn from_body(body: &str) -> ChangeMessageVisibilityError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AWS.SimpleQueueService.MessageNotInflight" => {
-                    ChangeMessageVisibilityError::MessageNotInflight(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ChangeMessageVisibilityError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AWS.SimpleQueueService.MessageNotInflight" => {
+                        return ChangeMessageVisibilityError::MessageNotInflight(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ReceiptHandleIsInvalid" => {
+                        return ChangeMessageVisibilityError::ReceiptHandleIsInvalid(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ReceiptHandleIsInvalid" => ChangeMessageVisibilityError::ReceiptHandleIsInvalid(
-                    String::from(parsed_error.message),
-                ),
-                _ => ChangeMessageVisibilityError::Unknown(String::from(body)),
-            },
-            Err(_) => ChangeMessageVisibilityError::Unknown(body.to_string()),
+            }
         }
+        ChangeMessageVisibilityError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2459,7 +2472,7 @@ impl ChangeMessageVisibilityError {
 impl From<XmlParseError> for ChangeMessageVisibilityError {
     fn from(err: XmlParseError) -> ChangeMessageVisibilityError {
         let XmlParseError(message) = err;
-        ChangeMessageVisibilityError::Unknown(message.to_string())
+        ChangeMessageVisibilityError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ChangeMessageVisibilityError {
@@ -2492,7 +2505,8 @@ impl Error for ChangeMessageVisibilityError {
             ChangeMessageVisibilityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ChangeMessageVisibilityError::Unknown(ref cause) => cause,
+            ChangeMessageVisibilityError::ParseError(ref cause) => cause,
+            ChangeMessageVisibilityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2513,41 +2527,45 @@ pub enum ChangeMessageVisibilityBatchError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ChangeMessageVisibilityBatchError {
-    pub fn from_body(body: &str) -> ChangeMessageVisibilityBatchError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
-                    ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ChangeMessageVisibilityBatchError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
+                        return ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "AWS.SimpleQueueService.EmptyBatchRequest" => {
+                        return ChangeMessageVisibilityBatchError::EmptyBatchRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AWS.SimpleQueueService.InvalidBatchEntryId" => {
+                        return ChangeMessageVisibilityBatchError::InvalidBatchEntryId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
+                        return ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "AWS.SimpleQueueService.EmptyBatchRequest" => {
-                    ChangeMessageVisibilityBatchError::EmptyBatchRequest(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "AWS.SimpleQueueService.InvalidBatchEntryId" => {
-                    ChangeMessageVisibilityBatchError::InvalidBatchEntryId(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
-                    ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => ChangeMessageVisibilityBatchError::Unknown(String::from(body)),
-            },
-            Err(_) => ChangeMessageVisibilityBatchError::Unknown(body.to_string()),
+            }
         }
+        ChangeMessageVisibilityBatchError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2562,7 +2580,7 @@ impl ChangeMessageVisibilityBatchError {
 impl From<XmlParseError> for ChangeMessageVisibilityBatchError {
     fn from(err: XmlParseError) -> ChangeMessageVisibilityBatchError {
         let XmlParseError(message) = err;
-        ChangeMessageVisibilityBatchError::Unknown(message.to_string())
+        ChangeMessageVisibilityBatchError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ChangeMessageVisibilityBatchError {
@@ -2597,7 +2615,8 @@ impl Error for ChangeMessageVisibilityBatchError {
             ChangeMessageVisibilityBatchError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ChangeMessageVisibilityBatchError::Unknown(ref cause) => cause,
+            ChangeMessageVisibilityBatchError::ParseError(ref cause) => cause,
+            ChangeMessageVisibilityBatchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2614,27 +2633,33 @@ pub enum CreateQueueError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateQueueError {
-    pub fn from_body(body: &str) -> CreateQueueError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AWS.SimpleQueueService.QueueDeletedRecently" => {
-                    CreateQueueError::QueueDeletedRecently(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateQueueError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AWS.SimpleQueueService.QueueDeletedRecently" => {
+                        return CreateQueueError::QueueDeletedRecently(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "QueueAlreadyExists" => {
+                        return CreateQueueError::QueueNameExists(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "QueueAlreadyExists" => {
-                    CreateQueueError::QueueNameExists(String::from(parsed_error.message))
-                }
-                _ => CreateQueueError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateQueueError::Unknown(body.to_string()),
+            }
         }
+        CreateQueueError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2649,7 +2674,7 @@ impl CreateQueueError {
 impl From<XmlParseError> for CreateQueueError {
     fn from(err: XmlParseError) -> CreateQueueError {
         let XmlParseError(message) = err;
-        CreateQueueError::Unknown(message.to_string())
+        CreateQueueError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateQueueError {
@@ -2680,7 +2705,8 @@ impl Error for CreateQueueError {
             CreateQueueError::Validation(ref cause) => cause,
             CreateQueueError::Credentials(ref err) => err.description(),
             CreateQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateQueueError::Unknown(ref cause) => cause,
+            CreateQueueError::ParseError(ref cause) => cause,
+            CreateQueueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2697,27 +2723,35 @@ pub enum DeleteMessageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteMessageError {
-    pub fn from_body(body: &str) -> DeleteMessageError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidIdFormat" => {
-                    DeleteMessageError::InvalidIdFormat(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteMessageError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidIdFormat" => {
+                        return DeleteMessageError::InvalidIdFormat(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ReceiptHandleIsInvalid" => {
+                        return DeleteMessageError::ReceiptHandleIsInvalid(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ReceiptHandleIsInvalid" => {
-                    DeleteMessageError::ReceiptHandleIsInvalid(String::from(parsed_error.message))
-                }
-                _ => DeleteMessageError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteMessageError::Unknown(body.to_string()),
+            }
         }
+        DeleteMessageError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2732,7 +2766,7 @@ impl DeleteMessageError {
 impl From<XmlParseError> for DeleteMessageError {
     fn from(err: XmlParseError) -> DeleteMessageError {
         let XmlParseError(message) = err;
-        DeleteMessageError::Unknown(message.to_string())
+        DeleteMessageError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteMessageError {
@@ -2763,7 +2797,8 @@ impl Error for DeleteMessageError {
             DeleteMessageError::Validation(ref cause) => cause,
             DeleteMessageError::Credentials(ref err) => err.description(),
             DeleteMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteMessageError::Unknown(ref cause) => cause,
+            DeleteMessageError::ParseError(ref cause) => cause,
+            DeleteMessageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2784,37 +2819,45 @@ pub enum DeleteMessageBatchError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteMessageBatchError {
-    pub fn from_body(body: &str) -> DeleteMessageBatchError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
-                    DeleteMessageBatchError::BatchEntryIdsNotDistinct(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteMessageBatchError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
+                        return DeleteMessageBatchError::BatchEntryIdsNotDistinct(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AWS.SimpleQueueService.EmptyBatchRequest" => {
+                        return DeleteMessageBatchError::EmptyBatchRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AWS.SimpleQueueService.InvalidBatchEntryId" => {
+                        return DeleteMessageBatchError::InvalidBatchEntryId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
+                        return DeleteMessageBatchError::TooManyEntriesInBatchRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "AWS.SimpleQueueService.EmptyBatchRequest" => {
-                    DeleteMessageBatchError::EmptyBatchRequest(String::from(parsed_error.message))
-                }
-                "AWS.SimpleQueueService.InvalidBatchEntryId" => {
-                    DeleteMessageBatchError::InvalidBatchEntryId(String::from(parsed_error.message))
-                }
-                "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
-                    DeleteMessageBatchError::TooManyEntriesInBatchRequest(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DeleteMessageBatchError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteMessageBatchError::Unknown(body.to_string()),
+            }
         }
+        DeleteMessageBatchError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2829,7 +2872,7 @@ impl DeleteMessageBatchError {
 impl From<XmlParseError> for DeleteMessageBatchError {
     fn from(err: XmlParseError) -> DeleteMessageBatchError {
         let XmlParseError(message) = err;
-        DeleteMessageBatchError::Unknown(message.to_string())
+        DeleteMessageBatchError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteMessageBatchError {
@@ -2864,7 +2907,8 @@ impl Error for DeleteMessageBatchError {
             DeleteMessageBatchError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteMessageBatchError::Unknown(ref cause) => cause,
+            DeleteMessageBatchError::ParseError(ref cause) => cause,
+            DeleteMessageBatchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2877,21 +2921,25 @@ pub enum DeleteQueueError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteQueueError {
-    pub fn from_body(body: &str) -> DeleteQueueError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteQueueError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteQueueError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteQueueError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteQueueError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2906,7 +2954,7 @@ impl DeleteQueueError {
 impl From<XmlParseError> for DeleteQueueError {
     fn from(err: XmlParseError) -> DeleteQueueError {
         let XmlParseError(message) = err;
-        DeleteQueueError::Unknown(message.to_string())
+        DeleteQueueError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteQueueError {
@@ -2935,7 +2983,8 @@ impl Error for DeleteQueueError {
             DeleteQueueError::Validation(ref cause) => cause,
             DeleteQueueError::Credentials(ref err) => err.description(),
             DeleteQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteQueueError::Unknown(ref cause) => cause,
+            DeleteQueueError::ParseError(ref cause) => cause,
+            DeleteQueueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2950,24 +2999,30 @@ pub enum GetQueueAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetQueueAttributesError {
-    pub fn from_body(body: &str) -> GetQueueAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidAttributeName" => GetQueueAttributesError::InvalidAttributeName(
-                    String::from(parsed_error.message),
-                ),
-                _ => GetQueueAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => GetQueueAttributesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetQueueAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidAttributeName" => {
+                        return GetQueueAttributesError::InvalidAttributeName(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        GetQueueAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2982,7 +3037,7 @@ impl GetQueueAttributesError {
 impl From<XmlParseError> for GetQueueAttributesError {
     fn from(err: XmlParseError) -> GetQueueAttributesError {
         let XmlParseError(message) = err;
-        GetQueueAttributesError::Unknown(message.to_string())
+        GetQueueAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetQueueAttributesError {
@@ -3014,7 +3069,8 @@ impl Error for GetQueueAttributesError {
             GetQueueAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetQueueAttributesError::Unknown(ref cause) => cause,
+            GetQueueAttributesError::ParseError(ref cause) => cause,
+            GetQueueAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3029,24 +3085,30 @@ pub enum GetQueueUrlError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetQueueUrlError {
-    pub fn from_body(body: &str) -> GetQueueUrlError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AWS.SimpleQueueService.NonExistentQueue" => {
-                    GetQueueUrlError::QueueDoesNotExist(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetQueueUrlError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AWS.SimpleQueueService.NonExistentQueue" => {
+                        return GetQueueUrlError::QueueDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => GetQueueUrlError::Unknown(String::from(body)),
-            },
-            Err(_) => GetQueueUrlError::Unknown(body.to_string()),
+            }
         }
+        GetQueueUrlError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3061,7 +3123,7 @@ impl GetQueueUrlError {
 impl From<XmlParseError> for GetQueueUrlError {
     fn from(err: XmlParseError) -> GetQueueUrlError {
         let XmlParseError(message) = err;
-        GetQueueUrlError::Unknown(message.to_string())
+        GetQueueUrlError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetQueueUrlError {
@@ -3091,7 +3153,8 @@ impl Error for GetQueueUrlError {
             GetQueueUrlError::Validation(ref cause) => cause,
             GetQueueUrlError::Credentials(ref err) => err.description(),
             GetQueueUrlError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetQueueUrlError::Unknown(ref cause) => cause,
+            GetQueueUrlError::ParseError(ref cause) => cause,
+            GetQueueUrlError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3106,26 +3169,30 @@ pub enum ListDeadLetterSourceQueuesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeadLetterSourceQueuesError {
-    pub fn from_body(body: &str) -> ListDeadLetterSourceQueuesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AWS.SimpleQueueService.NonExistentQueue" => {
-                    ListDeadLetterSourceQueuesError::QueueDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ListDeadLetterSourceQueuesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AWS.SimpleQueueService.NonExistentQueue" => {
+                        return ListDeadLetterSourceQueuesError::QueueDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ListDeadLetterSourceQueuesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListDeadLetterSourceQueuesError::Unknown(body.to_string()),
+            }
         }
+        ListDeadLetterSourceQueuesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3140,7 +3207,7 @@ impl ListDeadLetterSourceQueuesError {
 impl From<XmlParseError> for ListDeadLetterSourceQueuesError {
     fn from(err: XmlParseError) -> ListDeadLetterSourceQueuesError {
         let XmlParseError(message) = err;
-        ListDeadLetterSourceQueuesError::Unknown(message.to_string())
+        ListDeadLetterSourceQueuesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListDeadLetterSourceQueuesError {
@@ -3172,7 +3239,8 @@ impl Error for ListDeadLetterSourceQueuesError {
             ListDeadLetterSourceQueuesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListDeadLetterSourceQueuesError::Unknown(ref cause) => cause,
+            ListDeadLetterSourceQueuesError::ParseError(ref cause) => cause,
+            ListDeadLetterSourceQueuesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3185,21 +3253,25 @@ pub enum ListQueueTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListQueueTagsError {
-    pub fn from_body(body: &str) -> ListQueueTagsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListQueueTagsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListQueueTagsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListQueueTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListQueueTagsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3214,7 +3286,7 @@ impl ListQueueTagsError {
 impl From<XmlParseError> for ListQueueTagsError {
     fn from(err: XmlParseError) -> ListQueueTagsError {
         let XmlParseError(message) = err;
-        ListQueueTagsError::Unknown(message.to_string())
+        ListQueueTagsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListQueueTagsError {
@@ -3243,7 +3315,8 @@ impl Error for ListQueueTagsError {
             ListQueueTagsError::Validation(ref cause) => cause,
             ListQueueTagsError::Credentials(ref err) => err.description(),
             ListQueueTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListQueueTagsError::Unknown(ref cause) => cause,
+            ListQueueTagsError::ParseError(ref cause) => cause,
+            ListQueueTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3256,21 +3329,25 @@ pub enum ListQueuesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListQueuesError {
-    pub fn from_body(body: &str) -> ListQueuesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListQueuesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListQueuesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListQueuesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListQueuesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3285,7 +3362,7 @@ impl ListQueuesError {
 impl From<XmlParseError> for ListQueuesError {
     fn from(err: XmlParseError) -> ListQueuesError {
         let XmlParseError(message) = err;
-        ListQueuesError::Unknown(message.to_string())
+        ListQueuesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListQueuesError {
@@ -3314,7 +3391,8 @@ impl Error for ListQueuesError {
             ListQueuesError::Validation(ref cause) => cause,
             ListQueuesError::Credentials(ref err) => err.description(),
             ListQueuesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListQueuesError::Unknown(ref cause) => cause,
+            ListQueuesError::ParseError(ref cause) => cause,
+            ListQueuesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3331,27 +3409,35 @@ pub enum PurgeQueueError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PurgeQueueError {
-    pub fn from_body(body: &str) -> PurgeQueueError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AWS.SimpleQueueService.PurgeQueueInProgress" => {
-                    PurgeQueueError::PurgeQueueInProgress(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> PurgeQueueError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AWS.SimpleQueueService.PurgeQueueInProgress" => {
+                        return PurgeQueueError::PurgeQueueInProgress(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AWS.SimpleQueueService.NonExistentQueue" => {
+                        return PurgeQueueError::QueueDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "AWS.SimpleQueueService.NonExistentQueue" => {
-                    PurgeQueueError::QueueDoesNotExist(String::from(parsed_error.message))
-                }
-                _ => PurgeQueueError::Unknown(String::from(body)),
-            },
-            Err(_) => PurgeQueueError::Unknown(body.to_string()),
+            }
         }
+        PurgeQueueError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3366,7 +3452,7 @@ impl PurgeQueueError {
 impl From<XmlParseError> for PurgeQueueError {
     fn from(err: XmlParseError) -> PurgeQueueError {
         let XmlParseError(message) = err;
-        PurgeQueueError::Unknown(message.to_string())
+        PurgeQueueError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PurgeQueueError {
@@ -3397,7 +3483,8 @@ impl Error for PurgeQueueError {
             PurgeQueueError::Validation(ref cause) => cause,
             PurgeQueueError::Credentials(ref err) => err.description(),
             PurgeQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PurgeQueueError::Unknown(ref cause) => cause,
+            PurgeQueueError::ParseError(ref cause) => cause,
+            PurgeQueueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3412,22 +3499,28 @@ pub enum ReceiveMessageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ReceiveMessageError {
-    pub fn from_body(body: &str) -> ReceiveMessageError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "OverLimit" => ReceiveMessageError::OverLimit(String::from(parsed_error.message)),
-                _ => ReceiveMessageError::Unknown(String::from(body)),
-            },
-            Err(_) => ReceiveMessageError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ReceiveMessageError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "OverLimit" => {
+                        return ReceiveMessageError::OverLimit(String::from(parsed_error.message))
+                    }
+                    _ => {}
+                }
+            }
         }
+        ReceiveMessageError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3442,7 +3535,7 @@ impl ReceiveMessageError {
 impl From<XmlParseError> for ReceiveMessageError {
     fn from(err: XmlParseError) -> ReceiveMessageError {
         let XmlParseError(message) = err;
-        ReceiveMessageError::Unknown(message.to_string())
+        ReceiveMessageError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ReceiveMessageError {
@@ -3472,7 +3565,8 @@ impl Error for ReceiveMessageError {
             ReceiveMessageError::Validation(ref cause) => cause,
             ReceiveMessageError::Credentials(ref err) => err.description(),
             ReceiveMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ReceiveMessageError::Unknown(ref cause) => cause,
+            ReceiveMessageError::ParseError(ref cause) => cause,
+            ReceiveMessageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3485,21 +3579,25 @@ pub enum RemovePermissionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RemovePermissionError {
-    pub fn from_body(body: &str) -> RemovePermissionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => RemovePermissionError::Unknown(String::from(body)),
-            },
-            Err(_) => RemovePermissionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> RemovePermissionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        RemovePermissionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3514,7 +3612,7 @@ impl RemovePermissionError {
 impl From<XmlParseError> for RemovePermissionError {
     fn from(err: XmlParseError) -> RemovePermissionError {
         let XmlParseError(message) = err;
-        RemovePermissionError::Unknown(message.to_string())
+        RemovePermissionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RemovePermissionError {
@@ -3543,7 +3641,8 @@ impl Error for RemovePermissionError {
             RemovePermissionError::Validation(ref cause) => cause,
             RemovePermissionError::Credentials(ref err) => err.description(),
             RemovePermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RemovePermissionError::Unknown(ref cause) => cause,
+            RemovePermissionError::ParseError(ref cause) => cause,
+            RemovePermissionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3560,27 +3659,35 @@ pub enum SendMessageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SendMessageError {
-    pub fn from_body(body: &str) -> SendMessageError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidMessageContents" => {
-                    SendMessageError::InvalidMessageContents(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> SendMessageError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidMessageContents" => {
+                        return SendMessageError::InvalidMessageContents(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AWS.SimpleQueueService.UnsupportedOperation" => {
+                        return SendMessageError::UnsupportedOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "AWS.SimpleQueueService.UnsupportedOperation" => {
-                    SendMessageError::UnsupportedOperation(String::from(parsed_error.message))
-                }
-                _ => SendMessageError::Unknown(String::from(body)),
-            },
-            Err(_) => SendMessageError::Unknown(body.to_string()),
+            }
         }
+        SendMessageError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3595,7 +3702,7 @@ impl SendMessageError {
 impl From<XmlParseError> for SendMessageError {
     fn from(err: XmlParseError) -> SendMessageError {
         let XmlParseError(message) = err;
-        SendMessageError::Unknown(message.to_string())
+        SendMessageError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SendMessageError {
@@ -3626,7 +3733,8 @@ impl Error for SendMessageError {
             SendMessageError::Validation(ref cause) => cause,
             SendMessageError::Credentials(ref err) => err.description(),
             SendMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SendMessageError::Unknown(ref cause) => cause,
+            SendMessageError::ParseError(ref cause) => cause,
+            SendMessageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3651,43 +3759,55 @@ pub enum SendMessageBatchError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SendMessageBatchError {
-    pub fn from_body(body: &str) -> SendMessageBatchError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
-                    SendMessageBatchError::BatchEntryIdsNotDistinct(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> SendMessageBatchError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
+                        return SendMessageBatchError::BatchEntryIdsNotDistinct(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AWS.SimpleQueueService.BatchRequestTooLong" => {
+                        return SendMessageBatchError::BatchRequestTooLong(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AWS.SimpleQueueService.EmptyBatchRequest" => {
+                        return SendMessageBatchError::EmptyBatchRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AWS.SimpleQueueService.InvalidBatchEntryId" => {
+                        return SendMessageBatchError::InvalidBatchEntryId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
+                        return SendMessageBatchError::TooManyEntriesInBatchRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AWS.SimpleQueueService.UnsupportedOperation" => {
+                        return SendMessageBatchError::UnsupportedOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "AWS.SimpleQueueService.BatchRequestTooLong" => {
-                    SendMessageBatchError::BatchRequestTooLong(String::from(parsed_error.message))
-                }
-                "AWS.SimpleQueueService.EmptyBatchRequest" => {
-                    SendMessageBatchError::EmptyBatchRequest(String::from(parsed_error.message))
-                }
-                "AWS.SimpleQueueService.InvalidBatchEntryId" => {
-                    SendMessageBatchError::InvalidBatchEntryId(String::from(parsed_error.message))
-                }
-                "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
-                    SendMessageBatchError::TooManyEntriesInBatchRequest(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "AWS.SimpleQueueService.UnsupportedOperation" => {
-                    SendMessageBatchError::UnsupportedOperation(String::from(parsed_error.message))
-                }
-                _ => SendMessageBatchError::Unknown(String::from(body)),
-            },
-            Err(_) => SendMessageBatchError::Unknown(body.to_string()),
+            }
         }
+        SendMessageBatchError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3702,7 +3822,7 @@ impl SendMessageBatchError {
 impl From<XmlParseError> for SendMessageBatchError {
     fn from(err: XmlParseError) -> SendMessageBatchError {
         let XmlParseError(message) = err;
-        SendMessageBatchError::Unknown(message.to_string())
+        SendMessageBatchError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SendMessageBatchError {
@@ -3737,7 +3857,8 @@ impl Error for SendMessageBatchError {
             SendMessageBatchError::Validation(ref cause) => cause,
             SendMessageBatchError::Credentials(ref err) => err.description(),
             SendMessageBatchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SendMessageBatchError::Unknown(ref cause) => cause,
+            SendMessageBatchError::ParseError(ref cause) => cause,
+            SendMessageBatchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3752,24 +3873,30 @@ pub enum SetQueueAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetQueueAttributesError {
-    pub fn from_body(body: &str) -> SetQueueAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidAttributeName" => SetQueueAttributesError::InvalidAttributeName(
-                    String::from(parsed_error.message),
-                ),
-                _ => SetQueueAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => SetQueueAttributesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SetQueueAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidAttributeName" => {
+                        return SetQueueAttributesError::InvalidAttributeName(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        SetQueueAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3784,7 +3911,7 @@ impl SetQueueAttributesError {
 impl From<XmlParseError> for SetQueueAttributesError {
     fn from(err: XmlParseError) -> SetQueueAttributesError {
         let XmlParseError(message) = err;
-        SetQueueAttributesError::Unknown(message.to_string())
+        SetQueueAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetQueueAttributesError {
@@ -3816,7 +3943,8 @@ impl Error for SetQueueAttributesError {
             SetQueueAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetQueueAttributesError::Unknown(ref cause) => cause,
+            SetQueueAttributesError::ParseError(ref cause) => cause,
+            SetQueueAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3829,21 +3957,25 @@ pub enum TagQueueError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TagQueueError {
-    pub fn from_body(body: &str) -> TagQueueError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => TagQueueError::Unknown(String::from(body)),
-            },
-            Err(_) => TagQueueError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> TagQueueError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        TagQueueError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3858,7 +3990,7 @@ impl TagQueueError {
 impl From<XmlParseError> for TagQueueError {
     fn from(err: XmlParseError) -> TagQueueError {
         let XmlParseError(message) = err;
-        TagQueueError::Unknown(message.to_string())
+        TagQueueError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for TagQueueError {
@@ -3887,7 +4019,8 @@ impl Error for TagQueueError {
             TagQueueError::Validation(ref cause) => cause,
             TagQueueError::Credentials(ref err) => err.description(),
             TagQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagQueueError::Unknown(ref cause) => cause,
+            TagQueueError::ParseError(ref cause) => cause,
+            TagQueueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3900,21 +4033,25 @@ pub enum UntagQueueError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UntagQueueError {
-    pub fn from_body(body: &str) -> UntagQueueError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => UntagQueueError::Unknown(String::from(body)),
-            },
-            Err(_) => UntagQueueError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UntagQueueError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        UntagQueueError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3929,7 +4066,7 @@ impl UntagQueueError {
 impl From<XmlParseError> for UntagQueueError {
     fn from(err: XmlParseError) -> UntagQueueError {
         let XmlParseError(message) = err;
-        UntagQueueError::Unknown(message.to_string())
+        UntagQueueError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UntagQueueError {
@@ -3958,7 +4095,8 @@ impl Error for UntagQueueError {
             UntagQueueError::Validation(ref cause) => cause,
             UntagQueueError::Credentials(ref err) => err.description(),
             UntagQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagQueueError::Unknown(ref cause) => cause,
+            UntagQueueError::ParseError(ref cause) => cause,
+            UntagQueueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4117,11 +4255,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddPermissionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AddPermissionError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -4147,9 +4286,7 @@ impl Sqs for SqsClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ChangeMessageVisibilityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ChangeMessageVisibilityError::from_response(response))
                 }));
             }
 
@@ -4176,9 +4313,7 @@ impl Sqs for SqsClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ChangeMessageVisibilityBatchError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ChangeMessageVisibilityBatchError::from_response(response))
                 }));
             }
 
@@ -4227,11 +4362,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateQueueError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateQueueError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -4276,11 +4412,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteMessageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteMessageError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -4305,11 +4442,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteMessageBatchError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteMessageBatchError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -4354,11 +4492,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteQueueError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteQueueError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -4383,11 +4522,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetQueueAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetQueueAttributesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -4435,11 +4575,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetQueueUrlError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetQueueUrlError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -4488,9 +4629,7 @@ impl Sqs for SqsClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDeadLetterSourceQueuesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListDeadLetterSourceQueuesError::from_response(response))
                 }));
             }
 
@@ -4539,11 +4678,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListQueueTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListQueueTagsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -4591,11 +4731,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListQueuesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListQueuesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -4640,11 +4781,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PurgeQueueError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PurgeQueueError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -4669,11 +4811,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ReceiveMessageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ReceiveMessageError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -4721,11 +4864,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemovePermissionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RemovePermissionError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -4750,11 +4894,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SendMessageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SendMessageError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -4802,11 +4947,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SendMessageBatchError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SendMessageBatchError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -4854,11 +5000,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetQueueAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SetQueueAttributesError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -4880,11 +5027,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagQueueError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagQueueError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -4906,11 +5054,12 @@ impl Sqs for SqsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagQueueError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagQueueError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))

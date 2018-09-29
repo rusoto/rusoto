@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateEnvironmentEC2Request {
@@ -320,59 +320,61 @@ pub enum CreateEnvironmentEC2Error {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateEnvironmentEC2Error {
-    pub fn from_body(body: &str) -> CreateEnvironmentEC2Error {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateEnvironmentEC2Error {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateEnvironmentEC2Error::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        CreateEnvironmentEC2Error::Conflict(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        CreateEnvironmentEC2Error::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        CreateEnvironmentEC2Error::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateEnvironmentEC2Error::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        CreateEnvironmentEC2Error::NotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        CreateEnvironmentEC2Error::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateEnvironmentEC2Error::Validation(error_message.to_string())
-                    }
-                    _ => CreateEnvironmentEC2Error::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateEnvironmentEC2Error::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return CreateEnvironmentEC2Error::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return CreateEnvironmentEC2Error::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return CreateEnvironmentEC2Error::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return CreateEnvironmentEC2Error::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreateEnvironmentEC2Error::NotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return CreateEnvironmentEC2Error::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateEnvironmentEC2Error::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateEnvironmentEC2Error::Unknown(String::from(body)),
         }
+        return CreateEnvironmentEC2Error::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateEnvironmentEC2Error {
     fn from(err: serde_json::error::Error) -> CreateEnvironmentEC2Error {
-        CreateEnvironmentEC2Error::Unknown(err.description().to_string())
+        CreateEnvironmentEC2Error::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateEnvironmentEC2Error {
@@ -410,7 +412,8 @@ impl Error for CreateEnvironmentEC2Error {
             CreateEnvironmentEC2Error::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateEnvironmentEC2Error::Unknown(ref cause) => cause,
+            CreateEnvironmentEC2Error::ParseError(ref cause) => cause,
+            CreateEnvironmentEC2Error::Unknown(_) => "unknown error",
         }
     }
 }
@@ -437,63 +440,65 @@ pub enum CreateEnvironmentMembershipError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateEnvironmentMembershipError {
-    pub fn from_body(body: &str) -> CreateEnvironmentMembershipError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateEnvironmentMembershipError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateEnvironmentMembershipError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        CreateEnvironmentMembershipError::Conflict(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        CreateEnvironmentMembershipError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        CreateEnvironmentMembershipError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        CreateEnvironmentMembershipError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        CreateEnvironmentMembershipError::NotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        CreateEnvironmentMembershipError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateEnvironmentMembershipError::Validation(error_message.to_string())
-                    }
-                    _ => CreateEnvironmentMembershipError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateEnvironmentMembershipError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return CreateEnvironmentMembershipError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return CreateEnvironmentMembershipError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return CreateEnvironmentMembershipError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return CreateEnvironmentMembershipError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return CreateEnvironmentMembershipError::NotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return CreateEnvironmentMembershipError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateEnvironmentMembershipError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateEnvironmentMembershipError::Unknown(String::from(body)),
         }
+        return CreateEnvironmentMembershipError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateEnvironmentMembershipError {
     fn from(err: serde_json::error::Error) -> CreateEnvironmentMembershipError {
-        CreateEnvironmentMembershipError::Unknown(err.description().to_string())
+        CreateEnvironmentMembershipError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateEnvironmentMembershipError {
@@ -531,7 +536,8 @@ impl Error for CreateEnvironmentMembershipError {
             CreateEnvironmentMembershipError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateEnvironmentMembershipError::Unknown(ref cause) => cause,
+            CreateEnvironmentMembershipError::ParseError(ref cause) => cause,
+            CreateEnvironmentMembershipError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -558,59 +564,59 @@ pub enum DeleteEnvironmentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEnvironmentError {
-    pub fn from_body(body: &str) -> DeleteEnvironmentError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteEnvironmentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteEnvironmentError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        DeleteEnvironmentError::Conflict(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        DeleteEnvironmentError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        DeleteEnvironmentError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteEnvironmentError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteEnvironmentError::NotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        DeleteEnvironmentError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteEnvironmentError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteEnvironmentError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteEnvironmentError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return DeleteEnvironmentError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return DeleteEnvironmentError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return DeleteEnvironmentError::InternalServerError(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteEnvironmentError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteEnvironmentError::NotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return DeleteEnvironmentError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteEnvironmentError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteEnvironmentError::Unknown(String::from(body)),
         }
+        return DeleteEnvironmentError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteEnvironmentError {
     fn from(err: serde_json::error::Error) -> DeleteEnvironmentError {
-        DeleteEnvironmentError::Unknown(err.description().to_string())
+        DeleteEnvironmentError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteEnvironmentError {
@@ -648,7 +654,8 @@ impl Error for DeleteEnvironmentError {
             DeleteEnvironmentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteEnvironmentError::Unknown(ref cause) => cause,
+            DeleteEnvironmentError::ParseError(ref cause) => cause,
+            DeleteEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -675,63 +682,65 @@ pub enum DeleteEnvironmentMembershipError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEnvironmentMembershipError {
-    pub fn from_body(body: &str) -> DeleteEnvironmentMembershipError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteEnvironmentMembershipError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteEnvironmentMembershipError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        DeleteEnvironmentMembershipError::Conflict(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        DeleteEnvironmentMembershipError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        DeleteEnvironmentMembershipError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        DeleteEnvironmentMembershipError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteEnvironmentMembershipError::NotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        DeleteEnvironmentMembershipError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteEnvironmentMembershipError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteEnvironmentMembershipError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteEnvironmentMembershipError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return DeleteEnvironmentMembershipError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return DeleteEnvironmentMembershipError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return DeleteEnvironmentMembershipError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return DeleteEnvironmentMembershipError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DeleteEnvironmentMembershipError::NotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return DeleteEnvironmentMembershipError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteEnvironmentMembershipError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteEnvironmentMembershipError::Unknown(String::from(body)),
         }
+        return DeleteEnvironmentMembershipError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteEnvironmentMembershipError {
     fn from(err: serde_json::error::Error) -> DeleteEnvironmentMembershipError {
-        DeleteEnvironmentMembershipError::Unknown(err.description().to_string())
+        DeleteEnvironmentMembershipError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteEnvironmentMembershipError {
@@ -769,7 +778,8 @@ impl Error for DeleteEnvironmentMembershipError {
             DeleteEnvironmentMembershipError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteEnvironmentMembershipError::Unknown(ref cause) => cause,
+            DeleteEnvironmentMembershipError::ParseError(ref cause) => cause,
+            DeleteEnvironmentMembershipError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -796,63 +806,75 @@ pub enum DescribeEnvironmentMembershipsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentMembershipsError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentMembershipsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentMembershipsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DescribeEnvironmentMembershipsError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        DescribeEnvironmentMembershipsError::Conflict(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        DescribeEnvironmentMembershipsError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        DescribeEnvironmentMembershipsError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => DescribeEnvironmentMembershipsError::LimitExceeded(
-                        String::from(error_message),
-                    ),
-                    "NotFoundException" => {
-                        DescribeEnvironmentMembershipsError::NotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        DescribeEnvironmentMembershipsError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeEnvironmentMembershipsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeEnvironmentMembershipsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DescribeEnvironmentMembershipsError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ConflictException" => {
+                    return DescribeEnvironmentMembershipsError::Conflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return DescribeEnvironmentMembershipsError::Forbidden(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return DescribeEnvironmentMembershipsError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return DescribeEnvironmentMembershipsError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeEnvironmentMembershipsError::NotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return DescribeEnvironmentMembershipsError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeEnvironmentMembershipsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeEnvironmentMembershipsError::Unknown(String::from(body)),
         }
+        return DescribeEnvironmentMembershipsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeEnvironmentMembershipsError {
     fn from(err: serde_json::error::Error) -> DescribeEnvironmentMembershipsError {
-        DescribeEnvironmentMembershipsError::Unknown(err.description().to_string())
+        DescribeEnvironmentMembershipsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeEnvironmentMembershipsError {
@@ -890,7 +912,8 @@ impl Error for DescribeEnvironmentMembershipsError {
             DescribeEnvironmentMembershipsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEnvironmentMembershipsError::Unknown(ref cause) => cause,
+            DescribeEnvironmentMembershipsError::ParseError(ref cause) => cause,
+            DescribeEnvironmentMembershipsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -917,61 +940,65 @@ pub enum DescribeEnvironmentStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentStatusError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DescribeEnvironmentStatusError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        DescribeEnvironmentStatusError::Conflict(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        DescribeEnvironmentStatusError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        DescribeEnvironmentStatusError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        DescribeEnvironmentStatusError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeEnvironmentStatusError::NotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        DescribeEnvironmentStatusError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeEnvironmentStatusError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeEnvironmentStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DescribeEnvironmentStatusError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return DescribeEnvironmentStatusError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return DescribeEnvironmentStatusError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return DescribeEnvironmentStatusError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return DescribeEnvironmentStatusError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeEnvironmentStatusError::NotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return DescribeEnvironmentStatusError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeEnvironmentStatusError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeEnvironmentStatusError::Unknown(String::from(body)),
         }
+        return DescribeEnvironmentStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeEnvironmentStatusError {
     fn from(err: serde_json::error::Error) -> DescribeEnvironmentStatusError {
-        DescribeEnvironmentStatusError::Unknown(err.description().to_string())
+        DescribeEnvironmentStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeEnvironmentStatusError {
@@ -1009,7 +1036,8 @@ impl Error for DescribeEnvironmentStatusError {
             DescribeEnvironmentStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEnvironmentStatusError::Unknown(ref cause) => cause,
+            DescribeEnvironmentStatusError::ParseError(ref cause) => cause,
+            DescribeEnvironmentStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1036,59 +1064,61 @@ pub enum DescribeEnvironmentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentsError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DescribeEnvironmentsError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        DescribeEnvironmentsError::Conflict(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        DescribeEnvironmentsError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        DescribeEnvironmentsError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DescribeEnvironmentsError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeEnvironmentsError::NotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        DescribeEnvironmentsError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeEnvironmentsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeEnvironmentsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DescribeEnvironmentsError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return DescribeEnvironmentsError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return DescribeEnvironmentsError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return DescribeEnvironmentsError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return DescribeEnvironmentsError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeEnvironmentsError::NotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return DescribeEnvironmentsError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeEnvironmentsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeEnvironmentsError::Unknown(String::from(body)),
         }
+        return DescribeEnvironmentsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeEnvironmentsError {
     fn from(err: serde_json::error::Error) -> DescribeEnvironmentsError {
-        DescribeEnvironmentsError::Unknown(err.description().to_string())
+        DescribeEnvironmentsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeEnvironmentsError {
@@ -1126,7 +1156,8 @@ impl Error for DescribeEnvironmentsError {
             DescribeEnvironmentsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEnvironmentsError::Unknown(ref cause) => cause,
+            DescribeEnvironmentsError::ParseError(ref cause) => cause,
+            DescribeEnvironmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1153,59 +1184,59 @@ pub enum ListEnvironmentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListEnvironmentsError {
-    pub fn from_body(body: &str) -> ListEnvironmentsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListEnvironmentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListEnvironmentsError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        ListEnvironmentsError::Conflict(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        ListEnvironmentsError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        ListEnvironmentsError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListEnvironmentsError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        ListEnvironmentsError::NotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        ListEnvironmentsError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListEnvironmentsError::Validation(error_message.to_string())
-                    }
-                    _ => ListEnvironmentsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListEnvironmentsError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return ListEnvironmentsError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return ListEnvironmentsError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return ListEnvironmentsError::InternalServerError(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListEnvironmentsError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return ListEnvironmentsError::NotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return ListEnvironmentsError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListEnvironmentsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListEnvironmentsError::Unknown(String::from(body)),
         }
+        return ListEnvironmentsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListEnvironmentsError {
     fn from(err: serde_json::error::Error) -> ListEnvironmentsError {
-        ListEnvironmentsError::Unknown(err.description().to_string())
+        ListEnvironmentsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListEnvironmentsError {
@@ -1241,7 +1272,8 @@ impl Error for ListEnvironmentsError {
             ListEnvironmentsError::Validation(ref cause) => cause,
             ListEnvironmentsError::Credentials(ref err) => err.description(),
             ListEnvironmentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListEnvironmentsError::Unknown(ref cause) => cause,
+            ListEnvironmentsError::ParseError(ref cause) => cause,
+            ListEnvironmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1268,59 +1300,59 @@ pub enum UpdateEnvironmentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateEnvironmentError {
-    pub fn from_body(body: &str) -> UpdateEnvironmentError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateEnvironmentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateEnvironmentError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        UpdateEnvironmentError::Conflict(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        UpdateEnvironmentError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        UpdateEnvironmentError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateEnvironmentError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateEnvironmentError::NotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        UpdateEnvironmentError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateEnvironmentError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateEnvironmentError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateEnvironmentError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return UpdateEnvironmentError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return UpdateEnvironmentError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return UpdateEnvironmentError::InternalServerError(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateEnvironmentError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateEnvironmentError::NotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return UpdateEnvironmentError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateEnvironmentError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateEnvironmentError::Unknown(String::from(body)),
         }
+        return UpdateEnvironmentError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateEnvironmentError {
     fn from(err: serde_json::error::Error) -> UpdateEnvironmentError {
-        UpdateEnvironmentError::Unknown(err.description().to_string())
+        UpdateEnvironmentError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateEnvironmentError {
@@ -1358,7 +1390,8 @@ impl Error for UpdateEnvironmentError {
             UpdateEnvironmentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateEnvironmentError::Unknown(ref cause) => cause,
+            UpdateEnvironmentError::ParseError(ref cause) => cause,
+            UpdateEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1385,63 +1418,65 @@ pub enum UpdateEnvironmentMembershipError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateEnvironmentMembershipError {
-    pub fn from_body(body: &str) -> UpdateEnvironmentMembershipError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateEnvironmentMembershipError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateEnvironmentMembershipError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        UpdateEnvironmentMembershipError::Conflict(String::from(error_message))
-                    }
-                    "ForbiddenException" => {
-                        UpdateEnvironmentMembershipError::Forbidden(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        UpdateEnvironmentMembershipError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        UpdateEnvironmentMembershipError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateEnvironmentMembershipError::NotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        UpdateEnvironmentMembershipError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateEnvironmentMembershipError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateEnvironmentMembershipError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateEnvironmentMembershipError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return UpdateEnvironmentMembershipError::Conflict(String::from(error_message))
+                }
+                "ForbiddenException" => {
+                    return UpdateEnvironmentMembershipError::Forbidden(String::from(error_message))
+                }
+                "InternalServerErrorException" => {
+                    return UpdateEnvironmentMembershipError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return UpdateEnvironmentMembershipError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return UpdateEnvironmentMembershipError::NotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return UpdateEnvironmentMembershipError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateEnvironmentMembershipError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateEnvironmentMembershipError::Unknown(String::from(body)),
         }
+        return UpdateEnvironmentMembershipError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateEnvironmentMembershipError {
     fn from(err: serde_json::error::Error) -> UpdateEnvironmentMembershipError {
-        UpdateEnvironmentMembershipError::Unknown(err.description().to_string())
+        UpdateEnvironmentMembershipError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateEnvironmentMembershipError {
@@ -1479,7 +1514,8 @@ impl Error for UpdateEnvironmentMembershipError {
             UpdateEnvironmentMembershipError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateEnvironmentMembershipError::Unknown(ref cause) => cause,
+            UpdateEnvironmentMembershipError::ParseError(ref cause) => cause,
+            UpdateEnvironmentMembershipError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1607,14 +1643,15 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<CreateEnvironmentEC2Result>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateEnvironmentEC2Error::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateEnvironmentEC2Error::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1645,13 +1682,12 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<CreateEnvironmentMembershipResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateEnvironmentMembershipError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateEnvironmentMembershipError::from_response(response))
                 }))
             }
         })
@@ -1683,14 +1719,16 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<DeleteEnvironmentResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteEnvironmentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteEnvironmentError::from_response(response))),
+                )
             }
         })
     }
@@ -1721,13 +1759,12 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<DeleteEnvironmentMembershipResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteEnvironmentMembershipError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteEnvironmentMembershipError::from_response(response))
                 }))
             }
         })
@@ -1760,13 +1797,12 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<DescribeEnvironmentMembershipsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEnvironmentMembershipsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeEnvironmentMembershipsError::from_response(response))
                 }))
             }
         })
@@ -1798,13 +1834,12 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<DescribeEnvironmentStatusResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEnvironmentStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeEnvironmentStatusError::from_response(response))
                 }))
             }
         })
@@ -1836,14 +1871,15 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<DescribeEnvironmentsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEnvironmentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeEnvironmentsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1874,14 +1910,16 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<ListEnvironmentsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListEnvironmentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListEnvironmentsError::from_response(response))),
+                )
             }
         })
     }
@@ -1912,14 +1950,16 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<UpdateEnvironmentResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateEnvironmentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateEnvironmentError::from_response(response))),
+                )
             }
         })
     }
@@ -1950,13 +1990,12 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<UpdateEnvironmentMembershipResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateEnvironmentMembershipError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateEnvironmentMembershipError::from_response(response))
                 }))
             }
         })

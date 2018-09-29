@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Contains information about an alias.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -154,7 +154,7 @@ pub struct DecryptRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub ciphertext_blob: Vec<u8>,
     /// <p>The encryption context. If this was specified in the <a>Encrypt</a> function, it must be specified here or the decryption operation will fail. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html">Encryption Context</a>.</p>
@@ -178,7 +178,7 @@ pub struct DecryptResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub plaintext: Option<Vec<u8>>,
 }
@@ -262,7 +262,7 @@ pub struct EncryptRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub plaintext: Vec<u8>,
 }
@@ -274,7 +274,7 @@ pub struct EncryptResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>The ID of the key used during encryption.</p>
@@ -313,7 +313,7 @@ pub struct GenerateDataKeyResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>The identifier of the CMK under which the data encryption key was generated and encrypted.</p>
@@ -325,7 +325,7 @@ pub struct GenerateDataKeyResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub plaintext: Option<Vec<u8>>,
 }
@@ -360,7 +360,7 @@ pub struct GenerateDataKeyWithoutPlaintextResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>The identifier of the CMK under which the data encryption key was generated and encrypted.</p>
@@ -384,7 +384,7 @@ pub struct GenerateRandomResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub plaintext: Option<Vec<u8>>,
 }
@@ -442,7 +442,7 @@ pub struct GetParametersForImportResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub import_token: Option<Vec<u8>>,
     /// <p>The identifier of the CMK to use in a subsequent <a>ImportKeyMaterial</a> request. This is the same CMK specified in the <code>GetParametersForImport</code> request.</p>
@@ -458,7 +458,7 @@ pub struct GetParametersForImportResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub public_key: Option<Vec<u8>>,
 }
@@ -524,7 +524,7 @@ pub struct ImportKeyMaterialRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub encrypted_key_material: Vec<u8>,
     /// <p>Specifies whether the key material expires. The default is <code>KEY_MATERIAL_EXPIRES</code>, in which case you must include the <code>ValidTo</code> parameter. When this parameter is set to <code>KEY_MATERIAL_DOES_NOT_EXPIRE</code>, you must omit the <code>ValidTo</code> parameter.</p>
@@ -536,7 +536,7 @@ pub struct ImportKeyMaterialRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub import_token: Vec<u8>,
     /// <p>The identifier of the CMK to import the key material into. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
@@ -812,7 +812,7 @@ pub struct ReEncryptRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub ciphertext_blob: Vec<u8>,
     /// <p>Encryption context to use when the data is reencrypted.</p>
@@ -839,7 +839,7 @@ pub struct ReEncryptResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>Unique identifier of the CMK used to reencrypt the data.</p>
@@ -971,53 +971,53 @@ pub enum CancelKeyDeletionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CancelKeyDeletionError {
-    pub fn from_body(body: &str) -> CancelKeyDeletionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CancelKeyDeletionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        CancelKeyDeletionError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        CancelKeyDeletionError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        CancelKeyDeletionError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        CancelKeyDeletionError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        CancelKeyDeletionError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CancelKeyDeletionError::Validation(error_message.to_string())
-                    }
-                    _ => CancelKeyDeletionError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return CancelKeyDeletionError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return CancelKeyDeletionError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return CancelKeyDeletionError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return CancelKeyDeletionError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CancelKeyDeletionError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CancelKeyDeletionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CancelKeyDeletionError::Unknown(String::from(body)),
         }
+        return CancelKeyDeletionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CancelKeyDeletionError {
     fn from(err: serde_json::error::Error) -> CancelKeyDeletionError {
-        CancelKeyDeletionError::Unknown(err.description().to_string())
+        CancelKeyDeletionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CancelKeyDeletionError {
@@ -1053,7 +1053,8 @@ impl Error for CancelKeyDeletionError {
             CancelKeyDeletionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CancelKeyDeletionError::Unknown(ref cause) => cause,
+            CancelKeyDeletionError::ParseError(ref cause) => cause,
+            CancelKeyDeletionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1080,57 +1081,59 @@ pub enum CreateAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAliasError {
-    pub fn from_body(body: &str) -> CreateAliasError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateAliasError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AlreadyExistsException" => {
-                        CreateAliasError::AlreadyExists(String::from(error_message))
-                    }
-                    "DependencyTimeoutException" => {
-                        CreateAliasError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidAliasNameException" => {
-                        CreateAliasError::InvalidAliasName(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        CreateAliasError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        CreateAliasError::KMSInvalidState(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateAliasError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => CreateAliasError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        CreateAliasError::Validation(error_message.to_string())
-                    }
-                    _ => CreateAliasError::Unknown(String::from(body)),
+            match *error_type {
+                "AlreadyExistsException" => {
+                    return CreateAliasError::AlreadyExists(String::from(error_message))
                 }
+                "DependencyTimeoutException" => {
+                    return CreateAliasError::DependencyTimeout(String::from(error_message))
+                }
+                "InvalidAliasNameException" => {
+                    return CreateAliasError::InvalidAliasName(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return CreateAliasError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return CreateAliasError::KMSInvalidState(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateAliasError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreateAliasError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateAliasError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateAliasError::Unknown(String::from(body)),
         }
+        return CreateAliasError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateAliasError {
     fn from(err: serde_json::error::Error) -> CreateAliasError {
-        CreateAliasError::Unknown(err.description().to_string())
+        CreateAliasError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateAliasError {
@@ -1166,7 +1169,8 @@ impl Error for CreateAliasError {
             CreateAliasError::Validation(ref cause) => cause,
             CreateAliasError::Credentials(ref err) => err.description(),
             CreateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateAliasError::Unknown(ref cause) => cause,
+            CreateAliasError::ParseError(ref cause) => cause,
+            CreateAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1195,58 +1199,62 @@ pub enum CreateGrantError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGrantError {
-    pub fn from_body(body: &str) -> CreateGrantError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateGrantError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        CreateGrantError::DependencyTimeout(String::from(error_message))
-                    }
-                    "DisabledException" => CreateGrantError::Disabled(String::from(error_message)),
-                    "InvalidArnException" => {
-                        CreateGrantError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidGrantTokenException" => {
-                        CreateGrantError::InvalidGrantToken(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        CreateGrantError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        CreateGrantError::KMSInvalidState(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateGrantError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => CreateGrantError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        CreateGrantError::Validation(error_message.to_string())
-                    }
-                    _ => CreateGrantError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return CreateGrantError::DependencyTimeout(String::from(error_message))
                 }
+                "DisabledException" => {
+                    return CreateGrantError::Disabled(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return CreateGrantError::InvalidArn(String::from(error_message))
+                }
+                "InvalidGrantTokenException" => {
+                    return CreateGrantError::InvalidGrantToken(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return CreateGrantError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return CreateGrantError::KMSInvalidState(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateGrantError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreateGrantError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateGrantError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateGrantError::Unknown(String::from(body)),
         }
+        return CreateGrantError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateGrantError {
     fn from(err: serde_json::error::Error) -> CreateGrantError {
-        CreateGrantError::Unknown(err.description().to_string())
+        CreateGrantError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateGrantError {
@@ -1283,7 +1291,8 @@ impl Error for CreateGrantError {
             CreateGrantError::Validation(ref cause) => cause,
             CreateGrantError::Credentials(ref err) => err.description(),
             CreateGrantError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateGrantError::Unknown(ref cause) => cause,
+            CreateGrantError::ParseError(ref cause) => cause,
+            CreateGrantError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1310,55 +1319,57 @@ pub enum CreateKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateKeyError {
-    pub fn from_body(body: &str) -> CreateKeyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateKeyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        CreateKeyError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        CreateKeyError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        CreateKeyError::KMSInternal(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateKeyError::LimitExceeded(String::from(error_message))
-                    }
-                    "MalformedPolicyDocumentException" => {
-                        CreateKeyError::MalformedPolicyDocument(String::from(error_message))
-                    }
-                    "TagException" => CreateKeyError::Tag(String::from(error_message)),
-                    "UnsupportedOperationException" => {
-                        CreateKeyError::UnsupportedOperation(String::from(error_message))
-                    }
-                    "ValidationException" => CreateKeyError::Validation(error_message.to_string()),
-                    _ => CreateKeyError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return CreateKeyError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return CreateKeyError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return CreateKeyError::KMSInternal(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateKeyError::LimitExceeded(String::from(error_message))
+                }
+                "MalformedPolicyDocumentException" => {
+                    return CreateKeyError::MalformedPolicyDocument(String::from(error_message))
+                }
+                "TagException" => return CreateKeyError::Tag(String::from(error_message)),
+                "UnsupportedOperationException" => {
+                    return CreateKeyError::UnsupportedOperation(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateKeyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateKeyError::Unknown(String::from(body)),
         }
+        return CreateKeyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateKeyError {
     fn from(err: serde_json::error::Error) -> CreateKeyError {
-        CreateKeyError::Unknown(err.description().to_string())
+        CreateKeyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateKeyError {
@@ -1394,7 +1405,8 @@ impl Error for CreateKeyError {
             CreateKeyError::Validation(ref cause) => cause,
             CreateKeyError::Credentials(ref err) => err.description(),
             CreateKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateKeyError::Unknown(ref cause) => cause,
+            CreateKeyError::ParseError(ref cause) => cause,
+            CreateKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1423,56 +1435,56 @@ pub enum DecryptError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DecryptError {
-    pub fn from_body(body: &str) -> DecryptError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DecryptError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        DecryptError::DependencyTimeout(String::from(error_message))
-                    }
-                    "DisabledException" => DecryptError::Disabled(String::from(error_message)),
-                    "InvalidCiphertextException" => {
-                        DecryptError::InvalidCiphertext(String::from(error_message))
-                    }
-                    "InvalidGrantTokenException" => {
-                        DecryptError::InvalidGrantToken(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        DecryptError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        DecryptError::KMSInvalidState(String::from(error_message))
-                    }
-                    "KeyUnavailableException" => {
-                        DecryptError::KeyUnavailable(String::from(error_message))
-                    }
-                    "NotFoundException" => DecryptError::NotFound(String::from(error_message)),
-                    "ValidationException" => DecryptError::Validation(error_message.to_string()),
-                    _ => DecryptError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return DecryptError::DependencyTimeout(String::from(error_message))
                 }
+                "DisabledException" => return DecryptError::Disabled(String::from(error_message)),
+                "InvalidCiphertextException" => {
+                    return DecryptError::InvalidCiphertext(String::from(error_message))
+                }
+                "InvalidGrantTokenException" => {
+                    return DecryptError::InvalidGrantToken(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return DecryptError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return DecryptError::KMSInvalidState(String::from(error_message))
+                }
+                "KeyUnavailableException" => {
+                    return DecryptError::KeyUnavailable(String::from(error_message))
+                }
+                "NotFoundException" => return DecryptError::NotFound(String::from(error_message)),
+                "ValidationException" => return DecryptError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => DecryptError::Unknown(String::from(body)),
         }
+        return DecryptError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DecryptError {
     fn from(err: serde_json::error::Error) -> DecryptError {
-        DecryptError::Unknown(err.description().to_string())
+        DecryptError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DecryptError {
@@ -1509,7 +1521,8 @@ impl Error for DecryptError {
             DecryptError::Validation(ref cause) => cause,
             DecryptError::Credentials(ref err) => err.description(),
             DecryptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DecryptError::Unknown(ref cause) => cause,
+            DecryptError::ParseError(ref cause) => cause,
+            DecryptError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1530,48 +1543,50 @@ pub enum DeleteAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAliasError {
-    pub fn from_body(body: &str) -> DeleteAliasError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteAliasError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        DeleteAliasError::DependencyTimeout(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        DeleteAliasError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        DeleteAliasError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => DeleteAliasError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        DeleteAliasError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteAliasError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return DeleteAliasError::DependencyTimeout(String::from(error_message))
                 }
+                "KMSInternalException" => {
+                    return DeleteAliasError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return DeleteAliasError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteAliasError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteAliasError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteAliasError::Unknown(String::from(body)),
         }
+        return DeleteAliasError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteAliasError {
     fn from(err: serde_json::error::Error) -> DeleteAliasError {
-        DeleteAliasError::Unknown(err.description().to_string())
+        DeleteAliasError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteAliasError {
@@ -1604,7 +1619,8 @@ impl Error for DeleteAliasError {
             DeleteAliasError::Validation(ref cause) => cause,
             DeleteAliasError::Credentials(ref err) => err.description(),
             DeleteAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteAliasError::Unknown(ref cause) => cause,
+            DeleteAliasError::ParseError(ref cause) => cause,
+            DeleteAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1629,60 +1645,62 @@ pub enum DeleteImportedKeyMaterialError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteImportedKeyMaterialError {
-    pub fn from_body(body: &str) -> DeleteImportedKeyMaterialError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteImportedKeyMaterialError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        DeleteImportedKeyMaterialError::DependencyTimeout(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidArnException" => {
-                        DeleteImportedKeyMaterialError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        DeleteImportedKeyMaterialError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        DeleteImportedKeyMaterialError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteImportedKeyMaterialError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedOperationException" => {
-                        DeleteImportedKeyMaterialError::UnsupportedOperation(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteImportedKeyMaterialError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteImportedKeyMaterialError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return DeleteImportedKeyMaterialError::DependencyTimeout(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidArnException" => {
+                    return DeleteImportedKeyMaterialError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return DeleteImportedKeyMaterialError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return DeleteImportedKeyMaterialError::KMSInvalidState(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DeleteImportedKeyMaterialError::NotFound(String::from(error_message))
+                }
+                "UnsupportedOperationException" => {
+                    return DeleteImportedKeyMaterialError::UnsupportedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteImportedKeyMaterialError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteImportedKeyMaterialError::Unknown(String::from(body)),
         }
+        return DeleteImportedKeyMaterialError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteImportedKeyMaterialError {
     fn from(err: serde_json::error::Error) -> DeleteImportedKeyMaterialError {
-        DeleteImportedKeyMaterialError::Unknown(err.description().to_string())
+        DeleteImportedKeyMaterialError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteImportedKeyMaterialError {
@@ -1719,7 +1737,8 @@ impl Error for DeleteImportedKeyMaterialError {
             DeleteImportedKeyMaterialError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteImportedKeyMaterialError::Unknown(ref cause) => cause,
+            DeleteImportedKeyMaterialError::ParseError(ref cause) => cause,
+            DeleteImportedKeyMaterialError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1740,48 +1759,50 @@ pub enum DescribeKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeKeyError {
-    pub fn from_body(body: &str) -> DescribeKeyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeKeyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        DescribeKeyError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DescribeKeyError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        DescribeKeyError::KMSInternal(String::from(error_message))
-                    }
-                    "NotFoundException" => DescribeKeyError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeKeyError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeKeyError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return DescribeKeyError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return DescribeKeyError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return DescribeKeyError::KMSInternal(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeKeyError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeKeyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeKeyError::Unknown(String::from(body)),
         }
+        return DescribeKeyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeKeyError {
     fn from(err: serde_json::error::Error) -> DescribeKeyError {
-        DescribeKeyError::Unknown(err.description().to_string())
+        DescribeKeyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeKeyError {
@@ -1814,7 +1835,8 @@ impl Error for DescribeKeyError {
             DescribeKeyError::Validation(ref cause) => cause,
             DescribeKeyError::Credentials(ref err) => err.description(),
             DescribeKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeKeyError::Unknown(ref cause) => cause,
+            DescribeKeyError::ParseError(ref cause) => cause,
+            DescribeKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1837,49 +1859,53 @@ pub enum DisableKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisableKeyError {
-    pub fn from_body(body: &str) -> DisableKeyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisableKeyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        DisableKeyError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DisableKeyError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        DisableKeyError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        DisableKeyError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => DisableKeyError::NotFound(String::from(error_message)),
-                    "ValidationException" => DisableKeyError::Validation(error_message.to_string()),
-                    _ => DisableKeyError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return DisableKeyError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return DisableKeyError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return DisableKeyError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return DisableKeyError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DisableKeyError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DisableKeyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisableKeyError::Unknown(String::from(body)),
         }
+        return DisableKeyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisableKeyError {
     fn from(err: serde_json::error::Error) -> DisableKeyError {
-        DisableKeyError::Unknown(err.description().to_string())
+        DisableKeyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisableKeyError {
@@ -1913,7 +1939,8 @@ impl Error for DisableKeyError {
             DisableKeyError::Validation(ref cause) => cause,
             DisableKeyError::Credentials(ref err) => err.description(),
             DisableKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DisableKeyError::Unknown(ref cause) => cause,
+            DisableKeyError::ParseError(ref cause) => cause,
+            DisableKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1940,59 +1967,61 @@ pub enum DisableKeyRotationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisableKeyRotationError {
-    pub fn from_body(body: &str) -> DisableKeyRotationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisableKeyRotationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        DisableKeyRotationError::DependencyTimeout(String::from(error_message))
-                    }
-                    "DisabledException" => {
-                        DisableKeyRotationError::Disabled(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        DisableKeyRotationError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        DisableKeyRotationError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        DisableKeyRotationError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DisableKeyRotationError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedOperationException" => {
-                        DisableKeyRotationError::UnsupportedOperation(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DisableKeyRotationError::Validation(error_message.to_string())
-                    }
-                    _ => DisableKeyRotationError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return DisableKeyRotationError::DependencyTimeout(String::from(error_message))
                 }
+                "DisabledException" => {
+                    return DisableKeyRotationError::Disabled(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return DisableKeyRotationError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return DisableKeyRotationError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return DisableKeyRotationError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DisableKeyRotationError::NotFound(String::from(error_message))
+                }
+                "UnsupportedOperationException" => {
+                    return DisableKeyRotationError::UnsupportedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DisableKeyRotationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisableKeyRotationError::Unknown(String::from(body)),
         }
+        return DisableKeyRotationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisableKeyRotationError {
     fn from(err: serde_json::error::Error) -> DisableKeyRotationError {
-        DisableKeyRotationError::Unknown(err.description().to_string())
+        DisableKeyRotationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisableKeyRotationError {
@@ -2030,7 +2059,8 @@ impl Error for DisableKeyRotationError {
             DisableKeyRotationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisableKeyRotationError::Unknown(ref cause) => cause,
+            DisableKeyRotationError::ParseError(ref cause) => cause,
+            DisableKeyRotationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2055,52 +2085,54 @@ pub enum EnableKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EnableKeyError {
-    pub fn from_body(body: &str) -> EnableKeyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> EnableKeyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        EnableKeyError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        EnableKeyError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        EnableKeyError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        EnableKeyError::KMSInvalidState(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        EnableKeyError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => EnableKeyError::NotFound(String::from(error_message)),
-                    "ValidationException" => EnableKeyError::Validation(error_message.to_string()),
-                    _ => EnableKeyError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return EnableKeyError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return EnableKeyError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return EnableKeyError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return EnableKeyError::KMSInvalidState(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return EnableKeyError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => return EnableKeyError::NotFound(String::from(error_message)),
+                "ValidationException" => {
+                    return EnableKeyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => EnableKeyError::Unknown(String::from(body)),
         }
+        return EnableKeyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for EnableKeyError {
     fn from(err: serde_json::error::Error) -> EnableKeyError {
-        EnableKeyError::Unknown(err.description().to_string())
+        EnableKeyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for EnableKeyError {
@@ -2135,7 +2167,8 @@ impl Error for EnableKeyError {
             EnableKeyError::Validation(ref cause) => cause,
             EnableKeyError::Credentials(ref err) => err.description(),
             EnableKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EnableKeyError::Unknown(ref cause) => cause,
+            EnableKeyError::ParseError(ref cause) => cause,
+            EnableKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2162,59 +2195,59 @@ pub enum EnableKeyRotationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EnableKeyRotationError {
-    pub fn from_body(body: &str) -> EnableKeyRotationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> EnableKeyRotationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        EnableKeyRotationError::DependencyTimeout(String::from(error_message))
-                    }
-                    "DisabledException" => {
-                        EnableKeyRotationError::Disabled(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        EnableKeyRotationError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        EnableKeyRotationError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        EnableKeyRotationError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        EnableKeyRotationError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedOperationException" => {
-                        EnableKeyRotationError::UnsupportedOperation(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        EnableKeyRotationError::Validation(error_message.to_string())
-                    }
-                    _ => EnableKeyRotationError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return EnableKeyRotationError::DependencyTimeout(String::from(error_message))
                 }
+                "DisabledException" => {
+                    return EnableKeyRotationError::Disabled(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return EnableKeyRotationError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return EnableKeyRotationError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return EnableKeyRotationError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return EnableKeyRotationError::NotFound(String::from(error_message))
+                }
+                "UnsupportedOperationException" => {
+                    return EnableKeyRotationError::UnsupportedOperation(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return EnableKeyRotationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => EnableKeyRotationError::Unknown(String::from(body)),
         }
+        return EnableKeyRotationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for EnableKeyRotationError {
     fn from(err: serde_json::error::Error) -> EnableKeyRotationError {
-        EnableKeyRotationError::Unknown(err.description().to_string())
+        EnableKeyRotationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for EnableKeyRotationError {
@@ -2252,7 +2285,8 @@ impl Error for EnableKeyRotationError {
             EnableKeyRotationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            EnableKeyRotationError::Unknown(ref cause) => cause,
+            EnableKeyRotationError::ParseError(ref cause) => cause,
+            EnableKeyRotationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2281,56 +2315,56 @@ pub enum EncryptError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EncryptError {
-    pub fn from_body(body: &str) -> EncryptError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> EncryptError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        EncryptError::DependencyTimeout(String::from(error_message))
-                    }
-                    "DisabledException" => EncryptError::Disabled(String::from(error_message)),
-                    "InvalidGrantTokenException" => {
-                        EncryptError::InvalidGrantToken(String::from(error_message))
-                    }
-                    "InvalidKeyUsageException" => {
-                        EncryptError::InvalidKeyUsage(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        EncryptError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        EncryptError::KMSInvalidState(String::from(error_message))
-                    }
-                    "KeyUnavailableException" => {
-                        EncryptError::KeyUnavailable(String::from(error_message))
-                    }
-                    "NotFoundException" => EncryptError::NotFound(String::from(error_message)),
-                    "ValidationException" => EncryptError::Validation(error_message.to_string()),
-                    _ => EncryptError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return EncryptError::DependencyTimeout(String::from(error_message))
                 }
+                "DisabledException" => return EncryptError::Disabled(String::from(error_message)),
+                "InvalidGrantTokenException" => {
+                    return EncryptError::InvalidGrantToken(String::from(error_message))
+                }
+                "InvalidKeyUsageException" => {
+                    return EncryptError::InvalidKeyUsage(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return EncryptError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return EncryptError::KMSInvalidState(String::from(error_message))
+                }
+                "KeyUnavailableException" => {
+                    return EncryptError::KeyUnavailable(String::from(error_message))
+                }
+                "NotFoundException" => return EncryptError::NotFound(String::from(error_message)),
+                "ValidationException" => return EncryptError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => EncryptError::Unknown(String::from(body)),
         }
+        return EncryptError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for EncryptError {
     fn from(err: serde_json::error::Error) -> EncryptError {
-        EncryptError::Unknown(err.description().to_string())
+        EncryptError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for EncryptError {
@@ -2367,7 +2401,8 @@ impl Error for EncryptError {
             EncryptError::Validation(ref cause) => cause,
             EncryptError::Credentials(ref err) => err.description(),
             EncryptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EncryptError::Unknown(ref cause) => cause,
+            EncryptError::ParseError(ref cause) => cause,
+            EncryptError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2396,62 +2431,62 @@ pub enum GenerateDataKeyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateDataKeyError {
-    pub fn from_body(body: &str) -> GenerateDataKeyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GenerateDataKeyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        GenerateDataKeyError::DependencyTimeout(String::from(error_message))
-                    }
-                    "DisabledException" => {
-                        GenerateDataKeyError::Disabled(String::from(error_message))
-                    }
-                    "InvalidGrantTokenException" => {
-                        GenerateDataKeyError::InvalidGrantToken(String::from(error_message))
-                    }
-                    "InvalidKeyUsageException" => {
-                        GenerateDataKeyError::InvalidKeyUsage(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        GenerateDataKeyError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        GenerateDataKeyError::KMSInvalidState(String::from(error_message))
-                    }
-                    "KeyUnavailableException" => {
-                        GenerateDataKeyError::KeyUnavailable(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        GenerateDataKeyError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GenerateDataKeyError::Validation(error_message.to_string())
-                    }
-                    _ => GenerateDataKeyError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return GenerateDataKeyError::DependencyTimeout(String::from(error_message))
                 }
+                "DisabledException" => {
+                    return GenerateDataKeyError::Disabled(String::from(error_message))
+                }
+                "InvalidGrantTokenException" => {
+                    return GenerateDataKeyError::InvalidGrantToken(String::from(error_message))
+                }
+                "InvalidKeyUsageException" => {
+                    return GenerateDataKeyError::InvalidKeyUsage(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return GenerateDataKeyError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return GenerateDataKeyError::KMSInvalidState(String::from(error_message))
+                }
+                "KeyUnavailableException" => {
+                    return GenerateDataKeyError::KeyUnavailable(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GenerateDataKeyError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GenerateDataKeyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GenerateDataKeyError::Unknown(String::from(body)),
         }
+        return GenerateDataKeyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GenerateDataKeyError {
     fn from(err: serde_json::error::Error) -> GenerateDataKeyError {
-        GenerateDataKeyError::Unknown(err.description().to_string())
+        GenerateDataKeyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GenerateDataKeyError {
@@ -2488,7 +2523,8 @@ impl Error for GenerateDataKeyError {
             GenerateDataKeyError::Validation(ref cause) => cause,
             GenerateDataKeyError::Credentials(ref err) => err.description(),
             GenerateDataKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GenerateDataKeyError::Unknown(ref cause) => cause,
+            GenerateDataKeyError::ParseError(ref cause) => cause,
+            GenerateDataKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2517,72 +2553,80 @@ pub enum GenerateDataKeyWithoutPlaintextError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateDataKeyWithoutPlaintextError {
-    pub fn from_body(body: &str) -> GenerateDataKeyWithoutPlaintextError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GenerateDataKeyWithoutPlaintextError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        GenerateDataKeyWithoutPlaintextError::DependencyTimeout(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DisabledException" => {
-                        GenerateDataKeyWithoutPlaintextError::Disabled(String::from(error_message))
-                    }
-                    "InvalidGrantTokenException" => {
-                        GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidKeyUsageException" => {
-                        GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(String::from(
-                            error_message,
-                        ))
-                    }
-                    "KMSInternalException" => GenerateDataKeyWithoutPlaintextError::KMSInternal(
-                        String::from(error_message),
-                    ),
-                    "KMSInvalidStateException" => {
-                        GenerateDataKeyWithoutPlaintextError::KMSInvalidState(String::from(
-                            error_message,
-                        ))
-                    }
-                    "KeyUnavailableException" => {
-                        GenerateDataKeyWithoutPlaintextError::KeyUnavailable(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NotFoundException" => {
-                        GenerateDataKeyWithoutPlaintextError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GenerateDataKeyWithoutPlaintextError::Validation(error_message.to_string())
-                    }
-                    _ => GenerateDataKeyWithoutPlaintextError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return GenerateDataKeyWithoutPlaintextError::DependencyTimeout(String::from(
+                        error_message,
+                    ))
                 }
+                "DisabledException" => {
+                    return GenerateDataKeyWithoutPlaintextError::Disabled(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidGrantTokenException" => {
+                    return GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidKeyUsageException" => {
+                    return GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(String::from(
+                        error_message,
+                    ))
+                }
+                "KMSInternalException" => {
+                    return GenerateDataKeyWithoutPlaintextError::KMSInternal(String::from(
+                        error_message,
+                    ))
+                }
+                "KMSInvalidStateException" => {
+                    return GenerateDataKeyWithoutPlaintextError::KMSInvalidState(String::from(
+                        error_message,
+                    ))
+                }
+                "KeyUnavailableException" => {
+                    return GenerateDataKeyWithoutPlaintextError::KeyUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return GenerateDataKeyWithoutPlaintextError::NotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GenerateDataKeyWithoutPlaintextError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => GenerateDataKeyWithoutPlaintextError::Unknown(String::from(body)),
         }
+        return GenerateDataKeyWithoutPlaintextError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GenerateDataKeyWithoutPlaintextError {
     fn from(err: serde_json::error::Error) -> GenerateDataKeyWithoutPlaintextError {
-        GenerateDataKeyWithoutPlaintextError::Unknown(err.description().to_string())
+        GenerateDataKeyWithoutPlaintextError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GenerateDataKeyWithoutPlaintextError {
@@ -2621,7 +2665,8 @@ impl Error for GenerateDataKeyWithoutPlaintextError {
             GenerateDataKeyWithoutPlaintextError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GenerateDataKeyWithoutPlaintextError::Unknown(ref cause) => cause,
+            GenerateDataKeyWithoutPlaintextError::ParseError(ref cause) => cause,
+            GenerateDataKeyWithoutPlaintextError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2638,44 +2683,44 @@ pub enum GenerateRandomError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateRandomError {
-    pub fn from_body(body: &str) -> GenerateRandomError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GenerateRandomError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        GenerateRandomError::DependencyTimeout(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        GenerateRandomError::KMSInternal(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GenerateRandomError::Validation(error_message.to_string())
-                    }
-                    _ => GenerateRandomError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return GenerateRandomError::DependencyTimeout(String::from(error_message))
                 }
+                "KMSInternalException" => {
+                    return GenerateRandomError::KMSInternal(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GenerateRandomError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GenerateRandomError::Unknown(String::from(body)),
         }
+        return GenerateRandomError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GenerateRandomError {
     fn from(err: serde_json::error::Error) -> GenerateRandomError {
-        GenerateRandomError::Unknown(err.description().to_string())
+        GenerateRandomError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GenerateRandomError {
@@ -2706,7 +2751,8 @@ impl Error for GenerateRandomError {
             GenerateRandomError::Validation(ref cause) => cause,
             GenerateRandomError::Credentials(ref err) => err.description(),
             GenerateRandomError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GenerateRandomError::Unknown(ref cause) => cause,
+            GenerateRandomError::ParseError(ref cause) => cause,
+            GenerateRandomError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2729,51 +2775,53 @@ pub enum GetKeyPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetKeyPolicyError {
-    pub fn from_body(body: &str) -> GetKeyPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetKeyPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        GetKeyPolicyError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        GetKeyPolicyError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        GetKeyPolicyError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        GetKeyPolicyError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => GetKeyPolicyError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        GetKeyPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => GetKeyPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return GetKeyPolicyError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return GetKeyPolicyError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return GetKeyPolicyError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return GetKeyPolicyError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetKeyPolicyError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetKeyPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetKeyPolicyError::Unknown(String::from(body)),
         }
+        return GetKeyPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetKeyPolicyError {
     fn from(err: serde_json::error::Error) -> GetKeyPolicyError {
-        GetKeyPolicyError::Unknown(err.description().to_string())
+        GetKeyPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetKeyPolicyError {
@@ -2807,7 +2855,8 @@ impl Error for GetKeyPolicyError {
             GetKeyPolicyError::Validation(ref cause) => cause,
             GetKeyPolicyError::Credentials(ref err) => err.description(),
             GetKeyPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetKeyPolicyError::Unknown(ref cause) => cause,
+            GetKeyPolicyError::ParseError(ref cause) => cause,
+            GetKeyPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2832,56 +2881,58 @@ pub enum GetKeyRotationStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetKeyRotationStatusError {
-    pub fn from_body(body: &str) -> GetKeyRotationStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetKeyRotationStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        GetKeyRotationStatusError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        GetKeyRotationStatusError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        GetKeyRotationStatusError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        GetKeyRotationStatusError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        GetKeyRotationStatusError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedOperationException" => {
-                        GetKeyRotationStatusError::UnsupportedOperation(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetKeyRotationStatusError::Validation(error_message.to_string())
-                    }
-                    _ => GetKeyRotationStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return GetKeyRotationStatusError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return GetKeyRotationStatusError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return GetKeyRotationStatusError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return GetKeyRotationStatusError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetKeyRotationStatusError::NotFound(String::from(error_message))
+                }
+                "UnsupportedOperationException" => {
+                    return GetKeyRotationStatusError::UnsupportedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetKeyRotationStatusError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetKeyRotationStatusError::Unknown(String::from(body)),
         }
+        return GetKeyRotationStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetKeyRotationStatusError {
     fn from(err: serde_json::error::Error) -> GetKeyRotationStatusError {
-        GetKeyRotationStatusError::Unknown(err.description().to_string())
+        GetKeyRotationStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetKeyRotationStatusError {
@@ -2918,7 +2969,8 @@ impl Error for GetKeyRotationStatusError {
             GetKeyRotationStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetKeyRotationStatusError::Unknown(ref cause) => cause,
+            GetKeyRotationStatusError::ParseError(ref cause) => cause,
+            GetKeyRotationStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2943,58 +2995,60 @@ pub enum GetParametersForImportError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetParametersForImportError {
-    pub fn from_body(body: &str) -> GetParametersForImportError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetParametersForImportError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        GetParametersForImportError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        GetParametersForImportError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        GetParametersForImportError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        GetParametersForImportError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        GetParametersForImportError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedOperationException" => {
-                        GetParametersForImportError::UnsupportedOperation(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        GetParametersForImportError::Validation(error_message.to_string())
-                    }
-                    _ => GetParametersForImportError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return GetParametersForImportError::DependencyTimeout(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidArnException" => {
+                    return GetParametersForImportError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return GetParametersForImportError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return GetParametersForImportError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetParametersForImportError::NotFound(String::from(error_message))
+                }
+                "UnsupportedOperationException" => {
+                    return GetParametersForImportError::UnsupportedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetParametersForImportError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetParametersForImportError::Unknown(String::from(body)),
         }
+        return GetParametersForImportError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetParametersForImportError {
     fn from(err: serde_json::error::Error) -> GetParametersForImportError {
-        GetParametersForImportError::Unknown(err.description().to_string())
+        GetParametersForImportError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetParametersForImportError {
@@ -3031,7 +3085,8 @@ impl Error for GetParametersForImportError {
             GetParametersForImportError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetParametersForImportError::Unknown(ref cause) => cause,
+            GetParametersForImportError::ParseError(ref cause) => cause,
+            GetParametersForImportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3064,68 +3119,68 @@ pub enum ImportKeyMaterialError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ImportKeyMaterialError {
-    pub fn from_body(body: &str) -> ImportKeyMaterialError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ImportKeyMaterialError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        ImportKeyMaterialError::DependencyTimeout(String::from(error_message))
-                    }
-                    "ExpiredImportTokenException" => {
-                        ImportKeyMaterialError::ExpiredImportToken(String::from(error_message))
-                    }
-                    "IncorrectKeyMaterialException" => {
-                        ImportKeyMaterialError::IncorrectKeyMaterial(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ImportKeyMaterialError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidCiphertextException" => {
-                        ImportKeyMaterialError::InvalidCiphertext(String::from(error_message))
-                    }
-                    "InvalidImportTokenException" => {
-                        ImportKeyMaterialError::InvalidImportToken(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        ImportKeyMaterialError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        ImportKeyMaterialError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        ImportKeyMaterialError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedOperationException" => {
-                        ImportKeyMaterialError::UnsupportedOperation(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ImportKeyMaterialError::Validation(error_message.to_string())
-                    }
-                    _ => ImportKeyMaterialError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return ImportKeyMaterialError::DependencyTimeout(String::from(error_message))
                 }
+                "ExpiredImportTokenException" => {
+                    return ImportKeyMaterialError::ExpiredImportToken(String::from(error_message))
+                }
+                "IncorrectKeyMaterialException" => {
+                    return ImportKeyMaterialError::IncorrectKeyMaterial(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return ImportKeyMaterialError::InvalidArn(String::from(error_message))
+                }
+                "InvalidCiphertextException" => {
+                    return ImportKeyMaterialError::InvalidCiphertext(String::from(error_message))
+                }
+                "InvalidImportTokenException" => {
+                    return ImportKeyMaterialError::InvalidImportToken(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return ImportKeyMaterialError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return ImportKeyMaterialError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return ImportKeyMaterialError::NotFound(String::from(error_message))
+                }
+                "UnsupportedOperationException" => {
+                    return ImportKeyMaterialError::UnsupportedOperation(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ImportKeyMaterialError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ImportKeyMaterialError::Unknown(String::from(body)),
         }
+        return ImportKeyMaterialError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ImportKeyMaterialError {
     fn from(err: serde_json::error::Error) -> ImportKeyMaterialError {
-        ImportKeyMaterialError::Unknown(err.description().to_string())
+        ImportKeyMaterialError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ImportKeyMaterialError {
@@ -3166,7 +3221,8 @@ impl Error for ImportKeyMaterialError {
             ImportKeyMaterialError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ImportKeyMaterialError::Unknown(ref cause) => cause,
+            ImportKeyMaterialError::ParseError(ref cause) => cause,
+            ImportKeyMaterialError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3185,47 +3241,47 @@ pub enum ListAliasesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAliasesError {
-    pub fn from_body(body: &str) -> ListAliasesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListAliasesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        ListAliasesError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidMarkerException" => {
-                        ListAliasesError::InvalidMarker(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        ListAliasesError::KMSInternal(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListAliasesError::Validation(error_message.to_string())
-                    }
-                    _ => ListAliasesError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return ListAliasesError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidMarkerException" => {
+                    return ListAliasesError::InvalidMarker(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return ListAliasesError::KMSInternal(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListAliasesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListAliasesError::Unknown(String::from(body)),
         }
+        return ListAliasesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListAliasesError {
     fn from(err: serde_json::error::Error) -> ListAliasesError {
-        ListAliasesError::Unknown(err.description().to_string())
+        ListAliasesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListAliasesError {
@@ -3257,7 +3313,8 @@ impl Error for ListAliasesError {
             ListAliasesError::Validation(ref cause) => cause,
             ListAliasesError::Credentials(ref err) => err.description(),
             ListAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListAliasesError::Unknown(ref cause) => cause,
+            ListAliasesError::ParseError(ref cause) => cause,
+            ListAliasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3282,52 +3339,56 @@ pub enum ListGrantsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListGrantsError {
-    pub fn from_body(body: &str) -> ListGrantsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListGrantsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        ListGrantsError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListGrantsError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidMarkerException" => {
-                        ListGrantsError::InvalidMarker(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        ListGrantsError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        ListGrantsError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => ListGrantsError::NotFound(String::from(error_message)),
-                    "ValidationException" => ListGrantsError::Validation(error_message.to_string()),
-                    _ => ListGrantsError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return ListGrantsError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return ListGrantsError::InvalidArn(String::from(error_message))
+                }
+                "InvalidMarkerException" => {
+                    return ListGrantsError::InvalidMarker(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return ListGrantsError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return ListGrantsError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return ListGrantsError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListGrantsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListGrantsError::Unknown(String::from(body)),
         }
+        return ListGrantsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListGrantsError {
     fn from(err: serde_json::error::Error) -> ListGrantsError {
-        ListGrantsError::Unknown(err.description().to_string())
+        ListGrantsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListGrantsError {
@@ -3362,7 +3423,8 @@ impl Error for ListGrantsError {
             ListGrantsError::Validation(ref cause) => cause,
             ListGrantsError::Credentials(ref err) => err.description(),
             ListGrantsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGrantsError::Unknown(ref cause) => cause,
+            ListGrantsError::ParseError(ref cause) => cause,
+            ListGrantsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3385,53 +3447,53 @@ pub enum ListKeyPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListKeyPoliciesError {
-    pub fn from_body(body: &str) -> ListKeyPoliciesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListKeyPoliciesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        ListKeyPoliciesError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListKeyPoliciesError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        ListKeyPoliciesError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        ListKeyPoliciesError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        ListKeyPoliciesError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListKeyPoliciesError::Validation(error_message.to_string())
-                    }
-                    _ => ListKeyPoliciesError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return ListKeyPoliciesError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return ListKeyPoliciesError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return ListKeyPoliciesError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return ListKeyPoliciesError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return ListKeyPoliciesError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListKeyPoliciesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListKeyPoliciesError::Unknown(String::from(body)),
         }
+        return ListKeyPoliciesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListKeyPoliciesError {
     fn from(err: serde_json::error::Error) -> ListKeyPoliciesError {
-        ListKeyPoliciesError::Unknown(err.description().to_string())
+        ListKeyPoliciesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListKeyPoliciesError {
@@ -3465,7 +3527,8 @@ impl Error for ListKeyPoliciesError {
             ListKeyPoliciesError::Validation(ref cause) => cause,
             ListKeyPoliciesError::Credentials(ref err) => err.description(),
             ListKeyPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListKeyPoliciesError::Unknown(ref cause) => cause,
+            ListKeyPoliciesError::ParseError(ref cause) => cause,
+            ListKeyPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3484,45 +3547,47 @@ pub enum ListKeysError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListKeysError {
-    pub fn from_body(body: &str) -> ListKeysError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListKeysError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        ListKeysError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidMarkerException" => {
-                        ListKeysError::InvalidMarker(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        ListKeysError::KMSInternal(String::from(error_message))
-                    }
-                    "ValidationException" => ListKeysError::Validation(error_message.to_string()),
-                    _ => ListKeysError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return ListKeysError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidMarkerException" => {
+                    return ListKeysError::InvalidMarker(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return ListKeysError::KMSInternal(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListKeysError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListKeysError::Unknown(String::from(body)),
         }
+        return ListKeysError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListKeysError {
     fn from(err: serde_json::error::Error) -> ListKeysError {
-        ListKeysError::Unknown(err.description().to_string())
+        ListKeysError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListKeysError {
@@ -3554,7 +3619,8 @@ impl Error for ListKeysError {
             ListKeysError::Validation(ref cause) => cause,
             ListKeysError::Credentials(ref err) => err.description(),
             ListKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListKeysError::Unknown(ref cause) => cause,
+            ListKeysError::ParseError(ref cause) => cause,
+            ListKeysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3575,50 +3641,50 @@ pub enum ListResourceTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourceTagsError {
-    pub fn from_body(body: &str) -> ListResourceTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListResourceTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArnException" => {
-                        ListResourceTagsError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidMarkerException" => {
-                        ListResourceTagsError::InvalidMarker(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        ListResourceTagsError::KMSInternal(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        ListResourceTagsError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListResourceTagsError::Validation(error_message.to_string())
-                    }
-                    _ => ListResourceTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArnException" => {
+                    return ListResourceTagsError::InvalidArn(String::from(error_message))
                 }
+                "InvalidMarkerException" => {
+                    return ListResourceTagsError::InvalidMarker(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return ListResourceTagsError::KMSInternal(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return ListResourceTagsError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListResourceTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListResourceTagsError::Unknown(String::from(body)),
         }
+        return ListResourceTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListResourceTagsError {
     fn from(err: serde_json::error::Error) -> ListResourceTagsError {
-        ListResourceTagsError::Unknown(err.description().to_string())
+        ListResourceTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListResourceTagsError {
@@ -3651,7 +3717,8 @@ impl Error for ListResourceTagsError {
             ListResourceTagsError::Validation(ref cause) => cause,
             ListResourceTagsError::Credentials(ref err) => err.description(),
             ListResourceTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListResourceTagsError::Unknown(ref cause) => cause,
+            ListResourceTagsError::ParseError(ref cause) => cause,
+            ListResourceTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3674,53 +3741,53 @@ pub enum ListRetirableGrantsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListRetirableGrantsError {
-    pub fn from_body(body: &str) -> ListRetirableGrantsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListRetirableGrantsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        ListRetirableGrantsError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ListRetirableGrantsError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidMarkerException" => {
-                        ListRetirableGrantsError::InvalidMarker(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        ListRetirableGrantsError::KMSInternal(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        ListRetirableGrantsError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListRetirableGrantsError::Validation(error_message.to_string())
-                    }
-                    _ => ListRetirableGrantsError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return ListRetirableGrantsError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return ListRetirableGrantsError::InvalidArn(String::from(error_message))
+                }
+                "InvalidMarkerException" => {
+                    return ListRetirableGrantsError::InvalidMarker(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return ListRetirableGrantsError::KMSInternal(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return ListRetirableGrantsError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListRetirableGrantsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListRetirableGrantsError::Unknown(String::from(body)),
         }
+        return ListRetirableGrantsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListRetirableGrantsError {
     fn from(err: serde_json::error::Error) -> ListRetirableGrantsError {
-        ListRetirableGrantsError::Unknown(err.description().to_string())
+        ListRetirableGrantsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListRetirableGrantsError {
@@ -3756,7 +3823,8 @@ impl Error for ListRetirableGrantsError {
             ListRetirableGrantsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListRetirableGrantsError::Unknown(ref cause) => cause,
+            ListRetirableGrantsError::ParseError(ref cause) => cause,
+            ListRetirableGrantsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3785,60 +3853,62 @@ pub enum PutKeyPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutKeyPolicyError {
-    pub fn from_body(body: &str) -> PutKeyPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutKeyPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        PutKeyPolicyError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        PutKeyPolicyError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        PutKeyPolicyError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        PutKeyPolicyError::KMSInvalidState(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PutKeyPolicyError::LimitExceeded(String::from(error_message))
-                    }
-                    "MalformedPolicyDocumentException" => {
-                        PutKeyPolicyError::MalformedPolicyDocument(String::from(error_message))
-                    }
-                    "NotFoundException" => PutKeyPolicyError::NotFound(String::from(error_message)),
-                    "UnsupportedOperationException" => {
-                        PutKeyPolicyError::UnsupportedOperation(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutKeyPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => PutKeyPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return PutKeyPolicyError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return PutKeyPolicyError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return PutKeyPolicyError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return PutKeyPolicyError::KMSInvalidState(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PutKeyPolicyError::LimitExceeded(String::from(error_message))
+                }
+                "MalformedPolicyDocumentException" => {
+                    return PutKeyPolicyError::MalformedPolicyDocument(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return PutKeyPolicyError::NotFound(String::from(error_message))
+                }
+                "UnsupportedOperationException" => {
+                    return PutKeyPolicyError::UnsupportedOperation(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutKeyPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutKeyPolicyError::Unknown(String::from(body)),
         }
+        return PutKeyPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutKeyPolicyError {
     fn from(err: serde_json::error::Error) -> PutKeyPolicyError {
-        PutKeyPolicyError::Unknown(err.description().to_string())
+        PutKeyPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutKeyPolicyError {
@@ -3875,7 +3945,8 @@ impl Error for PutKeyPolicyError {
             PutKeyPolicyError::Validation(ref cause) => cause,
             PutKeyPolicyError::Credentials(ref err) => err.description(),
             PutKeyPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutKeyPolicyError::Unknown(ref cause) => cause,
+            PutKeyPolicyError::ParseError(ref cause) => cause,
+            PutKeyPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3906,59 +3977,61 @@ pub enum ReEncryptError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ReEncryptError {
-    pub fn from_body(body: &str) -> ReEncryptError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ReEncryptError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        ReEncryptError::DependencyTimeout(String::from(error_message))
-                    }
-                    "DisabledException" => ReEncryptError::Disabled(String::from(error_message)),
-                    "InvalidCiphertextException" => {
-                        ReEncryptError::InvalidCiphertext(String::from(error_message))
-                    }
-                    "InvalidGrantTokenException" => {
-                        ReEncryptError::InvalidGrantToken(String::from(error_message))
-                    }
-                    "InvalidKeyUsageException" => {
-                        ReEncryptError::InvalidKeyUsage(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        ReEncryptError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        ReEncryptError::KMSInvalidState(String::from(error_message))
-                    }
-                    "KeyUnavailableException" => {
-                        ReEncryptError::KeyUnavailable(String::from(error_message))
-                    }
-                    "NotFoundException" => ReEncryptError::NotFound(String::from(error_message)),
-                    "ValidationException" => ReEncryptError::Validation(error_message.to_string()),
-                    _ => ReEncryptError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return ReEncryptError::DependencyTimeout(String::from(error_message))
                 }
+                "DisabledException" => return ReEncryptError::Disabled(String::from(error_message)),
+                "InvalidCiphertextException" => {
+                    return ReEncryptError::InvalidCiphertext(String::from(error_message))
+                }
+                "InvalidGrantTokenException" => {
+                    return ReEncryptError::InvalidGrantToken(String::from(error_message))
+                }
+                "InvalidKeyUsageException" => {
+                    return ReEncryptError::InvalidKeyUsage(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return ReEncryptError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return ReEncryptError::KMSInvalidState(String::from(error_message))
+                }
+                "KeyUnavailableException" => {
+                    return ReEncryptError::KeyUnavailable(String::from(error_message))
+                }
+                "NotFoundException" => return ReEncryptError::NotFound(String::from(error_message)),
+                "ValidationException" => {
+                    return ReEncryptError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ReEncryptError::Unknown(String::from(body)),
         }
+        return ReEncryptError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ReEncryptError {
     fn from(err: serde_json::error::Error) -> ReEncryptError {
-        ReEncryptError::Unknown(err.description().to_string())
+        ReEncryptError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ReEncryptError {
@@ -3996,7 +4069,8 @@ impl Error for ReEncryptError {
             ReEncryptError::Validation(ref cause) => cause,
             ReEncryptError::Credentials(ref err) => err.description(),
             ReEncryptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ReEncryptError::Unknown(ref cause) => cause,
+            ReEncryptError::ParseError(ref cause) => cause,
+            ReEncryptError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4023,57 +4097,59 @@ pub enum RetireGrantError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RetireGrantError {
-    pub fn from_body(body: &str) -> RetireGrantError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RetireGrantError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        RetireGrantError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        RetireGrantError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidGrantIdException" => {
-                        RetireGrantError::InvalidGrantId(String::from(error_message))
-                    }
-                    "InvalidGrantTokenException" => {
-                        RetireGrantError::InvalidGrantToken(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        RetireGrantError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        RetireGrantError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => RetireGrantError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        RetireGrantError::Validation(error_message.to_string())
-                    }
-                    _ => RetireGrantError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return RetireGrantError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return RetireGrantError::InvalidArn(String::from(error_message))
+                }
+                "InvalidGrantIdException" => {
+                    return RetireGrantError::InvalidGrantId(String::from(error_message))
+                }
+                "InvalidGrantTokenException" => {
+                    return RetireGrantError::InvalidGrantToken(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return RetireGrantError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return RetireGrantError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return RetireGrantError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RetireGrantError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RetireGrantError::Unknown(String::from(body)),
         }
+        return RetireGrantError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RetireGrantError {
     fn from(err: serde_json::error::Error) -> RetireGrantError {
-        RetireGrantError::Unknown(err.description().to_string())
+        RetireGrantError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RetireGrantError {
@@ -4109,7 +4185,8 @@ impl Error for RetireGrantError {
             RetireGrantError::Validation(ref cause) => cause,
             RetireGrantError::Credentials(ref err) => err.description(),
             RetireGrantError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RetireGrantError::Unknown(ref cause) => cause,
+            RetireGrantError::ParseError(ref cause) => cause,
+            RetireGrantError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4134,54 +4211,56 @@ pub enum RevokeGrantError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RevokeGrantError {
-    pub fn from_body(body: &str) -> RevokeGrantError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RevokeGrantError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        RevokeGrantError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        RevokeGrantError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidGrantIdException" => {
-                        RevokeGrantError::InvalidGrantId(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        RevokeGrantError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        RevokeGrantError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => RevokeGrantError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        RevokeGrantError::Validation(error_message.to_string())
-                    }
-                    _ => RevokeGrantError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return RevokeGrantError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return RevokeGrantError::InvalidArn(String::from(error_message))
+                }
+                "InvalidGrantIdException" => {
+                    return RevokeGrantError::InvalidGrantId(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return RevokeGrantError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return RevokeGrantError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return RevokeGrantError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RevokeGrantError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RevokeGrantError::Unknown(String::from(body)),
         }
+        return RevokeGrantError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RevokeGrantError {
     fn from(err: serde_json::error::Error) -> RevokeGrantError {
-        RevokeGrantError::Unknown(err.description().to_string())
+        RevokeGrantError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RevokeGrantError {
@@ -4216,7 +4295,8 @@ impl Error for RevokeGrantError {
             RevokeGrantError::Validation(ref cause) => cause,
             RevokeGrantError::Credentials(ref err) => err.description(),
             RevokeGrantError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RevokeGrantError::Unknown(ref cause) => cause,
+            RevokeGrantError::ParseError(ref cause) => cause,
+            RevokeGrantError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4239,53 +4319,53 @@ pub enum ScheduleKeyDeletionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ScheduleKeyDeletionError {
-    pub fn from_body(body: &str) -> ScheduleKeyDeletionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ScheduleKeyDeletionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        ScheduleKeyDeletionError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        ScheduleKeyDeletionError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        ScheduleKeyDeletionError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        ScheduleKeyDeletionError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        ScheduleKeyDeletionError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ScheduleKeyDeletionError::Validation(error_message.to_string())
-                    }
-                    _ => ScheduleKeyDeletionError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return ScheduleKeyDeletionError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return ScheduleKeyDeletionError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return ScheduleKeyDeletionError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return ScheduleKeyDeletionError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return ScheduleKeyDeletionError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ScheduleKeyDeletionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ScheduleKeyDeletionError::Unknown(String::from(body)),
         }
+        return ScheduleKeyDeletionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ScheduleKeyDeletionError {
     fn from(err: serde_json::error::Error) -> ScheduleKeyDeletionError {
-        ScheduleKeyDeletionError::Unknown(err.description().to_string())
+        ScheduleKeyDeletionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ScheduleKeyDeletionError {
@@ -4321,7 +4401,8 @@ impl Error for ScheduleKeyDeletionError {
             ScheduleKeyDeletionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ScheduleKeyDeletionError::Unknown(ref cause) => cause,
+            ScheduleKeyDeletionError::ParseError(ref cause) => cause,
+            ScheduleKeyDeletionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4346,52 +4427,54 @@ pub enum TagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_body(body: &str) -> TagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArnException" => {
-                        TagResourceError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        TagResourceError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        TagResourceError::KMSInvalidState(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        TagResourceError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => TagResourceError::NotFound(String::from(error_message)),
-                    "TagException" => TagResourceError::Tag(String::from(error_message)),
-                    "ValidationException" => {
-                        TagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => TagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArnException" => {
+                    return TagResourceError::InvalidArn(String::from(error_message))
                 }
+                "KMSInternalException" => {
+                    return TagResourceError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return TagResourceError::KMSInvalidState(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return TagResourceError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return TagResourceError::NotFound(String::from(error_message))
+                }
+                "TagException" => return TagResourceError::Tag(String::from(error_message)),
+                "ValidationException" => {
+                    return TagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TagResourceError::Unknown(String::from(body)),
         }
+        return TagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TagResourceError {
     fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::Unknown(err.description().to_string())
+        TagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TagResourceError {
@@ -4426,7 +4509,8 @@ impl Error for TagResourceError {
             TagResourceError::Validation(ref cause) => cause,
             TagResourceError::Credentials(ref err) => err.description(),
             TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::Unknown(ref cause) => cause,
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4449,51 +4533,51 @@ pub enum UntagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_body(body: &str) -> UntagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArnException" => {
-                        UntagResourceError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        UntagResourceError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        UntagResourceError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UntagResourceError::NotFound(String::from(error_message))
-                    }
-                    "TagException" => UntagResourceError::Tag(String::from(error_message)),
-                    "ValidationException" => {
-                        UntagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => UntagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArnException" => {
+                    return UntagResourceError::InvalidArn(String::from(error_message))
                 }
+                "KMSInternalException" => {
+                    return UntagResourceError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return UntagResourceError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UntagResourceError::NotFound(String::from(error_message))
+                }
+                "TagException" => return UntagResourceError::Tag(String::from(error_message)),
+                "ValidationException" => {
+                    return UntagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UntagResourceError::Unknown(String::from(body)),
         }
+        return UntagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UntagResourceError {
     fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::Unknown(err.description().to_string())
+        UntagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UntagResourceError {
@@ -4527,7 +4611,8 @@ impl Error for UntagResourceError {
             UntagResourceError::Validation(ref cause) => cause,
             UntagResourceError::Credentials(ref err) => err.description(),
             UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::Unknown(ref cause) => cause,
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4548,48 +4633,50 @@ pub enum UpdateAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAliasError {
-    pub fn from_body(body: &str) -> UpdateAliasError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateAliasError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        UpdateAliasError::DependencyTimeout(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        UpdateAliasError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        UpdateAliasError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => UpdateAliasError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        UpdateAliasError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateAliasError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return UpdateAliasError::DependencyTimeout(String::from(error_message))
                 }
+                "KMSInternalException" => {
+                    return UpdateAliasError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return UpdateAliasError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateAliasError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateAliasError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateAliasError::Unknown(String::from(body)),
         }
+        return UpdateAliasError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateAliasError {
     fn from(err: serde_json::error::Error) -> UpdateAliasError {
-        UpdateAliasError::Unknown(err.description().to_string())
+        UpdateAliasError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateAliasError {
@@ -4622,7 +4709,8 @@ impl Error for UpdateAliasError {
             UpdateAliasError::Validation(ref cause) => cause,
             UpdateAliasError::Credentials(ref err) => err.description(),
             UpdateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateAliasError::Unknown(ref cause) => cause,
+            UpdateAliasError::ParseError(ref cause) => cause,
+            UpdateAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4645,53 +4733,53 @@ pub enum UpdateKeyDescriptionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateKeyDescriptionError {
-    pub fn from_body(body: &str) -> UpdateKeyDescriptionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateKeyDescriptionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DependencyTimeoutException" => {
-                        UpdateKeyDescriptionError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        UpdateKeyDescriptionError::InvalidArn(String::from(error_message))
-                    }
-                    "KMSInternalException" => {
-                        UpdateKeyDescriptionError::KMSInternal(String::from(error_message))
-                    }
-                    "KMSInvalidStateException" => {
-                        UpdateKeyDescriptionError::KMSInvalidState(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateKeyDescriptionError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateKeyDescriptionError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateKeyDescriptionError::Unknown(String::from(body)),
+            match *error_type {
+                "DependencyTimeoutException" => {
+                    return UpdateKeyDescriptionError::DependencyTimeout(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return UpdateKeyDescriptionError::InvalidArn(String::from(error_message))
+                }
+                "KMSInternalException" => {
+                    return UpdateKeyDescriptionError::KMSInternal(String::from(error_message))
+                }
+                "KMSInvalidStateException" => {
+                    return UpdateKeyDescriptionError::KMSInvalidState(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateKeyDescriptionError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateKeyDescriptionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateKeyDescriptionError::Unknown(String::from(body)),
         }
+        return UpdateKeyDescriptionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateKeyDescriptionError {
     fn from(err: serde_json::error::Error) -> UpdateKeyDescriptionError {
-        UpdateKeyDescriptionError::Unknown(err.description().to_string())
+        UpdateKeyDescriptionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateKeyDescriptionError {
@@ -4727,7 +4815,8 @@ impl Error for UpdateKeyDescriptionError {
             UpdateKeyDescriptionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateKeyDescriptionError::Unknown(ref cause) => cause,
+            UpdateKeyDescriptionError::ParseError(ref cause) => cause,
+            UpdateKeyDescriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4963,14 +5052,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<CancelKeyDeletionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CancelKeyDeletionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CancelKeyDeletionError::from_response(response))),
+                )
             }
         })
     }
@@ -4988,11 +5079,12 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateAliasError::from_response(response))),
+                )
             }
         })
     }
@@ -5020,14 +5112,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<CreateGrantResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateGrantError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateGrantError::from_response(response))),
+                )
             }
         })
     }
@@ -5055,14 +5149,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<CreateKeyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateKeyError::from_response(response))),
+                )
             }
         })
     }
@@ -5087,14 +5183,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<DecryptResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DecryptError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DecryptError::from_response(response))),
+                )
             }
         })
     }
@@ -5112,11 +5210,12 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteAliasError::from_response(response))),
+                )
             }
         })
     }
@@ -5138,9 +5237,7 @@ impl Kms for KmsClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteImportedKeyMaterialError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteImportedKeyMaterialError::from_response(response))
                 }))
             }
         })
@@ -5169,14 +5266,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<DescribeKeyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeKeyError::from_response(response))),
+                )
             }
         })
     }
@@ -5194,11 +5293,12 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DisableKeyError::from_response(response))),
+                )
             }
         })
     }
@@ -5219,11 +5319,12 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableKeyRotationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DisableKeyRotationError::from_response(response))),
+                )
             }
         })
     }
@@ -5241,11 +5342,12 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(EnableKeyError::from_response(response))),
+                )
             }
         })
     }
@@ -5266,11 +5368,12 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableKeyRotationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(EnableKeyRotationError::from_response(response))),
+                )
             }
         })
     }
@@ -5295,14 +5398,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<EncryptResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EncryptError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(EncryptError::from_response(response))),
+                )
             }
         })
     }
@@ -5330,14 +5435,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<GenerateDataKeyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GenerateDataKeyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GenerateDataKeyError::from_response(response))),
+                )
             }
         })
     }
@@ -5369,12 +5476,13 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<GenerateDataKeyWithoutPlaintextResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GenerateDataKeyWithoutPlaintextError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GenerateDataKeyWithoutPlaintextError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -5404,14 +5512,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<GenerateRandomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GenerateRandomError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GenerateRandomError::from_response(response))),
+                )
             }
         })
     }
@@ -5439,14 +5549,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<GetKeyPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetKeyPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetKeyPolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -5474,14 +5586,15 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<GetKeyRotationStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetKeyRotationStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetKeyRotationStatusError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5509,14 +5622,15 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<GetParametersForImportResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetParametersForImportError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetParametersForImportError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5544,14 +5658,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ImportKeyMaterialResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ImportKeyMaterialError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ImportKeyMaterialError::from_response(response))),
+                )
             }
         })
     }
@@ -5579,14 +5695,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ListAliasesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAliasesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListAliasesError::from_response(response))),
+                )
             }
         })
     }
@@ -5614,14 +5732,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ListGrantsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListGrantsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListGrantsError::from_response(response))),
+                )
             }
         })
     }
@@ -5649,14 +5769,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ListKeyPoliciesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListKeyPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListKeyPoliciesError::from_response(response))),
+                )
             }
         })
     }
@@ -5681,14 +5803,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ListKeysResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListKeysError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListKeysError::from_response(response))),
+                )
             }
         })
     }
@@ -5716,14 +5840,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ListResourceTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListResourceTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListResourceTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -5751,14 +5877,15 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ListGrantsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListRetirableGrantsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListRetirableGrantsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5776,11 +5903,12 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutKeyPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutKeyPolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -5808,14 +5936,16 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ReEncryptResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ReEncryptError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ReEncryptError::from_response(response))),
+                )
             }
         })
     }
@@ -5833,11 +5963,12 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RetireGrantError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RetireGrantError::from_response(response))),
+                )
             }
         })
     }
@@ -5855,11 +5986,12 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RevokeGrantError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RevokeGrantError::from_response(response))),
+                )
             }
         })
     }
@@ -5887,14 +6019,15 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ScheduleKeyDeletionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ScheduleKeyDeletionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ScheduleKeyDeletionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5912,11 +6045,12 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -5934,11 +6068,12 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -5956,11 +6091,12 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateAliasError::from_response(response))),
+                )
             }
         })
     }
@@ -5981,11 +6117,11 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateKeyDescriptionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateKeyDescriptionError::from_response(response))
+                    }),
+                )
             }
         })
     }

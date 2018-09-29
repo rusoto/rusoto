@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateIpGroupsRequest {
@@ -874,56 +874,62 @@ pub enum AssociateIpGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateIpGroupsError {
-    pub fn from_body(body: &str) -> AssociateIpGroupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateIpGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        AssociateIpGroupsError::AccessDenied(String::from(error_message))
-                    }
-                    "InvalidParameterValuesException" => {
-                        AssociateIpGroupsError::InvalidParameterValues(String::from(error_message))
-                    }
-                    "InvalidResourceStateException" => {
-                        AssociateIpGroupsError::InvalidResourceState(String::from(error_message))
-                    }
-                    "OperationNotSupportedException" => {
-                        AssociateIpGroupsError::OperationNotSupported(String::from(error_message))
-                    }
-                    "ResourceLimitExceededException" => {
-                        AssociateIpGroupsError::ResourceLimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        AssociateIpGroupsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AssociateIpGroupsError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateIpGroupsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return AssociateIpGroupsError::AccessDenied(String::from(error_message))
                 }
+                "InvalidParameterValuesException" => {
+                    return AssociateIpGroupsError::InvalidParameterValues(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidResourceStateException" => {
+                    return AssociateIpGroupsError::InvalidResourceState(String::from(error_message))
+                }
+                "OperationNotSupportedException" => {
+                    return AssociateIpGroupsError::OperationNotSupported(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceLimitExceededException" => {
+                    return AssociateIpGroupsError::ResourceLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return AssociateIpGroupsError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AssociateIpGroupsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AssociateIpGroupsError::Unknown(String::from(body)),
         }
+        return AssociateIpGroupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateIpGroupsError {
     fn from(err: serde_json::error::Error) -> AssociateIpGroupsError {
-        AssociateIpGroupsError::Unknown(err.description().to_string())
+        AssociateIpGroupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateIpGroupsError {
@@ -960,7 +966,8 @@ impl Error for AssociateIpGroupsError {
             AssociateIpGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateIpGroupsError::Unknown(ref cause) => cause,
+            AssociateIpGroupsError::ParseError(ref cause) => cause,
+            AssociateIpGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -983,53 +990,55 @@ pub enum AuthorizeIpRulesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AuthorizeIpRulesError {
-    pub fn from_body(body: &str) -> AuthorizeIpRulesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AuthorizeIpRulesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        AuthorizeIpRulesError::AccessDenied(String::from(error_message))
-                    }
-                    "InvalidParameterValuesException" => {
-                        AuthorizeIpRulesError::InvalidParameterValues(String::from(error_message))
-                    }
-                    "InvalidResourceStateException" => {
-                        AuthorizeIpRulesError::InvalidResourceState(String::from(error_message))
-                    }
-                    "ResourceLimitExceededException" => {
-                        AuthorizeIpRulesError::ResourceLimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        AuthorizeIpRulesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AuthorizeIpRulesError::Validation(error_message.to_string())
-                    }
-                    _ => AuthorizeIpRulesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return AuthorizeIpRulesError::AccessDenied(String::from(error_message))
                 }
+                "InvalidParameterValuesException" => {
+                    return AuthorizeIpRulesError::InvalidParameterValues(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidResourceStateException" => {
+                    return AuthorizeIpRulesError::InvalidResourceState(String::from(error_message))
+                }
+                "ResourceLimitExceededException" => {
+                    return AuthorizeIpRulesError::ResourceLimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return AuthorizeIpRulesError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AuthorizeIpRulesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AuthorizeIpRulesError::Unknown(String::from(body)),
         }
+        return AuthorizeIpRulesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AuthorizeIpRulesError {
     fn from(err: serde_json::error::Error) -> AuthorizeIpRulesError {
-        AuthorizeIpRulesError::Unknown(err.description().to_string())
+        AuthorizeIpRulesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AuthorizeIpRulesError {
@@ -1063,7 +1072,8 @@ impl Error for AuthorizeIpRulesError {
             AuthorizeIpRulesError::Validation(ref cause) => cause,
             AuthorizeIpRulesError::Credentials(ref err) => err.description(),
             AuthorizeIpRulesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AuthorizeIpRulesError::Unknown(ref cause) => cause,
+            AuthorizeIpRulesError::ParseError(ref cause) => cause,
+            AuthorizeIpRulesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1086,53 +1096,53 @@ pub enum CreateIpGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateIpGroupError {
-    pub fn from_body(body: &str) -> CreateIpGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateIpGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreateIpGroupError::AccessDenied(String::from(error_message))
-                    }
-                    "InvalidParameterValuesException" => {
-                        CreateIpGroupError::InvalidParameterValues(String::from(error_message))
-                    }
-                    "ResourceAlreadyExistsException" => {
-                        CreateIpGroupError::ResourceAlreadyExists(String::from(error_message))
-                    }
-                    "ResourceCreationFailedException" => {
-                        CreateIpGroupError::ResourceCreationFailed(String::from(error_message))
-                    }
-                    "ResourceLimitExceededException" => {
-                        CreateIpGroupError::ResourceLimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateIpGroupError::Validation(error_message.to_string())
-                    }
-                    _ => CreateIpGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateIpGroupError::AccessDenied(String::from(error_message))
                 }
+                "InvalidParameterValuesException" => {
+                    return CreateIpGroupError::InvalidParameterValues(String::from(error_message))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return CreateIpGroupError::ResourceAlreadyExists(String::from(error_message))
+                }
+                "ResourceCreationFailedException" => {
+                    return CreateIpGroupError::ResourceCreationFailed(String::from(error_message))
+                }
+                "ResourceLimitExceededException" => {
+                    return CreateIpGroupError::ResourceLimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateIpGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateIpGroupError::Unknown(String::from(body)),
         }
+        return CreateIpGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateIpGroupError {
     fn from(err: serde_json::error::Error) -> CreateIpGroupError {
-        CreateIpGroupError::Unknown(err.description().to_string())
+        CreateIpGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateIpGroupError {
@@ -1166,7 +1176,8 @@ impl Error for CreateIpGroupError {
             CreateIpGroupError::Validation(ref cause) => cause,
             CreateIpGroupError::Credentials(ref err) => err.description(),
             CreateIpGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateIpGroupError::Unknown(ref cause) => cause,
+            CreateIpGroupError::ParseError(ref cause) => cause,
+            CreateIpGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1185,45 +1196,47 @@ pub enum CreateTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTagsError {
-    pub fn from_body(body: &str) -> CreateTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValuesException" => {
-                        CreateTagsError::InvalidParameterValues(String::from(error_message))
-                    }
-                    "ResourceLimitExceededException" => {
-                        CreateTagsError::ResourceLimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateTagsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => CreateTagsError::Validation(error_message.to_string()),
-                    _ => CreateTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValuesException" => {
+                    return CreateTagsError::InvalidParameterValues(String::from(error_message))
                 }
+                "ResourceLimitExceededException" => {
+                    return CreateTagsError::ResourceLimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateTagsError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateTagsError::Unknown(String::from(body)),
         }
+        return CreateTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateTagsError {
     fn from(err: serde_json::error::Error) -> CreateTagsError {
-        CreateTagsError::Unknown(err.description().to_string())
+        CreateTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateTagsError {
@@ -1255,7 +1268,8 @@ impl Error for CreateTagsError {
             CreateTagsError::Validation(ref cause) => cause,
             CreateTagsError::Credentials(ref err) => err.description(),
             CreateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTagsError::Unknown(ref cause) => cause,
+            CreateTagsError::ParseError(ref cause) => cause,
+            CreateTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1272,44 +1286,46 @@ pub enum CreateWorkspacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateWorkspacesError {
-    pub fn from_body(body: &str) -> CreateWorkspacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateWorkspacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValuesException" => {
-                        CreateWorkspacesError::InvalidParameterValues(String::from(error_message))
-                    }
-                    "ResourceLimitExceededException" => {
-                        CreateWorkspacesError::ResourceLimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateWorkspacesError::Validation(error_message.to_string())
-                    }
-                    _ => CreateWorkspacesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValuesException" => {
+                    return CreateWorkspacesError::InvalidParameterValues(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceLimitExceededException" => {
+                    return CreateWorkspacesError::ResourceLimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateWorkspacesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateWorkspacesError::Unknown(String::from(body)),
         }
+        return CreateWorkspacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateWorkspacesError {
     fn from(err: serde_json::error::Error) -> CreateWorkspacesError {
-        CreateWorkspacesError::Unknown(err.description().to_string())
+        CreateWorkspacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateWorkspacesError {
@@ -1340,7 +1356,8 @@ impl Error for CreateWorkspacesError {
             CreateWorkspacesError::Validation(ref cause) => cause,
             CreateWorkspacesError::Credentials(ref err) => err.description(),
             CreateWorkspacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateWorkspacesError::Unknown(ref cause) => cause,
+            CreateWorkspacesError::ParseError(ref cause) => cause,
+            CreateWorkspacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1361,50 +1378,50 @@ pub enum DeleteIpGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIpGroupError {
-    pub fn from_body(body: &str) -> DeleteIpGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteIpGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DeleteIpGroupError::AccessDenied(String::from(error_message))
-                    }
-                    "InvalidParameterValuesException" => {
-                        DeleteIpGroupError::InvalidParameterValues(String::from(error_message))
-                    }
-                    "ResourceAssociatedException" => {
-                        DeleteIpGroupError::ResourceAssociated(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteIpGroupError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteIpGroupError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteIpGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeleteIpGroupError::AccessDenied(String::from(error_message))
                 }
+                "InvalidParameterValuesException" => {
+                    return DeleteIpGroupError::InvalidParameterValues(String::from(error_message))
+                }
+                "ResourceAssociatedException" => {
+                    return DeleteIpGroupError::ResourceAssociated(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteIpGroupError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteIpGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteIpGroupError::Unknown(String::from(body)),
         }
+        return DeleteIpGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteIpGroupError {
     fn from(err: serde_json::error::Error) -> DeleteIpGroupError {
-        DeleteIpGroupError::Unknown(err.description().to_string())
+        DeleteIpGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteIpGroupError {
@@ -1437,7 +1454,8 @@ impl Error for DeleteIpGroupError {
             DeleteIpGroupError::Validation(ref cause) => cause,
             DeleteIpGroupError::Credentials(ref err) => err.description(),
             DeleteIpGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteIpGroupError::Unknown(ref cause) => cause,
+            DeleteIpGroupError::ParseError(ref cause) => cause,
+            DeleteIpGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1454,42 +1472,44 @@ pub enum DeleteTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTagsError {
-    pub fn from_body(body: &str) -> DeleteTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValuesException" => {
-                        DeleteTagsError::InvalidParameterValues(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteTagsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => DeleteTagsError::Validation(error_message.to_string()),
-                    _ => DeleteTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValuesException" => {
+                    return DeleteTagsError::InvalidParameterValues(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return DeleteTagsError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteTagsError::Unknown(String::from(body)),
         }
+        return DeleteTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteTagsError {
     fn from(err: serde_json::error::Error) -> DeleteTagsError {
-        DeleteTagsError::Unknown(err.description().to_string())
+        DeleteTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteTagsError {
@@ -1520,7 +1540,8 @@ impl Error for DeleteTagsError {
             DeleteTagsError::Validation(ref cause) => cause,
             DeleteTagsError::Credentials(ref err) => err.description(),
             DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTagsError::Unknown(ref cause) => cause,
+            DeleteTagsError::ParseError(ref cause) => cause,
+            DeleteTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1537,44 +1558,46 @@ pub enum DescribeIpGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeIpGroupsError {
-    pub fn from_body(body: &str) -> DescribeIpGroupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeIpGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DescribeIpGroupsError::AccessDenied(String::from(error_message))
-                    }
-                    "InvalidParameterValuesException" => {
-                        DescribeIpGroupsError::InvalidParameterValues(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeIpGroupsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeIpGroupsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DescribeIpGroupsError::AccessDenied(String::from(error_message))
                 }
+                "InvalidParameterValuesException" => {
+                    return DescribeIpGroupsError::InvalidParameterValues(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeIpGroupsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeIpGroupsError::Unknown(String::from(body)),
         }
+        return DescribeIpGroupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeIpGroupsError {
     fn from(err: serde_json::error::Error) -> DescribeIpGroupsError {
-        DescribeIpGroupsError::Unknown(err.description().to_string())
+        DescribeIpGroupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeIpGroupsError {
@@ -1605,7 +1628,8 @@ impl Error for DescribeIpGroupsError {
             DescribeIpGroupsError::Validation(ref cause) => cause,
             DescribeIpGroupsError::Credentials(ref err) => err.description(),
             DescribeIpGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeIpGroupsError::Unknown(ref cause) => cause,
+            DescribeIpGroupsError::ParseError(ref cause) => cause,
+            DescribeIpGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1620,41 +1644,41 @@ pub enum DescribeTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_body(body: &str) -> DescribeTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ResourceNotFoundException" => {
-                        DescribeTagsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeTagsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DescribeTagsError::ResourceNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DescribeTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTagsError::Unknown(String::from(body)),
         }
+        return DescribeTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTagsError {
     fn from(err: serde_json::error::Error) -> DescribeTagsError {
-        DescribeTagsError::Unknown(err.description().to_string())
+        DescribeTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTagsError {
@@ -1684,7 +1708,8 @@ impl Error for DescribeTagsError {
             DescribeTagsError::Validation(ref cause) => cause,
             DescribeTagsError::Credentials(ref err) => err.description(),
             DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::Unknown(ref cause) => cause,
+            DescribeTagsError::ParseError(ref cause) => cause,
+            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1699,43 +1724,43 @@ pub enum DescribeWorkspaceBundlesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeWorkspaceBundlesError {
-    pub fn from_body(body: &str) -> DescribeWorkspaceBundlesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeWorkspaceBundlesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValuesException" => {
-                        DescribeWorkspaceBundlesError::InvalidParameterValues(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeWorkspaceBundlesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeWorkspaceBundlesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValuesException" => {
+                    return DescribeWorkspaceBundlesError::InvalidParameterValues(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DescribeWorkspaceBundlesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeWorkspaceBundlesError::Unknown(String::from(body)),
         }
+        return DescribeWorkspaceBundlesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeWorkspaceBundlesError {
     fn from(err: serde_json::error::Error) -> DescribeWorkspaceBundlesError {
-        DescribeWorkspaceBundlesError::Unknown(err.description().to_string())
+        DescribeWorkspaceBundlesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeWorkspaceBundlesError {
@@ -1767,7 +1792,8 @@ impl Error for DescribeWorkspaceBundlesError {
             DescribeWorkspaceBundlesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeWorkspaceBundlesError::Unknown(ref cause) => cause,
+            DescribeWorkspaceBundlesError::ParseError(ref cause) => cause,
+            DescribeWorkspaceBundlesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1782,43 +1808,43 @@ pub enum DescribeWorkspaceDirectoriesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeWorkspaceDirectoriesError {
-    pub fn from_body(body: &str) -> DescribeWorkspaceDirectoriesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeWorkspaceDirectoriesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValuesException" => {
-                        DescribeWorkspaceDirectoriesError::InvalidParameterValues(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeWorkspaceDirectoriesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeWorkspaceDirectoriesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValuesException" => {
+                    return DescribeWorkspaceDirectoriesError::InvalidParameterValues(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DescribeWorkspaceDirectoriesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeWorkspaceDirectoriesError::Unknown(String::from(body)),
         }
+        return DescribeWorkspaceDirectoriesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeWorkspaceDirectoriesError {
     fn from(err: serde_json::error::Error) -> DescribeWorkspaceDirectoriesError {
-        DescribeWorkspaceDirectoriesError::Unknown(err.description().to_string())
+        DescribeWorkspaceDirectoriesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeWorkspaceDirectoriesError {
@@ -1850,7 +1876,8 @@ impl Error for DescribeWorkspaceDirectoriesError {
             DescribeWorkspaceDirectoriesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeWorkspaceDirectoriesError::Unknown(ref cause) => cause,
+            DescribeWorkspaceDirectoriesError::ParseError(ref cause) => cause,
+            DescribeWorkspaceDirectoriesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1867,44 +1894,46 @@ pub enum DescribeWorkspacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeWorkspacesError {
-    pub fn from_body(body: &str) -> DescribeWorkspacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeWorkspacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValuesException" => {
-                        DescribeWorkspacesError::InvalidParameterValues(String::from(error_message))
-                    }
-                    "ResourceUnavailableException" => {
-                        DescribeWorkspacesError::ResourceUnavailable(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeWorkspacesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeWorkspacesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValuesException" => {
+                    return DescribeWorkspacesError::InvalidParameterValues(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceUnavailableException" => {
+                    return DescribeWorkspacesError::ResourceUnavailable(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeWorkspacesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeWorkspacesError::Unknown(String::from(body)),
         }
+        return DescribeWorkspacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeWorkspacesError {
     fn from(err: serde_json::error::Error) -> DescribeWorkspacesError {
-        DescribeWorkspacesError::Unknown(err.description().to_string())
+        DescribeWorkspacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeWorkspacesError {
@@ -1937,7 +1966,8 @@ impl Error for DescribeWorkspacesError {
             DescribeWorkspacesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeWorkspacesError::Unknown(ref cause) => cause,
+            DescribeWorkspacesError::ParseError(ref cause) => cause,
+            DescribeWorkspacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1952,43 +1982,45 @@ pub enum DescribeWorkspacesConnectionStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeWorkspacesConnectionStatusError {
-    pub fn from_body(body: &str) -> DescribeWorkspacesConnectionStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeWorkspacesConnectionStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValuesException" => {
-                        DescribeWorkspacesConnectionStatusError::InvalidParameterValues(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => DescribeWorkspacesConnectionStatusError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DescribeWorkspacesConnectionStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValuesException" => {
+                    return DescribeWorkspacesConnectionStatusError::InvalidParameterValues(
+                        String::from(error_message),
+                    )
                 }
+                "ValidationException" => {
+                    return DescribeWorkspacesConnectionStatusError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeWorkspacesConnectionStatusError::Unknown(String::from(body)),
         }
+        return DescribeWorkspacesConnectionStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeWorkspacesConnectionStatusError {
     fn from(err: serde_json::error::Error) -> DescribeWorkspacesConnectionStatusError {
-        DescribeWorkspacesConnectionStatusError::Unknown(err.description().to_string())
+        DescribeWorkspacesConnectionStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeWorkspacesConnectionStatusError {
@@ -2020,7 +2052,8 @@ impl Error for DescribeWorkspacesConnectionStatusError {
             DescribeWorkspacesConnectionStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeWorkspacesConnectionStatusError::Unknown(ref cause) => cause,
+            DescribeWorkspacesConnectionStatusError::ParseError(ref cause) => cause,
+            DescribeWorkspacesConnectionStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2041,52 +2074,54 @@ pub enum DisassociateIpGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateIpGroupsError {
-    pub fn from_body(body: &str) -> DisassociateIpGroupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateIpGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DisassociateIpGroupsError::AccessDenied(String::from(error_message))
-                    }
-                    "InvalidParameterValuesException" => {
-                        DisassociateIpGroupsError::InvalidParameterValues(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidResourceStateException" => {
-                        DisassociateIpGroupsError::InvalidResourceState(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DisassociateIpGroupsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DisassociateIpGroupsError::Validation(error_message.to_string())
-                    }
-                    _ => DisassociateIpGroupsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DisassociateIpGroupsError::AccessDenied(String::from(error_message))
                 }
+                "InvalidParameterValuesException" => {
+                    return DisassociateIpGroupsError::InvalidParameterValues(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidResourceStateException" => {
+                    return DisassociateIpGroupsError::InvalidResourceState(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DisassociateIpGroupsError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DisassociateIpGroupsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisassociateIpGroupsError::Unknown(String::from(body)),
         }
+        return DisassociateIpGroupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateIpGroupsError {
     fn from(err: serde_json::error::Error) -> DisassociateIpGroupsError {
-        DisassociateIpGroupsError::Unknown(err.description().to_string())
+        DisassociateIpGroupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateIpGroupsError {
@@ -2121,7 +2156,8 @@ impl Error for DisassociateIpGroupsError {
             DisassociateIpGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateIpGroupsError::Unknown(ref cause) => cause,
+            DisassociateIpGroupsError::ParseError(ref cause) => cause,
+            DisassociateIpGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2148,71 +2184,71 @@ pub enum ModifyWorkspacePropertiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyWorkspacePropertiesError {
-    pub fn from_body(body: &str) -> ModifyWorkspacePropertiesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyWorkspacePropertiesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ModifyWorkspacePropertiesError::AccessDenied(String::from(error_message))
-                    }
-                    "InvalidParameterValuesException" => {
-                        ModifyWorkspacePropertiesError::InvalidParameterValues(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidResourceStateException" => {
-                        ModifyWorkspacePropertiesError::InvalidResourceState(String::from(
-                            error_message,
-                        ))
-                    }
-                    "OperationInProgressException" => {
-                        ModifyWorkspacePropertiesError::OperationInProgress(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        ModifyWorkspacePropertiesError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceUnavailableException" => {
-                        ModifyWorkspacePropertiesError::ResourceUnavailable(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnsupportedWorkspaceConfigurationException" => {
-                        ModifyWorkspacePropertiesError::UnsupportedWorkspaceConfiguration(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        ModifyWorkspacePropertiesError::Validation(error_message.to_string())
-                    }
-                    _ => ModifyWorkspacePropertiesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ModifyWorkspacePropertiesError::AccessDenied(String::from(error_message))
                 }
+                "InvalidParameterValuesException" => {
+                    return ModifyWorkspacePropertiesError::InvalidParameterValues(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidResourceStateException" => {
+                    return ModifyWorkspacePropertiesError::InvalidResourceState(String::from(
+                        error_message,
+                    ))
+                }
+                "OperationInProgressException" => {
+                    return ModifyWorkspacePropertiesError::OperationInProgress(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return ModifyWorkspacePropertiesError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceUnavailableException" => {
+                    return ModifyWorkspacePropertiesError::ResourceUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedWorkspaceConfigurationException" => {
+                    return ModifyWorkspacePropertiesError::UnsupportedWorkspaceConfiguration(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return ModifyWorkspacePropertiesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ModifyWorkspacePropertiesError::Unknown(String::from(body)),
         }
+        return ModifyWorkspacePropertiesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ModifyWorkspacePropertiesError {
     fn from(err: serde_json::error::Error) -> ModifyWorkspacePropertiesError {
-        ModifyWorkspacePropertiesError::Unknown(err.description().to_string())
+        ModifyWorkspacePropertiesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ModifyWorkspacePropertiesError {
@@ -2250,7 +2286,8 @@ impl Error for ModifyWorkspacePropertiesError {
             ModifyWorkspacePropertiesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyWorkspacePropertiesError::Unknown(ref cause) => cause,
+            ModifyWorkspacePropertiesError::ParseError(ref cause) => cause,
+            ModifyWorkspacePropertiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2269,49 +2306,51 @@ pub enum ModifyWorkspaceStateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyWorkspaceStateError {
-    pub fn from_body(body: &str) -> ModifyWorkspaceStateError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyWorkspaceStateError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValuesException" => {
-                        ModifyWorkspaceStateError::InvalidParameterValues(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidResourceStateException" => {
-                        ModifyWorkspaceStateError::InvalidResourceState(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ModifyWorkspaceStateError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ModifyWorkspaceStateError::Validation(error_message.to_string())
-                    }
-                    _ => ModifyWorkspaceStateError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValuesException" => {
+                    return ModifyWorkspaceStateError::InvalidParameterValues(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidResourceStateException" => {
+                    return ModifyWorkspaceStateError::InvalidResourceState(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return ModifyWorkspaceStateError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ModifyWorkspaceStateError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ModifyWorkspaceStateError::Unknown(String::from(body)),
         }
+        return ModifyWorkspaceStateError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ModifyWorkspaceStateError {
     fn from(err: serde_json::error::Error) -> ModifyWorkspaceStateError {
-        ModifyWorkspaceStateError::Unknown(err.description().to_string())
+        ModifyWorkspaceStateError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ModifyWorkspaceStateError {
@@ -2345,7 +2384,8 @@ impl Error for ModifyWorkspaceStateError {
             ModifyWorkspaceStateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyWorkspaceStateError::Unknown(ref cause) => cause,
+            ModifyWorkspaceStateError::ParseError(ref cause) => cause,
+            ModifyWorkspaceStateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2358,38 +2398,38 @@ pub enum RebootWorkspacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RebootWorkspacesError {
-    pub fn from_body(body: &str) -> RebootWorkspacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RebootWorkspacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        RebootWorkspacesError::Validation(error_message.to_string())
-                    }
-                    _ => RebootWorkspacesError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return RebootWorkspacesError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => RebootWorkspacesError::Unknown(String::from(body)),
         }
+        return RebootWorkspacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RebootWorkspacesError {
     fn from(err: serde_json::error::Error) -> RebootWorkspacesError {
-        RebootWorkspacesError::Unknown(err.description().to_string())
+        RebootWorkspacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RebootWorkspacesError {
@@ -2418,7 +2458,8 @@ impl Error for RebootWorkspacesError {
             RebootWorkspacesError::Validation(ref cause) => cause,
             RebootWorkspacesError::Credentials(ref err) => err.description(),
             RebootWorkspacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RebootWorkspacesError::Unknown(ref cause) => cause,
+            RebootWorkspacesError::ParseError(ref cause) => cause,
+            RebootWorkspacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2431,38 +2472,38 @@ pub enum RebuildWorkspacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RebuildWorkspacesError {
-    pub fn from_body(body: &str) -> RebuildWorkspacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RebuildWorkspacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        RebuildWorkspacesError::Validation(error_message.to_string())
-                    }
-                    _ => RebuildWorkspacesError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return RebuildWorkspacesError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => RebuildWorkspacesError::Unknown(String::from(body)),
         }
+        return RebuildWorkspacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RebuildWorkspacesError {
     fn from(err: serde_json::error::Error) -> RebuildWorkspacesError {
-        RebuildWorkspacesError::Unknown(err.description().to_string())
+        RebuildWorkspacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RebuildWorkspacesError {
@@ -2493,7 +2534,8 @@ impl Error for RebuildWorkspacesError {
             RebuildWorkspacesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RebuildWorkspacesError::Unknown(ref cause) => cause,
+            RebuildWorkspacesError::ParseError(ref cause) => cause,
+            RebuildWorkspacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2514,50 +2556,50 @@ pub enum RevokeIpRulesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RevokeIpRulesError {
-    pub fn from_body(body: &str) -> RevokeIpRulesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RevokeIpRulesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        RevokeIpRulesError::AccessDenied(String::from(error_message))
-                    }
-                    "InvalidParameterValuesException" => {
-                        RevokeIpRulesError::InvalidParameterValues(String::from(error_message))
-                    }
-                    "InvalidResourceStateException" => {
-                        RevokeIpRulesError::InvalidResourceState(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        RevokeIpRulesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RevokeIpRulesError::Validation(error_message.to_string())
-                    }
-                    _ => RevokeIpRulesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return RevokeIpRulesError::AccessDenied(String::from(error_message))
                 }
+                "InvalidParameterValuesException" => {
+                    return RevokeIpRulesError::InvalidParameterValues(String::from(error_message))
+                }
+                "InvalidResourceStateException" => {
+                    return RevokeIpRulesError::InvalidResourceState(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return RevokeIpRulesError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RevokeIpRulesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RevokeIpRulesError::Unknown(String::from(body)),
         }
+        return RevokeIpRulesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RevokeIpRulesError {
     fn from(err: serde_json::error::Error) -> RevokeIpRulesError {
-        RevokeIpRulesError::Unknown(err.description().to_string())
+        RevokeIpRulesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RevokeIpRulesError {
@@ -2590,7 +2632,8 @@ impl Error for RevokeIpRulesError {
             RevokeIpRulesError::Validation(ref cause) => cause,
             RevokeIpRulesError::Credentials(ref err) => err.description(),
             RevokeIpRulesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RevokeIpRulesError::Unknown(ref cause) => cause,
+            RevokeIpRulesError::ParseError(ref cause) => cause,
+            RevokeIpRulesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2603,38 +2646,38 @@ pub enum StartWorkspacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartWorkspacesError {
-    pub fn from_body(body: &str) -> StartWorkspacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartWorkspacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        StartWorkspacesError::Validation(error_message.to_string())
-                    }
-                    _ => StartWorkspacesError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return StartWorkspacesError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => StartWorkspacesError::Unknown(String::from(body)),
         }
+        return StartWorkspacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartWorkspacesError {
     fn from(err: serde_json::error::Error) -> StartWorkspacesError {
-        StartWorkspacesError::Unknown(err.description().to_string())
+        StartWorkspacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartWorkspacesError {
@@ -2663,7 +2706,8 @@ impl Error for StartWorkspacesError {
             StartWorkspacesError::Validation(ref cause) => cause,
             StartWorkspacesError::Credentials(ref err) => err.description(),
             StartWorkspacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartWorkspacesError::Unknown(ref cause) => cause,
+            StartWorkspacesError::ParseError(ref cause) => cause,
+            StartWorkspacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2676,38 +2720,38 @@ pub enum StopWorkspacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopWorkspacesError {
-    pub fn from_body(body: &str) -> StopWorkspacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopWorkspacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        StopWorkspacesError::Validation(error_message.to_string())
-                    }
-                    _ => StopWorkspacesError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return StopWorkspacesError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => StopWorkspacesError::Unknown(String::from(body)),
         }
+        return StopWorkspacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopWorkspacesError {
     fn from(err: serde_json::error::Error) -> StopWorkspacesError {
-        StopWorkspacesError::Unknown(err.description().to_string())
+        StopWorkspacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopWorkspacesError {
@@ -2736,7 +2780,8 @@ impl Error for StopWorkspacesError {
             StopWorkspacesError::Validation(ref cause) => cause,
             StopWorkspacesError::Credentials(ref err) => err.description(),
             StopWorkspacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopWorkspacesError::Unknown(ref cause) => cause,
+            StopWorkspacesError::ParseError(ref cause) => cause,
+            StopWorkspacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2749,38 +2794,38 @@ pub enum TerminateWorkspacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TerminateWorkspacesError {
-    pub fn from_body(body: &str) -> TerminateWorkspacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TerminateWorkspacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        TerminateWorkspacesError::Validation(error_message.to_string())
-                    }
-                    _ => TerminateWorkspacesError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return TerminateWorkspacesError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => TerminateWorkspacesError::Unknown(String::from(body)),
         }
+        return TerminateWorkspacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TerminateWorkspacesError {
     fn from(err: serde_json::error::Error) -> TerminateWorkspacesError {
-        TerminateWorkspacesError::Unknown(err.description().to_string())
+        TerminateWorkspacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TerminateWorkspacesError {
@@ -2811,7 +2856,8 @@ impl Error for TerminateWorkspacesError {
             TerminateWorkspacesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            TerminateWorkspacesError::Unknown(ref cause) => cause,
+            TerminateWorkspacesError::ParseError(ref cause) => cause,
+            TerminateWorkspacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2834,57 +2880,59 @@ pub enum UpdateRulesOfIpGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRulesOfIpGroupError {
-    pub fn from_body(body: &str) -> UpdateRulesOfIpGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateRulesOfIpGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpdateRulesOfIpGroupError::AccessDenied(String::from(error_message))
-                    }
-                    "InvalidParameterValuesException" => {
-                        UpdateRulesOfIpGroupError::InvalidParameterValues(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidResourceStateException" => {
-                        UpdateRulesOfIpGroupError::InvalidResourceState(String::from(error_message))
-                    }
-                    "ResourceLimitExceededException" => {
-                        UpdateRulesOfIpGroupError::ResourceLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateRulesOfIpGroupError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateRulesOfIpGroupError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateRulesOfIpGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdateRulesOfIpGroupError::AccessDenied(String::from(error_message))
                 }
+                "InvalidParameterValuesException" => {
+                    return UpdateRulesOfIpGroupError::InvalidParameterValues(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidResourceStateException" => {
+                    return UpdateRulesOfIpGroupError::InvalidResourceState(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceLimitExceededException" => {
+                    return UpdateRulesOfIpGroupError::ResourceLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateRulesOfIpGroupError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateRulesOfIpGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateRulesOfIpGroupError::Unknown(String::from(body)),
         }
+        return UpdateRulesOfIpGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateRulesOfIpGroupError {
     fn from(err: serde_json::error::Error) -> UpdateRulesOfIpGroupError {
-        UpdateRulesOfIpGroupError::Unknown(err.description().to_string())
+        UpdateRulesOfIpGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateRulesOfIpGroupError {
@@ -2920,7 +2968,8 @@ impl Error for UpdateRulesOfIpGroupError {
             UpdateRulesOfIpGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateRulesOfIpGroupError::Unknown(ref cause) => cause,
+            UpdateRulesOfIpGroupError::ParseError(ref cause) => cause,
+            UpdateRulesOfIpGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3126,14 +3175,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<AssociateIpGroupsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateIpGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AssociateIpGroupsError::from_response(response))),
+                )
             }
         })
     }
@@ -3161,14 +3212,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<AuthorizeIpRulesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AuthorizeIpRulesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AuthorizeIpRulesError::from_response(response))),
+                )
             }
         })
     }
@@ -3196,14 +3249,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<CreateIpGroupResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateIpGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateIpGroupError::from_response(response))),
+                )
             }
         })
     }
@@ -3231,14 +3286,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<CreateTagsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -3266,14 +3323,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<CreateWorkspacesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateWorkspacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateWorkspacesError::from_response(response))),
+                )
             }
         })
     }
@@ -3301,14 +3360,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<DeleteIpGroupResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteIpGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteIpGroupError::from_response(response))),
+                )
             }
         })
     }
@@ -3336,14 +3397,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<DeleteTagsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -3371,14 +3434,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<DescribeIpGroupsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeIpGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeIpGroupsError::from_response(response))),
+                )
             }
         })
     }
@@ -3406,14 +3471,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<DescribeTagsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -3441,13 +3508,12 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<DescribeWorkspaceBundlesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeWorkspaceBundlesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeWorkspaceBundlesError::from_response(response))
                 }))
             }
         })
@@ -3479,13 +3545,12 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<DescribeWorkspaceDirectoriesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeWorkspaceDirectoriesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeWorkspaceDirectoriesError::from_response(response))
                 }))
             }
         })
@@ -3514,14 +3579,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<DescribeWorkspacesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeWorkspacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeWorkspacesError::from_response(response))),
+                )
             }
         })
     }
@@ -3555,12 +3622,13 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<DescribeWorkspacesConnectionStatusResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeWorkspacesConnectionStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeWorkspacesConnectionStatusError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -3590,14 +3658,15 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<DisassociateIpGroupsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateIpGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DisassociateIpGroupsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3628,13 +3697,12 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<ModifyWorkspacePropertiesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyWorkspacePropertiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ModifyWorkspacePropertiesError::from_response(response))
                 }))
             }
         })
@@ -3663,14 +3731,15 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<ModifyWorkspaceStateResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyWorkspaceStateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ModifyWorkspaceStateError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3698,14 +3767,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<RebootWorkspacesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RebootWorkspacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RebootWorkspacesError::from_response(response))),
+                )
             }
         })
     }
@@ -3733,14 +3804,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<RebuildWorkspacesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RebuildWorkspacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RebuildWorkspacesError::from_response(response))),
+                )
             }
         })
     }
@@ -3768,14 +3841,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<RevokeIpRulesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RevokeIpRulesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RevokeIpRulesError::from_response(response))),
+                )
             }
         })
     }
@@ -3803,14 +3878,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<StartWorkspacesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartWorkspacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartWorkspacesError::from_response(response))),
+                )
             }
         })
     }
@@ -3838,14 +3915,16 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<StopWorkspacesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopWorkspacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StopWorkspacesError::from_response(response))),
+                )
             }
         })
     }
@@ -3873,14 +3952,15 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<TerminateWorkspacesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TerminateWorkspacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(TerminateWorkspacesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3908,14 +3988,15 @@ impl Workspaces for WorkspacesClient {
 
                     serde_json::from_str::<UpdateRulesOfIpGroupResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateRulesOfIpGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateRulesOfIpGroupError::from_response(response))
+                    }),
+                )
             }
         })
     }

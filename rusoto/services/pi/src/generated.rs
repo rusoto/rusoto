@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>A timestamp, and a single numerical value, which together represent a measurement at a particular point in time.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -257,47 +257,49 @@ pub enum DescribeDimensionKeysError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDimensionKeysError {
-    pub fn from_body(body: &str) -> DescribeDimensionKeysError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeDimensionKeysError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => DescribeDimensionKeysError::InternalServiceError(
-                        String::from(error_message),
-                    ),
-                    "InvalidArgumentException" => {
-                        DescribeDimensionKeysError::InvalidArgument(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        DescribeDimensionKeysError::NotAuthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeDimensionKeysError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeDimensionKeysError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return DescribeDimensionKeysError::InternalServiceError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidArgumentException" => {
+                    return DescribeDimensionKeysError::InvalidArgument(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return DescribeDimensionKeysError::NotAuthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeDimensionKeysError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeDimensionKeysError::Unknown(String::from(body)),
         }
+        return DescribeDimensionKeysError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeDimensionKeysError {
     fn from(err: serde_json::error::Error) -> DescribeDimensionKeysError {
-        DescribeDimensionKeysError::Unknown(err.description().to_string())
+        DescribeDimensionKeysError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeDimensionKeysError {
@@ -331,7 +333,8 @@ impl Error for DescribeDimensionKeysError {
             DescribeDimensionKeysError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeDimensionKeysError::Unknown(ref cause) => cause,
+            DescribeDimensionKeysError::ParseError(ref cause) => cause,
+            DescribeDimensionKeysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -350,47 +353,49 @@ pub enum GetResourceMetricsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourceMetricsError {
-    pub fn from_body(body: &str) -> GetResourceMetricsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetResourceMetricsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        GetResourceMetricsError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidArgumentException" => {
-                        GetResourceMetricsError::InvalidArgument(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        GetResourceMetricsError::NotAuthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetResourceMetricsError::Validation(error_message.to_string())
-                    }
-                    _ => GetResourceMetricsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return GetResourceMetricsError::InternalServiceError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidArgumentException" => {
+                    return GetResourceMetricsError::InvalidArgument(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return GetResourceMetricsError::NotAuthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetResourceMetricsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetResourceMetricsError::Unknown(String::from(body)),
         }
+        return GetResourceMetricsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetResourceMetricsError {
     fn from(err: serde_json::error::Error) -> GetResourceMetricsError {
-        GetResourceMetricsError::Unknown(err.description().to_string())
+        GetResourceMetricsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetResourceMetricsError {
@@ -424,7 +429,8 @@ impl Error for GetResourceMetricsError {
             GetResourceMetricsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetResourceMetricsError::Unknown(ref cause) => cause,
+            GetResourceMetricsError::ParseError(ref cause) => cause,
+            GetResourceMetricsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -504,14 +510,15 @@ impl PerformanceInsights for PerformanceInsightsClient {
 
                     serde_json::from_str::<DescribeDimensionKeysResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDimensionKeysError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeDimensionKeysError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -542,14 +549,16 @@ impl PerformanceInsights for PerformanceInsightsClient {
 
                     serde_json::from_str::<GetResourceMetricsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetResourceMetricsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetResourceMetricsError::from_response(response))),
+                )
             }
         })
     }

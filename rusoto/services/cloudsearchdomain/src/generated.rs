@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -27,7 +27,7 @@ use rusoto_core::request::HttpDispatchError;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>A container for facet information. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -319,7 +319,7 @@ pub struct UploadDocumentsRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub documents: Vec<u8>,
 }
@@ -356,37 +356,37 @@ pub enum SearchError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchError {
-    pub fn from_body(body: &str) -> SearchError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "SearchException" => SearchError::Search(String::from(error_message)),
-                    "ValidationException" => SearchError::Validation(error_message.to_string()),
-                    _ => SearchError::Unknown(String::from(body)),
-                }
+            match *error_type {
+                "SearchException" => return SearchError::Search(String::from(error_message)),
+                "ValidationException" => return SearchError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => SearchError::Unknown(String::from(body)),
         }
+        return SearchError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchError {
     fn from(err: serde_json::error::Error) -> SearchError {
-        SearchError::Unknown(err.description().to_string())
+        SearchError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchError {
@@ -416,7 +416,8 @@ impl Error for SearchError {
             SearchError::Validation(ref cause) => cause,
             SearchError::Credentials(ref err) => err.description(),
             SearchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SearchError::Unknown(ref cause) => cause,
+            SearchError::ParseError(ref cause) => cause,
+            SearchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -431,37 +432,37 @@ pub enum SuggestError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SuggestError {
-    pub fn from_body(body: &str) -> SuggestError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SuggestError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "SearchException" => SuggestError::Search(String::from(error_message)),
-                    "ValidationException" => SuggestError::Validation(error_message.to_string()),
-                    _ => SuggestError::Unknown(String::from(body)),
-                }
+            match *error_type {
+                "SearchException" => return SuggestError::Search(String::from(error_message)),
+                "ValidationException" => return SuggestError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => SuggestError::Unknown(String::from(body)),
         }
+        return SuggestError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SuggestError {
     fn from(err: serde_json::error::Error) -> SuggestError {
-        SuggestError::Unknown(err.description().to_string())
+        SuggestError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SuggestError {
@@ -491,7 +492,8 @@ impl Error for SuggestError {
             SuggestError::Validation(ref cause) => cause,
             SuggestError::Credentials(ref err) => err.description(),
             SuggestError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SuggestError::Unknown(ref cause) => cause,
+            SuggestError::ParseError(ref cause) => cause,
+            SuggestError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -506,41 +508,41 @@ pub enum UploadDocumentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UploadDocumentsError {
-    pub fn from_body(body: &str) -> UploadDocumentsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UploadDocumentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DocumentServiceException" => {
-                        UploadDocumentsError::DocumentService(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UploadDocumentsError::Validation(error_message.to_string())
-                    }
-                    _ => UploadDocumentsError::Unknown(String::from(body)),
+            match *error_type {
+                "DocumentServiceException" => {
+                    return UploadDocumentsError::DocumentService(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return UploadDocumentsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UploadDocumentsError::Unknown(String::from(body)),
         }
+        return UploadDocumentsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UploadDocumentsError {
     fn from(err: serde_json::error::Error) -> UploadDocumentsError {
-        UploadDocumentsError::Unknown(err.description().to_string())
+        UploadDocumentsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UploadDocumentsError {
@@ -570,7 +572,8 @@ impl Error for UploadDocumentsError {
             UploadDocumentsError::Validation(ref cause) => cause,
             UploadDocumentsError::Credentials(ref err) => err.description(),
             UploadDocumentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UploadDocumentsError::Unknown(ref cause) => cause,
+            UploadDocumentsError::ParseError(ref cause) => cause,
+            UploadDocumentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -693,11 +696,12 @@ impl CloudSearchDomain for CloudSearchDomainClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchError::from_response(response))),
+                )
             }
         })
     }
@@ -736,11 +740,12 @@ impl CloudSearchDomain for CloudSearchDomainClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SuggestError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SuggestError::from_response(response))),
+                )
             }
         })
     }
@@ -779,11 +784,12 @@ impl CloudSearchDomain for CloudSearchDomainClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UploadDocumentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UploadDocumentsError::from_response(response))),
+                )
             }
         })
     }

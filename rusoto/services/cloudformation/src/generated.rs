@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -8774,24 +8774,30 @@ pub enum CancelUpdateStackError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CancelUpdateStackError {
-    pub fn from_body(body: &str) -> CancelUpdateStackError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "TokenAlreadyExistsException" => {
-                    CancelUpdateStackError::TokenAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CancelUpdateStackError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "TokenAlreadyExistsException" => {
+                        return CancelUpdateStackError::TokenAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => CancelUpdateStackError::Unknown(String::from(body)),
-            },
-            Err(_) => CancelUpdateStackError::Unknown(body.to_string()),
+            }
         }
+        CancelUpdateStackError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8806,7 +8812,7 @@ impl CancelUpdateStackError {
 impl From<XmlParseError> for CancelUpdateStackError {
     fn from(err: XmlParseError) -> CancelUpdateStackError {
         let XmlParseError(message) = err;
-        CancelUpdateStackError::Unknown(message.to_string())
+        CancelUpdateStackError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CancelUpdateStackError {
@@ -8838,7 +8844,8 @@ impl Error for CancelUpdateStackError {
             CancelUpdateStackError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CancelUpdateStackError::Unknown(ref cause) => cause,
+            CancelUpdateStackError::ParseError(ref cause) => cause,
+            CancelUpdateStackError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8853,24 +8860,30 @@ pub enum ContinueUpdateRollbackError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ContinueUpdateRollbackError {
-    pub fn from_body(body: &str) -> ContinueUpdateRollbackError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "TokenAlreadyExistsException" => ContinueUpdateRollbackError::TokenAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                _ => ContinueUpdateRollbackError::Unknown(String::from(body)),
-            },
-            Err(_) => ContinueUpdateRollbackError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ContinueUpdateRollbackError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "TokenAlreadyExistsException" => {
+                        return ContinueUpdateRollbackError::TokenAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        ContinueUpdateRollbackError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8885,7 +8898,7 @@ impl ContinueUpdateRollbackError {
 impl From<XmlParseError> for ContinueUpdateRollbackError {
     fn from(err: XmlParseError) -> ContinueUpdateRollbackError {
         let XmlParseError(message) = err;
-        ContinueUpdateRollbackError::Unknown(message.to_string())
+        ContinueUpdateRollbackError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ContinueUpdateRollbackError {
@@ -8917,7 +8930,8 @@ impl Error for ContinueUpdateRollbackError {
             ContinueUpdateRollbackError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ContinueUpdateRollbackError::Unknown(ref cause) => cause,
+            ContinueUpdateRollbackError::ParseError(ref cause) => cause,
+            ContinueUpdateRollbackError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8936,32 +8950,40 @@ pub enum CreateChangeSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateChangeSetError {
-    pub fn from_body(body: &str) -> CreateChangeSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsException" => {
-                    CreateChangeSetError::AlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateChangeSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AlreadyExistsException" => {
+                        return CreateChangeSetError::AlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InsufficientCapabilitiesException" => {
+                        return CreateChangeSetError::InsufficientCapabilities(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceededException" => {
+                        return CreateChangeSetError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InsufficientCapabilitiesException" => {
-                    CreateChangeSetError::InsufficientCapabilities(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "LimitExceededException" => {
-                    CreateChangeSetError::LimitExceeded(String::from(parsed_error.message))
-                }
-                _ => CreateChangeSetError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateChangeSetError::Unknown(body.to_string()),
+            }
         }
+        CreateChangeSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8976,7 +8998,7 @@ impl CreateChangeSetError {
 impl From<XmlParseError> for CreateChangeSetError {
     fn from(err: XmlParseError) -> CreateChangeSetError {
         let XmlParseError(message) = err;
-        CreateChangeSetError::Unknown(message.to_string())
+        CreateChangeSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateChangeSetError {
@@ -9008,7 +9030,8 @@ impl Error for CreateChangeSetError {
             CreateChangeSetError::Validation(ref cause) => cause,
             CreateChangeSetError::Credentials(ref err) => err.description(),
             CreateChangeSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateChangeSetError::Unknown(ref cause) => cause,
+            CreateChangeSetError::ParseError(ref cause) => cause,
+            CreateChangeSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9029,33 +9052,41 @@ pub enum CreateStackError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStackError {
-    pub fn from_body(body: &str) -> CreateStackError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsException" => {
-                    CreateStackError::AlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateStackError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AlreadyExistsException" => {
+                        return CreateStackError::AlreadyExists(String::from(parsed_error.message))
+                    }
+                    "InsufficientCapabilitiesException" => {
+                        return CreateStackError::InsufficientCapabilities(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceededException" => {
+                        return CreateStackError::LimitExceeded(String::from(parsed_error.message))
+                    }
+                    "TokenAlreadyExistsException" => {
+                        return CreateStackError::TokenAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InsufficientCapabilitiesException" => {
-                    CreateStackError::InsufficientCapabilities(String::from(parsed_error.message))
-                }
-                "LimitExceededException" => {
-                    CreateStackError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "TokenAlreadyExistsException" => {
-                    CreateStackError::TokenAlreadyExists(String::from(parsed_error.message))
-                }
-                _ => CreateStackError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateStackError::Unknown(body.to_string()),
+            }
         }
+        CreateStackError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9070,7 +9101,7 @@ impl CreateStackError {
 impl From<XmlParseError> for CreateStackError {
     fn from(err: XmlParseError) -> CreateStackError {
         let XmlParseError(message) = err;
-        CreateStackError::Unknown(message.to_string())
+        CreateStackError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateStackError {
@@ -9103,7 +9134,8 @@ impl Error for CreateStackError {
             CreateStackError::Validation(ref cause) => cause,
             CreateStackError::Credentials(ref err) => err.description(),
             CreateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateStackError::Unknown(ref cause) => cause,
+            CreateStackError::ParseError(ref cause) => cause,
+            CreateStackError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9128,41 +9160,55 @@ pub enum CreateStackInstancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStackInstancesError {
-    pub fn from_body(body: &str) -> CreateStackInstancesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidOperationException" => {
-                    CreateStackInstancesError::InvalidOperation(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateStackInstancesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidOperationException" => {
+                        return CreateStackInstancesError::InvalidOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceededException" => {
+                        return CreateStackInstancesError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationIdAlreadyExistsException" => {
+                        return CreateStackInstancesError::OperationIdAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationInProgressException" => {
+                        return CreateStackInstancesError::OperationInProgress(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StackSetNotFoundException" => {
+                        return CreateStackInstancesError::StackSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StaleRequestException" => {
+                        return CreateStackInstancesError::StaleRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceededException" => {
-                    CreateStackInstancesError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "OperationIdAlreadyExistsException" => {
-                    CreateStackInstancesError::OperationIdAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "OperationInProgressException" => CreateStackInstancesError::OperationInProgress(
-                    String::from(parsed_error.message),
-                ),
-                "StackSetNotFoundException" => {
-                    CreateStackInstancesError::StackSetNotFound(String::from(parsed_error.message))
-                }
-                "StaleRequestException" => {
-                    CreateStackInstancesError::StaleRequest(String::from(parsed_error.message))
-                }
-                _ => CreateStackInstancesError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateStackInstancesError::Unknown(body.to_string()),
+            }
         }
+        CreateStackInstancesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9177,7 +9223,7 @@ impl CreateStackInstancesError {
 impl From<XmlParseError> for CreateStackInstancesError {
     fn from(err: XmlParseError) -> CreateStackInstancesError {
         let XmlParseError(message) = err;
-        CreateStackInstancesError::Unknown(message.to_string())
+        CreateStackInstancesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateStackInstancesError {
@@ -9214,7 +9260,8 @@ impl Error for CreateStackInstancesError {
             CreateStackInstancesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateStackInstancesError::Unknown(ref cause) => cause,
+            CreateStackInstancesError::ParseError(ref cause) => cause,
+            CreateStackInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9233,30 +9280,40 @@ pub enum CreateStackSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStackSetError {
-    pub fn from_body(body: &str) -> CreateStackSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CreatedButModifiedException" => {
-                    CreateStackSetError::CreatedButModified(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateStackSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CreatedButModifiedException" => {
+                        return CreateStackSetError::CreatedButModified(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceededException" => {
+                        return CreateStackSetError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NameAlreadyExistsException" => {
+                        return CreateStackSetError::NameAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LimitExceededException" => {
-                    CreateStackSetError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NameAlreadyExistsException" => {
-                    CreateStackSetError::NameAlreadyExists(String::from(parsed_error.message))
-                }
-                _ => CreateStackSetError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateStackSetError::Unknown(body.to_string()),
+            }
         }
+        CreateStackSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9271,7 +9328,7 @@ impl CreateStackSetError {
 impl From<XmlParseError> for CreateStackSetError {
     fn from(err: XmlParseError) -> CreateStackSetError {
         let XmlParseError(message) = err;
-        CreateStackSetError::Unknown(message.to_string())
+        CreateStackSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateStackSetError {
@@ -9303,7 +9360,8 @@ impl Error for CreateStackSetError {
             CreateStackSetError::Validation(ref cause) => cause,
             CreateStackSetError::Credentials(ref err) => err.description(),
             CreateStackSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateStackSetError::Unknown(ref cause) => cause,
+            CreateStackSetError::ParseError(ref cause) => cause,
+            CreateStackSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9318,24 +9376,30 @@ pub enum DeleteChangeSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteChangeSetError {
-    pub fn from_body(body: &str) -> DeleteChangeSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidChangeSetStatus" => {
-                    DeleteChangeSetError::InvalidChangeSetStatus(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteChangeSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidChangeSetStatus" => {
+                        return DeleteChangeSetError::InvalidChangeSetStatus(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DeleteChangeSetError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteChangeSetError::Unknown(body.to_string()),
+            }
         }
+        DeleteChangeSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9350,7 +9414,7 @@ impl DeleteChangeSetError {
 impl From<XmlParseError> for DeleteChangeSetError {
     fn from(err: XmlParseError) -> DeleteChangeSetError {
         let XmlParseError(message) = err;
-        DeleteChangeSetError::Unknown(message.to_string())
+        DeleteChangeSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteChangeSetError {
@@ -9380,7 +9444,8 @@ impl Error for DeleteChangeSetError {
             DeleteChangeSetError::Validation(ref cause) => cause,
             DeleteChangeSetError::Credentials(ref err) => err.description(),
             DeleteChangeSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteChangeSetError::Unknown(ref cause) => cause,
+            DeleteChangeSetError::ParseError(ref cause) => cause,
+            DeleteChangeSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9395,24 +9460,30 @@ pub enum DeleteStackError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteStackError {
-    pub fn from_body(body: &str) -> DeleteStackError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "TokenAlreadyExistsException" => {
-                    DeleteStackError::TokenAlreadyExists(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteStackError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "TokenAlreadyExistsException" => {
+                        return DeleteStackError::TokenAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DeleteStackError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteStackError::Unknown(body.to_string()),
+            }
         }
+        DeleteStackError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9427,7 +9498,7 @@ impl DeleteStackError {
 impl From<XmlParseError> for DeleteStackError {
     fn from(err: XmlParseError) -> DeleteStackError {
         let XmlParseError(message) = err;
-        DeleteStackError::Unknown(message.to_string())
+        DeleteStackError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteStackError {
@@ -9457,7 +9528,8 @@ impl Error for DeleteStackError {
             DeleteStackError::Validation(ref cause) => cause,
             DeleteStackError::Credentials(ref err) => err.description(),
             DeleteStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteStackError::Unknown(ref cause) => cause,
+            DeleteStackError::ParseError(ref cause) => cause,
+            DeleteStackError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9480,38 +9552,50 @@ pub enum DeleteStackInstancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteStackInstancesError {
-    pub fn from_body(body: &str) -> DeleteStackInstancesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidOperationException" => {
-                    DeleteStackInstancesError::InvalidOperation(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteStackInstancesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidOperationException" => {
+                        return DeleteStackInstancesError::InvalidOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationIdAlreadyExistsException" => {
+                        return DeleteStackInstancesError::OperationIdAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationInProgressException" => {
+                        return DeleteStackInstancesError::OperationInProgress(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StackSetNotFoundException" => {
+                        return DeleteStackInstancesError::StackSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StaleRequestException" => {
+                        return DeleteStackInstancesError::StaleRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "OperationIdAlreadyExistsException" => {
-                    DeleteStackInstancesError::OperationIdAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "OperationInProgressException" => DeleteStackInstancesError::OperationInProgress(
-                    String::from(parsed_error.message),
-                ),
-                "StackSetNotFoundException" => {
-                    DeleteStackInstancesError::StackSetNotFound(String::from(parsed_error.message))
-                }
-                "StaleRequestException" => {
-                    DeleteStackInstancesError::StaleRequest(String::from(parsed_error.message))
-                }
-                _ => DeleteStackInstancesError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteStackInstancesError::Unknown(body.to_string()),
+            }
         }
+        DeleteStackInstancesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9526,7 +9610,7 @@ impl DeleteStackInstancesError {
 impl From<XmlParseError> for DeleteStackInstancesError {
     fn from(err: XmlParseError) -> DeleteStackInstancesError {
         let XmlParseError(message) = err;
-        DeleteStackInstancesError::Unknown(message.to_string())
+        DeleteStackInstancesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteStackInstancesError {
@@ -9562,7 +9646,8 @@ impl Error for DeleteStackInstancesError {
             DeleteStackInstancesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteStackInstancesError::Unknown(ref cause) => cause,
+            DeleteStackInstancesError::ParseError(ref cause) => cause,
+            DeleteStackInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9579,27 +9664,35 @@ pub enum DeleteStackSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteStackSetError {
-    pub fn from_body(body: &str) -> DeleteStackSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "OperationInProgressException" => {
-                    DeleteStackSetError::OperationInProgress(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteStackSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "OperationInProgressException" => {
+                        return DeleteStackSetError::OperationInProgress(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StackSetNotEmptyException" => {
+                        return DeleteStackSetError::StackSetNotEmpty(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "StackSetNotEmptyException" => {
-                    DeleteStackSetError::StackSetNotEmpty(String::from(parsed_error.message))
-                }
-                _ => DeleteStackSetError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteStackSetError::Unknown(body.to_string()),
+            }
         }
+        DeleteStackSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9614,7 +9707,7 @@ impl DeleteStackSetError {
 impl From<XmlParseError> for DeleteStackSetError {
     fn from(err: XmlParseError) -> DeleteStackSetError {
         let XmlParseError(message) = err;
-        DeleteStackSetError::Unknown(message.to_string())
+        DeleteStackSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteStackSetError {
@@ -9645,7 +9738,8 @@ impl Error for DeleteStackSetError {
             DeleteStackSetError::Validation(ref cause) => cause,
             DeleteStackSetError::Credentials(ref err) => err.description(),
             DeleteStackSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteStackSetError::Unknown(ref cause) => cause,
+            DeleteStackSetError::ParseError(ref cause) => cause,
+            DeleteStackSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9658,21 +9752,25 @@ pub enum DescribeAccountLimitsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAccountLimitsError {
-    pub fn from_body(body: &str) -> DescribeAccountLimitsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeAccountLimitsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAccountLimitsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountLimitsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeAccountLimitsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9687,7 +9785,7 @@ impl DescribeAccountLimitsError {
 impl From<XmlParseError> for DescribeAccountLimitsError {
     fn from(err: XmlParseError) -> DescribeAccountLimitsError {
         let XmlParseError(message) = err;
-        DescribeAccountLimitsError::Unknown(message.to_string())
+        DescribeAccountLimitsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAccountLimitsError {
@@ -9718,7 +9816,8 @@ impl Error for DescribeAccountLimitsError {
             DescribeAccountLimitsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAccountLimitsError::Unknown(ref cause) => cause,
+            DescribeAccountLimitsError::ParseError(ref cause) => cause,
+            DescribeAccountLimitsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9733,24 +9832,30 @@ pub enum DescribeChangeSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeChangeSetError {
-    pub fn from_body(body: &str) -> DescribeChangeSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ChangeSetNotFound" => {
-                    DescribeChangeSetError::ChangeSetNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeChangeSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ChangeSetNotFound" => {
+                        return DescribeChangeSetError::ChangeSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DescribeChangeSetError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeChangeSetError::Unknown(body.to_string()),
+            }
         }
+        DescribeChangeSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9765,7 +9870,7 @@ impl DescribeChangeSetError {
 impl From<XmlParseError> for DescribeChangeSetError {
     fn from(err: XmlParseError) -> DescribeChangeSetError {
         let XmlParseError(message) = err;
-        DescribeChangeSetError::Unknown(message.to_string())
+        DescribeChangeSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeChangeSetError {
@@ -9797,7 +9902,8 @@ impl Error for DescribeChangeSetError {
             DescribeChangeSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeChangeSetError::Unknown(ref cause) => cause,
+            DescribeChangeSetError::ParseError(ref cause) => cause,
+            DescribeChangeSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9810,21 +9916,25 @@ pub enum DescribeStackEventsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStackEventsError {
-    pub fn from_body(body: &str) -> DescribeStackEventsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeStackEventsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeStackEventsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeStackEventsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeStackEventsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9839,7 +9949,7 @@ impl DescribeStackEventsError {
 impl From<XmlParseError> for DescribeStackEventsError {
     fn from(err: XmlParseError) -> DescribeStackEventsError {
         let XmlParseError(message) = err;
-        DescribeStackEventsError::Unknown(message.to_string())
+        DescribeStackEventsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeStackEventsError {
@@ -9870,7 +9980,8 @@ impl Error for DescribeStackEventsError {
             DescribeStackEventsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeStackEventsError::Unknown(ref cause) => cause,
+            DescribeStackEventsError::ParseError(ref cause) => cause,
+            DescribeStackEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9887,29 +9998,35 @@ pub enum DescribeStackInstanceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStackInstanceError {
-    pub fn from_body(body: &str) -> DescribeStackInstanceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "StackInstanceNotFoundException" => {
-                    DescribeStackInstanceError::StackInstanceNotFound(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeStackInstanceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "StackInstanceNotFoundException" => {
+                        return DescribeStackInstanceError::StackInstanceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StackSetNotFoundException" => {
+                        return DescribeStackInstanceError::StackSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "StackSetNotFoundException" => {
-                    DescribeStackInstanceError::StackSetNotFound(String::from(parsed_error.message))
-                }
-                _ => DescribeStackInstanceError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeStackInstanceError::Unknown(body.to_string()),
+            }
         }
+        DescribeStackInstanceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9924,7 +10041,7 @@ impl DescribeStackInstanceError {
 impl From<XmlParseError> for DescribeStackInstanceError {
     fn from(err: XmlParseError) -> DescribeStackInstanceError {
         let XmlParseError(message) = err;
-        DescribeStackInstanceError::Unknown(message.to_string())
+        DescribeStackInstanceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeStackInstanceError {
@@ -9957,7 +10074,8 @@ impl Error for DescribeStackInstanceError {
             DescribeStackInstanceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeStackInstanceError::Unknown(ref cause) => cause,
+            DescribeStackInstanceError::ParseError(ref cause) => cause,
+            DescribeStackInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9970,21 +10088,25 @@ pub enum DescribeStackResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStackResourceError {
-    pub fn from_body(body: &str) -> DescribeStackResourceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeStackResourceError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeStackResourceError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeStackResourceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeStackResourceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9999,7 +10121,7 @@ impl DescribeStackResourceError {
 impl From<XmlParseError> for DescribeStackResourceError {
     fn from(err: XmlParseError) -> DescribeStackResourceError {
         let XmlParseError(message) = err;
-        DescribeStackResourceError::Unknown(message.to_string())
+        DescribeStackResourceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeStackResourceError {
@@ -10030,7 +10152,8 @@ impl Error for DescribeStackResourceError {
             DescribeStackResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeStackResourceError::Unknown(ref cause) => cause,
+            DescribeStackResourceError::ParseError(ref cause) => cause,
+            DescribeStackResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10043,21 +10166,25 @@ pub enum DescribeStackResourcesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStackResourcesError {
-    pub fn from_body(body: &str) -> DescribeStackResourcesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeStackResourcesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeStackResourcesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeStackResourcesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeStackResourcesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10072,7 +10199,7 @@ impl DescribeStackResourcesError {
 impl From<XmlParseError> for DescribeStackResourcesError {
     fn from(err: XmlParseError) -> DescribeStackResourcesError {
         let XmlParseError(message) = err;
-        DescribeStackResourcesError::Unknown(message.to_string())
+        DescribeStackResourcesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeStackResourcesError {
@@ -10103,7 +10230,8 @@ impl Error for DescribeStackResourcesError {
             DescribeStackResourcesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeStackResourcesError::Unknown(ref cause) => cause,
+            DescribeStackResourcesError::ParseError(ref cause) => cause,
+            DescribeStackResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10118,24 +10246,30 @@ pub enum DescribeStackSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStackSetError {
-    pub fn from_body(body: &str) -> DescribeStackSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "StackSetNotFoundException" => {
-                    DescribeStackSetError::StackSetNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeStackSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "StackSetNotFoundException" => {
+                        return DescribeStackSetError::StackSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DescribeStackSetError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeStackSetError::Unknown(body.to_string()),
+            }
         }
+        DescribeStackSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10150,7 +10284,7 @@ impl DescribeStackSetError {
 impl From<XmlParseError> for DescribeStackSetError {
     fn from(err: XmlParseError) -> DescribeStackSetError {
         let XmlParseError(message) = err;
-        DescribeStackSetError::Unknown(message.to_string())
+        DescribeStackSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeStackSetError {
@@ -10180,7 +10314,8 @@ impl Error for DescribeStackSetError {
             DescribeStackSetError::Validation(ref cause) => cause,
             DescribeStackSetError::Credentials(ref err) => err.description(),
             DescribeStackSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeStackSetError::Unknown(ref cause) => cause,
+            DescribeStackSetError::ParseError(ref cause) => cause,
+            DescribeStackSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10197,27 +10332,35 @@ pub enum DescribeStackSetOperationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStackSetOperationError {
-    pub fn from_body(body: &str) -> DescribeStackSetOperationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "OperationNotFoundException" => DescribeStackSetOperationError::OperationNotFound(
-                    String::from(parsed_error.message),
-                ),
-                "StackSetNotFoundException" => DescribeStackSetOperationError::StackSetNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeStackSetOperationError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeStackSetOperationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeStackSetOperationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "OperationNotFoundException" => {
+                        return DescribeStackSetOperationError::OperationNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StackSetNotFoundException" => {
+                        return DescribeStackSetOperationError::StackSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeStackSetOperationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10232,7 +10375,7 @@ impl DescribeStackSetOperationError {
 impl From<XmlParseError> for DescribeStackSetOperationError {
     fn from(err: XmlParseError) -> DescribeStackSetOperationError {
         let XmlParseError(message) = err;
-        DescribeStackSetOperationError::Unknown(message.to_string())
+        DescribeStackSetOperationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeStackSetOperationError {
@@ -10265,7 +10408,8 @@ impl Error for DescribeStackSetOperationError {
             DescribeStackSetOperationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeStackSetOperationError::Unknown(ref cause) => cause,
+            DescribeStackSetOperationError::ParseError(ref cause) => cause,
+            DescribeStackSetOperationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10278,21 +10422,25 @@ pub enum DescribeStacksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStacksError {
-    pub fn from_body(body: &str) -> DescribeStacksError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeStacksError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeStacksError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeStacksError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeStacksError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10307,7 +10455,7 @@ impl DescribeStacksError {
 impl From<XmlParseError> for DescribeStacksError {
     fn from(err: XmlParseError) -> DescribeStacksError {
         let XmlParseError(message) = err;
-        DescribeStacksError::Unknown(message.to_string())
+        DescribeStacksError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeStacksError {
@@ -10336,7 +10484,8 @@ impl Error for DescribeStacksError {
             DescribeStacksError::Validation(ref cause) => cause,
             DescribeStacksError::Credentials(ref err) => err.description(),
             DescribeStacksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeStacksError::Unknown(ref cause) => cause,
+            DescribeStacksError::ParseError(ref cause) => cause,
+            DescribeStacksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10349,21 +10498,25 @@ pub enum EstimateTemplateCostError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EstimateTemplateCostError {
-    pub fn from_body(body: &str) -> EstimateTemplateCostError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => EstimateTemplateCostError::Unknown(String::from(body)),
-            },
-            Err(_) => EstimateTemplateCostError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> EstimateTemplateCostError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        EstimateTemplateCostError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10378,7 +10531,7 @@ impl EstimateTemplateCostError {
 impl From<XmlParseError> for EstimateTemplateCostError {
     fn from(err: XmlParseError) -> EstimateTemplateCostError {
         let XmlParseError(message) = err;
-        EstimateTemplateCostError::Unknown(message.to_string())
+        EstimateTemplateCostError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for EstimateTemplateCostError {
@@ -10409,7 +10562,8 @@ impl Error for EstimateTemplateCostError {
             EstimateTemplateCostError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            EstimateTemplateCostError::Unknown(ref cause) => cause,
+            EstimateTemplateCostError::ParseError(ref cause) => cause,
+            EstimateTemplateCostError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10430,35 +10584,45 @@ pub enum ExecuteChangeSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ExecuteChangeSetError {
-    pub fn from_body(body: &str) -> ExecuteChangeSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ChangeSetNotFound" => {
-                    ExecuteChangeSetError::ChangeSetNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ExecuteChangeSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ChangeSetNotFound" => {
+                        return ExecuteChangeSetError::ChangeSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InsufficientCapabilitiesException" => {
+                        return ExecuteChangeSetError::InsufficientCapabilities(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidChangeSetStatus" => {
+                        return ExecuteChangeSetError::InvalidChangeSetStatus(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TokenAlreadyExistsException" => {
+                        return ExecuteChangeSetError::TokenAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InsufficientCapabilitiesException" => {
-                    ExecuteChangeSetError::InsufficientCapabilities(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidChangeSetStatus" => ExecuteChangeSetError::InvalidChangeSetStatus(
-                    String::from(parsed_error.message),
-                ),
-                "TokenAlreadyExistsException" => {
-                    ExecuteChangeSetError::TokenAlreadyExists(String::from(parsed_error.message))
-                }
-                _ => ExecuteChangeSetError::Unknown(String::from(body)),
-            },
-            Err(_) => ExecuteChangeSetError::Unknown(body.to_string()),
+            }
         }
+        ExecuteChangeSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10473,7 +10637,7 @@ impl ExecuteChangeSetError {
 impl From<XmlParseError> for ExecuteChangeSetError {
     fn from(err: XmlParseError) -> ExecuteChangeSetError {
         let XmlParseError(message) = err;
-        ExecuteChangeSetError::Unknown(message.to_string())
+        ExecuteChangeSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ExecuteChangeSetError {
@@ -10506,7 +10670,8 @@ impl Error for ExecuteChangeSetError {
             ExecuteChangeSetError::Validation(ref cause) => cause,
             ExecuteChangeSetError::Credentials(ref err) => err.description(),
             ExecuteChangeSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ExecuteChangeSetError::Unknown(ref cause) => cause,
+            ExecuteChangeSetError::ParseError(ref cause) => cause,
+            ExecuteChangeSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10519,21 +10684,25 @@ pub enum GetStackPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetStackPolicyError {
-    pub fn from_body(body: &str) -> GetStackPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => GetStackPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => GetStackPolicyError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetStackPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        GetStackPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10548,7 +10717,7 @@ impl GetStackPolicyError {
 impl From<XmlParseError> for GetStackPolicyError {
     fn from(err: XmlParseError) -> GetStackPolicyError {
         let XmlParseError(message) = err;
-        GetStackPolicyError::Unknown(message.to_string())
+        GetStackPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetStackPolicyError {
@@ -10577,7 +10746,8 @@ impl Error for GetStackPolicyError {
             GetStackPolicyError::Validation(ref cause) => cause,
             GetStackPolicyError::Credentials(ref err) => err.description(),
             GetStackPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetStackPolicyError::Unknown(ref cause) => cause,
+            GetStackPolicyError::ParseError(ref cause) => cause,
+            GetStackPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10592,24 +10762,30 @@ pub enum GetTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetTemplateError {
-    pub fn from_body(body: &str) -> GetTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ChangeSetNotFound" => {
-                    GetTemplateError::ChangeSetNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ChangeSetNotFound" => {
+                        return GetTemplateError::ChangeSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => GetTemplateError::Unknown(String::from(body)),
-            },
-            Err(_) => GetTemplateError::Unknown(body.to_string()),
+            }
         }
+        GetTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10624,7 +10800,7 @@ impl GetTemplateError {
 impl From<XmlParseError> for GetTemplateError {
     fn from(err: XmlParseError) -> GetTemplateError {
         let XmlParseError(message) = err;
-        GetTemplateError::Unknown(message.to_string())
+        GetTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetTemplateError {
@@ -10654,7 +10830,8 @@ impl Error for GetTemplateError {
             GetTemplateError::Validation(ref cause) => cause,
             GetTemplateError::Credentials(ref err) => err.description(),
             GetTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTemplateError::Unknown(ref cause) => cause,
+            GetTemplateError::ParseError(ref cause) => cause,
+            GetTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10669,24 +10846,30 @@ pub enum GetTemplateSummaryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetTemplateSummaryError {
-    pub fn from_body(body: &str) -> GetTemplateSummaryError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "StackSetNotFoundException" => {
-                    GetTemplateSummaryError::StackSetNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetTemplateSummaryError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "StackSetNotFoundException" => {
+                        return GetTemplateSummaryError::StackSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => GetTemplateSummaryError::Unknown(String::from(body)),
-            },
-            Err(_) => GetTemplateSummaryError::Unknown(body.to_string()),
+            }
         }
+        GetTemplateSummaryError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10701,7 +10884,7 @@ impl GetTemplateSummaryError {
 impl From<XmlParseError> for GetTemplateSummaryError {
     fn from(err: XmlParseError) -> GetTemplateSummaryError {
         let XmlParseError(message) = err;
-        GetTemplateSummaryError::Unknown(message.to_string())
+        GetTemplateSummaryError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetTemplateSummaryError {
@@ -10733,7 +10916,8 @@ impl Error for GetTemplateSummaryError {
             GetTemplateSummaryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetTemplateSummaryError::Unknown(ref cause) => cause,
+            GetTemplateSummaryError::ParseError(ref cause) => cause,
+            GetTemplateSummaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10746,21 +10930,25 @@ pub enum ListChangeSetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListChangeSetsError {
-    pub fn from_body(body: &str) -> ListChangeSetsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListChangeSetsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListChangeSetsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListChangeSetsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListChangeSetsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10775,7 +10963,7 @@ impl ListChangeSetsError {
 impl From<XmlParseError> for ListChangeSetsError {
     fn from(err: XmlParseError) -> ListChangeSetsError {
         let XmlParseError(message) = err;
-        ListChangeSetsError::Unknown(message.to_string())
+        ListChangeSetsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListChangeSetsError {
@@ -10804,7 +10992,8 @@ impl Error for ListChangeSetsError {
             ListChangeSetsError::Validation(ref cause) => cause,
             ListChangeSetsError::Credentials(ref err) => err.description(),
             ListChangeSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListChangeSetsError::Unknown(ref cause) => cause,
+            ListChangeSetsError::ParseError(ref cause) => cause,
+            ListChangeSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10817,21 +11006,25 @@ pub enum ListExportsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListExportsError {
-    pub fn from_body(body: &str) -> ListExportsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListExportsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListExportsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListExportsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListExportsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10846,7 +11039,7 @@ impl ListExportsError {
 impl From<XmlParseError> for ListExportsError {
     fn from(err: XmlParseError) -> ListExportsError {
         let XmlParseError(message) = err;
-        ListExportsError::Unknown(message.to_string())
+        ListExportsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListExportsError {
@@ -10875,7 +11068,8 @@ impl Error for ListExportsError {
             ListExportsError::Validation(ref cause) => cause,
             ListExportsError::Credentials(ref err) => err.description(),
             ListExportsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListExportsError::Unknown(ref cause) => cause,
+            ListExportsError::ParseError(ref cause) => cause,
+            ListExportsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10888,21 +11082,25 @@ pub enum ListImportsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListImportsError {
-    pub fn from_body(body: &str) -> ListImportsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListImportsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListImportsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListImportsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListImportsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10917,7 +11115,7 @@ impl ListImportsError {
 impl From<XmlParseError> for ListImportsError {
     fn from(err: XmlParseError) -> ListImportsError {
         let XmlParseError(message) = err;
-        ListImportsError::Unknown(message.to_string())
+        ListImportsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListImportsError {
@@ -10946,7 +11144,8 @@ impl Error for ListImportsError {
             ListImportsError::Validation(ref cause) => cause,
             ListImportsError::Credentials(ref err) => err.description(),
             ListImportsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListImportsError::Unknown(ref cause) => cause,
+            ListImportsError::ParseError(ref cause) => cause,
+            ListImportsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10961,24 +11160,30 @@ pub enum ListStackInstancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListStackInstancesError {
-    pub fn from_body(body: &str) -> ListStackInstancesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "StackSetNotFoundException" => {
-                    ListStackInstancesError::StackSetNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListStackInstancesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "StackSetNotFoundException" => {
+                        return ListStackInstancesError::StackSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ListStackInstancesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListStackInstancesError::Unknown(body.to_string()),
+            }
         }
+        ListStackInstancesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10993,7 +11198,7 @@ impl ListStackInstancesError {
 impl From<XmlParseError> for ListStackInstancesError {
     fn from(err: XmlParseError) -> ListStackInstancesError {
         let XmlParseError(message) = err;
-        ListStackInstancesError::Unknown(message.to_string())
+        ListStackInstancesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListStackInstancesError {
@@ -11025,7 +11230,8 @@ impl Error for ListStackInstancesError {
             ListStackInstancesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListStackInstancesError::Unknown(ref cause) => cause,
+            ListStackInstancesError::ParseError(ref cause) => cause,
+            ListStackInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11038,21 +11244,25 @@ pub enum ListStackResourcesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListStackResourcesError {
-    pub fn from_body(body: &str) -> ListStackResourcesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListStackResourcesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListStackResourcesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListStackResourcesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListStackResourcesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11067,7 +11277,7 @@ impl ListStackResourcesError {
 impl From<XmlParseError> for ListStackResourcesError {
     fn from(err: XmlParseError) -> ListStackResourcesError {
         let XmlParseError(message) = err;
-        ListStackResourcesError::Unknown(message.to_string())
+        ListStackResourcesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListStackResourcesError {
@@ -11098,7 +11308,8 @@ impl Error for ListStackResourcesError {
             ListStackResourcesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListStackResourcesError::Unknown(ref cause) => cause,
+            ListStackResourcesError::ParseError(ref cause) => cause,
+            ListStackResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11115,29 +11326,35 @@ pub enum ListStackSetOperationResultsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListStackSetOperationResultsError {
-    pub fn from_body(body: &str) -> ListStackSetOperationResultsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "OperationNotFoundException" => {
-                    ListStackSetOperationResultsError::OperationNotFound(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ListStackSetOperationResultsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "OperationNotFoundException" => {
+                        return ListStackSetOperationResultsError::OperationNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StackSetNotFoundException" => {
+                        return ListStackSetOperationResultsError::StackSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "StackSetNotFoundException" => ListStackSetOperationResultsError::StackSetNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => ListStackSetOperationResultsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListStackSetOperationResultsError::Unknown(body.to_string()),
+            }
         }
+        ListStackSetOperationResultsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11152,7 +11369,7 @@ impl ListStackSetOperationResultsError {
 impl From<XmlParseError> for ListStackSetOperationResultsError {
     fn from(err: XmlParseError) -> ListStackSetOperationResultsError {
         let XmlParseError(message) = err;
-        ListStackSetOperationResultsError::Unknown(message.to_string())
+        ListStackSetOperationResultsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListStackSetOperationResultsError {
@@ -11185,7 +11402,8 @@ impl Error for ListStackSetOperationResultsError {
             ListStackSetOperationResultsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListStackSetOperationResultsError::Unknown(ref cause) => cause,
+            ListStackSetOperationResultsError::ParseError(ref cause) => cause,
+            ListStackSetOperationResultsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11200,24 +11418,30 @@ pub enum ListStackSetOperationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListStackSetOperationsError {
-    pub fn from_body(body: &str) -> ListStackSetOperationsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "StackSetNotFoundException" => ListStackSetOperationsError::StackSetNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => ListStackSetOperationsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListStackSetOperationsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListStackSetOperationsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "StackSetNotFoundException" => {
+                        return ListStackSetOperationsError::StackSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        ListStackSetOperationsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11232,7 +11456,7 @@ impl ListStackSetOperationsError {
 impl From<XmlParseError> for ListStackSetOperationsError {
     fn from(err: XmlParseError) -> ListStackSetOperationsError {
         let XmlParseError(message) = err;
-        ListStackSetOperationsError::Unknown(message.to_string())
+        ListStackSetOperationsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListStackSetOperationsError {
@@ -11264,7 +11488,8 @@ impl Error for ListStackSetOperationsError {
             ListStackSetOperationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListStackSetOperationsError::Unknown(ref cause) => cause,
+            ListStackSetOperationsError::ParseError(ref cause) => cause,
+            ListStackSetOperationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11277,21 +11502,25 @@ pub enum ListStackSetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListStackSetsError {
-    pub fn from_body(body: &str) -> ListStackSetsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListStackSetsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListStackSetsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListStackSetsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListStackSetsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11306,7 +11535,7 @@ impl ListStackSetsError {
 impl From<XmlParseError> for ListStackSetsError {
     fn from(err: XmlParseError) -> ListStackSetsError {
         let XmlParseError(message) = err;
-        ListStackSetsError::Unknown(message.to_string())
+        ListStackSetsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListStackSetsError {
@@ -11335,7 +11564,8 @@ impl Error for ListStackSetsError {
             ListStackSetsError::Validation(ref cause) => cause,
             ListStackSetsError::Credentials(ref err) => err.description(),
             ListStackSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListStackSetsError::Unknown(ref cause) => cause,
+            ListStackSetsError::ParseError(ref cause) => cause,
+            ListStackSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11348,21 +11578,25 @@ pub enum ListStacksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListStacksError {
-    pub fn from_body(body: &str) -> ListStacksError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListStacksError::Unknown(String::from(body)),
-            },
-            Err(_) => ListStacksError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListStacksError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListStacksError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11377,7 +11611,7 @@ impl ListStacksError {
 impl From<XmlParseError> for ListStacksError {
     fn from(err: XmlParseError) -> ListStacksError {
         let XmlParseError(message) = err;
-        ListStacksError::Unknown(message.to_string())
+        ListStacksError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListStacksError {
@@ -11406,7 +11640,8 @@ impl Error for ListStacksError {
             ListStacksError::Validation(ref cause) => cause,
             ListStacksError::Credentials(ref err) => err.description(),
             ListStacksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListStacksError::Unknown(ref cause) => cause,
+            ListStacksError::ParseError(ref cause) => cause,
+            ListStacksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11419,21 +11654,25 @@ pub enum SetStackPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetStackPolicyError {
-    pub fn from_body(body: &str) -> SetStackPolicyError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => SetStackPolicyError::Unknown(String::from(body)),
-            },
-            Err(_) => SetStackPolicyError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SetStackPolicyError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        SetStackPolicyError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11448,7 +11687,7 @@ impl SetStackPolicyError {
 impl From<XmlParseError> for SetStackPolicyError {
     fn from(err: XmlParseError) -> SetStackPolicyError {
         let XmlParseError(message) = err;
-        SetStackPolicyError::Unknown(message.to_string())
+        SetStackPolicyError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetStackPolicyError {
@@ -11477,7 +11716,8 @@ impl Error for SetStackPolicyError {
             SetStackPolicyError::Validation(ref cause) => cause,
             SetStackPolicyError::Credentials(ref err) => err.description(),
             SetStackPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SetStackPolicyError::Unknown(ref cause) => cause,
+            SetStackPolicyError::ParseError(ref cause) => cause,
+            SetStackPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11490,21 +11730,25 @@ pub enum SignalResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SignalResourceError {
-    pub fn from_body(body: &str) -> SignalResourceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => SignalResourceError::Unknown(String::from(body)),
-            },
-            Err(_) => SignalResourceError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SignalResourceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        SignalResourceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11519,7 +11763,7 @@ impl SignalResourceError {
 impl From<XmlParseError> for SignalResourceError {
     fn from(err: XmlParseError) -> SignalResourceError {
         let XmlParseError(message) = err;
-        SignalResourceError::Unknown(message.to_string())
+        SignalResourceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SignalResourceError {
@@ -11548,7 +11792,8 @@ impl Error for SignalResourceError {
             SignalResourceError::Validation(ref cause) => cause,
             SignalResourceError::Credentials(ref err) => err.description(),
             SignalResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SignalResourceError::Unknown(ref cause) => cause,
+            SignalResourceError::ParseError(ref cause) => cause,
+            SignalResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11567,30 +11812,40 @@ pub enum StopStackSetOperationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopStackSetOperationError {
-    pub fn from_body(body: &str) -> StopStackSetOperationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidOperationException" => {
-                    StopStackSetOperationError::InvalidOperation(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> StopStackSetOperationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidOperationException" => {
+                        return StopStackSetOperationError::InvalidOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationNotFoundException" => {
+                        return StopStackSetOperationError::OperationNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StackSetNotFoundException" => {
+                        return StopStackSetOperationError::StackSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "OperationNotFoundException" => StopStackSetOperationError::OperationNotFound(
-                    String::from(parsed_error.message),
-                ),
-                "StackSetNotFoundException" => {
-                    StopStackSetOperationError::StackSetNotFound(String::from(parsed_error.message))
-                }
-                _ => StopStackSetOperationError::Unknown(String::from(body)),
-            },
-            Err(_) => StopStackSetOperationError::Unknown(body.to_string()),
+            }
         }
+        StopStackSetOperationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11605,7 +11860,7 @@ impl StopStackSetOperationError {
 impl From<XmlParseError> for StopStackSetOperationError {
     fn from(err: XmlParseError) -> StopStackSetOperationError {
         let XmlParseError(message) = err;
-        StopStackSetOperationError::Unknown(message.to_string())
+        StopStackSetOperationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for StopStackSetOperationError {
@@ -11639,7 +11894,8 @@ impl Error for StopStackSetOperationError {
             StopStackSetOperationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StopStackSetOperationError::Unknown(ref cause) => cause,
+            StopStackSetOperationError::ParseError(ref cause) => cause,
+            StopStackSetOperationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11656,27 +11912,35 @@ pub enum UpdateStackError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateStackError {
-    pub fn from_body(body: &str) -> UpdateStackError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientCapabilitiesException" => {
-                    UpdateStackError::InsufficientCapabilities(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateStackError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientCapabilitiesException" => {
+                        return UpdateStackError::InsufficientCapabilities(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TokenAlreadyExistsException" => {
+                        return UpdateStackError::TokenAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TokenAlreadyExistsException" => {
-                    UpdateStackError::TokenAlreadyExists(String::from(parsed_error.message))
-                }
-                _ => UpdateStackError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateStackError::Unknown(body.to_string()),
+            }
         }
+        UpdateStackError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11691,7 +11955,7 @@ impl UpdateStackError {
 impl From<XmlParseError> for UpdateStackError {
     fn from(err: XmlParseError) -> UpdateStackError {
         let XmlParseError(message) = err;
-        UpdateStackError::Unknown(message.to_string())
+        UpdateStackError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateStackError {
@@ -11722,7 +11986,8 @@ impl Error for UpdateStackError {
             UpdateStackError::Validation(ref cause) => cause,
             UpdateStackError::Credentials(ref err) => err.description(),
             UpdateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateStackError::Unknown(ref cause) => cause,
+            UpdateStackError::ParseError(ref cause) => cause,
+            UpdateStackError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11747,43 +12012,55 @@ pub enum UpdateStackInstancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateStackInstancesError {
-    pub fn from_body(body: &str) -> UpdateStackInstancesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidOperationException" => {
-                    UpdateStackInstancesError::InvalidOperation(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateStackInstancesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidOperationException" => {
+                        return UpdateStackInstancesError::InvalidOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationIdAlreadyExistsException" => {
+                        return UpdateStackInstancesError::OperationIdAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationInProgressException" => {
+                        return UpdateStackInstancesError::OperationInProgress(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StackInstanceNotFoundException" => {
+                        return UpdateStackInstancesError::StackInstanceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StackSetNotFoundException" => {
+                        return UpdateStackInstancesError::StackSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StaleRequestException" => {
+                        return UpdateStackInstancesError::StaleRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "OperationIdAlreadyExistsException" => {
-                    UpdateStackInstancesError::OperationIdAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "OperationInProgressException" => UpdateStackInstancesError::OperationInProgress(
-                    String::from(parsed_error.message),
-                ),
-                "StackInstanceNotFoundException" => {
-                    UpdateStackInstancesError::StackInstanceNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "StackSetNotFoundException" => {
-                    UpdateStackInstancesError::StackSetNotFound(String::from(parsed_error.message))
-                }
-                "StaleRequestException" => {
-                    UpdateStackInstancesError::StaleRequest(String::from(parsed_error.message))
-                }
-                _ => UpdateStackInstancesError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateStackInstancesError::Unknown(body.to_string()),
+            }
         }
+        UpdateStackInstancesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11798,7 +12075,7 @@ impl UpdateStackInstancesError {
 impl From<XmlParseError> for UpdateStackInstancesError {
     fn from(err: XmlParseError) -> UpdateStackInstancesError {
         let XmlParseError(message) = err;
-        UpdateStackInstancesError::Unknown(message.to_string())
+        UpdateStackInstancesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateStackInstancesError {
@@ -11835,7 +12112,8 @@ impl Error for UpdateStackInstancesError {
             UpdateStackInstancesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateStackInstancesError::Unknown(ref cause) => cause,
+            UpdateStackInstancesError::ParseError(ref cause) => cause,
+            UpdateStackInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11860,41 +12138,53 @@ pub enum UpdateStackSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateStackSetError {
-    pub fn from_body(body: &str) -> UpdateStackSetError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidOperationException" => {
-                    UpdateStackSetError::InvalidOperation(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateStackSetError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidOperationException" => {
+                        return UpdateStackSetError::InvalidOperation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationIdAlreadyExistsException" => {
+                        return UpdateStackSetError::OperationIdAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationInProgressException" => {
+                        return UpdateStackSetError::OperationInProgress(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StackInstanceNotFoundException" => {
+                        return UpdateStackSetError::StackInstanceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StackSetNotFoundException" => {
+                        return UpdateStackSetError::StackSetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StaleRequestException" => {
+                        return UpdateStackSetError::StaleRequest(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "OperationIdAlreadyExistsException" => {
-                    UpdateStackSetError::OperationIdAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "OperationInProgressException" => {
-                    UpdateStackSetError::OperationInProgress(String::from(parsed_error.message))
-                }
-                "StackInstanceNotFoundException" => {
-                    UpdateStackSetError::StackInstanceNotFound(String::from(parsed_error.message))
-                }
-                "StackSetNotFoundException" => {
-                    UpdateStackSetError::StackSetNotFound(String::from(parsed_error.message))
-                }
-                "StaleRequestException" => {
-                    UpdateStackSetError::StaleRequest(String::from(parsed_error.message))
-                }
-                _ => UpdateStackSetError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateStackSetError::Unknown(body.to_string()),
+            }
         }
+        UpdateStackSetError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11909,7 +12199,7 @@ impl UpdateStackSetError {
 impl From<XmlParseError> for UpdateStackSetError {
     fn from(err: XmlParseError) -> UpdateStackSetError {
         let XmlParseError(message) = err;
-        UpdateStackSetError::Unknown(message.to_string())
+        UpdateStackSetError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateStackSetError {
@@ -11944,7 +12234,8 @@ impl Error for UpdateStackSetError {
             UpdateStackSetError::Validation(ref cause) => cause,
             UpdateStackSetError::Credentials(ref err) => err.description(),
             UpdateStackSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateStackSetError::Unknown(ref cause) => cause,
+            UpdateStackSetError::ParseError(ref cause) => cause,
+            UpdateStackSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11957,21 +12248,25 @@ pub enum UpdateTerminationProtectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTerminationProtectionError {
-    pub fn from_body(body: &str) -> UpdateTerminationProtectionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => UpdateTerminationProtectionError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateTerminationProtectionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateTerminationProtectionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        UpdateTerminationProtectionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11986,7 +12281,7 @@ impl UpdateTerminationProtectionError {
 impl From<XmlParseError> for UpdateTerminationProtectionError {
     fn from(err: XmlParseError) -> UpdateTerminationProtectionError {
         let XmlParseError(message) = err;
-        UpdateTerminationProtectionError::Unknown(message.to_string())
+        UpdateTerminationProtectionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateTerminationProtectionError {
@@ -12017,7 +12312,8 @@ impl Error for UpdateTerminationProtectionError {
             UpdateTerminationProtectionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateTerminationProtectionError::Unknown(ref cause) => cause,
+            UpdateTerminationProtectionError::ParseError(ref cause) => cause,
+            UpdateTerminationProtectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12030,21 +12326,25 @@ pub enum ValidateTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ValidateTemplateError {
-    pub fn from_body(body: &str) -> ValidateTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ValidateTemplateError::Unknown(String::from(body)),
-            },
-            Err(_) => ValidateTemplateError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ValidateTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ValidateTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12059,7 +12359,7 @@ impl ValidateTemplateError {
 impl From<XmlParseError> for ValidateTemplateError {
     fn from(err: XmlParseError) -> ValidateTemplateError {
         let XmlParseError(message) = err;
-        ValidateTemplateError::Unknown(message.to_string())
+        ValidateTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ValidateTemplateError {
@@ -12088,7 +12388,8 @@ impl Error for ValidateTemplateError {
             ValidateTemplateError::Validation(ref cause) => cause,
             ValidateTemplateError::Credentials(ref err) => err.description(),
             ValidateTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ValidateTemplateError::Unknown(ref cause) => cause,
+            ValidateTemplateError::ParseError(ref cause) => cause,
+            ValidateTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12386,11 +12687,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CancelUpdateStackError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CancelUpdateStackError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -12416,9 +12718,7 @@ impl CloudFormation for CloudFormationClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ContinueUpdateRollbackError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ContinueUpdateRollbackError::from_response(response))
                 }));
             }
 
@@ -12467,11 +12767,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateChangeSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateChangeSetError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12519,11 +12820,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStackError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateStackError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12571,11 +12873,11 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStackInstancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateStackInstancesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12623,11 +12925,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStackSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateStackSetError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12675,11 +12978,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteChangeSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteChangeSetError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12724,11 +13028,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteStackError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteStackError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -12753,11 +13058,11 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteStackInstancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteStackInstancesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12805,11 +13110,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteStackSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteStackSetError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12857,11 +13163,11 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAccountLimitsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeAccountLimitsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12909,11 +13215,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeChangeSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeChangeSetError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12961,11 +13268,11 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStackEventsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeStackEventsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13013,11 +13320,11 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStackInstanceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeStackInstanceError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13065,11 +13372,11 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStackResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeStackResourceError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13118,9 +13425,7 @@ impl CloudFormation for CloudFormationClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStackResourcesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeStackResourcesError::from_response(response))
                 }));
             }
 
@@ -13169,11 +13474,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStackSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeStackSetError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13222,9 +13528,7 @@ impl CloudFormation for CloudFormationClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStackSetOperationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeStackSetOperationError::from_response(response))
                 }));
             }
 
@@ -13273,11 +13577,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStacksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeStacksError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13325,11 +13630,11 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EstimateTemplateCostError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(EstimateTemplateCostError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13377,11 +13682,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ExecuteChangeSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ExecuteChangeSetError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13429,11 +13735,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetStackPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetStackPolicyError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13481,11 +13788,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetTemplateError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13533,11 +13841,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTemplateSummaryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetTemplateSummaryError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13585,11 +13894,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListChangeSetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListChangeSetsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13637,11 +13947,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListExportsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListExportsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13689,11 +14000,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListImportsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListImportsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13741,11 +14053,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStackInstancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListStackInstancesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13793,11 +14106,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStackResourcesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListStackResourcesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13846,9 +14160,7 @@ impl CloudFormation for CloudFormationClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStackSetOperationResultsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListStackSetOperationResultsError::from_response(response))
                 }));
             }
 
@@ -13898,9 +14210,7 @@ impl CloudFormation for CloudFormationClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStackSetOperationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListStackSetOperationsError::from_response(response))
                 }));
             }
 
@@ -13949,11 +14259,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStackSetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListStackSetsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14001,11 +14312,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStacksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListStacksError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14053,11 +14365,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetStackPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SetStackPolicyError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -14079,11 +14392,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SignalResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SignalResourceError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -14108,11 +14422,11 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopStackSetOperationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StopStackSetOperationError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14160,11 +14474,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateStackError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateStackError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14212,11 +14527,11 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateStackInstancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateStackInstancesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14264,11 +14579,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateStackSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateStackSetError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14317,9 +14633,7 @@ impl CloudFormation for CloudFormationClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTerminationProtectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateTerminationProtectionError::from_response(response))
                 }));
             }
 
@@ -14368,11 +14682,12 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ValidateTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ValidateTemplateError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

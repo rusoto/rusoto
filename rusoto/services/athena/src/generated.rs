@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetNamedQueryInput {
@@ -494,44 +494,44 @@ pub enum BatchGetNamedQueryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetNamedQueryError {
-    pub fn from_body(body: &str) -> BatchGetNamedQueryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchGetNamedQueryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        BatchGetNamedQueryError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        BatchGetNamedQueryError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        BatchGetNamedQueryError::Validation(error_message.to_string())
-                    }
-                    _ => BatchGetNamedQueryError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return BatchGetNamedQueryError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return BatchGetNamedQueryError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return BatchGetNamedQueryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchGetNamedQueryError::Unknown(String::from(body)),
         }
+        return BatchGetNamedQueryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchGetNamedQueryError {
     fn from(err: serde_json::error::Error) -> BatchGetNamedQueryError {
-        BatchGetNamedQueryError::Unknown(err.description().to_string())
+        BatchGetNamedQueryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchGetNamedQueryError {
@@ -564,7 +564,8 @@ impl Error for BatchGetNamedQueryError {
             BatchGetNamedQueryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            BatchGetNamedQueryError::Unknown(ref cause) => cause,
+            BatchGetNamedQueryError::ParseError(ref cause) => cause,
+            BatchGetNamedQueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -581,44 +582,44 @@ pub enum BatchGetQueryExecutionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetQueryExecutionError {
-    pub fn from_body(body: &str) -> BatchGetQueryExecutionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchGetQueryExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        BatchGetQueryExecutionError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        BatchGetQueryExecutionError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        BatchGetQueryExecutionError::Validation(error_message.to_string())
-                    }
-                    _ => BatchGetQueryExecutionError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return BatchGetQueryExecutionError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return BatchGetQueryExecutionError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return BatchGetQueryExecutionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchGetQueryExecutionError::Unknown(String::from(body)),
         }
+        return BatchGetQueryExecutionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchGetQueryExecutionError {
     fn from(err: serde_json::error::Error) -> BatchGetQueryExecutionError {
-        BatchGetQueryExecutionError::Unknown(err.description().to_string())
+        BatchGetQueryExecutionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchGetQueryExecutionError {
@@ -651,7 +652,8 @@ impl Error for BatchGetQueryExecutionError {
             BatchGetQueryExecutionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            BatchGetQueryExecutionError::Unknown(ref cause) => cause,
+            BatchGetQueryExecutionError::ParseError(ref cause) => cause,
+            BatchGetQueryExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -668,44 +670,44 @@ pub enum CreateNamedQueryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateNamedQueryError {
-    pub fn from_body(body: &str) -> CreateNamedQueryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateNamedQueryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        CreateNamedQueryError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreateNamedQueryError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateNamedQueryError::Validation(error_message.to_string())
-                    }
-                    _ => CreateNamedQueryError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return CreateNamedQueryError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return CreateNamedQueryError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateNamedQueryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateNamedQueryError::Unknown(String::from(body)),
         }
+        return CreateNamedQueryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateNamedQueryError {
     fn from(err: serde_json::error::Error) -> CreateNamedQueryError {
-        CreateNamedQueryError::Unknown(err.description().to_string())
+        CreateNamedQueryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateNamedQueryError {
@@ -736,7 +738,8 @@ impl Error for CreateNamedQueryError {
             CreateNamedQueryError::Validation(ref cause) => cause,
             CreateNamedQueryError::Credentials(ref err) => err.description(),
             CreateNamedQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateNamedQueryError::Unknown(ref cause) => cause,
+            CreateNamedQueryError::ParseError(ref cause) => cause,
+            CreateNamedQueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -753,44 +756,44 @@ pub enum DeleteNamedQueryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteNamedQueryError {
-    pub fn from_body(body: &str) -> DeleteNamedQueryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteNamedQueryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        DeleteNamedQueryError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteNamedQueryError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteNamedQueryError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteNamedQueryError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return DeleteNamedQueryError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DeleteNamedQueryError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteNamedQueryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteNamedQueryError::Unknown(String::from(body)),
         }
+        return DeleteNamedQueryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteNamedQueryError {
     fn from(err: serde_json::error::Error) -> DeleteNamedQueryError {
-        DeleteNamedQueryError::Unknown(err.description().to_string())
+        DeleteNamedQueryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteNamedQueryError {
@@ -821,7 +824,8 @@ impl Error for DeleteNamedQueryError {
             DeleteNamedQueryError::Validation(ref cause) => cause,
             DeleteNamedQueryError::Credentials(ref err) => err.description(),
             DeleteNamedQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteNamedQueryError::Unknown(ref cause) => cause,
+            DeleteNamedQueryError::ParseError(ref cause) => cause,
+            DeleteNamedQueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -838,44 +842,44 @@ pub enum GetNamedQueryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetNamedQueryError {
-    pub fn from_body(body: &str) -> GetNamedQueryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetNamedQueryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        GetNamedQueryError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        GetNamedQueryError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetNamedQueryError::Validation(error_message.to_string())
-                    }
-                    _ => GetNamedQueryError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return GetNamedQueryError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return GetNamedQueryError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetNamedQueryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetNamedQueryError::Unknown(String::from(body)),
         }
+        return GetNamedQueryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetNamedQueryError {
     fn from(err: serde_json::error::Error) -> GetNamedQueryError {
-        GetNamedQueryError::Unknown(err.description().to_string())
+        GetNamedQueryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetNamedQueryError {
@@ -906,7 +910,8 @@ impl Error for GetNamedQueryError {
             GetNamedQueryError::Validation(ref cause) => cause,
             GetNamedQueryError::Credentials(ref err) => err.description(),
             GetNamedQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetNamedQueryError::Unknown(ref cause) => cause,
+            GetNamedQueryError::ParseError(ref cause) => cause,
+            GetNamedQueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -923,44 +928,44 @@ pub enum GetQueryExecutionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetQueryExecutionError {
-    pub fn from_body(body: &str) -> GetQueryExecutionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetQueryExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        GetQueryExecutionError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        GetQueryExecutionError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetQueryExecutionError::Validation(error_message.to_string())
-                    }
-                    _ => GetQueryExecutionError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return GetQueryExecutionError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return GetQueryExecutionError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetQueryExecutionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetQueryExecutionError::Unknown(String::from(body)),
         }
+        return GetQueryExecutionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetQueryExecutionError {
     fn from(err: serde_json::error::Error) -> GetQueryExecutionError {
-        GetQueryExecutionError::Unknown(err.description().to_string())
+        GetQueryExecutionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetQueryExecutionError {
@@ -993,7 +998,8 @@ impl Error for GetQueryExecutionError {
             GetQueryExecutionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetQueryExecutionError::Unknown(ref cause) => cause,
+            GetQueryExecutionError::ParseError(ref cause) => cause,
+            GetQueryExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1010,44 +1016,44 @@ pub enum GetQueryResultsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetQueryResultsError {
-    pub fn from_body(body: &str) -> GetQueryResultsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetQueryResultsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        GetQueryResultsError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        GetQueryResultsError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetQueryResultsError::Validation(error_message.to_string())
-                    }
-                    _ => GetQueryResultsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return GetQueryResultsError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return GetQueryResultsError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetQueryResultsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetQueryResultsError::Unknown(String::from(body)),
         }
+        return GetQueryResultsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetQueryResultsError {
     fn from(err: serde_json::error::Error) -> GetQueryResultsError {
-        GetQueryResultsError::Unknown(err.description().to_string())
+        GetQueryResultsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetQueryResultsError {
@@ -1078,7 +1084,8 @@ impl Error for GetQueryResultsError {
             GetQueryResultsError::Validation(ref cause) => cause,
             GetQueryResultsError::Credentials(ref err) => err.description(),
             GetQueryResultsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetQueryResultsError::Unknown(ref cause) => cause,
+            GetQueryResultsError::ParseError(ref cause) => cause,
+            GetQueryResultsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1095,44 +1102,44 @@ pub enum ListNamedQueriesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListNamedQueriesError {
-    pub fn from_body(body: &str) -> ListNamedQueriesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListNamedQueriesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        ListNamedQueriesError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListNamedQueriesError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListNamedQueriesError::Validation(error_message.to_string())
-                    }
-                    _ => ListNamedQueriesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return ListNamedQueriesError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return ListNamedQueriesError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListNamedQueriesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListNamedQueriesError::Unknown(String::from(body)),
         }
+        return ListNamedQueriesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListNamedQueriesError {
     fn from(err: serde_json::error::Error) -> ListNamedQueriesError {
-        ListNamedQueriesError::Unknown(err.description().to_string())
+        ListNamedQueriesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListNamedQueriesError {
@@ -1163,7 +1170,8 @@ impl Error for ListNamedQueriesError {
             ListNamedQueriesError::Validation(ref cause) => cause,
             ListNamedQueriesError::Credentials(ref err) => err.description(),
             ListNamedQueriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListNamedQueriesError::Unknown(ref cause) => cause,
+            ListNamedQueriesError::ParseError(ref cause) => cause,
+            ListNamedQueriesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1180,44 +1188,44 @@ pub enum ListQueryExecutionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListQueryExecutionsError {
-    pub fn from_body(body: &str) -> ListQueryExecutionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListQueryExecutionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        ListQueryExecutionsError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListQueryExecutionsError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListQueryExecutionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListQueryExecutionsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return ListQueryExecutionsError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return ListQueryExecutionsError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListQueryExecutionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListQueryExecutionsError::Unknown(String::from(body)),
         }
+        return ListQueryExecutionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListQueryExecutionsError {
     fn from(err: serde_json::error::Error) -> ListQueryExecutionsError {
-        ListQueryExecutionsError::Unknown(err.description().to_string())
+        ListQueryExecutionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListQueryExecutionsError {
@@ -1250,7 +1258,8 @@ impl Error for ListQueryExecutionsError {
             ListQueryExecutionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListQueryExecutionsError::Unknown(ref cause) => cause,
+            ListQueryExecutionsError::ParseError(ref cause) => cause,
+            ListQueryExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1269,47 +1278,47 @@ pub enum StartQueryExecutionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartQueryExecutionError {
-    pub fn from_body(body: &str) -> StartQueryExecutionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartQueryExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        StartQueryExecutionError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StartQueryExecutionError::InvalidRequest(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        StartQueryExecutionError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartQueryExecutionError::Validation(error_message.to_string())
-                    }
-                    _ => StartQueryExecutionError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return StartQueryExecutionError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return StartQueryExecutionError::InvalidRequest(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return StartQueryExecutionError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartQueryExecutionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartQueryExecutionError::Unknown(String::from(body)),
         }
+        return StartQueryExecutionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartQueryExecutionError {
     fn from(err: serde_json::error::Error) -> StartQueryExecutionError {
-        StartQueryExecutionError::Unknown(err.description().to_string())
+        StartQueryExecutionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartQueryExecutionError {
@@ -1343,7 +1352,8 @@ impl Error for StartQueryExecutionError {
             StartQueryExecutionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartQueryExecutionError::Unknown(ref cause) => cause,
+            StartQueryExecutionError::ParseError(ref cause) => cause,
+            StartQueryExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1360,44 +1370,44 @@ pub enum StopQueryExecutionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopQueryExecutionError {
-    pub fn from_body(body: &str) -> StopQueryExecutionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopQueryExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerException" => {
-                        StopQueryExecutionError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StopQueryExecutionError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StopQueryExecutionError::Validation(error_message.to_string())
-                    }
-                    _ => StopQueryExecutionError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerException" => {
+                    return StopQueryExecutionError::InternalServer(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return StopQueryExecutionError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StopQueryExecutionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StopQueryExecutionError::Unknown(String::from(body)),
         }
+        return StopQueryExecutionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopQueryExecutionError {
     fn from(err: serde_json::error::Error) -> StopQueryExecutionError {
-        StopQueryExecutionError::Unknown(err.description().to_string())
+        StopQueryExecutionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopQueryExecutionError {
@@ -1430,7 +1440,8 @@ impl Error for StopQueryExecutionError {
             StopQueryExecutionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StopQueryExecutionError::Unknown(ref cause) => cause,
+            StopQueryExecutionError::ParseError(ref cause) => cause,
+            StopQueryExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1561,14 +1572,16 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<BatchGetNamedQueryOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchGetNamedQueryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchGetNamedQueryError::from_response(response))),
+                )
             }
         })
     }
@@ -1596,14 +1609,15 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<BatchGetQueryExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchGetQueryExecutionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(BatchGetQueryExecutionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1631,14 +1645,16 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<CreateNamedQueryOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateNamedQueryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateNamedQueryError::from_response(response))),
+                )
             }
         })
     }
@@ -1666,14 +1682,16 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<DeleteNamedQueryOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteNamedQueryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteNamedQueryError::from_response(response))),
+                )
             }
         })
     }
@@ -1701,14 +1719,16 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<GetNamedQueryOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetNamedQueryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetNamedQueryError::from_response(response))),
+                )
             }
         })
     }
@@ -1736,14 +1756,16 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<GetQueryExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetQueryExecutionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetQueryExecutionError::from_response(response))),
+                )
             }
         })
     }
@@ -1771,14 +1793,16 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<GetQueryResultsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetQueryResultsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetQueryResultsError::from_response(response))),
+                )
             }
         })
     }
@@ -1806,14 +1830,16 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<ListNamedQueriesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListNamedQueriesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListNamedQueriesError::from_response(response))),
+                )
             }
         })
     }
@@ -1841,14 +1867,15 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<ListQueryExecutionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListQueryExecutionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListQueryExecutionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1876,14 +1903,15 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<StartQueryExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartQueryExecutionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartQueryExecutionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1911,14 +1939,16 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<StopQueryExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopQueryExecutionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StopQueryExecutionError::from_response(response))),
+                )
             }
         })
     }

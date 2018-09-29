@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>The amount of instance usage that a reservation covered.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -916,53 +916,53 @@ pub enum GetCostAndUsageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCostAndUsageError {
-    pub fn from_body(body: &str) -> GetCostAndUsageError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetCostAndUsageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BillExpirationException" => {
-                        GetCostAndUsageError::BillExpiration(String::from(error_message))
-                    }
-                    "DataUnavailableException" => {
-                        GetCostAndUsageError::DataUnavailable(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        GetCostAndUsageError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetCostAndUsageError::LimitExceeded(String::from(error_message))
-                    }
-                    "RequestChangedException" => {
-                        GetCostAndUsageError::RequestChanged(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetCostAndUsageError::Validation(error_message.to_string())
-                    }
-                    _ => GetCostAndUsageError::Unknown(String::from(body)),
+            match *error_type {
+                "BillExpirationException" => {
+                    return GetCostAndUsageError::BillExpiration(String::from(error_message))
                 }
+                "DataUnavailableException" => {
+                    return GetCostAndUsageError::DataUnavailable(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return GetCostAndUsageError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetCostAndUsageError::LimitExceeded(String::from(error_message))
+                }
+                "RequestChangedException" => {
+                    return GetCostAndUsageError::RequestChanged(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetCostAndUsageError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetCostAndUsageError::Unknown(String::from(body)),
         }
+        return GetCostAndUsageError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetCostAndUsageError {
     fn from(err: serde_json::error::Error) -> GetCostAndUsageError {
-        GetCostAndUsageError::Unknown(err.description().to_string())
+        GetCostAndUsageError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetCostAndUsageError {
@@ -996,7 +996,8 @@ impl Error for GetCostAndUsageError {
             GetCostAndUsageError::Validation(ref cause) => cause,
             GetCostAndUsageError::Credentials(ref err) => err.description(),
             GetCostAndUsageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCostAndUsageError::Unknown(ref cause) => cause,
+            GetCostAndUsageError::ParseError(ref cause) => cause,
+            GetCostAndUsageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1019,53 +1020,53 @@ pub enum GetDimensionValuesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDimensionValuesError {
-    pub fn from_body(body: &str) -> GetDimensionValuesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetDimensionValuesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BillExpirationException" => {
-                        GetDimensionValuesError::BillExpiration(String::from(error_message))
-                    }
-                    "DataUnavailableException" => {
-                        GetDimensionValuesError::DataUnavailable(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        GetDimensionValuesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetDimensionValuesError::LimitExceeded(String::from(error_message))
-                    }
-                    "RequestChangedException" => {
-                        GetDimensionValuesError::RequestChanged(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetDimensionValuesError::Validation(error_message.to_string())
-                    }
-                    _ => GetDimensionValuesError::Unknown(String::from(body)),
+            match *error_type {
+                "BillExpirationException" => {
+                    return GetDimensionValuesError::BillExpiration(String::from(error_message))
                 }
+                "DataUnavailableException" => {
+                    return GetDimensionValuesError::DataUnavailable(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return GetDimensionValuesError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetDimensionValuesError::LimitExceeded(String::from(error_message))
+                }
+                "RequestChangedException" => {
+                    return GetDimensionValuesError::RequestChanged(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetDimensionValuesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetDimensionValuesError::Unknown(String::from(body)),
         }
+        return GetDimensionValuesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetDimensionValuesError {
     fn from(err: serde_json::error::Error) -> GetDimensionValuesError {
-        GetDimensionValuesError::Unknown(err.description().to_string())
+        GetDimensionValuesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetDimensionValuesError {
@@ -1101,7 +1102,8 @@ impl Error for GetDimensionValuesError {
             GetDimensionValuesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetDimensionValuesError::Unknown(ref cause) => cause,
+            GetDimensionValuesError::ParseError(ref cause) => cause,
+            GetDimensionValuesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1120,47 +1122,49 @@ pub enum GetReservationCoverageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetReservationCoverageError {
-    pub fn from_body(body: &str) -> GetReservationCoverageError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetReservationCoverageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DataUnavailableException" => {
-                        GetReservationCoverageError::DataUnavailable(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        GetReservationCoverageError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetReservationCoverageError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetReservationCoverageError::Validation(error_message.to_string())
-                    }
-                    _ => GetReservationCoverageError::Unknown(String::from(body)),
+            match *error_type {
+                "DataUnavailableException" => {
+                    return GetReservationCoverageError::DataUnavailable(String::from(error_message))
                 }
+                "InvalidNextTokenException" => {
+                    return GetReservationCoverageError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return GetReservationCoverageError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetReservationCoverageError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetReservationCoverageError::Unknown(String::from(body)),
         }
+        return GetReservationCoverageError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetReservationCoverageError {
     fn from(err: serde_json::error::Error) -> GetReservationCoverageError {
-        GetReservationCoverageError::Unknown(err.description().to_string())
+        GetReservationCoverageError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetReservationCoverageError {
@@ -1194,7 +1198,8 @@ impl Error for GetReservationCoverageError {
             GetReservationCoverageError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetReservationCoverageError::Unknown(ref cause) => cause,
+            GetReservationCoverageError::ParseError(ref cause) => cause,
+            GetReservationCoverageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1213,53 +1218,55 @@ pub enum GetReservationPurchaseRecommendationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetReservationPurchaseRecommendationError {
-    pub fn from_body(body: &str) -> GetReservationPurchaseRecommendationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetReservationPurchaseRecommendationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DataUnavailableException" => {
-                        GetReservationPurchaseRecommendationError::DataUnavailable(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidNextTokenException" => {
-                        GetReservationPurchaseRecommendationError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        GetReservationPurchaseRecommendationError::LimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => GetReservationPurchaseRecommendationError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => GetReservationPurchaseRecommendationError::Unknown(String::from(body)),
+            match *error_type {
+                "DataUnavailableException" => {
+                    return GetReservationPurchaseRecommendationError::DataUnavailable(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidNextTokenException" => {
+                    return GetReservationPurchaseRecommendationError::InvalidNextToken(
+                        String::from(error_message),
+                    )
+                }
+                "LimitExceededException" => {
+                    return GetReservationPurchaseRecommendationError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetReservationPurchaseRecommendationError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => GetReservationPurchaseRecommendationError::Unknown(String::from(body)),
         }
+        return GetReservationPurchaseRecommendationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetReservationPurchaseRecommendationError {
     fn from(err: serde_json::error::Error) -> GetReservationPurchaseRecommendationError {
-        GetReservationPurchaseRecommendationError::Unknown(err.description().to_string())
+        GetReservationPurchaseRecommendationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetReservationPurchaseRecommendationError {
@@ -1293,7 +1300,8 @@ impl Error for GetReservationPurchaseRecommendationError {
             GetReservationPurchaseRecommendationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetReservationPurchaseRecommendationError::Unknown(ref cause) => cause,
+            GetReservationPurchaseRecommendationError::ParseError(ref cause) => cause,
+            GetReservationPurchaseRecommendationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1312,49 +1320,53 @@ pub enum GetReservationUtilizationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetReservationUtilizationError {
-    pub fn from_body(body: &str) -> GetReservationUtilizationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetReservationUtilizationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DataUnavailableException" => {
-                        GetReservationUtilizationError::DataUnavailable(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        GetReservationUtilizationError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        GetReservationUtilizationError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetReservationUtilizationError::Validation(error_message.to_string())
-                    }
-                    _ => GetReservationUtilizationError::Unknown(String::from(body)),
+            match *error_type {
+                "DataUnavailableException" => {
+                    return GetReservationUtilizationError::DataUnavailable(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidNextTokenException" => {
+                    return GetReservationUtilizationError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return GetReservationUtilizationError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetReservationUtilizationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetReservationUtilizationError::Unknown(String::from(body)),
         }
+        return GetReservationUtilizationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetReservationUtilizationError {
     fn from(err: serde_json::error::Error) -> GetReservationUtilizationError {
-        GetReservationUtilizationError::Unknown(err.description().to_string())
+        GetReservationUtilizationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetReservationUtilizationError {
@@ -1388,7 +1400,8 @@ impl Error for GetReservationUtilizationError {
             GetReservationUtilizationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetReservationUtilizationError::Unknown(ref cause) => cause,
+            GetReservationUtilizationError::ParseError(ref cause) => cause,
+            GetReservationUtilizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1411,51 +1424,51 @@ pub enum GetTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetTagsError {
-    pub fn from_body(body: &str) -> GetTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BillExpirationException" => {
-                        GetTagsError::BillExpiration(String::from(error_message))
-                    }
-                    "DataUnavailableException" => {
-                        GetTagsError::DataUnavailable(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        GetTagsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetTagsError::LimitExceeded(String::from(error_message))
-                    }
-                    "RequestChangedException" => {
-                        GetTagsError::RequestChanged(String::from(error_message))
-                    }
-                    "ValidationException" => GetTagsError::Validation(error_message.to_string()),
-                    _ => GetTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "BillExpirationException" => {
+                    return GetTagsError::BillExpiration(String::from(error_message))
                 }
+                "DataUnavailableException" => {
+                    return GetTagsError::DataUnavailable(String::from(error_message))
+                }
+                "InvalidNextTokenException" => {
+                    return GetTagsError::InvalidNextToken(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetTagsError::LimitExceeded(String::from(error_message))
+                }
+                "RequestChangedException" => {
+                    return GetTagsError::RequestChanged(String::from(error_message))
+                }
+                "ValidationException" => return GetTagsError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => GetTagsError::Unknown(String::from(body)),
         }
+        return GetTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetTagsError {
     fn from(err: serde_json::error::Error) -> GetTagsError {
-        GetTagsError::Unknown(err.description().to_string())
+        GetTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetTagsError {
@@ -1489,7 +1502,8 @@ impl Error for GetTagsError {
             GetTagsError::Validation(ref cause) => cause,
             GetTagsError::Credentials(ref err) => err.description(),
             GetTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTagsError::Unknown(ref cause) => cause,
+            GetTagsError::ParseError(ref cause) => cause,
+            GetTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1590,14 +1604,16 @@ impl CostExplorer for CostExplorerClient {
 
                     serde_json::from_str::<GetCostAndUsageResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCostAndUsageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetCostAndUsageError::from_response(response))),
+                )
             }
         })
     }
@@ -1625,14 +1641,16 @@ impl CostExplorer for CostExplorerClient {
 
                     serde_json::from_str::<GetDimensionValuesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDimensionValuesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetDimensionValuesError::from_response(response))),
+                )
             }
         })
     }
@@ -1663,14 +1681,15 @@ impl CostExplorer for CostExplorerClient {
 
                     serde_json::from_str::<GetReservationCoverageResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReservationCoverageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetReservationCoverageError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1704,12 +1723,13 @@ impl CostExplorer for CostExplorerClient {
 
                     serde_json::from_str::<GetReservationPurchaseRecommendationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReservationPurchaseRecommendationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetReservationPurchaseRecommendationError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -1742,13 +1762,12 @@ impl CostExplorer for CostExplorerClient {
 
                     serde_json::from_str::<GetReservationUtilizationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReservationUtilizationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetReservationUtilizationError::from_response(response))
                 }))
             }
         })
@@ -1774,14 +1793,16 @@ impl CostExplorer for CostExplorerClient {
 
                     serde_json::from_str::<GetTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetTagsError::from_response(response))),
+                )
             }
         })
     }

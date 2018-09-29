@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>A collection of accounts and regions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1852,43 +1852,43 @@ pub enum BatchGetResourceConfigError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetResourceConfigError {
-    pub fn from_body(body: &str) -> BatchGetResourceConfigError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchGetResourceConfigError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NoAvailableConfigurationRecorderException" => {
-                        BatchGetResourceConfigError::NoAvailableConfigurationRecorder(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        BatchGetResourceConfigError::Validation(error_message.to_string())
-                    }
-                    _ => BatchGetResourceConfigError::Unknown(String::from(body)),
+            match *error_type {
+                "NoAvailableConfigurationRecorderException" => {
+                    return BatchGetResourceConfigError::NoAvailableConfigurationRecorder(
+                        String::from(error_message),
+                    )
                 }
+                "ValidationException" => {
+                    return BatchGetResourceConfigError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchGetResourceConfigError::Unknown(String::from(body)),
         }
+        return BatchGetResourceConfigError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchGetResourceConfigError {
     fn from(err: serde_json::error::Error) -> BatchGetResourceConfigError {
-        BatchGetResourceConfigError::Unknown(err.description().to_string())
+        BatchGetResourceConfigError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchGetResourceConfigError {
@@ -1920,7 +1920,8 @@ impl Error for BatchGetResourceConfigError {
             BatchGetResourceConfigError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            BatchGetResourceConfigError::Unknown(ref cause) => cause,
+            BatchGetResourceConfigError::ParseError(ref cause) => cause,
+            BatchGetResourceConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1935,43 +1936,45 @@ pub enum DeleteAggregationAuthorizationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAggregationAuthorizationError {
-    pub fn from_body(body: &str) -> DeleteAggregationAuthorizationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteAggregationAuthorizationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        DeleteAggregationAuthorizationError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteAggregationAuthorizationError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteAggregationAuthorizationError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return DeleteAggregationAuthorizationError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DeleteAggregationAuthorizationError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DeleteAggregationAuthorizationError::Unknown(String::from(body)),
         }
+        return DeleteAggregationAuthorizationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteAggregationAuthorizationError {
     fn from(err: serde_json::error::Error) -> DeleteAggregationAuthorizationError {
-        DeleteAggregationAuthorizationError::Unknown(err.description().to_string())
+        DeleteAggregationAuthorizationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteAggregationAuthorizationError {
@@ -2003,7 +2006,8 @@ impl Error for DeleteAggregationAuthorizationError {
             DeleteAggregationAuthorizationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteAggregationAuthorizationError::Unknown(ref cause) => cause,
+            DeleteAggregationAuthorizationError::ParseError(ref cause) => cause,
+            DeleteAggregationAuthorizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2020,44 +2024,44 @@ pub enum DeleteConfigRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigRuleError {
-    pub fn from_body(body: &str) -> DeleteConfigRuleError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigRuleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NoSuchConfigRuleException" => {
-                        DeleteConfigRuleError::NoSuchConfigRule(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        DeleteConfigRuleError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteConfigRuleError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteConfigRuleError::Unknown(String::from(body)),
+            match *error_type {
+                "NoSuchConfigRuleException" => {
+                    return DeleteConfigRuleError::NoSuchConfigRule(String::from(error_message))
                 }
+                "ResourceInUseException" => {
+                    return DeleteConfigRuleError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteConfigRuleError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteConfigRuleError::Unknown(String::from(body)),
         }
+        return DeleteConfigRuleError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteConfigRuleError {
     fn from(err: serde_json::error::Error) -> DeleteConfigRuleError {
-        DeleteConfigRuleError::Unknown(err.description().to_string())
+        DeleteConfigRuleError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteConfigRuleError {
@@ -2088,7 +2092,8 @@ impl Error for DeleteConfigRuleError {
             DeleteConfigRuleError::Validation(ref cause) => cause,
             DeleteConfigRuleError::Credentials(ref err) => err.description(),
             DeleteConfigRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteConfigRuleError::Unknown(ref cause) => cause,
+            DeleteConfigRuleError::ParseError(ref cause) => cause,
+            DeleteConfigRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2103,43 +2108,43 @@ pub enum DeleteConfigurationAggregatorError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigurationAggregatorError {
-    pub fn from_body(body: &str) -> DeleteConfigurationAggregatorError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigurationAggregatorError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NoSuchConfigurationAggregatorException" => {
-                        DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        DeleteConfigurationAggregatorError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteConfigurationAggregatorError::Unknown(String::from(body)),
+            match *error_type {
+                "NoSuchConfigurationAggregatorException" => {
+                    return DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(
+                        String::from(error_message),
+                    )
                 }
+                "ValidationException" => {
+                    return DeleteConfigurationAggregatorError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteConfigurationAggregatorError::Unknown(String::from(body)),
         }
+        return DeleteConfigurationAggregatorError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteConfigurationAggregatorError {
     fn from(err: serde_json::error::Error) -> DeleteConfigurationAggregatorError {
-        DeleteConfigurationAggregatorError::Unknown(err.description().to_string())
+        DeleteConfigurationAggregatorError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteConfigurationAggregatorError {
@@ -2171,7 +2176,8 @@ impl Error for DeleteConfigurationAggregatorError {
             DeleteConfigurationAggregatorError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteConfigurationAggregatorError::Unknown(ref cause) => cause,
+            DeleteConfigurationAggregatorError::ParseError(ref cause) => cause,
+            DeleteConfigurationAggregatorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2186,43 +2192,43 @@ pub enum DeleteConfigurationRecorderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigurationRecorderError {
-    pub fn from_body(body: &str) -> DeleteConfigurationRecorderError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigurationRecorderError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NoSuchConfigurationRecorderException" => {
-                        DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteConfigurationRecorderError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteConfigurationRecorderError::Unknown(String::from(body)),
+            match *error_type {
+                "NoSuchConfigurationRecorderException" => {
+                    return DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(
+                        String::from(error_message),
+                    )
                 }
+                "ValidationException" => {
+                    return DeleteConfigurationRecorderError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteConfigurationRecorderError::Unknown(String::from(body)),
         }
+        return DeleteConfigurationRecorderError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteConfigurationRecorderError {
     fn from(err: serde_json::error::Error) -> DeleteConfigurationRecorderError {
-        DeleteConfigurationRecorderError::Unknown(err.description().to_string())
+        DeleteConfigurationRecorderError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteConfigurationRecorderError {
@@ -2254,7 +2260,8 @@ impl Error for DeleteConfigurationRecorderError {
             DeleteConfigurationRecorderError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteConfigurationRecorderError::Unknown(ref cause) => cause,
+            DeleteConfigurationRecorderError::ParseError(ref cause) => cause,
+            DeleteConfigurationRecorderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2271,48 +2278,48 @@ pub enum DeleteDeliveryChannelError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDeliveryChannelError {
-    pub fn from_body(body: &str) -> DeleteDeliveryChannelError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDeliveryChannelError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "LastDeliveryChannelDeleteFailedException" => {
-                        DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoSuchDeliveryChannelException" => {
-                        DeleteDeliveryChannelError::NoSuchDeliveryChannel(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteDeliveryChannelError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteDeliveryChannelError::Unknown(String::from(body)),
+            match *error_type {
+                "LastDeliveryChannelDeleteFailedException" => {
+                    return DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(
+                        String::from(error_message),
+                    )
                 }
+                "NoSuchDeliveryChannelException" => {
+                    return DeleteDeliveryChannelError::NoSuchDeliveryChannel(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteDeliveryChannelError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteDeliveryChannelError::Unknown(String::from(body)),
         }
+        return DeleteDeliveryChannelError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteDeliveryChannelError {
     fn from(err: serde_json::error::Error) -> DeleteDeliveryChannelError {
-        DeleteDeliveryChannelError::Unknown(err.description().to_string())
+        DeleteDeliveryChannelError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteDeliveryChannelError {
@@ -2345,7 +2352,8 @@ impl Error for DeleteDeliveryChannelError {
             DeleteDeliveryChannelError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteDeliveryChannelError::Unknown(ref cause) => cause,
+            DeleteDeliveryChannelError::ParseError(ref cause) => cause,
+            DeleteDeliveryChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2362,44 +2370,46 @@ pub enum DeleteEvaluationResultsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEvaluationResultsError {
-    pub fn from_body(body: &str) -> DeleteEvaluationResultsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteEvaluationResultsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NoSuchConfigRuleException" => {
-                        DeleteEvaluationResultsError::NoSuchConfigRule(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        DeleteEvaluationResultsError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteEvaluationResultsError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteEvaluationResultsError::Unknown(String::from(body)),
+            match *error_type {
+                "NoSuchConfigRuleException" => {
+                    return DeleteEvaluationResultsError::NoSuchConfigRule(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceInUseException" => {
+                    return DeleteEvaluationResultsError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteEvaluationResultsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteEvaluationResultsError::Unknown(String::from(body)),
         }
+        return DeleteEvaluationResultsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteEvaluationResultsError {
     fn from(err: serde_json::error::Error) -> DeleteEvaluationResultsError {
-        DeleteEvaluationResultsError::Unknown(err.description().to_string())
+        DeleteEvaluationResultsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteEvaluationResultsError {
@@ -2432,7 +2442,8 @@ impl Error for DeleteEvaluationResultsError {
             DeleteEvaluationResultsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteEvaluationResultsError::Unknown(ref cause) => cause,
+            DeleteEvaluationResultsError::ParseError(ref cause) => cause,
+            DeleteEvaluationResultsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2447,43 +2458,45 @@ pub enum DeletePendingAggregationRequestError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePendingAggregationRequestError {
-    pub fn from_body(body: &str) -> DeletePendingAggregationRequestError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePendingAggregationRequestError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        DeletePendingAggregationRequestError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeletePendingAggregationRequestError::Validation(error_message.to_string())
-                    }
-                    _ => DeletePendingAggregationRequestError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return DeletePendingAggregationRequestError::InvalidParameterValue(
+                        String::from(error_message),
+                    )
                 }
+                "ValidationException" => {
+                    return DeletePendingAggregationRequestError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DeletePendingAggregationRequestError::Unknown(String::from(body)),
         }
+        return DeletePendingAggregationRequestError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeletePendingAggregationRequestError {
     fn from(err: serde_json::error::Error) -> DeletePendingAggregationRequestError {
-        DeletePendingAggregationRequestError::Unknown(err.description().to_string())
+        DeletePendingAggregationRequestError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeletePendingAggregationRequestError {
@@ -2515,7 +2528,8 @@ impl Error for DeletePendingAggregationRequestError {
             DeletePendingAggregationRequestError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeletePendingAggregationRequestError::Unknown(ref cause) => cause,
+            DeletePendingAggregationRequestError::ParseError(ref cause) => cause,
+            DeletePendingAggregationRequestError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2532,48 +2546,48 @@ pub enum DeleteRetentionConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRetentionConfigurationError {
-    pub fn from_body(body: &str) -> DeleteRetentionConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteRetentionConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        DeleteRetentionConfigurationError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoSuchRetentionConfigurationException" => {
-                        DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        DeleteRetentionConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteRetentionConfigurationError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return DeleteRetentionConfigurationError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "NoSuchRetentionConfigurationException" => {
+                    return DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DeleteRetentionConfigurationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteRetentionConfigurationError::Unknown(String::from(body)),
         }
+        return DeleteRetentionConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteRetentionConfigurationError {
     fn from(err: serde_json::error::Error) -> DeleteRetentionConfigurationError {
-        DeleteRetentionConfigurationError::Unknown(err.description().to_string())
+        DeleteRetentionConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteRetentionConfigurationError {
@@ -2606,7 +2620,8 @@ impl Error for DeleteRetentionConfigurationError {
             DeleteRetentionConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteRetentionConfigurationError::Unknown(ref cause) => cause,
+            DeleteRetentionConfigurationError::ParseError(ref cause) => cause,
+            DeleteRetentionConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2625,53 +2640,53 @@ pub enum DeliverConfigSnapshotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeliverConfigSnapshotError {
-    pub fn from_body(body: &str) -> DeliverConfigSnapshotError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeliverConfigSnapshotError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NoAvailableConfigurationRecorderException" => {
-                        DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoRunningConfigurationRecorderException" => {
-                        DeliverConfigSnapshotError::NoRunningConfigurationRecorder(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoSuchDeliveryChannelException" => {
-                        DeliverConfigSnapshotError::NoSuchDeliveryChannel(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeliverConfigSnapshotError::Validation(error_message.to_string())
-                    }
-                    _ => DeliverConfigSnapshotError::Unknown(String::from(body)),
+            match *error_type {
+                "NoAvailableConfigurationRecorderException" => {
+                    return DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(
+                        String::from(error_message),
+                    )
                 }
+                "NoRunningConfigurationRecorderException" => {
+                    return DeliverConfigSnapshotError::NoRunningConfigurationRecorder(String::from(
+                        error_message,
+                    ))
+                }
+                "NoSuchDeliveryChannelException" => {
+                    return DeliverConfigSnapshotError::NoSuchDeliveryChannel(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeliverConfigSnapshotError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeliverConfigSnapshotError::Unknown(String::from(body)),
         }
+        return DeliverConfigSnapshotError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeliverConfigSnapshotError {
     fn from(err: serde_json::error::Error) -> DeliverConfigSnapshotError {
-        DeliverConfigSnapshotError::Unknown(err.description().to_string())
+        DeliverConfigSnapshotError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeliverConfigSnapshotError {
@@ -2705,7 +2720,8 @@ impl Error for DeliverConfigSnapshotError {
             DeliverConfigSnapshotError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeliverConfigSnapshotError::Unknown(ref cause) => cause,
+            DeliverConfigSnapshotError::ParseError(ref cause) => cause,
+            DeliverConfigSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2724,55 +2740,41 @@ pub enum DescribeAggregateComplianceByConfigRulesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAggregateComplianceByConfigRulesError {
-    pub fn from_body(body: &str) -> DescribeAggregateComplianceByConfigRulesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> DescribeAggregateComplianceByConfigRulesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidLimitException" => {
-                        DescribeAggregateComplianceByConfigRulesError::InvalidLimit(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidNextTokenException" => {
-                        DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(
-                            String::from(error_message),
-                        )
-                    }
-                    "NoSuchConfigurationAggregatorException" => {
-                        DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        DescribeAggregateComplianceByConfigRulesError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
-                    _ => DescribeAggregateComplianceByConfigRulesError::Unknown(String::from(body)),
-                }
-            }
-            Err(_) => DescribeAggregateComplianceByConfigRulesError::Unknown(String::from(body)),
+            match *error_type {
+                                "InvalidLimitException" => return DescribeAggregateComplianceByConfigRulesError::InvalidLimit(String::from(error_message)),
+"InvalidNextTokenException" => return DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(String::from(error_message)),
+"NoSuchConfigurationAggregatorException" => return DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(String::from(error_message)),
+"ValidationException" => return DescribeAggregateComplianceByConfigRulesError::Validation(error_message.to_string()),
+_ => {}
+                            }
         }
+        return DescribeAggregateComplianceByConfigRulesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeAggregateComplianceByConfigRulesError {
     fn from(err: serde_json::error::Error) -> DescribeAggregateComplianceByConfigRulesError {
-        DescribeAggregateComplianceByConfigRulesError::Unknown(err.description().to_string())
+        DescribeAggregateComplianceByConfigRulesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeAggregateComplianceByConfigRulesError {
@@ -2810,7 +2812,8 @@ impl Error for DescribeAggregateComplianceByConfigRulesError {
             DescribeAggregateComplianceByConfigRulesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAggregateComplianceByConfigRulesError::Unknown(ref cause) => cause,
+            DescribeAggregateComplianceByConfigRulesError::ParseError(ref cause) => cause,
+            DescribeAggregateComplianceByConfigRulesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2829,53 +2832,55 @@ pub enum DescribeAggregationAuthorizationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAggregationAuthorizationsError {
-    pub fn from_body(body: &str) -> DescribeAggregationAuthorizationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAggregationAuthorizationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidLimitException" => {
-                        DescribeAggregationAuthorizationsError::InvalidLimit(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidNextTokenException" => {
-                        DescribeAggregationAuthorizationsError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeAggregationAuthorizationsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => DescribeAggregationAuthorizationsError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DescribeAggregationAuthorizationsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidLimitException" => {
+                    return DescribeAggregationAuthorizationsError::InvalidLimit(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidNextTokenException" => {
+                    return DescribeAggregationAuthorizationsError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return DescribeAggregationAuthorizationsError::InvalidParameterValue(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DescribeAggregationAuthorizationsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeAggregationAuthorizationsError::Unknown(String::from(body)),
         }
+        return DescribeAggregationAuthorizationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeAggregationAuthorizationsError {
     fn from(err: serde_json::error::Error) -> DescribeAggregationAuthorizationsError {
-        DescribeAggregationAuthorizationsError::Unknown(err.description().to_string())
+        DescribeAggregationAuthorizationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeAggregationAuthorizationsError {
@@ -2909,7 +2914,8 @@ impl Error for DescribeAggregationAuthorizationsError {
             DescribeAggregationAuthorizationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAggregationAuthorizationsError::Unknown(ref cause) => cause,
+            DescribeAggregationAuthorizationsError::ParseError(ref cause) => cause,
+            DescribeAggregationAuthorizationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2928,53 +2934,55 @@ pub enum DescribeComplianceByConfigRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeComplianceByConfigRuleError {
-    pub fn from_body(body: &str) -> DescribeComplianceByConfigRuleError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeComplianceByConfigRuleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        DescribeComplianceByConfigRuleError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeComplianceByConfigRuleError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoSuchConfigRuleException" => {
-                        DescribeComplianceByConfigRuleError::NoSuchConfigRule(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeComplianceByConfigRuleError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeComplianceByConfigRuleError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return DescribeComplianceByConfigRuleError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterValueException" => {
+                    return DescribeComplianceByConfigRuleError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "NoSuchConfigRuleException" => {
+                    return DescribeComplianceByConfigRuleError::NoSuchConfigRule(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeComplianceByConfigRuleError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeComplianceByConfigRuleError::Unknown(String::from(body)),
         }
+        return DescribeComplianceByConfigRuleError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeComplianceByConfigRuleError {
     fn from(err: serde_json::error::Error) -> DescribeComplianceByConfigRuleError {
-        DescribeComplianceByConfigRuleError::Unknown(err.description().to_string())
+        DescribeComplianceByConfigRuleError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeComplianceByConfigRuleError {
@@ -3008,7 +3016,8 @@ impl Error for DescribeComplianceByConfigRuleError {
             DescribeComplianceByConfigRuleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeComplianceByConfigRuleError::Unknown(ref cause) => cause,
+            DescribeComplianceByConfigRuleError::ParseError(ref cause) => cause,
+            DescribeComplianceByConfigRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3025,48 +3034,48 @@ pub enum DescribeComplianceByResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeComplianceByResourceError {
-    pub fn from_body(body: &str) -> DescribeComplianceByResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeComplianceByResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        DescribeComplianceByResourceError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeComplianceByResourceError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeComplianceByResourceError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeComplianceByResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return DescribeComplianceByResourceError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterValueException" => {
+                    return DescribeComplianceByResourceError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeComplianceByResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeComplianceByResourceError::Unknown(String::from(body)),
         }
+        return DescribeComplianceByResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeComplianceByResourceError {
     fn from(err: serde_json::error::Error) -> DescribeComplianceByResourceError {
-        DescribeComplianceByResourceError::Unknown(err.description().to_string())
+        DescribeComplianceByResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeComplianceByResourceError {
@@ -3099,7 +3108,8 @@ impl Error for DescribeComplianceByResourceError {
             DescribeComplianceByResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeComplianceByResourceError::Unknown(ref cause) => cause,
+            DescribeComplianceByResourceError::ParseError(ref cause) => cause,
+            DescribeComplianceByResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3118,53 +3128,55 @@ pub enum DescribeConfigRuleEvaluationStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigRuleEvaluationStatusError {
-    pub fn from_body(body: &str) -> DescribeConfigRuleEvaluationStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigRuleEvaluationStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        DescribeConfigRuleEvaluationStatusError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(
-                            String::from(error_message),
-                        )
-                    }
-                    "NoSuchConfigRuleException" => {
-                        DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => DescribeConfigRuleEvaluationStatusError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DescribeConfigRuleEvaluationStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return DescribeConfigRuleEvaluationStatusError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterValueException" => {
+                    return DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(
+                        String::from(error_message),
+                    )
+                }
+                "NoSuchConfigRuleException" => {
+                    return DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeConfigRuleEvaluationStatusError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeConfigRuleEvaluationStatusError::Unknown(String::from(body)),
         }
+        return DescribeConfigRuleEvaluationStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConfigRuleEvaluationStatusError {
     fn from(err: serde_json::error::Error) -> DescribeConfigRuleEvaluationStatusError {
-        DescribeConfigRuleEvaluationStatusError::Unknown(err.description().to_string())
+        DescribeConfigRuleEvaluationStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConfigRuleEvaluationStatusError {
@@ -3198,7 +3210,8 @@ impl Error for DescribeConfigRuleEvaluationStatusError {
             DescribeConfigRuleEvaluationStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConfigRuleEvaluationStatusError::Unknown(ref cause) => cause,
+            DescribeConfigRuleEvaluationStatusError::ParseError(ref cause) => cause,
+            DescribeConfigRuleEvaluationStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3215,44 +3228,44 @@ pub enum DescribeConfigRulesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigRulesError {
-    pub fn from_body(body: &str) -> DescribeConfigRulesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigRulesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        DescribeConfigRulesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "NoSuchConfigRuleException" => {
-                        DescribeConfigRulesError::NoSuchConfigRule(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeConfigRulesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeConfigRulesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return DescribeConfigRulesError::InvalidNextToken(String::from(error_message))
                 }
+                "NoSuchConfigRuleException" => {
+                    return DescribeConfigRulesError::NoSuchConfigRule(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeConfigRulesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeConfigRulesError::Unknown(String::from(body)),
         }
+        return DescribeConfigRulesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConfigRulesError {
     fn from(err: serde_json::error::Error) -> DescribeConfigRulesError {
-        DescribeConfigRulesError::Unknown(err.description().to_string())
+        DescribeConfigRulesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConfigRulesError {
@@ -3285,7 +3298,8 @@ impl Error for DescribeConfigRulesError {
             DescribeConfigRulesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConfigRulesError::Unknown(ref cause) => cause,
+            DescribeConfigRulesError::ParseError(ref cause) => cause,
+            DescribeConfigRulesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3306,42 +3320,42 @@ pub enum DescribeConfigurationAggregatorSourcesStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationAggregatorSourcesStatusError {
-    pub fn from_body(body: &str) -> DescribeConfigurationAggregatorSourcesStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> DescribeConfigurationAggregatorSourcesStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                                    "InvalidLimitException" => DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(String::from(error_message)),
-"InvalidNextTokenException" => DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(String::from(error_message)),
-"InvalidParameterValueException" => DescribeConfigurationAggregatorSourcesStatusError::InvalidParameterValue(String::from(error_message)),
-"NoSuchConfigurationAggregatorException" => DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(String::from(error_message)),
-"ValidationException" => DescribeConfigurationAggregatorSourcesStatusError::Validation(error_message.to_string()),
-_ => DescribeConfigurationAggregatorSourcesStatusError::Unknown(String::from(body))
-                                }
-            }
-            Err(_) => {
-                DescribeConfigurationAggregatorSourcesStatusError::Unknown(String::from(body))
-            }
+            match *error_type {
+                                "InvalidLimitException" => return DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(String::from(error_message)),
+"InvalidNextTokenException" => return DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(String::from(error_message)),
+"InvalidParameterValueException" => return DescribeConfigurationAggregatorSourcesStatusError::InvalidParameterValue(String::from(error_message)),
+"NoSuchConfigurationAggregatorException" => return DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(String::from(error_message)),
+"ValidationException" => return DescribeConfigurationAggregatorSourcesStatusError::Validation(error_message.to_string()),
+_ => {}
+                            }
         }
+        return DescribeConfigurationAggregatorSourcesStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConfigurationAggregatorSourcesStatusError {
     fn from(err: serde_json::error::Error) -> DescribeConfigurationAggregatorSourcesStatusError {
-        DescribeConfigurationAggregatorSourcesStatusError::Unknown(err.description().to_string())
+        DescribeConfigurationAggregatorSourcesStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConfigurationAggregatorSourcesStatusError {
@@ -3384,7 +3398,8 @@ impl Error for DescribeConfigurationAggregatorSourcesStatusError {
             DescribeConfigurationAggregatorSourcesStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConfigurationAggregatorSourcesStatusError::Unknown(ref cause) => cause,
+            DescribeConfigurationAggregatorSourcesStatusError::ParseError(ref cause) => cause,
+            DescribeConfigurationAggregatorSourcesStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3405,56 +3420,60 @@ pub enum DescribeConfigurationAggregatorsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationAggregatorsError {
-    pub fn from_body(body: &str) -> DescribeConfigurationAggregatorsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationAggregatorsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidLimitException" => DescribeConfigurationAggregatorsError::InvalidLimit(
-                        String::from(error_message),
-                    ),
-                    "InvalidNextTokenException" => {
-                        DescribeConfigurationAggregatorsError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeConfigurationAggregatorsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoSuchConfigurationAggregatorException" => {
-                        DescribeConfigurationAggregatorsError::NoSuchConfigurationAggregator(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        DescribeConfigurationAggregatorsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeConfigurationAggregatorsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidLimitException" => {
+                    return DescribeConfigurationAggregatorsError::InvalidLimit(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidNextTokenException" => {
+                    return DescribeConfigurationAggregatorsError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return DescribeConfigurationAggregatorsError::InvalidParameterValue(
+                        String::from(error_message),
+                    )
+                }
+                "NoSuchConfigurationAggregatorException" => {
+                    return DescribeConfigurationAggregatorsError::NoSuchConfigurationAggregator(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DescribeConfigurationAggregatorsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeConfigurationAggregatorsError::Unknown(String::from(body)),
         }
+        return DescribeConfigurationAggregatorsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConfigurationAggregatorsError {
     fn from(err: serde_json::error::Error) -> DescribeConfigurationAggregatorsError {
-        DescribeConfigurationAggregatorsError::Unknown(err.description().to_string())
+        DescribeConfigurationAggregatorsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConfigurationAggregatorsError {
@@ -3491,7 +3510,8 @@ impl Error for DescribeConfigurationAggregatorsError {
             DescribeConfigurationAggregatorsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConfigurationAggregatorsError::Unknown(ref cause) => cause,
+            DescribeConfigurationAggregatorsError::ParseError(ref cause) => cause,
+            DescribeConfigurationAggregatorsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3506,43 +3526,45 @@ pub enum DescribeConfigurationRecorderStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationRecorderStatusError {
-    pub fn from_body(body: &str) -> DescribeConfigurationRecorderStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationRecorderStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NoSuchConfigurationRecorderException" => {
-                        DescribeConfigurationRecorderStatusError::NoSuchConfigurationRecorder(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => DescribeConfigurationRecorderStatusError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DescribeConfigurationRecorderStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "NoSuchConfigurationRecorderException" => {
+                    return DescribeConfigurationRecorderStatusError::NoSuchConfigurationRecorder(
+                        String::from(error_message),
+                    )
                 }
+                "ValidationException" => {
+                    return DescribeConfigurationRecorderStatusError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeConfigurationRecorderStatusError::Unknown(String::from(body)),
         }
+        return DescribeConfigurationRecorderStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConfigurationRecorderStatusError {
     fn from(err: serde_json::error::Error) -> DescribeConfigurationRecorderStatusError {
-        DescribeConfigurationRecorderStatusError::Unknown(err.description().to_string())
+        DescribeConfigurationRecorderStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConfigurationRecorderStatusError {
@@ -3576,7 +3598,8 @@ impl Error for DescribeConfigurationRecorderStatusError {
             DescribeConfigurationRecorderStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConfigurationRecorderStatusError::Unknown(ref cause) => cause,
+            DescribeConfigurationRecorderStatusError::ParseError(ref cause) => cause,
+            DescribeConfigurationRecorderStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3591,43 +3614,45 @@ pub enum DescribeConfigurationRecordersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationRecordersError {
-    pub fn from_body(body: &str) -> DescribeConfigurationRecordersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationRecordersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NoSuchConfigurationRecorderException" => {
-                        DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        DescribeConfigurationRecordersError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeConfigurationRecordersError::Unknown(String::from(body)),
+            match *error_type {
+                "NoSuchConfigurationRecorderException" => {
+                    return DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(
+                        String::from(error_message),
+                    )
                 }
+                "ValidationException" => {
+                    return DescribeConfigurationRecordersError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeConfigurationRecordersError::Unknown(String::from(body)),
         }
+        return DescribeConfigurationRecordersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConfigurationRecordersError {
     fn from(err: serde_json::error::Error) -> DescribeConfigurationRecordersError {
-        DescribeConfigurationRecordersError::Unknown(err.description().to_string())
+        DescribeConfigurationRecordersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConfigurationRecordersError {
@@ -3659,7 +3684,8 @@ impl Error for DescribeConfigurationRecordersError {
             DescribeConfigurationRecordersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConfigurationRecordersError::Unknown(ref cause) => cause,
+            DescribeConfigurationRecordersError::ParseError(ref cause) => cause,
+            DescribeConfigurationRecordersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3674,43 +3700,43 @@ pub enum DescribeDeliveryChannelStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDeliveryChannelStatusError {
-    pub fn from_body(body: &str) -> DescribeDeliveryChannelStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeDeliveryChannelStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NoSuchDeliveryChannelException" => {
-                        DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeDeliveryChannelStatusError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeDeliveryChannelStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "NoSuchDeliveryChannelException" => {
+                    return DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DescribeDeliveryChannelStatusError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeDeliveryChannelStatusError::Unknown(String::from(body)),
         }
+        return DescribeDeliveryChannelStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeDeliveryChannelStatusError {
     fn from(err: serde_json::error::Error) -> DescribeDeliveryChannelStatusError {
-        DescribeDeliveryChannelStatusError::Unknown(err.description().to_string())
+        DescribeDeliveryChannelStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeDeliveryChannelStatusError {
@@ -3742,7 +3768,8 @@ impl Error for DescribeDeliveryChannelStatusError {
             DescribeDeliveryChannelStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeDeliveryChannelStatusError::Unknown(ref cause) => cause,
+            DescribeDeliveryChannelStatusError::ParseError(ref cause) => cause,
+            DescribeDeliveryChannelStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3757,43 +3784,43 @@ pub enum DescribeDeliveryChannelsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDeliveryChannelsError {
-    pub fn from_body(body: &str) -> DescribeDeliveryChannelsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeDeliveryChannelsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NoSuchDeliveryChannelException" => {
-                        DescribeDeliveryChannelsError::NoSuchDeliveryChannel(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeDeliveryChannelsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeDeliveryChannelsError::Unknown(String::from(body)),
+            match *error_type {
+                "NoSuchDeliveryChannelException" => {
+                    return DescribeDeliveryChannelsError::NoSuchDeliveryChannel(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DescribeDeliveryChannelsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeDeliveryChannelsError::Unknown(String::from(body)),
         }
+        return DescribeDeliveryChannelsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeDeliveryChannelsError {
     fn from(err: serde_json::error::Error) -> DescribeDeliveryChannelsError {
-        DescribeDeliveryChannelsError::Unknown(err.description().to_string())
+        DescribeDeliveryChannelsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeDeliveryChannelsError {
@@ -3825,7 +3852,8 @@ impl Error for DescribeDeliveryChannelsError {
             DescribeDeliveryChannelsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeDeliveryChannelsError::Unknown(ref cause) => cause,
+            DescribeDeliveryChannelsError::ParseError(ref cause) => cause,
+            DescribeDeliveryChannelsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3844,53 +3872,55 @@ pub enum DescribePendingAggregationRequestsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribePendingAggregationRequestsError {
-    pub fn from_body(body: &str) -> DescribePendingAggregationRequestsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribePendingAggregationRequestsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidLimitException" => {
-                        DescribePendingAggregationRequestsError::InvalidLimit(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidNextTokenException" => {
-                        DescribePendingAggregationRequestsError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribePendingAggregationRequestsError::InvalidParameterValue(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => DescribePendingAggregationRequestsError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DescribePendingAggregationRequestsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidLimitException" => {
+                    return DescribePendingAggregationRequestsError::InvalidLimit(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidNextTokenException" => {
+                    return DescribePendingAggregationRequestsError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return DescribePendingAggregationRequestsError::InvalidParameterValue(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DescribePendingAggregationRequestsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribePendingAggregationRequestsError::Unknown(String::from(body)),
         }
+        return DescribePendingAggregationRequestsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribePendingAggregationRequestsError {
     fn from(err: serde_json::error::Error) -> DescribePendingAggregationRequestsError {
-        DescribePendingAggregationRequestsError::Unknown(err.description().to_string())
+        DescribePendingAggregationRequestsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribePendingAggregationRequestsError {
@@ -3924,7 +3954,8 @@ impl Error for DescribePendingAggregationRequestsError {
             DescribePendingAggregationRequestsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribePendingAggregationRequestsError::Unknown(ref cause) => cause,
+            DescribePendingAggregationRequestsError::ParseError(ref cause) => cause,
+            DescribePendingAggregationRequestsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3943,53 +3974,55 @@ pub enum DescribeRetentionConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeRetentionConfigurationsError {
-    pub fn from_body(body: &str) -> DescribeRetentionConfigurationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeRetentionConfigurationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        DescribeRetentionConfigurationsError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeRetentionConfigurationsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoSuchRetentionConfigurationException" => {
-                        DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        DescribeRetentionConfigurationsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeRetentionConfigurationsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return DescribeRetentionConfigurationsError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterValueException" => {
+                    return DescribeRetentionConfigurationsError::InvalidParameterValue(
+                        String::from(error_message),
+                    )
+                }
+                "NoSuchRetentionConfigurationException" => {
+                    return DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DescribeRetentionConfigurationsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeRetentionConfigurationsError::Unknown(String::from(body)),
         }
+        return DescribeRetentionConfigurationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeRetentionConfigurationsError {
     fn from(err: serde_json::error::Error) -> DescribeRetentionConfigurationsError {
-        DescribeRetentionConfigurationsError::Unknown(err.description().to_string())
+        DescribeRetentionConfigurationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeRetentionConfigurationsError {
@@ -4023,7 +4056,8 @@ impl Error for DescribeRetentionConfigurationsError {
             DescribeRetentionConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeRetentionConfigurationsError::Unknown(ref cause) => cause,
+            DescribeRetentionConfigurationsError::ParseError(ref cause) => cause,
+            DescribeRetentionConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4042,39 +4076,41 @@ pub enum GetAggregateComplianceDetailsByConfigRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAggregateComplianceDetailsByConfigRuleError {
-    pub fn from_body(body: &str) -> GetAggregateComplianceDetailsByConfigRuleError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> GetAggregateComplianceDetailsByConfigRuleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                                    "InvalidLimitException" => GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(String::from(error_message)),
-"InvalidNextTokenException" => GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(error_message)),
-"NoSuchConfigurationAggregatorException" => GetAggregateComplianceDetailsByConfigRuleError::NoSuchConfigurationAggregator(String::from(error_message)),
-"ValidationException" => GetAggregateComplianceDetailsByConfigRuleError::Validation(error_message.to_string()),
-_ => GetAggregateComplianceDetailsByConfigRuleError::Unknown(String::from(body))
-                                }
-            }
-            Err(_) => GetAggregateComplianceDetailsByConfigRuleError::Unknown(String::from(body)),
+            match *error_type {
+                                "InvalidLimitException" => return GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(String::from(error_message)),
+"InvalidNextTokenException" => return GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(error_message)),
+"NoSuchConfigurationAggregatorException" => return GetAggregateComplianceDetailsByConfigRuleError::NoSuchConfigurationAggregator(String::from(error_message)),
+"ValidationException" => return GetAggregateComplianceDetailsByConfigRuleError::Validation(error_message.to_string()),
+_ => {}
+                            }
         }
+        return GetAggregateComplianceDetailsByConfigRuleError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetAggregateComplianceDetailsByConfigRuleError {
     fn from(err: serde_json::error::Error) -> GetAggregateComplianceDetailsByConfigRuleError {
-        GetAggregateComplianceDetailsByConfigRuleError::Unknown(err.description().to_string())
+        GetAggregateComplianceDetailsByConfigRuleError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetAggregateComplianceDetailsByConfigRuleError {
@@ -4112,7 +4148,8 @@ impl Error for GetAggregateComplianceDetailsByConfigRuleError {
             GetAggregateComplianceDetailsByConfigRuleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetAggregateComplianceDetailsByConfigRuleError::Unknown(ref cause) => cause,
+            GetAggregateComplianceDetailsByConfigRuleError::ParseError(ref cause) => cause,
+            GetAggregateComplianceDetailsByConfigRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4131,55 +4168,41 @@ pub enum GetAggregateConfigRuleComplianceSummaryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAggregateConfigRuleComplianceSummaryError {
-    pub fn from_body(body: &str) -> GetAggregateConfigRuleComplianceSummaryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> GetAggregateConfigRuleComplianceSummaryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidLimitException" => {
-                        GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidNextTokenException" => {
-                        GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(
-                            String::from(error_message),
-                        )
-                    }
-                    "NoSuchConfigurationAggregatorException" => {
-                        GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        GetAggregateConfigRuleComplianceSummaryError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
-                    _ => GetAggregateConfigRuleComplianceSummaryError::Unknown(String::from(body)),
-                }
-            }
-            Err(_) => GetAggregateConfigRuleComplianceSummaryError::Unknown(String::from(body)),
+            match *error_type {
+                                "InvalidLimitException" => return GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(String::from(error_message)),
+"InvalidNextTokenException" => return GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(String::from(error_message)),
+"NoSuchConfigurationAggregatorException" => return GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(String::from(error_message)),
+"ValidationException" => return GetAggregateConfigRuleComplianceSummaryError::Validation(error_message.to_string()),
+_ => {}
+                            }
         }
+        return GetAggregateConfigRuleComplianceSummaryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetAggregateConfigRuleComplianceSummaryError {
     fn from(err: serde_json::error::Error) -> GetAggregateConfigRuleComplianceSummaryError {
-        GetAggregateConfigRuleComplianceSummaryError::Unknown(err.description().to_string())
+        GetAggregateConfigRuleComplianceSummaryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetAggregateConfigRuleComplianceSummaryError {
@@ -4215,7 +4238,8 @@ impl Error for GetAggregateConfigRuleComplianceSummaryError {
             GetAggregateConfigRuleComplianceSummaryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetAggregateConfigRuleComplianceSummaryError::Unknown(ref cause) => cause,
+            GetAggregateConfigRuleComplianceSummaryError::ParseError(ref cause) => cause,
+            GetAggregateConfigRuleComplianceSummaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4234,53 +4258,55 @@ pub enum GetComplianceDetailsByConfigRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetComplianceDetailsByConfigRuleError {
-    pub fn from_body(body: &str) -> GetComplianceDetailsByConfigRuleError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetComplianceDetailsByConfigRuleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        GetComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        GetComplianceDetailsByConfigRuleError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoSuchConfigRuleException" => {
-                        GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        GetComplianceDetailsByConfigRuleError::Validation(error_message.to_string())
-                    }
-                    _ => GetComplianceDetailsByConfigRuleError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return GetComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterValueException" => {
+                    return GetComplianceDetailsByConfigRuleError::InvalidParameterValue(
+                        String::from(error_message),
+                    )
+                }
+                "NoSuchConfigRuleException" => {
+                    return GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetComplianceDetailsByConfigRuleError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => GetComplianceDetailsByConfigRuleError::Unknown(String::from(body)),
         }
+        return GetComplianceDetailsByConfigRuleError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetComplianceDetailsByConfigRuleError {
     fn from(err: serde_json::error::Error) -> GetComplianceDetailsByConfigRuleError {
-        GetComplianceDetailsByConfigRuleError::Unknown(err.description().to_string())
+        GetComplianceDetailsByConfigRuleError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetComplianceDetailsByConfigRuleError {
@@ -4314,7 +4340,8 @@ impl Error for GetComplianceDetailsByConfigRuleError {
             GetComplianceDetailsByConfigRuleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetComplianceDetailsByConfigRuleError::Unknown(ref cause) => cause,
+            GetComplianceDetailsByConfigRuleError::ParseError(ref cause) => cause,
+            GetComplianceDetailsByConfigRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4329,43 +4356,45 @@ pub enum GetComplianceDetailsByResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetComplianceDetailsByResourceError {
-    pub fn from_body(body: &str) -> GetComplianceDetailsByResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetComplianceDetailsByResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        GetComplianceDetailsByResourceError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        GetComplianceDetailsByResourceError::Validation(error_message.to_string())
-                    }
-                    _ => GetComplianceDetailsByResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return GetComplianceDetailsByResourceError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return GetComplianceDetailsByResourceError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => GetComplianceDetailsByResourceError::Unknown(String::from(body)),
         }
+        return GetComplianceDetailsByResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetComplianceDetailsByResourceError {
     fn from(err: serde_json::error::Error) -> GetComplianceDetailsByResourceError {
-        GetComplianceDetailsByResourceError::Unknown(err.description().to_string())
+        GetComplianceDetailsByResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetComplianceDetailsByResourceError {
@@ -4397,7 +4426,8 @@ impl Error for GetComplianceDetailsByResourceError {
             GetComplianceDetailsByResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetComplianceDetailsByResourceError::Unknown(ref cause) => cause,
+            GetComplianceDetailsByResourceError::ParseError(ref cause) => cause,
+            GetComplianceDetailsByResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4410,38 +4440,40 @@ pub enum GetComplianceSummaryByConfigRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetComplianceSummaryByConfigRuleError {
-    pub fn from_body(body: &str) -> GetComplianceSummaryByConfigRuleError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetComplianceSummaryByConfigRuleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        GetComplianceSummaryByConfigRuleError::Validation(error_message.to_string())
-                    }
-                    _ => GetComplianceSummaryByConfigRuleError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return GetComplianceSummaryByConfigRuleError::Validation(
+                        error_message.to_string(),
+                    )
                 }
+                _ => {}
             }
-            Err(_) => GetComplianceSummaryByConfigRuleError::Unknown(String::from(body)),
         }
+        return GetComplianceSummaryByConfigRuleError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetComplianceSummaryByConfigRuleError {
     fn from(err: serde_json::error::Error) -> GetComplianceSummaryByConfigRuleError {
-        GetComplianceSummaryByConfigRuleError::Unknown(err.description().to_string())
+        GetComplianceSummaryByConfigRuleError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetComplianceSummaryByConfigRuleError {
@@ -4472,7 +4504,8 @@ impl Error for GetComplianceSummaryByConfigRuleError {
             GetComplianceSummaryByConfigRuleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetComplianceSummaryByConfigRuleError::Unknown(ref cause) => cause,
+            GetComplianceSummaryByConfigRuleError::ParseError(ref cause) => cause,
+            GetComplianceSummaryByConfigRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4487,43 +4520,45 @@ pub enum GetComplianceSummaryByResourceTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetComplianceSummaryByResourceTypeError {
-    pub fn from_body(body: &str) -> GetComplianceSummaryByResourceTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetComplianceSummaryByResourceTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        GetComplianceSummaryByResourceTypeError::InvalidParameterValue(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => GetComplianceSummaryByResourceTypeError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => GetComplianceSummaryByResourceTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return GetComplianceSummaryByResourceTypeError::InvalidParameterValue(
+                        String::from(error_message),
+                    )
                 }
+                "ValidationException" => {
+                    return GetComplianceSummaryByResourceTypeError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => GetComplianceSummaryByResourceTypeError::Unknown(String::from(body)),
         }
+        return GetComplianceSummaryByResourceTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetComplianceSummaryByResourceTypeError {
     fn from(err: serde_json::error::Error) -> GetComplianceSummaryByResourceTypeError {
-        GetComplianceSummaryByResourceTypeError::Unknown(err.description().to_string())
+        GetComplianceSummaryByResourceTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetComplianceSummaryByResourceTypeError {
@@ -4555,7 +4590,8 @@ impl Error for GetComplianceSummaryByResourceTypeError {
             GetComplianceSummaryByResourceTypeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetComplianceSummaryByResourceTypeError::Unknown(ref cause) => cause,
+            GetComplianceSummaryByResourceTypeError::ParseError(ref cause) => cause,
+            GetComplianceSummaryByResourceTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4572,46 +4608,48 @@ pub enum GetDiscoveredResourceCountsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDiscoveredResourceCountsError {
-    pub fn from_body(body: &str) -> GetDiscoveredResourceCountsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetDiscoveredResourceCountsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidLimitException" => {
-                        GetDiscoveredResourceCountsError::InvalidLimit(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        GetDiscoveredResourceCountsError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        GetDiscoveredResourceCountsError::Validation(error_message.to_string())
-                    }
-                    _ => GetDiscoveredResourceCountsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidLimitException" => {
+                    return GetDiscoveredResourceCountsError::InvalidLimit(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidNextTokenException" => {
+                    return GetDiscoveredResourceCountsError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetDiscoveredResourceCountsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetDiscoveredResourceCountsError::Unknown(String::from(body)),
         }
+        return GetDiscoveredResourceCountsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetDiscoveredResourceCountsError {
     fn from(err: serde_json::error::Error) -> GetDiscoveredResourceCountsError {
-        GetDiscoveredResourceCountsError::Unknown(err.description().to_string())
+        GetDiscoveredResourceCountsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetDiscoveredResourceCountsError {
@@ -4644,7 +4682,8 @@ impl Error for GetDiscoveredResourceCountsError {
             GetDiscoveredResourceCountsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetDiscoveredResourceCountsError::Unknown(ref cause) => cause,
+            GetDiscoveredResourceCountsError::ParseError(ref cause) => cause,
+            GetDiscoveredResourceCountsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4667,57 +4706,61 @@ pub enum GetResourceConfigHistoryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourceConfigHistoryError {
-    pub fn from_body(body: &str) -> GetResourceConfigHistoryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetResourceConfigHistoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidLimitException" => {
-                        GetResourceConfigHistoryError::InvalidLimit(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        GetResourceConfigHistoryError::InvalidNextToken(String::from(error_message))
-                    }
-                    "InvalidTimeRangeException" => {
-                        GetResourceConfigHistoryError::InvalidTimeRange(String::from(error_message))
-                    }
-                    "NoAvailableConfigurationRecorderException" => {
-                        GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(
-                            String::from(error_message),
-                        )
-                    }
-                    "ResourceNotDiscoveredException" => {
-                        GetResourceConfigHistoryError::ResourceNotDiscovered(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        GetResourceConfigHistoryError::Validation(error_message.to_string())
-                    }
-                    _ => GetResourceConfigHistoryError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidLimitException" => {
+                    return GetResourceConfigHistoryError::InvalidLimit(String::from(error_message))
                 }
+                "InvalidNextTokenException" => {
+                    return GetResourceConfigHistoryError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidTimeRangeException" => {
+                    return GetResourceConfigHistoryError::InvalidTimeRange(String::from(
+                        error_message,
+                    ))
+                }
+                "NoAvailableConfigurationRecorderException" => {
+                    return GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(
+                        String::from(error_message),
+                    )
+                }
+                "ResourceNotDiscoveredException" => {
+                    return GetResourceConfigHistoryError::ResourceNotDiscovered(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetResourceConfigHistoryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetResourceConfigHistoryError::Unknown(String::from(body)),
         }
+        return GetResourceConfigHistoryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetResourceConfigHistoryError {
     fn from(err: serde_json::error::Error) -> GetResourceConfigHistoryError {
-        GetResourceConfigHistoryError::Unknown(err.description().to_string())
+        GetResourceConfigHistoryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetResourceConfigHistoryError {
@@ -4753,7 +4796,8 @@ impl Error for GetResourceConfigHistoryError {
             GetResourceConfigHistoryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetResourceConfigHistoryError::Unknown(ref cause) => cause,
+            GetResourceConfigHistoryError::ParseError(ref cause) => cause,
+            GetResourceConfigHistoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4772,49 +4816,51 @@ pub enum ListDiscoveredResourcesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDiscoveredResourcesError {
-    pub fn from_body(body: &str) -> ListDiscoveredResourcesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListDiscoveredResourcesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidLimitException" => {
-                        ListDiscoveredResourcesError::InvalidLimit(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListDiscoveredResourcesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "NoAvailableConfigurationRecorderException" => {
-                        ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        ListDiscoveredResourcesError::Validation(error_message.to_string())
-                    }
-                    _ => ListDiscoveredResourcesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidLimitException" => {
+                    return ListDiscoveredResourcesError::InvalidLimit(String::from(error_message))
                 }
+                "InvalidNextTokenException" => {
+                    return ListDiscoveredResourcesError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "NoAvailableConfigurationRecorderException" => {
+                    return ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return ListDiscoveredResourcesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListDiscoveredResourcesError::Unknown(String::from(body)),
         }
+        return ListDiscoveredResourcesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListDiscoveredResourcesError {
     fn from(err: serde_json::error::Error) -> ListDiscoveredResourcesError {
-        ListDiscoveredResourcesError::Unknown(err.description().to_string())
+        ListDiscoveredResourcesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListDiscoveredResourcesError {
@@ -4848,7 +4894,8 @@ impl Error for ListDiscoveredResourcesError {
             ListDiscoveredResourcesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListDiscoveredResourcesError::Unknown(ref cause) => cause,
+            ListDiscoveredResourcesError::ParseError(ref cause) => cause,
+            ListDiscoveredResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4863,43 +4910,43 @@ pub enum PutAggregationAuthorizationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutAggregationAuthorizationError {
-    pub fn from_body(body: &str) -> PutAggregationAuthorizationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutAggregationAuthorizationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        PutAggregationAuthorizationError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        PutAggregationAuthorizationError::Validation(error_message.to_string())
-                    }
-                    _ => PutAggregationAuthorizationError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return PutAggregationAuthorizationError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return PutAggregationAuthorizationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutAggregationAuthorizationError::Unknown(String::from(body)),
         }
+        return PutAggregationAuthorizationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutAggregationAuthorizationError {
     fn from(err: serde_json::error::Error) -> PutAggregationAuthorizationError {
-        PutAggregationAuthorizationError::Unknown(err.description().to_string())
+        PutAggregationAuthorizationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutAggregationAuthorizationError {
@@ -4931,7 +4978,8 @@ impl Error for PutAggregationAuthorizationError {
             PutAggregationAuthorizationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutAggregationAuthorizationError::Unknown(ref cause) => cause,
+            PutAggregationAuthorizationError::ParseError(ref cause) => cause,
+            PutAggregationAuthorizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4954,57 +5002,57 @@ pub enum PutConfigRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutConfigRuleError {
-    pub fn from_body(body: &str) -> PutConfigRuleError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutConfigRuleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InsufficientPermissionsException" => {
-                        PutConfigRuleError::InsufficientPermissions(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        PutConfigRuleError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "MaxNumberOfConfigRulesExceededException" => {
-                        PutConfigRuleError::MaxNumberOfConfigRulesExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoAvailableConfigurationRecorderException" => {
-                        PutConfigRuleError::NoAvailableConfigurationRecorder(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceInUseException" => {
-                        PutConfigRuleError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutConfigRuleError::Validation(error_message.to_string())
-                    }
-                    _ => PutConfigRuleError::Unknown(String::from(body)),
+            match *error_type {
+                "InsufficientPermissionsException" => {
+                    return PutConfigRuleError::InsufficientPermissions(String::from(error_message))
                 }
+                "InvalidParameterValueException" => {
+                    return PutConfigRuleError::InvalidParameterValue(String::from(error_message))
+                }
+                "MaxNumberOfConfigRulesExceededException" => {
+                    return PutConfigRuleError::MaxNumberOfConfigRulesExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "NoAvailableConfigurationRecorderException" => {
+                    return PutConfigRuleError::NoAvailableConfigurationRecorder(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return PutConfigRuleError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutConfigRuleError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutConfigRuleError::Unknown(String::from(body)),
         }
+        return PutConfigRuleError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutConfigRuleError {
     fn from(err: serde_json::error::Error) -> PutConfigRuleError {
-        PutConfigRuleError::Unknown(err.description().to_string())
+        PutConfigRuleError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutConfigRuleError {
@@ -5038,7 +5086,8 @@ impl Error for PutConfigRuleError {
             PutConfigRuleError::Validation(ref cause) => cause,
             PutConfigRuleError::Credentials(ref err) => err.description(),
             PutConfigRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutConfigRuleError::Unknown(ref cause) => cause,
+            PutConfigRuleError::ParseError(ref cause) => cause,
+            PutConfigRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5063,64 +5112,66 @@ pub enum PutConfigurationAggregatorError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutConfigurationAggregatorError {
-    pub fn from_body(body: &str) -> PutConfigurationAggregatorError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutConfigurationAggregatorError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        PutConfigurationAggregatorError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRoleException" => {
-                        PutConfigurationAggregatorError::InvalidRole(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PutConfigurationAggregatorError::LimitExceeded(String::from(error_message))
-                    }
-                    "NoAvailableOrganizationException" => {
-                        PutConfigurationAggregatorError::NoAvailableOrganization(String::from(
-                            error_message,
-                        ))
-                    }
-                    "OrganizationAccessDeniedException" => {
-                        PutConfigurationAggregatorError::OrganizationAccessDenied(String::from(
-                            error_message,
-                        ))
-                    }
-                    "OrganizationAllFeaturesNotEnabledException" => {
-                        PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        PutConfigurationAggregatorError::Validation(error_message.to_string())
-                    }
-                    _ => PutConfigurationAggregatorError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return PutConfigurationAggregatorError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRoleException" => {
+                    return PutConfigurationAggregatorError::InvalidRole(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PutConfigurationAggregatorError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "NoAvailableOrganizationException" => {
+                    return PutConfigurationAggregatorError::NoAvailableOrganization(String::from(
+                        error_message,
+                    ))
+                }
+                "OrganizationAccessDeniedException" => {
+                    return PutConfigurationAggregatorError::OrganizationAccessDenied(String::from(
+                        error_message,
+                    ))
+                }
+                "OrganizationAllFeaturesNotEnabledException" => {
+                    return PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return PutConfigurationAggregatorError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutConfigurationAggregatorError::Unknown(String::from(body)),
         }
+        return PutConfigurationAggregatorError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutConfigurationAggregatorError {
     fn from(err: serde_json::error::Error) -> PutConfigurationAggregatorError {
-        PutConfigurationAggregatorError::Unknown(err.description().to_string())
+        PutConfigurationAggregatorError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutConfigurationAggregatorError {
@@ -5157,7 +5208,8 @@ impl Error for PutConfigurationAggregatorError {
             PutConfigurationAggregatorError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutConfigurationAggregatorError::Unknown(ref cause) => cause,
+            PutConfigurationAggregatorError::ParseError(ref cause) => cause,
+            PutConfigurationAggregatorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5178,56 +5230,56 @@ pub enum PutConfigurationRecorderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutConfigurationRecorderError {
-    pub fn from_body(body: &str) -> PutConfigurationRecorderError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutConfigurationRecorderError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidConfigurationRecorderNameException" => {
-                        PutConfigurationRecorderError::InvalidConfigurationRecorderName(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidRecordingGroupException" => {
-                        PutConfigurationRecorderError::InvalidRecordingGroup(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRoleException" => {
-                        PutConfigurationRecorderError::InvalidRole(String::from(error_message))
-                    }
-                    "MaxNumberOfConfigurationRecordersExceededException" => {
-                        PutConfigurationRecorderError::MaxNumberOfConfigurationRecordersExceeded(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        PutConfigurationRecorderError::Validation(error_message.to_string())
-                    }
-                    _ => PutConfigurationRecorderError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidConfigurationRecorderNameException" => {
+                    return PutConfigurationRecorderError::InvalidConfigurationRecorderName(
+                        String::from(error_message),
+                    )
                 }
+                "InvalidRecordingGroupException" => {
+                    return PutConfigurationRecorderError::InvalidRecordingGroup(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRoleException" => {
+                    return PutConfigurationRecorderError::InvalidRole(String::from(error_message))
+                }
+                "MaxNumberOfConfigurationRecordersExceededException" => {
+                    return PutConfigurationRecorderError::MaxNumberOfConfigurationRecordersExceeded(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return PutConfigurationRecorderError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutConfigurationRecorderError::Unknown(String::from(body)),
         }
+        return PutConfigurationRecorderError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutConfigurationRecorderError {
     fn from(err: serde_json::error::Error) -> PutConfigurationRecorderError {
-        PutConfigurationRecorderError::Unknown(err.description().to_string())
+        PutConfigurationRecorderError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutConfigurationRecorderError {
@@ -5264,7 +5316,8 @@ impl Error for PutConfigurationRecorderError {
             PutConfigurationRecorderError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutConfigurationRecorderError::Unknown(ref cause) => cause,
+            PutConfigurationRecorderError::ParseError(ref cause) => cause,
+            PutConfigurationRecorderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5291,67 +5344,67 @@ pub enum PutDeliveryChannelError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutDeliveryChannelError {
-    pub fn from_body(body: &str) -> PutDeliveryChannelError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutDeliveryChannelError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InsufficientDeliveryPolicyException" => {
-                        PutDeliveryChannelError::InsufficientDeliveryPolicy(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidDeliveryChannelNameException" => {
-                        PutDeliveryChannelError::InvalidDeliveryChannelName(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidS3KeyPrefixException" => {
-                        PutDeliveryChannelError::InvalidS3KeyPrefix(String::from(error_message))
-                    }
-                    "InvalidSNSTopicARNException" => {
-                        PutDeliveryChannelError::InvalidSNSTopicARN(String::from(error_message))
-                    }
-                    "MaxNumberOfDeliveryChannelsExceededException" => {
-                        PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoAvailableConfigurationRecorderException" => {
-                        PutDeliveryChannelError::NoAvailableConfigurationRecorder(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoSuchBucketException" => {
-                        PutDeliveryChannelError::NoSuchBucket(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutDeliveryChannelError::Validation(error_message.to_string())
-                    }
-                    _ => PutDeliveryChannelError::Unknown(String::from(body)),
+            match *error_type {
+                "InsufficientDeliveryPolicyException" => {
+                    return PutDeliveryChannelError::InsufficientDeliveryPolicy(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidDeliveryChannelNameException" => {
+                    return PutDeliveryChannelError::InvalidDeliveryChannelName(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidS3KeyPrefixException" => {
+                    return PutDeliveryChannelError::InvalidS3KeyPrefix(String::from(error_message))
+                }
+                "InvalidSNSTopicARNException" => {
+                    return PutDeliveryChannelError::InvalidSNSTopicARN(String::from(error_message))
+                }
+                "MaxNumberOfDeliveryChannelsExceededException" => {
+                    return PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(
+                        String::from(error_message),
+                    )
+                }
+                "NoAvailableConfigurationRecorderException" => {
+                    return PutDeliveryChannelError::NoAvailableConfigurationRecorder(String::from(
+                        error_message,
+                    ))
+                }
+                "NoSuchBucketException" => {
+                    return PutDeliveryChannelError::NoSuchBucket(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutDeliveryChannelError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutDeliveryChannelError::Unknown(String::from(body)),
         }
+        return PutDeliveryChannelError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutDeliveryChannelError {
     fn from(err: serde_json::error::Error) -> PutDeliveryChannelError {
-        PutDeliveryChannelError::Unknown(err.description().to_string())
+        PutDeliveryChannelError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutDeliveryChannelError {
@@ -5389,7 +5442,8 @@ impl Error for PutDeliveryChannelError {
             PutDeliveryChannelError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutDeliveryChannelError::Unknown(ref cause) => cause,
+            PutDeliveryChannelError::ParseError(ref cause) => cause,
+            PutDeliveryChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5408,47 +5462,47 @@ pub enum PutEvaluationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutEvaluationsError {
-    pub fn from_body(body: &str) -> PutEvaluationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutEvaluationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        PutEvaluationsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "InvalidResultTokenException" => {
-                        PutEvaluationsError::InvalidResultToken(String::from(error_message))
-                    }
-                    "NoSuchConfigRuleException" => {
-                        PutEvaluationsError::NoSuchConfigRule(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutEvaluationsError::Validation(error_message.to_string())
-                    }
-                    _ => PutEvaluationsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return PutEvaluationsError::InvalidParameterValue(String::from(error_message))
                 }
+                "InvalidResultTokenException" => {
+                    return PutEvaluationsError::InvalidResultToken(String::from(error_message))
+                }
+                "NoSuchConfigRuleException" => {
+                    return PutEvaluationsError::NoSuchConfigRule(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutEvaluationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutEvaluationsError::Unknown(String::from(body)),
         }
+        return PutEvaluationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutEvaluationsError {
     fn from(err: serde_json::error::Error) -> PutEvaluationsError {
-        PutEvaluationsError::Unknown(err.description().to_string())
+        PutEvaluationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutEvaluationsError {
@@ -5480,7 +5534,8 @@ impl Error for PutEvaluationsError {
             PutEvaluationsError::Validation(ref cause) => cause,
             PutEvaluationsError::Credentials(ref err) => err.description(),
             PutEvaluationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutEvaluationsError::Unknown(ref cause) => cause,
+            PutEvaluationsError::ParseError(ref cause) => cause,
+            PutEvaluationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5497,48 +5552,38 @@ pub enum PutRetentionConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutRetentionConfigurationError {
-    pub fn from_body(body: &str) -> PutRetentionConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutRetentionConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        PutRetentionConfigurationError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MaxNumberOfRetentionConfigurationsExceededException" => {
-                        PutRetentionConfigurationError::MaxNumberOfRetentionConfigurationsExceeded(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        PutRetentionConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => PutRetentionConfigurationError::Unknown(String::from(body)),
-                }
-            }
-            Err(_) => PutRetentionConfigurationError::Unknown(String::from(body)),
+            match *error_type {
+                                "InvalidParameterValueException" => return PutRetentionConfigurationError::InvalidParameterValue(String::from(error_message)),
+"MaxNumberOfRetentionConfigurationsExceededException" => return PutRetentionConfigurationError::MaxNumberOfRetentionConfigurationsExceeded(String::from(error_message)),
+"ValidationException" => return PutRetentionConfigurationError::Validation(error_message.to_string()),
+_ => {}
+                            }
         }
+        return PutRetentionConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutRetentionConfigurationError {
     fn from(err: serde_json::error::Error) -> PutRetentionConfigurationError {
-        PutRetentionConfigurationError::Unknown(err.description().to_string())
+        PutRetentionConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutRetentionConfigurationError {
@@ -5573,7 +5618,8 @@ impl Error for PutRetentionConfigurationError {
             PutRetentionConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutRetentionConfigurationError::Unknown(ref cause) => cause,
+            PutRetentionConfigurationError::ParseError(ref cause) => cause,
+            PutRetentionConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5594,54 +5640,58 @@ pub enum StartConfigRulesEvaluationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartConfigRulesEvaluationError {
-    pub fn from_body(body: &str) -> StartConfigRulesEvaluationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartConfigRulesEvaluationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterValueException" => {
-                        StartConfigRulesEvaluationError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        StartConfigRulesEvaluationError::LimitExceeded(String::from(error_message))
-                    }
-                    "NoSuchConfigRuleException" => {
-                        StartConfigRulesEvaluationError::NoSuchConfigRule(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceInUseException" => {
-                        StartConfigRulesEvaluationError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartConfigRulesEvaluationError::Validation(error_message.to_string())
-                    }
-                    _ => StartConfigRulesEvaluationError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterValueException" => {
+                    return StartConfigRulesEvaluationError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
                 }
+                "LimitExceededException" => {
+                    return StartConfigRulesEvaluationError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "NoSuchConfigRuleException" => {
+                    return StartConfigRulesEvaluationError::NoSuchConfigRule(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return StartConfigRulesEvaluationError::ResourceInUse(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return StartConfigRulesEvaluationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartConfigRulesEvaluationError::Unknown(String::from(body)),
         }
+        return StartConfigRulesEvaluationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartConfigRulesEvaluationError {
     fn from(err: serde_json::error::Error) -> StartConfigRulesEvaluationError {
-        StartConfigRulesEvaluationError::Unknown(err.description().to_string())
+        StartConfigRulesEvaluationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartConfigRulesEvaluationError {
@@ -5676,7 +5726,8 @@ impl Error for StartConfigRulesEvaluationError {
             StartConfigRulesEvaluationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartConfigRulesEvaluationError::Unknown(ref cause) => cause,
+            StartConfigRulesEvaluationError::ParseError(ref cause) => cause,
+            StartConfigRulesEvaluationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5693,48 +5744,48 @@ pub enum StartConfigurationRecorderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartConfigurationRecorderError {
-    pub fn from_body(body: &str) -> StartConfigurationRecorderError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartConfigurationRecorderError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NoAvailableDeliveryChannelException" => {
-                        StartConfigurationRecorderError::NoAvailableDeliveryChannel(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoSuchConfigurationRecorderException" => {
-                        StartConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        StartConfigurationRecorderError::Validation(error_message.to_string())
-                    }
-                    _ => StartConfigurationRecorderError::Unknown(String::from(body)),
+            match *error_type {
+                "NoAvailableDeliveryChannelException" => {
+                    return StartConfigurationRecorderError::NoAvailableDeliveryChannel(
+                        String::from(error_message),
+                    )
                 }
+                "NoSuchConfigurationRecorderException" => {
+                    return StartConfigurationRecorderError::NoSuchConfigurationRecorder(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return StartConfigurationRecorderError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartConfigurationRecorderError::Unknown(String::from(body)),
         }
+        return StartConfigurationRecorderError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartConfigurationRecorderError {
     fn from(err: serde_json::error::Error) -> StartConfigurationRecorderError {
-        StartConfigurationRecorderError::Unknown(err.description().to_string())
+        StartConfigurationRecorderError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartConfigurationRecorderError {
@@ -5767,7 +5818,8 @@ impl Error for StartConfigurationRecorderError {
             StartConfigurationRecorderError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartConfigurationRecorderError::Unknown(ref cause) => cause,
+            StartConfigurationRecorderError::ParseError(ref cause) => cause,
+            StartConfigurationRecorderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5782,43 +5834,43 @@ pub enum StopConfigurationRecorderError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopConfigurationRecorderError {
-    pub fn from_body(body: &str) -> StopConfigurationRecorderError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopConfigurationRecorderError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NoSuchConfigurationRecorderException" => {
-                        StopConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        StopConfigurationRecorderError::Validation(error_message.to_string())
-                    }
-                    _ => StopConfigurationRecorderError::Unknown(String::from(body)),
+            match *error_type {
+                "NoSuchConfigurationRecorderException" => {
+                    return StopConfigurationRecorderError::NoSuchConfigurationRecorder(
+                        String::from(error_message),
+                    )
                 }
+                "ValidationException" => {
+                    return StopConfigurationRecorderError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StopConfigurationRecorderError::Unknown(String::from(body)),
         }
+        return StopConfigurationRecorderError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopConfigurationRecorderError {
     fn from(err: serde_json::error::Error) -> StopConfigurationRecorderError {
-        StopConfigurationRecorderError::Unknown(err.description().to_string())
+        StopConfigurationRecorderError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopConfigurationRecorderError {
@@ -5850,7 +5902,8 @@ impl Error for StopConfigurationRecorderError {
             StopConfigurationRecorderError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StopConfigurationRecorderError::Unknown(ref cause) => cause,
+            StopConfigurationRecorderError::ParseError(ref cause) => cause,
+            StopConfigurationRecorderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6196,14 +6249,15 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<BatchGetResourceConfigResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchGetResourceConfigError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(BatchGetResourceConfigError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6228,9 +6282,7 @@ impl ConfigService for ConfigServiceClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAggregationAuthorizationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteAggregationAuthorizationError::from_response(response))
                 }))
             }
         })
@@ -6252,11 +6304,12 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConfigRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteConfigRuleError::from_response(response))),
+                )
             }
         })
     }
@@ -6281,9 +6334,7 @@ impl ConfigService for ConfigServiceClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConfigurationAggregatorError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteConfigurationAggregatorError::from_response(response))
                 }))
             }
         })
@@ -6309,9 +6360,7 @@ impl ConfigService for ConfigServiceClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConfigurationRecorderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteConfigurationRecorderError::from_response(response))
                 }))
             }
         })
@@ -6333,11 +6382,11 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDeliveryChannelError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteDeliveryChannelError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6368,13 +6417,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DeleteEvaluationResultsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteEvaluationResultsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteEvaluationResultsError::from_response(response))
                 }))
             }
         })
@@ -6400,8 +6448,8 @@ impl ConfigService for ConfigServiceClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePendingAggregationRequestError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeletePendingAggregationRequestError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -6428,9 +6476,7 @@ impl ConfigService for ConfigServiceClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteRetentionConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteRetentionConfigurationError::from_response(response))
                 }))
             }
         })
@@ -6459,14 +6505,15 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DeliverConfigSnapshotResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeliverConfigSnapshotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeliverConfigSnapshotError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6500,13 +6547,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeAggregateComplianceByConfigRulesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAggregateComplianceByConfigRulesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeAggregateComplianceByConfigRulesError::from_response(response))
                 }))
             }
         })
@@ -6541,12 +6587,13 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeAggregationAuthorizationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAggregationAuthorizationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeAggregationAuthorizationsError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -6580,13 +6627,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeComplianceByConfigRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeComplianceByConfigRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeComplianceByConfigRuleError::from_response(response))
                 }))
             }
         })
@@ -6618,13 +6664,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeComplianceByResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeComplianceByResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeComplianceByResourceError::from_response(response))
                 }))
             }
         })
@@ -6659,12 +6704,13 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeConfigRuleEvaluationStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigRuleEvaluationStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeConfigRuleEvaluationStatusError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -6694,14 +6740,15 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeConfigRulesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigRulesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeConfigRulesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6735,15 +6782,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeConfigurationAggregatorSourcesStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(
-                        DescribeConfigurationAggregatorSourcesStatusError::from_body(
-                            String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                        ),
-                    )
+                    Err(DescribeConfigurationAggregatorSourcesStatusError::from_response(response))
                 }))
             }
         })
@@ -6776,12 +6820,13 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeConfigurationAggregatorsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationAggregatorsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeConfigurationAggregatorsError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -6817,12 +6862,13 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeConfigurationRecorderStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationRecorderStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeConfigurationRecorderStatusError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -6856,13 +6902,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeConfigurationRecordersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationRecordersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeConfigurationRecordersError::from_response(response))
                 }))
             }
         })
@@ -6895,13 +6940,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeDeliveryChannelStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDeliveryChannelStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeDeliveryChannelStatusError::from_response(response))
                 }))
             }
         })
@@ -6933,13 +6977,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeDeliveryChannelsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDeliveryChannelsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeDeliveryChannelsError::from_response(response))
                 }))
             }
         })
@@ -6974,12 +7017,13 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribePendingAggregationRequestsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribePendingAggregationRequestsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribePendingAggregationRequestsError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -7013,12 +7057,13 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<DescribeRetentionConfigurationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeRetentionConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeRetentionConfigurationsError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -7054,13 +7099,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<GetAggregateComplianceDetailsByConfigRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAggregateComplianceDetailsByConfigRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetAggregateComplianceDetailsByConfigRuleError::from_response(response))
                 }))
             }
         })
@@ -7095,12 +7139,13 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<GetAggregateConfigRuleComplianceSummaryResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAggregateConfigRuleComplianceSummaryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetAggregateConfigRuleComplianceSummaryError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -7134,12 +7179,13 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<GetComplianceDetailsByConfigRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetComplianceDetailsByConfigRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetComplianceDetailsByConfigRuleError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -7173,13 +7219,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<GetComplianceDetailsByResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetComplianceDetailsByResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetComplianceDetailsByResourceError::from_response(response))
                 }))
             }
         })
@@ -7210,12 +7255,13 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<GetComplianceSummaryByConfigRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetComplianceSummaryByConfigRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetComplianceSummaryByConfigRuleError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -7251,12 +7297,13 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<GetComplianceSummaryByResourceTypeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetComplianceSummaryByResourceTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetComplianceSummaryByResourceTypeError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -7289,13 +7336,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<GetDiscoveredResourceCountsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDiscoveredResourceCountsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetDiscoveredResourceCountsError::from_response(response))
                 }))
             }
         })
@@ -7327,13 +7373,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<GetResourceConfigHistoryResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetResourceConfigHistoryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetResourceConfigHistoryError::from_response(response))
                 }))
             }
         })
@@ -7365,13 +7410,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<ListDiscoveredResourcesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDiscoveredResourcesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListDiscoveredResourcesError::from_response(response))
                 }))
             }
         })
@@ -7403,13 +7447,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<PutAggregationAuthorizationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutAggregationAuthorizationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutAggregationAuthorizationError::from_response(response))
                 }))
             }
         })
@@ -7428,11 +7471,12 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutConfigRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutConfigRuleError::from_response(response))),
+                )
             }
         })
     }
@@ -7463,13 +7507,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<PutConfigurationAggregatorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutConfigurationAggregatorError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutConfigurationAggregatorError::from_response(response))
                 }))
             }
         })
@@ -7495,9 +7538,7 @@ impl ConfigService for ConfigServiceClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutConfigurationRecorderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutConfigurationRecorderError::from_response(response))
                 }))
             }
         })
@@ -7519,11 +7560,12 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutDeliveryChannelError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutDeliveryChannelError::from_response(response))),
+                )
             }
         })
     }
@@ -7551,14 +7593,16 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<PutEvaluationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutEvaluationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutEvaluationsError::from_response(response))),
+                )
             }
         })
     }
@@ -7589,13 +7633,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<PutRetentionConfigurationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutRetentionConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(PutRetentionConfigurationError::from_response(response))
                 }))
             }
         })
@@ -7627,13 +7670,12 @@ impl ConfigService for ConfigServiceClient {
 
                     serde_json::from_str::<StartConfigRulesEvaluationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartConfigRulesEvaluationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StartConfigRulesEvaluationError::from_response(response))
                 }))
             }
         })
@@ -7659,9 +7701,7 @@ impl ConfigService for ConfigServiceClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartConfigurationRecorderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StartConfigurationRecorderError::from_response(response))
                 }))
             }
         })
@@ -7687,9 +7727,7 @@ impl ConfigService for ConfigServiceClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopConfigurationRecorderError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StopConfigurationRecorderError::from_response(response))
                 }))
             }
         })

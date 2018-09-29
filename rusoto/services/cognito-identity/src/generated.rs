@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>A provider representing an Amazon Cognito Identity User Pool and its client ID.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -591,56 +591,56 @@ pub enum CreateIdentityPoolError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateIdentityPoolError {
-    pub fn from_body(body: &str) -> CreateIdentityPoolError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateIdentityPoolError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        CreateIdentityPoolError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateIdentityPoolError::InvalidParameter(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateIdentityPoolError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        CreateIdentityPoolError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceConflictException" => {
-                        CreateIdentityPoolError::ResourceConflict(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        CreateIdentityPoolError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateIdentityPoolError::Validation(error_message.to_string())
-                    }
-                    _ => CreateIdentityPoolError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return CreateIdentityPoolError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return CreateIdentityPoolError::InvalidParameter(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateIdentityPoolError::LimitExceeded(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return CreateIdentityPoolError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceConflictException" => {
+                    return CreateIdentityPoolError::ResourceConflict(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return CreateIdentityPoolError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateIdentityPoolError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateIdentityPoolError::Unknown(String::from(body)),
         }
+        return CreateIdentityPoolError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateIdentityPoolError {
     fn from(err: serde_json::error::Error) -> CreateIdentityPoolError {
-        CreateIdentityPoolError::Unknown(err.description().to_string())
+        CreateIdentityPoolError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateIdentityPoolError {
@@ -677,7 +677,8 @@ impl Error for CreateIdentityPoolError {
             CreateIdentityPoolError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateIdentityPoolError::Unknown(ref cause) => cause,
+            CreateIdentityPoolError::ParseError(ref cause) => cause,
+            CreateIdentityPoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -696,47 +697,47 @@ pub enum DeleteIdentitiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIdentitiesError {
-    pub fn from_body(body: &str) -> DeleteIdentitiesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteIdentitiesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DeleteIdentitiesError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteIdentitiesError::InvalidParameter(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        DeleteIdentitiesError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteIdentitiesError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteIdentitiesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DeleteIdentitiesError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DeleteIdentitiesError::InvalidParameter(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return DeleteIdentitiesError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteIdentitiesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteIdentitiesError::Unknown(String::from(body)),
         }
+        return DeleteIdentitiesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteIdentitiesError {
     fn from(err: serde_json::error::Error) -> DeleteIdentitiesError {
-        DeleteIdentitiesError::Unknown(err.description().to_string())
+        DeleteIdentitiesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteIdentitiesError {
@@ -768,7 +769,8 @@ impl Error for DeleteIdentitiesError {
             DeleteIdentitiesError::Validation(ref cause) => cause,
             DeleteIdentitiesError::Credentials(ref err) => err.description(),
             DeleteIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteIdentitiesError::Unknown(ref cause) => cause,
+            DeleteIdentitiesError::ParseError(ref cause) => cause,
+            DeleteIdentitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -791,53 +793,53 @@ pub enum DeleteIdentityPoolError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIdentityPoolError {
-    pub fn from_body(body: &str) -> DeleteIdentityPoolError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteIdentityPoolError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DeleteIdentityPoolError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteIdentityPoolError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        DeleteIdentityPoolError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteIdentityPoolError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        DeleteIdentityPoolError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteIdentityPoolError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteIdentityPoolError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DeleteIdentityPoolError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DeleteIdentityPoolError::InvalidParameter(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return DeleteIdentityPoolError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteIdentityPoolError::ResourceNotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return DeleteIdentityPoolError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteIdentityPoolError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteIdentityPoolError::Unknown(String::from(body)),
         }
+        return DeleteIdentityPoolError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteIdentityPoolError {
     fn from(err: serde_json::error::Error) -> DeleteIdentityPoolError {
-        DeleteIdentityPoolError::Unknown(err.description().to_string())
+        DeleteIdentityPoolError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteIdentityPoolError {
@@ -873,7 +875,8 @@ impl Error for DeleteIdentityPoolError {
             DeleteIdentityPoolError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteIdentityPoolError::Unknown(ref cause) => cause,
+            DeleteIdentityPoolError::ParseError(ref cause) => cause,
+            DeleteIdentityPoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -896,53 +899,53 @@ pub enum DescribeIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeIdentityError {
-    pub fn from_body(body: &str) -> DescribeIdentityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeIdentityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DescribeIdentityError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeIdentityError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        DescribeIdentityError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeIdentityError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        DescribeIdentityError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeIdentityError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeIdentityError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DescribeIdentityError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DescribeIdentityError::InvalidParameter(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return DescribeIdentityError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeIdentityError::ResourceNotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return DescribeIdentityError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeIdentityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeIdentityError::Unknown(String::from(body)),
         }
+        return DescribeIdentityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeIdentityError {
     fn from(err: serde_json::error::Error) -> DescribeIdentityError {
-        DescribeIdentityError::Unknown(err.description().to_string())
+        DescribeIdentityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeIdentityError {
@@ -976,7 +979,8 @@ impl Error for DescribeIdentityError {
             DescribeIdentityError::Validation(ref cause) => cause,
             DescribeIdentityError::Credentials(ref err) => err.description(),
             DescribeIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeIdentityError::Unknown(ref cause) => cause,
+            DescribeIdentityError::ParseError(ref cause) => cause,
+            DescribeIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -999,53 +1003,53 @@ pub enum DescribeIdentityPoolError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeIdentityPoolError {
-    pub fn from_body(body: &str) -> DescribeIdentityPoolError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeIdentityPoolError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        DescribeIdentityPoolError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeIdentityPoolError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        DescribeIdentityPoolError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeIdentityPoolError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        DescribeIdentityPoolError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeIdentityPoolError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeIdentityPoolError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return DescribeIdentityPoolError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DescribeIdentityPoolError::InvalidParameter(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return DescribeIdentityPoolError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeIdentityPoolError::ResourceNotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return DescribeIdentityPoolError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeIdentityPoolError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeIdentityPoolError::Unknown(String::from(body)),
         }
+        return DescribeIdentityPoolError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeIdentityPoolError {
     fn from(err: serde_json::error::Error) -> DescribeIdentityPoolError {
-        DescribeIdentityPoolError::Unknown(err.description().to_string())
+        DescribeIdentityPoolError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeIdentityPoolError {
@@ -1081,7 +1085,8 @@ impl Error for DescribeIdentityPoolError {
             DescribeIdentityPoolError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeIdentityPoolError::Unknown(ref cause) => cause,
+            DescribeIdentityPoolError::ParseError(ref cause) => cause,
+            DescribeIdentityPoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1110,70 +1115,78 @@ pub enum GetCredentialsForIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCredentialsForIdentityError {
-    pub fn from_body(body: &str) -> GetCredentialsForIdentityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetCredentialsForIdentityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ExternalServiceException" => {
-                        GetCredentialsForIdentityError::ExternalService(String::from(error_message))
-                    }
-                    "InternalErrorException" => {
-                        GetCredentialsForIdentityError::InternalError(String::from(error_message))
-                    }
-                    "InvalidIdentityPoolConfigurationException" => {
-                        GetCredentialsForIdentityError::InvalidIdentityPoolConfiguration(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidParameterException" => {
-                        GetCredentialsForIdentityError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NotAuthorizedException" => {
-                        GetCredentialsForIdentityError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceConflictException" => {
-                        GetCredentialsForIdentityError::ResourceConflict(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetCredentialsForIdentityError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TooManyRequestsException" => {
-                        GetCredentialsForIdentityError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetCredentialsForIdentityError::Validation(error_message.to_string())
-                    }
-                    _ => GetCredentialsForIdentityError::Unknown(String::from(body)),
+            match *error_type {
+                "ExternalServiceException" => {
+                    return GetCredentialsForIdentityError::ExternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalErrorException" => {
+                    return GetCredentialsForIdentityError::InternalError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidIdentityPoolConfigurationException" => {
+                    return GetCredentialsForIdentityError::InvalidIdentityPoolConfiguration(
+                        String::from(error_message),
+                    )
+                }
+                "InvalidParameterException" => {
+                    return GetCredentialsForIdentityError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "NotAuthorizedException" => {
+                    return GetCredentialsForIdentityError::NotAuthorized(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceConflictException" => {
+                    return GetCredentialsForIdentityError::ResourceConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetCredentialsForIdentityError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return GetCredentialsForIdentityError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetCredentialsForIdentityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetCredentialsForIdentityError::Unknown(String::from(body)),
         }
+        return GetCredentialsForIdentityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetCredentialsForIdentityError {
     fn from(err: serde_json::error::Error) -> GetCredentialsForIdentityError {
-        GetCredentialsForIdentityError::Unknown(err.description().to_string())
+        GetCredentialsForIdentityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetCredentialsForIdentityError {
@@ -1212,7 +1225,8 @@ impl Error for GetCredentialsForIdentityError {
             GetCredentialsForIdentityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetCredentialsForIdentityError::Unknown(ref cause) => cause,
+            GetCredentialsForIdentityError::ParseError(ref cause) => cause,
+            GetCredentialsForIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1241,60 +1255,60 @@ pub enum GetIdError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetIdError {
-    pub fn from_body(body: &str) -> GetIdError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetIdError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ExternalServiceException" => {
-                        GetIdError::ExternalService(String::from(error_message))
-                    }
-                    "InternalErrorException" => {
-                        GetIdError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        GetIdError::InvalidParameter(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetIdError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        GetIdError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceConflictException" => {
-                        GetIdError::ResourceConflict(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetIdError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        GetIdError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => GetIdError::Validation(error_message.to_string()),
-                    _ => GetIdError::Unknown(String::from(body)),
+            match *error_type {
+                "ExternalServiceException" => {
+                    return GetIdError::ExternalService(String::from(error_message))
                 }
+                "InternalErrorException" => {
+                    return GetIdError::InternalError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return GetIdError::InvalidParameter(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetIdError::LimitExceeded(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return GetIdError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceConflictException" => {
+                    return GetIdError::ResourceConflict(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetIdError::ResourceNotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return GetIdError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => return GetIdError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => GetIdError::Unknown(String::from(body)),
         }
+        return GetIdError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetIdError {
     fn from(err: serde_json::error::Error) -> GetIdError {
-        GetIdError::Unknown(err.description().to_string())
+        GetIdError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetIdError {
@@ -1331,7 +1345,8 @@ impl Error for GetIdError {
             GetIdError::Validation(ref cause) => cause,
             GetIdError::Credentials(ref err) => err.description(),
             GetIdError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetIdError::Unknown(ref cause) => cause,
+            GetIdError::ParseError(ref cause) => cause,
+            GetIdError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1356,56 +1371,56 @@ pub enum GetIdentityPoolRolesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetIdentityPoolRolesError {
-    pub fn from_body(body: &str) -> GetIdentityPoolRolesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityPoolRolesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        GetIdentityPoolRolesError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        GetIdentityPoolRolesError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        GetIdentityPoolRolesError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceConflictException" => {
-                        GetIdentityPoolRolesError::ResourceConflict(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetIdentityPoolRolesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        GetIdentityPoolRolesError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetIdentityPoolRolesError::Validation(error_message.to_string())
-                    }
-                    _ => GetIdentityPoolRolesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return GetIdentityPoolRolesError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return GetIdentityPoolRolesError::InvalidParameter(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return GetIdentityPoolRolesError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceConflictException" => {
+                    return GetIdentityPoolRolesError::ResourceConflict(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetIdentityPoolRolesError::ResourceNotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return GetIdentityPoolRolesError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetIdentityPoolRolesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetIdentityPoolRolesError::Unknown(String::from(body)),
         }
+        return GetIdentityPoolRolesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetIdentityPoolRolesError {
     fn from(err: serde_json::error::Error) -> GetIdentityPoolRolesError {
-        GetIdentityPoolRolesError::Unknown(err.description().to_string())
+        GetIdentityPoolRolesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetIdentityPoolRolesError {
@@ -1442,7 +1457,8 @@ impl Error for GetIdentityPoolRolesError {
             GetIdentityPoolRolesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetIdentityPoolRolesError::Unknown(ref cause) => cause,
+            GetIdentityPoolRolesError::ParseError(ref cause) => cause,
+            GetIdentityPoolRolesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1469,59 +1485,59 @@ pub enum GetOpenIdTokenError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetOpenIdTokenError {
-    pub fn from_body(body: &str) -> GetOpenIdTokenError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetOpenIdTokenError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ExternalServiceException" => {
-                        GetOpenIdTokenError::ExternalService(String::from(error_message))
-                    }
-                    "InternalErrorException" => {
-                        GetOpenIdTokenError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        GetOpenIdTokenError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        GetOpenIdTokenError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceConflictException" => {
-                        GetOpenIdTokenError::ResourceConflict(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetOpenIdTokenError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        GetOpenIdTokenError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetOpenIdTokenError::Validation(error_message.to_string())
-                    }
-                    _ => GetOpenIdTokenError::Unknown(String::from(body)),
+            match *error_type {
+                "ExternalServiceException" => {
+                    return GetOpenIdTokenError::ExternalService(String::from(error_message))
                 }
+                "InternalErrorException" => {
+                    return GetOpenIdTokenError::InternalError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return GetOpenIdTokenError::InvalidParameter(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return GetOpenIdTokenError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceConflictException" => {
+                    return GetOpenIdTokenError::ResourceConflict(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetOpenIdTokenError::ResourceNotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return GetOpenIdTokenError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetOpenIdTokenError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetOpenIdTokenError::Unknown(String::from(body)),
         }
+        return GetOpenIdTokenError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetOpenIdTokenError {
     fn from(err: serde_json::error::Error) -> GetOpenIdTokenError {
-        GetOpenIdTokenError::Unknown(err.description().to_string())
+        GetOpenIdTokenError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetOpenIdTokenError {
@@ -1557,7 +1573,8 @@ impl Error for GetOpenIdTokenError {
             GetOpenIdTokenError::Validation(ref cause) => cause,
             GetOpenIdTokenError::Credentials(ref err) => err.description(),
             GetOpenIdTokenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetOpenIdTokenError::Unknown(ref cause) => cause,
+            GetOpenIdTokenError::ParseError(ref cause) => cause,
+            GetOpenIdTokenError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1584,73 +1601,75 @@ pub enum GetOpenIdTokenForDeveloperIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetOpenIdTokenForDeveloperIdentityError {
-    pub fn from_body(body: &str) -> GetOpenIdTokenForDeveloperIdentityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetOpenIdTokenForDeveloperIdentityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DeveloperUserAlreadyRegisteredException" => {
-                        GetOpenIdTokenForDeveloperIdentityError::DeveloperUserAlreadyRegistered(
-                            String::from(error_message),
-                        )
-                    }
-                    "InternalErrorException" => {
-                        GetOpenIdTokenForDeveloperIdentityError::InternalError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        GetOpenIdTokenForDeveloperIdentityError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NotAuthorizedException" => {
-                        GetOpenIdTokenForDeveloperIdentityError::NotAuthorized(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceConflictException" => {
-                        GetOpenIdTokenForDeveloperIdentityError::ResourceConflict(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetOpenIdTokenForDeveloperIdentityError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TooManyRequestsException" => {
-                        GetOpenIdTokenForDeveloperIdentityError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => GetOpenIdTokenForDeveloperIdentityError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => GetOpenIdTokenForDeveloperIdentityError::Unknown(String::from(body)),
+            match *error_type {
+                "DeveloperUserAlreadyRegisteredException" => {
+                    return GetOpenIdTokenForDeveloperIdentityError::DeveloperUserAlreadyRegistered(
+                        String::from(error_message),
+                    )
                 }
+                "InternalErrorException" => {
+                    return GetOpenIdTokenForDeveloperIdentityError::InternalError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return GetOpenIdTokenForDeveloperIdentityError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "NotAuthorizedException" => {
+                    return GetOpenIdTokenForDeveloperIdentityError::NotAuthorized(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceConflictException" => {
+                    return GetOpenIdTokenForDeveloperIdentityError::ResourceConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetOpenIdTokenForDeveloperIdentityError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return GetOpenIdTokenForDeveloperIdentityError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetOpenIdTokenForDeveloperIdentityError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => GetOpenIdTokenForDeveloperIdentityError::Unknown(String::from(body)),
         }
+        return GetOpenIdTokenForDeveloperIdentityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetOpenIdTokenForDeveloperIdentityError {
     fn from(err: serde_json::error::Error) -> GetOpenIdTokenForDeveloperIdentityError {
-        GetOpenIdTokenForDeveloperIdentityError::Unknown(err.description().to_string())
+        GetOpenIdTokenForDeveloperIdentityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetOpenIdTokenForDeveloperIdentityError {
@@ -1690,7 +1709,8 @@ impl Error for GetOpenIdTokenForDeveloperIdentityError {
             GetOpenIdTokenForDeveloperIdentityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetOpenIdTokenForDeveloperIdentityError::Unknown(ref cause) => cause,
+            GetOpenIdTokenForDeveloperIdentityError::ParseError(ref cause) => cause,
+            GetOpenIdTokenForDeveloperIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1713,53 +1733,53 @@ pub enum ListIdentitiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListIdentitiesError {
-    pub fn from_body(body: &str) -> ListIdentitiesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListIdentitiesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        ListIdentitiesError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListIdentitiesError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        ListIdentitiesError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListIdentitiesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        ListIdentitiesError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListIdentitiesError::Validation(error_message.to_string())
-                    }
-                    _ => ListIdentitiesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return ListIdentitiesError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return ListIdentitiesError::InvalidParameter(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return ListIdentitiesError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListIdentitiesError::ResourceNotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return ListIdentitiesError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListIdentitiesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListIdentitiesError::Unknown(String::from(body)),
         }
+        return ListIdentitiesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListIdentitiesError {
     fn from(err: serde_json::error::Error) -> ListIdentitiesError {
-        ListIdentitiesError::Unknown(err.description().to_string())
+        ListIdentitiesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListIdentitiesError {
@@ -1793,7 +1813,8 @@ impl Error for ListIdentitiesError {
             ListIdentitiesError::Validation(ref cause) => cause,
             ListIdentitiesError::Credentials(ref err) => err.description(),
             ListIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListIdentitiesError::Unknown(ref cause) => cause,
+            ListIdentitiesError::ParseError(ref cause) => cause,
+            ListIdentitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1814,50 +1835,50 @@ pub enum ListIdentityPoolsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListIdentityPoolsError {
-    pub fn from_body(body: &str) -> ListIdentityPoolsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListIdentityPoolsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        ListIdentityPoolsError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListIdentityPoolsError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        ListIdentityPoolsError::NotAuthorized(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        ListIdentityPoolsError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListIdentityPoolsError::Validation(error_message.to_string())
-                    }
-                    _ => ListIdentityPoolsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return ListIdentityPoolsError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return ListIdentityPoolsError::InvalidParameter(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return ListIdentityPoolsError::NotAuthorized(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return ListIdentityPoolsError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListIdentityPoolsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListIdentityPoolsError::Unknown(String::from(body)),
         }
+        return ListIdentityPoolsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListIdentityPoolsError {
     fn from(err: serde_json::error::Error) -> ListIdentityPoolsError {
-        ListIdentityPoolsError::Unknown(err.description().to_string())
+        ListIdentityPoolsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListIdentityPoolsError {
@@ -1892,7 +1913,8 @@ impl Error for ListIdentityPoolsError {
             ListIdentityPoolsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListIdentityPoolsError::Unknown(ref cause) => cause,
+            ListIdentityPoolsError::ParseError(ref cause) => cause,
+            ListIdentityPoolsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1917,56 +1939,64 @@ pub enum LookupDeveloperIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl LookupDeveloperIdentityError {
-    pub fn from_body(body: &str) -> LookupDeveloperIdentityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> LookupDeveloperIdentityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        LookupDeveloperIdentityError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        LookupDeveloperIdentityError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        LookupDeveloperIdentityError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceConflictException" => {
-                        LookupDeveloperIdentityError::ResourceConflict(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        LookupDeveloperIdentityError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        LookupDeveloperIdentityError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        LookupDeveloperIdentityError::Validation(error_message.to_string())
-                    }
-                    _ => LookupDeveloperIdentityError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return LookupDeveloperIdentityError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return LookupDeveloperIdentityError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "NotAuthorizedException" => {
+                    return LookupDeveloperIdentityError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceConflictException" => {
+                    return LookupDeveloperIdentityError::ResourceConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return LookupDeveloperIdentityError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return LookupDeveloperIdentityError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return LookupDeveloperIdentityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => LookupDeveloperIdentityError::Unknown(String::from(body)),
         }
+        return LookupDeveloperIdentityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for LookupDeveloperIdentityError {
     fn from(err: serde_json::error::Error) -> LookupDeveloperIdentityError {
-        LookupDeveloperIdentityError::Unknown(err.description().to_string())
+        LookupDeveloperIdentityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for LookupDeveloperIdentityError {
@@ -2003,7 +2033,8 @@ impl Error for LookupDeveloperIdentityError {
             LookupDeveloperIdentityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            LookupDeveloperIdentityError::Unknown(ref cause) => cause,
+            LookupDeveloperIdentityError::ParseError(ref cause) => cause,
+            LookupDeveloperIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2028,56 +2059,64 @@ pub enum MergeDeveloperIdentitiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl MergeDeveloperIdentitiesError {
-    pub fn from_body(body: &str) -> MergeDeveloperIdentitiesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> MergeDeveloperIdentitiesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        MergeDeveloperIdentitiesError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        MergeDeveloperIdentitiesError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        MergeDeveloperIdentitiesError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceConflictException" => {
-                        MergeDeveloperIdentitiesError::ResourceConflict(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        MergeDeveloperIdentitiesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        MergeDeveloperIdentitiesError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        MergeDeveloperIdentitiesError::Validation(error_message.to_string())
-                    }
-                    _ => MergeDeveloperIdentitiesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return MergeDeveloperIdentitiesError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return MergeDeveloperIdentitiesError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "NotAuthorizedException" => {
+                    return MergeDeveloperIdentitiesError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceConflictException" => {
+                    return MergeDeveloperIdentitiesError::ResourceConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return MergeDeveloperIdentitiesError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return MergeDeveloperIdentitiesError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return MergeDeveloperIdentitiesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => MergeDeveloperIdentitiesError::Unknown(String::from(body)),
         }
+        return MergeDeveloperIdentitiesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for MergeDeveloperIdentitiesError {
     fn from(err: serde_json::error::Error) -> MergeDeveloperIdentitiesError {
-        MergeDeveloperIdentitiesError::Unknown(err.description().to_string())
+        MergeDeveloperIdentitiesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for MergeDeveloperIdentitiesError {
@@ -2114,7 +2153,8 @@ impl Error for MergeDeveloperIdentitiesError {
             MergeDeveloperIdentitiesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            MergeDeveloperIdentitiesError::Unknown(ref cause) => cause,
+            MergeDeveloperIdentitiesError::ParseError(ref cause) => cause,
+            MergeDeveloperIdentitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2141,61 +2181,61 @@ pub enum SetIdentityPoolRolesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetIdentityPoolRolesError {
-    pub fn from_body(body: &str) -> SetIdentityPoolRolesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SetIdentityPoolRolesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        SetIdentityPoolRolesError::ConcurrentModification(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalErrorException" => {
-                        SetIdentityPoolRolesError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        SetIdentityPoolRolesError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        SetIdentityPoolRolesError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceConflictException" => {
-                        SetIdentityPoolRolesError::ResourceConflict(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        SetIdentityPoolRolesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        SetIdentityPoolRolesError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SetIdentityPoolRolesError::Validation(error_message.to_string())
-                    }
-                    _ => SetIdentityPoolRolesError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return SetIdentityPoolRolesError::ConcurrentModification(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalErrorException" => {
+                    return SetIdentityPoolRolesError::InternalError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return SetIdentityPoolRolesError::InvalidParameter(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return SetIdentityPoolRolesError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceConflictException" => {
+                    return SetIdentityPoolRolesError::ResourceConflict(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return SetIdentityPoolRolesError::ResourceNotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return SetIdentityPoolRolesError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return SetIdentityPoolRolesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SetIdentityPoolRolesError::Unknown(String::from(body)),
         }
+        return SetIdentityPoolRolesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SetIdentityPoolRolesError {
     fn from(err: serde_json::error::Error) -> SetIdentityPoolRolesError {
-        SetIdentityPoolRolesError::Unknown(err.description().to_string())
+        SetIdentityPoolRolesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SetIdentityPoolRolesError {
@@ -2233,7 +2273,8 @@ impl Error for SetIdentityPoolRolesError {
             SetIdentityPoolRolesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetIdentityPoolRolesError::Unknown(ref cause) => cause,
+            SetIdentityPoolRolesError::ParseError(ref cause) => cause,
+            SetIdentityPoolRolesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2258,56 +2299,64 @@ pub enum UnlinkDeveloperIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UnlinkDeveloperIdentityError {
-    pub fn from_body(body: &str) -> UnlinkDeveloperIdentityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UnlinkDeveloperIdentityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalErrorException" => {
-                        UnlinkDeveloperIdentityError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UnlinkDeveloperIdentityError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        UnlinkDeveloperIdentityError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceConflictException" => {
-                        UnlinkDeveloperIdentityError::ResourceConflict(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UnlinkDeveloperIdentityError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        UnlinkDeveloperIdentityError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UnlinkDeveloperIdentityError::Validation(error_message.to_string())
-                    }
-                    _ => UnlinkDeveloperIdentityError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalErrorException" => {
+                    return UnlinkDeveloperIdentityError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return UnlinkDeveloperIdentityError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "NotAuthorizedException" => {
+                    return UnlinkDeveloperIdentityError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceConflictException" => {
+                    return UnlinkDeveloperIdentityError::ResourceConflict(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return UnlinkDeveloperIdentityError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return UnlinkDeveloperIdentityError::TooManyRequests(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UnlinkDeveloperIdentityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UnlinkDeveloperIdentityError::Unknown(String::from(body)),
         }
+        return UnlinkDeveloperIdentityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UnlinkDeveloperIdentityError {
     fn from(err: serde_json::error::Error) -> UnlinkDeveloperIdentityError {
-        UnlinkDeveloperIdentityError::Unknown(err.description().to_string())
+        UnlinkDeveloperIdentityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UnlinkDeveloperIdentityError {
@@ -2344,7 +2393,8 @@ impl Error for UnlinkDeveloperIdentityError {
             UnlinkDeveloperIdentityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UnlinkDeveloperIdentityError::Unknown(ref cause) => cause,
+            UnlinkDeveloperIdentityError::ParseError(ref cause) => cause,
+            UnlinkDeveloperIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2371,59 +2421,59 @@ pub enum UnlinkIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UnlinkIdentityError {
-    pub fn from_body(body: &str) -> UnlinkIdentityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UnlinkIdentityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ExternalServiceException" => {
-                        UnlinkIdentityError::ExternalService(String::from(error_message))
-                    }
-                    "InternalErrorException" => {
-                        UnlinkIdentityError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UnlinkIdentityError::InvalidParameter(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        UnlinkIdentityError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceConflictException" => {
-                        UnlinkIdentityError::ResourceConflict(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UnlinkIdentityError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        UnlinkIdentityError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UnlinkIdentityError::Validation(error_message.to_string())
-                    }
-                    _ => UnlinkIdentityError::Unknown(String::from(body)),
+            match *error_type {
+                "ExternalServiceException" => {
+                    return UnlinkIdentityError::ExternalService(String::from(error_message))
                 }
+                "InternalErrorException" => {
+                    return UnlinkIdentityError::InternalError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return UnlinkIdentityError::InvalidParameter(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return UnlinkIdentityError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceConflictException" => {
+                    return UnlinkIdentityError::ResourceConflict(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UnlinkIdentityError::ResourceNotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return UnlinkIdentityError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UnlinkIdentityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UnlinkIdentityError::Unknown(String::from(body)),
         }
+        return UnlinkIdentityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UnlinkIdentityError {
     fn from(err: serde_json::error::Error) -> UnlinkIdentityError {
-        UnlinkIdentityError::Unknown(err.description().to_string())
+        UnlinkIdentityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UnlinkIdentityError {
@@ -2459,7 +2509,8 @@ impl Error for UnlinkIdentityError {
             UnlinkIdentityError::Validation(ref cause) => cause,
             UnlinkIdentityError::Credentials(ref err) => err.description(),
             UnlinkIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UnlinkIdentityError::Unknown(ref cause) => cause,
+            UnlinkIdentityError::ParseError(ref cause) => cause,
+            UnlinkIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2488,62 +2539,64 @@ pub enum UpdateIdentityPoolError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateIdentityPoolError {
-    pub fn from_body(body: &str) -> UpdateIdentityPoolError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateIdentityPoolError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        UpdateIdentityPoolError::ConcurrentModification(String::from(error_message))
-                    }
-                    "InternalErrorException" => {
-                        UpdateIdentityPoolError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateIdentityPoolError::InvalidParameter(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateIdentityPoolError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotAuthorizedException" => {
-                        UpdateIdentityPoolError::NotAuthorized(String::from(error_message))
-                    }
-                    "ResourceConflictException" => {
-                        UpdateIdentityPoolError::ResourceConflict(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateIdentityPoolError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        UpdateIdentityPoolError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateIdentityPoolError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateIdentityPoolError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return UpdateIdentityPoolError::ConcurrentModification(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalErrorException" => {
+                    return UpdateIdentityPoolError::InternalError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return UpdateIdentityPoolError::InvalidParameter(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateIdentityPoolError::LimitExceeded(String::from(error_message))
+                }
+                "NotAuthorizedException" => {
+                    return UpdateIdentityPoolError::NotAuthorized(String::from(error_message))
+                }
+                "ResourceConflictException" => {
+                    return UpdateIdentityPoolError::ResourceConflict(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateIdentityPoolError::ResourceNotFound(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return UpdateIdentityPoolError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateIdentityPoolError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateIdentityPoolError::Unknown(String::from(body)),
         }
+        return UpdateIdentityPoolError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateIdentityPoolError {
     fn from(err: serde_json::error::Error) -> UpdateIdentityPoolError {
-        UpdateIdentityPoolError::Unknown(err.description().to_string())
+        UpdateIdentityPoolError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateIdentityPoolError {
@@ -2582,7 +2635,8 @@ impl Error for UpdateIdentityPoolError {
             UpdateIdentityPoolError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateIdentityPoolError::Unknown(ref cause) => cause,
+            UpdateIdentityPoolError::ParseError(ref cause) => cause,
+            UpdateIdentityPoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2755,14 +2809,16 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<IdentityPool>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateIdentityPoolError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateIdentityPoolError::from_response(response))),
+                )
             }
         })
     }
@@ -2790,14 +2846,16 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<DeleteIdentitiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteIdentitiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteIdentitiesError::from_response(response))),
+                )
             }
         })
     }
@@ -2821,11 +2879,12 @@ impl CognitoIdentity for CognitoIdentityClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteIdentityPoolError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteIdentityPoolError::from_response(response))),
+                )
             }
         })
     }
@@ -2853,14 +2912,16 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<IdentityDescription>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeIdentityError::from_response(response))),
+                )
             }
         })
     }
@@ -2891,14 +2952,15 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<IdentityPool>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeIdentityPoolError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeIdentityPoolError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -2929,13 +2991,12 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<GetCredentialsForIdentityResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCredentialsForIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetCredentialsForIdentityError::from_response(response))
                 }))
             }
         })
@@ -2961,14 +3022,16 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<GetIdResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetIdError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetIdError::from_response(response))),
+                )
             }
         })
     }
@@ -2999,14 +3062,15 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<GetIdentityPoolRolesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetIdentityPoolRolesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetIdentityPoolRolesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3034,14 +3098,16 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<GetOpenIdTokenResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetOpenIdTokenError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetOpenIdTokenError::from_response(response))),
+                )
             }
         })
     }
@@ -3075,12 +3141,13 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<GetOpenIdTokenForDeveloperIdentityResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetOpenIdTokenForDeveloperIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetOpenIdTokenForDeveloperIdentityError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -3110,14 +3177,16 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<ListIdentitiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListIdentitiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListIdentitiesError::from_response(response))),
+                )
             }
         })
     }
@@ -3148,14 +3217,16 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<ListIdentityPoolsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListIdentityPoolsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListIdentityPoolsError::from_response(response))),
+                )
             }
         })
     }
@@ -3186,13 +3257,12 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<LookupDeveloperIdentityResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(LookupDeveloperIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(LookupDeveloperIdentityError::from_response(response))
                 }))
             }
         })
@@ -3224,13 +3294,12 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<MergeDeveloperIdentitiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(MergeDeveloperIdentitiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(MergeDeveloperIdentitiesError::from_response(response))
                 }))
             }
         })
@@ -3255,11 +3324,11 @@ impl CognitoIdentity for CognitoIdentityClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetIdentityPoolRolesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(SetIdentityPoolRolesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3284,9 +3353,7 @@ impl CognitoIdentity for CognitoIdentityClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UnlinkDeveloperIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UnlinkDeveloperIdentityError::from_response(response))
                 }))
             }
         })
@@ -3305,11 +3372,12 @@ impl CognitoIdentity for CognitoIdentityClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UnlinkIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UnlinkIdentityError::from_response(response))),
+                )
             }
         })
     }
@@ -3340,14 +3408,16 @@ impl CognitoIdentity for CognitoIdentityClient {
 
                     serde_json::from_str::<IdentityPool>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateIdentityPoolError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateIdentityPoolError::from_response(response))),
+                )
             }
         })
     }

@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents a CloudWatch alarm associated with a scaling policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -633,47 +633,47 @@ pub enum DeleteScalingPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteScalingPolicyError {
-    pub fn from_body(body: &str) -> DeleteScalingPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteScalingPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentUpdateException" => {
-                        DeleteScalingPolicyError::ConcurrentUpdate(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DeleteScalingPolicyError::InternalService(String::from(error_message))
-                    }
-                    "ObjectNotFoundException" => {
-                        DeleteScalingPolicyError::ObjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteScalingPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteScalingPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentUpdateException" => {
+                    return DeleteScalingPolicyError::ConcurrentUpdate(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return DeleteScalingPolicyError::InternalService(String::from(error_message))
+                }
+                "ObjectNotFoundException" => {
+                    return DeleteScalingPolicyError::ObjectNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteScalingPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteScalingPolicyError::Unknown(String::from(body)),
         }
+        return DeleteScalingPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteScalingPolicyError {
     fn from(err: serde_json::error::Error) -> DeleteScalingPolicyError {
-        DeleteScalingPolicyError::Unknown(err.description().to_string())
+        DeleteScalingPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteScalingPolicyError {
@@ -707,7 +707,8 @@ impl Error for DeleteScalingPolicyError {
             DeleteScalingPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteScalingPolicyError::Unknown(ref cause) => cause,
+            DeleteScalingPolicyError::ParseError(ref cause) => cause,
+            DeleteScalingPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -726,47 +727,47 @@ pub enum DeleteScheduledActionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteScheduledActionError {
-    pub fn from_body(body: &str) -> DeleteScheduledActionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteScheduledActionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentUpdateException" => {
-                        DeleteScheduledActionError::ConcurrentUpdate(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DeleteScheduledActionError::InternalService(String::from(error_message))
-                    }
-                    "ObjectNotFoundException" => {
-                        DeleteScheduledActionError::ObjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteScheduledActionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteScheduledActionError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentUpdateException" => {
+                    return DeleteScheduledActionError::ConcurrentUpdate(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return DeleteScheduledActionError::InternalService(String::from(error_message))
+                }
+                "ObjectNotFoundException" => {
+                    return DeleteScheduledActionError::ObjectNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteScheduledActionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteScheduledActionError::Unknown(String::from(body)),
         }
+        return DeleteScheduledActionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteScheduledActionError {
     fn from(err: serde_json::error::Error) -> DeleteScheduledActionError {
-        DeleteScheduledActionError::Unknown(err.description().to_string())
+        DeleteScheduledActionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteScheduledActionError {
@@ -800,7 +801,8 @@ impl Error for DeleteScheduledActionError {
             DeleteScheduledActionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteScheduledActionError::Unknown(ref cause) => cause,
+            DeleteScheduledActionError::ParseError(ref cause) => cause,
+            DeleteScheduledActionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -819,47 +821,53 @@ pub enum DeregisterScalableTargetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterScalableTargetError {
-    pub fn from_body(body: &str) -> DeregisterScalableTargetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeregisterScalableTargetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentUpdateException" => {
-                        DeregisterScalableTargetError::ConcurrentUpdate(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DeregisterScalableTargetError::InternalService(String::from(error_message))
-                    }
-                    "ObjectNotFoundException" => {
-                        DeregisterScalableTargetError::ObjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeregisterScalableTargetError::Validation(error_message.to_string())
-                    }
-                    _ => DeregisterScalableTargetError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentUpdateException" => {
+                    return DeregisterScalableTargetError::ConcurrentUpdate(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServiceException" => {
+                    return DeregisterScalableTargetError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "ObjectNotFoundException" => {
+                    return DeregisterScalableTargetError::ObjectNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeregisterScalableTargetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeregisterScalableTargetError::Unknown(String::from(body)),
         }
+        return DeregisterScalableTargetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeregisterScalableTargetError {
     fn from(err: serde_json::error::Error) -> DeregisterScalableTargetError {
-        DeregisterScalableTargetError::Unknown(err.description().to_string())
+        DeregisterScalableTargetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeregisterScalableTargetError {
@@ -893,7 +901,8 @@ impl Error for DeregisterScalableTargetError {
             DeregisterScalableTargetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeregisterScalableTargetError::Unknown(ref cause) => cause,
+            DeregisterScalableTargetError::ParseError(ref cause) => cause,
+            DeregisterScalableTargetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -912,47 +921,53 @@ pub enum DescribeScalableTargetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalableTargetsError {
-    pub fn from_body(body: &str) -> DescribeScalableTargetsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalableTargetsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentUpdateException" => {
-                        DescribeScalableTargetsError::ConcurrentUpdate(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DescribeScalableTargetsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        DescribeScalableTargetsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeScalableTargetsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeScalableTargetsError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentUpdateException" => {
+                    return DescribeScalableTargetsError::ConcurrentUpdate(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServiceException" => {
+                    return DescribeScalableTargetsError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return DescribeScalableTargetsError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeScalableTargetsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeScalableTargetsError::Unknown(String::from(body)),
         }
+        return DescribeScalableTargetsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeScalableTargetsError {
     fn from(err: serde_json::error::Error) -> DescribeScalableTargetsError {
-        DescribeScalableTargetsError::Unknown(err.description().to_string())
+        DescribeScalableTargetsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeScalableTargetsError {
@@ -986,7 +1001,8 @@ impl Error for DescribeScalableTargetsError {
             DescribeScalableTargetsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeScalableTargetsError::Unknown(ref cause) => cause,
+            DescribeScalableTargetsError::ParseError(ref cause) => cause,
+            DescribeScalableTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1005,51 +1021,53 @@ pub enum DescribeScalingActivitiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalingActivitiesError {
-    pub fn from_body(body: &str) -> DescribeScalingActivitiesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalingActivitiesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentUpdateException" => {
-                        DescribeScalingActivitiesError::ConcurrentUpdate(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServiceException" => {
-                        DescribeScalingActivitiesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        DescribeScalingActivitiesError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeScalingActivitiesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeScalingActivitiesError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentUpdateException" => {
+                    return DescribeScalingActivitiesError::ConcurrentUpdate(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServiceException" => {
+                    return DescribeScalingActivitiesError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return DescribeScalingActivitiesError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeScalingActivitiesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeScalingActivitiesError::Unknown(String::from(body)),
         }
+        return DescribeScalingActivitiesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeScalingActivitiesError {
     fn from(err: serde_json::error::Error) -> DescribeScalingActivitiesError {
-        DescribeScalingActivitiesError::Unknown(err.description().to_string())
+        DescribeScalingActivitiesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeScalingActivitiesError {
@@ -1083,7 +1101,8 @@ impl Error for DescribeScalingActivitiesError {
             DescribeScalingActivitiesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeScalingActivitiesError::Unknown(ref cause) => cause,
+            DescribeScalingActivitiesError::ParseError(ref cause) => cause,
+            DescribeScalingActivitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1104,52 +1123,58 @@ pub enum DescribeScalingPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalingPoliciesError {
-    pub fn from_body(body: &str) -> DescribeScalingPoliciesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalingPoliciesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentUpdateException" => {
-                        DescribeScalingPoliciesError::ConcurrentUpdate(String::from(error_message))
-                    }
-                    "FailedResourceAccessException" => {
-                        DescribeScalingPoliciesError::FailedResourceAccess(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServiceException" => {
-                        DescribeScalingPoliciesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        DescribeScalingPoliciesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeScalingPoliciesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeScalingPoliciesError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentUpdateException" => {
+                    return DescribeScalingPoliciesError::ConcurrentUpdate(String::from(
+                        error_message,
+                    ))
                 }
+                "FailedResourceAccessException" => {
+                    return DescribeScalingPoliciesError::FailedResourceAccess(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return DescribeScalingPoliciesError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return DescribeScalingPoliciesError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeScalingPoliciesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeScalingPoliciesError::Unknown(String::from(body)),
         }
+        return DescribeScalingPoliciesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeScalingPoliciesError {
     fn from(err: serde_json::error::Error) -> DescribeScalingPoliciesError {
-        DescribeScalingPoliciesError::Unknown(err.description().to_string())
+        DescribeScalingPoliciesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeScalingPoliciesError {
@@ -1184,7 +1209,8 @@ impl Error for DescribeScalingPoliciesError {
             DescribeScalingPoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeScalingPoliciesError::Unknown(ref cause) => cause,
+            DescribeScalingPoliciesError::ParseError(ref cause) => cause,
+            DescribeScalingPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1203,47 +1229,53 @@ pub enum DescribeScheduledActionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScheduledActionsError {
-    pub fn from_body(body: &str) -> DescribeScheduledActionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeScheduledActionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentUpdateException" => {
-                        DescribeScheduledActionsError::ConcurrentUpdate(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DescribeScheduledActionsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        DescribeScheduledActionsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeScheduledActionsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeScheduledActionsError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentUpdateException" => {
+                    return DescribeScheduledActionsError::ConcurrentUpdate(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServiceException" => {
+                    return DescribeScheduledActionsError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidNextTokenException" => {
+                    return DescribeScheduledActionsError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeScheduledActionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeScheduledActionsError::Unknown(String::from(body)),
         }
+        return DescribeScheduledActionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeScheduledActionsError {
     fn from(err: serde_json::error::Error) -> DescribeScheduledActionsError {
-        DescribeScheduledActionsError::Unknown(err.description().to_string())
+        DescribeScheduledActionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeScheduledActionsError {
@@ -1277,7 +1309,8 @@ impl Error for DescribeScheduledActionsError {
             DescribeScheduledActionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeScheduledActionsError::Unknown(ref cause) => cause,
+            DescribeScheduledActionsError::ParseError(ref cause) => cause,
+            DescribeScheduledActionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1300,53 +1333,53 @@ pub enum PutScalingPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutScalingPolicyError {
-    pub fn from_body(body: &str) -> PutScalingPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutScalingPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentUpdateException" => {
-                        PutScalingPolicyError::ConcurrentUpdate(String::from(error_message))
-                    }
-                    "FailedResourceAccessException" => {
-                        PutScalingPolicyError::FailedResourceAccess(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        PutScalingPolicyError::InternalService(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PutScalingPolicyError::LimitExceeded(String::from(error_message))
-                    }
-                    "ObjectNotFoundException" => {
-                        PutScalingPolicyError::ObjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutScalingPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => PutScalingPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentUpdateException" => {
+                    return PutScalingPolicyError::ConcurrentUpdate(String::from(error_message))
                 }
+                "FailedResourceAccessException" => {
+                    return PutScalingPolicyError::FailedResourceAccess(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return PutScalingPolicyError::InternalService(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PutScalingPolicyError::LimitExceeded(String::from(error_message))
+                }
+                "ObjectNotFoundException" => {
+                    return PutScalingPolicyError::ObjectNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutScalingPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutScalingPolicyError::Unknown(String::from(body)),
         }
+        return PutScalingPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutScalingPolicyError {
     fn from(err: serde_json::error::Error) -> PutScalingPolicyError {
-        PutScalingPolicyError::Unknown(err.description().to_string())
+        PutScalingPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutScalingPolicyError {
@@ -1380,7 +1413,8 @@ impl Error for PutScalingPolicyError {
             PutScalingPolicyError::Validation(ref cause) => cause,
             PutScalingPolicyError::Credentials(ref err) => err.description(),
             PutScalingPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutScalingPolicyError::Unknown(ref cause) => cause,
+            PutScalingPolicyError::ParseError(ref cause) => cause,
+            PutScalingPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1401,50 +1435,50 @@ pub enum PutScheduledActionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutScheduledActionError {
-    pub fn from_body(body: &str) -> PutScheduledActionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutScheduledActionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentUpdateException" => {
-                        PutScheduledActionError::ConcurrentUpdate(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        PutScheduledActionError::InternalService(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PutScheduledActionError::LimitExceeded(String::from(error_message))
-                    }
-                    "ObjectNotFoundException" => {
-                        PutScheduledActionError::ObjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutScheduledActionError::Validation(error_message.to_string())
-                    }
-                    _ => PutScheduledActionError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentUpdateException" => {
+                    return PutScheduledActionError::ConcurrentUpdate(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return PutScheduledActionError::InternalService(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PutScheduledActionError::LimitExceeded(String::from(error_message))
+                }
+                "ObjectNotFoundException" => {
+                    return PutScheduledActionError::ObjectNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutScheduledActionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutScheduledActionError::Unknown(String::from(body)),
         }
+        return PutScheduledActionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutScheduledActionError {
     fn from(err: serde_json::error::Error) -> PutScheduledActionError {
-        PutScheduledActionError::Unknown(err.description().to_string())
+        PutScheduledActionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutScheduledActionError {
@@ -1479,7 +1513,8 @@ impl Error for PutScheduledActionError {
             PutScheduledActionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutScheduledActionError::Unknown(ref cause) => cause,
+            PutScheduledActionError::ParseError(ref cause) => cause,
+            PutScheduledActionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1498,47 +1533,49 @@ pub enum RegisterScalableTargetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterScalableTargetError {
-    pub fn from_body(body: &str) -> RegisterScalableTargetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterScalableTargetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentUpdateException" => {
-                        RegisterScalableTargetError::ConcurrentUpdate(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        RegisterScalableTargetError::InternalService(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        RegisterScalableTargetError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RegisterScalableTargetError::Validation(error_message.to_string())
-                    }
-                    _ => RegisterScalableTargetError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentUpdateException" => {
+                    return RegisterScalableTargetError::ConcurrentUpdate(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServiceException" => {
+                    return RegisterScalableTargetError::InternalService(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return RegisterScalableTargetError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RegisterScalableTargetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RegisterScalableTargetError::Unknown(String::from(body)),
         }
+        return RegisterScalableTargetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RegisterScalableTargetError {
     fn from(err: serde_json::error::Error) -> RegisterScalableTargetError {
-        RegisterScalableTargetError::Unknown(err.description().to_string())
+        RegisterScalableTargetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RegisterScalableTargetError {
@@ -1572,7 +1609,8 @@ impl Error for RegisterScalableTargetError {
             RegisterScalableTargetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RegisterScalableTargetError::Unknown(ref cause) => cause,
+            RegisterScalableTargetError::ParseError(ref cause) => cause,
+            RegisterScalableTargetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1700,14 +1738,15 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DeleteScalingPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteScalingPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteScalingPolicyError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1738,14 +1777,15 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DeleteScheduledActionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteScheduledActionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteScheduledActionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1776,13 +1816,12 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DeregisterScalableTargetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeregisterScalableTargetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeregisterScalableTargetError::from_response(response))
                 }))
             }
         })
@@ -1814,13 +1853,12 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DescribeScalableTargetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScalableTargetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeScalableTargetsError::from_response(response))
                 }))
             }
         })
@@ -1852,13 +1890,12 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DescribeScalingActivitiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScalingActivitiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeScalingActivitiesError::from_response(response))
                 }))
             }
         })
@@ -1890,13 +1927,12 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DescribeScalingPoliciesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScalingPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeScalingPoliciesError::from_response(response))
                 }))
             }
         })
@@ -1928,13 +1964,12 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DescribeScheduledActionsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScheduledActionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeScheduledActionsError::from_response(response))
                 }))
             }
         })
@@ -1963,14 +1998,16 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<PutScalingPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutScalingPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutScalingPolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -1998,14 +2035,16 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<PutScheduledActionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutScheduledActionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutScheduledActionError::from_response(response))),
+                )
             }
         })
     }
@@ -2036,14 +2075,15 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<RegisterScalableTargetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterScalableTargetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RegisterScalableTargetError::from_response(response))
+                    }),
+                )
             }
         })
     }

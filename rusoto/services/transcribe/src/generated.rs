@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateVocabularyRequest {
@@ -422,50 +422,50 @@ pub enum CreateVocabularyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateVocabularyError {
-    pub fn from_body(body: &str) -> CreateVocabularyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateVocabularyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateVocabularyError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        CreateVocabularyError::Conflict(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        CreateVocabularyError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateVocabularyError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateVocabularyError::Validation(error_message.to_string())
-                    }
-                    _ => CreateVocabularyError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateVocabularyError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return CreateVocabularyError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return CreateVocabularyError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateVocabularyError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateVocabularyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateVocabularyError::Unknown(String::from(body)),
         }
+        return CreateVocabularyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateVocabularyError {
     fn from(err: serde_json::error::Error) -> CreateVocabularyError {
-        CreateVocabularyError::Unknown(err.description().to_string())
+        CreateVocabularyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateVocabularyError {
@@ -498,7 +498,8 @@ impl Error for CreateVocabularyError {
             CreateVocabularyError::Validation(ref cause) => cause,
             CreateVocabularyError::Credentials(ref err) => err.description(),
             CreateVocabularyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateVocabularyError::Unknown(ref cause) => cause,
+            CreateVocabularyError::ParseError(ref cause) => cause,
+            CreateVocabularyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -519,50 +520,50 @@ pub enum DeleteVocabularyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVocabularyError {
-    pub fn from_body(body: &str) -> DeleteVocabularyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteVocabularyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteVocabularyError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        DeleteVocabularyError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteVocabularyError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteVocabularyError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteVocabularyError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteVocabularyError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteVocabularyError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return DeleteVocabularyError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteVocabularyError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteVocabularyError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteVocabularyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteVocabularyError::Unknown(String::from(body)),
         }
+        return DeleteVocabularyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteVocabularyError {
     fn from(err: serde_json::error::Error) -> DeleteVocabularyError {
-        DeleteVocabularyError::Unknown(err.description().to_string())
+        DeleteVocabularyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteVocabularyError {
@@ -595,7 +596,8 @@ impl Error for DeleteVocabularyError {
             DeleteVocabularyError::Validation(ref cause) => cause,
             DeleteVocabularyError::Credentials(ref err) => err.description(),
             DeleteVocabularyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteVocabularyError::Unknown(ref cause) => cause,
+            DeleteVocabularyError::ParseError(ref cause) => cause,
+            DeleteVocabularyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -616,50 +618,50 @@ pub enum GetTranscriptionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetTranscriptionJobError {
-    pub fn from_body(body: &str) -> GetTranscriptionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetTranscriptionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetTranscriptionJobError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetTranscriptionJobError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetTranscriptionJobError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        GetTranscriptionJobError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetTranscriptionJobError::Validation(error_message.to_string())
-                    }
-                    _ => GetTranscriptionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetTranscriptionJobError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetTranscriptionJobError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetTranscriptionJobError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetTranscriptionJobError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetTranscriptionJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetTranscriptionJobError::Unknown(String::from(body)),
         }
+        return GetTranscriptionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetTranscriptionJobError {
     fn from(err: serde_json::error::Error) -> GetTranscriptionJobError {
-        GetTranscriptionJobError::Unknown(err.description().to_string())
+        GetTranscriptionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetTranscriptionJobError {
@@ -694,7 +696,8 @@ impl Error for GetTranscriptionJobError {
             GetTranscriptionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetTranscriptionJobError::Unknown(ref cause) => cause,
+            GetTranscriptionJobError::ParseError(ref cause) => cause,
+            GetTranscriptionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -715,50 +718,50 @@ pub enum GetVocabularyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetVocabularyError {
-    pub fn from_body(body: &str) -> GetVocabularyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetVocabularyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetVocabularyError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetVocabularyError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetVocabularyError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        GetVocabularyError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetVocabularyError::Validation(error_message.to_string())
-                    }
-                    _ => GetVocabularyError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetVocabularyError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetVocabularyError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetVocabularyError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetVocabularyError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetVocabularyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetVocabularyError::Unknown(String::from(body)),
         }
+        return GetVocabularyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetVocabularyError {
     fn from(err: serde_json::error::Error) -> GetVocabularyError {
-        GetVocabularyError::Unknown(err.description().to_string())
+        GetVocabularyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetVocabularyError {
@@ -791,7 +794,8 @@ impl Error for GetVocabularyError {
             GetVocabularyError::Validation(ref cause) => cause,
             GetVocabularyError::Credentials(ref err) => err.description(),
             GetVocabularyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetVocabularyError::Unknown(ref cause) => cause,
+            GetVocabularyError::ParseError(ref cause) => cause,
+            GetVocabularyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -810,47 +814,47 @@ pub enum ListTranscriptionJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTranscriptionJobsError {
-    pub fn from_body(body: &str) -> ListTranscriptionJobsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTranscriptionJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListTranscriptionJobsError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        ListTranscriptionJobsError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListTranscriptionJobsError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTranscriptionJobsError::Validation(error_message.to_string())
-                    }
-                    _ => ListTranscriptionJobsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListTranscriptionJobsError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return ListTranscriptionJobsError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListTranscriptionJobsError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTranscriptionJobsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTranscriptionJobsError::Unknown(String::from(body)),
         }
+        return ListTranscriptionJobsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTranscriptionJobsError {
     fn from(err: serde_json::error::Error) -> ListTranscriptionJobsError {
-        ListTranscriptionJobsError::Unknown(err.description().to_string())
+        ListTranscriptionJobsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTranscriptionJobsError {
@@ -884,7 +888,8 @@ impl Error for ListTranscriptionJobsError {
             ListTranscriptionJobsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTranscriptionJobsError::Unknown(ref cause) => cause,
+            ListTranscriptionJobsError::ParseError(ref cause) => cause,
+            ListTranscriptionJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -903,47 +908,47 @@ pub enum ListVocabulariesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListVocabulariesError {
-    pub fn from_body(body: &str) -> ListVocabulariesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListVocabulariesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListVocabulariesError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        ListVocabulariesError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        ListVocabulariesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListVocabulariesError::Validation(error_message.to_string())
-                    }
-                    _ => ListVocabulariesError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListVocabulariesError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return ListVocabulariesError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return ListVocabulariesError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListVocabulariesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListVocabulariesError::Unknown(String::from(body)),
         }
+        return ListVocabulariesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListVocabulariesError {
     fn from(err: serde_json::error::Error) -> ListVocabulariesError {
-        ListVocabulariesError::Unknown(err.description().to_string())
+        ListVocabulariesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListVocabulariesError {
@@ -975,7 +980,8 @@ impl Error for ListVocabulariesError {
             ListVocabulariesError::Validation(ref cause) => cause,
             ListVocabulariesError::Credentials(ref err) => err.description(),
             ListVocabulariesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListVocabulariesError::Unknown(ref cause) => cause,
+            ListVocabulariesError::ParseError(ref cause) => cause,
+            ListVocabulariesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -996,50 +1002,50 @@ pub enum StartTranscriptionJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartTranscriptionJobError {
-    pub fn from_body(body: &str) -> StartTranscriptionJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartTranscriptionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        StartTranscriptionJobError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        StartTranscriptionJobError::Conflict(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        StartTranscriptionJobError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        StartTranscriptionJobError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartTranscriptionJobError::Validation(error_message.to_string())
-                    }
-                    _ => StartTranscriptionJobError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return StartTranscriptionJobError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return StartTranscriptionJobError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return StartTranscriptionJobError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return StartTranscriptionJobError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartTranscriptionJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartTranscriptionJobError::Unknown(String::from(body)),
         }
+        return StartTranscriptionJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartTranscriptionJobError {
     fn from(err: serde_json::error::Error) -> StartTranscriptionJobError {
-        StartTranscriptionJobError::Unknown(err.description().to_string())
+        StartTranscriptionJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartTranscriptionJobError {
@@ -1074,7 +1080,8 @@ impl Error for StartTranscriptionJobError {
             StartTranscriptionJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartTranscriptionJobError::Unknown(ref cause) => cause,
+            StartTranscriptionJobError::ParseError(ref cause) => cause,
+            StartTranscriptionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1097,53 +1104,53 @@ pub enum UpdateVocabularyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateVocabularyError {
-    pub fn from_body(body: &str) -> UpdateVocabularyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateVocabularyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateVocabularyError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        UpdateVocabularyError::Conflict(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        UpdateVocabularyError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateVocabularyError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateVocabularyError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateVocabularyError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateVocabularyError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateVocabularyError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return UpdateVocabularyError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return UpdateVocabularyError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateVocabularyError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateVocabularyError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateVocabularyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateVocabularyError::Unknown(String::from(body)),
         }
+        return UpdateVocabularyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateVocabularyError {
     fn from(err: serde_json::error::Error) -> UpdateVocabularyError {
-        UpdateVocabularyError::Unknown(err.description().to_string())
+        UpdateVocabularyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateVocabularyError {
@@ -1177,7 +1184,8 @@ impl Error for UpdateVocabularyError {
             UpdateVocabularyError::Validation(ref cause) => cause,
             UpdateVocabularyError::Credentials(ref err) => err.description(),
             UpdateVocabularyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateVocabularyError::Unknown(ref cause) => cause,
+            UpdateVocabularyError::ParseError(ref cause) => cause,
+            UpdateVocabularyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1290,14 +1298,16 @@ impl Transcribe for TranscribeClient {
 
                     serde_json::from_str::<CreateVocabularyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateVocabularyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateVocabularyError::from_response(response))),
+                )
             }
         })
     }
@@ -1318,11 +1328,12 @@ impl Transcribe for TranscribeClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVocabularyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteVocabularyError::from_response(response))),
+                )
             }
         })
     }
@@ -1350,14 +1361,15 @@ impl Transcribe for TranscribeClient {
 
                     serde_json::from_str::<GetTranscriptionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTranscriptionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetTranscriptionJobError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1385,14 +1397,16 @@ impl Transcribe for TranscribeClient {
 
                     serde_json::from_str::<GetVocabularyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetVocabularyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetVocabularyError::from_response(response))),
+                )
             }
         })
     }
@@ -1420,14 +1434,15 @@ impl Transcribe for TranscribeClient {
 
                     serde_json::from_str::<ListTranscriptionJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTranscriptionJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTranscriptionJobsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1455,14 +1470,16 @@ impl Transcribe for TranscribeClient {
 
                     serde_json::from_str::<ListVocabulariesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVocabulariesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListVocabulariesError::from_response(response))),
+                )
             }
         })
     }
@@ -1490,14 +1507,15 @@ impl Transcribe for TranscribeClient {
 
                     serde_json::from_str::<StartTranscriptionJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartTranscriptionJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartTranscriptionJobError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1525,14 +1543,16 @@ impl Transcribe for TranscribeClient {
 
                     serde_json::from_str::<UpdateVocabularyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateVocabularyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateVocabularyError::from_response(response))),
+                )
             }
         })
     }

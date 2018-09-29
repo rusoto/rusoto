@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Container for the parameters to the AllocateConnectionOnInterconnect operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -934,7 +934,7 @@ pub struct Loa {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub loa_content: Option<Vec<u8>>,
     #[serde(rename = "loaContentType")]
@@ -1287,48 +1287,50 @@ pub enum AllocateConnectionOnInterconnectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AllocateConnectionOnInterconnectError {
-    pub fn from_body(body: &str) -> AllocateConnectionOnInterconnectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AllocateConnectionOnInterconnectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        AllocateConnectionOnInterconnectError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        AllocateConnectionOnInterconnectError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AllocateConnectionOnInterconnectError::Validation(error_message.to_string())
-                    }
-                    _ => AllocateConnectionOnInterconnectError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return AllocateConnectionOnInterconnectError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return AllocateConnectionOnInterconnectError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AllocateConnectionOnInterconnectError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => AllocateConnectionOnInterconnectError::Unknown(String::from(body)),
         }
+        return AllocateConnectionOnInterconnectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AllocateConnectionOnInterconnectError {
     fn from(err: serde_json::error::Error) -> AllocateConnectionOnInterconnectError {
-        AllocateConnectionOnInterconnectError::Unknown(err.description().to_string())
+        AllocateConnectionOnInterconnectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AllocateConnectionOnInterconnectError {
@@ -1361,7 +1363,8 @@ impl Error for AllocateConnectionOnInterconnectError {
             AllocateConnectionOnInterconnectError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AllocateConnectionOnInterconnectError::Unknown(ref cause) => cause,
+            AllocateConnectionOnInterconnectError::ParseError(ref cause) => cause,
+            AllocateConnectionOnInterconnectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1378,48 +1381,48 @@ pub enum AllocateHostedConnectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AllocateHostedConnectionError {
-    pub fn from_body(body: &str) -> AllocateHostedConnectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AllocateHostedConnectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        AllocateHostedConnectionError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        AllocateHostedConnectionError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AllocateHostedConnectionError::Validation(error_message.to_string())
-                    }
-                    _ => AllocateHostedConnectionError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return AllocateHostedConnectionError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return AllocateHostedConnectionError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AllocateHostedConnectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AllocateHostedConnectionError::Unknown(String::from(body)),
         }
+        return AllocateHostedConnectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AllocateHostedConnectionError {
     fn from(err: serde_json::error::Error) -> AllocateHostedConnectionError {
-        AllocateHostedConnectionError::Unknown(err.description().to_string())
+        AllocateHostedConnectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AllocateHostedConnectionError {
@@ -1452,7 +1455,8 @@ impl Error for AllocateHostedConnectionError {
             AllocateHostedConnectionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AllocateHostedConnectionError::Unknown(ref cause) => cause,
+            AllocateHostedConnectionError::ParseError(ref cause) => cause,
+            AllocateHostedConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1469,48 +1473,50 @@ pub enum AllocatePrivateVirtualInterfaceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AllocatePrivateVirtualInterfaceError {
-    pub fn from_body(body: &str) -> AllocatePrivateVirtualInterfaceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AllocatePrivateVirtualInterfaceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        AllocatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        AllocatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AllocatePrivateVirtualInterfaceError::Validation(error_message.to_string())
-                    }
-                    _ => AllocatePrivateVirtualInterfaceError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return AllocatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return AllocatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AllocatePrivateVirtualInterfaceError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => AllocatePrivateVirtualInterfaceError::Unknown(String::from(body)),
         }
+        return AllocatePrivateVirtualInterfaceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AllocatePrivateVirtualInterfaceError {
     fn from(err: serde_json::error::Error) -> AllocatePrivateVirtualInterfaceError {
-        AllocatePrivateVirtualInterfaceError::Unknown(err.description().to_string())
+        AllocatePrivateVirtualInterfaceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AllocatePrivateVirtualInterfaceError {
@@ -1543,7 +1549,8 @@ impl Error for AllocatePrivateVirtualInterfaceError {
             AllocatePrivateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AllocatePrivateVirtualInterfaceError::Unknown(ref cause) => cause,
+            AllocatePrivateVirtualInterfaceError::ParseError(ref cause) => cause,
+            AllocatePrivateVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1560,48 +1567,50 @@ pub enum AllocatePublicVirtualInterfaceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AllocatePublicVirtualInterfaceError {
-    pub fn from_body(body: &str) -> AllocatePublicVirtualInterfaceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AllocatePublicVirtualInterfaceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        AllocatePublicVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        AllocatePublicVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AllocatePublicVirtualInterfaceError::Validation(error_message.to_string())
-                    }
-                    _ => AllocatePublicVirtualInterfaceError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return AllocatePublicVirtualInterfaceError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return AllocatePublicVirtualInterfaceError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AllocatePublicVirtualInterfaceError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => AllocatePublicVirtualInterfaceError::Unknown(String::from(body)),
         }
+        return AllocatePublicVirtualInterfaceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AllocatePublicVirtualInterfaceError {
     fn from(err: serde_json::error::Error) -> AllocatePublicVirtualInterfaceError {
-        AllocatePublicVirtualInterfaceError::Unknown(err.description().to_string())
+        AllocatePublicVirtualInterfaceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AllocatePublicVirtualInterfaceError {
@@ -1634,7 +1643,8 @@ impl Error for AllocatePublicVirtualInterfaceError {
             AllocatePublicVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AllocatePublicVirtualInterfaceError::Unknown(ref cause) => cause,
+            AllocatePublicVirtualInterfaceError::ParseError(ref cause) => cause,
+            AllocatePublicVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1651,48 +1661,48 @@ pub enum AssociateConnectionWithLagError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateConnectionWithLagError {
-    pub fn from_body(body: &str) -> AssociateConnectionWithLagError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateConnectionWithLagError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        AssociateConnectionWithLagError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        AssociateConnectionWithLagError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AssociateConnectionWithLagError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateConnectionWithLagError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return AssociateConnectionWithLagError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return AssociateConnectionWithLagError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AssociateConnectionWithLagError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AssociateConnectionWithLagError::Unknown(String::from(body)),
         }
+        return AssociateConnectionWithLagError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateConnectionWithLagError {
     fn from(err: serde_json::error::Error) -> AssociateConnectionWithLagError {
-        AssociateConnectionWithLagError::Unknown(err.description().to_string())
+        AssociateConnectionWithLagError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateConnectionWithLagError {
@@ -1725,7 +1735,8 @@ impl Error for AssociateConnectionWithLagError {
             AssociateConnectionWithLagError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateConnectionWithLagError::Unknown(ref cause) => cause,
+            AssociateConnectionWithLagError::ParseError(ref cause) => cause,
+            AssociateConnectionWithLagError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1742,48 +1753,48 @@ pub enum AssociateHostedConnectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateHostedConnectionError {
-    pub fn from_body(body: &str) -> AssociateHostedConnectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateHostedConnectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        AssociateHostedConnectionError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        AssociateHostedConnectionError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AssociateHostedConnectionError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateHostedConnectionError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return AssociateHostedConnectionError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return AssociateHostedConnectionError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AssociateHostedConnectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AssociateHostedConnectionError::Unknown(String::from(body)),
         }
+        return AssociateHostedConnectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateHostedConnectionError {
     fn from(err: serde_json::error::Error) -> AssociateHostedConnectionError {
-        AssociateHostedConnectionError::Unknown(err.description().to_string())
+        AssociateHostedConnectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateHostedConnectionError {
@@ -1816,7 +1827,8 @@ impl Error for AssociateHostedConnectionError {
             AssociateHostedConnectionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateHostedConnectionError::Unknown(ref cause) => cause,
+            AssociateHostedConnectionError::ParseError(ref cause) => cause,
+            AssociateHostedConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1833,48 +1845,48 @@ pub enum AssociateVirtualInterfaceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateVirtualInterfaceError {
-    pub fn from_body(body: &str) -> AssociateVirtualInterfaceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateVirtualInterfaceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        AssociateVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        AssociateVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AssociateVirtualInterfaceError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateVirtualInterfaceError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return AssociateVirtualInterfaceError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return AssociateVirtualInterfaceError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AssociateVirtualInterfaceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AssociateVirtualInterfaceError::Unknown(String::from(body)),
         }
+        return AssociateVirtualInterfaceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateVirtualInterfaceError {
     fn from(err: serde_json::error::Error) -> AssociateVirtualInterfaceError {
-        AssociateVirtualInterfaceError::Unknown(err.description().to_string())
+        AssociateVirtualInterfaceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateVirtualInterfaceError {
@@ -1907,7 +1919,8 @@ impl Error for AssociateVirtualInterfaceError {
             AssociateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateVirtualInterfaceError::Unknown(ref cause) => cause,
+            AssociateVirtualInterfaceError::ParseError(ref cause) => cause,
+            AssociateVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1924,44 +1937,44 @@ pub enum ConfirmConnectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ConfirmConnectionError {
-    pub fn from_body(body: &str) -> ConfirmConnectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ConfirmConnectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        ConfirmConnectionError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        ConfirmConnectionError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ConfirmConnectionError::Validation(error_message.to_string())
-                    }
-                    _ => ConfirmConnectionError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return ConfirmConnectionError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return ConfirmConnectionError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ConfirmConnectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ConfirmConnectionError::Unknown(String::from(body)),
         }
+        return ConfirmConnectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ConfirmConnectionError {
     fn from(err: serde_json::error::Error) -> ConfirmConnectionError {
-        ConfirmConnectionError::Unknown(err.description().to_string())
+        ConfirmConnectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ConfirmConnectionError {
@@ -1994,7 +2007,8 @@ impl Error for ConfirmConnectionError {
             ConfirmConnectionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ConfirmConnectionError::Unknown(ref cause) => cause,
+            ConfirmConnectionError::ParseError(ref cause) => cause,
+            ConfirmConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2011,48 +2025,50 @@ pub enum ConfirmPrivateVirtualInterfaceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ConfirmPrivateVirtualInterfaceError {
-    pub fn from_body(body: &str) -> ConfirmPrivateVirtualInterfaceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ConfirmPrivateVirtualInterfaceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        ConfirmPrivateVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        ConfirmPrivateVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ConfirmPrivateVirtualInterfaceError::Validation(error_message.to_string())
-                    }
-                    _ => ConfirmPrivateVirtualInterfaceError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return ConfirmPrivateVirtualInterfaceError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return ConfirmPrivateVirtualInterfaceError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ConfirmPrivateVirtualInterfaceError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => ConfirmPrivateVirtualInterfaceError::Unknown(String::from(body)),
         }
+        return ConfirmPrivateVirtualInterfaceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ConfirmPrivateVirtualInterfaceError {
     fn from(err: serde_json::error::Error) -> ConfirmPrivateVirtualInterfaceError {
-        ConfirmPrivateVirtualInterfaceError::Unknown(err.description().to_string())
+        ConfirmPrivateVirtualInterfaceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ConfirmPrivateVirtualInterfaceError {
@@ -2085,7 +2101,8 @@ impl Error for ConfirmPrivateVirtualInterfaceError {
             ConfirmPrivateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ConfirmPrivateVirtualInterfaceError::Unknown(ref cause) => cause,
+            ConfirmPrivateVirtualInterfaceError::ParseError(ref cause) => cause,
+            ConfirmPrivateVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2102,48 +2119,48 @@ pub enum ConfirmPublicVirtualInterfaceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ConfirmPublicVirtualInterfaceError {
-    pub fn from_body(body: &str) -> ConfirmPublicVirtualInterfaceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ConfirmPublicVirtualInterfaceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        ConfirmPublicVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        ConfirmPublicVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ConfirmPublicVirtualInterfaceError::Validation(error_message.to_string())
-                    }
-                    _ => ConfirmPublicVirtualInterfaceError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return ConfirmPublicVirtualInterfaceError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return ConfirmPublicVirtualInterfaceError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ConfirmPublicVirtualInterfaceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ConfirmPublicVirtualInterfaceError::Unknown(String::from(body)),
         }
+        return ConfirmPublicVirtualInterfaceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ConfirmPublicVirtualInterfaceError {
     fn from(err: serde_json::error::Error) -> ConfirmPublicVirtualInterfaceError {
-        ConfirmPublicVirtualInterfaceError::Unknown(err.description().to_string())
+        ConfirmPublicVirtualInterfaceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ConfirmPublicVirtualInterfaceError {
@@ -2176,7 +2193,8 @@ impl Error for ConfirmPublicVirtualInterfaceError {
             ConfirmPublicVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ConfirmPublicVirtualInterfaceError::Unknown(ref cause) => cause,
+            ConfirmPublicVirtualInterfaceError::ParseError(ref cause) => cause,
+            ConfirmPublicVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2193,44 +2211,44 @@ pub enum CreateBGPPeerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBGPPeerError {
-    pub fn from_body(body: &str) -> CreateBGPPeerError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateBGPPeerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        CreateBGPPeerError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        CreateBGPPeerError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateBGPPeerError::Validation(error_message.to_string())
-                    }
-                    _ => CreateBGPPeerError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return CreateBGPPeerError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return CreateBGPPeerError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateBGPPeerError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateBGPPeerError::Unknown(String::from(body)),
         }
+        return CreateBGPPeerError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateBGPPeerError {
     fn from(err: serde_json::error::Error) -> CreateBGPPeerError {
-        CreateBGPPeerError::Unknown(err.description().to_string())
+        CreateBGPPeerError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateBGPPeerError {
@@ -2261,7 +2279,8 @@ impl Error for CreateBGPPeerError {
             CreateBGPPeerError::Validation(ref cause) => cause,
             CreateBGPPeerError::Credentials(ref err) => err.description(),
             CreateBGPPeerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBGPPeerError::Unknown(ref cause) => cause,
+            CreateBGPPeerError::ParseError(ref cause) => cause,
+            CreateBGPPeerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2278,44 +2297,44 @@ pub enum CreateConnectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConnectionError {
-    pub fn from_body(body: &str) -> CreateConnectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateConnectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        CreateConnectionError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        CreateConnectionError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateConnectionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateConnectionError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return CreateConnectionError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return CreateConnectionError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateConnectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateConnectionError::Unknown(String::from(body)),
         }
+        return CreateConnectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateConnectionError {
     fn from(err: serde_json::error::Error) -> CreateConnectionError {
-        CreateConnectionError::Unknown(err.description().to_string())
+        CreateConnectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateConnectionError {
@@ -2346,7 +2365,8 @@ impl Error for CreateConnectionError {
             CreateConnectionError::Validation(ref cause) => cause,
             CreateConnectionError::Credentials(ref err) => err.description(),
             CreateConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateConnectionError::Unknown(ref cause) => cause,
+            CreateConnectionError::ParseError(ref cause) => cause,
+            CreateConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2363,48 +2383,48 @@ pub enum CreateDirectConnectGatewayError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDirectConnectGatewayError {
-    pub fn from_body(body: &str) -> CreateDirectConnectGatewayError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDirectConnectGatewayError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        CreateDirectConnectGatewayError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        CreateDirectConnectGatewayError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateDirectConnectGatewayError::Validation(error_message.to_string())
-                    }
-                    _ => CreateDirectConnectGatewayError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return CreateDirectConnectGatewayError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return CreateDirectConnectGatewayError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateDirectConnectGatewayError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateDirectConnectGatewayError::Unknown(String::from(body)),
         }
+        return CreateDirectConnectGatewayError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateDirectConnectGatewayError {
     fn from(err: serde_json::error::Error) -> CreateDirectConnectGatewayError {
-        CreateDirectConnectGatewayError::Unknown(err.description().to_string())
+        CreateDirectConnectGatewayError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateDirectConnectGatewayError {
@@ -2437,7 +2457,8 @@ impl Error for CreateDirectConnectGatewayError {
             CreateDirectConnectGatewayError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateDirectConnectGatewayError::Unknown(ref cause) => cause,
+            CreateDirectConnectGatewayError::ParseError(ref cause) => cause,
+            CreateDirectConnectGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2454,50 +2475,50 @@ pub enum CreateDirectConnectGatewayAssociationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDirectConnectGatewayAssociationError {
-    pub fn from_body(body: &str) -> CreateDirectConnectGatewayAssociationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDirectConnectGatewayAssociationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        CreateDirectConnectGatewayAssociationError::DirectConnectClient(
-                            String::from(error_message),
-                        )
-                    }
-                    "DirectConnectServerException" => {
-                        CreateDirectConnectGatewayAssociationError::DirectConnectServer(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        CreateDirectConnectGatewayAssociationError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
-                    _ => CreateDirectConnectGatewayAssociationError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return CreateDirectConnectGatewayAssociationError::DirectConnectClient(
+                        String::from(error_message),
+                    )
                 }
+                "DirectConnectServerException" => {
+                    return CreateDirectConnectGatewayAssociationError::DirectConnectServer(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return CreateDirectConnectGatewayAssociationError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => CreateDirectConnectGatewayAssociationError::Unknown(String::from(body)),
         }
+        return CreateDirectConnectGatewayAssociationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateDirectConnectGatewayAssociationError {
     fn from(err: serde_json::error::Error) -> CreateDirectConnectGatewayAssociationError {
-        CreateDirectConnectGatewayAssociationError::Unknown(err.description().to_string())
+        CreateDirectConnectGatewayAssociationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateDirectConnectGatewayAssociationError {
@@ -2530,7 +2551,8 @@ impl Error for CreateDirectConnectGatewayAssociationError {
             CreateDirectConnectGatewayAssociationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateDirectConnectGatewayAssociationError::Unknown(ref cause) => cause,
+            CreateDirectConnectGatewayAssociationError::ParseError(ref cause) => cause,
+            CreateDirectConnectGatewayAssociationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2547,44 +2569,44 @@ pub enum CreateInterconnectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateInterconnectError {
-    pub fn from_body(body: &str) -> CreateInterconnectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateInterconnectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        CreateInterconnectError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        CreateInterconnectError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateInterconnectError::Validation(error_message.to_string())
-                    }
-                    _ => CreateInterconnectError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return CreateInterconnectError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return CreateInterconnectError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateInterconnectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateInterconnectError::Unknown(String::from(body)),
         }
+        return CreateInterconnectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateInterconnectError {
     fn from(err: serde_json::error::Error) -> CreateInterconnectError {
-        CreateInterconnectError::Unknown(err.description().to_string())
+        CreateInterconnectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateInterconnectError {
@@ -2617,7 +2639,8 @@ impl Error for CreateInterconnectError {
             CreateInterconnectError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateInterconnectError::Unknown(ref cause) => cause,
+            CreateInterconnectError::ParseError(ref cause) => cause,
+            CreateInterconnectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2634,42 +2657,44 @@ pub enum CreateLagError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLagError {
-    pub fn from_body(body: &str) -> CreateLagError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateLagError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        CreateLagError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        CreateLagError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => CreateLagError::Validation(error_message.to_string()),
-                    _ => CreateLagError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return CreateLagError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return CreateLagError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateLagError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateLagError::Unknown(String::from(body)),
         }
+        return CreateLagError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateLagError {
     fn from(err: serde_json::error::Error) -> CreateLagError {
-        CreateLagError::Unknown(err.description().to_string())
+        CreateLagError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateLagError {
@@ -2700,7 +2725,8 @@ impl Error for CreateLagError {
             CreateLagError::Validation(ref cause) => cause,
             CreateLagError::Credentials(ref err) => err.description(),
             CreateLagError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateLagError::Unknown(ref cause) => cause,
+            CreateLagError::ParseError(ref cause) => cause,
+            CreateLagError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2717,48 +2743,48 @@ pub enum CreatePrivateVirtualInterfaceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePrivateVirtualInterfaceError {
-    pub fn from_body(body: &str) -> CreatePrivateVirtualInterfaceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePrivateVirtualInterfaceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        CreatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        CreatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreatePrivateVirtualInterfaceError::Validation(error_message.to_string())
-                    }
-                    _ => CreatePrivateVirtualInterfaceError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return CreatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return CreatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreatePrivateVirtualInterfaceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreatePrivateVirtualInterfaceError::Unknown(String::from(body)),
         }
+        return CreatePrivateVirtualInterfaceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreatePrivateVirtualInterfaceError {
     fn from(err: serde_json::error::Error) -> CreatePrivateVirtualInterfaceError {
-        CreatePrivateVirtualInterfaceError::Unknown(err.description().to_string())
+        CreatePrivateVirtualInterfaceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreatePrivateVirtualInterfaceError {
@@ -2791,7 +2817,8 @@ impl Error for CreatePrivateVirtualInterfaceError {
             CreatePrivateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreatePrivateVirtualInterfaceError::Unknown(ref cause) => cause,
+            CreatePrivateVirtualInterfaceError::ParseError(ref cause) => cause,
+            CreatePrivateVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2808,48 +2835,48 @@ pub enum CreatePublicVirtualInterfaceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePublicVirtualInterfaceError {
-    pub fn from_body(body: &str) -> CreatePublicVirtualInterfaceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePublicVirtualInterfaceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        CreatePublicVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        CreatePublicVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreatePublicVirtualInterfaceError::Validation(error_message.to_string())
-                    }
-                    _ => CreatePublicVirtualInterfaceError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return CreatePublicVirtualInterfaceError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return CreatePublicVirtualInterfaceError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreatePublicVirtualInterfaceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreatePublicVirtualInterfaceError::Unknown(String::from(body)),
         }
+        return CreatePublicVirtualInterfaceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreatePublicVirtualInterfaceError {
     fn from(err: serde_json::error::Error) -> CreatePublicVirtualInterfaceError {
-        CreatePublicVirtualInterfaceError::Unknown(err.description().to_string())
+        CreatePublicVirtualInterfaceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreatePublicVirtualInterfaceError {
@@ -2882,7 +2909,8 @@ impl Error for CreatePublicVirtualInterfaceError {
             CreatePublicVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreatePublicVirtualInterfaceError::Unknown(ref cause) => cause,
+            CreatePublicVirtualInterfaceError::ParseError(ref cause) => cause,
+            CreatePublicVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2899,44 +2927,44 @@ pub enum DeleteBGPPeerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBGPPeerError {
-    pub fn from_body(body: &str) -> DeleteBGPPeerError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBGPPeerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DeleteBGPPeerError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        DeleteBGPPeerError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteBGPPeerError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteBGPPeerError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DeleteBGPPeerError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return DeleteBGPPeerError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteBGPPeerError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteBGPPeerError::Unknown(String::from(body)),
         }
+        return DeleteBGPPeerError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteBGPPeerError {
     fn from(err: serde_json::error::Error) -> DeleteBGPPeerError {
-        DeleteBGPPeerError::Unknown(err.description().to_string())
+        DeleteBGPPeerError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteBGPPeerError {
@@ -2967,7 +2995,8 @@ impl Error for DeleteBGPPeerError {
             DeleteBGPPeerError::Validation(ref cause) => cause,
             DeleteBGPPeerError::Credentials(ref err) => err.description(),
             DeleteBGPPeerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBGPPeerError::Unknown(ref cause) => cause,
+            DeleteBGPPeerError::ParseError(ref cause) => cause,
+            DeleteBGPPeerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2984,44 +3013,44 @@ pub enum DeleteConnectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConnectionError {
-    pub fn from_body(body: &str) -> DeleteConnectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteConnectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DeleteConnectionError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        DeleteConnectionError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteConnectionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteConnectionError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DeleteConnectionError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return DeleteConnectionError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteConnectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteConnectionError::Unknown(String::from(body)),
         }
+        return DeleteConnectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteConnectionError {
     fn from(err: serde_json::error::Error) -> DeleteConnectionError {
-        DeleteConnectionError::Unknown(err.description().to_string())
+        DeleteConnectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteConnectionError {
@@ -3052,7 +3081,8 @@ impl Error for DeleteConnectionError {
             DeleteConnectionError::Validation(ref cause) => cause,
             DeleteConnectionError::Credentials(ref err) => err.description(),
             DeleteConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteConnectionError::Unknown(ref cause) => cause,
+            DeleteConnectionError::ParseError(ref cause) => cause,
+            DeleteConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3069,48 +3099,48 @@ pub enum DeleteDirectConnectGatewayError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDirectConnectGatewayError {
-    pub fn from_body(body: &str) -> DeleteDirectConnectGatewayError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDirectConnectGatewayError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DeleteDirectConnectGatewayError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        DeleteDirectConnectGatewayError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteDirectConnectGatewayError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteDirectConnectGatewayError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DeleteDirectConnectGatewayError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return DeleteDirectConnectGatewayError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteDirectConnectGatewayError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteDirectConnectGatewayError::Unknown(String::from(body)),
         }
+        return DeleteDirectConnectGatewayError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteDirectConnectGatewayError {
     fn from(err: serde_json::error::Error) -> DeleteDirectConnectGatewayError {
-        DeleteDirectConnectGatewayError::Unknown(err.description().to_string())
+        DeleteDirectConnectGatewayError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteDirectConnectGatewayError {
@@ -3143,7 +3173,8 @@ impl Error for DeleteDirectConnectGatewayError {
             DeleteDirectConnectGatewayError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteDirectConnectGatewayError::Unknown(ref cause) => cause,
+            DeleteDirectConnectGatewayError::ParseError(ref cause) => cause,
+            DeleteDirectConnectGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3160,50 +3191,50 @@ pub enum DeleteDirectConnectGatewayAssociationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDirectConnectGatewayAssociationError {
-    pub fn from_body(body: &str) -> DeleteDirectConnectGatewayAssociationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDirectConnectGatewayAssociationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DeleteDirectConnectGatewayAssociationError::DirectConnectClient(
-                            String::from(error_message),
-                        )
-                    }
-                    "DirectConnectServerException" => {
-                        DeleteDirectConnectGatewayAssociationError::DirectConnectServer(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        DeleteDirectConnectGatewayAssociationError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
-                    _ => DeleteDirectConnectGatewayAssociationError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DeleteDirectConnectGatewayAssociationError::DirectConnectClient(
+                        String::from(error_message),
+                    )
                 }
+                "DirectConnectServerException" => {
+                    return DeleteDirectConnectGatewayAssociationError::DirectConnectServer(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DeleteDirectConnectGatewayAssociationError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DeleteDirectConnectGatewayAssociationError::Unknown(String::from(body)),
         }
+        return DeleteDirectConnectGatewayAssociationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteDirectConnectGatewayAssociationError {
     fn from(err: serde_json::error::Error) -> DeleteDirectConnectGatewayAssociationError {
-        DeleteDirectConnectGatewayAssociationError::Unknown(err.description().to_string())
+        DeleteDirectConnectGatewayAssociationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteDirectConnectGatewayAssociationError {
@@ -3236,7 +3267,8 @@ impl Error for DeleteDirectConnectGatewayAssociationError {
             DeleteDirectConnectGatewayAssociationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteDirectConnectGatewayAssociationError::Unknown(ref cause) => cause,
+            DeleteDirectConnectGatewayAssociationError::ParseError(ref cause) => cause,
+            DeleteDirectConnectGatewayAssociationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3253,44 +3285,44 @@ pub enum DeleteInterconnectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteInterconnectError {
-    pub fn from_body(body: &str) -> DeleteInterconnectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteInterconnectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DeleteInterconnectError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        DeleteInterconnectError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteInterconnectError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteInterconnectError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DeleteInterconnectError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return DeleteInterconnectError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteInterconnectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteInterconnectError::Unknown(String::from(body)),
         }
+        return DeleteInterconnectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteInterconnectError {
     fn from(err: serde_json::error::Error) -> DeleteInterconnectError {
-        DeleteInterconnectError::Unknown(err.description().to_string())
+        DeleteInterconnectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteInterconnectError {
@@ -3323,7 +3355,8 @@ impl Error for DeleteInterconnectError {
             DeleteInterconnectError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteInterconnectError::Unknown(ref cause) => cause,
+            DeleteInterconnectError::ParseError(ref cause) => cause,
+            DeleteInterconnectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3340,42 +3373,44 @@ pub enum DeleteLagError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLagError {
-    pub fn from_body(body: &str) -> DeleteLagError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteLagError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DeleteLagError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        DeleteLagError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => DeleteLagError::Validation(error_message.to_string()),
-                    _ => DeleteLagError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DeleteLagError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return DeleteLagError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteLagError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteLagError::Unknown(String::from(body)),
         }
+        return DeleteLagError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteLagError {
     fn from(err: serde_json::error::Error) -> DeleteLagError {
-        DeleteLagError::Unknown(err.description().to_string())
+        DeleteLagError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteLagError {
@@ -3406,7 +3441,8 @@ impl Error for DeleteLagError {
             DeleteLagError::Validation(ref cause) => cause,
             DeleteLagError::Credentials(ref err) => err.description(),
             DeleteLagError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteLagError::Unknown(ref cause) => cause,
+            DeleteLagError::ParseError(ref cause) => cause,
+            DeleteLagError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3423,48 +3459,48 @@ pub enum DeleteVirtualInterfaceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVirtualInterfaceError {
-    pub fn from_body(body: &str) -> DeleteVirtualInterfaceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteVirtualInterfaceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DeleteVirtualInterfaceError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        DeleteVirtualInterfaceError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteVirtualInterfaceError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteVirtualInterfaceError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DeleteVirtualInterfaceError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return DeleteVirtualInterfaceError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteVirtualInterfaceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteVirtualInterfaceError::Unknown(String::from(body)),
         }
+        return DeleteVirtualInterfaceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteVirtualInterfaceError {
     fn from(err: serde_json::error::Error) -> DeleteVirtualInterfaceError {
-        DeleteVirtualInterfaceError::Unknown(err.description().to_string())
+        DeleteVirtualInterfaceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteVirtualInterfaceError {
@@ -3497,7 +3533,8 @@ impl Error for DeleteVirtualInterfaceError {
             DeleteVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteVirtualInterfaceError::Unknown(ref cause) => cause,
+            DeleteVirtualInterfaceError::ParseError(ref cause) => cause,
+            DeleteVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3514,44 +3551,48 @@ pub enum DescribeConnectionLoaError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConnectionLoaError {
-    pub fn from_body(body: &str) -> DescribeConnectionLoaError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConnectionLoaError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeConnectionLoaError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeConnectionLoaError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeConnectionLoaError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeConnectionLoaError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeConnectionLoaError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return DescribeConnectionLoaError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeConnectionLoaError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeConnectionLoaError::Unknown(String::from(body)),
         }
+        return DescribeConnectionLoaError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConnectionLoaError {
     fn from(err: serde_json::error::Error) -> DescribeConnectionLoaError {
-        DescribeConnectionLoaError::Unknown(err.description().to_string())
+        DescribeConnectionLoaError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConnectionLoaError {
@@ -3584,7 +3625,8 @@ impl Error for DescribeConnectionLoaError {
             DescribeConnectionLoaError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConnectionLoaError::Unknown(ref cause) => cause,
+            DescribeConnectionLoaError::ParseError(ref cause) => cause,
+            DescribeConnectionLoaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3601,44 +3643,48 @@ pub enum DescribeConnectionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConnectionsError {
-    pub fn from_body(body: &str) -> DescribeConnectionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConnectionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeConnectionsError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeConnectionsError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeConnectionsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeConnectionsError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeConnectionsError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return DescribeConnectionsError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeConnectionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeConnectionsError::Unknown(String::from(body)),
         }
+        return DescribeConnectionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConnectionsError {
     fn from(err: serde_json::error::Error) -> DescribeConnectionsError {
-        DescribeConnectionsError::Unknown(err.description().to_string())
+        DescribeConnectionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConnectionsError {
@@ -3671,7 +3717,8 @@ impl Error for DescribeConnectionsError {
             DescribeConnectionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConnectionsError::Unknown(ref cause) => cause,
+            DescribeConnectionsError::ParseError(ref cause) => cause,
+            DescribeConnectionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3688,48 +3735,50 @@ pub enum DescribeConnectionsOnInterconnectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConnectionsOnInterconnectError {
-    pub fn from_body(body: &str) -> DescribeConnectionsOnInterconnectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConnectionsOnInterconnectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeConnectionsOnInterconnectError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeConnectionsOnInterconnectError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => DescribeConnectionsOnInterconnectError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DescribeConnectionsOnInterconnectError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeConnectionsOnInterconnectError::DirectConnectClient(
+                        String::from(error_message),
+                    )
                 }
+                "DirectConnectServerException" => {
+                    return DescribeConnectionsOnInterconnectError::DirectConnectServer(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DescribeConnectionsOnInterconnectError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeConnectionsOnInterconnectError::Unknown(String::from(body)),
         }
+        return DescribeConnectionsOnInterconnectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConnectionsOnInterconnectError {
     fn from(err: serde_json::error::Error) -> DescribeConnectionsOnInterconnectError {
-        DescribeConnectionsOnInterconnectError::Unknown(err.description().to_string())
+        DescribeConnectionsOnInterconnectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConnectionsOnInterconnectError {
@@ -3762,7 +3811,8 @@ impl Error for DescribeConnectionsOnInterconnectError {
             DescribeConnectionsOnInterconnectError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConnectionsOnInterconnectError::Unknown(ref cause) => cause,
+            DescribeConnectionsOnInterconnectError::ParseError(ref cause) => cause,
+            DescribeConnectionsOnInterconnectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3779,50 +3829,52 @@ pub enum DescribeDirectConnectGatewayAssociationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDirectConnectGatewayAssociationsError {
-    pub fn from_body(body: &str) -> DescribeDirectConnectGatewayAssociationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> DescribeDirectConnectGatewayAssociationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(
-                            String::from(error_message),
-                        )
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        DescribeDirectConnectGatewayAssociationsError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
-                    _ => DescribeDirectConnectGatewayAssociationsError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(
+                        String::from(error_message),
+                    )
                 }
+                "DirectConnectServerException" => {
+                    return DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DescribeDirectConnectGatewayAssociationsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeDirectConnectGatewayAssociationsError::Unknown(String::from(body)),
         }
+        return DescribeDirectConnectGatewayAssociationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeDirectConnectGatewayAssociationsError {
     fn from(err: serde_json::error::Error) -> DescribeDirectConnectGatewayAssociationsError {
-        DescribeDirectConnectGatewayAssociationsError::Unknown(err.description().to_string())
+        DescribeDirectConnectGatewayAssociationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeDirectConnectGatewayAssociationsError {
@@ -3857,7 +3909,8 @@ impl Error for DescribeDirectConnectGatewayAssociationsError {
             DescribeDirectConnectGatewayAssociationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeDirectConnectGatewayAssociationsError::Unknown(ref cause) => cause,
+            DescribeDirectConnectGatewayAssociationsError::ParseError(ref cause) => cause,
+            DescribeDirectConnectGatewayAssociationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3874,50 +3927,52 @@ pub enum DescribeDirectConnectGatewayAttachmentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDirectConnectGatewayAttachmentsError {
-    pub fn from_body(body: &str) -> DescribeDirectConnectGatewayAttachmentsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> DescribeDirectConnectGatewayAttachmentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(
-                            String::from(error_message),
-                        )
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        DescribeDirectConnectGatewayAttachmentsError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
-                    _ => DescribeDirectConnectGatewayAttachmentsError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(
+                        String::from(error_message),
+                    )
                 }
+                "DirectConnectServerException" => {
+                    return DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DescribeDirectConnectGatewayAttachmentsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeDirectConnectGatewayAttachmentsError::Unknown(String::from(body)),
         }
+        return DescribeDirectConnectGatewayAttachmentsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeDirectConnectGatewayAttachmentsError {
     fn from(err: serde_json::error::Error) -> DescribeDirectConnectGatewayAttachmentsError {
-        DescribeDirectConnectGatewayAttachmentsError::Unknown(err.description().to_string())
+        DescribeDirectConnectGatewayAttachmentsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeDirectConnectGatewayAttachmentsError {
@@ -3950,7 +4005,8 @@ impl Error for DescribeDirectConnectGatewayAttachmentsError {
             DescribeDirectConnectGatewayAttachmentsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeDirectConnectGatewayAttachmentsError::Unknown(ref cause) => cause,
+            DescribeDirectConnectGatewayAttachmentsError::ParseError(ref cause) => cause,
+            DescribeDirectConnectGatewayAttachmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3967,48 +4023,48 @@ pub enum DescribeDirectConnectGatewaysError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDirectConnectGatewaysError {
-    pub fn from_body(body: &str) -> DescribeDirectConnectGatewaysError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeDirectConnectGatewaysError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeDirectConnectGatewaysError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeDirectConnectGatewaysError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeDirectConnectGatewaysError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeDirectConnectGatewaysError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeDirectConnectGatewaysError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return DescribeDirectConnectGatewaysError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeDirectConnectGatewaysError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeDirectConnectGatewaysError::Unknown(String::from(body)),
         }
+        return DescribeDirectConnectGatewaysError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeDirectConnectGatewaysError {
     fn from(err: serde_json::error::Error) -> DescribeDirectConnectGatewaysError {
-        DescribeDirectConnectGatewaysError::Unknown(err.description().to_string())
+        DescribeDirectConnectGatewaysError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeDirectConnectGatewaysError {
@@ -4041,7 +4097,8 @@ impl Error for DescribeDirectConnectGatewaysError {
             DescribeDirectConnectGatewaysError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeDirectConnectGatewaysError::Unknown(ref cause) => cause,
+            DescribeDirectConnectGatewaysError::ParseError(ref cause) => cause,
+            DescribeDirectConnectGatewaysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4058,48 +4115,48 @@ pub enum DescribeHostedConnectionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeHostedConnectionsError {
-    pub fn from_body(body: &str) -> DescribeHostedConnectionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeHostedConnectionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeHostedConnectionsError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeHostedConnectionsError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeHostedConnectionsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeHostedConnectionsError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeHostedConnectionsError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return DescribeHostedConnectionsError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeHostedConnectionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeHostedConnectionsError::Unknown(String::from(body)),
         }
+        return DescribeHostedConnectionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeHostedConnectionsError {
     fn from(err: serde_json::error::Error) -> DescribeHostedConnectionsError {
-        DescribeHostedConnectionsError::Unknown(err.description().to_string())
+        DescribeHostedConnectionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeHostedConnectionsError {
@@ -4132,7 +4189,8 @@ impl Error for DescribeHostedConnectionsError {
             DescribeHostedConnectionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeHostedConnectionsError::Unknown(ref cause) => cause,
+            DescribeHostedConnectionsError::ParseError(ref cause) => cause,
+            DescribeHostedConnectionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4149,48 +4207,48 @@ pub enum DescribeInterconnectLoaError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeInterconnectLoaError {
-    pub fn from_body(body: &str) -> DescribeInterconnectLoaError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeInterconnectLoaError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeInterconnectLoaError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeInterconnectLoaError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeInterconnectLoaError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeInterconnectLoaError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeInterconnectLoaError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return DescribeInterconnectLoaError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeInterconnectLoaError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeInterconnectLoaError::Unknown(String::from(body)),
         }
+        return DescribeInterconnectLoaError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeInterconnectLoaError {
     fn from(err: serde_json::error::Error) -> DescribeInterconnectLoaError {
-        DescribeInterconnectLoaError::Unknown(err.description().to_string())
+        DescribeInterconnectLoaError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeInterconnectLoaError {
@@ -4223,7 +4281,8 @@ impl Error for DescribeInterconnectLoaError {
             DescribeInterconnectLoaError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeInterconnectLoaError::Unknown(ref cause) => cause,
+            DescribeInterconnectLoaError::ParseError(ref cause) => cause,
+            DescribeInterconnectLoaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4240,44 +4299,48 @@ pub enum DescribeInterconnectsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeInterconnectsError {
-    pub fn from_body(body: &str) -> DescribeInterconnectsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeInterconnectsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeInterconnectsError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeInterconnectsError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeInterconnectsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeInterconnectsError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeInterconnectsError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return DescribeInterconnectsError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeInterconnectsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeInterconnectsError::Unknown(String::from(body)),
         }
+        return DescribeInterconnectsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeInterconnectsError {
     fn from(err: serde_json::error::Error) -> DescribeInterconnectsError {
-        DescribeInterconnectsError::Unknown(err.description().to_string())
+        DescribeInterconnectsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeInterconnectsError {
@@ -4310,7 +4373,8 @@ impl Error for DescribeInterconnectsError {
             DescribeInterconnectsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeInterconnectsError::Unknown(ref cause) => cause,
+            DescribeInterconnectsError::ParseError(ref cause) => cause,
+            DescribeInterconnectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4327,44 +4391,44 @@ pub enum DescribeLagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLagsError {
-    pub fn from_body(body: &str) -> DescribeLagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeLagsError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeLagsError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeLagsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeLagsError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeLagsError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return DescribeLagsError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeLagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeLagsError::Unknown(String::from(body)),
         }
+        return DescribeLagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeLagsError {
     fn from(err: serde_json::error::Error) -> DescribeLagsError {
-        DescribeLagsError::Unknown(err.description().to_string())
+        DescribeLagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeLagsError {
@@ -4395,7 +4459,8 @@ impl Error for DescribeLagsError {
             DescribeLagsError::Validation(ref cause) => cause,
             DescribeLagsError::Credentials(ref err) => err.description(),
             DescribeLagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeLagsError::Unknown(ref cause) => cause,
+            DescribeLagsError::ParseError(ref cause) => cause,
+            DescribeLagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4412,44 +4477,44 @@ pub enum DescribeLoaError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoaError {
-    pub fn from_body(body: &str) -> DescribeLoaError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoaError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeLoaError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeLoaError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeLoaError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeLoaError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeLoaError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return DescribeLoaError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeLoaError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeLoaError::Unknown(String::from(body)),
         }
+        return DescribeLoaError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeLoaError {
     fn from(err: serde_json::error::Error) -> DescribeLoaError {
-        DescribeLoaError::Unknown(err.description().to_string())
+        DescribeLoaError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeLoaError {
@@ -4480,7 +4545,8 @@ impl Error for DescribeLoaError {
             DescribeLoaError::Validation(ref cause) => cause,
             DescribeLoaError::Credentials(ref err) => err.description(),
             DescribeLoaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeLoaError::Unknown(ref cause) => cause,
+            DescribeLoaError::ParseError(ref cause) => cause,
+            DescribeLoaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4497,44 +4563,44 @@ pub enum DescribeLocationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLocationsError {
-    pub fn from_body(body: &str) -> DescribeLocationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLocationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeLocationsError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeLocationsError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeLocationsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeLocationsError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeLocationsError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return DescribeLocationsError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeLocationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeLocationsError::Unknown(String::from(body)),
         }
+        return DescribeLocationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeLocationsError {
     fn from(err: serde_json::error::Error) -> DescribeLocationsError {
-        DescribeLocationsError::Unknown(err.description().to_string())
+        DescribeLocationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeLocationsError {
@@ -4567,7 +4633,8 @@ impl Error for DescribeLocationsError {
             DescribeLocationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeLocationsError::Unknown(ref cause) => cause,
+            DescribeLocationsError::ParseError(ref cause) => cause,
+            DescribeLocationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4584,44 +4651,44 @@ pub enum DescribeTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_body(body: &str) -> DescribeTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeTagsError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeTagsError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeTagsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeTagsError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return DescribeTagsError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTagsError::Unknown(String::from(body)),
         }
+        return DescribeTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTagsError {
     fn from(err: serde_json::error::Error) -> DescribeTagsError {
-        DescribeTagsError::Unknown(err.description().to_string())
+        DescribeTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTagsError {
@@ -4652,7 +4719,8 @@ impl Error for DescribeTagsError {
             DescribeTagsError::Validation(ref cause) => cause,
             DescribeTagsError::Credentials(ref err) => err.description(),
             DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::Unknown(ref cause) => cause,
+            DescribeTagsError::ParseError(ref cause) => cause,
+            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4669,48 +4737,48 @@ pub enum DescribeVirtualGatewaysError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeVirtualGatewaysError {
-    pub fn from_body(body: &str) -> DescribeVirtualGatewaysError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeVirtualGatewaysError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeVirtualGatewaysError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeVirtualGatewaysError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeVirtualGatewaysError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeVirtualGatewaysError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeVirtualGatewaysError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return DescribeVirtualGatewaysError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeVirtualGatewaysError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeVirtualGatewaysError::Unknown(String::from(body)),
         }
+        return DescribeVirtualGatewaysError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeVirtualGatewaysError {
     fn from(err: serde_json::error::Error) -> DescribeVirtualGatewaysError {
-        DescribeVirtualGatewaysError::Unknown(err.description().to_string())
+        DescribeVirtualGatewaysError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeVirtualGatewaysError {
@@ -4743,7 +4811,8 @@ impl Error for DescribeVirtualGatewaysError {
             DescribeVirtualGatewaysError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeVirtualGatewaysError::Unknown(ref cause) => cause,
+            DescribeVirtualGatewaysError::ParseError(ref cause) => cause,
+            DescribeVirtualGatewaysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4760,48 +4829,48 @@ pub enum DescribeVirtualInterfacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeVirtualInterfacesError {
-    pub fn from_body(body: &str) -> DescribeVirtualInterfacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeVirtualInterfacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DescribeVirtualInterfacesError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        DescribeVirtualInterfacesError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeVirtualInterfacesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeVirtualInterfacesError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DescribeVirtualInterfacesError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return DescribeVirtualInterfacesError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeVirtualInterfacesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeVirtualInterfacesError::Unknown(String::from(body)),
         }
+        return DescribeVirtualInterfacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeVirtualInterfacesError {
     fn from(err: serde_json::error::Error) -> DescribeVirtualInterfacesError {
-        DescribeVirtualInterfacesError::Unknown(err.description().to_string())
+        DescribeVirtualInterfacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeVirtualInterfacesError {
@@ -4834,7 +4903,8 @@ impl Error for DescribeVirtualInterfacesError {
             DescribeVirtualInterfacesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeVirtualInterfacesError::Unknown(ref cause) => cause,
+            DescribeVirtualInterfacesError::ParseError(ref cause) => cause,
+            DescribeVirtualInterfacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4851,48 +4921,48 @@ pub enum DisassociateConnectionFromLagError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateConnectionFromLagError {
-    pub fn from_body(body: &str) -> DisassociateConnectionFromLagError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateConnectionFromLagError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        DisassociateConnectionFromLagError::DirectConnectClient(String::from(
-                            error_message,
-                        ))
-                    }
-                    "DirectConnectServerException" => {
-                        DisassociateConnectionFromLagError::DirectConnectServer(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DisassociateConnectionFromLagError::Validation(error_message.to_string())
-                    }
-                    _ => DisassociateConnectionFromLagError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return DisassociateConnectionFromLagError::DirectConnectClient(String::from(
+                        error_message,
+                    ))
                 }
+                "DirectConnectServerException" => {
+                    return DisassociateConnectionFromLagError::DirectConnectServer(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DisassociateConnectionFromLagError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisassociateConnectionFromLagError::Unknown(String::from(body)),
         }
+        return DisassociateConnectionFromLagError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateConnectionFromLagError {
     fn from(err: serde_json::error::Error) -> DisassociateConnectionFromLagError {
-        DisassociateConnectionFromLagError::Unknown(err.description().to_string())
+        DisassociateConnectionFromLagError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateConnectionFromLagError {
@@ -4925,7 +4995,8 @@ impl Error for DisassociateConnectionFromLagError {
             DisassociateConnectionFromLagError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateConnectionFromLagError::Unknown(ref cause) => cause,
+            DisassociateConnectionFromLagError::ParseError(ref cause) => cause,
+            DisassociateConnectionFromLagError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4946,50 +5017,50 @@ pub enum TagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_body(body: &str) -> TagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        TagResourceError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        TagResourceError::DirectConnectServer(String::from(error_message))
-                    }
-                    "DuplicateTagKeysException" => {
-                        TagResourceError::DuplicateTagKeys(String::from(error_message))
-                    }
-                    "TooManyTagsException" => {
-                        TagResourceError::TooManyTags(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        TagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => TagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return TagResourceError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return TagResourceError::DirectConnectServer(String::from(error_message))
+                }
+                "DuplicateTagKeysException" => {
+                    return TagResourceError::DuplicateTagKeys(String::from(error_message))
+                }
+                "TooManyTagsException" => {
+                    return TagResourceError::TooManyTags(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return TagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TagResourceError::Unknown(String::from(body)),
         }
+        return TagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TagResourceError {
     fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::Unknown(err.description().to_string())
+        TagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TagResourceError {
@@ -5022,7 +5093,8 @@ impl Error for TagResourceError {
             TagResourceError::Validation(ref cause) => cause,
             TagResourceError::Credentials(ref err) => err.description(),
             TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::Unknown(ref cause) => cause,
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5039,44 +5111,44 @@ pub enum UntagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_body(body: &str) -> UntagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        UntagResourceError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        UntagResourceError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UntagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => UntagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return UntagResourceError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return UntagResourceError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UntagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UntagResourceError::Unknown(String::from(body)),
         }
+        return UntagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UntagResourceError {
     fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::Unknown(err.description().to_string())
+        UntagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UntagResourceError {
@@ -5107,7 +5179,8 @@ impl Error for UntagResourceError {
             UntagResourceError::Validation(ref cause) => cause,
             UntagResourceError::Credentials(ref err) => err.description(),
             UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::Unknown(ref cause) => cause,
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5124,42 +5197,44 @@ pub enum UpdateLagError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateLagError {
-    pub fn from_body(body: &str) -> UpdateLagError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateLagError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DirectConnectClientException" => {
-                        UpdateLagError::DirectConnectClient(String::from(error_message))
-                    }
-                    "DirectConnectServerException" => {
-                        UpdateLagError::DirectConnectServer(String::from(error_message))
-                    }
-                    "ValidationException" => UpdateLagError::Validation(error_message.to_string()),
-                    _ => UpdateLagError::Unknown(String::from(body)),
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return UpdateLagError::DirectConnectClient(String::from(error_message))
                 }
+                "DirectConnectServerException" => {
+                    return UpdateLagError::DirectConnectServer(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateLagError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateLagError::Unknown(String::from(body)),
         }
+        return UpdateLagError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateLagError {
     fn from(err: serde_json::error::Error) -> UpdateLagError {
-        UpdateLagError::Unknown(err.description().to_string())
+        UpdateLagError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateLagError {
@@ -5190,7 +5265,8 @@ impl Error for UpdateLagError {
             UpdateLagError::Validation(ref cause) => cause,
             UpdateLagError::Credentials(ref err) => err.description(),
             UpdateLagError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateLagError::Unknown(ref cause) => cause,
+            UpdateLagError::ParseError(ref cause) => cause,
+            UpdateLagError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5515,12 +5591,13 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AllocateConnectionOnInterconnectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(AllocateConnectionOnInterconnectError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -5550,13 +5627,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AllocateHostedConnectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AllocateHostedConnectionError::from_response(response))
                 }))
             }
         })
@@ -5588,12 +5664,13 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualInterface>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AllocatePrivateVirtualInterfaceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(AllocatePrivateVirtualInterfaceError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -5626,13 +5703,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualInterface>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AllocatePublicVirtualInterfaceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AllocatePublicVirtualInterfaceError::from_response(response))
                 }))
             }
         })
@@ -5661,13 +5737,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateConnectionWithLagError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AssociateConnectionWithLagError::from_response(response))
                 }))
             }
         })
@@ -5696,13 +5771,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateHostedConnectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AssociateHostedConnectionError::from_response(response))
                 }))
             }
         })
@@ -5731,13 +5805,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualInterface>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateVirtualInterfaceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AssociateVirtualInterfaceError::from_response(response))
                 }))
             }
         })
@@ -5766,14 +5839,16 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<ConfirmConnectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ConfirmConnectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ConfirmConnectionError::from_response(response))),
+                )
             }
         })
     }
@@ -5805,13 +5880,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<ConfirmPrivateVirtualInterfaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ConfirmPrivateVirtualInterfaceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ConfirmPrivateVirtualInterfaceError::from_response(response))
                 }))
             }
         })
@@ -5844,13 +5918,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<ConfirmPublicVirtualInterfaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ConfirmPublicVirtualInterfaceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ConfirmPublicVirtualInterfaceError::from_response(response))
                 }))
             }
         })
@@ -5879,14 +5952,16 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<CreateBGPPeerResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateBGPPeerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateBGPPeerError::from_response(response))),
+                )
             }
         })
     }
@@ -5914,14 +5989,16 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateConnectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateConnectionError::from_response(response))),
+                )
             }
         })
     }
@@ -5949,13 +6026,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<CreateDirectConnectGatewayResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDirectConnectGatewayError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateDirectConnectGatewayError::from_response(response))
                 }))
             }
         })
@@ -5990,12 +6066,13 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<CreateDirectConnectGatewayAssociationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDirectConnectGatewayAssociationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateDirectConnectGatewayAssociationError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -6025,14 +6102,16 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Interconnect>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateInterconnectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateInterconnectError::from_response(response))),
+                )
             }
         })
     }
@@ -6059,11 +6138,12 @@ impl DirectConnect for DirectConnectClient {
                         .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateLagError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateLagError::from_response(response))),
+                )
             }
         })
     }
@@ -6094,13 +6174,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualInterface>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePrivateVirtualInterfaceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreatePrivateVirtualInterfaceError::from_response(response))
                 }))
             }
         })
@@ -6132,13 +6211,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualInterface>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePublicVirtualInterfaceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreatePublicVirtualInterfaceError::from_response(response))
                 }))
             }
         })
@@ -6167,14 +6245,16 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DeleteBGPPeerResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBGPPeerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteBGPPeerError::from_response(response))),
+                )
             }
         })
     }
@@ -6202,14 +6282,16 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConnectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteConnectionError::from_response(response))),
+                )
             }
         })
     }
@@ -6237,13 +6319,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DeleteDirectConnectGatewayResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDirectConnectGatewayError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteDirectConnectGatewayError::from_response(response))
                 }))
             }
         })
@@ -6278,12 +6359,13 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DeleteDirectConnectGatewayAssociationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDirectConnectGatewayAssociationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeleteDirectConnectGatewayAssociationError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -6313,14 +6395,16 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DeleteInterconnectResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteInterconnectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteInterconnectError::from_response(response))),
+                )
             }
         })
     }
@@ -6347,11 +6431,12 @@ impl DirectConnect for DirectConnectClient {
                         .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteLagError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteLagError::from_response(response))),
+                )
             }
         })
     }
@@ -6379,14 +6464,15 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DeleteVirtualInterfaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVirtualInterfaceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteVirtualInterfaceError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6414,14 +6500,15 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DescribeConnectionLoaResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConnectionLoaError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeConnectionLoaError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6449,14 +6536,15 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connections>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConnectionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeConnectionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6487,12 +6575,13 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connections>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConnectionsOnInterconnectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeConnectionsOnInterconnectError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -6528,13 +6617,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DescribeDirectConnectGatewayAssociationsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDirectConnectGatewayAssociationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeDirectConnectGatewayAssociationsError::from_response(response))
                 }))
             }
         })
@@ -6569,12 +6657,13 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DescribeDirectConnectGatewayAttachmentsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDirectConnectGatewayAttachmentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeDirectConnectGatewayAttachmentsError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -6607,13 +6696,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DescribeDirectConnectGatewaysResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDirectConnectGatewaysError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeDirectConnectGatewaysError::from_response(response))
                 }))
             }
         })
@@ -6642,13 +6730,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connections>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeHostedConnectionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeHostedConnectionsError::from_response(response))
                 }))
             }
         })
@@ -6677,13 +6764,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DescribeInterconnectLoaResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeInterconnectLoaError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeInterconnectLoaError::from_response(response))
                 }))
             }
         })
@@ -6712,14 +6798,15 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Interconnects>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeInterconnectsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeInterconnectsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6746,11 +6833,12 @@ impl DirectConnect for DirectConnectClient {
                         .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeLagsError::from_response(response))),
+                )
             }
         })
     }
@@ -6777,11 +6865,12 @@ impl DirectConnect for DirectConnectClient {
                         .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoaError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeLoaError::from_response(response))),
+                )
             }
         })
     }
@@ -6805,14 +6894,16 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Locations>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLocationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeLocationsError::from_response(response))),
+                )
             }
         })
     }
@@ -6840,14 +6931,16 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DescribeTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -6873,13 +6966,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualGateways>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeVirtualGatewaysError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeVirtualGatewaysError::from_response(response))
                 }))
             }
         })
@@ -6908,13 +7000,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualInterfaces>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeVirtualInterfacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeVirtualInterfacesError::from_response(response))
                 }))
             }
         })
@@ -6946,13 +7037,12 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateConnectionFromLagError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DisassociateConnectionFromLagError::from_response(response))
                 }))
             }
         })
@@ -6981,14 +7071,16 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<TagResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -7016,14 +7108,16 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<UntagResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -7050,11 +7144,12 @@ impl DirectConnect for DirectConnectClient {
                         .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateLagError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateLagError::from_response(response))),
+                )
             }
         })
     }

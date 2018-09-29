@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -1207,39 +1207,47 @@ pub enum CancelJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CancelJobError {
-    pub fn from_body(body: &str) -> CancelJobError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CanceledJobIdException" => {
-                    CancelJobError::CanceledJobId(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CancelJobError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CanceledJobIdException" => {
+                        return CancelJobError::CanceledJobId(String::from(parsed_error.message))
+                    }
+                    "ExpiredJobIdException" => {
+                        return CancelJobError::ExpiredJobId(String::from(parsed_error.message))
+                    }
+                    "InvalidAccessKeyIdException" => {
+                        return CancelJobError::InvalidAccessKeyId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidJobIdException" => {
+                        return CancelJobError::InvalidJobId(String::from(parsed_error.message))
+                    }
+                    "InvalidVersionException" => {
+                        return CancelJobError::InvalidVersion(String::from(parsed_error.message))
+                    }
+                    "UnableToCancelJobIdException" => {
+                        return CancelJobError::UnableToCancelJobId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ExpiredJobIdException" => {
-                    CancelJobError::ExpiredJobId(String::from(parsed_error.message))
-                }
-                "InvalidAccessKeyIdException" => {
-                    CancelJobError::InvalidAccessKeyId(String::from(parsed_error.message))
-                }
-                "InvalidJobIdException" => {
-                    CancelJobError::InvalidJobId(String::from(parsed_error.message))
-                }
-                "InvalidVersionException" => {
-                    CancelJobError::InvalidVersion(String::from(parsed_error.message))
-                }
-                "UnableToCancelJobIdException" => {
-                    CancelJobError::UnableToCancelJobId(String::from(parsed_error.message))
-                }
-                _ => CancelJobError::Unknown(String::from(body)),
-            },
-            Err(_) => CancelJobError::Unknown(body.to_string()),
+            }
         }
+        CancelJobError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1254,7 +1262,7 @@ impl CancelJobError {
 impl From<XmlParseError> for CancelJobError {
     fn from(err: XmlParseError) -> CancelJobError {
         let XmlParseError(message) = err;
-        CancelJobError::Unknown(message.to_string())
+        CancelJobError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CancelJobError {
@@ -1289,7 +1297,8 @@ impl Error for CancelJobError {
             CancelJobError::Validation(ref cause) => cause,
             CancelJobError::Credentials(ref err) => err.description(),
             CancelJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelJobError::Unknown(ref cause) => cause,
+            CancelJobError::ParseError(ref cause) => cause,
+            CancelJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1334,69 +1343,81 @@ pub enum CreateJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateJobError {
-    pub fn from_body(body: &str) -> CreateJobError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BucketPermissionException" => {
-                    CreateJobError::BucketPermission(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateJobError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BucketPermissionException" => {
+                        return CreateJobError::BucketPermission(String::from(parsed_error.message))
+                    }
+                    "CreateJobQuotaExceededException" => {
+                        return CreateJobError::CreateJobQuotaExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidAccessKeyIdException" => {
+                        return CreateJobError::InvalidAccessKeyId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidAddressException" => {
+                        return CreateJobError::InvalidAddress(String::from(parsed_error.message))
+                    }
+                    "InvalidCustomsException" => {
+                        return CreateJobError::InvalidCustoms(String::from(parsed_error.message))
+                    }
+                    "InvalidFileSystemException" => {
+                        return CreateJobError::InvalidFileSystem(String::from(parsed_error.message))
+                    }
+                    "InvalidJobIdException" => {
+                        return CreateJobError::InvalidJobId(String::from(parsed_error.message))
+                    }
+                    "InvalidManifestFieldException" => {
+                        return CreateJobError::InvalidManifestField(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterException" => {
+                        return CreateJobError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "InvalidVersionException" => {
+                        return CreateJobError::InvalidVersion(String::from(parsed_error.message))
+                    }
+                    "MalformedManifestException" => {
+                        return CreateJobError::MalformedManifest(String::from(parsed_error.message))
+                    }
+                    "MissingCustomsException" => {
+                        return CreateJobError::MissingCustoms(String::from(parsed_error.message))
+                    }
+                    "MissingManifestFieldException" => {
+                        return CreateJobError::MissingManifestField(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameterException" => {
+                        return CreateJobError::MissingParameter(String::from(parsed_error.message))
+                    }
+                    "MultipleRegionsException" => {
+                        return CreateJobError::MultipleRegions(String::from(parsed_error.message))
+                    }
+                    "NoSuchBucketException" => {
+                        return CreateJobError::NoSuchBucket(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "CreateJobQuotaExceededException" => {
-                    CreateJobError::CreateJobQuotaExceeded(String::from(parsed_error.message))
-                }
-                "InvalidAccessKeyIdException" => {
-                    CreateJobError::InvalidAccessKeyId(String::from(parsed_error.message))
-                }
-                "InvalidAddressException" => {
-                    CreateJobError::InvalidAddress(String::from(parsed_error.message))
-                }
-                "InvalidCustomsException" => {
-                    CreateJobError::InvalidCustoms(String::from(parsed_error.message))
-                }
-                "InvalidFileSystemException" => {
-                    CreateJobError::InvalidFileSystem(String::from(parsed_error.message))
-                }
-                "InvalidJobIdException" => {
-                    CreateJobError::InvalidJobId(String::from(parsed_error.message))
-                }
-                "InvalidManifestFieldException" => {
-                    CreateJobError::InvalidManifestField(String::from(parsed_error.message))
-                }
-                "InvalidParameterException" => {
-                    CreateJobError::InvalidParameter(String::from(parsed_error.message))
-                }
-                "InvalidVersionException" => {
-                    CreateJobError::InvalidVersion(String::from(parsed_error.message))
-                }
-                "MalformedManifestException" => {
-                    CreateJobError::MalformedManifest(String::from(parsed_error.message))
-                }
-                "MissingCustomsException" => {
-                    CreateJobError::MissingCustoms(String::from(parsed_error.message))
-                }
-                "MissingManifestFieldException" => {
-                    CreateJobError::MissingManifestField(String::from(parsed_error.message))
-                }
-                "MissingParameterException" => {
-                    CreateJobError::MissingParameter(String::from(parsed_error.message))
-                }
-                "MultipleRegionsException" => {
-                    CreateJobError::MultipleRegions(String::from(parsed_error.message))
-                }
-                "NoSuchBucketException" => {
-                    CreateJobError::NoSuchBucket(String::from(parsed_error.message))
-                }
-                _ => CreateJobError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateJobError::Unknown(body.to_string()),
+            }
         }
+        CreateJobError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1411,7 +1432,7 @@ impl CreateJobError {
 impl From<XmlParseError> for CreateJobError {
     fn from(err: XmlParseError) -> CreateJobError {
         let XmlParseError(message) = err;
-        CreateJobError::Unknown(message.to_string())
+        CreateJobError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateJobError {
@@ -1456,7 +1477,8 @@ impl Error for CreateJobError {
             CreateJobError::Validation(ref cause) => cause,
             CreateJobError::Credentials(ref err) => err.description(),
             CreateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateJobError::Unknown(ref cause) => cause,
+            CreateJobError::ParseError(ref cause) => cause,
+            CreateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1483,42 +1505,60 @@ pub enum GetShippingLabelError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetShippingLabelError {
-    pub fn from_body(body: &str) -> GetShippingLabelError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CanceledJobIdException" => {
-                    GetShippingLabelError::CanceledJobId(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetShippingLabelError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CanceledJobIdException" => {
+                        return GetShippingLabelError::CanceledJobId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ExpiredJobIdException" => {
+                        return GetShippingLabelError::ExpiredJobId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidAccessKeyIdException" => {
+                        return GetShippingLabelError::InvalidAccessKeyId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidAddressException" => {
+                        return GetShippingLabelError::InvalidAddress(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidJobIdException" => {
+                        return GetShippingLabelError::InvalidJobId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterException" => {
+                        return GetShippingLabelError::InvalidParameter(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidVersionException" => {
+                        return GetShippingLabelError::InvalidVersion(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ExpiredJobIdException" => {
-                    GetShippingLabelError::ExpiredJobId(String::from(parsed_error.message))
-                }
-                "InvalidAccessKeyIdException" => {
-                    GetShippingLabelError::InvalidAccessKeyId(String::from(parsed_error.message))
-                }
-                "InvalidAddressException" => {
-                    GetShippingLabelError::InvalidAddress(String::from(parsed_error.message))
-                }
-                "InvalidJobIdException" => {
-                    GetShippingLabelError::InvalidJobId(String::from(parsed_error.message))
-                }
-                "InvalidParameterException" => {
-                    GetShippingLabelError::InvalidParameter(String::from(parsed_error.message))
-                }
-                "InvalidVersionException" => {
-                    GetShippingLabelError::InvalidVersion(String::from(parsed_error.message))
-                }
-                _ => GetShippingLabelError::Unknown(String::from(body)),
-            },
-            Err(_) => GetShippingLabelError::Unknown(body.to_string()),
+            }
         }
+        GetShippingLabelError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1533,7 +1573,7 @@ impl GetShippingLabelError {
 impl From<XmlParseError> for GetShippingLabelError {
     fn from(err: XmlParseError) -> GetShippingLabelError {
         let XmlParseError(message) = err;
-        GetShippingLabelError::Unknown(message.to_string())
+        GetShippingLabelError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetShippingLabelError {
@@ -1569,7 +1609,8 @@ impl Error for GetShippingLabelError {
             GetShippingLabelError::Validation(ref cause) => cause,
             GetShippingLabelError::Credentials(ref err) => err.description(),
             GetShippingLabelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetShippingLabelError::Unknown(ref cause) => cause,
+            GetShippingLabelError::ParseError(ref cause) => cause,
+            GetShippingLabelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1592,36 +1633,42 @@ pub enum GetStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetStatusError {
-    pub fn from_body(body: &str) -> GetStatusError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CanceledJobIdException" => {
-                    GetStatusError::CanceledJobId(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetStatusError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CanceledJobIdException" => {
+                        return GetStatusError::CanceledJobId(String::from(parsed_error.message))
+                    }
+                    "ExpiredJobIdException" => {
+                        return GetStatusError::ExpiredJobId(String::from(parsed_error.message))
+                    }
+                    "InvalidAccessKeyIdException" => {
+                        return GetStatusError::InvalidAccessKeyId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidJobIdException" => {
+                        return GetStatusError::InvalidJobId(String::from(parsed_error.message))
+                    }
+                    "InvalidVersionException" => {
+                        return GetStatusError::InvalidVersion(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "ExpiredJobIdException" => {
-                    GetStatusError::ExpiredJobId(String::from(parsed_error.message))
-                }
-                "InvalidAccessKeyIdException" => {
-                    GetStatusError::InvalidAccessKeyId(String::from(parsed_error.message))
-                }
-                "InvalidJobIdException" => {
-                    GetStatusError::InvalidJobId(String::from(parsed_error.message))
-                }
-                "InvalidVersionException" => {
-                    GetStatusError::InvalidVersion(String::from(parsed_error.message))
-                }
-                _ => GetStatusError::Unknown(String::from(body)),
-            },
-            Err(_) => GetStatusError::Unknown(body.to_string()),
+            }
         }
+        GetStatusError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1636,7 +1683,7 @@ impl GetStatusError {
 impl From<XmlParseError> for GetStatusError {
     fn from(err: XmlParseError) -> GetStatusError {
         let XmlParseError(message) = err;
-        GetStatusError::Unknown(message.to_string())
+        GetStatusError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetStatusError {
@@ -1670,7 +1717,8 @@ impl Error for GetStatusError {
             GetStatusError::Validation(ref cause) => cause,
             GetStatusError::Credentials(ref err) => err.description(),
             GetStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetStatusError::Unknown(ref cause) => cause,
+            GetStatusError::ParseError(ref cause) => cause,
+            GetStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1689,30 +1737,34 @@ pub enum ListJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListJobsError {
-    pub fn from_body(body: &str) -> ListJobsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidAccessKeyIdException" => {
-                    ListJobsError::InvalidAccessKeyId(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListJobsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidAccessKeyIdException" => {
+                        return ListJobsError::InvalidAccessKeyId(String::from(parsed_error.message))
+                    }
+                    "InvalidParameterException" => {
+                        return ListJobsError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "InvalidVersionException" => {
+                        return ListJobsError::InvalidVersion(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterException" => {
-                    ListJobsError::InvalidParameter(String::from(parsed_error.message))
-                }
-                "InvalidVersionException" => {
-                    ListJobsError::InvalidVersion(String::from(parsed_error.message))
-                }
-                _ => ListJobsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListJobsError::Unknown(body.to_string()),
+            }
         }
+        ListJobsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1727,7 +1779,7 @@ impl ListJobsError {
 impl From<XmlParseError> for ListJobsError {
     fn from(err: XmlParseError) -> ListJobsError {
         let XmlParseError(message) = err;
-        ListJobsError::Unknown(message.to_string())
+        ListJobsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListJobsError {
@@ -1759,7 +1811,8 @@ impl Error for ListJobsError {
             ListJobsError::Validation(ref cause) => cause,
             ListJobsError::Credentials(ref err) => err.description(),
             ListJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListJobsError::Unknown(ref cause) => cause,
+            ListJobsError::ParseError(ref cause) => cause,
+            ListJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1808,75 +1861,87 @@ pub enum UpdateJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateJobError {
-    pub fn from_body(body: &str) -> UpdateJobError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "BucketPermissionException" => {
-                    UpdateJobError::BucketPermission(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateJobError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BucketPermissionException" => {
+                        return UpdateJobError::BucketPermission(String::from(parsed_error.message))
+                    }
+                    "CanceledJobIdException" => {
+                        return UpdateJobError::CanceledJobId(String::from(parsed_error.message))
+                    }
+                    "ExpiredJobIdException" => {
+                        return UpdateJobError::ExpiredJobId(String::from(parsed_error.message))
+                    }
+                    "InvalidAccessKeyIdException" => {
+                        return UpdateJobError::InvalidAccessKeyId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidAddressException" => {
+                        return UpdateJobError::InvalidAddress(String::from(parsed_error.message))
+                    }
+                    "InvalidCustomsException" => {
+                        return UpdateJobError::InvalidCustoms(String::from(parsed_error.message))
+                    }
+                    "InvalidFileSystemException" => {
+                        return UpdateJobError::InvalidFileSystem(String::from(parsed_error.message))
+                    }
+                    "InvalidJobIdException" => {
+                        return UpdateJobError::InvalidJobId(String::from(parsed_error.message))
+                    }
+                    "InvalidManifestFieldException" => {
+                        return UpdateJobError::InvalidManifestField(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterException" => {
+                        return UpdateJobError::InvalidParameter(String::from(parsed_error.message))
+                    }
+                    "InvalidVersionException" => {
+                        return UpdateJobError::InvalidVersion(String::from(parsed_error.message))
+                    }
+                    "MalformedManifestException" => {
+                        return UpdateJobError::MalformedManifest(String::from(parsed_error.message))
+                    }
+                    "MissingCustomsException" => {
+                        return UpdateJobError::MissingCustoms(String::from(parsed_error.message))
+                    }
+                    "MissingManifestFieldException" => {
+                        return UpdateJobError::MissingManifestField(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameterException" => {
+                        return UpdateJobError::MissingParameter(String::from(parsed_error.message))
+                    }
+                    "MultipleRegionsException" => {
+                        return UpdateJobError::MultipleRegions(String::from(parsed_error.message))
+                    }
+                    "NoSuchBucketException" => {
+                        return UpdateJobError::NoSuchBucket(String::from(parsed_error.message))
+                    }
+                    "UnableToUpdateJobIdException" => {
+                        return UpdateJobError::UnableToUpdateJobId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "CanceledJobIdException" => {
-                    UpdateJobError::CanceledJobId(String::from(parsed_error.message))
-                }
-                "ExpiredJobIdException" => {
-                    UpdateJobError::ExpiredJobId(String::from(parsed_error.message))
-                }
-                "InvalidAccessKeyIdException" => {
-                    UpdateJobError::InvalidAccessKeyId(String::from(parsed_error.message))
-                }
-                "InvalidAddressException" => {
-                    UpdateJobError::InvalidAddress(String::from(parsed_error.message))
-                }
-                "InvalidCustomsException" => {
-                    UpdateJobError::InvalidCustoms(String::from(parsed_error.message))
-                }
-                "InvalidFileSystemException" => {
-                    UpdateJobError::InvalidFileSystem(String::from(parsed_error.message))
-                }
-                "InvalidJobIdException" => {
-                    UpdateJobError::InvalidJobId(String::from(parsed_error.message))
-                }
-                "InvalidManifestFieldException" => {
-                    UpdateJobError::InvalidManifestField(String::from(parsed_error.message))
-                }
-                "InvalidParameterException" => {
-                    UpdateJobError::InvalidParameter(String::from(parsed_error.message))
-                }
-                "InvalidVersionException" => {
-                    UpdateJobError::InvalidVersion(String::from(parsed_error.message))
-                }
-                "MalformedManifestException" => {
-                    UpdateJobError::MalformedManifest(String::from(parsed_error.message))
-                }
-                "MissingCustomsException" => {
-                    UpdateJobError::MissingCustoms(String::from(parsed_error.message))
-                }
-                "MissingManifestFieldException" => {
-                    UpdateJobError::MissingManifestField(String::from(parsed_error.message))
-                }
-                "MissingParameterException" => {
-                    UpdateJobError::MissingParameter(String::from(parsed_error.message))
-                }
-                "MultipleRegionsException" => {
-                    UpdateJobError::MultipleRegions(String::from(parsed_error.message))
-                }
-                "NoSuchBucketException" => {
-                    UpdateJobError::NoSuchBucket(String::from(parsed_error.message))
-                }
-                "UnableToUpdateJobIdException" => {
-                    UpdateJobError::UnableToUpdateJobId(String::from(parsed_error.message))
-                }
-                _ => UpdateJobError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateJobError::Unknown(body.to_string()),
+            }
         }
+        UpdateJobError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1891,7 +1956,7 @@ impl UpdateJobError {
 impl From<XmlParseError> for UpdateJobError {
     fn from(err: XmlParseError) -> UpdateJobError {
         let XmlParseError(message) = err;
-        UpdateJobError::Unknown(message.to_string())
+        UpdateJobError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateJobError {
@@ -1938,7 +2003,8 @@ impl Error for UpdateJobError {
             UpdateJobError::Validation(ref cause) => cause,
             UpdateJobError::Credentials(ref err) => err.description(),
             UpdateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateJobError::Unknown(ref cause) => cause,
+            UpdateJobError::ParseError(ref cause) => cause,
+            UpdateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2021,11 +2087,12 @@ impl ImportExport for ImportExportClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CancelJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CancelJobError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -2075,11 +2142,12 @@ impl ImportExport for ImportExportClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateJobError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -2132,11 +2200,12 @@ impl ImportExport for ImportExportClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetShippingLabelError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetShippingLabelError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -2186,11 +2255,12 @@ impl ImportExport for ImportExportClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetStatusError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -2236,11 +2306,12 @@ impl ImportExport for ImportExportClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListJobsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -2290,11 +2361,12 @@ impl ImportExport for ImportExportClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateJobError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

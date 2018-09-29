@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -7242,30 +7242,40 @@ pub enum AddListenerCertificatesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddListenerCertificatesError {
-    pub fn from_body(body: &str) -> AddListenerCertificatesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CertificateNotFound" => AddListenerCertificatesError::CertificateNotFound(
-                    String::from(parsed_error.message),
-                ),
-                "ListenerNotFound" => AddListenerCertificatesError::ListenerNotFound(String::from(
-                    parsed_error.message,
-                )),
-                "TooManyCertificates" => AddListenerCertificatesError::TooManyCertificates(
-                    String::from(parsed_error.message),
-                ),
-                _ => AddListenerCertificatesError::Unknown(String::from(body)),
-            },
-            Err(_) => AddListenerCertificatesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> AddListenerCertificatesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CertificateNotFound" => {
+                        return AddListenerCertificatesError::CertificateNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ListenerNotFound" => {
+                        return AddListenerCertificatesError::ListenerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyCertificates" => {
+                        return AddListenerCertificatesError::TooManyCertificates(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        AddListenerCertificatesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7280,7 +7290,7 @@ impl AddListenerCertificatesError {
 impl From<XmlParseError> for AddListenerCertificatesError {
     fn from(err: XmlParseError) -> AddListenerCertificatesError {
         let XmlParseError(message) = err;
-        AddListenerCertificatesError::Unknown(message.to_string())
+        AddListenerCertificatesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AddListenerCertificatesError {
@@ -7314,7 +7324,8 @@ impl Error for AddListenerCertificatesError {
             AddListenerCertificatesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AddListenerCertificatesError::Unknown(ref cause) => cause,
+            AddListenerCertificatesError::ParseError(ref cause) => cause,
+            AddListenerCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7335,31 +7346,39 @@ pub enum AddTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsError {
-    pub fn from_body(body: &str) -> AddTagsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DuplicateTagKeys" => {
-                    AddTagsError::DuplicateTagKeys(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> AddTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DuplicateTagKeys" => {
+                        return AddTagsError::DuplicateTagKeys(String::from(parsed_error.message))
+                    }
+                    "LoadBalancerNotFound" => {
+                        return AddTagsError::LoadBalancerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TargetGroupNotFound" => {
+                        return AddTagsError::TargetGroupNotFound(String::from(parsed_error.message))
+                    }
+                    "TooManyTags" => {
+                        return AddTagsError::TooManyTags(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "LoadBalancerNotFound" => {
-                    AddTagsError::LoadBalancerNotFound(String::from(parsed_error.message))
-                }
-                "TargetGroupNotFound" => {
-                    AddTagsError::TargetGroupNotFound(String::from(parsed_error.message))
-                }
-                "TooManyTags" => AddTagsError::TooManyTags(String::from(parsed_error.message)),
-                _ => AddTagsError::Unknown(String::from(body)),
-            },
-            Err(_) => AddTagsError::Unknown(body.to_string()),
+            }
         }
+        AddTagsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7374,7 +7393,7 @@ impl AddTagsError {
 impl From<XmlParseError> for AddTagsError {
     fn from(err: XmlParseError) -> AddTagsError {
         let XmlParseError(message) = err;
-        AddTagsError::Unknown(message.to_string())
+        AddTagsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AddTagsError {
@@ -7407,7 +7426,8 @@ impl Error for AddTagsError {
             AddTagsError::Validation(ref cause) => cause,
             AddTagsError::Credentials(ref err) => err.description(),
             AddTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddTagsError::Unknown(ref cause) => cause,
+            AddTagsError::ParseError(ref cause) => cause,
+            AddTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7450,68 +7470,100 @@ pub enum CreateListenerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateListenerError {
-    pub fn from_body(body: &str) -> CreateListenerError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CertificateNotFound" => {
-                    CreateListenerError::CertificateNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateListenerError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CertificateNotFound" => {
+                        return CreateListenerError::CertificateNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DuplicateListener" => {
+                        return CreateListenerError::DuplicateListener(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "IncompatibleProtocols" => {
+                        return CreateListenerError::IncompatibleProtocols(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidConfigurationRequest" => {
+                        return CreateListenerError::InvalidConfigurationRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidLoadBalancerAction" => {
+                        return CreateListenerError::InvalidLoadBalancerAction(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LoadBalancerNotFound" => {
+                        return CreateListenerError::LoadBalancerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SSLPolicyNotFound" => {
+                        return CreateListenerError::SSLPolicyNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TargetGroupAssociationLimit" => {
+                        return CreateListenerError::TargetGroupAssociationLimit(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TargetGroupNotFound" => {
+                        return CreateListenerError::TargetGroupNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyActions" => {
+                        return CreateListenerError::TooManyActions(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyCertificates" => {
+                        return CreateListenerError::TooManyCertificates(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyListeners" => {
+                        return CreateListenerError::TooManyListeners(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyRegistrationsForTargetId" => {
+                        return CreateListenerError::TooManyRegistrationsForTargetId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTargets" => {
+                        return CreateListenerError::TooManyTargets(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnsupportedProtocol" => {
+                        return CreateListenerError::UnsupportedProtocol(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "DuplicateListener" => {
-                    CreateListenerError::DuplicateListener(String::from(parsed_error.message))
-                }
-                "IncompatibleProtocols" => {
-                    CreateListenerError::IncompatibleProtocols(String::from(parsed_error.message))
-                }
-                "InvalidConfigurationRequest" => CreateListenerError::InvalidConfigurationRequest(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidLoadBalancerAction" => CreateListenerError::InvalidLoadBalancerAction(
-                    String::from(parsed_error.message),
-                ),
-                "LoadBalancerNotFound" => {
-                    CreateListenerError::LoadBalancerNotFound(String::from(parsed_error.message))
-                }
-                "SSLPolicyNotFound" => {
-                    CreateListenerError::SSLPolicyNotFound(String::from(parsed_error.message))
-                }
-                "TargetGroupAssociationLimit" => CreateListenerError::TargetGroupAssociationLimit(
-                    String::from(parsed_error.message),
-                ),
-                "TargetGroupNotFound" => {
-                    CreateListenerError::TargetGroupNotFound(String::from(parsed_error.message))
-                }
-                "TooManyActions" => {
-                    CreateListenerError::TooManyActions(String::from(parsed_error.message))
-                }
-                "TooManyCertificates" => {
-                    CreateListenerError::TooManyCertificates(String::from(parsed_error.message))
-                }
-                "TooManyListeners" => {
-                    CreateListenerError::TooManyListeners(String::from(parsed_error.message))
-                }
-                "TooManyRegistrationsForTargetId" => {
-                    CreateListenerError::TooManyRegistrationsForTargetId(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyTargets" => {
-                    CreateListenerError::TooManyTargets(String::from(parsed_error.message))
-                }
-                "UnsupportedProtocol" => {
-                    CreateListenerError::UnsupportedProtocol(String::from(parsed_error.message))
-                }
-                _ => CreateListenerError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateListenerError::Unknown(body.to_string()),
+            }
         }
+        CreateListenerError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7526,7 +7578,7 @@ impl CreateListenerError {
 impl From<XmlParseError> for CreateListenerError {
     fn from(err: XmlParseError) -> CreateListenerError {
         let XmlParseError(message) = err;
-        CreateListenerError::Unknown(message.to_string())
+        CreateListenerError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateListenerError {
@@ -7570,7 +7622,8 @@ impl Error for CreateListenerError {
             CreateListenerError::Validation(ref cause) => cause,
             CreateListenerError::Credentials(ref err) => err.description(),
             CreateListenerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateListenerError::Unknown(ref cause) => cause,
+            CreateListenerError::ParseError(ref cause) => cause,
+            CreateListenerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7609,64 +7662,90 @@ pub enum CreateLoadBalancerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLoadBalancerError {
-    pub fn from_body(body: &str) -> CreateLoadBalancerError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AllocationIdNotFound" => CreateLoadBalancerError::AllocationIdNotFound(
-                    String::from(parsed_error.message),
-                ),
-                "AvailabilityZoneNotSupported" => {
-                    CreateLoadBalancerError::AvailabilityZoneNotSupported(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateLoadBalancerError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AllocationIdNotFound" => {
+                        return CreateLoadBalancerError::AllocationIdNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AvailabilityZoneNotSupported" => {
+                        return CreateLoadBalancerError::AvailabilityZoneNotSupported(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DuplicateLoadBalancerName" => {
+                        return CreateLoadBalancerError::DuplicateLoadBalancerName(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DuplicateTagKeys" => {
+                        return CreateLoadBalancerError::DuplicateTagKeys(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidConfigurationRequest" => {
+                        return CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidScheme" => {
+                        return CreateLoadBalancerError::InvalidScheme(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidSecurityGroup" => {
+                        return CreateLoadBalancerError::InvalidSecurityGroup(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidSubnet" => {
+                        return CreateLoadBalancerError::InvalidSubnet(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationNotPermitted" => {
+                        return CreateLoadBalancerError::OperationNotPermitted(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceInUse" => {
+                        return CreateLoadBalancerError::ResourceInUse(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SubnetNotFound" => {
+                        return CreateLoadBalancerError::SubnetNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyLoadBalancers" => {
+                        return CreateLoadBalancerError::TooManyLoadBalancers(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTags" => {
+                        return CreateLoadBalancerError::TooManyTags(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "DuplicateLoadBalancerName" => CreateLoadBalancerError::DuplicateLoadBalancerName(
-                    String::from(parsed_error.message),
-                ),
-                "DuplicateTagKeys" => {
-                    CreateLoadBalancerError::DuplicateTagKeys(String::from(parsed_error.message))
-                }
-                "InvalidConfigurationRequest" => {
-                    CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidScheme" => {
-                    CreateLoadBalancerError::InvalidScheme(String::from(parsed_error.message))
-                }
-                "InvalidSecurityGroup" => CreateLoadBalancerError::InvalidSecurityGroup(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidSubnet" => {
-                    CreateLoadBalancerError::InvalidSubnet(String::from(parsed_error.message))
-                }
-                "OperationNotPermitted" => CreateLoadBalancerError::OperationNotPermitted(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceInUse" => {
-                    CreateLoadBalancerError::ResourceInUse(String::from(parsed_error.message))
-                }
-                "SubnetNotFound" => {
-                    CreateLoadBalancerError::SubnetNotFound(String::from(parsed_error.message))
-                }
-                "TooManyLoadBalancers" => CreateLoadBalancerError::TooManyLoadBalancers(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyTags" => {
-                    CreateLoadBalancerError::TooManyTags(String::from(parsed_error.message))
-                }
-                _ => CreateLoadBalancerError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateLoadBalancerError::Unknown(body.to_string()),
+            }
         }
+        CreateLoadBalancerError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7681,7 +7760,7 @@ impl CreateLoadBalancerError {
 impl From<XmlParseError> for CreateLoadBalancerError {
     fn from(err: XmlParseError) -> CreateLoadBalancerError {
         let XmlParseError(message) = err;
-        CreateLoadBalancerError::Unknown(message.to_string())
+        CreateLoadBalancerError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateLoadBalancerError {
@@ -7725,7 +7804,8 @@ impl Error for CreateLoadBalancerError {
             CreateLoadBalancerError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateLoadBalancerError::Unknown(ref cause) => cause,
+            CreateLoadBalancerError::ParseError(ref cause) => cause,
+            CreateLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7764,60 +7844,80 @@ pub enum CreateRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRuleError {
-    pub fn from_body(body: &str) -> CreateRuleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "IncompatibleProtocols" => {
-                    CreateRuleError::IncompatibleProtocols(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateRuleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "IncompatibleProtocols" => {
+                        return CreateRuleError::IncompatibleProtocols(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidConfigurationRequest" => {
+                        return CreateRuleError::InvalidConfigurationRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidLoadBalancerAction" => {
+                        return CreateRuleError::InvalidLoadBalancerAction(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ListenerNotFound" => {
+                        return CreateRuleError::ListenerNotFound(String::from(parsed_error.message))
+                    }
+                    "PriorityInUse" => {
+                        return CreateRuleError::PriorityInUse(String::from(parsed_error.message))
+                    }
+                    "TargetGroupAssociationLimit" => {
+                        return CreateRuleError::TargetGroupAssociationLimit(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TargetGroupNotFound" => {
+                        return CreateRuleError::TargetGroupNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyActions" => {
+                        return CreateRuleError::TooManyActions(String::from(parsed_error.message))
+                    }
+                    "TooManyRegistrationsForTargetId" => {
+                        return CreateRuleError::TooManyRegistrationsForTargetId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyRules" => {
+                        return CreateRuleError::TooManyRules(String::from(parsed_error.message))
+                    }
+                    "TooManyTargetGroups" => {
+                        return CreateRuleError::TooManyTargetGroups(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTargets" => {
+                        return CreateRuleError::TooManyTargets(String::from(parsed_error.message))
+                    }
+                    "UnsupportedProtocol" => {
+                        return CreateRuleError::UnsupportedProtocol(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidConfigurationRequest" => {
-                    CreateRuleError::InvalidConfigurationRequest(String::from(parsed_error.message))
-                }
-                "InvalidLoadBalancerAction" => {
-                    CreateRuleError::InvalidLoadBalancerAction(String::from(parsed_error.message))
-                }
-                "ListenerNotFound" => {
-                    CreateRuleError::ListenerNotFound(String::from(parsed_error.message))
-                }
-                "PriorityInUse" => {
-                    CreateRuleError::PriorityInUse(String::from(parsed_error.message))
-                }
-                "TargetGroupAssociationLimit" => {
-                    CreateRuleError::TargetGroupAssociationLimit(String::from(parsed_error.message))
-                }
-                "TargetGroupNotFound" => {
-                    CreateRuleError::TargetGroupNotFound(String::from(parsed_error.message))
-                }
-                "TooManyActions" => {
-                    CreateRuleError::TooManyActions(String::from(parsed_error.message))
-                }
-                "TooManyRegistrationsForTargetId" => {
-                    CreateRuleError::TooManyRegistrationsForTargetId(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyRules" => CreateRuleError::TooManyRules(String::from(parsed_error.message)),
-                "TooManyTargetGroups" => {
-                    CreateRuleError::TooManyTargetGroups(String::from(parsed_error.message))
-                }
-                "TooManyTargets" => {
-                    CreateRuleError::TooManyTargets(String::from(parsed_error.message))
-                }
-                "UnsupportedProtocol" => {
-                    CreateRuleError::UnsupportedProtocol(String::from(parsed_error.message))
-                }
-                _ => CreateRuleError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateRuleError::Unknown(body.to_string()),
+            }
         }
+        CreateRuleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7832,7 +7932,7 @@ impl CreateRuleError {
 impl From<XmlParseError> for CreateRuleError {
     fn from(err: XmlParseError) -> CreateRuleError {
         let XmlParseError(message) = err;
-        CreateRuleError::Unknown(message.to_string())
+        CreateRuleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateRuleError {
@@ -7874,7 +7974,8 @@ impl Error for CreateRuleError {
             CreateRuleError::Validation(ref cause) => cause,
             CreateRuleError::Credentials(ref err) => err.description(),
             CreateRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateRuleError::Unknown(ref cause) => cause,
+            CreateRuleError::ParseError(ref cause) => cause,
+            CreateRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7893,32 +7994,40 @@ pub enum CreateTargetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTargetGroupError {
-    pub fn from_body(body: &str) -> CreateTargetGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "DuplicateTargetGroupName" => CreateTargetGroupError::DuplicateTargetGroupName(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidConfigurationRequest" => {
-                    CreateTargetGroupError::InvalidConfigurationRequest(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTargetGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DuplicateTargetGroupName" => {
+                        return CreateTargetGroupError::DuplicateTargetGroupName(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidConfigurationRequest" => {
+                        return CreateTargetGroupError::InvalidConfigurationRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTargetGroups" => {
+                        return CreateTargetGroupError::TooManyTargetGroups(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TooManyTargetGroups" => {
-                    CreateTargetGroupError::TooManyTargetGroups(String::from(parsed_error.message))
-                }
-                _ => CreateTargetGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateTargetGroupError::Unknown(body.to_string()),
+            }
         }
+        CreateTargetGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7933,7 +8042,7 @@ impl CreateTargetGroupError {
 impl From<XmlParseError> for CreateTargetGroupError {
     fn from(err: XmlParseError) -> CreateTargetGroupError {
         let XmlParseError(message) = err;
-        CreateTargetGroupError::Unknown(message.to_string())
+        CreateTargetGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateTargetGroupError {
@@ -7967,7 +8076,8 @@ impl Error for CreateTargetGroupError {
             CreateTargetGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateTargetGroupError::Unknown(ref cause) => cause,
+            CreateTargetGroupError::ParseError(ref cause) => cause,
+            CreateTargetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7982,24 +8092,30 @@ pub enum DeleteListenerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteListenerError {
-    pub fn from_body(body: &str) -> DeleteListenerError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFound" => {
-                    DeleteListenerError::ListenerNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteListenerError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ListenerNotFound" => {
+                        return DeleteListenerError::ListenerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DeleteListenerError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteListenerError::Unknown(body.to_string()),
+            }
         }
+        DeleteListenerError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8014,7 +8130,7 @@ impl DeleteListenerError {
 impl From<XmlParseError> for DeleteListenerError {
     fn from(err: XmlParseError) -> DeleteListenerError {
         let XmlParseError(message) = err;
-        DeleteListenerError::Unknown(message.to_string())
+        DeleteListenerError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteListenerError {
@@ -8044,7 +8160,8 @@ impl Error for DeleteListenerError {
             DeleteListenerError::Validation(ref cause) => cause,
             DeleteListenerError::Credentials(ref err) => err.description(),
             DeleteListenerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteListenerError::Unknown(ref cause) => cause,
+            DeleteListenerError::ParseError(ref cause) => cause,
+            DeleteListenerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8063,30 +8180,40 @@ pub enum DeleteLoadBalancerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLoadBalancerError {
-    pub fn from_body(body: &str) -> DeleteLoadBalancerError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LoadBalancerNotFound" => DeleteLoadBalancerError::LoadBalancerNotFound(
-                    String::from(parsed_error.message),
-                ),
-                "OperationNotPermitted" => DeleteLoadBalancerError::OperationNotPermitted(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceInUse" => {
-                    DeleteLoadBalancerError::ResourceInUse(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteLoadBalancerError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LoadBalancerNotFound" => {
+                        return DeleteLoadBalancerError::LoadBalancerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationNotPermitted" => {
+                        return DeleteLoadBalancerError::OperationNotPermitted(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceInUse" => {
+                        return DeleteLoadBalancerError::ResourceInUse(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DeleteLoadBalancerError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteLoadBalancerError::Unknown(body.to_string()),
+            }
         }
+        DeleteLoadBalancerError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8101,7 +8228,7 @@ impl DeleteLoadBalancerError {
 impl From<XmlParseError> for DeleteLoadBalancerError {
     fn from(err: XmlParseError) -> DeleteLoadBalancerError {
         let XmlParseError(message) = err;
-        DeleteLoadBalancerError::Unknown(message.to_string())
+        DeleteLoadBalancerError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteLoadBalancerError {
@@ -8135,7 +8262,8 @@ impl Error for DeleteLoadBalancerError {
             DeleteLoadBalancerError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteLoadBalancerError::Unknown(ref cause) => cause,
+            DeleteLoadBalancerError::ParseError(ref cause) => cause,
+            DeleteLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8152,25 +8280,33 @@ pub enum DeleteRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRuleError {
-    pub fn from_body(body: &str) -> DeleteRuleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "OperationNotPermitted" => {
-                    DeleteRuleError::OperationNotPermitted(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteRuleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "OperationNotPermitted" => {
+                        return DeleteRuleError::OperationNotPermitted(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleNotFound" => {
+                        return DeleteRuleError::RuleNotFound(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "RuleNotFound" => DeleteRuleError::RuleNotFound(String::from(parsed_error.message)),
-                _ => DeleteRuleError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteRuleError::Unknown(body.to_string()),
+            }
         }
+        DeleteRuleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8185,7 +8321,7 @@ impl DeleteRuleError {
 impl From<XmlParseError> for DeleteRuleError {
     fn from(err: XmlParseError) -> DeleteRuleError {
         let XmlParseError(message) = err;
-        DeleteRuleError::Unknown(message.to_string())
+        DeleteRuleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteRuleError {
@@ -8216,7 +8352,8 @@ impl Error for DeleteRuleError {
             DeleteRuleError::Validation(ref cause) => cause,
             DeleteRuleError::Credentials(ref err) => err.description(),
             DeleteRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteRuleError::Unknown(ref cause) => cause,
+            DeleteRuleError::ParseError(ref cause) => cause,
+            DeleteRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8231,24 +8368,30 @@ pub enum DeleteTargetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTargetGroupError {
-    pub fn from_body(body: &str) -> DeleteTargetGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceInUse" => {
-                    DeleteTargetGroupError::ResourceInUse(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTargetGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceInUse" => {
+                        return DeleteTargetGroupError::ResourceInUse(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DeleteTargetGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteTargetGroupError::Unknown(body.to_string()),
+            }
         }
+        DeleteTargetGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8263,7 +8406,7 @@ impl DeleteTargetGroupError {
 impl From<XmlParseError> for DeleteTargetGroupError {
     fn from(err: XmlParseError) -> DeleteTargetGroupError {
         let XmlParseError(message) = err;
-        DeleteTargetGroupError::Unknown(message.to_string())
+        DeleteTargetGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteTargetGroupError {
@@ -8295,7 +8438,8 @@ impl Error for DeleteTargetGroupError {
             DeleteTargetGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteTargetGroupError::Unknown(ref cause) => cause,
+            DeleteTargetGroupError::ParseError(ref cause) => cause,
+            DeleteTargetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8312,27 +8456,35 @@ pub enum DeregisterTargetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterTargetsError {
-    pub fn from_body(body: &str) -> DeregisterTargetsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidTarget" => {
-                    DeregisterTargetsError::InvalidTarget(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeregisterTargetsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidTarget" => {
+                        return DeregisterTargetsError::InvalidTarget(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TargetGroupNotFound" => {
+                        return DeregisterTargetsError::TargetGroupNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TargetGroupNotFound" => {
-                    DeregisterTargetsError::TargetGroupNotFound(String::from(parsed_error.message))
-                }
-                _ => DeregisterTargetsError::Unknown(String::from(body)),
-            },
-            Err(_) => DeregisterTargetsError::Unknown(body.to_string()),
+            }
         }
+        DeregisterTargetsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8347,7 +8499,7 @@ impl DeregisterTargetsError {
 impl From<XmlParseError> for DeregisterTargetsError {
     fn from(err: XmlParseError) -> DeregisterTargetsError {
         let XmlParseError(message) = err;
-        DeregisterTargetsError::Unknown(message.to_string())
+        DeregisterTargetsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeregisterTargetsError {
@@ -8380,7 +8532,8 @@ impl Error for DeregisterTargetsError {
             DeregisterTargetsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeregisterTargetsError::Unknown(ref cause) => cause,
+            DeregisterTargetsError::ParseError(ref cause) => cause,
+            DeregisterTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8393,21 +8546,25 @@ pub enum DescribeAccountLimitsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAccountLimitsError {
-    pub fn from_body(body: &str) -> DescribeAccountLimitsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeAccountLimitsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAccountLimitsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountLimitsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeAccountLimitsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8422,7 +8579,7 @@ impl DescribeAccountLimitsError {
 impl From<XmlParseError> for DescribeAccountLimitsError {
     fn from(err: XmlParseError) -> DescribeAccountLimitsError {
         let XmlParseError(message) = err;
-        DescribeAccountLimitsError::Unknown(message.to_string())
+        DescribeAccountLimitsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAccountLimitsError {
@@ -8453,7 +8610,8 @@ impl Error for DescribeAccountLimitsError {
             DescribeAccountLimitsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAccountLimitsError::Unknown(ref cause) => cause,
+            DescribeAccountLimitsError::ParseError(ref cause) => cause,
+            DescribeAccountLimitsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8468,24 +8626,30 @@ pub enum DescribeListenerCertificatesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeListenerCertificatesError {
-    pub fn from_body(body: &str) -> DescribeListenerCertificatesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFound" => DescribeListenerCertificatesError::ListenerNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeListenerCertificatesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeListenerCertificatesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeListenerCertificatesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ListenerNotFound" => {
+                        return DescribeListenerCertificatesError::ListenerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeListenerCertificatesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8500,7 +8664,7 @@ impl DescribeListenerCertificatesError {
 impl From<XmlParseError> for DescribeListenerCertificatesError {
     fn from(err: XmlParseError) -> DescribeListenerCertificatesError {
         let XmlParseError(message) = err;
-        DescribeListenerCertificatesError::Unknown(message.to_string())
+        DescribeListenerCertificatesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeListenerCertificatesError {
@@ -8532,7 +8696,8 @@ impl Error for DescribeListenerCertificatesError {
             DescribeListenerCertificatesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeListenerCertificatesError::Unknown(ref cause) => cause,
+            DescribeListenerCertificatesError::ParseError(ref cause) => cause,
+            DescribeListenerCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8551,30 +8716,40 @@ pub enum DescribeListenersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeListenersError {
-    pub fn from_body(body: &str) -> DescribeListenersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFound" => {
-                    DescribeListenersError::ListenerNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeListenersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ListenerNotFound" => {
+                        return DescribeListenersError::ListenerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LoadBalancerNotFound" => {
+                        return DescribeListenersError::LoadBalancerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnsupportedProtocol" => {
+                        return DescribeListenersError::UnsupportedProtocol(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LoadBalancerNotFound" => {
-                    DescribeListenersError::LoadBalancerNotFound(String::from(parsed_error.message))
-                }
-                "UnsupportedProtocol" => {
-                    DescribeListenersError::UnsupportedProtocol(String::from(parsed_error.message))
-                }
-                _ => DescribeListenersError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeListenersError::Unknown(body.to_string()),
+            }
         }
+        DescribeListenersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8589,7 +8764,7 @@ impl DescribeListenersError {
 impl From<XmlParseError> for DescribeListenersError {
     fn from(err: XmlParseError) -> DescribeListenersError {
         let XmlParseError(message) = err;
-        DescribeListenersError::Unknown(message.to_string())
+        DescribeListenersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeListenersError {
@@ -8623,7 +8798,8 @@ impl Error for DescribeListenersError {
             DescribeListenersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeListenersError::Unknown(ref cause) => cause,
+            DescribeListenersError::ParseError(ref cause) => cause,
+            DescribeListenersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8638,26 +8814,30 @@ pub enum DescribeLoadBalancerAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoadBalancerAttributesError {
-    pub fn from_body(body: &str) -> DescribeLoadBalancerAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LoadBalancerNotFound" => {
-                    DescribeLoadBalancerAttributesError::LoadBalancerNotFound(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoadBalancerAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LoadBalancerNotFound" => {
+                        return DescribeLoadBalancerAttributesError::LoadBalancerNotFound(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeLoadBalancerAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeLoadBalancerAttributesError::Unknown(body.to_string()),
+            }
         }
+        DescribeLoadBalancerAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8672,7 +8852,7 @@ impl DescribeLoadBalancerAttributesError {
 impl From<XmlParseError> for DescribeLoadBalancerAttributesError {
     fn from(err: XmlParseError) -> DescribeLoadBalancerAttributesError {
         let XmlParseError(message) = err;
-        DescribeLoadBalancerAttributesError::Unknown(message.to_string())
+        DescribeLoadBalancerAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeLoadBalancerAttributesError {
@@ -8704,7 +8884,8 @@ impl Error for DescribeLoadBalancerAttributesError {
             DescribeLoadBalancerAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeLoadBalancerAttributesError::Unknown(ref cause) => cause,
+            DescribeLoadBalancerAttributesError::ParseError(ref cause) => cause,
+            DescribeLoadBalancerAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8719,24 +8900,30 @@ pub enum DescribeLoadBalancersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoadBalancersError {
-    pub fn from_body(body: &str) -> DescribeLoadBalancersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LoadBalancerNotFound" => DescribeLoadBalancersError::LoadBalancerNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeLoadBalancersError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeLoadBalancersError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoadBalancersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LoadBalancerNotFound" => {
+                        return DescribeLoadBalancersError::LoadBalancerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeLoadBalancersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8751,7 +8938,7 @@ impl DescribeLoadBalancersError {
 impl From<XmlParseError> for DescribeLoadBalancersError {
     fn from(err: XmlParseError) -> DescribeLoadBalancersError {
         let XmlParseError(message) = err;
-        DescribeLoadBalancersError::Unknown(message.to_string())
+        DescribeLoadBalancersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeLoadBalancersError {
@@ -8783,7 +8970,8 @@ impl Error for DescribeLoadBalancersError {
             DescribeLoadBalancersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeLoadBalancersError::Unknown(ref cause) => cause,
+            DescribeLoadBalancersError::ParseError(ref cause) => cause,
+            DescribeLoadBalancersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8802,30 +8990,38 @@ pub enum DescribeRulesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeRulesError {
-    pub fn from_body(body: &str) -> DescribeRulesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFound" => {
-                    DescribeRulesError::ListenerNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeRulesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ListenerNotFound" => {
+                        return DescribeRulesError::ListenerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleNotFound" => {
+                        return DescribeRulesError::RuleNotFound(String::from(parsed_error.message))
+                    }
+                    "UnsupportedProtocol" => {
+                        return DescribeRulesError::UnsupportedProtocol(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "RuleNotFound" => {
-                    DescribeRulesError::RuleNotFound(String::from(parsed_error.message))
-                }
-                "UnsupportedProtocol" => {
-                    DescribeRulesError::UnsupportedProtocol(String::from(parsed_error.message))
-                }
-                _ => DescribeRulesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeRulesError::Unknown(body.to_string()),
+            }
         }
+        DescribeRulesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8840,7 +9036,7 @@ impl DescribeRulesError {
 impl From<XmlParseError> for DescribeRulesError {
     fn from(err: XmlParseError) -> DescribeRulesError {
         let XmlParseError(message) = err;
-        DescribeRulesError::Unknown(message.to_string())
+        DescribeRulesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeRulesError {
@@ -8872,7 +9068,8 @@ impl Error for DescribeRulesError {
             DescribeRulesError::Validation(ref cause) => cause,
             DescribeRulesError::Credentials(ref err) => err.description(),
             DescribeRulesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeRulesError::Unknown(ref cause) => cause,
+            DescribeRulesError::ParseError(ref cause) => cause,
+            DescribeRulesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8887,24 +9084,30 @@ pub enum DescribeSSLPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSSLPoliciesError {
-    pub fn from_body(body: &str) -> DescribeSSLPoliciesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "SSLPolicyNotFound" => {
-                    DescribeSSLPoliciesError::SSLPolicyNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSSLPoliciesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "SSLPolicyNotFound" => {
+                        return DescribeSSLPoliciesError::SSLPolicyNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DescribeSSLPoliciesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeSSLPoliciesError::Unknown(body.to_string()),
+            }
         }
+        DescribeSSLPoliciesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8919,7 +9122,7 @@ impl DescribeSSLPoliciesError {
 impl From<XmlParseError> for DescribeSSLPoliciesError {
     fn from(err: XmlParseError) -> DescribeSSLPoliciesError {
         let XmlParseError(message) = err;
-        DescribeSSLPoliciesError::Unknown(message.to_string())
+        DescribeSSLPoliciesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeSSLPoliciesError {
@@ -8951,7 +9154,8 @@ impl Error for DescribeSSLPoliciesError {
             DescribeSSLPoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeSSLPoliciesError::Unknown(ref cause) => cause,
+            DescribeSSLPoliciesError::ParseError(ref cause) => cause,
+            DescribeSSLPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8972,33 +9176,43 @@ pub enum DescribeTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_body(body: &str) -> DescribeTagsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFound" => {
-                    DescribeTagsError::ListenerNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ListenerNotFound" => {
+                        return DescribeTagsError::ListenerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LoadBalancerNotFound" => {
+                        return DescribeTagsError::LoadBalancerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleNotFound" => {
+                        return DescribeTagsError::RuleNotFound(String::from(parsed_error.message))
+                    }
+                    "TargetGroupNotFound" => {
+                        return DescribeTagsError::TargetGroupNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "LoadBalancerNotFound" => {
-                    DescribeTagsError::LoadBalancerNotFound(String::from(parsed_error.message))
-                }
-                "RuleNotFound" => {
-                    DescribeTagsError::RuleNotFound(String::from(parsed_error.message))
-                }
-                "TargetGroupNotFound" => {
-                    DescribeTagsError::TargetGroupNotFound(String::from(parsed_error.message))
-                }
-                _ => DescribeTagsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeTagsError::Unknown(body.to_string()),
+            }
         }
+        DescribeTagsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9013,7 +9227,7 @@ impl DescribeTagsError {
 impl From<XmlParseError> for DescribeTagsError {
     fn from(err: XmlParseError) -> DescribeTagsError {
         let XmlParseError(message) = err;
-        DescribeTagsError::Unknown(message.to_string())
+        DescribeTagsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeTagsError {
@@ -9046,7 +9260,8 @@ impl Error for DescribeTagsError {
             DescribeTagsError::Validation(ref cause) => cause,
             DescribeTagsError::Credentials(ref err) => err.description(),
             DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::Unknown(ref cause) => cause,
+            DescribeTagsError::ParseError(ref cause) => cause,
+            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9061,24 +9276,30 @@ pub enum DescribeTargetGroupAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTargetGroupAttributesError {
-    pub fn from_body(body: &str) -> DescribeTargetGroupAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "TargetGroupNotFound" => DescribeTargetGroupAttributesError::TargetGroupNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeTargetGroupAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeTargetGroupAttributesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTargetGroupAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "TargetGroupNotFound" => {
+                        return DescribeTargetGroupAttributesError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeTargetGroupAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9093,7 +9314,7 @@ impl DescribeTargetGroupAttributesError {
 impl From<XmlParseError> for DescribeTargetGroupAttributesError {
     fn from(err: XmlParseError) -> DescribeTargetGroupAttributesError {
         let XmlParseError(message) = err;
-        DescribeTargetGroupAttributesError::Unknown(message.to_string())
+        DescribeTargetGroupAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeTargetGroupAttributesError {
@@ -9125,7 +9346,8 @@ impl Error for DescribeTargetGroupAttributesError {
             DescribeTargetGroupAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeTargetGroupAttributesError::Unknown(ref cause) => cause,
+            DescribeTargetGroupAttributesError::ParseError(ref cause) => cause,
+            DescribeTargetGroupAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9142,27 +9364,35 @@ pub enum DescribeTargetGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTargetGroupsError {
-    pub fn from_body(body: &str) -> DescribeTargetGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LoadBalancerNotFound" => DescribeTargetGroupsError::LoadBalancerNotFound(
-                    String::from(parsed_error.message),
-                ),
-                "TargetGroupNotFound" => DescribeTargetGroupsError::TargetGroupNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeTargetGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeTargetGroupsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTargetGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LoadBalancerNotFound" => {
+                        return DescribeTargetGroupsError::LoadBalancerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TargetGroupNotFound" => {
+                        return DescribeTargetGroupsError::TargetGroupNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeTargetGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9177,7 +9407,7 @@ impl DescribeTargetGroupsError {
 impl From<XmlParseError> for DescribeTargetGroupsError {
     fn from(err: XmlParseError) -> DescribeTargetGroupsError {
         let XmlParseError(message) = err;
-        DescribeTargetGroupsError::Unknown(message.to_string())
+        DescribeTargetGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeTargetGroupsError {
@@ -9210,7 +9440,8 @@ impl Error for DescribeTargetGroupsError {
             DescribeTargetGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeTargetGroupsError::Unknown(ref cause) => cause,
+            DescribeTargetGroupsError::ParseError(ref cause) => cause,
+            DescribeTargetGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9229,30 +9460,40 @@ pub enum DescribeTargetHealthError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTargetHealthError {
-    pub fn from_body(body: &str) -> DescribeTargetHealthError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "HealthUnavailable" => {
-                    DescribeTargetHealthError::HealthUnavailable(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTargetHealthError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "HealthUnavailable" => {
+                        return DescribeTargetHealthError::HealthUnavailable(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidTarget" => {
+                        return DescribeTargetHealthError::InvalidTarget(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TargetGroupNotFound" => {
+                        return DescribeTargetHealthError::TargetGroupNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidTarget" => {
-                    DescribeTargetHealthError::InvalidTarget(String::from(parsed_error.message))
-                }
-                "TargetGroupNotFound" => DescribeTargetHealthError::TargetGroupNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeTargetHealthError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeTargetHealthError::Unknown(body.to_string()),
+            }
         }
+        DescribeTargetHealthError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9267,7 +9508,7 @@ impl DescribeTargetHealthError {
 impl From<XmlParseError> for DescribeTargetHealthError {
     fn from(err: XmlParseError) -> DescribeTargetHealthError {
         let XmlParseError(message) = err;
-        DescribeTargetHealthError::Unknown(message.to_string())
+        DescribeTargetHealthError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeTargetHealthError {
@@ -9301,7 +9542,8 @@ impl Error for DescribeTargetHealthError {
             DescribeTargetHealthError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeTargetHealthError::Unknown(ref cause) => cause,
+            DescribeTargetHealthError::ParseError(ref cause) => cause,
+            DescribeTargetHealthError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9344,68 +9586,100 @@ pub enum ModifyListenerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyListenerError {
-    pub fn from_body(body: &str) -> ModifyListenerError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CertificateNotFound" => {
-                    ModifyListenerError::CertificateNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyListenerError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CertificateNotFound" => {
+                        return ModifyListenerError::CertificateNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DuplicateListener" => {
+                        return ModifyListenerError::DuplicateListener(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "IncompatibleProtocols" => {
+                        return ModifyListenerError::IncompatibleProtocols(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidConfigurationRequest" => {
+                        return ModifyListenerError::InvalidConfigurationRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidLoadBalancerAction" => {
+                        return ModifyListenerError::InvalidLoadBalancerAction(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ListenerNotFound" => {
+                        return ModifyListenerError::ListenerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SSLPolicyNotFound" => {
+                        return ModifyListenerError::SSLPolicyNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TargetGroupAssociationLimit" => {
+                        return ModifyListenerError::TargetGroupAssociationLimit(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TargetGroupNotFound" => {
+                        return ModifyListenerError::TargetGroupNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyActions" => {
+                        return ModifyListenerError::TooManyActions(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyCertificates" => {
+                        return ModifyListenerError::TooManyCertificates(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyListeners" => {
+                        return ModifyListenerError::TooManyListeners(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyRegistrationsForTargetId" => {
+                        return ModifyListenerError::TooManyRegistrationsForTargetId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTargets" => {
+                        return ModifyListenerError::TooManyTargets(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnsupportedProtocol" => {
+                        return ModifyListenerError::UnsupportedProtocol(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "DuplicateListener" => {
-                    ModifyListenerError::DuplicateListener(String::from(parsed_error.message))
-                }
-                "IncompatibleProtocols" => {
-                    ModifyListenerError::IncompatibleProtocols(String::from(parsed_error.message))
-                }
-                "InvalidConfigurationRequest" => ModifyListenerError::InvalidConfigurationRequest(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidLoadBalancerAction" => ModifyListenerError::InvalidLoadBalancerAction(
-                    String::from(parsed_error.message),
-                ),
-                "ListenerNotFound" => {
-                    ModifyListenerError::ListenerNotFound(String::from(parsed_error.message))
-                }
-                "SSLPolicyNotFound" => {
-                    ModifyListenerError::SSLPolicyNotFound(String::from(parsed_error.message))
-                }
-                "TargetGroupAssociationLimit" => ModifyListenerError::TargetGroupAssociationLimit(
-                    String::from(parsed_error.message),
-                ),
-                "TargetGroupNotFound" => {
-                    ModifyListenerError::TargetGroupNotFound(String::from(parsed_error.message))
-                }
-                "TooManyActions" => {
-                    ModifyListenerError::TooManyActions(String::from(parsed_error.message))
-                }
-                "TooManyCertificates" => {
-                    ModifyListenerError::TooManyCertificates(String::from(parsed_error.message))
-                }
-                "TooManyListeners" => {
-                    ModifyListenerError::TooManyListeners(String::from(parsed_error.message))
-                }
-                "TooManyRegistrationsForTargetId" => {
-                    ModifyListenerError::TooManyRegistrationsForTargetId(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyTargets" => {
-                    ModifyListenerError::TooManyTargets(String::from(parsed_error.message))
-                }
-                "UnsupportedProtocol" => {
-                    ModifyListenerError::UnsupportedProtocol(String::from(parsed_error.message))
-                }
-                _ => ModifyListenerError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyListenerError::Unknown(body.to_string()),
+            }
         }
+        ModifyListenerError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9420,7 +9694,7 @@ impl ModifyListenerError {
 impl From<XmlParseError> for ModifyListenerError {
     fn from(err: XmlParseError) -> ModifyListenerError {
         let XmlParseError(message) = err;
-        ModifyListenerError::Unknown(message.to_string())
+        ModifyListenerError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyListenerError {
@@ -9464,7 +9738,8 @@ impl Error for ModifyListenerError {
             ModifyListenerError::Validation(ref cause) => cause,
             ModifyListenerError::Credentials(ref err) => err.description(),
             ModifyListenerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyListenerError::Unknown(ref cause) => cause,
+            ModifyListenerError::ParseError(ref cause) => cause,
+            ModifyListenerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9481,29 +9756,35 @@ pub enum ModifyLoadBalancerAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyLoadBalancerAttributesError {
-    pub fn from_body(body: &str) -> ModifyLoadBalancerAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidConfigurationRequest" => {
-                    ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyLoadBalancerAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidConfigurationRequest" => {
+                        return ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "LoadBalancerNotFound" => {
+                        return ModifyLoadBalancerAttributesError::LoadBalancerNotFound(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "LoadBalancerNotFound" => ModifyLoadBalancerAttributesError::LoadBalancerNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => ModifyLoadBalancerAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyLoadBalancerAttributesError::Unknown(body.to_string()),
+            }
         }
+        ModifyLoadBalancerAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9518,7 +9799,7 @@ impl ModifyLoadBalancerAttributesError {
 impl From<XmlParseError> for ModifyLoadBalancerAttributesError {
     fn from(err: XmlParseError) -> ModifyLoadBalancerAttributesError {
         let XmlParseError(message) = err;
-        ModifyLoadBalancerAttributesError::Unknown(message.to_string())
+        ModifyLoadBalancerAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyLoadBalancerAttributesError {
@@ -9551,7 +9832,8 @@ impl Error for ModifyLoadBalancerAttributesError {
             ModifyLoadBalancerAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyLoadBalancerAttributesError::Unknown(ref cause) => cause,
+            ModifyLoadBalancerAttributesError::ParseError(ref cause) => cause,
+            ModifyLoadBalancerAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9584,51 +9866,69 @@ pub enum ModifyRuleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyRuleError {
-    pub fn from_body(body: &str) -> ModifyRuleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "IncompatibleProtocols" => {
-                    ModifyRuleError::IncompatibleProtocols(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyRuleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "IncompatibleProtocols" => {
+                        return ModifyRuleError::IncompatibleProtocols(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidLoadBalancerAction" => {
+                        return ModifyRuleError::InvalidLoadBalancerAction(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationNotPermitted" => {
+                        return ModifyRuleError::OperationNotPermitted(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleNotFound" => {
+                        return ModifyRuleError::RuleNotFound(String::from(parsed_error.message))
+                    }
+                    "TargetGroupAssociationLimit" => {
+                        return ModifyRuleError::TargetGroupAssociationLimit(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TargetGroupNotFound" => {
+                        return ModifyRuleError::TargetGroupNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyActions" => {
+                        return ModifyRuleError::TooManyActions(String::from(parsed_error.message))
+                    }
+                    "TooManyRegistrationsForTargetId" => {
+                        return ModifyRuleError::TooManyRegistrationsForTargetId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTargets" => {
+                        return ModifyRuleError::TooManyTargets(String::from(parsed_error.message))
+                    }
+                    "UnsupportedProtocol" => {
+                        return ModifyRuleError::UnsupportedProtocol(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidLoadBalancerAction" => {
-                    ModifyRuleError::InvalidLoadBalancerAction(String::from(parsed_error.message))
-                }
-                "OperationNotPermitted" => {
-                    ModifyRuleError::OperationNotPermitted(String::from(parsed_error.message))
-                }
-                "RuleNotFound" => ModifyRuleError::RuleNotFound(String::from(parsed_error.message)),
-                "TargetGroupAssociationLimit" => {
-                    ModifyRuleError::TargetGroupAssociationLimit(String::from(parsed_error.message))
-                }
-                "TargetGroupNotFound" => {
-                    ModifyRuleError::TargetGroupNotFound(String::from(parsed_error.message))
-                }
-                "TooManyActions" => {
-                    ModifyRuleError::TooManyActions(String::from(parsed_error.message))
-                }
-                "TooManyRegistrationsForTargetId" => {
-                    ModifyRuleError::TooManyRegistrationsForTargetId(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyTargets" => {
-                    ModifyRuleError::TooManyTargets(String::from(parsed_error.message))
-                }
-                "UnsupportedProtocol" => {
-                    ModifyRuleError::UnsupportedProtocol(String::from(parsed_error.message))
-                }
-                _ => ModifyRuleError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyRuleError::Unknown(body.to_string()),
+            }
         }
+        ModifyRuleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9643,7 +9943,7 @@ impl ModifyRuleError {
 impl From<XmlParseError> for ModifyRuleError {
     fn from(err: XmlParseError) -> ModifyRuleError {
         let XmlParseError(message) = err;
-        ModifyRuleError::Unknown(message.to_string())
+        ModifyRuleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyRuleError {
@@ -9682,7 +9982,8 @@ impl Error for ModifyRuleError {
             ModifyRuleError::Validation(ref cause) => cause,
             ModifyRuleError::Credentials(ref err) => err.description(),
             ModifyRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyRuleError::Unknown(ref cause) => cause,
+            ModifyRuleError::ParseError(ref cause) => cause,
+            ModifyRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9699,29 +10000,35 @@ pub enum ModifyTargetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyTargetGroupError {
-    pub fn from_body(body: &str) -> ModifyTargetGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidConfigurationRequest" => {
-                    ModifyTargetGroupError::InvalidConfigurationRequest(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyTargetGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidConfigurationRequest" => {
+                        return ModifyTargetGroupError::InvalidConfigurationRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TargetGroupNotFound" => {
+                        return ModifyTargetGroupError::TargetGroupNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TargetGroupNotFound" => {
-                    ModifyTargetGroupError::TargetGroupNotFound(String::from(parsed_error.message))
-                }
-                _ => ModifyTargetGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyTargetGroupError::Unknown(body.to_string()),
+            }
         }
+        ModifyTargetGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9736,7 +10043,7 @@ impl ModifyTargetGroupError {
 impl From<XmlParseError> for ModifyTargetGroupError {
     fn from(err: XmlParseError) -> ModifyTargetGroupError {
         let XmlParseError(message) = err;
-        ModifyTargetGroupError::Unknown(message.to_string())
+        ModifyTargetGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyTargetGroupError {
@@ -9769,7 +10076,8 @@ impl Error for ModifyTargetGroupError {
             ModifyTargetGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyTargetGroupError::Unknown(ref cause) => cause,
+            ModifyTargetGroupError::ParseError(ref cause) => cause,
+            ModifyTargetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9786,29 +10094,35 @@ pub enum ModifyTargetGroupAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyTargetGroupAttributesError {
-    pub fn from_body(body: &str) -> ModifyTargetGroupAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidConfigurationRequest" => {
-                    ModifyTargetGroupAttributesError::InvalidConfigurationRequest(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyTargetGroupAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidConfigurationRequest" => {
+                        return ModifyTargetGroupAttributesError::InvalidConfigurationRequest(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TargetGroupNotFound" => {
+                        return ModifyTargetGroupAttributesError::TargetGroupNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TargetGroupNotFound" => ModifyTargetGroupAttributesError::TargetGroupNotFound(
-                    String::from(parsed_error.message),
-                ),
-                _ => ModifyTargetGroupAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyTargetGroupAttributesError::Unknown(body.to_string()),
+            }
         }
+        ModifyTargetGroupAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9823,7 +10137,7 @@ impl ModifyTargetGroupAttributesError {
 impl From<XmlParseError> for ModifyTargetGroupAttributesError {
     fn from(err: XmlParseError) -> ModifyTargetGroupAttributesError {
         let XmlParseError(message) = err;
-        ModifyTargetGroupAttributesError::Unknown(message.to_string())
+        ModifyTargetGroupAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyTargetGroupAttributesError {
@@ -9856,7 +10170,8 @@ impl Error for ModifyTargetGroupAttributesError {
             ModifyTargetGroupAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyTargetGroupAttributesError::Unknown(ref cause) => cause,
+            ModifyTargetGroupAttributesError::ParseError(ref cause) => cause,
+            ModifyTargetGroupAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9877,35 +10192,45 @@ pub enum RegisterTargetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterTargetsError {
-    pub fn from_body(body: &str) -> RegisterTargetsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidTarget" => {
-                    RegisterTargetsError::InvalidTarget(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterTargetsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidTarget" => {
+                        return RegisterTargetsError::InvalidTarget(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TargetGroupNotFound" => {
+                        return RegisterTargetsError::TargetGroupNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyRegistrationsForTargetId" => {
+                        return RegisterTargetsError::TooManyRegistrationsForTargetId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTargets" => {
+                        return RegisterTargetsError::TooManyTargets(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TargetGroupNotFound" => {
-                    RegisterTargetsError::TargetGroupNotFound(String::from(parsed_error.message))
-                }
-                "TooManyRegistrationsForTargetId" => {
-                    RegisterTargetsError::TooManyRegistrationsForTargetId(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyTargets" => {
-                    RegisterTargetsError::TooManyTargets(String::from(parsed_error.message))
-                }
-                _ => RegisterTargetsError::Unknown(String::from(body)),
-            },
-            Err(_) => RegisterTargetsError::Unknown(body.to_string()),
+            }
         }
+        RegisterTargetsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9920,7 +10245,7 @@ impl RegisterTargetsError {
 impl From<XmlParseError> for RegisterTargetsError {
     fn from(err: XmlParseError) -> RegisterTargetsError {
         let XmlParseError(message) = err;
-        RegisterTargetsError::Unknown(message.to_string())
+        RegisterTargetsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RegisterTargetsError {
@@ -9953,7 +10278,8 @@ impl Error for RegisterTargetsError {
             RegisterTargetsError::Validation(ref cause) => cause,
             RegisterTargetsError::Credentials(ref err) => err.description(),
             RegisterTargetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RegisterTargetsError::Unknown(ref cause) => cause,
+            RegisterTargetsError::ParseError(ref cause) => cause,
+            RegisterTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9970,27 +10296,35 @@ pub enum RemoveListenerCertificatesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveListenerCertificatesError {
-    pub fn from_body(body: &str) -> RemoveListenerCertificatesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFound" => RemoveListenerCertificatesError::ListenerNotFound(
-                    String::from(parsed_error.message),
-                ),
-                "OperationNotPermitted" => RemoveListenerCertificatesError::OperationNotPermitted(
-                    String::from(parsed_error.message),
-                ),
-                _ => RemoveListenerCertificatesError::Unknown(String::from(body)),
-            },
-            Err(_) => RemoveListenerCertificatesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> RemoveListenerCertificatesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ListenerNotFound" => {
+                        return RemoveListenerCertificatesError::ListenerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationNotPermitted" => {
+                        return RemoveListenerCertificatesError::OperationNotPermitted(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        RemoveListenerCertificatesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10005,7 +10339,7 @@ impl RemoveListenerCertificatesError {
 impl From<XmlParseError> for RemoveListenerCertificatesError {
     fn from(err: XmlParseError) -> RemoveListenerCertificatesError {
         let XmlParseError(message) = err;
-        RemoveListenerCertificatesError::Unknown(message.to_string())
+        RemoveListenerCertificatesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RemoveListenerCertificatesError {
@@ -10038,7 +10372,8 @@ impl Error for RemoveListenerCertificatesError {
             RemoveListenerCertificatesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RemoveListenerCertificatesError::Unknown(ref cause) => cause,
+            RemoveListenerCertificatesError::ParseError(ref cause) => cause,
+            RemoveListenerCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10061,32 +10396,44 @@ pub enum RemoveTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsError {
-    pub fn from_body(body: &str) -> RemoveTagsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFound" => {
-                    RemoveTagsError::ListenerNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ListenerNotFound" => {
+                        return RemoveTagsError::ListenerNotFound(String::from(parsed_error.message))
+                    }
+                    "LoadBalancerNotFound" => {
+                        return RemoveTagsError::LoadBalancerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleNotFound" => {
+                        return RemoveTagsError::RuleNotFound(String::from(parsed_error.message))
+                    }
+                    "TargetGroupNotFound" => {
+                        return RemoveTagsError::TargetGroupNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTags" => {
+                        return RemoveTagsError::TooManyTags(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "LoadBalancerNotFound" => {
-                    RemoveTagsError::LoadBalancerNotFound(String::from(parsed_error.message))
-                }
-                "RuleNotFound" => RemoveTagsError::RuleNotFound(String::from(parsed_error.message)),
-                "TargetGroupNotFound" => {
-                    RemoveTagsError::TargetGroupNotFound(String::from(parsed_error.message))
-                }
-                "TooManyTags" => RemoveTagsError::TooManyTags(String::from(parsed_error.message)),
-                _ => RemoveTagsError::Unknown(String::from(body)),
-            },
-            Err(_) => RemoveTagsError::Unknown(body.to_string()),
+            }
         }
+        RemoveTagsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10101,7 +10448,7 @@ impl RemoveTagsError {
 impl From<XmlParseError> for RemoveTagsError {
     fn from(err: XmlParseError) -> RemoveTagsError {
         let XmlParseError(message) = err;
-        RemoveTagsError::Unknown(message.to_string())
+        RemoveTagsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RemoveTagsError {
@@ -10135,7 +10482,8 @@ impl Error for RemoveTagsError {
             RemoveTagsError::Validation(ref cause) => cause,
             RemoveTagsError::Credentials(ref err) => err.description(),
             RemoveTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RemoveTagsError::Unknown(ref cause) => cause,
+            RemoveTagsError::ParseError(ref cause) => cause,
+            RemoveTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10154,32 +10502,40 @@ pub enum SetIpAddressTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetIpAddressTypeError {
-    pub fn from_body(body: &str) -> SetIpAddressTypeError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidConfigurationRequest" => {
-                    SetIpAddressTypeError::InvalidConfigurationRequest(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> SetIpAddressTypeError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidConfigurationRequest" => {
+                        return SetIpAddressTypeError::InvalidConfigurationRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidSubnet" => {
+                        return SetIpAddressTypeError::InvalidSubnet(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LoadBalancerNotFound" => {
+                        return SetIpAddressTypeError::LoadBalancerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidSubnet" => {
-                    SetIpAddressTypeError::InvalidSubnet(String::from(parsed_error.message))
-                }
-                "LoadBalancerNotFound" => {
-                    SetIpAddressTypeError::LoadBalancerNotFound(String::from(parsed_error.message))
-                }
-                _ => SetIpAddressTypeError::Unknown(String::from(body)),
-            },
-            Err(_) => SetIpAddressTypeError::Unknown(body.to_string()),
+            }
         }
+        SetIpAddressTypeError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10194,7 +10550,7 @@ impl SetIpAddressTypeError {
 impl From<XmlParseError> for SetIpAddressTypeError {
     fn from(err: XmlParseError) -> SetIpAddressTypeError {
         let XmlParseError(message) = err;
-        SetIpAddressTypeError::Unknown(message.to_string())
+        SetIpAddressTypeError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetIpAddressTypeError {
@@ -10226,7 +10582,8 @@ impl Error for SetIpAddressTypeError {
             SetIpAddressTypeError::Validation(ref cause) => cause,
             SetIpAddressTypeError::Credentials(ref err) => err.description(),
             SetIpAddressTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SetIpAddressTypeError::Unknown(ref cause) => cause,
+            SetIpAddressTypeError::ParseError(ref cause) => cause,
+            SetIpAddressTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10245,30 +10602,40 @@ pub enum SetRulePrioritiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetRulePrioritiesError {
-    pub fn from_body(body: &str) -> SetRulePrioritiesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "OperationNotPermitted" => SetRulePrioritiesError::OperationNotPermitted(
-                    String::from(parsed_error.message),
-                ),
-                "PriorityInUse" => {
-                    SetRulePrioritiesError::PriorityInUse(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> SetRulePrioritiesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "OperationNotPermitted" => {
+                        return SetRulePrioritiesError::OperationNotPermitted(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PriorityInUse" => {
+                        return SetRulePrioritiesError::PriorityInUse(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "RuleNotFound" => {
+                        return SetRulePrioritiesError::RuleNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "RuleNotFound" => {
-                    SetRulePrioritiesError::RuleNotFound(String::from(parsed_error.message))
-                }
-                _ => SetRulePrioritiesError::Unknown(String::from(body)),
-            },
-            Err(_) => SetRulePrioritiesError::Unknown(body.to_string()),
+            }
         }
+        SetRulePrioritiesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10283,7 +10650,7 @@ impl SetRulePrioritiesError {
 impl From<XmlParseError> for SetRulePrioritiesError {
     fn from(err: XmlParseError) -> SetRulePrioritiesError {
         let XmlParseError(message) = err;
-        SetRulePrioritiesError::Unknown(message.to_string())
+        SetRulePrioritiesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetRulePrioritiesError {
@@ -10317,7 +10684,8 @@ impl Error for SetRulePrioritiesError {
             SetRulePrioritiesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetRulePrioritiesError::Unknown(ref cause) => cause,
+            SetRulePrioritiesError::ParseError(ref cause) => cause,
+            SetRulePrioritiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10336,32 +10704,40 @@ pub enum SetSecurityGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetSecurityGroupsError {
-    pub fn from_body(body: &str) -> SetSecurityGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidConfigurationRequest" => {
-                    SetSecurityGroupsError::InvalidConfigurationRequest(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> SetSecurityGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidConfigurationRequest" => {
+                        return SetSecurityGroupsError::InvalidConfigurationRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidSecurityGroup" => {
+                        return SetSecurityGroupsError::InvalidSecurityGroup(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LoadBalancerNotFound" => {
+                        return SetSecurityGroupsError::LoadBalancerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidSecurityGroup" => {
-                    SetSecurityGroupsError::InvalidSecurityGroup(String::from(parsed_error.message))
-                }
-                "LoadBalancerNotFound" => {
-                    SetSecurityGroupsError::LoadBalancerNotFound(String::from(parsed_error.message))
-                }
-                _ => SetSecurityGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => SetSecurityGroupsError::Unknown(body.to_string()),
+            }
         }
+        SetSecurityGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10376,7 +10752,7 @@ impl SetSecurityGroupsError {
 impl From<XmlParseError> for SetSecurityGroupsError {
     fn from(err: XmlParseError) -> SetSecurityGroupsError {
         let XmlParseError(message) = err;
-        SetSecurityGroupsError::Unknown(message.to_string())
+        SetSecurityGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetSecurityGroupsError {
@@ -10410,7 +10786,8 @@ impl Error for SetSecurityGroupsError {
             SetSecurityGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetSecurityGroupsError::Unknown(ref cause) => cause,
+            SetSecurityGroupsError::ParseError(ref cause) => cause,
+            SetSecurityGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10435,39 +10812,51 @@ pub enum SetSubnetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetSubnetsError {
-    pub fn from_body(body: &str) -> SetSubnetsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AllocationIdNotFound" => {
-                    SetSubnetsError::AllocationIdNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> SetSubnetsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AllocationIdNotFound" => {
+                        return SetSubnetsError::AllocationIdNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "AvailabilityZoneNotSupported" => {
+                        return SetSubnetsError::AvailabilityZoneNotSupported(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidConfigurationRequest" => {
+                        return SetSubnetsError::InvalidConfigurationRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidSubnet" => {
+                        return SetSubnetsError::InvalidSubnet(String::from(parsed_error.message))
+                    }
+                    "LoadBalancerNotFound" => {
+                        return SetSubnetsError::LoadBalancerNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SubnetNotFound" => {
+                        return SetSubnetsError::SubnetNotFound(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "AvailabilityZoneNotSupported" => SetSubnetsError::AvailabilityZoneNotSupported(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidConfigurationRequest" => {
-                    SetSubnetsError::InvalidConfigurationRequest(String::from(parsed_error.message))
-                }
-                "InvalidSubnet" => {
-                    SetSubnetsError::InvalidSubnet(String::from(parsed_error.message))
-                }
-                "LoadBalancerNotFound" => {
-                    SetSubnetsError::LoadBalancerNotFound(String::from(parsed_error.message))
-                }
-                "SubnetNotFound" => {
-                    SetSubnetsError::SubnetNotFound(String::from(parsed_error.message))
-                }
-                _ => SetSubnetsError::Unknown(String::from(body)),
-            },
-            Err(_) => SetSubnetsError::Unknown(body.to_string()),
+            }
         }
+        SetSubnetsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10482,7 +10871,7 @@ impl SetSubnetsError {
 impl From<XmlParseError> for SetSubnetsError {
     fn from(err: XmlParseError) -> SetSubnetsError {
         let XmlParseError(message) = err;
-        SetSubnetsError::Unknown(message.to_string())
+        SetSubnetsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetSubnetsError {
@@ -10517,7 +10906,8 @@ impl Error for SetSubnetsError {
             SetSubnetsError::Validation(ref cause) => cause,
             SetSubnetsError::Credentials(ref err) => err.description(),
             SetSubnetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SetSubnetsError::Unknown(ref cause) => cause,
+            SetSubnetsError::ParseError(ref cause) => cause,
+            SetSubnetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10779,9 +11169,7 @@ impl Elb for ElbClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddListenerCertificatesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AddListenerCertificatesError::from_response(response))
                 }));
             }
 
@@ -10827,11 +11215,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AddTagsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10879,11 +11268,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateListenerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateListenerError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10931,11 +11321,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateLoadBalancerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateLoadBalancerError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10983,11 +11374,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateRuleError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11035,11 +11427,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTargetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateTargetGroupError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11087,11 +11480,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteListenerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteListenerError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11139,11 +11533,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteLoadBalancerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteLoadBalancerError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11191,11 +11586,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteRuleError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11243,11 +11639,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTargetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTargetGroupError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11295,11 +11692,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeregisterTargetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeregisterTargetsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11347,11 +11745,11 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAccountLimitsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeAccountLimitsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11400,9 +11798,7 @@ impl Elb for ElbClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeListenerCertificatesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeListenerCertificatesError::from_response(response))
                 }));
             }
 
@@ -11451,11 +11847,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeListenersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeListenersError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11505,9 +11902,7 @@ impl Elb for ElbClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoadBalancerAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeLoadBalancerAttributesError::from_response(response))
                 }));
             }
 
@@ -11558,11 +11953,11 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLoadBalancersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeLoadBalancersError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11610,11 +12005,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeRulesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeRulesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11662,11 +12058,11 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSSLPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeSSLPoliciesError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11714,11 +12110,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11767,9 +12164,7 @@ impl Elb for ElbClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTargetGroupAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeTargetGroupAttributesError::from_response(response))
                 }));
             }
 
@@ -11820,11 +12215,11 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTargetGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeTargetGroupsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11872,11 +12267,11 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTargetHealthError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeTargetHealthError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11924,11 +12319,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyListenerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ModifyListenerError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11977,9 +12373,7 @@ impl Elb for ElbClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyLoadBalancerAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ModifyLoadBalancerAttributesError::from_response(response))
                 }));
             }
 
@@ -12028,11 +12422,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyRuleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ModifyRuleError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12080,11 +12475,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyTargetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ModifyTargetGroupError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12133,9 +12529,7 @@ impl Elb for ElbClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyTargetGroupAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ModifyTargetGroupAttributesError::from_response(response))
                 }));
             }
 
@@ -12184,11 +12578,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterTargetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RegisterTargetsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12237,9 +12632,7 @@ impl Elb for ElbClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveListenerCertificatesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RemoveListenerCertificatesError::from_response(response))
                 }));
             }
 
@@ -12288,11 +12681,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RemoveTagsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12340,11 +12734,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetIpAddressTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SetIpAddressTypeError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12392,11 +12787,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetRulePrioritiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SetRulePrioritiesError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12444,11 +12840,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetSecurityGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SetSecurityGroupsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12496,11 +12893,12 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetSubnetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SetSubnetsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
