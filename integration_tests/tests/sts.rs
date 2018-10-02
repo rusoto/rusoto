@@ -20,27 +20,30 @@ fn main() {
     let sts = StsClient::new(Region::UsEast1);
 
     // http://docs.aws.amazon.com/STS/latest/APIReference/Welcome.html
-    match sts.assume_role(AssumeRoleRequest{
-            role_arn: "bogus".to_owned(),
-            role_session_name: "rusoto_test_session".to_owned(),
-            ..Default::default()
-        }).sync() {
-        Err(AssumeRoleError::Unknown(msg)) =>
-            assert!(msg.contains("validation error detected: Value 'bogus' at 'roleArn' failed to satisfy constraint")),
-        err =>
-            panic!("this should have been an Unknown STS Error: {:?}", err)
+    let assume_role_res = sts.assume_role(AssumeRoleRequest{
+        role_arn: "bogus".to_owned(),
+        role_session_name: "rusoto_test_session".to_owned(),
+        ..Default::default()
+    }).sync();
+    match assume_role_res {
+        Err(AssumeRoleError::Unknown(http_res)) => {
+            let msg = ::std::str::from_utf8(&http_res.body).unwrap();
+            assert!(msg.contains("validation error detected: Value 'bogus' at 'roleArn' failed to satisfy constraint"))
+        },
+        _ => panic!("this should have been an Unknown STS Error: {:?}", assume_role_res)
     }
 
-    match sts.get_session_token(
-        GetSessionTokenRequest {
-            token_code: Some("123456".to_owned()),
-            serial_number: Some("123456789".to_owned()),
-            ..Default::default()
-        }).sync() {
-        Err(GetSessionTokenError::Unknown(msg)) =>
-            assert!(msg.contains("Please verify your MFA serial number is valid and associated with this user.")),
-        err => 
-            panic!("this should have been an Unknown STS Error: {:?}", err)
+    let get_session_token_res = sts.get_session_token(GetSessionTokenRequest {
+        token_code: Some("123456".to_owned()),
+        serial_number: Some("123456789".to_owned()),
+        ..Default::default()
+    }).sync();
+    match get_session_token_res {
+        Err(GetSessionTokenError::Unknown(http_res)) => {
+            let msg = ::std::str::from_utf8(&http_res.body).unwrap();
+            assert!(msg.contains("Please verify your MFA serial number is valid and associated with this user."))
+        },
+        _ => panic!("this should have been an Unknown STS Error: {:?}", get_session_token_res)
     }
 
     let sts_creds_provider = StsSessionCredentialsProvider::new(sts, None, None);
