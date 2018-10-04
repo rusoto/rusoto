@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -9974,26 +9974,30 @@ pub enum AbortEnvironmentUpdateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AbortEnvironmentUpdateError {
-    pub fn from_body(body: &str) -> AbortEnvironmentUpdateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    AbortEnvironmentUpdateError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> AbortEnvironmentUpdateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return AbortEnvironmentUpdateError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => AbortEnvironmentUpdateError::Unknown(String::from(body)),
-            },
-            Err(_) => AbortEnvironmentUpdateError::Unknown(body.to_string()),
+            }
         }
+        AbortEnvironmentUpdateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10008,7 +10012,7 @@ impl AbortEnvironmentUpdateError {
 impl From<XmlParseError> for AbortEnvironmentUpdateError {
     fn from(err: XmlParseError) -> AbortEnvironmentUpdateError {
         let XmlParseError(message) = err;
-        AbortEnvironmentUpdateError::Unknown(message.to_string())
+        AbortEnvironmentUpdateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AbortEnvironmentUpdateError {
@@ -10040,7 +10044,8 @@ impl Error for AbortEnvironmentUpdateError {
             AbortEnvironmentUpdateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AbortEnvironmentUpdateError::Unknown(ref cause) => cause,
+            AbortEnvironmentUpdateError::ParseError(ref cause) => cause,
+            AbortEnvironmentUpdateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10057,31 +10062,35 @@ pub enum ApplyEnvironmentManagedActionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ApplyEnvironmentManagedActionError {
-    pub fn from_body(body: &str) -> ApplyEnvironmentManagedActionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ElasticBeanstalkServiceException" => {
-                    ApplyEnvironmentManagedActionError::ElasticBeanstalkService(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ApplyEnvironmentManagedActionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ElasticBeanstalkServiceException" => {
+                        return ApplyEnvironmentManagedActionError::ElasticBeanstalkService(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ManagedActionInvalidStateException" => {
+                        return ApplyEnvironmentManagedActionError::ManagedActionInvalidState(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "ManagedActionInvalidStateException" => {
-                    ApplyEnvironmentManagedActionError::ManagedActionInvalidState(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => ApplyEnvironmentManagedActionError::Unknown(String::from(body)),
-            },
-            Err(_) => ApplyEnvironmentManagedActionError::Unknown(body.to_string()),
+            }
         }
+        ApplyEnvironmentManagedActionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10096,7 +10105,7 @@ impl ApplyEnvironmentManagedActionError {
 impl From<XmlParseError> for ApplyEnvironmentManagedActionError {
     fn from(err: XmlParseError) -> ApplyEnvironmentManagedActionError {
         let XmlParseError(message) = err;
-        ApplyEnvironmentManagedActionError::Unknown(message.to_string())
+        ApplyEnvironmentManagedActionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ApplyEnvironmentManagedActionError {
@@ -10129,7 +10138,8 @@ impl Error for ApplyEnvironmentManagedActionError {
             ApplyEnvironmentManagedActionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ApplyEnvironmentManagedActionError::Unknown(ref cause) => cause,
+            ApplyEnvironmentManagedActionError::ParseError(ref cause) => cause,
+            ApplyEnvironmentManagedActionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10142,21 +10152,25 @@ pub enum CheckDNSAvailabilityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CheckDNSAvailabilityError {
-    pub fn from_body(body: &str) -> CheckDNSAvailabilityError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => CheckDNSAvailabilityError::Unknown(String::from(body)),
-            },
-            Err(_) => CheckDNSAvailabilityError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CheckDNSAvailabilityError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        CheckDNSAvailabilityError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10171,7 +10185,7 @@ impl CheckDNSAvailabilityError {
 impl From<XmlParseError> for CheckDNSAvailabilityError {
     fn from(err: XmlParseError) -> CheckDNSAvailabilityError {
         let XmlParseError(message) = err;
-        CheckDNSAvailabilityError::Unknown(message.to_string())
+        CheckDNSAvailabilityError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CheckDNSAvailabilityError {
@@ -10202,7 +10216,8 @@ impl Error for CheckDNSAvailabilityError {
             CheckDNSAvailabilityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CheckDNSAvailabilityError::Unknown(ref cause) => cause,
+            CheckDNSAvailabilityError::ParseError(ref cause) => cause,
+            CheckDNSAvailabilityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10219,29 +10234,35 @@ pub enum ComposeEnvironmentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ComposeEnvironmentsError {
-    pub fn from_body(body: &str) -> ComposeEnvironmentsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    ComposeEnvironmentsError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ComposeEnvironmentsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return ComposeEnvironmentsError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyEnvironmentsException" => {
+                        return ComposeEnvironmentsError::TooManyEnvironments(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TooManyEnvironmentsException" => ComposeEnvironmentsError::TooManyEnvironments(
-                    String::from(parsed_error.message),
-                ),
-                _ => ComposeEnvironmentsError::Unknown(String::from(body)),
-            },
-            Err(_) => ComposeEnvironmentsError::Unknown(body.to_string()),
+            }
         }
+        ComposeEnvironmentsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10256,7 +10277,7 @@ impl ComposeEnvironmentsError {
 impl From<XmlParseError> for ComposeEnvironmentsError {
     fn from(err: XmlParseError) -> ComposeEnvironmentsError {
         let XmlParseError(message) = err;
-        ComposeEnvironmentsError::Unknown(message.to_string())
+        ComposeEnvironmentsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ComposeEnvironmentsError {
@@ -10289,7 +10310,8 @@ impl Error for ComposeEnvironmentsError {
             ComposeEnvironmentsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ComposeEnvironmentsError::Unknown(ref cause) => cause,
+            ComposeEnvironmentsError::ParseError(ref cause) => cause,
+            ComposeEnvironmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10304,24 +10326,30 @@ pub enum CreateApplicationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateApplicationError {
-    pub fn from_body(body: &str) -> CreateApplicationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "TooManyApplicationsException" => {
-                    CreateApplicationError::TooManyApplications(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateApplicationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "TooManyApplicationsException" => {
+                        return CreateApplicationError::TooManyApplications(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => CreateApplicationError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateApplicationError::Unknown(body.to_string()),
+            }
         }
+        CreateApplicationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10336,7 +10364,7 @@ impl CreateApplicationError {
 impl From<XmlParseError> for CreateApplicationError {
     fn from(err: XmlParseError) -> CreateApplicationError {
         let XmlParseError(message) = err;
-        CreateApplicationError::Unknown(message.to_string())
+        CreateApplicationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateApplicationError {
@@ -10368,7 +10396,8 @@ impl Error for CreateApplicationError {
             CreateApplicationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateApplicationError::Unknown(ref cause) => cause,
+            CreateApplicationError::ParseError(ref cause) => cause,
+            CreateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10391,46 +10420,50 @@ pub enum CreateApplicationVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateApplicationVersionError {
-    pub fn from_body(body: &str) -> CreateApplicationVersionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CodeBuildNotInServiceRegionException" => {
-                    CreateApplicationVersionError::CodeBuildNotInServiceRegion(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateApplicationVersionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CodeBuildNotInServiceRegionException" => {
+                        return CreateApplicationVersionError::CodeBuildNotInServiceRegion(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InsufficientPrivilegesException" => {
+                        return CreateApplicationVersionError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "S3LocationNotInServiceRegionException" => {
+                        return CreateApplicationVersionError::S3LocationNotInServiceRegion(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyApplicationVersionsException" => {
+                        return CreateApplicationVersionError::TooManyApplicationVersions(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyApplicationsException" => {
+                        return CreateApplicationVersionError::TooManyApplications(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InsufficientPrivilegesException" => {
-                    CreateApplicationVersionError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "S3LocationNotInServiceRegionException" => {
-                    CreateApplicationVersionError::S3LocationNotInServiceRegion(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyApplicationVersionsException" => {
-                    CreateApplicationVersionError::TooManyApplicationVersions(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyApplicationsException" => {
-                    CreateApplicationVersionError::TooManyApplications(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => CreateApplicationVersionError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateApplicationVersionError::Unknown(body.to_string()),
+            }
         }
+        CreateApplicationVersionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10445,7 +10478,7 @@ impl CreateApplicationVersionError {
 impl From<XmlParseError> for CreateApplicationVersionError {
     fn from(err: XmlParseError) -> CreateApplicationVersionError {
         let XmlParseError(message) = err;
-        CreateApplicationVersionError::Unknown(message.to_string())
+        CreateApplicationVersionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateApplicationVersionError {
@@ -10481,7 +10514,8 @@ impl Error for CreateApplicationVersionError {
             CreateApplicationVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateApplicationVersionError::Unknown(ref cause) => cause,
+            CreateApplicationVersionError::ParseError(ref cause) => cause,
+            CreateApplicationVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10500,34 +10534,40 @@ pub enum CreateConfigurationTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConfigurationTemplateError {
-    pub fn from_body(body: &str) -> CreateConfigurationTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    CreateConfigurationTemplateError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateConfigurationTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return CreateConfigurationTemplateError::InsufficientPrivileges(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyBucketsException" => {
+                        return CreateConfigurationTemplateError::TooManyBuckets(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyConfigurationTemplatesException" => {
+                        return CreateConfigurationTemplateError::TooManyConfigurationTemplates(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "TooManyBucketsException" => CreateConfigurationTemplateError::TooManyBuckets(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyConfigurationTemplatesException" => {
-                    CreateConfigurationTemplateError::TooManyConfigurationTemplates(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => CreateConfigurationTemplateError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateConfigurationTemplateError::Unknown(body.to_string()),
+            }
         }
+        CreateConfigurationTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10542,7 +10582,7 @@ impl CreateConfigurationTemplateError {
 impl From<XmlParseError> for CreateConfigurationTemplateError {
     fn from(err: XmlParseError) -> CreateConfigurationTemplateError {
         let XmlParseError(message) = err;
-        CreateConfigurationTemplateError::Unknown(message.to_string())
+        CreateConfigurationTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateConfigurationTemplateError {
@@ -10576,7 +10616,8 @@ impl Error for CreateConfigurationTemplateError {
             CreateConfigurationTemplateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateConfigurationTemplateError::Unknown(ref cause) => cause,
+            CreateConfigurationTemplateError::ParseError(ref cause) => cause,
+            CreateConfigurationTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10593,29 +10634,35 @@ pub enum CreateEnvironmentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateEnvironmentError {
-    pub fn from_body(body: &str) -> CreateEnvironmentError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    CreateEnvironmentError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateEnvironmentError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return CreateEnvironmentError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyEnvironmentsException" => {
+                        return CreateEnvironmentError::TooManyEnvironments(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TooManyEnvironmentsException" => {
-                    CreateEnvironmentError::TooManyEnvironments(String::from(parsed_error.message))
-                }
-                _ => CreateEnvironmentError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateEnvironmentError::Unknown(body.to_string()),
+            }
         }
+        CreateEnvironmentError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10630,7 +10677,7 @@ impl CreateEnvironmentError {
 impl From<XmlParseError> for CreateEnvironmentError {
     fn from(err: XmlParseError) -> CreateEnvironmentError {
         let XmlParseError(message) = err;
-        CreateEnvironmentError::Unknown(message.to_string())
+        CreateEnvironmentError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateEnvironmentError {
@@ -10663,7 +10710,8 @@ impl Error for CreateEnvironmentError {
             CreateEnvironmentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateEnvironmentError::Unknown(ref cause) => cause,
+            CreateEnvironmentError::ParseError(ref cause) => cause,
+            CreateEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10682,34 +10730,40 @@ pub enum CreatePlatformVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePlatformVersionError {
-    pub fn from_body(body: &str) -> CreatePlatformVersionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ElasticBeanstalkServiceException" => {
-                    CreatePlatformVersionError::ElasticBeanstalkService(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePlatformVersionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ElasticBeanstalkServiceException" => {
+                        return CreatePlatformVersionError::ElasticBeanstalkService(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InsufficientPrivilegesException" => {
+                        return CreatePlatformVersionError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyPlatformsException" => {
+                        return CreatePlatformVersionError::TooManyPlatforms(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InsufficientPrivilegesException" => {
-                    CreatePlatformVersionError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyPlatformsException" => {
-                    CreatePlatformVersionError::TooManyPlatforms(String::from(parsed_error.message))
-                }
-                _ => CreatePlatformVersionError::Unknown(String::from(body)),
-            },
-            Err(_) => CreatePlatformVersionError::Unknown(body.to_string()),
+            }
         }
+        CreatePlatformVersionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10724,7 +10778,7 @@ impl CreatePlatformVersionError {
 impl From<XmlParseError> for CreatePlatformVersionError {
     fn from(err: XmlParseError) -> CreatePlatformVersionError {
         let XmlParseError(message) = err;
-        CreatePlatformVersionError::Unknown(message.to_string())
+        CreatePlatformVersionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreatePlatformVersionError {
@@ -10758,7 +10812,8 @@ impl Error for CreatePlatformVersionError {
             CreatePlatformVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreatePlatformVersionError::Unknown(ref cause) => cause,
+            CreatePlatformVersionError::ParseError(ref cause) => cause,
+            CreatePlatformVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10777,34 +10832,40 @@ pub enum CreateStorageLocationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStorageLocationError {
-    pub fn from_body(body: &str) -> CreateStorageLocationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    CreateStorageLocationError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateStorageLocationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return CreateStorageLocationError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "S3SubscriptionRequiredException" => {
+                        return CreateStorageLocationError::S3SubscriptionRequired(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyBucketsException" => {
+                        return CreateStorageLocationError::TooManyBuckets(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "S3SubscriptionRequiredException" => {
-                    CreateStorageLocationError::S3SubscriptionRequired(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyBucketsException" => {
-                    CreateStorageLocationError::TooManyBuckets(String::from(parsed_error.message))
-                }
-                _ => CreateStorageLocationError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateStorageLocationError::Unknown(body.to_string()),
+            }
         }
+        CreateStorageLocationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10819,7 +10880,7 @@ impl CreateStorageLocationError {
 impl From<XmlParseError> for CreateStorageLocationError {
     fn from(err: XmlParseError) -> CreateStorageLocationError {
         let XmlParseError(message) = err;
-        CreateStorageLocationError::Unknown(message.to_string())
+        CreateStorageLocationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateStorageLocationError {
@@ -10853,7 +10914,8 @@ impl Error for CreateStorageLocationError {
             CreateStorageLocationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateStorageLocationError::Unknown(ref cause) => cause,
+            CreateStorageLocationError::ParseError(ref cause) => cause,
+            CreateStorageLocationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10868,24 +10930,30 @@ pub enum DeleteApplicationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationError {
-    pub fn from_body(body: &str) -> DeleteApplicationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "OperationInProgressFailure" => {
-                    DeleteApplicationError::OperationInProgress(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteApplicationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "OperationInProgressFailure" => {
+                        return DeleteApplicationError::OperationInProgress(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DeleteApplicationError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteApplicationError::Unknown(body.to_string()),
+            }
         }
+        DeleteApplicationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10900,7 +10968,7 @@ impl DeleteApplicationError {
 impl From<XmlParseError> for DeleteApplicationError {
     fn from(err: XmlParseError) -> DeleteApplicationError {
         let XmlParseError(message) = err;
-        DeleteApplicationError::Unknown(message.to_string())
+        DeleteApplicationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteApplicationError {
@@ -10932,7 +11000,8 @@ impl Error for DeleteApplicationError {
             DeleteApplicationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteApplicationError::Unknown(ref cause) => cause,
+            DeleteApplicationError::ParseError(ref cause) => cause,
+            DeleteApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10953,39 +11022,45 @@ pub enum DeleteApplicationVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationVersionError {
-    pub fn from_body(body: &str) -> DeleteApplicationVersionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    DeleteApplicationVersionError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteApplicationVersionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return DeleteApplicationVersionError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationInProgressFailure" => {
+                        return DeleteApplicationVersionError::OperationInProgress(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "S3LocationNotInServiceRegionException" => {
+                        return DeleteApplicationVersionError::S3LocationNotInServiceRegion(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SourceBundleDeletionFailure" => {
+                        return DeleteApplicationVersionError::SourceBundleDeletion(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "OperationInProgressFailure" => DeleteApplicationVersionError::OperationInProgress(
-                    String::from(parsed_error.message),
-                ),
-                "S3LocationNotInServiceRegionException" => {
-                    DeleteApplicationVersionError::S3LocationNotInServiceRegion(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SourceBundleDeletionFailure" => {
-                    DeleteApplicationVersionError::SourceBundleDeletion(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DeleteApplicationVersionError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteApplicationVersionError::Unknown(body.to_string()),
+            }
         }
+        DeleteApplicationVersionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11000,7 +11075,7 @@ impl DeleteApplicationVersionError {
 impl From<XmlParseError> for DeleteApplicationVersionError {
     fn from(err: XmlParseError) -> DeleteApplicationVersionError {
         let XmlParseError(message) = err;
-        DeleteApplicationVersionError::Unknown(message.to_string())
+        DeleteApplicationVersionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteApplicationVersionError {
@@ -11035,7 +11110,8 @@ impl Error for DeleteApplicationVersionError {
             DeleteApplicationVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteApplicationVersionError::Unknown(ref cause) => cause,
+            DeleteApplicationVersionError::ParseError(ref cause) => cause,
+            DeleteApplicationVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11050,26 +11126,30 @@ pub enum DeleteConfigurationTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigurationTemplateError {
-    pub fn from_body(body: &str) -> DeleteConfigurationTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "OperationInProgressFailure" => {
-                    DeleteConfigurationTemplateError::OperationInProgress(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigurationTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "OperationInProgressFailure" => {
+                        return DeleteConfigurationTemplateError::OperationInProgress(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DeleteConfigurationTemplateError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteConfigurationTemplateError::Unknown(body.to_string()),
+            }
         }
+        DeleteConfigurationTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11084,7 +11164,7 @@ impl DeleteConfigurationTemplateError {
 impl From<XmlParseError> for DeleteConfigurationTemplateError {
     fn from(err: XmlParseError) -> DeleteConfigurationTemplateError {
         let XmlParseError(message) = err;
-        DeleteConfigurationTemplateError::Unknown(message.to_string())
+        DeleteConfigurationTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteConfigurationTemplateError {
@@ -11116,7 +11196,8 @@ impl Error for DeleteConfigurationTemplateError {
             DeleteConfigurationTemplateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteConfigurationTemplateError::Unknown(ref cause) => cause,
+            DeleteConfigurationTemplateError::ParseError(ref cause) => cause,
+            DeleteConfigurationTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11129,21 +11210,25 @@ pub enum DeleteEnvironmentConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEnvironmentConfigurationError {
-    pub fn from_body(body: &str) -> DeleteEnvironmentConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DeleteEnvironmentConfigurationError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteEnvironmentConfigurationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteEnvironmentConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DeleteEnvironmentConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11158,7 +11243,7 @@ impl DeleteEnvironmentConfigurationError {
 impl From<XmlParseError> for DeleteEnvironmentConfigurationError {
     fn from(err: XmlParseError) -> DeleteEnvironmentConfigurationError {
         let XmlParseError(message) = err;
-        DeleteEnvironmentConfigurationError::Unknown(message.to_string())
+        DeleteEnvironmentConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteEnvironmentConfigurationError {
@@ -11189,7 +11274,8 @@ impl Error for DeleteEnvironmentConfigurationError {
             DeleteEnvironmentConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteEnvironmentConfigurationError::Unknown(ref cause) => cause,
+            DeleteEnvironmentConfigurationError::ParseError(ref cause) => cause,
+            DeleteEnvironmentConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11210,39 +11296,45 @@ pub enum DeletePlatformVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePlatformVersionError {
-    pub fn from_body(body: &str) -> DeletePlatformVersionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ElasticBeanstalkServiceException" => {
-                    DeletePlatformVersionError::ElasticBeanstalkService(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePlatformVersionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ElasticBeanstalkServiceException" => {
+                        return DeletePlatformVersionError::ElasticBeanstalkService(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InsufficientPrivilegesException" => {
+                        return DeletePlatformVersionError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationInProgressFailure" => {
+                        return DeletePlatformVersionError::OperationInProgress(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PlatformVersionStillReferencedException" => {
+                        return DeletePlatformVersionError::PlatformVersionStillReferenced(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InsufficientPrivilegesException" => {
-                    DeletePlatformVersionError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "OperationInProgressFailure" => DeletePlatformVersionError::OperationInProgress(
-                    String::from(parsed_error.message),
-                ),
-                "PlatformVersionStillReferencedException" => {
-                    DeletePlatformVersionError::PlatformVersionStillReferenced(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DeletePlatformVersionError::Unknown(String::from(body)),
-            },
-            Err(_) => DeletePlatformVersionError::Unknown(body.to_string()),
+            }
         }
+        DeletePlatformVersionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11257,7 +11349,7 @@ impl DeletePlatformVersionError {
 impl From<XmlParseError> for DeletePlatformVersionError {
     fn from(err: XmlParseError) -> DeletePlatformVersionError {
         let XmlParseError(message) = err;
-        DeletePlatformVersionError::Unknown(message.to_string())
+        DeletePlatformVersionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeletePlatformVersionError {
@@ -11292,7 +11384,8 @@ impl Error for DeletePlatformVersionError {
             DeletePlatformVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeletePlatformVersionError::Unknown(ref cause) => cause,
+            DeletePlatformVersionError::ParseError(ref cause) => cause,
+            DeletePlatformVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11307,26 +11400,30 @@ pub enum DescribeAccountAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAccountAttributesError {
-    pub fn from_body(body: &str) -> DescribeAccountAttributesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    DescribeAccountAttributesError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return DescribeAccountAttributesError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DescribeAccountAttributesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAccountAttributesError::Unknown(body.to_string()),
+            }
         }
+        DescribeAccountAttributesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11341,7 +11438,7 @@ impl DescribeAccountAttributesError {
 impl From<XmlParseError> for DescribeAccountAttributesError {
     fn from(err: XmlParseError) -> DescribeAccountAttributesError {
         let XmlParseError(message) = err;
-        DescribeAccountAttributesError::Unknown(message.to_string())
+        DescribeAccountAttributesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAccountAttributesError {
@@ -11373,7 +11470,8 @@ impl Error for DescribeAccountAttributesError {
             DescribeAccountAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAccountAttributesError::Unknown(ref cause) => cause,
+            DescribeAccountAttributesError::ParseError(ref cause) => cause,
+            DescribeAccountAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11386,21 +11484,25 @@ pub enum DescribeApplicationVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeApplicationVersionsError {
-    pub fn from_body(body: &str) -> DescribeApplicationVersionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeApplicationVersionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeApplicationVersionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeApplicationVersionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeApplicationVersionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11415,7 +11517,7 @@ impl DescribeApplicationVersionsError {
 impl From<XmlParseError> for DescribeApplicationVersionsError {
     fn from(err: XmlParseError) -> DescribeApplicationVersionsError {
         let XmlParseError(message) = err;
-        DescribeApplicationVersionsError::Unknown(message.to_string())
+        DescribeApplicationVersionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeApplicationVersionsError {
@@ -11446,7 +11548,8 @@ impl Error for DescribeApplicationVersionsError {
             DescribeApplicationVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeApplicationVersionsError::Unknown(ref cause) => cause,
+            DescribeApplicationVersionsError::ParseError(ref cause) => cause,
+            DescribeApplicationVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11459,21 +11562,25 @@ pub enum DescribeApplicationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeApplicationsError {
-    pub fn from_body(body: &str) -> DescribeApplicationsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeApplicationsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeApplicationsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeApplicationsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeApplicationsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11488,7 +11595,7 @@ impl DescribeApplicationsError {
 impl From<XmlParseError> for DescribeApplicationsError {
     fn from(err: XmlParseError) -> DescribeApplicationsError {
         let XmlParseError(message) = err;
-        DescribeApplicationsError::Unknown(message.to_string())
+        DescribeApplicationsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeApplicationsError {
@@ -11519,7 +11626,8 @@ impl Error for DescribeApplicationsError {
             DescribeApplicationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeApplicationsError::Unknown(ref cause) => cause,
+            DescribeApplicationsError::ParseError(ref cause) => cause,
+            DescribeApplicationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11534,24 +11642,30 @@ pub enum DescribeConfigurationOptionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationOptionsError {
-    pub fn from_body(body: &str) -> DescribeConfigurationOptionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "TooManyBucketsException" => DescribeConfigurationOptionsError::TooManyBuckets(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeConfigurationOptionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeConfigurationOptionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationOptionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "TooManyBucketsException" => {
+                        return DescribeConfigurationOptionsError::TooManyBuckets(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeConfigurationOptionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11566,7 +11680,7 @@ impl DescribeConfigurationOptionsError {
 impl From<XmlParseError> for DescribeConfigurationOptionsError {
     fn from(err: XmlParseError) -> DescribeConfigurationOptionsError {
         let XmlParseError(message) = err;
-        DescribeConfigurationOptionsError::Unknown(message.to_string())
+        DescribeConfigurationOptionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeConfigurationOptionsError {
@@ -11598,7 +11712,8 @@ impl Error for DescribeConfigurationOptionsError {
             DescribeConfigurationOptionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConfigurationOptionsError::Unknown(ref cause) => cause,
+            DescribeConfigurationOptionsError::ParseError(ref cause) => cause,
+            DescribeConfigurationOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11613,24 +11728,30 @@ pub enum DescribeConfigurationSettingsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationSettingsError {
-    pub fn from_body(body: &str) -> DescribeConfigurationSettingsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "TooManyBucketsException" => DescribeConfigurationSettingsError::TooManyBuckets(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeConfigurationSettingsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeConfigurationSettingsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationSettingsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "TooManyBucketsException" => {
+                        return DescribeConfigurationSettingsError::TooManyBuckets(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        DescribeConfigurationSettingsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11645,7 +11766,7 @@ impl DescribeConfigurationSettingsError {
 impl From<XmlParseError> for DescribeConfigurationSettingsError {
     fn from(err: XmlParseError) -> DescribeConfigurationSettingsError {
         let XmlParseError(message) = err;
-        DescribeConfigurationSettingsError::Unknown(message.to_string())
+        DescribeConfigurationSettingsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeConfigurationSettingsError {
@@ -11677,7 +11798,8 @@ impl Error for DescribeConfigurationSettingsError {
             DescribeConfigurationSettingsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConfigurationSettingsError::Unknown(ref cause) => cause,
+            DescribeConfigurationSettingsError::ParseError(ref cause) => cause,
+            DescribeConfigurationSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11694,29 +11816,35 @@ pub enum DescribeEnvironmentHealthError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentHealthError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentHealthError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ElasticBeanstalkServiceException" => {
-                    DescribeEnvironmentHealthError::ElasticBeanstalkService(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentHealthError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ElasticBeanstalkServiceException" => {
+                        return DescribeEnvironmentHealthError::ElasticBeanstalkService(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidRequestException" => {
+                        return DescribeEnvironmentHealthError::InvalidRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidRequestException" => DescribeEnvironmentHealthError::InvalidRequest(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeEnvironmentHealthError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeEnvironmentHealthError::Unknown(body.to_string()),
+            }
         }
+        DescribeEnvironmentHealthError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11731,7 +11859,7 @@ impl DescribeEnvironmentHealthError {
 impl From<XmlParseError> for DescribeEnvironmentHealthError {
     fn from(err: XmlParseError) -> DescribeEnvironmentHealthError {
         let XmlParseError(message) = err;
-        DescribeEnvironmentHealthError::Unknown(message.to_string())
+        DescribeEnvironmentHealthError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeEnvironmentHealthError {
@@ -11764,7 +11892,8 @@ impl Error for DescribeEnvironmentHealthError {
             DescribeEnvironmentHealthError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEnvironmentHealthError::Unknown(ref cause) => cause,
+            DescribeEnvironmentHealthError::ParseError(ref cause) => cause,
+            DescribeEnvironmentHealthError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11779,26 +11908,32 @@ pub enum DescribeEnvironmentManagedActionHistoryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentManagedActionHistoryError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentManagedActionHistoryError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ElasticBeanstalkServiceException" => {
-                    DescribeEnvironmentManagedActionHistoryError::ElasticBeanstalkService(
-                        String::from(parsed_error.message),
-                    )
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> DescribeEnvironmentManagedActionHistoryError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ElasticBeanstalkServiceException" => {
+                        return DescribeEnvironmentManagedActionHistoryError::ElasticBeanstalkService(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeEnvironmentManagedActionHistoryError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeEnvironmentManagedActionHistoryError::Unknown(body.to_string()),
+            }
         }
+        DescribeEnvironmentManagedActionHistoryError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11813,7 +11948,7 @@ impl DescribeEnvironmentManagedActionHistoryError {
 impl From<XmlParseError> for DescribeEnvironmentManagedActionHistoryError {
     fn from(err: XmlParseError) -> DescribeEnvironmentManagedActionHistoryError {
         let XmlParseError(message) = err;
-        DescribeEnvironmentManagedActionHistoryError::Unknown(message.to_string())
+        DescribeEnvironmentManagedActionHistoryError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeEnvironmentManagedActionHistoryError {
@@ -11847,7 +11982,8 @@ impl Error for DescribeEnvironmentManagedActionHistoryError {
             DescribeEnvironmentManagedActionHistoryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEnvironmentManagedActionHistoryError::Unknown(ref cause) => cause,
+            DescribeEnvironmentManagedActionHistoryError::ParseError(ref cause) => cause,
+            DescribeEnvironmentManagedActionHistoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11862,26 +11998,30 @@ pub enum DescribeEnvironmentManagedActionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentManagedActionsError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentManagedActionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ElasticBeanstalkServiceException" => {
-                    DescribeEnvironmentManagedActionsError::ElasticBeanstalkService(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentManagedActionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ElasticBeanstalkServiceException" => {
+                        return DescribeEnvironmentManagedActionsError::ElasticBeanstalkService(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeEnvironmentManagedActionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeEnvironmentManagedActionsError::Unknown(body.to_string()),
+            }
         }
+        DescribeEnvironmentManagedActionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11896,7 +12036,7 @@ impl DescribeEnvironmentManagedActionsError {
 impl From<XmlParseError> for DescribeEnvironmentManagedActionsError {
     fn from(err: XmlParseError) -> DescribeEnvironmentManagedActionsError {
         let XmlParseError(message) = err;
-        DescribeEnvironmentManagedActionsError::Unknown(message.to_string())
+        DescribeEnvironmentManagedActionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeEnvironmentManagedActionsError {
@@ -11928,7 +12068,8 @@ impl Error for DescribeEnvironmentManagedActionsError {
             DescribeEnvironmentManagedActionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEnvironmentManagedActionsError::Unknown(ref cause) => cause,
+            DescribeEnvironmentManagedActionsError::ParseError(ref cause) => cause,
+            DescribeEnvironmentManagedActionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11943,26 +12084,30 @@ pub enum DescribeEnvironmentResourcesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentResourcesError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentResourcesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    DescribeEnvironmentResourcesError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentResourcesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return DescribeEnvironmentResourcesError::InsufficientPrivileges(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeEnvironmentResourcesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeEnvironmentResourcesError::Unknown(body.to_string()),
+            }
         }
+        DescribeEnvironmentResourcesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11977,7 +12122,7 @@ impl DescribeEnvironmentResourcesError {
 impl From<XmlParseError> for DescribeEnvironmentResourcesError {
     fn from(err: XmlParseError) -> DescribeEnvironmentResourcesError {
         let XmlParseError(message) = err;
-        DescribeEnvironmentResourcesError::Unknown(message.to_string())
+        DescribeEnvironmentResourcesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeEnvironmentResourcesError {
@@ -12009,7 +12154,8 @@ impl Error for DescribeEnvironmentResourcesError {
             DescribeEnvironmentResourcesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEnvironmentResourcesError::Unknown(ref cause) => cause,
+            DescribeEnvironmentResourcesError::ParseError(ref cause) => cause,
+            DescribeEnvironmentResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12022,21 +12168,25 @@ pub enum DescribeEnvironmentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentsError {
-    pub fn from_body(body: &str) -> DescribeEnvironmentsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeEnvironmentsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeEnvironmentsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeEnvironmentsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12051,7 +12201,7 @@ impl DescribeEnvironmentsError {
 impl From<XmlParseError> for DescribeEnvironmentsError {
     fn from(err: XmlParseError) -> DescribeEnvironmentsError {
         let XmlParseError(message) = err;
-        DescribeEnvironmentsError::Unknown(message.to_string())
+        DescribeEnvironmentsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeEnvironmentsError {
@@ -12082,7 +12232,8 @@ impl Error for DescribeEnvironmentsError {
             DescribeEnvironmentsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEnvironmentsError::Unknown(ref cause) => cause,
+            DescribeEnvironmentsError::ParseError(ref cause) => cause,
+            DescribeEnvironmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12095,21 +12246,25 @@ pub enum DescribeEventsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventsError {
-    pub fn from_body(body: &str) -> DescribeEventsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeEventsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeEventsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeEventsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12124,7 +12279,7 @@ impl DescribeEventsError {
 impl From<XmlParseError> for DescribeEventsError {
     fn from(err: XmlParseError) -> DescribeEventsError {
         let XmlParseError(message) = err;
-        DescribeEventsError::Unknown(message.to_string())
+        DescribeEventsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeEventsError {
@@ -12153,7 +12308,8 @@ impl Error for DescribeEventsError {
             DescribeEventsError::Validation(ref cause) => cause,
             DescribeEventsError::Credentials(ref err) => err.description(),
             DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeEventsError::Unknown(ref cause) => cause,
+            DescribeEventsError::ParseError(ref cause) => cause,
+            DescribeEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12170,29 +12326,35 @@ pub enum DescribeInstancesHealthError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeInstancesHealthError {
-    pub fn from_body(body: &str) -> DescribeInstancesHealthError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ElasticBeanstalkServiceException" => {
-                    DescribeInstancesHealthError::ElasticBeanstalkService(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeInstancesHealthError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ElasticBeanstalkServiceException" => {
+                        return DescribeInstancesHealthError::ElasticBeanstalkService(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        return DescribeInstancesHealthError::InvalidRequest(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidRequestException" => {
-                    DescribeInstancesHealthError::InvalidRequest(String::from(parsed_error.message))
-                }
-                _ => DescribeInstancesHealthError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeInstancesHealthError::Unknown(body.to_string()),
+            }
         }
+        DescribeInstancesHealthError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12207,7 +12369,7 @@ impl DescribeInstancesHealthError {
 impl From<XmlParseError> for DescribeInstancesHealthError {
     fn from(err: XmlParseError) -> DescribeInstancesHealthError {
         let XmlParseError(message) = err;
-        DescribeInstancesHealthError::Unknown(message.to_string())
+        DescribeInstancesHealthError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeInstancesHealthError {
@@ -12240,7 +12402,8 @@ impl Error for DescribeInstancesHealthError {
             DescribeInstancesHealthError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeInstancesHealthError::Unknown(ref cause) => cause,
+            DescribeInstancesHealthError::ParseError(ref cause) => cause,
+            DescribeInstancesHealthError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12257,31 +12420,35 @@ pub enum DescribePlatformVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribePlatformVersionError {
-    pub fn from_body(body: &str) -> DescribePlatformVersionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ElasticBeanstalkServiceException" => {
-                    DescribePlatformVersionError::ElasticBeanstalkService(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribePlatformVersionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ElasticBeanstalkServiceException" => {
+                        return DescribePlatformVersionError::ElasticBeanstalkService(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InsufficientPrivilegesException" => {
+                        return DescribePlatformVersionError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InsufficientPrivilegesException" => {
-                    DescribePlatformVersionError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DescribePlatformVersionError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribePlatformVersionError::Unknown(body.to_string()),
+            }
         }
+        DescribePlatformVersionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12296,7 +12463,7 @@ impl DescribePlatformVersionError {
 impl From<XmlParseError> for DescribePlatformVersionError {
     fn from(err: XmlParseError) -> DescribePlatformVersionError {
         let XmlParseError(message) = err;
-        DescribePlatformVersionError::Unknown(message.to_string())
+        DescribePlatformVersionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribePlatformVersionError {
@@ -12329,7 +12496,8 @@ impl Error for DescribePlatformVersionError {
             DescribePlatformVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribePlatformVersionError::Unknown(ref cause) => cause,
+            DescribePlatformVersionError::ParseError(ref cause) => cause,
+            DescribePlatformVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12342,21 +12510,25 @@ pub enum ListAvailableSolutionStacksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAvailableSolutionStacksError {
-    pub fn from_body(body: &str) -> ListAvailableSolutionStacksError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => ListAvailableSolutionStacksError::Unknown(String::from(body)),
-            },
-            Err(_) => ListAvailableSolutionStacksError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListAvailableSolutionStacksError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        ListAvailableSolutionStacksError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12371,7 +12543,7 @@ impl ListAvailableSolutionStacksError {
 impl From<XmlParseError> for ListAvailableSolutionStacksError {
     fn from(err: XmlParseError) -> ListAvailableSolutionStacksError {
         let XmlParseError(message) = err;
-        ListAvailableSolutionStacksError::Unknown(message.to_string())
+        ListAvailableSolutionStacksError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListAvailableSolutionStacksError {
@@ -12402,7 +12574,8 @@ impl Error for ListAvailableSolutionStacksError {
             ListAvailableSolutionStacksError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListAvailableSolutionStacksError::Unknown(ref cause) => cause,
+            ListAvailableSolutionStacksError::ParseError(ref cause) => cause,
+            ListAvailableSolutionStacksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12419,31 +12592,35 @@ pub enum ListPlatformVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPlatformVersionsError {
-    pub fn from_body(body: &str) -> ListPlatformVersionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ElasticBeanstalkServiceException" => {
-                    ListPlatformVersionsError::ElasticBeanstalkService(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ListPlatformVersionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ElasticBeanstalkServiceException" => {
+                        return ListPlatformVersionsError::ElasticBeanstalkService(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InsufficientPrivilegesException" => {
+                        return ListPlatformVersionsError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InsufficientPrivilegesException" => {
-                    ListPlatformVersionsError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => ListPlatformVersionsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListPlatformVersionsError::Unknown(body.to_string()),
+            }
         }
+        ListPlatformVersionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12458,7 +12635,7 @@ impl ListPlatformVersionsError {
 impl From<XmlParseError> for ListPlatformVersionsError {
     fn from(err: XmlParseError) -> ListPlatformVersionsError {
         let XmlParseError(message) = err;
-        ListPlatformVersionsError::Unknown(message.to_string())
+        ListPlatformVersionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListPlatformVersionsError {
@@ -12491,7 +12668,8 @@ impl Error for ListPlatformVersionsError {
             ListPlatformVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListPlatformVersionsError::Unknown(ref cause) => cause,
+            ListPlatformVersionsError::ParseError(ref cause) => cause,
+            ListPlatformVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12510,34 +12688,40 @@ pub enum ListTagsForResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_body(body: &str) -> ListTagsForResourceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    ListTagsForResourceError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return ListTagsForResourceError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        return ListTagsForResourceError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceTypeNotSupportedException" => {
+                        return ListTagsForResourceError::ResourceTypeNotSupported(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResourceNotFoundException" => {
-                    ListTagsForResourceError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                "ResourceTypeNotSupportedException" => {
-                    ListTagsForResourceError::ResourceTypeNotSupported(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => ListTagsForResourceError::Unknown(String::from(body)),
-            },
-            Err(_) => ListTagsForResourceError::Unknown(body.to_string()),
+            }
         }
+        ListTagsForResourceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12552,7 +12736,7 @@ impl ListTagsForResourceError {
 impl From<XmlParseError> for ListTagsForResourceError {
     fn from(err: XmlParseError) -> ListTagsForResourceError {
         let XmlParseError(message) = err;
-        ListTagsForResourceError::Unknown(message.to_string())
+        ListTagsForResourceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListTagsForResourceError {
@@ -12586,7 +12770,8 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTagsForResourceError::Unknown(ref cause) => cause,
+            ListTagsForResourceError::ParseError(ref cause) => cause,
+            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12601,26 +12786,30 @@ pub enum RebuildEnvironmentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RebuildEnvironmentError {
-    pub fn from_body(body: &str) -> RebuildEnvironmentError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    RebuildEnvironmentError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> RebuildEnvironmentError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return RebuildEnvironmentError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => RebuildEnvironmentError::Unknown(String::from(body)),
-            },
-            Err(_) => RebuildEnvironmentError::Unknown(body.to_string()),
+            }
         }
+        RebuildEnvironmentError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12635,7 +12824,7 @@ impl RebuildEnvironmentError {
 impl From<XmlParseError> for RebuildEnvironmentError {
     fn from(err: XmlParseError) -> RebuildEnvironmentError {
         let XmlParseError(message) = err;
-        RebuildEnvironmentError::Unknown(message.to_string())
+        RebuildEnvironmentError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RebuildEnvironmentError {
@@ -12667,7 +12856,8 @@ impl Error for RebuildEnvironmentError {
             RebuildEnvironmentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RebuildEnvironmentError::Unknown(ref cause) => cause,
+            RebuildEnvironmentError::ParseError(ref cause) => cause,
+            RebuildEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12680,21 +12870,25 @@ pub enum RequestEnvironmentInfoError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RequestEnvironmentInfoError {
-    pub fn from_body(body: &str) -> RequestEnvironmentInfoError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => RequestEnvironmentInfoError::Unknown(String::from(body)),
-            },
-            Err(_) => RequestEnvironmentInfoError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> RequestEnvironmentInfoError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        RequestEnvironmentInfoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12709,7 +12903,7 @@ impl RequestEnvironmentInfoError {
 impl From<XmlParseError> for RequestEnvironmentInfoError {
     fn from(err: XmlParseError) -> RequestEnvironmentInfoError {
         let XmlParseError(message) = err;
-        RequestEnvironmentInfoError::Unknown(message.to_string())
+        RequestEnvironmentInfoError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RequestEnvironmentInfoError {
@@ -12740,7 +12934,8 @@ impl Error for RequestEnvironmentInfoError {
             RequestEnvironmentInfoError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RequestEnvironmentInfoError::Unknown(ref cause) => cause,
+            RequestEnvironmentInfoError::ParseError(ref cause) => cause,
+            RequestEnvironmentInfoError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12753,21 +12948,25 @@ pub enum RestartAppServerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RestartAppServerError {
-    pub fn from_body(body: &str) -> RestartAppServerError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => RestartAppServerError::Unknown(String::from(body)),
-            },
-            Err(_) => RestartAppServerError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> RestartAppServerError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        RestartAppServerError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12782,7 +12981,7 @@ impl RestartAppServerError {
 impl From<XmlParseError> for RestartAppServerError {
     fn from(err: XmlParseError) -> RestartAppServerError {
         let XmlParseError(message) = err;
-        RestartAppServerError::Unknown(message.to_string())
+        RestartAppServerError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RestartAppServerError {
@@ -12811,7 +13010,8 @@ impl Error for RestartAppServerError {
             RestartAppServerError::Validation(ref cause) => cause,
             RestartAppServerError::Credentials(ref err) => err.description(),
             RestartAppServerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RestartAppServerError::Unknown(ref cause) => cause,
+            RestartAppServerError::ParseError(ref cause) => cause,
+            RestartAppServerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12824,21 +13024,25 @@ pub enum RetrieveEnvironmentInfoError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RetrieveEnvironmentInfoError {
-    pub fn from_body(body: &str) -> RetrieveEnvironmentInfoError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => RetrieveEnvironmentInfoError::Unknown(String::from(body)),
-            },
-            Err(_) => RetrieveEnvironmentInfoError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> RetrieveEnvironmentInfoError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        RetrieveEnvironmentInfoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12853,7 +13057,7 @@ impl RetrieveEnvironmentInfoError {
 impl From<XmlParseError> for RetrieveEnvironmentInfoError {
     fn from(err: XmlParseError) -> RetrieveEnvironmentInfoError {
         let XmlParseError(message) = err;
-        RetrieveEnvironmentInfoError::Unknown(message.to_string())
+        RetrieveEnvironmentInfoError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RetrieveEnvironmentInfoError {
@@ -12884,7 +13088,8 @@ impl Error for RetrieveEnvironmentInfoError {
             RetrieveEnvironmentInfoError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RetrieveEnvironmentInfoError::Unknown(ref cause) => cause,
+            RetrieveEnvironmentInfoError::ParseError(ref cause) => cause,
+            RetrieveEnvironmentInfoError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12897,21 +13102,25 @@ pub enum SwapEnvironmentCNAMEsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SwapEnvironmentCNAMEsError {
-    pub fn from_body(body: &str) -> SwapEnvironmentCNAMEsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => SwapEnvironmentCNAMEsError::Unknown(String::from(body)),
-            },
-            Err(_) => SwapEnvironmentCNAMEsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> SwapEnvironmentCNAMEsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        SwapEnvironmentCNAMEsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12926,7 +13135,7 @@ impl SwapEnvironmentCNAMEsError {
 impl From<XmlParseError> for SwapEnvironmentCNAMEsError {
     fn from(err: XmlParseError) -> SwapEnvironmentCNAMEsError {
         let XmlParseError(message) = err;
-        SwapEnvironmentCNAMEsError::Unknown(message.to_string())
+        SwapEnvironmentCNAMEsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SwapEnvironmentCNAMEsError {
@@ -12957,7 +13166,8 @@ impl Error for SwapEnvironmentCNAMEsError {
             SwapEnvironmentCNAMEsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SwapEnvironmentCNAMEsError::Unknown(ref cause) => cause,
+            SwapEnvironmentCNAMEsError::ParseError(ref cause) => cause,
+            SwapEnvironmentCNAMEsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12972,26 +13182,30 @@ pub enum TerminateEnvironmentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TerminateEnvironmentError {
-    pub fn from_body(body: &str) -> TerminateEnvironmentError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    TerminateEnvironmentError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> TerminateEnvironmentError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return TerminateEnvironmentError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => TerminateEnvironmentError::Unknown(String::from(body)),
-            },
-            Err(_) => TerminateEnvironmentError::Unknown(body.to_string()),
+            }
         }
+        TerminateEnvironmentError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13006,7 +13220,7 @@ impl TerminateEnvironmentError {
 impl From<XmlParseError> for TerminateEnvironmentError {
     fn from(err: XmlParseError) -> TerminateEnvironmentError {
         let XmlParseError(message) = err;
-        TerminateEnvironmentError::Unknown(message.to_string())
+        TerminateEnvironmentError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for TerminateEnvironmentError {
@@ -13038,7 +13252,8 @@ impl Error for TerminateEnvironmentError {
             TerminateEnvironmentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            TerminateEnvironmentError::Unknown(ref cause) => cause,
+            TerminateEnvironmentError::ParseError(ref cause) => cause,
+            TerminateEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13051,21 +13266,25 @@ pub enum UpdateApplicationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateApplicationError {
-    pub fn from_body(body: &str) -> UpdateApplicationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => UpdateApplicationError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateApplicationError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateApplicationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        UpdateApplicationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13080,7 +13299,7 @@ impl UpdateApplicationError {
 impl From<XmlParseError> for UpdateApplicationError {
     fn from(err: XmlParseError) -> UpdateApplicationError {
         let XmlParseError(message) = err;
-        UpdateApplicationError::Unknown(message.to_string())
+        UpdateApplicationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateApplicationError {
@@ -13111,7 +13330,8 @@ impl Error for UpdateApplicationError {
             UpdateApplicationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateApplicationError::Unknown(ref cause) => cause,
+            UpdateApplicationError::ParseError(ref cause) => cause,
+            UpdateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13126,26 +13346,30 @@ pub enum UpdateApplicationResourceLifecycleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateApplicationResourceLifecycleError {
-    pub fn from_body(body: &str) -> UpdateApplicationResourceLifecycleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    UpdateApplicationResourceLifecycleError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateApplicationResourceLifecycleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return UpdateApplicationResourceLifecycleError::InsufficientPrivileges(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => UpdateApplicationResourceLifecycleError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateApplicationResourceLifecycleError::Unknown(body.to_string()),
+            }
         }
+        UpdateApplicationResourceLifecycleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13160,7 +13384,7 @@ impl UpdateApplicationResourceLifecycleError {
 impl From<XmlParseError> for UpdateApplicationResourceLifecycleError {
     fn from(err: XmlParseError) -> UpdateApplicationResourceLifecycleError {
         let XmlParseError(message) = err;
-        UpdateApplicationResourceLifecycleError::Unknown(message.to_string())
+        UpdateApplicationResourceLifecycleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateApplicationResourceLifecycleError {
@@ -13192,7 +13416,8 @@ impl Error for UpdateApplicationResourceLifecycleError {
             UpdateApplicationResourceLifecycleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateApplicationResourceLifecycleError::Unknown(ref cause) => cause,
+            UpdateApplicationResourceLifecycleError::ParseError(ref cause) => cause,
+            UpdateApplicationResourceLifecycleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13205,21 +13430,25 @@ pub enum UpdateApplicationVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateApplicationVersionError {
-    pub fn from_body(body: &str) -> UpdateApplicationVersionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => UpdateApplicationVersionError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateApplicationVersionError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateApplicationVersionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        UpdateApplicationVersionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13234,7 +13463,7 @@ impl UpdateApplicationVersionError {
 impl From<XmlParseError> for UpdateApplicationVersionError {
     fn from(err: XmlParseError) -> UpdateApplicationVersionError {
         let XmlParseError(message) = err;
-        UpdateApplicationVersionError::Unknown(message.to_string())
+        UpdateApplicationVersionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateApplicationVersionError {
@@ -13265,7 +13494,8 @@ impl Error for UpdateApplicationVersionError {
             UpdateApplicationVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateApplicationVersionError::Unknown(ref cause) => cause,
+            UpdateApplicationVersionError::ParseError(ref cause) => cause,
+            UpdateApplicationVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13282,29 +13512,35 @@ pub enum UpdateConfigurationTemplateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConfigurationTemplateError {
-    pub fn from_body(body: &str) -> UpdateConfigurationTemplateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    UpdateConfigurationTemplateError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateConfigurationTemplateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return UpdateConfigurationTemplateError::InsufficientPrivileges(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyBucketsException" => {
+                        return UpdateConfigurationTemplateError::TooManyBuckets(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TooManyBucketsException" => UpdateConfigurationTemplateError::TooManyBuckets(
-                    String::from(parsed_error.message),
-                ),
-                _ => UpdateConfigurationTemplateError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateConfigurationTemplateError::Unknown(body.to_string()),
+            }
         }
+        UpdateConfigurationTemplateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13319,7 +13555,7 @@ impl UpdateConfigurationTemplateError {
 impl From<XmlParseError> for UpdateConfigurationTemplateError {
     fn from(err: XmlParseError) -> UpdateConfigurationTemplateError {
         let XmlParseError(message) = err;
-        UpdateConfigurationTemplateError::Unknown(message.to_string())
+        UpdateConfigurationTemplateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateConfigurationTemplateError {
@@ -13352,7 +13588,8 @@ impl Error for UpdateConfigurationTemplateError {
             UpdateConfigurationTemplateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateConfigurationTemplateError::Unknown(ref cause) => cause,
+            UpdateConfigurationTemplateError::ParseError(ref cause) => cause,
+            UpdateConfigurationTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13369,29 +13606,35 @@ pub enum UpdateEnvironmentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateEnvironmentError {
-    pub fn from_body(body: &str) -> UpdateEnvironmentError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    UpdateEnvironmentError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateEnvironmentError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return UpdateEnvironmentError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyBucketsException" => {
+                        return UpdateEnvironmentError::TooManyBuckets(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TooManyBucketsException" => {
-                    UpdateEnvironmentError::TooManyBuckets(String::from(parsed_error.message))
-                }
-                _ => UpdateEnvironmentError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateEnvironmentError::Unknown(body.to_string()),
+            }
         }
+        UpdateEnvironmentError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13406,7 +13649,7 @@ impl UpdateEnvironmentError {
 impl From<XmlParseError> for UpdateEnvironmentError {
     fn from(err: XmlParseError) -> UpdateEnvironmentError {
         let XmlParseError(message) = err;
-        UpdateEnvironmentError::Unknown(message.to_string())
+        UpdateEnvironmentError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateEnvironmentError {
@@ -13439,7 +13682,8 @@ impl Error for UpdateEnvironmentError {
             UpdateEnvironmentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateEnvironmentError::Unknown(ref cause) => cause,
+            UpdateEnvironmentError::ParseError(ref cause) => cause,
+            UpdateEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13462,40 +13706,50 @@ pub enum UpdateTagsForResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTagsForResourceError {
-    pub fn from_body(body: &str) -> UpdateTagsForResourceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    UpdateTagsForResourceError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateTagsForResourceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return UpdateTagsForResourceError::InsufficientPrivileges(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "OperationInProgressFailure" => {
+                        return UpdateTagsForResourceError::OperationInProgress(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        return UpdateTagsForResourceError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceTypeNotSupportedException" => {
+                        return UpdateTagsForResourceError::ResourceTypeNotSupported(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTagsException" => {
+                        return UpdateTagsForResourceError::TooManyTags(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "OperationInProgressFailure" => UpdateTagsForResourceError::OperationInProgress(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceNotFoundException" => {
-                    UpdateTagsForResourceError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                "ResourceTypeNotSupportedException" => {
-                    UpdateTagsForResourceError::ResourceTypeNotSupported(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyTagsException" => {
-                    UpdateTagsForResourceError::TooManyTags(String::from(parsed_error.message))
-                }
-                _ => UpdateTagsForResourceError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateTagsForResourceError::Unknown(body.to_string()),
+            }
         }
+        UpdateTagsForResourceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13510,7 +13764,7 @@ impl UpdateTagsForResourceError {
 impl From<XmlParseError> for UpdateTagsForResourceError {
     fn from(err: XmlParseError) -> UpdateTagsForResourceError {
         let XmlParseError(message) = err;
-        UpdateTagsForResourceError::Unknown(message.to_string())
+        UpdateTagsForResourceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateTagsForResourceError {
@@ -13546,7 +13800,8 @@ impl Error for UpdateTagsForResourceError {
             UpdateTagsForResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateTagsForResourceError::Unknown(ref cause) => cause,
+            UpdateTagsForResourceError::ParseError(ref cause) => cause,
+            UpdateTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13563,29 +13818,35 @@ pub enum ValidateConfigurationSettingsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ValidateConfigurationSettingsError {
-    pub fn from_body(body: &str) -> ValidateConfigurationSettingsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InsufficientPrivilegesException" => {
-                    ValidateConfigurationSettingsError::InsufficientPrivileges(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ValidateConfigurationSettingsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return ValidateConfigurationSettingsError::InsufficientPrivileges(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyBucketsException" => {
+                        return ValidateConfigurationSettingsError::TooManyBuckets(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "TooManyBucketsException" => ValidateConfigurationSettingsError::TooManyBuckets(
-                    String::from(parsed_error.message),
-                ),
-                _ => ValidateConfigurationSettingsError::Unknown(String::from(body)),
-            },
-            Err(_) => ValidateConfigurationSettingsError::Unknown(body.to_string()),
+            }
         }
+        ValidateConfigurationSettingsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13600,7 +13861,7 @@ impl ValidateConfigurationSettingsError {
 impl From<XmlParseError> for ValidateConfigurationSettingsError {
     fn from(err: XmlParseError) -> ValidateConfigurationSettingsError {
         let XmlParseError(message) = err;
-        ValidateConfigurationSettingsError::Unknown(message.to_string())
+        ValidateConfigurationSettingsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ValidateConfigurationSettingsError {
@@ -13633,7 +13894,8 @@ impl Error for ValidateConfigurationSettingsError {
             ValidateConfigurationSettingsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ValidateConfigurationSettingsError::Unknown(ref cause) => cause,
+            ValidateConfigurationSettingsError::ParseError(ref cause) => cause,
+            ValidateConfigurationSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13961,9 +14223,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AbortEnvironmentUpdateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AbortEnvironmentUpdateError::from_response(response))
                 }));
             }
 
@@ -13990,9 +14250,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ApplyEnvironmentManagedActionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ApplyEnvironmentManagedActionError::from_response(response))
                 }));
             }
 
@@ -14043,11 +14301,11 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CheckDNSAvailabilityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CheckDNSAvailabilityError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14095,11 +14353,11 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ComposeEnvironmentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ComposeEnvironmentsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14147,11 +14405,12 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateApplicationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateApplicationError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14200,9 +14459,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateApplicationVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateApplicationVersionError::from_response(response))
                 }));
             }
 
@@ -14254,9 +14511,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateConfigurationTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateConfigurationTemplateError::from_response(response))
                 }));
             }
 
@@ -14305,11 +14560,12 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateEnvironmentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateEnvironmentError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14357,11 +14613,11 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePlatformVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreatePlatformVersionError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14408,11 +14664,11 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStorageLocationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateStorageLocationError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14460,11 +14716,12 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteApplicationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteApplicationError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -14490,9 +14747,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteApplicationVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteApplicationVersionError::from_response(response))
                 }));
             }
 
@@ -14519,9 +14774,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteConfigurationTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteConfigurationTemplateError::from_response(response))
                 }));
             }
 
@@ -14548,9 +14801,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteEnvironmentConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteEnvironmentConfigurationError::from_response(response))
                 }));
             }
 
@@ -14576,11 +14827,11 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePlatformVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeletePlatformVersionError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14628,9 +14879,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAccountAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeAccountAttributesError::from_response(response))
                 }));
             }
 
@@ -14680,9 +14929,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeApplicationVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeApplicationVersionsError::from_response(response))
                 }));
             }
 
@@ -14733,11 +14980,11 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeApplicationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeApplicationsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14786,9 +15033,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationOptionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeConfigurationOptionsError::from_response(response))
                 }));
             }
 
@@ -14838,9 +15083,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationSettingsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeConfigurationSettingsError::from_response(response))
                 }));
             }
 
@@ -14890,9 +15133,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEnvironmentHealthError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeEnvironmentHealthError::from_response(response))
                 }));
             }
 
@@ -14949,8 +15190,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEnvironmentManagedActionHistoryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeEnvironmentManagedActionHistoryError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -15004,8 +15245,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEnvironmentManagedActionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeEnvironmentManagedActionsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -15059,9 +15300,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEnvironmentResourcesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeEnvironmentResourcesError::from_response(response))
                 }));
             }
 
@@ -15112,11 +15351,11 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEnvironmentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeEnvironmentsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15164,11 +15403,12 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeEventsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15217,9 +15457,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeInstancesHealthError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeInstancesHealthError::from_response(response))
                 }));
             }
 
@@ -15269,9 +15507,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribePlatformVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribePlatformVersionError::from_response(response))
                 }));
             }
 
@@ -15321,9 +15557,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAvailableSolutionStacksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListAvailableSolutionStacksError::from_response(response))
                 }));
             }
 
@@ -15374,11 +15608,11 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPlatformVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListPlatformVersionsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15426,11 +15660,11 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsForResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15478,11 +15712,12 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RebuildEnvironmentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RebuildEnvironmentError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -15508,9 +15743,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RequestEnvironmentInfoError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RequestEnvironmentInfoError::from_response(response))
                 }));
             }
 
@@ -15536,11 +15769,12 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestartAppServerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RestartAppServerError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -15566,9 +15800,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RetrieveEnvironmentInfoError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RetrieveEnvironmentInfoError::from_response(response))
                 }));
             }
 
@@ -15619,11 +15851,11 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SwapEnvironmentCNAMEsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(SwapEnvironmentCNAMEsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -15648,11 +15880,11 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TerminateEnvironmentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(TerminateEnvironmentError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15700,11 +15932,12 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateApplicationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateApplicationError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15756,8 +15989,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateApplicationResourceLifecycleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(UpdateApplicationResourceLifecycleError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -15810,9 +16043,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateApplicationVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateApplicationVersionError::from_response(response))
                 }));
             }
 
@@ -15864,9 +16095,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateConfigurationTemplateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateConfigurationTemplateError::from_response(response))
                 }));
             }
 
@@ -15915,11 +16144,12 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateEnvironmentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateEnvironmentError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -15967,11 +16197,11 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTagsForResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateTagsForResourceError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -15998,9 +16228,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ValidateConfigurationSettingsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ValidateConfigurationSettingsError::from_response(response))
                 }));
             }
 

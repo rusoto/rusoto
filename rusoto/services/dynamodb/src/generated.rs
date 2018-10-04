@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents an attribute for describing the key schema for the table and indexes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -47,7 +47,7 @@ pub struct AttributeValue {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub b: Option<Vec<u8>>,
     /// <p>An attribute of type Boolean. For example:</p> <p> <code>"BOOL": true</code> </p>
@@ -2169,49 +2169,49 @@ pub enum BatchGetItemError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetItemError {
-    pub fn from_body(body: &str) -> BatchGetItemError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchGetItemError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        BatchGetItemError::InternalServerError(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        BatchGetItemError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        BatchGetItemError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        BatchGetItemError::Validation(error_message.to_string())
-                    }
-                    _ => BatchGetItemError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return BatchGetItemError::InternalServerError(String::from(error_message))
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return BatchGetItemError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return BatchGetItemError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return BatchGetItemError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchGetItemError::Unknown(String::from(body)),
         }
+        return BatchGetItemError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchGetItemError {
     fn from(err: serde_json::error::Error) -> BatchGetItemError {
-        BatchGetItemError::Unknown(err.description().to_string())
+        BatchGetItemError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchGetItemError {
@@ -2243,7 +2243,8 @@ impl Error for BatchGetItemError {
             BatchGetItemError::Validation(ref cause) => cause,
             BatchGetItemError::Credentials(ref err) => err.description(),
             BatchGetItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchGetItemError::Unknown(ref cause) => cause,
+            BatchGetItemError::ParseError(ref cause) => cause,
+            BatchGetItemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2264,54 +2265,54 @@ pub enum BatchWriteItemError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchWriteItemError {
-    pub fn from_body(body: &str) -> BatchWriteItemError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchWriteItemError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        BatchWriteItemError::InternalServerError(String::from(error_message))
-                    }
-                    "ItemCollectionSizeLimitExceededException" => {
-                        BatchWriteItemError::ItemCollectionSizeLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        BatchWriteItemError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        BatchWriteItemError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        BatchWriteItemError::Validation(error_message.to_string())
-                    }
-                    _ => BatchWriteItemError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return BatchWriteItemError::InternalServerError(String::from(error_message))
                 }
+                "ItemCollectionSizeLimitExceededException" => {
+                    return BatchWriteItemError::ItemCollectionSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return BatchWriteItemError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return BatchWriteItemError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return BatchWriteItemError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchWriteItemError::Unknown(String::from(body)),
         }
+        return BatchWriteItemError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchWriteItemError {
     fn from(err: serde_json::error::Error) -> BatchWriteItemError {
-        BatchWriteItemError::Unknown(err.description().to_string())
+        BatchWriteItemError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchWriteItemError {
@@ -2344,7 +2345,8 @@ impl Error for BatchWriteItemError {
             BatchWriteItemError::Validation(ref cause) => cause,
             BatchWriteItemError::Credentials(ref err) => err.description(),
             BatchWriteItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchWriteItemError::Unknown(ref cause) => cause,
+            BatchWriteItemError::ParseError(ref cause) => cause,
+            BatchWriteItemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2369,56 +2371,58 @@ pub enum CreateBackupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBackupError {
-    pub fn from_body(body: &str) -> CreateBackupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateBackupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BackupInUseException" => {
-                        CreateBackupError::BackupInUse(String::from(error_message))
-                    }
-                    "ContinuousBackupsUnavailableException" => {
-                        CreateBackupError::ContinuousBackupsUnavailable(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        CreateBackupError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateBackupError::LimitExceeded(String::from(error_message))
-                    }
-                    "TableInUseException" => {
-                        CreateBackupError::TableInUse(String::from(error_message))
-                    }
-                    "TableNotFoundException" => {
-                        CreateBackupError::TableNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateBackupError::Validation(error_message.to_string())
-                    }
-                    _ => CreateBackupError::Unknown(String::from(body)),
+            match *error_type {
+                "BackupInUseException" => {
+                    return CreateBackupError::BackupInUse(String::from(error_message))
                 }
+                "ContinuousBackupsUnavailableException" => {
+                    return CreateBackupError::ContinuousBackupsUnavailable(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerError" => {
+                    return CreateBackupError::InternalServerError(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateBackupError::LimitExceeded(String::from(error_message))
+                }
+                "TableInUseException" => {
+                    return CreateBackupError::TableInUse(String::from(error_message))
+                }
+                "TableNotFoundException" => {
+                    return CreateBackupError::TableNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateBackupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateBackupError::Unknown(String::from(body)),
         }
+        return CreateBackupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateBackupError {
     fn from(err: serde_json::error::Error) -> CreateBackupError {
-        CreateBackupError::Unknown(err.description().to_string())
+        CreateBackupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateBackupError {
@@ -2453,7 +2457,8 @@ impl Error for CreateBackupError {
             CreateBackupError::Validation(ref cause) => cause,
             CreateBackupError::Credentials(ref err) => err.description(),
             CreateBackupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBackupError::Unknown(ref cause) => cause,
+            CreateBackupError::ParseError(ref cause) => cause,
+            CreateBackupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2474,52 +2479,52 @@ pub enum CreateGlobalTableError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGlobalTableError {
-    pub fn from_body(body: &str) -> CreateGlobalTableError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateGlobalTableError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "GlobalTableAlreadyExistsException" => {
-                        CreateGlobalTableError::GlobalTableAlreadyExists(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerError" => {
-                        CreateGlobalTableError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateGlobalTableError::LimitExceeded(String::from(error_message))
-                    }
-                    "TableNotFoundException" => {
-                        CreateGlobalTableError::TableNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateGlobalTableError::Validation(error_message.to_string())
-                    }
-                    _ => CreateGlobalTableError::Unknown(String::from(body)),
+            match *error_type {
+                "GlobalTableAlreadyExistsException" => {
+                    return CreateGlobalTableError::GlobalTableAlreadyExists(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerError" => {
+                    return CreateGlobalTableError::InternalServerError(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateGlobalTableError::LimitExceeded(String::from(error_message))
+                }
+                "TableNotFoundException" => {
+                    return CreateGlobalTableError::TableNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateGlobalTableError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateGlobalTableError::Unknown(String::from(body)),
         }
+        return CreateGlobalTableError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateGlobalTableError {
     fn from(err: serde_json::error::Error) -> CreateGlobalTableError {
-        CreateGlobalTableError::Unknown(err.description().to_string())
+        CreateGlobalTableError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateGlobalTableError {
@@ -2554,7 +2559,8 @@ impl Error for CreateGlobalTableError {
             CreateGlobalTableError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateGlobalTableError::Unknown(ref cause) => cause,
+            CreateGlobalTableError::ParseError(ref cause) => cause,
+            CreateGlobalTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2573,47 +2579,47 @@ pub enum CreateTableError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTableError {
-    pub fn from_body(body: &str) -> CreateTableError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTableError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        CreateTableError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateTableError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        CreateTableError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateTableError::Validation(error_message.to_string())
-                    }
-                    _ => CreateTableError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return CreateTableError::InternalServerError(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return CreateTableError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return CreateTableError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateTableError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateTableError::Unknown(String::from(body)),
         }
+        return CreateTableError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateTableError {
     fn from(err: serde_json::error::Error) -> CreateTableError {
-        CreateTableError::Unknown(err.description().to_string())
+        CreateTableError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateTableError {
@@ -2645,7 +2651,8 @@ impl Error for CreateTableError {
             CreateTableError::Validation(ref cause) => cause,
             CreateTableError::Credentials(ref err) => err.description(),
             CreateTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTableError::Unknown(ref cause) => cause,
+            CreateTableError::ParseError(ref cause) => cause,
+            CreateTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2666,50 +2673,50 @@ pub enum DeleteBackupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBackupError {
-    pub fn from_body(body: &str) -> DeleteBackupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBackupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BackupInUseException" => {
-                        DeleteBackupError::BackupInUse(String::from(error_message))
-                    }
-                    "BackupNotFoundException" => {
-                        DeleteBackupError::BackupNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DeleteBackupError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteBackupError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteBackupError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteBackupError::Unknown(String::from(body)),
+            match *error_type {
+                "BackupInUseException" => {
+                    return DeleteBackupError::BackupInUse(String::from(error_message))
                 }
+                "BackupNotFoundException" => {
+                    return DeleteBackupError::BackupNotFound(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return DeleteBackupError::InternalServerError(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteBackupError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteBackupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteBackupError::Unknown(String::from(body)),
         }
+        return DeleteBackupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteBackupError {
     fn from(err: serde_json::error::Error) -> DeleteBackupError {
-        DeleteBackupError::Unknown(err.description().to_string())
+        DeleteBackupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteBackupError {
@@ -2742,7 +2749,8 @@ impl Error for DeleteBackupError {
             DeleteBackupError::Validation(ref cause) => cause,
             DeleteBackupError::Credentials(ref err) => err.description(),
             DeleteBackupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBackupError::Unknown(ref cause) => cause,
+            DeleteBackupError::ParseError(ref cause) => cause,
+            DeleteBackupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2765,53 +2773,57 @@ pub enum DeleteItemError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteItemError {
-    pub fn from_body(body: &str) -> DeleteItemError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteItemError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConditionalCheckFailedException" => {
-                        DeleteItemError::ConditionalCheckFailed(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DeleteItemError::InternalServerError(String::from(error_message))
-                    }
-                    "ItemCollectionSizeLimitExceededException" => {
-                        DeleteItemError::ItemCollectionSizeLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        DeleteItemError::ProvisionedThroughputExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteItemError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => DeleteItemError::Validation(error_message.to_string()),
-                    _ => DeleteItemError::Unknown(String::from(body)),
+            match *error_type {
+                "ConditionalCheckFailedException" => {
+                    return DeleteItemError::ConditionalCheckFailed(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return DeleteItemError::InternalServerError(String::from(error_message))
+                }
+                "ItemCollectionSizeLimitExceededException" => {
+                    return DeleteItemError::ItemCollectionSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return DeleteItemError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteItemError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteItemError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteItemError::Unknown(String::from(body)),
         }
+        return DeleteItemError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteItemError {
     fn from(err: serde_json::error::Error) -> DeleteItemError {
-        DeleteItemError::Unknown(err.description().to_string())
+        DeleteItemError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteItemError {
@@ -2845,7 +2857,8 @@ impl Error for DeleteItemError {
             DeleteItemError::Validation(ref cause) => cause,
             DeleteItemError::Credentials(ref err) => err.description(),
             DeleteItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteItemError::Unknown(ref cause) => cause,
+            DeleteItemError::ParseError(ref cause) => cause,
+            DeleteItemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2866,50 +2879,50 @@ pub enum DeleteTableError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTableError {
-    pub fn from_body(body: &str) -> DeleteTableError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTableError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DeleteTableError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteTableError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        DeleteTableError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteTableError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteTableError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteTableError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DeleteTableError::InternalServerError(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return DeleteTableError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return DeleteTableError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteTableError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteTableError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteTableError::Unknown(String::from(body)),
         }
+        return DeleteTableError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteTableError {
     fn from(err: serde_json::error::Error) -> DeleteTableError {
-        DeleteTableError::Unknown(err.description().to_string())
+        DeleteTableError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteTableError {
@@ -2942,7 +2955,8 @@ impl Error for DeleteTableError {
             DeleteTableError::Validation(ref cause) => cause,
             DeleteTableError::Credentials(ref err) => err.description(),
             DeleteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTableError::Unknown(ref cause) => cause,
+            DeleteTableError::ParseError(ref cause) => cause,
+            DeleteTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2959,44 +2973,44 @@ pub enum DescribeBackupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBackupError {
-    pub fn from_body(body: &str) -> DescribeBackupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeBackupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BackupNotFoundException" => {
-                        DescribeBackupError::BackupNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DescribeBackupError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeBackupError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeBackupError::Unknown(String::from(body)),
+            match *error_type {
+                "BackupNotFoundException" => {
+                    return DescribeBackupError::BackupNotFound(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return DescribeBackupError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeBackupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeBackupError::Unknown(String::from(body)),
         }
+        return DescribeBackupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeBackupError {
     fn from(err: serde_json::error::Error) -> DescribeBackupError {
-        DescribeBackupError::Unknown(err.description().to_string())
+        DescribeBackupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeBackupError {
@@ -3027,7 +3041,8 @@ impl Error for DescribeBackupError {
             DescribeBackupError::Validation(ref cause) => cause,
             DescribeBackupError::Credentials(ref err) => err.description(),
             DescribeBackupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeBackupError::Unknown(ref cause) => cause,
+            DescribeBackupError::ParseError(ref cause) => cause,
+            DescribeBackupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3044,44 +3059,48 @@ pub enum DescribeContinuousBackupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeContinuousBackupsError {
-    pub fn from_body(body: &str) -> DescribeContinuousBackupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeContinuousBackupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => DescribeContinuousBackupsError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "TableNotFoundException" => {
-                        DescribeContinuousBackupsError::TableNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeContinuousBackupsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeContinuousBackupsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeContinuousBackupsError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "TableNotFoundException" => {
+                    return DescribeContinuousBackupsError::TableNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeContinuousBackupsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeContinuousBackupsError::Unknown(String::from(body)),
         }
+        return DescribeContinuousBackupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeContinuousBackupsError {
     fn from(err: serde_json::error::Error) -> DescribeContinuousBackupsError {
-        DescribeContinuousBackupsError::Unknown(err.description().to_string())
+        DescribeContinuousBackupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeContinuousBackupsError {
@@ -3114,7 +3133,8 @@ impl Error for DescribeContinuousBackupsError {
             DescribeContinuousBackupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeContinuousBackupsError::Unknown(ref cause) => cause,
+            DescribeContinuousBackupsError::ParseError(ref cause) => cause,
+            DescribeContinuousBackupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3131,44 +3151,48 @@ pub enum DescribeGlobalTableError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGlobalTableError {
-    pub fn from_body(body: &str) -> DescribeGlobalTableError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeGlobalTableError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "GlobalTableNotFoundException" => {
-                        DescribeGlobalTableError::GlobalTableNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DescribeGlobalTableError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeGlobalTableError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeGlobalTableError::Unknown(String::from(body)),
+            match *error_type {
+                "GlobalTableNotFoundException" => {
+                    return DescribeGlobalTableError::GlobalTableNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerError" => {
+                    return DescribeGlobalTableError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeGlobalTableError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeGlobalTableError::Unknown(String::from(body)),
         }
+        return DescribeGlobalTableError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeGlobalTableError {
     fn from(err: serde_json::error::Error) -> DescribeGlobalTableError {
-        DescribeGlobalTableError::Unknown(err.description().to_string())
+        DescribeGlobalTableError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeGlobalTableError {
@@ -3201,7 +3225,8 @@ impl Error for DescribeGlobalTableError {
             DescribeGlobalTableError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeGlobalTableError::Unknown(ref cause) => cause,
+            DescribeGlobalTableError::ParseError(ref cause) => cause,
+            DescribeGlobalTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3218,46 +3243,48 @@ pub enum DescribeGlobalTableSettingsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGlobalTableSettingsError {
-    pub fn from_body(body: &str) -> DescribeGlobalTableSettingsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeGlobalTableSettingsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "GlobalTableNotFoundException" => {
-                        DescribeGlobalTableSettingsError::GlobalTableNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerError" => DescribeGlobalTableSettingsError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        DescribeGlobalTableSettingsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeGlobalTableSettingsError::Unknown(String::from(body)),
+            match *error_type {
+                "GlobalTableNotFoundException" => {
+                    return DescribeGlobalTableSettingsError::GlobalTableNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerError" => {
+                    return DescribeGlobalTableSettingsError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeGlobalTableSettingsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeGlobalTableSettingsError::Unknown(String::from(body)),
         }
+        return DescribeGlobalTableSettingsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeGlobalTableSettingsError {
     fn from(err: serde_json::error::Error) -> DescribeGlobalTableSettingsError {
-        DescribeGlobalTableSettingsError::Unknown(err.description().to_string())
+        DescribeGlobalTableSettingsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeGlobalTableSettingsError {
@@ -3290,7 +3317,8 @@ impl Error for DescribeGlobalTableSettingsError {
             DescribeGlobalTableSettingsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeGlobalTableSettingsError::Unknown(ref cause) => cause,
+            DescribeGlobalTableSettingsError::ParseError(ref cause) => cause,
+            DescribeGlobalTableSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3305,41 +3333,41 @@ pub enum DescribeLimitsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLimitsError {
-    pub fn from_body(body: &str) -> DescribeLimitsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeLimitsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeLimitsError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeLimitsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeLimitsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeLimitsError::InternalServerError(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DescribeLimitsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeLimitsError::Unknown(String::from(body)),
         }
+        return DescribeLimitsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeLimitsError {
     fn from(err: serde_json::error::Error) -> DescribeLimitsError {
-        DescribeLimitsError::Unknown(err.description().to_string())
+        DescribeLimitsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeLimitsError {
@@ -3369,7 +3397,8 @@ impl Error for DescribeLimitsError {
             DescribeLimitsError::Validation(ref cause) => cause,
             DescribeLimitsError::Credentials(ref err) => err.description(),
             DescribeLimitsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeLimitsError::Unknown(ref cause) => cause,
+            DescribeLimitsError::ParseError(ref cause) => cause,
+            DescribeLimitsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3386,44 +3415,44 @@ pub enum DescribeTableError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTableError {
-    pub fn from_body(body: &str) -> DescribeTableError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTableError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeTableError::InternalServerError(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeTableError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeTableError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTableError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeTableError::InternalServerError(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return DescribeTableError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeTableError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTableError::Unknown(String::from(body)),
         }
+        return DescribeTableError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTableError {
     fn from(err: serde_json::error::Error) -> DescribeTableError {
-        DescribeTableError::Unknown(err.description().to_string())
+        DescribeTableError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTableError {
@@ -3454,7 +3483,8 @@ impl Error for DescribeTableError {
             DescribeTableError::Validation(ref cause) => cause,
             DescribeTableError::Credentials(ref err) => err.description(),
             DescribeTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTableError::Unknown(ref cause) => cause,
+            DescribeTableError::ParseError(ref cause) => cause,
+            DescribeTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3471,44 +3501,44 @@ pub enum DescribeTimeToLiveError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTimeToLiveError {
-    pub fn from_body(body: &str) -> DescribeTimeToLiveError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTimeToLiveError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeTimeToLiveError::InternalServerError(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeTimeToLiveError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeTimeToLiveError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTimeToLiveError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeTimeToLiveError::InternalServerError(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return DescribeTimeToLiveError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeTimeToLiveError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTimeToLiveError::Unknown(String::from(body)),
         }
+        return DescribeTimeToLiveError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTimeToLiveError {
     fn from(err: serde_json::error::Error) -> DescribeTimeToLiveError {
-        DescribeTimeToLiveError::Unknown(err.description().to_string())
+        DescribeTimeToLiveError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTimeToLiveError {
@@ -3541,7 +3571,8 @@ impl Error for DescribeTimeToLiveError {
             DescribeTimeToLiveError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeTimeToLiveError::Unknown(ref cause) => cause,
+            DescribeTimeToLiveError::ParseError(ref cause) => cause,
+            DescribeTimeToLiveError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3560,45 +3591,45 @@ pub enum GetItemError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetItemError {
-    pub fn from_body(body: &str) -> GetItemError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetItemError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        GetItemError::InternalServerError(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        GetItemError::ProvisionedThroughputExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetItemError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => GetItemError::Validation(error_message.to_string()),
-                    _ => GetItemError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return GetItemError::InternalServerError(String::from(error_message))
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return GetItemError::ProvisionedThroughputExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetItemError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => return GetItemError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => GetItemError::Unknown(String::from(body)),
         }
+        return GetItemError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetItemError {
     fn from(err: serde_json::error::Error) -> GetItemError {
-        GetItemError::Unknown(err.description().to_string())
+        GetItemError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetItemError {
@@ -3630,7 +3661,8 @@ impl Error for GetItemError {
             GetItemError::Validation(ref cause) => cause,
             GetItemError::Credentials(ref err) => err.description(),
             GetItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetItemError::Unknown(ref cause) => cause,
+            GetItemError::ParseError(ref cause) => cause,
+            GetItemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3645,41 +3677,41 @@ pub enum ListBackupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListBackupsError {
-    pub fn from_body(body: &str) -> ListBackupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListBackupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListBackupsError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListBackupsError::Validation(error_message.to_string())
-                    }
-                    _ => ListBackupsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListBackupsError::InternalServerError(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListBackupsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListBackupsError::Unknown(String::from(body)),
         }
+        return ListBackupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListBackupsError {
     fn from(err: serde_json::error::Error) -> ListBackupsError {
-        ListBackupsError::Unknown(err.description().to_string())
+        ListBackupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListBackupsError {
@@ -3709,7 +3741,8 @@ impl Error for ListBackupsError {
             ListBackupsError::Validation(ref cause) => cause,
             ListBackupsError::Credentials(ref err) => err.description(),
             ListBackupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListBackupsError::Unknown(ref cause) => cause,
+            ListBackupsError::ParseError(ref cause) => cause,
+            ListBackupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3724,41 +3757,41 @@ pub enum ListGlobalTablesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListGlobalTablesError {
-    pub fn from_body(body: &str) -> ListGlobalTablesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListGlobalTablesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListGlobalTablesError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListGlobalTablesError::Validation(error_message.to_string())
-                    }
-                    _ => ListGlobalTablesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListGlobalTablesError::InternalServerError(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListGlobalTablesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListGlobalTablesError::Unknown(String::from(body)),
         }
+        return ListGlobalTablesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListGlobalTablesError {
     fn from(err: serde_json::error::Error) -> ListGlobalTablesError {
-        ListGlobalTablesError::Unknown(err.description().to_string())
+        ListGlobalTablesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListGlobalTablesError {
@@ -3788,7 +3821,8 @@ impl Error for ListGlobalTablesError {
             ListGlobalTablesError::Validation(ref cause) => cause,
             ListGlobalTablesError::Credentials(ref err) => err.description(),
             ListGlobalTablesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGlobalTablesError::Unknown(ref cause) => cause,
+            ListGlobalTablesError::ParseError(ref cause) => cause,
+            ListGlobalTablesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3803,39 +3837,41 @@ pub enum ListTablesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTablesError {
-    pub fn from_body(body: &str) -> ListTablesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTablesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListTablesError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => ListTablesError::Validation(error_message.to_string()),
-                    _ => ListTablesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListTablesError::InternalServerError(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListTablesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTablesError::Unknown(String::from(body)),
         }
+        return ListTablesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTablesError {
     fn from(err: serde_json::error::Error) -> ListTablesError {
-        ListTablesError::Unknown(err.description().to_string())
+        ListTablesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTablesError {
@@ -3865,7 +3901,8 @@ impl Error for ListTablesError {
             ListTablesError::Validation(ref cause) => cause,
             ListTablesError::Credentials(ref err) => err.description(),
             ListTablesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTablesError::Unknown(ref cause) => cause,
+            ListTablesError::ParseError(ref cause) => cause,
+            ListTablesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3882,44 +3919,44 @@ pub enum ListTagsOfResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsOfResourceError {
-    pub fn from_body(body: &str) -> ListTagsOfResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsOfResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListTagsOfResourceError::InternalServerError(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListTagsOfResourceError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTagsOfResourceError::Validation(error_message.to_string())
-                    }
-                    _ => ListTagsOfResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListTagsOfResourceError::InternalServerError(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return ListTagsOfResourceError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTagsOfResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTagsOfResourceError::Unknown(String::from(body)),
         }
+        return ListTagsOfResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTagsOfResourceError {
     fn from(err: serde_json::error::Error) -> ListTagsOfResourceError {
-        ListTagsOfResourceError::Unknown(err.description().to_string())
+        ListTagsOfResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTagsOfResourceError {
@@ -3952,7 +3989,8 @@ impl Error for ListTagsOfResourceError {
             ListTagsOfResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTagsOfResourceError::Unknown(ref cause) => cause,
+            ListTagsOfResourceError::ParseError(ref cause) => cause,
+            ListTagsOfResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3975,51 +4013,53 @@ pub enum PutItemError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutItemError {
-    pub fn from_body(body: &str) -> PutItemError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutItemError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConditionalCheckFailedException" => {
-                        PutItemError::ConditionalCheckFailed(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        PutItemError::InternalServerError(String::from(error_message))
-                    }
-                    "ItemCollectionSizeLimitExceededException" => {
-                        PutItemError::ItemCollectionSizeLimitExceeded(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        PutItemError::ProvisionedThroughputExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        PutItemError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => PutItemError::Validation(error_message.to_string()),
-                    _ => PutItemError::Unknown(String::from(body)),
+            match *error_type {
+                "ConditionalCheckFailedException" => {
+                    return PutItemError::ConditionalCheckFailed(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return PutItemError::InternalServerError(String::from(error_message))
+                }
+                "ItemCollectionSizeLimitExceededException" => {
+                    return PutItemError::ItemCollectionSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return PutItemError::ProvisionedThroughputExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return PutItemError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => return PutItemError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => PutItemError::Unknown(String::from(body)),
         }
+        return PutItemError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutItemError {
     fn from(err: serde_json::error::Error) -> PutItemError {
-        PutItemError::Unknown(err.description().to_string())
+        PutItemError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutItemError {
@@ -4053,7 +4093,8 @@ impl Error for PutItemError {
             PutItemError::Validation(ref cause) => cause,
             PutItemError::Credentials(ref err) => err.description(),
             PutItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutItemError::Unknown(ref cause) => cause,
+            PutItemError::ParseError(ref cause) => cause,
+            PutItemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4072,45 +4113,45 @@ pub enum QueryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl QueryError {
-    pub fn from_body(body: &str) -> QueryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> QueryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        QueryError::InternalServerError(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        QueryError::ProvisionedThroughputExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        QueryError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => QueryError::Validation(error_message.to_string()),
-                    _ => QueryError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return QueryError::InternalServerError(String::from(error_message))
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return QueryError::ProvisionedThroughputExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return QueryError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => return QueryError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => QueryError::Unknown(String::from(body)),
         }
+        return QueryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for QueryError {
     fn from(err: serde_json::error::Error) -> QueryError {
-        QueryError::Unknown(err.description().to_string())
+        QueryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for QueryError {
@@ -4142,7 +4183,8 @@ impl Error for QueryError {
             QueryError::Validation(ref cause) => cause,
             QueryError::Credentials(ref err) => err.description(),
             QueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            QueryError::Unknown(ref cause) => cause,
+            QueryError::ParseError(ref cause) => cause,
+            QueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4167,56 +4209,60 @@ pub enum RestoreTableFromBackupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreTableFromBackupError {
-    pub fn from_body(body: &str) -> RestoreTableFromBackupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RestoreTableFromBackupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BackupInUseException" => {
-                        RestoreTableFromBackupError::BackupInUse(String::from(error_message))
-                    }
-                    "BackupNotFoundException" => {
-                        RestoreTableFromBackupError::BackupNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => RestoreTableFromBackupError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "LimitExceededException" => {
-                        RestoreTableFromBackupError::LimitExceeded(String::from(error_message))
-                    }
-                    "TableAlreadyExistsException" => {
-                        RestoreTableFromBackupError::TableAlreadyExists(String::from(error_message))
-                    }
-                    "TableInUseException" => {
-                        RestoreTableFromBackupError::TableInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RestoreTableFromBackupError::Validation(error_message.to_string())
-                    }
-                    _ => RestoreTableFromBackupError::Unknown(String::from(body)),
+            match *error_type {
+                "BackupInUseException" => {
+                    return RestoreTableFromBackupError::BackupInUse(String::from(error_message))
                 }
+                "BackupNotFoundException" => {
+                    return RestoreTableFromBackupError::BackupNotFound(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return RestoreTableFromBackupError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RestoreTableFromBackupError::LimitExceeded(String::from(error_message))
+                }
+                "TableAlreadyExistsException" => {
+                    return RestoreTableFromBackupError::TableAlreadyExists(String::from(
+                        error_message,
+                    ))
+                }
+                "TableInUseException" => {
+                    return RestoreTableFromBackupError::TableInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RestoreTableFromBackupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RestoreTableFromBackupError::Unknown(String::from(body)),
         }
+        return RestoreTableFromBackupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RestoreTableFromBackupError {
     fn from(err: serde_json::error::Error) -> RestoreTableFromBackupError {
-        RestoreTableFromBackupError::Unknown(err.description().to_string())
+        RestoreTableFromBackupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RestoreTableFromBackupError {
@@ -4253,7 +4299,8 @@ impl Error for RestoreTableFromBackupError {
             RestoreTableFromBackupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RestoreTableFromBackupError::Unknown(ref cause) => cause,
+            RestoreTableFromBackupError::ParseError(ref cause) => cause,
+            RestoreTableFromBackupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4280,65 +4327,71 @@ pub enum RestoreTableToPointInTimeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreTableToPointInTimeError {
-    pub fn from_body(body: &str) -> RestoreTableToPointInTimeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RestoreTableToPointInTimeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => RestoreTableToPointInTimeError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidRestoreTimeException" => {
-                        RestoreTableToPointInTimeError::InvalidRestoreTime(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        RestoreTableToPointInTimeError::LimitExceeded(String::from(error_message))
-                    }
-                    "PointInTimeRecoveryUnavailableException" => {
-                        RestoreTableToPointInTimeError::PointInTimeRecoveryUnavailable(
-                            String::from(error_message),
-                        )
-                    }
-                    "TableAlreadyExistsException" => {
-                        RestoreTableToPointInTimeError::TableAlreadyExists(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TableInUseException" => {
-                        RestoreTableToPointInTimeError::TableInUse(String::from(error_message))
-                    }
-                    "TableNotFoundException" => {
-                        RestoreTableToPointInTimeError::TableNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RestoreTableToPointInTimeError::Validation(error_message.to_string())
-                    }
-                    _ => RestoreTableToPointInTimeError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return RestoreTableToPointInTimeError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRestoreTimeException" => {
+                    return RestoreTableToPointInTimeError::InvalidRestoreTime(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RestoreTableToPointInTimeError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "PointInTimeRecoveryUnavailableException" => {
+                    return RestoreTableToPointInTimeError::PointInTimeRecoveryUnavailable(
+                        String::from(error_message),
+                    )
+                }
+                "TableAlreadyExistsException" => {
+                    return RestoreTableToPointInTimeError::TableAlreadyExists(String::from(
+                        error_message,
+                    ))
+                }
+                "TableInUseException" => {
+                    return RestoreTableToPointInTimeError::TableInUse(String::from(error_message))
+                }
+                "TableNotFoundException" => {
+                    return RestoreTableToPointInTimeError::TableNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RestoreTableToPointInTimeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RestoreTableToPointInTimeError::Unknown(String::from(body)),
         }
+        return RestoreTableToPointInTimeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RestoreTableToPointInTimeError {
     fn from(err: serde_json::error::Error) -> RestoreTableToPointInTimeError {
-        RestoreTableToPointInTimeError::Unknown(err.description().to_string())
+        RestoreTableToPointInTimeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RestoreTableToPointInTimeError {
@@ -4376,7 +4429,8 @@ impl Error for RestoreTableToPointInTimeError {
             RestoreTableToPointInTimeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RestoreTableToPointInTimeError::Unknown(ref cause) => cause,
+            RestoreTableToPointInTimeError::ParseError(ref cause) => cause,
+            RestoreTableToPointInTimeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4395,45 +4449,45 @@ pub enum ScanError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ScanError {
-    pub fn from_body(body: &str) -> ScanError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ScanError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ScanError::InternalServerError(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        ScanError::ProvisionedThroughputExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ScanError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => ScanError::Validation(error_message.to_string()),
-                    _ => ScanError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ScanError::InternalServerError(String::from(error_message))
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return ScanError::ProvisionedThroughputExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ScanError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => return ScanError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => ScanError::Unknown(String::from(body)),
         }
+        return ScanError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ScanError {
     fn from(err: serde_json::error::Error) -> ScanError {
-        ScanError::Unknown(err.description().to_string())
+        ScanError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ScanError {
@@ -4465,7 +4519,8 @@ impl Error for ScanError {
             ScanError::Validation(ref cause) => cause,
             ScanError::Credentials(ref err) => err.description(),
             ScanError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ScanError::Unknown(ref cause) => cause,
+            ScanError::ParseError(ref cause) => cause,
+            ScanError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4486,50 +4541,50 @@ pub enum TagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_body(body: &str) -> TagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        TagResourceError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        TagResourceError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        TagResourceError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        TagResourceError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        TagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => TagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return TagResourceError::InternalServerError(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return TagResourceError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return TagResourceError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return TagResourceError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return TagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TagResourceError::Unknown(String::from(body)),
         }
+        return TagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TagResourceError {
     fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::Unknown(err.description().to_string())
+        TagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TagResourceError {
@@ -4562,7 +4617,8 @@ impl Error for TagResourceError {
             TagResourceError::Validation(ref cause) => cause,
             TagResourceError::Credentials(ref err) => err.description(),
             TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::Unknown(ref cause) => cause,
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4583,50 +4639,50 @@ pub enum UntagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_body(body: &str) -> UntagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        UntagResourceError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UntagResourceError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        UntagResourceError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UntagResourceError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UntagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => UntagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return UntagResourceError::InternalServerError(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return UntagResourceError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return UntagResourceError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UntagResourceError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UntagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UntagResourceError::Unknown(String::from(body)),
         }
+        return UntagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UntagResourceError {
     fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::Unknown(err.description().to_string())
+        UntagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UntagResourceError {
@@ -4659,7 +4715,8 @@ impl Error for UntagResourceError {
             UntagResourceError::Validation(ref cause) => cause,
             UntagResourceError::Credentials(ref err) => err.description(),
             UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::Unknown(ref cause) => cause,
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4678,49 +4735,51 @@ pub enum UpdateContinuousBackupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateContinuousBackupsError {
-    pub fn from_body(body: &str) -> UpdateContinuousBackupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateContinuousBackupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ContinuousBackupsUnavailableException" => {
-                        UpdateContinuousBackupsError::ContinuousBackupsUnavailable(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerError" => UpdateContinuousBackupsError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "TableNotFoundException" => {
-                        UpdateContinuousBackupsError::TableNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateContinuousBackupsError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateContinuousBackupsError::Unknown(String::from(body)),
+            match *error_type {
+                "ContinuousBackupsUnavailableException" => {
+                    return UpdateContinuousBackupsError::ContinuousBackupsUnavailable(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerError" => {
+                    return UpdateContinuousBackupsError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "TableNotFoundException" => {
+                    return UpdateContinuousBackupsError::TableNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateContinuousBackupsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateContinuousBackupsError::Unknown(String::from(body)),
         }
+        return UpdateContinuousBackupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateContinuousBackupsError {
     fn from(err: serde_json::error::Error) -> UpdateContinuousBackupsError {
-        UpdateContinuousBackupsError::Unknown(err.description().to_string())
+        UpdateContinuousBackupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateContinuousBackupsError {
@@ -4754,7 +4813,8 @@ impl Error for UpdateContinuousBackupsError {
             UpdateContinuousBackupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateContinuousBackupsError::Unknown(ref cause) => cause,
+            UpdateContinuousBackupsError::ParseError(ref cause) => cause,
+            UpdateContinuousBackupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4777,53 +4837,53 @@ pub enum UpdateGlobalTableError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGlobalTableError {
-    pub fn from_body(body: &str) -> UpdateGlobalTableError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateGlobalTableError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "GlobalTableNotFoundException" => {
-                        UpdateGlobalTableError::GlobalTableNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        UpdateGlobalTableError::InternalServerError(String::from(error_message))
-                    }
-                    "ReplicaAlreadyExistsException" => {
-                        UpdateGlobalTableError::ReplicaAlreadyExists(String::from(error_message))
-                    }
-                    "ReplicaNotFoundException" => {
-                        UpdateGlobalTableError::ReplicaNotFound(String::from(error_message))
-                    }
-                    "TableNotFoundException" => {
-                        UpdateGlobalTableError::TableNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateGlobalTableError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateGlobalTableError::Unknown(String::from(body)),
+            match *error_type {
+                "GlobalTableNotFoundException" => {
+                    return UpdateGlobalTableError::GlobalTableNotFound(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return UpdateGlobalTableError::InternalServerError(String::from(error_message))
+                }
+                "ReplicaAlreadyExistsException" => {
+                    return UpdateGlobalTableError::ReplicaAlreadyExists(String::from(error_message))
+                }
+                "ReplicaNotFoundException" => {
+                    return UpdateGlobalTableError::ReplicaNotFound(String::from(error_message))
+                }
+                "TableNotFoundException" => {
+                    return UpdateGlobalTableError::TableNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateGlobalTableError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateGlobalTableError::Unknown(String::from(body)),
         }
+        return UpdateGlobalTableError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateGlobalTableError {
     fn from(err: serde_json::error::Error) -> UpdateGlobalTableError {
-        UpdateGlobalTableError::Unknown(err.description().to_string())
+        UpdateGlobalTableError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateGlobalTableError {
@@ -4859,7 +4919,8 @@ impl Error for UpdateGlobalTableError {
             UpdateGlobalTableError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateGlobalTableError::Unknown(ref cause) => cause,
+            UpdateGlobalTableError::ParseError(ref cause) => cause,
+            UpdateGlobalTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4884,58 +4945,68 @@ pub enum UpdateGlobalTableSettingsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGlobalTableSettingsError {
-    pub fn from_body(body: &str) -> UpdateGlobalTableSettingsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateGlobalTableSettingsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "GlobalTableNotFoundException" => {
-                        UpdateGlobalTableSettingsError::GlobalTableNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "IndexNotFoundException" => {
-                        UpdateGlobalTableSettingsError::IndexNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => UpdateGlobalTableSettingsError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "LimitExceededException" => {
-                        UpdateGlobalTableSettingsError::LimitExceeded(String::from(error_message))
-                    }
-                    "ReplicaNotFoundException" => {
-                        UpdateGlobalTableSettingsError::ReplicaNotFound(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        UpdateGlobalTableSettingsError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateGlobalTableSettingsError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateGlobalTableSettingsError::Unknown(String::from(body)),
+            match *error_type {
+                "GlobalTableNotFoundException" => {
+                    return UpdateGlobalTableSettingsError::GlobalTableNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "IndexNotFoundException" => {
+                    return UpdateGlobalTableSettingsError::IndexNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerError" => {
+                    return UpdateGlobalTableSettingsError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return UpdateGlobalTableSettingsError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ReplicaNotFoundException" => {
+                    return UpdateGlobalTableSettingsError::ReplicaNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return UpdateGlobalTableSettingsError::ResourceInUse(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateGlobalTableSettingsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateGlobalTableSettingsError::Unknown(String::from(body)),
         }
+        return UpdateGlobalTableSettingsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateGlobalTableSettingsError {
     fn from(err: serde_json::error::Error) -> UpdateGlobalTableSettingsError {
-        UpdateGlobalTableSettingsError::Unknown(err.description().to_string())
+        UpdateGlobalTableSettingsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateGlobalTableSettingsError {
@@ -4972,7 +5043,8 @@ impl Error for UpdateGlobalTableSettingsError {
             UpdateGlobalTableSettingsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateGlobalTableSettingsError::Unknown(ref cause) => cause,
+            UpdateGlobalTableSettingsError::ParseError(ref cause) => cause,
+            UpdateGlobalTableSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4995,53 +5067,57 @@ pub enum UpdateItemError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateItemError {
-    pub fn from_body(body: &str) -> UpdateItemError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateItemError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConditionalCheckFailedException" => {
-                        UpdateItemError::ConditionalCheckFailed(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        UpdateItemError::InternalServerError(String::from(error_message))
-                    }
-                    "ItemCollectionSizeLimitExceededException" => {
-                        UpdateItemError::ItemCollectionSizeLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        UpdateItemError::ProvisionedThroughputExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateItemError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => UpdateItemError::Validation(error_message.to_string()),
-                    _ => UpdateItemError::Unknown(String::from(body)),
+            match *error_type {
+                "ConditionalCheckFailedException" => {
+                    return UpdateItemError::ConditionalCheckFailed(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return UpdateItemError::InternalServerError(String::from(error_message))
+                }
+                "ItemCollectionSizeLimitExceededException" => {
+                    return UpdateItemError::ItemCollectionSizeLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return UpdateItemError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateItemError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateItemError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateItemError::Unknown(String::from(body)),
         }
+        return UpdateItemError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateItemError {
     fn from(err: serde_json::error::Error) -> UpdateItemError {
-        UpdateItemError::Unknown(err.description().to_string())
+        UpdateItemError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateItemError {
@@ -5075,7 +5151,8 @@ impl Error for UpdateItemError {
             UpdateItemError::Validation(ref cause) => cause,
             UpdateItemError::Credentials(ref err) => err.description(),
             UpdateItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateItemError::Unknown(ref cause) => cause,
+            UpdateItemError::ParseError(ref cause) => cause,
+            UpdateItemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5096,50 +5173,50 @@ pub enum UpdateTableError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTableError {
-    pub fn from_body(body: &str) -> UpdateTableError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateTableError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        UpdateTableError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateTableError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        UpdateTableError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateTableError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateTableError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateTableError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return UpdateTableError::InternalServerError(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return UpdateTableError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return UpdateTableError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateTableError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateTableError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateTableError::Unknown(String::from(body)),
         }
+        return UpdateTableError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateTableError {
     fn from(err: serde_json::error::Error) -> UpdateTableError {
-        UpdateTableError::Unknown(err.description().to_string())
+        UpdateTableError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateTableError {
@@ -5172,7 +5249,8 @@ impl Error for UpdateTableError {
             UpdateTableError::Validation(ref cause) => cause,
             UpdateTableError::Credentials(ref err) => err.description(),
             UpdateTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateTableError::Unknown(ref cause) => cause,
+            UpdateTableError::ParseError(ref cause) => cause,
+            UpdateTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5193,50 +5271,50 @@ pub enum UpdateTimeToLiveError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTimeToLiveError {
-    pub fn from_body(body: &str) -> UpdateTimeToLiveError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateTimeToLiveError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        UpdateTimeToLiveError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateTimeToLiveError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        UpdateTimeToLiveError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateTimeToLiveError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateTimeToLiveError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateTimeToLiveError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return UpdateTimeToLiveError::InternalServerError(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return UpdateTimeToLiveError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return UpdateTimeToLiveError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateTimeToLiveError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateTimeToLiveError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateTimeToLiveError::Unknown(String::from(body)),
         }
+        return UpdateTimeToLiveError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateTimeToLiveError {
     fn from(err: serde_json::error::Error) -> UpdateTimeToLiveError {
-        UpdateTimeToLiveError::Unknown(err.description().to_string())
+        UpdateTimeToLiveError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateTimeToLiveError {
@@ -5269,7 +5347,8 @@ impl Error for UpdateTimeToLiveError {
             UpdateTimeToLiveError::Validation(ref cause) => cause,
             UpdateTimeToLiveError::Credentials(ref err) => err.description(),
             UpdateTimeToLiveError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateTimeToLiveError::Unknown(ref cause) => cause,
+            UpdateTimeToLiveError::ParseError(ref cause) => cause,
+            UpdateTimeToLiveError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5511,14 +5590,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<BatchGetItemOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchGetItemError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchGetItemError::from_response(response))),
+                )
             }
         })
     }
@@ -5546,14 +5627,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<BatchWriteItemOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchWriteItemError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchWriteItemError::from_response(response))),
+                )
             }
         })
     }
@@ -5581,14 +5664,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<CreateBackupOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateBackupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateBackupError::from_response(response))),
+                )
             }
         })
     }
@@ -5616,14 +5701,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<CreateGlobalTableOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateGlobalTableError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateGlobalTableError::from_response(response))),
+                )
             }
         })
     }
@@ -5651,14 +5738,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<CreateTableOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTableError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateTableError::from_response(response))),
+                )
             }
         })
     }
@@ -5686,14 +5775,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<DeleteBackupOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBackupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteBackupError::from_response(response))),
+                )
             }
         })
     }
@@ -5721,14 +5812,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<DeleteItemOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteItemError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteItemError::from_response(response))),
+                )
             }
         })
     }
@@ -5756,14 +5849,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<DeleteTableOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTableError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTableError::from_response(response))),
+                )
             }
         })
     }
@@ -5791,14 +5886,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<DescribeBackupOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeBackupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeBackupError::from_response(response))),
+                )
             }
         })
     }
@@ -5829,13 +5926,12 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<DescribeContinuousBackupsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeContinuousBackupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeContinuousBackupsError::from_response(response))
                 }))
             }
         })
@@ -5864,14 +5960,15 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<DescribeGlobalTableOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeGlobalTableError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeGlobalTableError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5902,13 +5999,12 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<DescribeGlobalTableSettingsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeGlobalTableSettingsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeGlobalTableSettingsError::from_response(response))
                 }))
             }
         })
@@ -5933,14 +6029,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<DescribeLimitsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeLimitsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeLimitsError::from_response(response))),
+                )
             }
         })
     }
@@ -5968,14 +6066,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<DescribeTableOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTableError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTableError::from_response(response))),
+                )
             }
         })
     }
@@ -6003,14 +6103,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<DescribeTimeToLiveOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTimeToLiveError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTimeToLiveError::from_response(response))),
+                )
             }
         })
     }
@@ -6035,14 +6137,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<GetItemOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetItemError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetItemError::from_response(response))),
+                )
             }
         })
     }
@@ -6070,14 +6174,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<ListBackupsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListBackupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListBackupsError::from_response(response))),
+                )
             }
         })
     }
@@ -6105,14 +6211,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<ListGlobalTablesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListGlobalTablesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListGlobalTablesError::from_response(response))),
+                )
             }
         })
     }
@@ -6140,14 +6248,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<ListTablesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTablesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTablesError::from_response(response))),
+                )
             }
         })
     }
@@ -6175,14 +6285,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<ListTagsOfResourceOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsOfResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTagsOfResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -6207,14 +6319,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<PutItemOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutItemError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutItemError::from_response(response))),
+                )
             }
         })
     }
@@ -6239,14 +6353,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<QueryOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(QueryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(QueryError::from_response(response))),
+                )
             }
         })
     }
@@ -6274,14 +6390,15 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<RestoreTableFromBackupOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreTableFromBackupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RestoreTableFromBackupError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6312,13 +6429,12 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<RestoreTableToPointInTimeOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreTableToPointInTimeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RestoreTableToPointInTimeError::from_response(response))
                 }))
             }
         })
@@ -6344,14 +6460,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<ScanOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ScanError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ScanError::from_response(response))),
+                )
             }
         })
     }
@@ -6369,11 +6487,12 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -6391,11 +6510,12 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -6423,13 +6543,12 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<UpdateContinuousBackupsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateContinuousBackupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateContinuousBackupsError::from_response(response))
                 }))
             }
         })
@@ -6458,14 +6577,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<UpdateGlobalTableOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateGlobalTableError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateGlobalTableError::from_response(response))),
+                )
             }
         })
     }
@@ -6496,13 +6617,12 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<UpdateGlobalTableSettingsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateGlobalTableSettingsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateGlobalTableSettingsError::from_response(response))
                 }))
             }
         })
@@ -6531,14 +6651,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<UpdateItemOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateItemError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateItemError::from_response(response))),
+                )
             }
         })
     }
@@ -6566,14 +6688,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<UpdateTableOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTableError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateTableError::from_response(response))),
+                )
             }
         })
     }
@@ -6601,14 +6725,16 @@ impl DynamoDb for DynamoDbClient {
 
                     serde_json::from_str::<UpdateTimeToLiveOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTimeToLiveError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateTimeToLiveError::from_response(response))),
+                )
             }
         })
     }

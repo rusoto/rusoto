@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents the data for an attribute. You can set one, and only one, of the elements.</p> <p>Each attribute in an item is a name-value pair. An attribute can be single-valued or multi-valued set. For example, a book item can have title and authors attributes. Each book has one title but can have many authors. The multi-valued attribute is a set; duplicate values are not allowed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -36,7 +36,7 @@ pub struct AttributeValue {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub b: Option<Vec<u8>>,
     /// <p>A Boolean data type.</p>
@@ -375,44 +375,44 @@ pub enum DescribeStreamError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStreamError {
-    pub fn from_body(body: &str) -> DescribeStreamError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeStreamError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeStreamError::InternalServerError(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeStreamError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeStreamError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeStreamError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeStreamError::InternalServerError(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return DescribeStreamError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeStreamError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeStreamError::Unknown(String::from(body)),
         }
+        return DescribeStreamError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeStreamError {
     fn from(err: serde_json::error::Error) -> DescribeStreamError {
-        DescribeStreamError::Unknown(err.description().to_string())
+        DescribeStreamError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeStreamError {
@@ -443,7 +443,8 @@ impl Error for DescribeStreamError {
             DescribeStreamError::Validation(ref cause) => cause,
             DescribeStreamError::Credentials(ref err) => err.description(),
             DescribeStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeStreamError::Unknown(ref cause) => cause,
+            DescribeStreamError::ParseError(ref cause) => cause,
+            DescribeStreamError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -466,51 +467,53 @@ pub enum GetRecordsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetRecordsError {
-    pub fn from_body(body: &str) -> GetRecordsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetRecordsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ExpiredIteratorException" => {
-                        GetRecordsError::ExpiredIterator(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        GetRecordsError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetRecordsError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetRecordsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TrimmedDataAccessException" => {
-                        GetRecordsError::TrimmedDataAccess(String::from(error_message))
-                    }
-                    "ValidationException" => GetRecordsError::Validation(error_message.to_string()),
-                    _ => GetRecordsError::Unknown(String::from(body)),
+            match *error_type {
+                "ExpiredIteratorException" => {
+                    return GetRecordsError::ExpiredIterator(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return GetRecordsError::InternalServerError(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetRecordsError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetRecordsError::ResourceNotFound(String::from(error_message))
+                }
+                "TrimmedDataAccessException" => {
+                    return GetRecordsError::TrimmedDataAccess(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetRecordsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetRecordsError::Unknown(String::from(body)),
         }
+        return GetRecordsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetRecordsError {
     fn from(err: serde_json::error::Error) -> GetRecordsError {
-        GetRecordsError::Unknown(err.description().to_string())
+        GetRecordsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetRecordsError {
@@ -544,7 +547,8 @@ impl Error for GetRecordsError {
             GetRecordsError::Validation(ref cause) => cause,
             GetRecordsError::Credentials(ref err) => err.description(),
             GetRecordsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRecordsError::Unknown(ref cause) => cause,
+            GetRecordsError::ParseError(ref cause) => cause,
+            GetRecordsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -563,47 +567,47 @@ pub enum GetShardIteratorError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetShardIteratorError {
-    pub fn from_body(body: &str) -> GetShardIteratorError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetShardIteratorError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        GetShardIteratorError::InternalServerError(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetShardIteratorError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TrimmedDataAccessException" => {
-                        GetShardIteratorError::TrimmedDataAccess(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetShardIteratorError::Validation(error_message.to_string())
-                    }
-                    _ => GetShardIteratorError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return GetShardIteratorError::InternalServerError(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return GetShardIteratorError::ResourceNotFound(String::from(error_message))
+                }
+                "TrimmedDataAccessException" => {
+                    return GetShardIteratorError::TrimmedDataAccess(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetShardIteratorError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetShardIteratorError::Unknown(String::from(body)),
         }
+        return GetShardIteratorError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetShardIteratorError {
     fn from(err: serde_json::error::Error) -> GetShardIteratorError {
-        GetShardIteratorError::Unknown(err.description().to_string())
+        GetShardIteratorError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetShardIteratorError {
@@ -635,7 +639,8 @@ impl Error for GetShardIteratorError {
             GetShardIteratorError::Validation(ref cause) => cause,
             GetShardIteratorError::Credentials(ref err) => err.description(),
             GetShardIteratorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetShardIteratorError::Unknown(ref cause) => cause,
+            GetShardIteratorError::ParseError(ref cause) => cause,
+            GetShardIteratorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -652,44 +657,44 @@ pub enum ListStreamsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListStreamsError {
-    pub fn from_body(body: &str) -> ListStreamsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListStreamsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListStreamsError::InternalServerError(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListStreamsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListStreamsError::Validation(error_message.to_string())
-                    }
-                    _ => ListStreamsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListStreamsError::InternalServerError(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return ListStreamsError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListStreamsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListStreamsError::Unknown(String::from(body)),
         }
+        return ListStreamsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListStreamsError {
     fn from(err: serde_json::error::Error) -> ListStreamsError {
-        ListStreamsError::Unknown(err.description().to_string())
+        ListStreamsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListStreamsError {
@@ -720,7 +725,8 @@ impl Error for ListStreamsError {
             ListStreamsError::Validation(ref cause) => cause,
             ListStreamsError::Credentials(ref err) => err.description(),
             ListStreamsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListStreamsError::Unknown(ref cause) => cause,
+            ListStreamsError::ParseError(ref cause) => cause,
+            ListStreamsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -809,14 +815,16 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
 
                     serde_json::from_str::<DescribeStreamOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStreamError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeStreamError::from_response(response))),
+                )
             }
         })
     }
@@ -844,14 +852,16 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
 
                     serde_json::from_str::<GetRecordsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetRecordsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetRecordsError::from_response(response))),
+                )
             }
         })
     }
@@ -879,14 +889,16 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
 
                     serde_json::from_str::<GetShardIteratorOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetShardIteratorError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetShardIteratorError::from_response(response))),
+                )
             }
         })
     }
@@ -914,14 +926,16 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
 
                     serde_json::from_str::<ListStreamsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStreamsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListStreamsError::from_response(response))),
+                )
             }
         })
     }

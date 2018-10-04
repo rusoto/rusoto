@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>This section describes operations that you can perform on an AWS Elemental MediaStore container.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -229,47 +229,47 @@ pub enum CreateContainerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateContainerError {
-    pub fn from_body(body: &str) -> CreateContainerError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateContainerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ContainerInUseException" => {
-                        CreateContainerError::ContainerInUse(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        CreateContainerError::InternalServerError(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateContainerError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateContainerError::Validation(error_message.to_string())
-                    }
-                    _ => CreateContainerError::Unknown(String::from(body)),
+            match *error_type {
+                "ContainerInUseException" => {
+                    return CreateContainerError::ContainerInUse(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return CreateContainerError::InternalServerError(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateContainerError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateContainerError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateContainerError::Unknown(String::from(body)),
         }
+        return CreateContainerError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateContainerError {
     fn from(err: serde_json::error::Error) -> CreateContainerError {
-        CreateContainerError::Unknown(err.description().to_string())
+        CreateContainerError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateContainerError {
@@ -301,7 +301,8 @@ impl Error for CreateContainerError {
             CreateContainerError::Validation(ref cause) => cause,
             CreateContainerError::Credentials(ref err) => err.description(),
             CreateContainerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateContainerError::Unknown(ref cause) => cause,
+            CreateContainerError::ParseError(ref cause) => cause,
+            CreateContainerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -320,47 +321,47 @@ pub enum DeleteContainerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteContainerError {
-    pub fn from_body(body: &str) -> DeleteContainerError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteContainerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ContainerInUseException" => {
-                        DeleteContainerError::ContainerInUse(String::from(error_message))
-                    }
-                    "ContainerNotFoundException" => {
-                        DeleteContainerError::ContainerNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DeleteContainerError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteContainerError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteContainerError::Unknown(String::from(body)),
+            match *error_type {
+                "ContainerInUseException" => {
+                    return DeleteContainerError::ContainerInUse(String::from(error_message))
                 }
+                "ContainerNotFoundException" => {
+                    return DeleteContainerError::ContainerNotFound(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return DeleteContainerError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteContainerError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteContainerError::Unknown(String::from(body)),
         }
+        return DeleteContainerError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteContainerError {
     fn from(err: serde_json::error::Error) -> DeleteContainerError {
-        DeleteContainerError::Unknown(err.description().to_string())
+        DeleteContainerError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteContainerError {
@@ -392,7 +393,8 @@ impl Error for DeleteContainerError {
             DeleteContainerError::Validation(ref cause) => cause,
             DeleteContainerError::Credentials(ref err) => err.description(),
             DeleteContainerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteContainerError::Unknown(ref cause) => cause,
+            DeleteContainerError::ParseError(ref cause) => cause,
+            DeleteContainerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -413,50 +415,54 @@ pub enum DeleteContainerPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteContainerPolicyError {
-    pub fn from_body(body: &str) -> DeleteContainerPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteContainerPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ContainerInUseException" => {
-                        DeleteContainerPolicyError::ContainerInUse(String::from(error_message))
-                    }
-                    "ContainerNotFoundException" => {
-                        DeleteContainerPolicyError::ContainerNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DeleteContainerPolicyError::InternalServerError(String::from(error_message))
-                    }
-                    "PolicyNotFoundException" => {
-                        DeleteContainerPolicyError::PolicyNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteContainerPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteContainerPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "ContainerInUseException" => {
+                    return DeleteContainerPolicyError::ContainerInUse(String::from(error_message))
                 }
+                "ContainerNotFoundException" => {
+                    return DeleteContainerPolicyError::ContainerNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerError" => {
+                    return DeleteContainerPolicyError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "PolicyNotFoundException" => {
+                    return DeleteContainerPolicyError::PolicyNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteContainerPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteContainerPolicyError::Unknown(String::from(body)),
         }
+        return DeleteContainerPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteContainerPolicyError {
     fn from(err: serde_json::error::Error) -> DeleteContainerPolicyError {
-        DeleteContainerPolicyError::Unknown(err.description().to_string())
+        DeleteContainerPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteContainerPolicyError {
@@ -491,7 +497,8 @@ impl Error for DeleteContainerPolicyError {
             DeleteContainerPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteContainerPolicyError::Unknown(ref cause) => cause,
+            DeleteContainerPolicyError::ParseError(ref cause) => cause,
+            DeleteContainerPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -512,50 +519,50 @@ pub enum DeleteCorsPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCorsPolicyError {
-    pub fn from_body(body: &str) -> DeleteCorsPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteCorsPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ContainerInUseException" => {
-                        DeleteCorsPolicyError::ContainerInUse(String::from(error_message))
-                    }
-                    "ContainerNotFoundException" => {
-                        DeleteCorsPolicyError::ContainerNotFound(String::from(error_message))
-                    }
-                    "CorsPolicyNotFoundException" => {
-                        DeleteCorsPolicyError::CorsPolicyNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DeleteCorsPolicyError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteCorsPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteCorsPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "ContainerInUseException" => {
+                    return DeleteCorsPolicyError::ContainerInUse(String::from(error_message))
                 }
+                "ContainerNotFoundException" => {
+                    return DeleteCorsPolicyError::ContainerNotFound(String::from(error_message))
+                }
+                "CorsPolicyNotFoundException" => {
+                    return DeleteCorsPolicyError::CorsPolicyNotFound(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return DeleteCorsPolicyError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteCorsPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteCorsPolicyError::Unknown(String::from(body)),
         }
+        return DeleteCorsPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteCorsPolicyError {
     fn from(err: serde_json::error::Error) -> DeleteCorsPolicyError {
-        DeleteCorsPolicyError::Unknown(err.description().to_string())
+        DeleteCorsPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteCorsPolicyError {
@@ -588,7 +595,8 @@ impl Error for DeleteCorsPolicyError {
             DeleteCorsPolicyError::Validation(ref cause) => cause,
             DeleteCorsPolicyError::Credentials(ref err) => err.description(),
             DeleteCorsPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteCorsPolicyError::Unknown(ref cause) => cause,
+            DeleteCorsPolicyError::ParseError(ref cause) => cause,
+            DeleteCorsPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -605,44 +613,44 @@ pub enum DescribeContainerError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeContainerError {
-    pub fn from_body(body: &str) -> DescribeContainerError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeContainerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ContainerNotFoundException" => {
-                        DescribeContainerError::ContainerNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DescribeContainerError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeContainerError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeContainerError::Unknown(String::from(body)),
+            match *error_type {
+                "ContainerNotFoundException" => {
+                    return DescribeContainerError::ContainerNotFound(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return DescribeContainerError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeContainerError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeContainerError::Unknown(String::from(body)),
         }
+        return DescribeContainerError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeContainerError {
     fn from(err: serde_json::error::Error) -> DescribeContainerError {
-        DescribeContainerError::Unknown(err.description().to_string())
+        DescribeContainerError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeContainerError {
@@ -675,7 +683,8 @@ impl Error for DescribeContainerError {
             DescribeContainerError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeContainerError::Unknown(ref cause) => cause,
+            DescribeContainerError::ParseError(ref cause) => cause,
+            DescribeContainerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -696,50 +705,50 @@ pub enum GetContainerPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetContainerPolicyError {
-    pub fn from_body(body: &str) -> GetContainerPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetContainerPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ContainerInUseException" => {
-                        GetContainerPolicyError::ContainerInUse(String::from(error_message))
-                    }
-                    "ContainerNotFoundException" => {
-                        GetContainerPolicyError::ContainerNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        GetContainerPolicyError::InternalServerError(String::from(error_message))
-                    }
-                    "PolicyNotFoundException" => {
-                        GetContainerPolicyError::PolicyNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetContainerPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => GetContainerPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "ContainerInUseException" => {
+                    return GetContainerPolicyError::ContainerInUse(String::from(error_message))
                 }
+                "ContainerNotFoundException" => {
+                    return GetContainerPolicyError::ContainerNotFound(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return GetContainerPolicyError::InternalServerError(String::from(error_message))
+                }
+                "PolicyNotFoundException" => {
+                    return GetContainerPolicyError::PolicyNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetContainerPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetContainerPolicyError::Unknown(String::from(body)),
         }
+        return GetContainerPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetContainerPolicyError {
     fn from(err: serde_json::error::Error) -> GetContainerPolicyError {
-        GetContainerPolicyError::Unknown(err.description().to_string())
+        GetContainerPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetContainerPolicyError {
@@ -774,7 +783,8 @@ impl Error for GetContainerPolicyError {
             GetContainerPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetContainerPolicyError::Unknown(ref cause) => cause,
+            GetContainerPolicyError::ParseError(ref cause) => cause,
+            GetContainerPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -795,50 +805,50 @@ pub enum GetCorsPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCorsPolicyError {
-    pub fn from_body(body: &str) -> GetCorsPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetCorsPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ContainerInUseException" => {
-                        GetCorsPolicyError::ContainerInUse(String::from(error_message))
-                    }
-                    "ContainerNotFoundException" => {
-                        GetCorsPolicyError::ContainerNotFound(String::from(error_message))
-                    }
-                    "CorsPolicyNotFoundException" => {
-                        GetCorsPolicyError::CorsPolicyNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        GetCorsPolicyError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetCorsPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => GetCorsPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "ContainerInUseException" => {
+                    return GetCorsPolicyError::ContainerInUse(String::from(error_message))
                 }
+                "ContainerNotFoundException" => {
+                    return GetCorsPolicyError::ContainerNotFound(String::from(error_message))
+                }
+                "CorsPolicyNotFoundException" => {
+                    return GetCorsPolicyError::CorsPolicyNotFound(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return GetCorsPolicyError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetCorsPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetCorsPolicyError::Unknown(String::from(body)),
         }
+        return GetCorsPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetCorsPolicyError {
     fn from(err: serde_json::error::Error) -> GetCorsPolicyError {
-        GetCorsPolicyError::Unknown(err.description().to_string())
+        GetCorsPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetCorsPolicyError {
@@ -871,7 +881,8 @@ impl Error for GetCorsPolicyError {
             GetCorsPolicyError::Validation(ref cause) => cause,
             GetCorsPolicyError::Credentials(ref err) => err.description(),
             GetCorsPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCorsPolicyError::Unknown(ref cause) => cause,
+            GetCorsPolicyError::ParseError(ref cause) => cause,
+            GetCorsPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -886,41 +897,41 @@ pub enum ListContainersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListContainersError {
-    pub fn from_body(body: &str) -> ListContainersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListContainersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListContainersError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListContainersError::Validation(error_message.to_string())
-                    }
-                    _ => ListContainersError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListContainersError::InternalServerError(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListContainersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListContainersError::Unknown(String::from(body)),
         }
+        return ListContainersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListContainersError {
     fn from(err: serde_json::error::Error) -> ListContainersError {
-        ListContainersError::Unknown(err.description().to_string())
+        ListContainersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListContainersError {
@@ -950,7 +961,8 @@ impl Error for ListContainersError {
             ListContainersError::Validation(ref cause) => cause,
             ListContainersError::Credentials(ref err) => err.description(),
             ListContainersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListContainersError::Unknown(ref cause) => cause,
+            ListContainersError::ParseError(ref cause) => cause,
+            ListContainersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -969,47 +981,47 @@ pub enum PutContainerPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutContainerPolicyError {
-    pub fn from_body(body: &str) -> PutContainerPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutContainerPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ContainerInUseException" => {
-                        PutContainerPolicyError::ContainerInUse(String::from(error_message))
-                    }
-                    "ContainerNotFoundException" => {
-                        PutContainerPolicyError::ContainerNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        PutContainerPolicyError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutContainerPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => PutContainerPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "ContainerInUseException" => {
+                    return PutContainerPolicyError::ContainerInUse(String::from(error_message))
                 }
+                "ContainerNotFoundException" => {
+                    return PutContainerPolicyError::ContainerNotFound(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return PutContainerPolicyError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutContainerPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutContainerPolicyError::Unknown(String::from(body)),
         }
+        return PutContainerPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutContainerPolicyError {
     fn from(err: serde_json::error::Error) -> PutContainerPolicyError {
-        PutContainerPolicyError::Unknown(err.description().to_string())
+        PutContainerPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutContainerPolicyError {
@@ -1043,7 +1055,8 @@ impl Error for PutContainerPolicyError {
             PutContainerPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutContainerPolicyError::Unknown(ref cause) => cause,
+            PutContainerPolicyError::ParseError(ref cause) => cause,
+            PutContainerPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1062,47 +1075,47 @@ pub enum PutCorsPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutCorsPolicyError {
-    pub fn from_body(body: &str) -> PutCorsPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutCorsPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ContainerInUseException" => {
-                        PutCorsPolicyError::ContainerInUse(String::from(error_message))
-                    }
-                    "ContainerNotFoundException" => {
-                        PutCorsPolicyError::ContainerNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        PutCorsPolicyError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutCorsPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => PutCorsPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "ContainerInUseException" => {
+                    return PutCorsPolicyError::ContainerInUse(String::from(error_message))
                 }
+                "ContainerNotFoundException" => {
+                    return PutCorsPolicyError::ContainerNotFound(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return PutCorsPolicyError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutCorsPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutCorsPolicyError::Unknown(String::from(body)),
         }
+        return PutCorsPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutCorsPolicyError {
     fn from(err: serde_json::error::Error) -> PutCorsPolicyError {
-        PutCorsPolicyError::Unknown(err.description().to_string())
+        PutCorsPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutCorsPolicyError {
@@ -1134,7 +1147,8 @@ impl Error for PutCorsPolicyError {
             PutCorsPolicyError::Validation(ref cause) => cause,
             PutCorsPolicyError::Credentials(ref err) => err.description(),
             PutCorsPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutCorsPolicyError::Unknown(ref cause) => cause,
+            PutCorsPolicyError::ParseError(ref cause) => cause,
+            PutCorsPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1259,14 +1273,16 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<CreateContainerOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateContainerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateContainerError::from_response(response))),
+                )
             }
         })
     }
@@ -1294,14 +1310,16 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<DeleteContainerOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteContainerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteContainerError::from_response(response))),
+                )
             }
         })
     }
@@ -1329,14 +1347,15 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<DeleteContainerPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteContainerPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteContainerPolicyError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1364,14 +1383,16 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<DeleteCorsPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCorsPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteCorsPolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -1399,14 +1420,16 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<DescribeContainerOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeContainerError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeContainerError::from_response(response))),
+                )
             }
         })
     }
@@ -1434,14 +1457,16 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<GetContainerPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetContainerPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetContainerPolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -1469,14 +1494,16 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<GetCorsPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCorsPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetCorsPolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -1504,14 +1531,16 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<ListContainersOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListContainersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListContainersError::from_response(response))),
+                )
             }
         })
     }
@@ -1539,14 +1568,16 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<PutContainerPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutContainerPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutContainerPolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -1574,14 +1605,16 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<PutCorsPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutCorsPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutCorsPolicyError::from_response(response))),
+                )
             }
         })
     }

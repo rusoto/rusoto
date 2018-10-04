@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>ActivateGatewayInput$ActivationKey</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayName</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayRegion</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayTimezone</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$TapeDriveType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$MediumChangerType</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2393,44 +2393,44 @@ pub enum ActivateGatewayError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ActivateGatewayError {
-    pub fn from_body(body: &str) -> ActivateGatewayError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ActivateGatewayError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ActivateGatewayError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        ActivateGatewayError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ActivateGatewayError::Validation(error_message.to_string())
-                    }
-                    _ => ActivateGatewayError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ActivateGatewayError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return ActivateGatewayError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ActivateGatewayError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ActivateGatewayError::Unknown(String::from(body)),
         }
+        return ActivateGatewayError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ActivateGatewayError {
     fn from(err: serde_json::error::Error) -> ActivateGatewayError {
-        ActivateGatewayError::Unknown(err.description().to_string())
+        ActivateGatewayError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ActivateGatewayError {
@@ -2461,7 +2461,8 @@ impl Error for ActivateGatewayError {
             ActivateGatewayError::Validation(ref cause) => cause,
             ActivateGatewayError::Credentials(ref err) => err.description(),
             ActivateGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ActivateGatewayError::Unknown(ref cause) => cause,
+            ActivateGatewayError::ParseError(ref cause) => cause,
+            ActivateGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2478,42 +2479,44 @@ pub enum AddCacheError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddCacheError {
-    pub fn from_body(body: &str) -> AddCacheError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AddCacheError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        AddCacheError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        AddCacheError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => AddCacheError::Validation(error_message.to_string()),
-                    _ => AddCacheError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return AddCacheError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return AddCacheError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AddCacheError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AddCacheError::Unknown(String::from(body)),
         }
+        return AddCacheError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AddCacheError {
     fn from(err: serde_json::error::Error) -> AddCacheError {
-        AddCacheError::Unknown(err.description().to_string())
+        AddCacheError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AddCacheError {
@@ -2544,7 +2547,8 @@ impl Error for AddCacheError {
             AddCacheError::Validation(ref cause) => cause,
             AddCacheError::Credentials(ref err) => err.description(),
             AddCacheError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddCacheError::Unknown(ref cause) => cause,
+            AddCacheError::ParseError(ref cause) => cause,
+            AddCacheError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2561,44 +2565,46 @@ pub enum AddTagsToResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsToResourceError {
-    pub fn from_body(body: &str) -> AddTagsToResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AddTagsToResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        AddTagsToResourceError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        AddTagsToResourceError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AddTagsToResourceError::Validation(error_message.to_string())
-                    }
-                    _ => AddTagsToResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return AddTagsToResourceError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return AddTagsToResourceError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AddTagsToResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AddTagsToResourceError::Unknown(String::from(body)),
         }
+        return AddTagsToResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AddTagsToResourceError {
     fn from(err: serde_json::error::Error) -> AddTagsToResourceError {
-        AddTagsToResourceError::Unknown(err.description().to_string())
+        AddTagsToResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AddTagsToResourceError {
@@ -2631,7 +2637,8 @@ impl Error for AddTagsToResourceError {
             AddTagsToResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AddTagsToResourceError::Unknown(ref cause) => cause,
+            AddTagsToResourceError::ParseError(ref cause) => cause,
+            AddTagsToResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2648,44 +2655,44 @@ pub enum AddUploadBufferError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddUploadBufferError {
-    pub fn from_body(body: &str) -> AddUploadBufferError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AddUploadBufferError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        AddUploadBufferError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        AddUploadBufferError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AddUploadBufferError::Validation(error_message.to_string())
-                    }
-                    _ => AddUploadBufferError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return AddUploadBufferError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return AddUploadBufferError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AddUploadBufferError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AddUploadBufferError::Unknown(String::from(body)),
         }
+        return AddUploadBufferError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AddUploadBufferError {
     fn from(err: serde_json::error::Error) -> AddUploadBufferError {
-        AddUploadBufferError::Unknown(err.description().to_string())
+        AddUploadBufferError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AddUploadBufferError {
@@ -2716,7 +2723,8 @@ impl Error for AddUploadBufferError {
             AddUploadBufferError::Validation(ref cause) => cause,
             AddUploadBufferError::Credentials(ref err) => err.description(),
             AddUploadBufferError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddUploadBufferError::Unknown(ref cause) => cause,
+            AddUploadBufferError::ParseError(ref cause) => cause,
+            AddUploadBufferError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2733,44 +2741,46 @@ pub enum AddWorkingStorageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddWorkingStorageError {
-    pub fn from_body(body: &str) -> AddWorkingStorageError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AddWorkingStorageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        AddWorkingStorageError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        AddWorkingStorageError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AddWorkingStorageError::Validation(error_message.to_string())
-                    }
-                    _ => AddWorkingStorageError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return AddWorkingStorageError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return AddWorkingStorageError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AddWorkingStorageError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AddWorkingStorageError::Unknown(String::from(body)),
         }
+        return AddWorkingStorageError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AddWorkingStorageError {
     fn from(err: serde_json::error::Error) -> AddWorkingStorageError {
-        AddWorkingStorageError::Unknown(err.description().to_string())
+        AddWorkingStorageError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AddWorkingStorageError {
@@ -2803,7 +2813,8 @@ impl Error for AddWorkingStorageError {
             AddWorkingStorageError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AddWorkingStorageError::Unknown(ref cause) => cause,
+            AddWorkingStorageError::ParseError(ref cause) => cause,
+            AddWorkingStorageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2820,44 +2831,44 @@ pub enum CancelArchivalError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CancelArchivalError {
-    pub fn from_body(body: &str) -> CancelArchivalError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CancelArchivalError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        CancelArchivalError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        CancelArchivalError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CancelArchivalError::Validation(error_message.to_string())
-                    }
-                    _ => CancelArchivalError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return CancelArchivalError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return CancelArchivalError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CancelArchivalError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CancelArchivalError::Unknown(String::from(body)),
         }
+        return CancelArchivalError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CancelArchivalError {
     fn from(err: serde_json::error::Error) -> CancelArchivalError {
-        CancelArchivalError::Unknown(err.description().to_string())
+        CancelArchivalError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CancelArchivalError {
@@ -2888,7 +2899,8 @@ impl Error for CancelArchivalError {
             CancelArchivalError::Validation(ref cause) => cause,
             CancelArchivalError::Credentials(ref err) => err.description(),
             CancelArchivalError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelArchivalError::Unknown(ref cause) => cause,
+            CancelArchivalError::ParseError(ref cause) => cause,
+            CancelArchivalError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2905,44 +2917,44 @@ pub enum CancelRetrievalError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CancelRetrievalError {
-    pub fn from_body(body: &str) -> CancelRetrievalError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CancelRetrievalError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        CancelRetrievalError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        CancelRetrievalError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CancelRetrievalError::Validation(error_message.to_string())
-                    }
-                    _ => CancelRetrievalError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return CancelRetrievalError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return CancelRetrievalError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CancelRetrievalError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CancelRetrievalError::Unknown(String::from(body)),
         }
+        return CancelRetrievalError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CancelRetrievalError {
     fn from(err: serde_json::error::Error) -> CancelRetrievalError {
-        CancelRetrievalError::Unknown(err.description().to_string())
+        CancelRetrievalError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CancelRetrievalError {
@@ -2973,7 +2985,8 @@ impl Error for CancelRetrievalError {
             CancelRetrievalError::Validation(ref cause) => cause,
             CancelRetrievalError::Credentials(ref err) => err.description(),
             CancelRetrievalError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelRetrievalError::Unknown(ref cause) => cause,
+            CancelRetrievalError::ParseError(ref cause) => cause,
+            CancelRetrievalError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2990,46 +3003,48 @@ pub enum CreateCachediSCSIVolumeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCachediSCSIVolumeError {
-    pub fn from_body(body: &str) -> CreateCachediSCSIVolumeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCachediSCSIVolumeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => CreateCachediSCSIVolumeError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        CreateCachediSCSIVolumeError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateCachediSCSIVolumeError::Validation(error_message.to_string())
-                    }
-                    _ => CreateCachediSCSIVolumeError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return CreateCachediSCSIVolumeError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return CreateCachediSCSIVolumeError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateCachediSCSIVolumeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateCachediSCSIVolumeError::Unknown(String::from(body)),
         }
+        return CreateCachediSCSIVolumeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateCachediSCSIVolumeError {
     fn from(err: serde_json::error::Error) -> CreateCachediSCSIVolumeError {
-        CreateCachediSCSIVolumeError::Unknown(err.description().to_string())
+        CreateCachediSCSIVolumeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateCachediSCSIVolumeError {
@@ -3062,7 +3077,8 @@ impl Error for CreateCachediSCSIVolumeError {
             CreateCachediSCSIVolumeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateCachediSCSIVolumeError::Unknown(ref cause) => cause,
+            CreateCachediSCSIVolumeError::ParseError(ref cause) => cause,
+            CreateCachediSCSIVolumeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3079,44 +3095,46 @@ pub enum CreateNFSFileShareError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateNFSFileShareError {
-    pub fn from_body(body: &str) -> CreateNFSFileShareError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateNFSFileShareError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        CreateNFSFileShareError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        CreateNFSFileShareError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateNFSFileShareError::Validation(error_message.to_string())
-                    }
-                    _ => CreateNFSFileShareError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return CreateNFSFileShareError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return CreateNFSFileShareError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateNFSFileShareError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateNFSFileShareError::Unknown(String::from(body)),
         }
+        return CreateNFSFileShareError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateNFSFileShareError {
     fn from(err: serde_json::error::Error) -> CreateNFSFileShareError {
-        CreateNFSFileShareError::Unknown(err.description().to_string())
+        CreateNFSFileShareError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateNFSFileShareError {
@@ -3149,7 +3167,8 @@ impl Error for CreateNFSFileShareError {
             CreateNFSFileShareError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateNFSFileShareError::Unknown(ref cause) => cause,
+            CreateNFSFileShareError::ParseError(ref cause) => cause,
+            CreateNFSFileShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3166,44 +3185,46 @@ pub enum CreateSMBFileShareError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSMBFileShareError {
-    pub fn from_body(body: &str) -> CreateSMBFileShareError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSMBFileShareError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        CreateSMBFileShareError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        CreateSMBFileShareError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateSMBFileShareError::Validation(error_message.to_string())
-                    }
-                    _ => CreateSMBFileShareError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return CreateSMBFileShareError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return CreateSMBFileShareError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateSMBFileShareError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateSMBFileShareError::Unknown(String::from(body)),
         }
+        return CreateSMBFileShareError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateSMBFileShareError {
     fn from(err: serde_json::error::Error) -> CreateSMBFileShareError {
-        CreateSMBFileShareError::Unknown(err.description().to_string())
+        CreateSMBFileShareError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateSMBFileShareError {
@@ -3236,7 +3257,8 @@ impl Error for CreateSMBFileShareError {
             CreateSMBFileShareError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateSMBFileShareError::Unknown(ref cause) => cause,
+            CreateSMBFileShareError::ParseError(ref cause) => cause,
+            CreateSMBFileShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3255,47 +3277,47 @@ pub enum CreateSnapshotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSnapshotError {
-    pub fn from_body(body: &str) -> CreateSnapshotError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSnapshotError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        CreateSnapshotError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        CreateSnapshotError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ServiceUnavailableError" => {
-                        CreateSnapshotError::ServiceUnavailableError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateSnapshotError::Validation(error_message.to_string())
-                    }
-                    _ => CreateSnapshotError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return CreateSnapshotError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return CreateSnapshotError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ServiceUnavailableError" => {
+                    return CreateSnapshotError::ServiceUnavailableError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateSnapshotError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateSnapshotError::Unknown(String::from(body)),
         }
+        return CreateSnapshotError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateSnapshotError {
     fn from(err: serde_json::error::Error) -> CreateSnapshotError {
-        CreateSnapshotError::Unknown(err.description().to_string())
+        CreateSnapshotError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateSnapshotError {
@@ -3327,7 +3349,8 @@ impl Error for CreateSnapshotError {
             CreateSnapshotError::Validation(ref cause) => cause,
             CreateSnapshotError::Credentials(ref err) => err.description(),
             CreateSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateSnapshotError::Unknown(ref cause) => cause,
+            CreateSnapshotError::ParseError(ref cause) => cause,
+            CreateSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3346,55 +3369,55 @@ pub enum CreateSnapshotFromVolumeRecoveryPointError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSnapshotFromVolumeRecoveryPointError {
-    pub fn from_body(body: &str) -> CreateSnapshotFromVolumeRecoveryPointError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSnapshotFromVolumeRecoveryPointError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidGatewayRequestException" => {
-                        CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(
-                            String::from(error_message),
-                        )
-                    }
-                    "ServiceUnavailableError" => {
-                        CreateSnapshotFromVolumeRecoveryPointError::ServiceUnavailableError(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        CreateSnapshotFromVolumeRecoveryPointError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
-                    _ => CreateSnapshotFromVolumeRecoveryPointError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(
+                        String::from(error_message),
+                    )
                 }
+                "InvalidGatewayRequestException" => {
+                    return CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    )
+                }
+                "ServiceUnavailableError" => {
+                    return CreateSnapshotFromVolumeRecoveryPointError::ServiceUnavailableError(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return CreateSnapshotFromVolumeRecoveryPointError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => CreateSnapshotFromVolumeRecoveryPointError::Unknown(String::from(body)),
         }
+        return CreateSnapshotFromVolumeRecoveryPointError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateSnapshotFromVolumeRecoveryPointError {
     fn from(err: serde_json::error::Error) -> CreateSnapshotFromVolumeRecoveryPointError {
-        CreateSnapshotFromVolumeRecoveryPointError::Unknown(err.description().to_string())
+        CreateSnapshotFromVolumeRecoveryPointError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateSnapshotFromVolumeRecoveryPointError {
@@ -3428,7 +3451,8 @@ impl Error for CreateSnapshotFromVolumeRecoveryPointError {
             CreateSnapshotFromVolumeRecoveryPointError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateSnapshotFromVolumeRecoveryPointError::Unknown(ref cause) => cause,
+            CreateSnapshotFromVolumeRecoveryPointError::ParseError(ref cause) => cause,
+            CreateSnapshotFromVolumeRecoveryPointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3445,46 +3469,48 @@ pub enum CreateStorediSCSIVolumeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStorediSCSIVolumeError {
-    pub fn from_body(body: &str) -> CreateStorediSCSIVolumeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateStorediSCSIVolumeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => CreateStorediSCSIVolumeError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        CreateStorediSCSIVolumeError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateStorediSCSIVolumeError::Validation(error_message.to_string())
-                    }
-                    _ => CreateStorediSCSIVolumeError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return CreateStorediSCSIVolumeError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return CreateStorediSCSIVolumeError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateStorediSCSIVolumeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateStorediSCSIVolumeError::Unknown(String::from(body)),
         }
+        return CreateStorediSCSIVolumeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateStorediSCSIVolumeError {
     fn from(err: serde_json::error::Error) -> CreateStorediSCSIVolumeError {
-        CreateStorediSCSIVolumeError::Unknown(err.description().to_string())
+        CreateStorediSCSIVolumeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateStorediSCSIVolumeError {
@@ -3517,7 +3543,8 @@ impl Error for CreateStorediSCSIVolumeError {
             CreateStorediSCSIVolumeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateStorediSCSIVolumeError::Unknown(ref cause) => cause,
+            CreateStorediSCSIVolumeError::ParseError(ref cause) => cause,
+            CreateStorediSCSIVolumeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3534,46 +3561,48 @@ pub enum CreateTapeWithBarcodeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTapeWithBarcodeError {
-    pub fn from_body(body: &str) -> CreateTapeWithBarcodeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTapeWithBarcodeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        CreateTapeWithBarcodeError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        CreateTapeWithBarcodeError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateTapeWithBarcodeError::Validation(error_message.to_string())
-                    }
-                    _ => CreateTapeWithBarcodeError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return CreateTapeWithBarcodeError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return CreateTapeWithBarcodeError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateTapeWithBarcodeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateTapeWithBarcodeError::Unknown(String::from(body)),
         }
+        return CreateTapeWithBarcodeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateTapeWithBarcodeError {
     fn from(err: serde_json::error::Error) -> CreateTapeWithBarcodeError {
-        CreateTapeWithBarcodeError::Unknown(err.description().to_string())
+        CreateTapeWithBarcodeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateTapeWithBarcodeError {
@@ -3606,7 +3635,8 @@ impl Error for CreateTapeWithBarcodeError {
             CreateTapeWithBarcodeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateTapeWithBarcodeError::Unknown(ref cause) => cause,
+            CreateTapeWithBarcodeError::ParseError(ref cause) => cause,
+            CreateTapeWithBarcodeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3623,44 +3653,44 @@ pub enum CreateTapesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTapesError {
-    pub fn from_body(body: &str) -> CreateTapesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTapesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        CreateTapesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        CreateTapesError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateTapesError::Validation(error_message.to_string())
-                    }
-                    _ => CreateTapesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return CreateTapesError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return CreateTapesError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateTapesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateTapesError::Unknown(String::from(body)),
         }
+        return CreateTapesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateTapesError {
     fn from(err: serde_json::error::Error) -> CreateTapesError {
-        CreateTapesError::Unknown(err.description().to_string())
+        CreateTapesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateTapesError {
@@ -3691,7 +3721,8 @@ impl Error for CreateTapesError {
             CreateTapesError::Validation(ref cause) => cause,
             CreateTapesError::Credentials(ref err) => err.description(),
             CreateTapesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTapesError::Unknown(ref cause) => cause,
+            CreateTapesError::ParseError(ref cause) => cause,
+            CreateTapesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3708,46 +3739,48 @@ pub enum DeleteBandwidthRateLimitError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBandwidthRateLimitError {
-    pub fn from_body(body: &str) -> DeleteBandwidthRateLimitError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBandwidthRateLimitError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => DeleteBandwidthRateLimitError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        DeleteBandwidthRateLimitError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteBandwidthRateLimitError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteBandwidthRateLimitError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DeleteBandwidthRateLimitError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DeleteBandwidthRateLimitError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteBandwidthRateLimitError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteBandwidthRateLimitError::Unknown(String::from(body)),
         }
+        return DeleteBandwidthRateLimitError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteBandwidthRateLimitError {
     fn from(err: serde_json::error::Error) -> DeleteBandwidthRateLimitError {
-        DeleteBandwidthRateLimitError::Unknown(err.description().to_string())
+        DeleteBandwidthRateLimitError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteBandwidthRateLimitError {
@@ -3780,7 +3813,8 @@ impl Error for DeleteBandwidthRateLimitError {
             DeleteBandwidthRateLimitError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteBandwidthRateLimitError::Unknown(ref cause) => cause,
+            DeleteBandwidthRateLimitError::ParseError(ref cause) => cause,
+            DeleteBandwidthRateLimitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3797,46 +3831,48 @@ pub enum DeleteChapCredentialsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteChapCredentialsError {
-    pub fn from_body(body: &str) -> DeleteChapCredentialsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteChapCredentialsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DeleteChapCredentialsError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DeleteChapCredentialsError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteChapCredentialsError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteChapCredentialsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DeleteChapCredentialsError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DeleteChapCredentialsError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteChapCredentialsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteChapCredentialsError::Unknown(String::from(body)),
         }
+        return DeleteChapCredentialsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteChapCredentialsError {
     fn from(err: serde_json::error::Error) -> DeleteChapCredentialsError {
-        DeleteChapCredentialsError::Unknown(err.description().to_string())
+        DeleteChapCredentialsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteChapCredentialsError {
@@ -3869,7 +3905,8 @@ impl Error for DeleteChapCredentialsError {
             DeleteChapCredentialsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteChapCredentialsError::Unknown(ref cause) => cause,
+            DeleteChapCredentialsError::ParseError(ref cause) => cause,
+            DeleteChapCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3886,44 +3923,44 @@ pub enum DeleteFileShareError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFileShareError {
-    pub fn from_body(body: &str) -> DeleteFileShareError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteFileShareError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DeleteFileShareError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DeleteFileShareError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteFileShareError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteFileShareError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DeleteFileShareError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DeleteFileShareError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteFileShareError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteFileShareError::Unknown(String::from(body)),
         }
+        return DeleteFileShareError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteFileShareError {
     fn from(err: serde_json::error::Error) -> DeleteFileShareError {
-        DeleteFileShareError::Unknown(err.description().to_string())
+        DeleteFileShareError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteFileShareError {
@@ -3954,7 +3991,8 @@ impl Error for DeleteFileShareError {
             DeleteFileShareError::Validation(ref cause) => cause,
             DeleteFileShareError::Credentials(ref err) => err.description(),
             DeleteFileShareError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFileShareError::Unknown(ref cause) => cause,
+            DeleteFileShareError::ParseError(ref cause) => cause,
+            DeleteFileShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3971,44 +4009,44 @@ pub enum DeleteGatewayError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGatewayError {
-    pub fn from_body(body: &str) -> DeleteGatewayError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteGatewayError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DeleteGatewayError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DeleteGatewayError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteGatewayError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteGatewayError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DeleteGatewayError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DeleteGatewayError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteGatewayError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteGatewayError::Unknown(String::from(body)),
         }
+        return DeleteGatewayError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteGatewayError {
     fn from(err: serde_json::error::Error) -> DeleteGatewayError {
-        DeleteGatewayError::Unknown(err.description().to_string())
+        DeleteGatewayError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteGatewayError {
@@ -4039,7 +4077,8 @@ impl Error for DeleteGatewayError {
             DeleteGatewayError::Validation(ref cause) => cause,
             DeleteGatewayError::Credentials(ref err) => err.description(),
             DeleteGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteGatewayError::Unknown(ref cause) => cause,
+            DeleteGatewayError::ParseError(ref cause) => cause,
+            DeleteGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4056,46 +4095,48 @@ pub enum DeleteSnapshotScheduleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSnapshotScheduleError {
-    pub fn from_body(body: &str) -> DeleteSnapshotScheduleError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSnapshotScheduleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => DeleteSnapshotScheduleError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        DeleteSnapshotScheduleError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteSnapshotScheduleError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteSnapshotScheduleError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DeleteSnapshotScheduleError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DeleteSnapshotScheduleError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteSnapshotScheduleError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteSnapshotScheduleError::Unknown(String::from(body)),
         }
+        return DeleteSnapshotScheduleError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteSnapshotScheduleError {
     fn from(err: serde_json::error::Error) -> DeleteSnapshotScheduleError {
-        DeleteSnapshotScheduleError::Unknown(err.description().to_string())
+        DeleteSnapshotScheduleError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteSnapshotScheduleError {
@@ -4128,7 +4169,8 @@ impl Error for DeleteSnapshotScheduleError {
             DeleteSnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteSnapshotScheduleError::Unknown(ref cause) => cause,
+            DeleteSnapshotScheduleError::ParseError(ref cause) => cause,
+            DeleteSnapshotScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4145,42 +4187,44 @@ pub enum DeleteTapeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTapeError {
-    pub fn from_body(body: &str) -> DeleteTapeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTapeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DeleteTapeError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DeleteTapeError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => DeleteTapeError::Validation(error_message.to_string()),
-                    _ => DeleteTapeError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DeleteTapeError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DeleteTapeError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteTapeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteTapeError::Unknown(String::from(body)),
         }
+        return DeleteTapeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteTapeError {
     fn from(err: serde_json::error::Error) -> DeleteTapeError {
-        DeleteTapeError::Unknown(err.description().to_string())
+        DeleteTapeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteTapeError {
@@ -4211,7 +4255,8 @@ impl Error for DeleteTapeError {
             DeleteTapeError::Validation(ref cause) => cause,
             DeleteTapeError::Credentials(ref err) => err.description(),
             DeleteTapeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTapeError::Unknown(ref cause) => cause,
+            DeleteTapeError::ParseError(ref cause) => cause,
+            DeleteTapeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4228,44 +4273,46 @@ pub enum DeleteTapeArchiveError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTapeArchiveError {
-    pub fn from_body(body: &str) -> DeleteTapeArchiveError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTapeArchiveError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DeleteTapeArchiveError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DeleteTapeArchiveError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteTapeArchiveError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteTapeArchiveError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DeleteTapeArchiveError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DeleteTapeArchiveError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteTapeArchiveError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteTapeArchiveError::Unknown(String::from(body)),
         }
+        return DeleteTapeArchiveError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteTapeArchiveError {
     fn from(err: serde_json::error::Error) -> DeleteTapeArchiveError {
-        DeleteTapeArchiveError::Unknown(err.description().to_string())
+        DeleteTapeArchiveError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteTapeArchiveError {
@@ -4298,7 +4345,8 @@ impl Error for DeleteTapeArchiveError {
             DeleteTapeArchiveError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteTapeArchiveError::Unknown(ref cause) => cause,
+            DeleteTapeArchiveError::ParseError(ref cause) => cause,
+            DeleteTapeArchiveError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4315,44 +4363,44 @@ pub enum DeleteVolumeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVolumeError {
-    pub fn from_body(body: &str) -> DeleteVolumeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteVolumeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DeleteVolumeError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DeleteVolumeError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteVolumeError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteVolumeError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DeleteVolumeError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DeleteVolumeError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteVolumeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteVolumeError::Unknown(String::from(body)),
         }
+        return DeleteVolumeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteVolumeError {
     fn from(err: serde_json::error::Error) -> DeleteVolumeError {
-        DeleteVolumeError::Unknown(err.description().to_string())
+        DeleteVolumeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteVolumeError {
@@ -4383,7 +4431,8 @@ impl Error for DeleteVolumeError {
             DeleteVolumeError::Validation(ref cause) => cause,
             DeleteVolumeError::Credentials(ref err) => err.description(),
             DeleteVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteVolumeError::Unknown(ref cause) => cause,
+            DeleteVolumeError::ParseError(ref cause) => cause,
+            DeleteVolumeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4400,46 +4449,48 @@ pub enum DescribeBandwidthRateLimitError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBandwidthRateLimitError {
-    pub fn from_body(body: &str) -> DescribeBandwidthRateLimitError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeBandwidthRateLimitError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => DescribeBandwidthRateLimitError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        DescribeBandwidthRateLimitError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeBandwidthRateLimitError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeBandwidthRateLimitError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeBandwidthRateLimitError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeBandwidthRateLimitError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeBandwidthRateLimitError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeBandwidthRateLimitError::Unknown(String::from(body)),
         }
+        return DescribeBandwidthRateLimitError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeBandwidthRateLimitError {
     fn from(err: serde_json::error::Error) -> DescribeBandwidthRateLimitError {
-        DescribeBandwidthRateLimitError::Unknown(err.description().to_string())
+        DescribeBandwidthRateLimitError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeBandwidthRateLimitError {
@@ -4472,7 +4523,8 @@ impl Error for DescribeBandwidthRateLimitError {
             DescribeBandwidthRateLimitError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeBandwidthRateLimitError::Unknown(ref cause) => cause,
+            DescribeBandwidthRateLimitError::ParseError(ref cause) => cause,
+            DescribeBandwidthRateLimitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4489,44 +4541,44 @@ pub enum DescribeCacheError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCacheError {
-    pub fn from_body(body: &str) -> DescribeCacheError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeCacheError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeCacheError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DescribeCacheError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeCacheError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeCacheError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeCacheError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeCacheError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeCacheError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeCacheError::Unknown(String::from(body)),
         }
+        return DescribeCacheError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeCacheError {
     fn from(err: serde_json::error::Error) -> DescribeCacheError {
-        DescribeCacheError::Unknown(err.description().to_string())
+        DescribeCacheError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeCacheError {
@@ -4557,7 +4609,8 @@ impl Error for DescribeCacheError {
             DescribeCacheError::Validation(ref cause) => cause,
             DescribeCacheError::Credentials(ref err) => err.description(),
             DescribeCacheError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeCacheError::Unknown(ref cause) => cause,
+            DescribeCacheError::ParseError(ref cause) => cause,
+            DescribeCacheError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4574,46 +4627,48 @@ pub enum DescribeCachediSCSIVolumesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCachediSCSIVolumesError {
-    pub fn from_body(body: &str) -> DescribeCachediSCSIVolumesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeCachediSCSIVolumesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => DescribeCachediSCSIVolumesError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        DescribeCachediSCSIVolumesError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeCachediSCSIVolumesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeCachediSCSIVolumesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeCachediSCSIVolumesError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeCachediSCSIVolumesError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeCachediSCSIVolumesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeCachediSCSIVolumesError::Unknown(String::from(body)),
         }
+        return DescribeCachediSCSIVolumesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeCachediSCSIVolumesError {
     fn from(err: serde_json::error::Error) -> DescribeCachediSCSIVolumesError {
-        DescribeCachediSCSIVolumesError::Unknown(err.description().to_string())
+        DescribeCachediSCSIVolumesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeCachediSCSIVolumesError {
@@ -4646,7 +4701,8 @@ impl Error for DescribeCachediSCSIVolumesError {
             DescribeCachediSCSIVolumesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeCachediSCSIVolumesError::Unknown(ref cause) => cause,
+            DescribeCachediSCSIVolumesError::ParseError(ref cause) => cause,
+            DescribeCachediSCSIVolumesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4663,46 +4719,48 @@ pub enum DescribeChapCredentialsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeChapCredentialsError {
-    pub fn from_body(body: &str) -> DescribeChapCredentialsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeChapCredentialsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => DescribeChapCredentialsError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        DescribeChapCredentialsError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeChapCredentialsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeChapCredentialsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeChapCredentialsError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeChapCredentialsError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeChapCredentialsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeChapCredentialsError::Unknown(String::from(body)),
         }
+        return DescribeChapCredentialsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeChapCredentialsError {
     fn from(err: serde_json::error::Error) -> DescribeChapCredentialsError {
-        DescribeChapCredentialsError::Unknown(err.description().to_string())
+        DescribeChapCredentialsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeChapCredentialsError {
@@ -4735,7 +4793,8 @@ impl Error for DescribeChapCredentialsError {
             DescribeChapCredentialsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeChapCredentialsError::Unknown(ref cause) => cause,
+            DescribeChapCredentialsError::ParseError(ref cause) => cause,
+            DescribeChapCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4752,46 +4811,48 @@ pub enum DescribeGatewayInformationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGatewayInformationError {
-    pub fn from_body(body: &str) -> DescribeGatewayInformationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeGatewayInformationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => DescribeGatewayInformationError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        DescribeGatewayInformationError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeGatewayInformationError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeGatewayInformationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeGatewayInformationError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeGatewayInformationError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeGatewayInformationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeGatewayInformationError::Unknown(String::from(body)),
         }
+        return DescribeGatewayInformationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeGatewayInformationError {
     fn from(err: serde_json::error::Error) -> DescribeGatewayInformationError {
-        DescribeGatewayInformationError::Unknown(err.description().to_string())
+        DescribeGatewayInformationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeGatewayInformationError {
@@ -4824,7 +4885,8 @@ impl Error for DescribeGatewayInformationError {
             DescribeGatewayInformationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeGatewayInformationError::Unknown(ref cause) => cause,
+            DescribeGatewayInformationError::ParseError(ref cause) => cause,
+            DescribeGatewayInformationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4841,48 +4903,48 @@ pub enum DescribeMaintenanceStartTimeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeMaintenanceStartTimeError {
-    pub fn from_body(body: &str) -> DescribeMaintenanceStartTimeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeMaintenanceStartTimeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeMaintenanceStartTimeError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DescribeMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeMaintenanceStartTimeError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeMaintenanceStartTimeError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeMaintenanceStartTimeError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeMaintenanceStartTimeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeMaintenanceStartTimeError::Unknown(String::from(body)),
         }
+        return DescribeMaintenanceStartTimeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeMaintenanceStartTimeError {
     fn from(err: serde_json::error::Error) -> DescribeMaintenanceStartTimeError {
-        DescribeMaintenanceStartTimeError::Unknown(err.description().to_string())
+        DescribeMaintenanceStartTimeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeMaintenanceStartTimeError {
@@ -4915,7 +4977,8 @@ impl Error for DescribeMaintenanceStartTimeError {
             DescribeMaintenanceStartTimeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeMaintenanceStartTimeError::Unknown(ref cause) => cause,
+            DescribeMaintenanceStartTimeError::ParseError(ref cause) => cause,
+            DescribeMaintenanceStartTimeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4932,46 +4995,48 @@ pub enum DescribeNFSFileSharesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeNFSFileSharesError {
-    pub fn from_body(body: &str) -> DescribeNFSFileSharesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeNFSFileSharesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeNFSFileSharesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DescribeNFSFileSharesError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeNFSFileSharesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeNFSFileSharesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeNFSFileSharesError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeNFSFileSharesError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeNFSFileSharesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeNFSFileSharesError::Unknown(String::from(body)),
         }
+        return DescribeNFSFileSharesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeNFSFileSharesError {
     fn from(err: serde_json::error::Error) -> DescribeNFSFileSharesError {
-        DescribeNFSFileSharesError::Unknown(err.description().to_string())
+        DescribeNFSFileSharesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeNFSFileSharesError {
@@ -5004,7 +5069,8 @@ impl Error for DescribeNFSFileSharesError {
             DescribeNFSFileSharesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeNFSFileSharesError::Unknown(ref cause) => cause,
+            DescribeNFSFileSharesError::ParseError(ref cause) => cause,
+            DescribeNFSFileSharesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5021,46 +5087,48 @@ pub enum DescribeSMBFileSharesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSMBFileSharesError {
-    pub fn from_body(body: &str) -> DescribeSMBFileSharesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSMBFileSharesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeSMBFileSharesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DescribeSMBFileSharesError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeSMBFileSharesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeSMBFileSharesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeSMBFileSharesError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeSMBFileSharesError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeSMBFileSharesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeSMBFileSharesError::Unknown(String::from(body)),
         }
+        return DescribeSMBFileSharesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeSMBFileSharesError {
     fn from(err: serde_json::error::Error) -> DescribeSMBFileSharesError {
-        DescribeSMBFileSharesError::Unknown(err.description().to_string())
+        DescribeSMBFileSharesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeSMBFileSharesError {
@@ -5093,7 +5161,8 @@ impl Error for DescribeSMBFileSharesError {
             DescribeSMBFileSharesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeSMBFileSharesError::Unknown(ref cause) => cause,
+            DescribeSMBFileSharesError::ParseError(ref cause) => cause,
+            DescribeSMBFileSharesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5110,44 +5179,48 @@ pub enum DescribeSMBSettingsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSMBSettingsError {
-    pub fn from_body(body: &str) -> DescribeSMBSettingsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSMBSettingsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeSMBSettingsError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DescribeSMBSettingsError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeSMBSettingsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeSMBSettingsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeSMBSettingsError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeSMBSettingsError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeSMBSettingsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeSMBSettingsError::Unknown(String::from(body)),
         }
+        return DescribeSMBSettingsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeSMBSettingsError {
     fn from(err: serde_json::error::Error) -> DescribeSMBSettingsError {
-        DescribeSMBSettingsError::Unknown(err.description().to_string())
+        DescribeSMBSettingsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeSMBSettingsError {
@@ -5180,7 +5253,8 @@ impl Error for DescribeSMBSettingsError {
             DescribeSMBSettingsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeSMBSettingsError::Unknown(ref cause) => cause,
+            DescribeSMBSettingsError::ParseError(ref cause) => cause,
+            DescribeSMBSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5197,46 +5271,48 @@ pub enum DescribeSnapshotScheduleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSnapshotScheduleError {
-    pub fn from_body(body: &str) -> DescribeSnapshotScheduleError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSnapshotScheduleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => DescribeSnapshotScheduleError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        DescribeSnapshotScheduleError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeSnapshotScheduleError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeSnapshotScheduleError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeSnapshotScheduleError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeSnapshotScheduleError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeSnapshotScheduleError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeSnapshotScheduleError::Unknown(String::from(body)),
         }
+        return DescribeSnapshotScheduleError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeSnapshotScheduleError {
     fn from(err: serde_json::error::Error) -> DescribeSnapshotScheduleError {
-        DescribeSnapshotScheduleError::Unknown(err.description().to_string())
+        DescribeSnapshotScheduleError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeSnapshotScheduleError {
@@ -5269,7 +5345,8 @@ impl Error for DescribeSnapshotScheduleError {
             DescribeSnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeSnapshotScheduleError::Unknown(ref cause) => cause,
+            DescribeSnapshotScheduleError::ParseError(ref cause) => cause,
+            DescribeSnapshotScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5286,46 +5363,48 @@ pub enum DescribeStorediSCSIVolumesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStorediSCSIVolumesError {
-    pub fn from_body(body: &str) -> DescribeStorediSCSIVolumesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeStorediSCSIVolumesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => DescribeStorediSCSIVolumesError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        DescribeStorediSCSIVolumesError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeStorediSCSIVolumesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeStorediSCSIVolumesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeStorediSCSIVolumesError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeStorediSCSIVolumesError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeStorediSCSIVolumesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeStorediSCSIVolumesError::Unknown(String::from(body)),
         }
+        return DescribeStorediSCSIVolumesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeStorediSCSIVolumesError {
     fn from(err: serde_json::error::Error) -> DescribeStorediSCSIVolumesError {
-        DescribeStorediSCSIVolumesError::Unknown(err.description().to_string())
+        DescribeStorediSCSIVolumesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeStorediSCSIVolumesError {
@@ -5358,7 +5437,8 @@ impl Error for DescribeStorediSCSIVolumesError {
             DescribeStorediSCSIVolumesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeStorediSCSIVolumesError::Unknown(ref cause) => cause,
+            DescribeStorediSCSIVolumesError::ParseError(ref cause) => cause,
+            DescribeStorediSCSIVolumesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5375,46 +5455,48 @@ pub enum DescribeTapeArchivesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTapeArchivesError {
-    pub fn from_body(body: &str) -> DescribeTapeArchivesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTapeArchivesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeTapeArchivesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DescribeTapeArchivesError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeTapeArchivesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTapeArchivesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeTapeArchivesError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeTapeArchivesError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeTapeArchivesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTapeArchivesError::Unknown(String::from(body)),
         }
+        return DescribeTapeArchivesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTapeArchivesError {
     fn from(err: serde_json::error::Error) -> DescribeTapeArchivesError {
-        DescribeTapeArchivesError::Unknown(err.description().to_string())
+        DescribeTapeArchivesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTapeArchivesError {
@@ -5447,7 +5529,8 @@ impl Error for DescribeTapeArchivesError {
             DescribeTapeArchivesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeTapeArchivesError::Unknown(ref cause) => cause,
+            DescribeTapeArchivesError::ParseError(ref cause) => cause,
+            DescribeTapeArchivesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5464,46 +5547,48 @@ pub enum DescribeTapeRecoveryPointsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTapeRecoveryPointsError {
-    pub fn from_body(body: &str) -> DescribeTapeRecoveryPointsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTapeRecoveryPointsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => DescribeTapeRecoveryPointsError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        DescribeTapeRecoveryPointsError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeTapeRecoveryPointsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTapeRecoveryPointsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeTapeRecoveryPointsError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeTapeRecoveryPointsError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeTapeRecoveryPointsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTapeRecoveryPointsError::Unknown(String::from(body)),
         }
+        return DescribeTapeRecoveryPointsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTapeRecoveryPointsError {
     fn from(err: serde_json::error::Error) -> DescribeTapeRecoveryPointsError {
-        DescribeTapeRecoveryPointsError::Unknown(err.description().to_string())
+        DescribeTapeRecoveryPointsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTapeRecoveryPointsError {
@@ -5536,7 +5621,8 @@ impl Error for DescribeTapeRecoveryPointsError {
             DescribeTapeRecoveryPointsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeTapeRecoveryPointsError::Unknown(ref cause) => cause,
+            DescribeTapeRecoveryPointsError::ParseError(ref cause) => cause,
+            DescribeTapeRecoveryPointsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5553,44 +5639,44 @@ pub enum DescribeTapesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTapesError {
-    pub fn from_body(body: &str) -> DescribeTapesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTapesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeTapesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DescribeTapesError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeTapesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTapesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeTapesError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeTapesError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeTapesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTapesError::Unknown(String::from(body)),
         }
+        return DescribeTapesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTapesError {
     fn from(err: serde_json::error::Error) -> DescribeTapesError {
-        DescribeTapesError::Unknown(err.description().to_string())
+        DescribeTapesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTapesError {
@@ -5621,7 +5707,8 @@ impl Error for DescribeTapesError {
             DescribeTapesError::Validation(ref cause) => cause,
             DescribeTapesError::Credentials(ref err) => err.description(),
             DescribeTapesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTapesError::Unknown(ref cause) => cause,
+            DescribeTapesError::ParseError(ref cause) => cause,
+            DescribeTapesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5638,46 +5725,48 @@ pub enum DescribeUploadBufferError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUploadBufferError {
-    pub fn from_body(body: &str) -> DescribeUploadBufferError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeUploadBufferError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeUploadBufferError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DescribeUploadBufferError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeUploadBufferError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeUploadBufferError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeUploadBufferError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeUploadBufferError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeUploadBufferError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeUploadBufferError::Unknown(String::from(body)),
         }
+        return DescribeUploadBufferError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeUploadBufferError {
     fn from(err: serde_json::error::Error) -> DescribeUploadBufferError {
-        DescribeUploadBufferError::Unknown(err.description().to_string())
+        DescribeUploadBufferError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeUploadBufferError {
@@ -5710,7 +5799,8 @@ impl Error for DescribeUploadBufferError {
             DescribeUploadBufferError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeUploadBufferError::Unknown(ref cause) => cause,
+            DescribeUploadBufferError::ParseError(ref cause) => cause,
+            DescribeUploadBufferError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5727,44 +5817,46 @@ pub enum DescribeVTLDevicesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeVTLDevicesError {
-    pub fn from_body(body: &str) -> DescribeVTLDevicesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeVTLDevicesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DescribeVTLDevicesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DescribeVTLDevicesError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeVTLDevicesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeVTLDevicesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeVTLDevicesError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeVTLDevicesError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeVTLDevicesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeVTLDevicesError::Unknown(String::from(body)),
         }
+        return DescribeVTLDevicesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeVTLDevicesError {
     fn from(err: serde_json::error::Error) -> DescribeVTLDevicesError {
-        DescribeVTLDevicesError::Unknown(err.description().to_string())
+        DescribeVTLDevicesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeVTLDevicesError {
@@ -5797,7 +5889,8 @@ impl Error for DescribeVTLDevicesError {
             DescribeVTLDevicesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeVTLDevicesError::Unknown(ref cause) => cause,
+            DescribeVTLDevicesError::ParseError(ref cause) => cause,
+            DescribeVTLDevicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5814,46 +5907,48 @@ pub enum DescribeWorkingStorageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeWorkingStorageError {
-    pub fn from_body(body: &str) -> DescribeWorkingStorageError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeWorkingStorageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => DescribeWorkingStorageError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        DescribeWorkingStorageError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeWorkingStorageError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeWorkingStorageError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeWorkingStorageError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DescribeWorkingStorageError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeWorkingStorageError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeWorkingStorageError::Unknown(String::from(body)),
         }
+        return DescribeWorkingStorageError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeWorkingStorageError {
     fn from(err: serde_json::error::Error) -> DescribeWorkingStorageError {
-        DescribeWorkingStorageError::Unknown(err.description().to_string())
+        DescribeWorkingStorageError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeWorkingStorageError {
@@ -5886,7 +5981,8 @@ impl Error for DescribeWorkingStorageError {
             DescribeWorkingStorageError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeWorkingStorageError::Unknown(ref cause) => cause,
+            DescribeWorkingStorageError::ParseError(ref cause) => cause,
+            DescribeWorkingStorageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5903,44 +5999,44 @@ pub enum DisableGatewayError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisableGatewayError {
-    pub fn from_body(body: &str) -> DisableGatewayError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisableGatewayError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        DisableGatewayError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        DisableGatewayError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DisableGatewayError::Validation(error_message.to_string())
-                    }
-                    _ => DisableGatewayError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return DisableGatewayError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return DisableGatewayError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DisableGatewayError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisableGatewayError::Unknown(String::from(body)),
         }
+        return DisableGatewayError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisableGatewayError {
     fn from(err: serde_json::error::Error) -> DisableGatewayError {
-        DisableGatewayError::Unknown(err.description().to_string())
+        DisableGatewayError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisableGatewayError {
@@ -5971,7 +6067,8 @@ impl Error for DisableGatewayError {
             DisableGatewayError::Validation(ref cause) => cause,
             DisableGatewayError::Credentials(ref err) => err.description(),
             DisableGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DisableGatewayError::Unknown(ref cause) => cause,
+            DisableGatewayError::ParseError(ref cause) => cause,
+            DisableGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5988,42 +6085,44 @@ pub enum JoinDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl JoinDomainError {
-    pub fn from_body(body: &str) -> JoinDomainError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> JoinDomainError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        JoinDomainError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        JoinDomainError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => JoinDomainError::Validation(error_message.to_string()),
-                    _ => JoinDomainError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return JoinDomainError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return JoinDomainError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return JoinDomainError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => JoinDomainError::Unknown(String::from(body)),
         }
+        return JoinDomainError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for JoinDomainError {
     fn from(err: serde_json::error::Error) -> JoinDomainError {
-        JoinDomainError::Unknown(err.description().to_string())
+        JoinDomainError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for JoinDomainError {
@@ -6054,7 +6153,8 @@ impl Error for JoinDomainError {
             JoinDomainError::Validation(ref cause) => cause,
             JoinDomainError::Credentials(ref err) => err.description(),
             JoinDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            JoinDomainError::Unknown(ref cause) => cause,
+            JoinDomainError::ParseError(ref cause) => cause,
+            JoinDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6071,44 +6171,44 @@ pub enum ListFileSharesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListFileSharesError {
-    pub fn from_body(body: &str) -> ListFileSharesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListFileSharesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListFileSharesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        ListFileSharesError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListFileSharesError::Validation(error_message.to_string())
-                    }
-                    _ => ListFileSharesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListFileSharesError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return ListFileSharesError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListFileSharesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListFileSharesError::Unknown(String::from(body)),
         }
+        return ListFileSharesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListFileSharesError {
     fn from(err: serde_json::error::Error) -> ListFileSharesError {
-        ListFileSharesError::Unknown(err.description().to_string())
+        ListFileSharesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListFileSharesError {
@@ -6139,7 +6239,8 @@ impl Error for ListFileSharesError {
             ListFileSharesError::Validation(ref cause) => cause,
             ListFileSharesError::Credentials(ref err) => err.description(),
             ListFileSharesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListFileSharesError::Unknown(ref cause) => cause,
+            ListFileSharesError::ParseError(ref cause) => cause,
+            ListFileSharesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6156,44 +6257,44 @@ pub enum ListGatewaysError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListGatewaysError {
-    pub fn from_body(body: &str) -> ListGatewaysError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListGatewaysError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListGatewaysError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        ListGatewaysError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListGatewaysError::Validation(error_message.to_string())
-                    }
-                    _ => ListGatewaysError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListGatewaysError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return ListGatewaysError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListGatewaysError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListGatewaysError::Unknown(String::from(body)),
         }
+        return ListGatewaysError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListGatewaysError {
     fn from(err: serde_json::error::Error) -> ListGatewaysError {
-        ListGatewaysError::Unknown(err.description().to_string())
+        ListGatewaysError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListGatewaysError {
@@ -6224,7 +6325,8 @@ impl Error for ListGatewaysError {
             ListGatewaysError::Validation(ref cause) => cause,
             ListGatewaysError::Credentials(ref err) => err.description(),
             ListGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGatewaysError::Unknown(ref cause) => cause,
+            ListGatewaysError::ParseError(ref cause) => cause,
+            ListGatewaysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6241,44 +6343,44 @@ pub enum ListLocalDisksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListLocalDisksError {
-    pub fn from_body(body: &str) -> ListLocalDisksError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListLocalDisksError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListLocalDisksError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        ListLocalDisksError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListLocalDisksError::Validation(error_message.to_string())
-                    }
-                    _ => ListLocalDisksError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListLocalDisksError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return ListLocalDisksError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListLocalDisksError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListLocalDisksError::Unknown(String::from(body)),
         }
+        return ListLocalDisksError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListLocalDisksError {
     fn from(err: serde_json::error::Error) -> ListLocalDisksError {
-        ListLocalDisksError::Unknown(err.description().to_string())
+        ListLocalDisksError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListLocalDisksError {
@@ -6309,7 +6411,8 @@ impl Error for ListLocalDisksError {
             ListLocalDisksError::Validation(ref cause) => cause,
             ListLocalDisksError::Credentials(ref err) => err.description(),
             ListLocalDisksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListLocalDisksError::Unknown(ref cause) => cause,
+            ListLocalDisksError::ParseError(ref cause) => cause,
+            ListLocalDisksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6326,44 +6429,48 @@ pub enum ListTagsForResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_body(body: &str) -> ListTagsForResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListTagsForResourceError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        ListTagsForResourceError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTagsForResourceError::Validation(error_message.to_string())
-                    }
-                    _ => ListTagsForResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListTagsForResourceError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return ListTagsForResourceError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListTagsForResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTagsForResourceError::Unknown(String::from(body)),
         }
+        return ListTagsForResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTagsForResourceError {
     fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::Unknown(err.description().to_string())
+        ListTagsForResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTagsForResourceError {
@@ -6396,7 +6503,8 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTagsForResourceError::Unknown(ref cause) => cause,
+            ListTagsForResourceError::ParseError(ref cause) => cause,
+            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6413,42 +6521,44 @@ pub enum ListTapesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTapesError {
-    pub fn from_body(body: &str) -> ListTapesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTapesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListTapesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        ListTapesError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => ListTapesError::Validation(error_message.to_string()),
-                    _ => ListTapesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListTapesError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return ListTapesError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTapesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTapesError::Unknown(String::from(body)),
         }
+        return ListTapesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTapesError {
     fn from(err: serde_json::error::Error) -> ListTapesError {
-        ListTapesError::Unknown(err.description().to_string())
+        ListTapesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTapesError {
@@ -6479,7 +6589,8 @@ impl Error for ListTapesError {
             ListTapesError::Validation(ref cause) => cause,
             ListTapesError::Credentials(ref err) => err.description(),
             ListTapesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTapesError::Unknown(ref cause) => cause,
+            ListTapesError::ParseError(ref cause) => cause,
+            ListTapesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6496,46 +6607,48 @@ pub enum ListVolumeInitiatorsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListVolumeInitiatorsError {
-    pub fn from_body(body: &str) -> ListVolumeInitiatorsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListVolumeInitiatorsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListVolumeInitiatorsError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        ListVolumeInitiatorsError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListVolumeInitiatorsError::Validation(error_message.to_string())
-                    }
-                    _ => ListVolumeInitiatorsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListVolumeInitiatorsError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return ListVolumeInitiatorsError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListVolumeInitiatorsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListVolumeInitiatorsError::Unknown(String::from(body)),
         }
+        return ListVolumeInitiatorsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListVolumeInitiatorsError {
     fn from(err: serde_json::error::Error) -> ListVolumeInitiatorsError {
-        ListVolumeInitiatorsError::Unknown(err.description().to_string())
+        ListVolumeInitiatorsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListVolumeInitiatorsError {
@@ -6568,7 +6681,8 @@ impl Error for ListVolumeInitiatorsError {
             ListVolumeInitiatorsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListVolumeInitiatorsError::Unknown(ref cause) => cause,
+            ListVolumeInitiatorsError::ParseError(ref cause) => cause,
+            ListVolumeInitiatorsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6585,46 +6699,48 @@ pub enum ListVolumeRecoveryPointsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListVolumeRecoveryPointsError {
-    pub fn from_body(body: &str) -> ListVolumeRecoveryPointsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListVolumeRecoveryPointsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => ListVolumeRecoveryPointsError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        ListVolumeRecoveryPointsError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListVolumeRecoveryPointsError::Validation(error_message.to_string())
-                    }
-                    _ => ListVolumeRecoveryPointsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListVolumeRecoveryPointsError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return ListVolumeRecoveryPointsError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListVolumeRecoveryPointsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListVolumeRecoveryPointsError::Unknown(String::from(body)),
         }
+        return ListVolumeRecoveryPointsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListVolumeRecoveryPointsError {
     fn from(err: serde_json::error::Error) -> ListVolumeRecoveryPointsError {
-        ListVolumeRecoveryPointsError::Unknown(err.description().to_string())
+        ListVolumeRecoveryPointsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListVolumeRecoveryPointsError {
@@ -6657,7 +6773,8 @@ impl Error for ListVolumeRecoveryPointsError {
             ListVolumeRecoveryPointsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListVolumeRecoveryPointsError::Unknown(ref cause) => cause,
+            ListVolumeRecoveryPointsError::ParseError(ref cause) => cause,
+            ListVolumeRecoveryPointsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6674,44 +6791,44 @@ pub enum ListVolumesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListVolumesError {
-    pub fn from_body(body: &str) -> ListVolumesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListVolumesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ListVolumesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        ListVolumesError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListVolumesError::Validation(error_message.to_string())
-                    }
-                    _ => ListVolumesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ListVolumesError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return ListVolumesError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListVolumesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListVolumesError::Unknown(String::from(body)),
         }
+        return ListVolumesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListVolumesError {
     fn from(err: serde_json::error::Error) -> ListVolumesError {
-        ListVolumesError::Unknown(err.description().to_string())
+        ListVolumesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListVolumesError {
@@ -6742,7 +6859,8 @@ impl Error for ListVolumesError {
             ListVolumesError::Validation(ref cause) => cause,
             ListVolumesError::Credentials(ref err) => err.description(),
             ListVolumesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListVolumesError::Unknown(ref cause) => cause,
+            ListVolumesError::ParseError(ref cause) => cause,
+            ListVolumesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6759,44 +6877,46 @@ pub enum NotifyWhenUploadedError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl NotifyWhenUploadedError {
-    pub fn from_body(body: &str) -> NotifyWhenUploadedError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> NotifyWhenUploadedError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        NotifyWhenUploadedError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        NotifyWhenUploadedError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        NotifyWhenUploadedError::Validation(error_message.to_string())
-                    }
-                    _ => NotifyWhenUploadedError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return NotifyWhenUploadedError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return NotifyWhenUploadedError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return NotifyWhenUploadedError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => NotifyWhenUploadedError::Unknown(String::from(body)),
         }
+        return NotifyWhenUploadedError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for NotifyWhenUploadedError {
     fn from(err: serde_json::error::Error) -> NotifyWhenUploadedError {
-        NotifyWhenUploadedError::Unknown(err.description().to_string())
+        NotifyWhenUploadedError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for NotifyWhenUploadedError {
@@ -6829,7 +6949,8 @@ impl Error for NotifyWhenUploadedError {
             NotifyWhenUploadedError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            NotifyWhenUploadedError::Unknown(ref cause) => cause,
+            NotifyWhenUploadedError::ParseError(ref cause) => cause,
+            NotifyWhenUploadedError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6846,44 +6967,44 @@ pub enum RefreshCacheError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RefreshCacheError {
-    pub fn from_body(body: &str) -> RefreshCacheError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RefreshCacheError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        RefreshCacheError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        RefreshCacheError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RefreshCacheError::Validation(error_message.to_string())
-                    }
-                    _ => RefreshCacheError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return RefreshCacheError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return RefreshCacheError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RefreshCacheError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RefreshCacheError::Unknown(String::from(body)),
         }
+        return RefreshCacheError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RefreshCacheError {
     fn from(err: serde_json::error::Error) -> RefreshCacheError {
-        RefreshCacheError::Unknown(err.description().to_string())
+        RefreshCacheError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RefreshCacheError {
@@ -6914,7 +7035,8 @@ impl Error for RefreshCacheError {
             RefreshCacheError::Validation(ref cause) => cause,
             RefreshCacheError::Credentials(ref err) => err.description(),
             RefreshCacheError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RefreshCacheError::Unknown(ref cause) => cause,
+            RefreshCacheError::ParseError(ref cause) => cause,
+            RefreshCacheError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6931,46 +7053,48 @@ pub enum RemoveTagsFromResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsFromResourceError {
-    pub fn from_body(body: &str) -> RemoveTagsFromResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsFromResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => RemoveTagsFromResourceError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        RemoveTagsFromResourceError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        RemoveTagsFromResourceError::Validation(error_message.to_string())
-                    }
-                    _ => RemoveTagsFromResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return RemoveTagsFromResourceError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return RemoveTagsFromResourceError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RemoveTagsFromResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RemoveTagsFromResourceError::Unknown(String::from(body)),
         }
+        return RemoveTagsFromResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RemoveTagsFromResourceError {
     fn from(err: serde_json::error::Error) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::Unknown(err.description().to_string())
+        RemoveTagsFromResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RemoveTagsFromResourceError {
@@ -7003,7 +7127,8 @@ impl Error for RemoveTagsFromResourceError {
             RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RemoveTagsFromResourceError::Unknown(ref cause) => cause,
+            RemoveTagsFromResourceError::ParseError(ref cause) => cause,
+            RemoveTagsFromResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7020,42 +7145,44 @@ pub enum ResetCacheError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ResetCacheError {
-    pub fn from_body(body: &str) -> ResetCacheError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ResetCacheError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ResetCacheError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        ResetCacheError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => ResetCacheError::Validation(error_message.to_string()),
-                    _ => ResetCacheError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ResetCacheError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return ResetCacheError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ResetCacheError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ResetCacheError::Unknown(String::from(body)),
         }
+        return ResetCacheError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ResetCacheError {
     fn from(err: serde_json::error::Error) -> ResetCacheError {
-        ResetCacheError::Unknown(err.description().to_string())
+        ResetCacheError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ResetCacheError {
@@ -7086,7 +7213,8 @@ impl Error for ResetCacheError {
             ResetCacheError::Validation(ref cause) => cause,
             ResetCacheError::Credentials(ref err) => err.description(),
             ResetCacheError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResetCacheError::Unknown(ref cause) => cause,
+            ResetCacheError::ParseError(ref cause) => cause,
+            ResetCacheError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7103,44 +7231,48 @@ pub enum RetrieveTapeArchiveError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RetrieveTapeArchiveError {
-    pub fn from_body(body: &str) -> RetrieveTapeArchiveError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RetrieveTapeArchiveError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        RetrieveTapeArchiveError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        RetrieveTapeArchiveError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RetrieveTapeArchiveError::Validation(error_message.to_string())
-                    }
-                    _ => RetrieveTapeArchiveError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return RetrieveTapeArchiveError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return RetrieveTapeArchiveError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RetrieveTapeArchiveError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RetrieveTapeArchiveError::Unknown(String::from(body)),
         }
+        return RetrieveTapeArchiveError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RetrieveTapeArchiveError {
     fn from(err: serde_json::error::Error) -> RetrieveTapeArchiveError {
-        RetrieveTapeArchiveError::Unknown(err.description().to_string())
+        RetrieveTapeArchiveError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RetrieveTapeArchiveError {
@@ -7173,7 +7305,8 @@ impl Error for RetrieveTapeArchiveError {
             RetrieveTapeArchiveError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RetrieveTapeArchiveError::Unknown(ref cause) => cause,
+            RetrieveTapeArchiveError::ParseError(ref cause) => cause,
+            RetrieveTapeArchiveError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7190,46 +7323,48 @@ pub enum RetrieveTapeRecoveryPointError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RetrieveTapeRecoveryPointError {
-    pub fn from_body(body: &str) -> RetrieveTapeRecoveryPointError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RetrieveTapeRecoveryPointError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => RetrieveTapeRecoveryPointError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        RetrieveTapeRecoveryPointError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        RetrieveTapeRecoveryPointError::Validation(error_message.to_string())
-                    }
-                    _ => RetrieveTapeRecoveryPointError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return RetrieveTapeRecoveryPointError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return RetrieveTapeRecoveryPointError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RetrieveTapeRecoveryPointError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RetrieveTapeRecoveryPointError::Unknown(String::from(body)),
         }
+        return RetrieveTapeRecoveryPointError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RetrieveTapeRecoveryPointError {
     fn from(err: serde_json::error::Error) -> RetrieveTapeRecoveryPointError {
-        RetrieveTapeRecoveryPointError::Unknown(err.description().to_string())
+        RetrieveTapeRecoveryPointError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RetrieveTapeRecoveryPointError {
@@ -7262,7 +7397,8 @@ impl Error for RetrieveTapeRecoveryPointError {
             RetrieveTapeRecoveryPointError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RetrieveTapeRecoveryPointError::Unknown(ref cause) => cause,
+            RetrieveTapeRecoveryPointError::ParseError(ref cause) => cause,
+            RetrieveTapeRecoveryPointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7279,46 +7415,48 @@ pub enum SetLocalConsolePasswordError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetLocalConsolePasswordError {
-    pub fn from_body(body: &str) -> SetLocalConsolePasswordError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SetLocalConsolePasswordError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => SetLocalConsolePasswordError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        SetLocalConsolePasswordError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        SetLocalConsolePasswordError::Validation(error_message.to_string())
-                    }
-                    _ => SetLocalConsolePasswordError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return SetLocalConsolePasswordError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return SetLocalConsolePasswordError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return SetLocalConsolePasswordError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SetLocalConsolePasswordError::Unknown(String::from(body)),
         }
+        return SetLocalConsolePasswordError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SetLocalConsolePasswordError {
     fn from(err: serde_json::error::Error) -> SetLocalConsolePasswordError {
-        SetLocalConsolePasswordError::Unknown(err.description().to_string())
+        SetLocalConsolePasswordError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SetLocalConsolePasswordError {
@@ -7351,7 +7489,8 @@ impl Error for SetLocalConsolePasswordError {
             SetLocalConsolePasswordError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetLocalConsolePasswordError::Unknown(ref cause) => cause,
+            SetLocalConsolePasswordError::ParseError(ref cause) => cause,
+            SetLocalConsolePasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7368,44 +7507,48 @@ pub enum SetSMBGuestPasswordError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetSMBGuestPasswordError {
-    pub fn from_body(body: &str) -> SetSMBGuestPasswordError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SetSMBGuestPasswordError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        SetSMBGuestPasswordError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        SetSMBGuestPasswordError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SetSMBGuestPasswordError::Validation(error_message.to_string())
-                    }
-                    _ => SetSMBGuestPasswordError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return SetSMBGuestPasswordError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return SetSMBGuestPasswordError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return SetSMBGuestPasswordError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SetSMBGuestPasswordError::Unknown(String::from(body)),
         }
+        return SetSMBGuestPasswordError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SetSMBGuestPasswordError {
     fn from(err: serde_json::error::Error) -> SetSMBGuestPasswordError {
-        SetSMBGuestPasswordError::Unknown(err.description().to_string())
+        SetSMBGuestPasswordError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SetSMBGuestPasswordError {
@@ -7438,7 +7581,8 @@ impl Error for SetSMBGuestPasswordError {
             SetSMBGuestPasswordError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SetSMBGuestPasswordError::Unknown(ref cause) => cause,
+            SetSMBGuestPasswordError::ParseError(ref cause) => cause,
+            SetSMBGuestPasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7455,44 +7599,44 @@ pub enum ShutdownGatewayError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ShutdownGatewayError {
-    pub fn from_body(body: &str) -> ShutdownGatewayError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ShutdownGatewayError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        ShutdownGatewayError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        ShutdownGatewayError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ShutdownGatewayError::Validation(error_message.to_string())
-                    }
-                    _ => ShutdownGatewayError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return ShutdownGatewayError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return ShutdownGatewayError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ShutdownGatewayError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ShutdownGatewayError::Unknown(String::from(body)),
         }
+        return ShutdownGatewayError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ShutdownGatewayError {
     fn from(err: serde_json::error::Error) -> ShutdownGatewayError {
-        ShutdownGatewayError::Unknown(err.description().to_string())
+        ShutdownGatewayError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ShutdownGatewayError {
@@ -7523,7 +7667,8 @@ impl Error for ShutdownGatewayError {
             ShutdownGatewayError::Validation(ref cause) => cause,
             ShutdownGatewayError::Credentials(ref err) => err.description(),
             ShutdownGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ShutdownGatewayError::Unknown(ref cause) => cause,
+            ShutdownGatewayError::ParseError(ref cause) => cause,
+            ShutdownGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7540,44 +7685,44 @@ pub enum StartGatewayError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartGatewayError {
-    pub fn from_body(body: &str) -> StartGatewayError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartGatewayError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        StartGatewayError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        StartGatewayError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartGatewayError::Validation(error_message.to_string())
-                    }
-                    _ => StartGatewayError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return StartGatewayError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return StartGatewayError::InvalidGatewayRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartGatewayError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartGatewayError::Unknown(String::from(body)),
         }
+        return StartGatewayError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartGatewayError {
     fn from(err: serde_json::error::Error) -> StartGatewayError {
-        StartGatewayError::Unknown(err.description().to_string())
+        StartGatewayError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartGatewayError {
@@ -7608,7 +7753,8 @@ impl Error for StartGatewayError {
             StartGatewayError::Validation(ref cause) => cause,
             StartGatewayError::Credentials(ref err) => err.description(),
             StartGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartGatewayError::Unknown(ref cause) => cause,
+            StartGatewayError::ParseError(ref cause) => cause,
+            StartGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7625,46 +7771,48 @@ pub enum UpdateBandwidthRateLimitError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateBandwidthRateLimitError {
-    pub fn from_body(body: &str) -> UpdateBandwidthRateLimitError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateBandwidthRateLimitError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => UpdateBandwidthRateLimitError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        UpdateBandwidthRateLimitError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateBandwidthRateLimitError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateBandwidthRateLimitError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return UpdateBandwidthRateLimitError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return UpdateBandwidthRateLimitError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateBandwidthRateLimitError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateBandwidthRateLimitError::Unknown(String::from(body)),
         }
+        return UpdateBandwidthRateLimitError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateBandwidthRateLimitError {
     fn from(err: serde_json::error::Error) -> UpdateBandwidthRateLimitError {
-        UpdateBandwidthRateLimitError::Unknown(err.description().to_string())
+        UpdateBandwidthRateLimitError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateBandwidthRateLimitError {
@@ -7697,7 +7845,8 @@ impl Error for UpdateBandwidthRateLimitError {
             UpdateBandwidthRateLimitError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateBandwidthRateLimitError::Unknown(ref cause) => cause,
+            UpdateBandwidthRateLimitError::ParseError(ref cause) => cause,
+            UpdateBandwidthRateLimitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7714,46 +7863,48 @@ pub enum UpdateChapCredentialsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateChapCredentialsError {
-    pub fn from_body(body: &str) -> UpdateChapCredentialsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateChapCredentialsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        UpdateChapCredentialsError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        UpdateChapCredentialsError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateChapCredentialsError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateChapCredentialsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return UpdateChapCredentialsError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return UpdateChapCredentialsError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateChapCredentialsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateChapCredentialsError::Unknown(String::from(body)),
         }
+        return UpdateChapCredentialsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateChapCredentialsError {
     fn from(err: serde_json::error::Error) -> UpdateChapCredentialsError {
-        UpdateChapCredentialsError::Unknown(err.description().to_string())
+        UpdateChapCredentialsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateChapCredentialsError {
@@ -7786,7 +7937,8 @@ impl Error for UpdateChapCredentialsError {
             UpdateChapCredentialsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateChapCredentialsError::Unknown(ref cause) => cause,
+            UpdateChapCredentialsError::ParseError(ref cause) => cause,
+            UpdateChapCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7803,46 +7955,48 @@ pub enum UpdateGatewayInformationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGatewayInformationError {
-    pub fn from_body(body: &str) -> UpdateGatewayInformationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateGatewayInformationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => UpdateGatewayInformationError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        UpdateGatewayInformationError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateGatewayInformationError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateGatewayInformationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return UpdateGatewayInformationError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return UpdateGatewayInformationError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateGatewayInformationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateGatewayInformationError::Unknown(String::from(body)),
         }
+        return UpdateGatewayInformationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateGatewayInformationError {
     fn from(err: serde_json::error::Error) -> UpdateGatewayInformationError {
-        UpdateGatewayInformationError::Unknown(err.description().to_string())
+        UpdateGatewayInformationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateGatewayInformationError {
@@ -7875,7 +8029,8 @@ impl Error for UpdateGatewayInformationError {
             UpdateGatewayInformationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateGatewayInformationError::Unknown(ref cause) => cause,
+            UpdateGatewayInformationError::ParseError(ref cause) => cause,
+            UpdateGatewayInformationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7892,46 +8047,48 @@ pub enum UpdateGatewaySoftwareNowError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGatewaySoftwareNowError {
-    pub fn from_body(body: &str) -> UpdateGatewaySoftwareNowError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateGatewaySoftwareNowError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => UpdateGatewaySoftwareNowError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        UpdateGatewaySoftwareNowError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateGatewaySoftwareNowError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateGatewaySoftwareNowError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return UpdateGatewaySoftwareNowError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return UpdateGatewaySoftwareNowError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateGatewaySoftwareNowError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateGatewaySoftwareNowError::Unknown(String::from(body)),
         }
+        return UpdateGatewaySoftwareNowError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateGatewaySoftwareNowError {
     fn from(err: serde_json::error::Error) -> UpdateGatewaySoftwareNowError {
-        UpdateGatewaySoftwareNowError::Unknown(err.description().to_string())
+        UpdateGatewaySoftwareNowError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateGatewaySoftwareNowError {
@@ -7964,7 +8121,8 @@ impl Error for UpdateGatewaySoftwareNowError {
             UpdateGatewaySoftwareNowError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateGatewaySoftwareNowError::Unknown(ref cause) => cause,
+            UpdateGatewaySoftwareNowError::ParseError(ref cause) => cause,
+            UpdateGatewaySoftwareNowError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7981,46 +8139,48 @@ pub enum UpdateMaintenanceStartTimeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateMaintenanceStartTimeError {
-    pub fn from_body(body: &str) -> UpdateMaintenanceStartTimeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateMaintenanceStartTimeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => UpdateMaintenanceStartTimeError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        UpdateMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateMaintenanceStartTimeError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateMaintenanceStartTimeError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return UpdateMaintenanceStartTimeError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return UpdateMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateMaintenanceStartTimeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateMaintenanceStartTimeError::Unknown(String::from(body)),
         }
+        return UpdateMaintenanceStartTimeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateMaintenanceStartTimeError {
     fn from(err: serde_json::error::Error) -> UpdateMaintenanceStartTimeError {
-        UpdateMaintenanceStartTimeError::Unknown(err.description().to_string())
+        UpdateMaintenanceStartTimeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateMaintenanceStartTimeError {
@@ -8053,7 +8213,8 @@ impl Error for UpdateMaintenanceStartTimeError {
             UpdateMaintenanceStartTimeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateMaintenanceStartTimeError::Unknown(ref cause) => cause,
+            UpdateMaintenanceStartTimeError::ParseError(ref cause) => cause,
+            UpdateMaintenanceStartTimeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8070,44 +8231,46 @@ pub enum UpdateNFSFileShareError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateNFSFileShareError {
-    pub fn from_body(body: &str) -> UpdateNFSFileShareError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateNFSFileShareError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        UpdateNFSFileShareError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        UpdateNFSFileShareError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateNFSFileShareError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateNFSFileShareError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return UpdateNFSFileShareError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return UpdateNFSFileShareError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateNFSFileShareError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateNFSFileShareError::Unknown(String::from(body)),
         }
+        return UpdateNFSFileShareError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateNFSFileShareError {
     fn from(err: serde_json::error::Error) -> UpdateNFSFileShareError {
-        UpdateNFSFileShareError::Unknown(err.description().to_string())
+        UpdateNFSFileShareError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateNFSFileShareError {
@@ -8140,7 +8303,8 @@ impl Error for UpdateNFSFileShareError {
             UpdateNFSFileShareError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateNFSFileShareError::Unknown(ref cause) => cause,
+            UpdateNFSFileShareError::ParseError(ref cause) => cause,
+            UpdateNFSFileShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8157,44 +8321,46 @@ pub enum UpdateSMBFileShareError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSMBFileShareError {
-    pub fn from_body(body: &str) -> UpdateSMBFileShareError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSMBFileShareError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        UpdateSMBFileShareError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        UpdateSMBFileShareError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateSMBFileShareError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateSMBFileShareError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return UpdateSMBFileShareError::InternalServerError(String::from(error_message))
                 }
+                "InvalidGatewayRequestException" => {
+                    return UpdateSMBFileShareError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateSMBFileShareError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateSMBFileShareError::Unknown(String::from(body)),
         }
+        return UpdateSMBFileShareError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateSMBFileShareError {
     fn from(err: serde_json::error::Error) -> UpdateSMBFileShareError {
-        UpdateSMBFileShareError::Unknown(err.description().to_string())
+        UpdateSMBFileShareError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateSMBFileShareError {
@@ -8227,7 +8393,8 @@ impl Error for UpdateSMBFileShareError {
             UpdateSMBFileShareError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateSMBFileShareError::Unknown(ref cause) => cause,
+            UpdateSMBFileShareError::ParseError(ref cause) => cause,
+            UpdateSMBFileShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8244,46 +8411,48 @@ pub enum UpdateSnapshotScheduleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSnapshotScheduleError {
-    pub fn from_body(body: &str) -> UpdateSnapshotScheduleError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSnapshotScheduleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => UpdateSnapshotScheduleError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidGatewayRequestException" => {
-                        UpdateSnapshotScheduleError::InvalidGatewayRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateSnapshotScheduleError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateSnapshotScheduleError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return UpdateSnapshotScheduleError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return UpdateSnapshotScheduleError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateSnapshotScheduleError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateSnapshotScheduleError::Unknown(String::from(body)),
         }
+        return UpdateSnapshotScheduleError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateSnapshotScheduleError {
     fn from(err: serde_json::error::Error) -> UpdateSnapshotScheduleError {
-        UpdateSnapshotScheduleError::Unknown(err.description().to_string())
+        UpdateSnapshotScheduleError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateSnapshotScheduleError {
@@ -8316,7 +8485,8 @@ impl Error for UpdateSnapshotScheduleError {
             UpdateSnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateSnapshotScheduleError::Unknown(ref cause) => cause,
+            UpdateSnapshotScheduleError::ParseError(ref cause) => cause,
+            UpdateSnapshotScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8333,44 +8503,48 @@ pub enum UpdateVTLDeviceTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateVTLDeviceTypeError {
-    pub fn from_body(body: &str) -> UpdateVTLDeviceTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateVTLDeviceTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerError" => {
-                        UpdateVTLDeviceTypeError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidGatewayRequestException" => {
-                        UpdateVTLDeviceTypeError::InvalidGatewayRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateVTLDeviceTypeError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateVTLDeviceTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerError" => {
+                    return UpdateVTLDeviceTypeError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidGatewayRequestException" => {
+                    return UpdateVTLDeviceTypeError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateVTLDeviceTypeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateVTLDeviceTypeError::Unknown(String::from(body)),
         }
+        return UpdateVTLDeviceTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateVTLDeviceTypeError {
     fn from(err: serde_json::error::Error) -> UpdateVTLDeviceTypeError {
-        UpdateVTLDeviceTypeError::Unknown(err.description().to_string())
+        UpdateVTLDeviceTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateVTLDeviceTypeError {
@@ -8403,7 +8577,8 @@ impl Error for UpdateVTLDeviceTypeError {
             UpdateVTLDeviceTypeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateVTLDeviceTypeError::Unknown(ref cause) => cause,
+            UpdateVTLDeviceTypeError::ParseError(ref cause) => cause,
+            UpdateVTLDeviceTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8879,14 +9054,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<ActivateGatewayOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ActivateGatewayError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ActivateGatewayError::from_response(response))),
+                )
             }
         })
     }
@@ -8911,14 +9088,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<AddCacheOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddCacheError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AddCacheError::from_response(response))),
+                )
             }
         })
     }
@@ -8946,14 +9125,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<AddTagsToResourceOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddTagsToResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AddTagsToResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -8981,14 +9162,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<AddUploadBufferOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddUploadBufferError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AddUploadBufferError::from_response(response))),
+                )
             }
         })
     }
@@ -9016,14 +9199,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<AddWorkingStorageOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddWorkingStorageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AddWorkingStorageError::from_response(response))),
+                )
             }
         })
     }
@@ -9051,14 +9236,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<CancelArchivalOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CancelArchivalError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CancelArchivalError::from_response(response))),
+                )
             }
         })
     }
@@ -9086,14 +9273,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<CancelRetrievalOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CancelRetrievalError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CancelRetrievalError::from_response(response))),
+                )
             }
         })
     }
@@ -9124,13 +9313,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<CreateCachediSCSIVolumeOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCachediSCSIVolumeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateCachediSCSIVolumeError::from_response(response))
                 }))
             }
         })
@@ -9159,14 +9347,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<CreateNFSFileShareOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateNFSFileShareError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateNFSFileShareError::from_response(response))),
+                )
             }
         })
     }
@@ -9194,14 +9384,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<CreateSMBFileShareOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSMBFileShareError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateSMBFileShareError::from_response(response))),
+                )
             }
         })
     }
@@ -9229,14 +9421,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<CreateSnapshotOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSnapshotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateSnapshotError::from_response(response))),
+                )
             }
         })
     }
@@ -9270,12 +9464,13 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<CreateSnapshotFromVolumeRecoveryPointOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSnapshotFromVolumeRecoveryPointError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateSnapshotFromVolumeRecoveryPointError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -9308,13 +9503,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<CreateStorediSCSIVolumeOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStorediSCSIVolumeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateStorediSCSIVolumeError::from_response(response))
                 }))
             }
         })
@@ -9346,14 +9540,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<CreateTapeWithBarcodeOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTapeWithBarcodeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateTapeWithBarcodeError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9381,14 +9576,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<CreateTapesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTapesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateTapesError::from_response(response))),
+                )
             }
         })
     }
@@ -9419,13 +9616,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DeleteBandwidthRateLimitOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBandwidthRateLimitError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteBandwidthRateLimitError::from_response(response))
                 }))
             }
         })
@@ -9457,14 +9653,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DeleteChapCredentialsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteChapCredentialsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteChapCredentialsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9492,14 +9689,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DeleteFileShareOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteFileShareError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteFileShareError::from_response(response))),
+                )
             }
         })
     }
@@ -9527,14 +9726,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DeleteGatewayOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteGatewayError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteGatewayError::from_response(response))),
+                )
             }
         })
     }
@@ -9565,14 +9766,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DeleteSnapshotScheduleOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSnapshotScheduleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteSnapshotScheduleError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9600,14 +9802,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DeleteTapeOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTapeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTapeError::from_response(response))),
+                )
             }
         })
     }
@@ -9635,14 +9839,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DeleteTapeArchiveOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTapeArchiveError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTapeArchiveError::from_response(response))),
+                )
             }
         })
     }
@@ -9670,14 +9876,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DeleteVolumeOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVolumeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteVolumeError::from_response(response))),
+                )
             }
         })
     }
@@ -9708,13 +9916,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeBandwidthRateLimitOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeBandwidthRateLimitError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeBandwidthRateLimitError::from_response(response))
                 }))
             }
         })
@@ -9743,14 +9950,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeCacheOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeCacheError::from_response(response))),
+                )
             }
         })
     }
@@ -9781,13 +9990,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeCachediSCSIVolumesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCachediSCSIVolumesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeCachediSCSIVolumesError::from_response(response))
                 }))
             }
         })
@@ -9819,13 +10027,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeChapCredentialsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeChapCredentialsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeChapCredentialsError::from_response(response))
                 }))
             }
         })
@@ -9857,13 +10064,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeGatewayInformationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeGatewayInformationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeGatewayInformationError::from_response(response))
                 }))
             }
         })
@@ -9895,13 +10101,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeMaintenanceStartTimeOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeMaintenanceStartTimeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeMaintenanceStartTimeError::from_response(response))
                 }))
             }
         })
@@ -9933,14 +10138,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeNFSFileSharesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeNFSFileSharesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeNFSFileSharesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9971,14 +10177,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeSMBFileSharesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSMBFileSharesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeSMBFileSharesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10009,14 +10216,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeSMBSettingsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSMBSettingsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeSMBSettingsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10047,13 +10255,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeSnapshotScheduleOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSnapshotScheduleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeSnapshotScheduleError::from_response(response))
                 }))
             }
         })
@@ -10085,13 +10292,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeStorediSCSIVolumesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStorediSCSIVolumesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeStorediSCSIVolumesError::from_response(response))
                 }))
             }
         })
@@ -10123,14 +10329,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeTapeArchivesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTapeArchivesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeTapeArchivesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10161,13 +10368,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeTapeRecoveryPointsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTapeRecoveryPointsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeTapeRecoveryPointsError::from_response(response))
                 }))
             }
         })
@@ -10196,14 +10402,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeTapesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTapesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTapesError::from_response(response))),
+                )
             }
         })
     }
@@ -10234,14 +10442,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeUploadBufferOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeUploadBufferError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeUploadBufferError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10269,14 +10478,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeVTLDevicesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeVTLDevicesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeVTLDevicesError::from_response(response))),
+                )
             }
         })
     }
@@ -10307,14 +10518,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DescribeWorkingStorageOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeWorkingStorageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeWorkingStorageError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10342,14 +10554,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<DisableGatewayOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableGatewayError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DisableGatewayError::from_response(response))),
+                )
             }
         })
     }
@@ -10377,14 +10591,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<JoinDomainOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(JoinDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(JoinDomainError::from_response(response))),
+                )
             }
         })
     }
@@ -10412,14 +10628,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<ListFileSharesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListFileSharesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListFileSharesError::from_response(response))),
+                )
             }
         })
     }
@@ -10447,14 +10665,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<ListGatewaysOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListGatewaysError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListGatewaysError::from_response(response))),
+                )
             }
         })
     }
@@ -10482,14 +10702,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<ListLocalDisksOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListLocalDisksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListLocalDisksError::from_response(response))),
+                )
             }
         })
     }
@@ -10520,14 +10742,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<ListTagsForResourceOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsForResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10552,14 +10775,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<ListTapesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTapesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTapesError::from_response(response))),
+                )
             }
         })
     }
@@ -10590,14 +10815,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<ListVolumeInitiatorsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVolumeInitiatorsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListVolumeInitiatorsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10628,13 +10854,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<ListVolumeRecoveryPointsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVolumeRecoveryPointsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListVolumeRecoveryPointsError::from_response(response))
                 }))
             }
         })
@@ -10663,14 +10888,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<ListVolumesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListVolumesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListVolumesError::from_response(response))),
+                )
             }
         })
     }
@@ -10698,14 +10925,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<NotifyWhenUploadedOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(NotifyWhenUploadedError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(NotifyWhenUploadedError::from_response(response))),
+                )
             }
         })
     }
@@ -10733,14 +10962,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<RefreshCacheOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RefreshCacheError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RefreshCacheError::from_response(response))),
+                )
             }
         })
     }
@@ -10771,14 +11002,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<RemoveTagsFromResourceOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveTagsFromResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RemoveTagsFromResourceError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10806,14 +11038,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<ResetCacheOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResetCacheError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ResetCacheError::from_response(response))),
+                )
             }
         })
     }
@@ -10844,14 +11078,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<RetrieveTapeArchiveOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RetrieveTapeArchiveError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RetrieveTapeArchiveError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10882,13 +11117,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<RetrieveTapeRecoveryPointOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RetrieveTapeRecoveryPointError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RetrieveTapeRecoveryPointError::from_response(response))
                 }))
             }
         })
@@ -10920,13 +11154,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<SetLocalConsolePasswordOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetLocalConsolePasswordError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SetLocalConsolePasswordError::from_response(response))
                 }))
             }
         })
@@ -10958,14 +11191,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<SetSMBGuestPasswordOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetSMBGuestPasswordError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(SetSMBGuestPasswordError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10993,14 +11227,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<ShutdownGatewayOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ShutdownGatewayError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ShutdownGatewayError::from_response(response))),
+                )
             }
         })
     }
@@ -11028,14 +11264,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<StartGatewayOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartGatewayError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartGatewayError::from_response(response))),
+                )
             }
         })
     }
@@ -11066,13 +11304,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<UpdateBandwidthRateLimitOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateBandwidthRateLimitError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateBandwidthRateLimitError::from_response(response))
                 }))
             }
         })
@@ -11104,14 +11341,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<UpdateChapCredentialsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateChapCredentialsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateChapCredentialsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -11142,13 +11380,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<UpdateGatewayInformationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateGatewayInformationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateGatewayInformationError::from_response(response))
                 }))
             }
         })
@@ -11180,13 +11417,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<UpdateGatewaySoftwareNowOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateGatewaySoftwareNowError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateGatewaySoftwareNowError::from_response(response))
                 }))
             }
         })
@@ -11218,13 +11454,12 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<UpdateMaintenanceStartTimeOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateMaintenanceStartTimeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateMaintenanceStartTimeError::from_response(response))
                 }))
             }
         })
@@ -11253,14 +11488,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<UpdateNFSFileShareOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateNFSFileShareError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateNFSFileShareError::from_response(response))),
+                )
             }
         })
     }
@@ -11288,14 +11525,16 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<UpdateSMBFileShareOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSMBFileShareError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateSMBFileShareError::from_response(response))),
+                )
             }
         })
     }
@@ -11326,14 +11565,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<UpdateSnapshotScheduleOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSnapshotScheduleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateSnapshotScheduleError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -11364,14 +11604,15 @@ impl StorageGateway for StorageGatewayClient {
 
                     serde_json::from_str::<UpdateVTLDeviceTypeOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateVTLDeviceTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateVTLDeviceTypeError::from_response(response))
+                    }),
+                )
             }
         })
     }

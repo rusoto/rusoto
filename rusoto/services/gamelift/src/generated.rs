@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2862,48 +2862,50 @@ pub enum AcceptMatchError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AcceptMatchError {
-    pub fn from_body(body: &str) -> AcceptMatchError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AcceptMatchError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        AcceptMatchError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        AcceptMatchError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => AcceptMatchError::NotFound(String::from(error_message)),
-                    "UnsupportedRegionException" => {
-                        AcceptMatchError::UnsupportedRegion(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AcceptMatchError::Validation(error_message.to_string())
-                    }
-                    _ => AcceptMatchError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return AcceptMatchError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return AcceptMatchError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return AcceptMatchError::NotFound(String::from(error_message))
+                }
+                "UnsupportedRegionException" => {
+                    return AcceptMatchError::UnsupportedRegion(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AcceptMatchError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AcceptMatchError::Unknown(String::from(body)),
         }
+        return AcceptMatchError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AcceptMatchError {
     fn from(err: serde_json::error::Error) -> AcceptMatchError {
-        AcceptMatchError::Unknown(err.description().to_string())
+        AcceptMatchError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AcceptMatchError {
@@ -2936,7 +2938,8 @@ impl Error for AcceptMatchError {
             AcceptMatchError::Validation(ref cause) => cause,
             AcceptMatchError::Credentials(ref err) => err.description(),
             AcceptMatchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AcceptMatchError::Unknown(ref cause) => cause,
+            AcceptMatchError::ParseError(ref cause) => cause,
+            AcceptMatchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2959,51 +2962,53 @@ pub enum CreateAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAliasError {
-    pub fn from_body(body: &str) -> CreateAliasError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateAliasError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConflictException" => CreateAliasError::Conflict(String::from(error_message)),
-                    "InternalServiceException" => {
-                        CreateAliasError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreateAliasError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateAliasError::LimitExceeded(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        CreateAliasError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateAliasError::Validation(error_message.to_string())
-                    }
-                    _ => CreateAliasError::Unknown(String::from(body)),
+            match *error_type {
+                "ConflictException" => {
+                    return CreateAliasError::Conflict(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return CreateAliasError::InternalService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return CreateAliasError::InvalidRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateAliasError::LimitExceeded(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return CreateAliasError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateAliasError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateAliasError::Unknown(String::from(body)),
         }
+        return CreateAliasError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateAliasError {
     fn from(err: serde_json::error::Error) -> CreateAliasError {
-        CreateAliasError::Unknown(err.description().to_string())
+        CreateAliasError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateAliasError {
@@ -3037,7 +3042,8 @@ impl Error for CreateAliasError {
             CreateAliasError::Validation(ref cause) => cause,
             CreateAliasError::Credentials(ref err) => err.description(),
             CreateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateAliasError::Unknown(ref cause) => cause,
+            CreateAliasError::ParseError(ref cause) => cause,
+            CreateAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3058,48 +3064,50 @@ pub enum CreateBuildError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBuildError {
-    pub fn from_body(body: &str) -> CreateBuildError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateBuildError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConflictException" => CreateBuildError::Conflict(String::from(error_message)),
-                    "InternalServiceException" => {
-                        CreateBuildError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreateBuildError::InvalidRequest(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        CreateBuildError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateBuildError::Validation(error_message.to_string())
-                    }
-                    _ => CreateBuildError::Unknown(String::from(body)),
+            match *error_type {
+                "ConflictException" => {
+                    return CreateBuildError::Conflict(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return CreateBuildError::InternalService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return CreateBuildError::InvalidRequest(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return CreateBuildError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateBuildError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateBuildError::Unknown(String::from(body)),
         }
+        return CreateBuildError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateBuildError {
     fn from(err: serde_json::error::Error) -> CreateBuildError {
-        CreateBuildError::Unknown(err.description().to_string())
+        CreateBuildError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateBuildError {
@@ -3132,7 +3140,8 @@ impl Error for CreateBuildError {
             CreateBuildError::Validation(ref cause) => cause,
             CreateBuildError::Credentials(ref err) => err.description(),
             CreateBuildError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBuildError::Unknown(ref cause) => cause,
+            CreateBuildError::ParseError(ref cause) => cause,
+            CreateBuildError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3157,52 +3166,56 @@ pub enum CreateFleetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateFleetError {
-    pub fn from_body(body: &str) -> CreateFleetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateFleetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConflictException" => CreateFleetError::Conflict(String::from(error_message)),
-                    "InternalServiceException" => {
-                        CreateFleetError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreateFleetError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateFleetError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => CreateFleetError::NotFound(String::from(error_message)),
-                    "UnauthorizedException" => {
-                        CreateFleetError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateFleetError::Validation(error_message.to_string())
-                    }
-                    _ => CreateFleetError::Unknown(String::from(body)),
+            match *error_type {
+                "ConflictException" => {
+                    return CreateFleetError::Conflict(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return CreateFleetError::InternalService(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return CreateFleetError::InvalidRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateFleetError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreateFleetError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return CreateFleetError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateFleetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateFleetError::Unknown(String::from(body)),
         }
+        return CreateFleetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateFleetError {
     fn from(err: serde_json::error::Error) -> CreateFleetError {
-        CreateFleetError::Unknown(err.description().to_string())
+        CreateFleetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateFleetError {
@@ -3237,7 +3250,8 @@ impl Error for CreateFleetError {
             CreateFleetError::Validation(ref cause) => cause,
             CreateFleetError::Credentials(ref err) => err.description(),
             CreateFleetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateFleetError::Unknown(ref cause) => cause,
+            CreateFleetError::ParseError(ref cause) => cause,
+            CreateFleetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3270,70 +3284,74 @@ pub enum CreateGameSessionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGameSessionError {
-    pub fn from_body(body: &str) -> CreateGameSessionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateGameSessionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConflictException" => {
-                        CreateGameSessionError::Conflict(String::from(error_message))
-                    }
-                    "FleetCapacityExceededException" => {
-                        CreateGameSessionError::FleetCapacityExceeded(String::from(error_message))
-                    }
-                    "IdempotentParameterMismatchException" => {
-                        CreateGameSessionError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServiceException" => {
-                        CreateGameSessionError::InternalService(String::from(error_message))
-                    }
-                    "InvalidFleetStatusException" => {
-                        CreateGameSessionError::InvalidFleetStatus(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreateGameSessionError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateGameSessionError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        CreateGameSessionError::NotFound(String::from(error_message))
-                    }
-                    "TerminalRoutingStrategyException" => {
-                        CreateGameSessionError::TerminalRoutingStrategy(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        CreateGameSessionError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateGameSessionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateGameSessionError::Unknown(String::from(body)),
+            match *error_type {
+                "ConflictException" => {
+                    return CreateGameSessionError::Conflict(String::from(error_message))
                 }
+                "FleetCapacityExceededException" => {
+                    return CreateGameSessionError::FleetCapacityExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "IdempotentParameterMismatchException" => {
+                    return CreateGameSessionError::IdempotentParameterMismatch(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return CreateGameSessionError::InternalService(String::from(error_message))
+                }
+                "InvalidFleetStatusException" => {
+                    return CreateGameSessionError::InvalidFleetStatus(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return CreateGameSessionError::InvalidRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateGameSessionError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreateGameSessionError::NotFound(String::from(error_message))
+                }
+                "TerminalRoutingStrategyException" => {
+                    return CreateGameSessionError::TerminalRoutingStrategy(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return CreateGameSessionError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateGameSessionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateGameSessionError::Unknown(String::from(body)),
         }
+        return CreateGameSessionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateGameSessionError {
     fn from(err: serde_json::error::Error) -> CreateGameSessionError {
-        CreateGameSessionError::Unknown(err.description().to_string())
+        CreateGameSessionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateGameSessionError {
@@ -3374,7 +3392,8 @@ impl Error for CreateGameSessionError {
             CreateGameSessionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateGameSessionError::Unknown(ref cause) => cause,
+            CreateGameSessionError::ParseError(ref cause) => cause,
+            CreateGameSessionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3395,50 +3414,50 @@ pub enum CreateGameSessionQueueError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGameSessionQueueError {
-    pub fn from_body(body: &str) -> CreateGameSessionQueueError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateGameSessionQueueError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        CreateGameSessionQueueError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreateGameSessionQueueError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateGameSessionQueueError::LimitExceeded(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        CreateGameSessionQueueError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateGameSessionQueueError::Validation(error_message.to_string())
-                    }
-                    _ => CreateGameSessionQueueError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return CreateGameSessionQueueError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return CreateGameSessionQueueError::InvalidRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateGameSessionQueueError::LimitExceeded(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return CreateGameSessionQueueError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateGameSessionQueueError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateGameSessionQueueError::Unknown(String::from(body)),
         }
+        return CreateGameSessionQueueError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateGameSessionQueueError {
     fn from(err: serde_json::error::Error) -> CreateGameSessionQueueError {
-        CreateGameSessionQueueError::Unknown(err.description().to_string())
+        CreateGameSessionQueueError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateGameSessionQueueError {
@@ -3473,7 +3492,8 @@ impl Error for CreateGameSessionQueueError {
             CreateGameSessionQueueError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateGameSessionQueueError::Unknown(ref cause) => cause,
+            CreateGameSessionQueueError::ParseError(ref cause) => cause,
+            CreateGameSessionQueueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3496,59 +3516,65 @@ pub enum CreateMatchmakingConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateMatchmakingConfigurationError {
-    pub fn from_body(body: &str) -> CreateMatchmakingConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateMatchmakingConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        CreateMatchmakingConfigurationError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        CreateMatchmakingConfigurationError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => CreateMatchmakingConfigurationError::LimitExceeded(
-                        String::from(error_message),
-                    ),
-                    "NotFoundException" => {
-                        CreateMatchmakingConfigurationError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedRegionException" => {
-                        CreateMatchmakingConfigurationError::UnsupportedRegion(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateMatchmakingConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => CreateMatchmakingConfigurationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return CreateMatchmakingConfigurationError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return CreateMatchmakingConfigurationError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return CreateMatchmakingConfigurationError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return CreateMatchmakingConfigurationError::NotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedRegionException" => {
+                    return CreateMatchmakingConfigurationError::UnsupportedRegion(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateMatchmakingConfigurationError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => CreateMatchmakingConfigurationError::Unknown(String::from(body)),
         }
+        return CreateMatchmakingConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateMatchmakingConfigurationError {
     fn from(err: serde_json::error::Error) -> CreateMatchmakingConfigurationError {
-        CreateMatchmakingConfigurationError::Unknown(err.description().to_string())
+        CreateMatchmakingConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateMatchmakingConfigurationError {
@@ -3584,7 +3610,8 @@ impl Error for CreateMatchmakingConfigurationError {
             CreateMatchmakingConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateMatchmakingConfigurationError::Unknown(ref cause) => cause,
+            CreateMatchmakingConfigurationError::ParseError(ref cause) => cause,
+            CreateMatchmakingConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3603,49 +3630,53 @@ pub enum CreateMatchmakingRuleSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateMatchmakingRuleSetError {
-    pub fn from_body(body: &str) -> CreateMatchmakingRuleSetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateMatchmakingRuleSetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        CreateMatchmakingRuleSetError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreateMatchmakingRuleSetError::InvalidRequest(String::from(error_message))
-                    }
-                    "UnsupportedRegionException" => {
-                        CreateMatchmakingRuleSetError::UnsupportedRegion(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateMatchmakingRuleSetError::Validation(error_message.to_string())
-                    }
-                    _ => CreateMatchmakingRuleSetError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return CreateMatchmakingRuleSetError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return CreateMatchmakingRuleSetError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedRegionException" => {
+                    return CreateMatchmakingRuleSetError::UnsupportedRegion(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateMatchmakingRuleSetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateMatchmakingRuleSetError::Unknown(String::from(body)),
         }
+        return CreateMatchmakingRuleSetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateMatchmakingRuleSetError {
     fn from(err: serde_json::error::Error) -> CreateMatchmakingRuleSetError {
-        CreateMatchmakingRuleSetError::Unknown(err.description().to_string())
+        CreateMatchmakingRuleSetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateMatchmakingRuleSetError {
@@ -3679,7 +3710,8 @@ impl Error for CreateMatchmakingRuleSetError {
             CreateMatchmakingRuleSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateMatchmakingRuleSetError::Unknown(ref cause) => cause,
+            CreateMatchmakingRuleSetError::ParseError(ref cause) => cause,
+            CreateMatchmakingRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3706,63 +3738,63 @@ pub enum CreatePlayerSessionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePlayerSessionError {
-    pub fn from_body(body: &str) -> CreatePlayerSessionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePlayerSessionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "GameSessionFullException" => {
-                        CreatePlayerSessionError::GameSessionFull(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CreatePlayerSessionError::InternalService(String::from(error_message))
-                    }
-                    "InvalidGameSessionStatusException" => {
-                        CreatePlayerSessionError::InvalidGameSessionStatus(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        CreatePlayerSessionError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        CreatePlayerSessionError::NotFound(String::from(error_message))
-                    }
-                    "TerminalRoutingStrategyException" => {
-                        CreatePlayerSessionError::TerminalRoutingStrategy(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedException" => {
-                        CreatePlayerSessionError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreatePlayerSessionError::Validation(error_message.to_string())
-                    }
-                    _ => CreatePlayerSessionError::Unknown(String::from(body)),
+            match *error_type {
+                "GameSessionFullException" => {
+                    return CreatePlayerSessionError::GameSessionFull(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return CreatePlayerSessionError::InternalService(String::from(error_message))
+                }
+                "InvalidGameSessionStatusException" => {
+                    return CreatePlayerSessionError::InvalidGameSessionStatus(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return CreatePlayerSessionError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreatePlayerSessionError::NotFound(String::from(error_message))
+                }
+                "TerminalRoutingStrategyException" => {
+                    return CreatePlayerSessionError::TerminalRoutingStrategy(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return CreatePlayerSessionError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreatePlayerSessionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreatePlayerSessionError::Unknown(String::from(body)),
         }
+        return CreatePlayerSessionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreatePlayerSessionError {
     fn from(err: serde_json::error::Error) -> CreatePlayerSessionError {
-        CreatePlayerSessionError::Unknown(err.description().to_string())
+        CreatePlayerSessionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreatePlayerSessionError {
@@ -3800,7 +3832,8 @@ impl Error for CreatePlayerSessionError {
             CreatePlayerSessionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreatePlayerSessionError::Unknown(ref cause) => cause,
+            CreatePlayerSessionError::ParseError(ref cause) => cause,
+            CreatePlayerSessionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3827,63 +3860,63 @@ pub enum CreatePlayerSessionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePlayerSessionsError {
-    pub fn from_body(body: &str) -> CreatePlayerSessionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePlayerSessionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "GameSessionFullException" => {
-                        CreatePlayerSessionsError::GameSessionFull(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CreatePlayerSessionsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidGameSessionStatusException" => {
-                        CreatePlayerSessionsError::InvalidGameSessionStatus(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        CreatePlayerSessionsError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        CreatePlayerSessionsError::NotFound(String::from(error_message))
-                    }
-                    "TerminalRoutingStrategyException" => {
-                        CreatePlayerSessionsError::TerminalRoutingStrategy(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedException" => {
-                        CreatePlayerSessionsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreatePlayerSessionsError::Validation(error_message.to_string())
-                    }
-                    _ => CreatePlayerSessionsError::Unknown(String::from(body)),
+            match *error_type {
+                "GameSessionFullException" => {
+                    return CreatePlayerSessionsError::GameSessionFull(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return CreatePlayerSessionsError::InternalService(String::from(error_message))
+                }
+                "InvalidGameSessionStatusException" => {
+                    return CreatePlayerSessionsError::InvalidGameSessionStatus(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return CreatePlayerSessionsError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreatePlayerSessionsError::NotFound(String::from(error_message))
+                }
+                "TerminalRoutingStrategyException" => {
+                    return CreatePlayerSessionsError::TerminalRoutingStrategy(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return CreatePlayerSessionsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreatePlayerSessionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreatePlayerSessionsError::Unknown(String::from(body)),
         }
+        return CreatePlayerSessionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreatePlayerSessionsError {
     fn from(err: serde_json::error::Error) -> CreatePlayerSessionsError {
-        CreatePlayerSessionsError::Unknown(err.description().to_string())
+        CreatePlayerSessionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreatePlayerSessionsError {
@@ -3921,7 +3954,8 @@ impl Error for CreatePlayerSessionsError {
             CreatePlayerSessionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreatePlayerSessionsError::Unknown(ref cause) => cause,
+            CreatePlayerSessionsError::ParseError(ref cause) => cause,
+            CreatePlayerSessionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3942,54 +3976,56 @@ pub enum CreateVpcPeeringAuthorizationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateVpcPeeringAuthorizationError {
-    pub fn from_body(body: &str) -> CreateVpcPeeringAuthorizationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateVpcPeeringAuthorizationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        CreateVpcPeeringAuthorizationError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        CreateVpcPeeringAuthorizationError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NotFoundException" => {
-                        CreateVpcPeeringAuthorizationError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => CreateVpcPeeringAuthorizationError::Unauthorized(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        CreateVpcPeeringAuthorizationError::Validation(error_message.to_string())
-                    }
-                    _ => CreateVpcPeeringAuthorizationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return CreateVpcPeeringAuthorizationError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return CreateVpcPeeringAuthorizationError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return CreateVpcPeeringAuthorizationError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return CreateVpcPeeringAuthorizationError::Unauthorized(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateVpcPeeringAuthorizationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateVpcPeeringAuthorizationError::Unknown(String::from(body)),
         }
+        return CreateVpcPeeringAuthorizationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateVpcPeeringAuthorizationError {
     fn from(err: serde_json::error::Error) -> CreateVpcPeeringAuthorizationError {
-        CreateVpcPeeringAuthorizationError::Unknown(err.description().to_string())
+        CreateVpcPeeringAuthorizationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateVpcPeeringAuthorizationError {
@@ -4024,7 +4060,8 @@ impl Error for CreateVpcPeeringAuthorizationError {
             CreateVpcPeeringAuthorizationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateVpcPeeringAuthorizationError::Unknown(ref cause) => cause,
+            CreateVpcPeeringAuthorizationError::ParseError(ref cause) => cause,
+            CreateVpcPeeringAuthorizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4045,50 +4082,56 @@ pub enum CreateVpcPeeringConnectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateVpcPeeringConnectionError {
-    pub fn from_body(body: &str) -> CreateVpcPeeringConnectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateVpcPeeringConnectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => CreateVpcPeeringConnectionError::InternalService(
-                        String::from(error_message),
-                    ),
-                    "InvalidRequestException" => {
-                        CreateVpcPeeringConnectionError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        CreateVpcPeeringConnectionError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        CreateVpcPeeringConnectionError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateVpcPeeringConnectionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateVpcPeeringConnectionError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return CreateVpcPeeringConnectionError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return CreateVpcPeeringConnectionError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return CreateVpcPeeringConnectionError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return CreateVpcPeeringConnectionError::Unauthorized(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateVpcPeeringConnectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateVpcPeeringConnectionError::Unknown(String::from(body)),
         }
+        return CreateVpcPeeringConnectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateVpcPeeringConnectionError {
     fn from(err: serde_json::error::Error) -> CreateVpcPeeringConnectionError {
-        CreateVpcPeeringConnectionError::Unknown(err.description().to_string())
+        CreateVpcPeeringConnectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateVpcPeeringConnectionError {
@@ -4123,7 +4166,8 @@ impl Error for CreateVpcPeeringConnectionError {
             CreateVpcPeeringConnectionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateVpcPeeringConnectionError::Unknown(ref cause) => cause,
+            CreateVpcPeeringConnectionError::ParseError(ref cause) => cause,
+            CreateVpcPeeringConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4144,48 +4188,50 @@ pub enum DeleteAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAliasError {
-    pub fn from_body(body: &str) -> DeleteAliasError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteAliasError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DeleteAliasError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteAliasError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => DeleteAliasError::NotFound(String::from(error_message)),
-                    "UnauthorizedException" => {
-                        DeleteAliasError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteAliasError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteAliasError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DeleteAliasError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DeleteAliasError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteAliasError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DeleteAliasError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteAliasError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteAliasError::Unknown(String::from(body)),
         }
+        return DeleteAliasError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteAliasError {
     fn from(err: serde_json::error::Error) -> DeleteAliasError {
-        DeleteAliasError::Unknown(err.description().to_string())
+        DeleteAliasError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteAliasError {
@@ -4218,7 +4264,8 @@ impl Error for DeleteAliasError {
             DeleteAliasError::Validation(ref cause) => cause,
             DeleteAliasError::Credentials(ref err) => err.description(),
             DeleteAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteAliasError::Unknown(ref cause) => cause,
+            DeleteAliasError::ParseError(ref cause) => cause,
+            DeleteAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4239,48 +4286,50 @@ pub enum DeleteBuildError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBuildError {
-    pub fn from_body(body: &str) -> DeleteBuildError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBuildError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DeleteBuildError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteBuildError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => DeleteBuildError::NotFound(String::from(error_message)),
-                    "UnauthorizedException" => {
-                        DeleteBuildError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteBuildError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteBuildError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DeleteBuildError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DeleteBuildError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteBuildError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DeleteBuildError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteBuildError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteBuildError::Unknown(String::from(body)),
         }
+        return DeleteBuildError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteBuildError {
     fn from(err: serde_json::error::Error) -> DeleteBuildError {
-        DeleteBuildError::Unknown(err.description().to_string())
+        DeleteBuildError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteBuildError {
@@ -4313,7 +4362,8 @@ impl Error for DeleteBuildError {
             DeleteBuildError::Validation(ref cause) => cause,
             DeleteBuildError::Credentials(ref err) => err.description(),
             DeleteBuildError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBuildError::Unknown(ref cause) => cause,
+            DeleteBuildError::ParseError(ref cause) => cause,
+            DeleteBuildError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4336,51 +4386,53 @@ pub enum DeleteFleetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFleetError {
-    pub fn from_body(body: &str) -> DeleteFleetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteFleetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DeleteFleetError::InternalService(String::from(error_message))
-                    }
-                    "InvalidFleetStatusException" => {
-                        DeleteFleetError::InvalidFleetStatus(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteFleetError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => DeleteFleetError::NotFound(String::from(error_message)),
-                    "UnauthorizedException" => {
-                        DeleteFleetError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteFleetError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteFleetError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DeleteFleetError::InternalService(String::from(error_message))
                 }
+                "InvalidFleetStatusException" => {
+                    return DeleteFleetError::InvalidFleetStatus(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return DeleteFleetError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteFleetError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DeleteFleetError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteFleetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteFleetError::Unknown(String::from(body)),
         }
+        return DeleteFleetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteFleetError {
     fn from(err: serde_json::error::Error) -> DeleteFleetError {
-        DeleteFleetError::Unknown(err.description().to_string())
+        DeleteFleetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteFleetError {
@@ -4414,7 +4466,8 @@ impl Error for DeleteFleetError {
             DeleteFleetError::Validation(ref cause) => cause,
             DeleteFleetError::Credentials(ref err) => err.description(),
             DeleteFleetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFleetError::Unknown(ref cause) => cause,
+            DeleteFleetError::ParseError(ref cause) => cause,
+            DeleteFleetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4435,50 +4488,50 @@ pub enum DeleteGameSessionQueueError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGameSessionQueueError {
-    pub fn from_body(body: &str) -> DeleteGameSessionQueueError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteGameSessionQueueError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DeleteGameSessionQueueError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteGameSessionQueueError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteGameSessionQueueError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DeleteGameSessionQueueError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteGameSessionQueueError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteGameSessionQueueError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DeleteGameSessionQueueError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DeleteGameSessionQueueError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteGameSessionQueueError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DeleteGameSessionQueueError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteGameSessionQueueError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteGameSessionQueueError::Unknown(String::from(body)),
         }
+        return DeleteGameSessionQueueError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteGameSessionQueueError {
     fn from(err: serde_json::error::Error) -> DeleteGameSessionQueueError {
-        DeleteGameSessionQueueError::Unknown(err.description().to_string())
+        DeleteGameSessionQueueError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteGameSessionQueueError {
@@ -4513,7 +4566,8 @@ impl Error for DeleteGameSessionQueueError {
             DeleteGameSessionQueueError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteGameSessionQueueError::Unknown(ref cause) => cause,
+            DeleteGameSessionQueueError::ParseError(ref cause) => cause,
+            DeleteGameSessionQueueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4534,56 +4588,60 @@ pub enum DeleteMatchmakingConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteMatchmakingConfigurationError {
-    pub fn from_body(body: &str) -> DeleteMatchmakingConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteMatchmakingConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DeleteMatchmakingConfigurationError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteMatchmakingConfigurationError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NotFoundException" => {
-                        DeleteMatchmakingConfigurationError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedRegionException" => {
-                        DeleteMatchmakingConfigurationError::UnsupportedRegion(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteMatchmakingConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteMatchmakingConfigurationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DeleteMatchmakingConfigurationError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DeleteMatchmakingConfigurationError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DeleteMatchmakingConfigurationError::NotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedRegionException" => {
+                    return DeleteMatchmakingConfigurationError::UnsupportedRegion(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteMatchmakingConfigurationError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DeleteMatchmakingConfigurationError::Unknown(String::from(body)),
         }
+        return DeleteMatchmakingConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteMatchmakingConfigurationError {
     fn from(err: serde_json::error::Error) -> DeleteMatchmakingConfigurationError {
-        DeleteMatchmakingConfigurationError::Unknown(err.description().to_string())
+        DeleteMatchmakingConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteMatchmakingConfigurationError {
@@ -4618,7 +4676,8 @@ impl Error for DeleteMatchmakingConfigurationError {
             DeleteMatchmakingConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteMatchmakingConfigurationError::Unknown(ref cause) => cause,
+            DeleteMatchmakingConfigurationError::ParseError(ref cause) => cause,
+            DeleteMatchmakingConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4639,50 +4698,50 @@ pub enum DeleteScalingPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteScalingPolicyError {
-    pub fn from_body(body: &str) -> DeleteScalingPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteScalingPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DeleteScalingPolicyError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteScalingPolicyError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteScalingPolicyError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DeleteScalingPolicyError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteScalingPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteScalingPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DeleteScalingPolicyError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DeleteScalingPolicyError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteScalingPolicyError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DeleteScalingPolicyError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteScalingPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteScalingPolicyError::Unknown(String::from(body)),
         }
+        return DeleteScalingPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteScalingPolicyError {
     fn from(err: serde_json::error::Error) -> DeleteScalingPolicyError {
-        DeleteScalingPolicyError::Unknown(err.description().to_string())
+        DeleteScalingPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteScalingPolicyError {
@@ -4717,7 +4776,8 @@ impl Error for DeleteScalingPolicyError {
             DeleteScalingPolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteScalingPolicyError::Unknown(ref cause) => cause,
+            DeleteScalingPolicyError::ParseError(ref cause) => cause,
+            DeleteScalingPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4738,54 +4798,56 @@ pub enum DeleteVpcPeeringAuthorizationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVpcPeeringAuthorizationError {
-    pub fn from_body(body: &str) -> DeleteVpcPeeringAuthorizationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteVpcPeeringAuthorizationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DeleteVpcPeeringAuthorizationError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteVpcPeeringAuthorizationError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NotFoundException" => {
-                        DeleteVpcPeeringAuthorizationError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => DeleteVpcPeeringAuthorizationError::Unauthorized(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        DeleteVpcPeeringAuthorizationError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteVpcPeeringAuthorizationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DeleteVpcPeeringAuthorizationError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DeleteVpcPeeringAuthorizationError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DeleteVpcPeeringAuthorizationError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DeleteVpcPeeringAuthorizationError::Unauthorized(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteVpcPeeringAuthorizationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteVpcPeeringAuthorizationError::Unknown(String::from(body)),
         }
+        return DeleteVpcPeeringAuthorizationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteVpcPeeringAuthorizationError {
     fn from(err: serde_json::error::Error) -> DeleteVpcPeeringAuthorizationError {
-        DeleteVpcPeeringAuthorizationError::Unknown(err.description().to_string())
+        DeleteVpcPeeringAuthorizationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteVpcPeeringAuthorizationError {
@@ -4820,7 +4882,8 @@ impl Error for DeleteVpcPeeringAuthorizationError {
             DeleteVpcPeeringAuthorizationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteVpcPeeringAuthorizationError::Unknown(ref cause) => cause,
+            DeleteVpcPeeringAuthorizationError::ParseError(ref cause) => cause,
+            DeleteVpcPeeringAuthorizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4841,50 +4904,56 @@ pub enum DeleteVpcPeeringConnectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVpcPeeringConnectionError {
-    pub fn from_body(body: &str) -> DeleteVpcPeeringConnectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteVpcPeeringConnectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => DeleteVpcPeeringConnectionError::InternalService(
-                        String::from(error_message),
-                    ),
-                    "InvalidRequestException" => {
-                        DeleteVpcPeeringConnectionError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteVpcPeeringConnectionError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DeleteVpcPeeringConnectionError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteVpcPeeringConnectionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteVpcPeeringConnectionError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DeleteVpcPeeringConnectionError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DeleteVpcPeeringConnectionError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DeleteVpcPeeringConnectionError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DeleteVpcPeeringConnectionError::Unauthorized(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteVpcPeeringConnectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteVpcPeeringConnectionError::Unknown(String::from(body)),
         }
+        return DeleteVpcPeeringConnectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteVpcPeeringConnectionError {
     fn from(err: serde_json::error::Error) -> DeleteVpcPeeringConnectionError {
-        DeleteVpcPeeringConnectionError::Unknown(err.description().to_string())
+        DeleteVpcPeeringConnectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteVpcPeeringConnectionError {
@@ -4919,7 +4988,8 @@ impl Error for DeleteVpcPeeringConnectionError {
             DeleteVpcPeeringConnectionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteVpcPeeringConnectionError::Unknown(ref cause) => cause,
+            DeleteVpcPeeringConnectionError::ParseError(ref cause) => cause,
+            DeleteVpcPeeringConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4940,50 +5010,50 @@ pub enum DescribeAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAliasError {
-    pub fn from_body(body: &str) -> DescribeAliasError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAliasError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeAliasError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeAliasError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeAliasError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeAliasError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeAliasError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeAliasError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeAliasError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DescribeAliasError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeAliasError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeAliasError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeAliasError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeAliasError::Unknown(String::from(body)),
         }
+        return DescribeAliasError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeAliasError {
     fn from(err: serde_json::error::Error) -> DescribeAliasError {
-        DescribeAliasError::Unknown(err.description().to_string())
+        DescribeAliasError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeAliasError {
@@ -5016,7 +5086,8 @@ impl Error for DescribeAliasError {
             DescribeAliasError::Validation(ref cause) => cause,
             DescribeAliasError::Credentials(ref err) => err.description(),
             DescribeAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeAliasError::Unknown(ref cause) => cause,
+            DescribeAliasError::ParseError(ref cause) => cause,
+            DescribeAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5037,50 +5108,50 @@ pub enum DescribeBuildError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBuildError {
-    pub fn from_body(body: &str) -> DescribeBuildError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeBuildError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeBuildError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeBuildError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeBuildError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeBuildError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeBuildError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeBuildError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeBuildError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DescribeBuildError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeBuildError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeBuildError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeBuildError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeBuildError::Unknown(String::from(body)),
         }
+        return DescribeBuildError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeBuildError {
     fn from(err: serde_json::error::Error) -> DescribeBuildError {
-        DescribeBuildError::Unknown(err.description().to_string())
+        DescribeBuildError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeBuildError {
@@ -5113,7 +5184,8 @@ impl Error for DescribeBuildError {
             DescribeBuildError::Validation(ref cause) => cause,
             DescribeBuildError::Credentials(ref err) => err.description(),
             DescribeBuildError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeBuildError::Unknown(ref cause) => cause,
+            DescribeBuildError::ParseError(ref cause) => cause,
+            DescribeBuildError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5132,47 +5204,51 @@ pub enum DescribeEC2InstanceLimitsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEC2InstanceLimitsError {
-    pub fn from_body(body: &str) -> DescribeEC2InstanceLimitsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEC2InstanceLimitsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeEC2InstanceLimitsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeEC2InstanceLimitsError::InvalidRequest(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeEC2InstanceLimitsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeEC2InstanceLimitsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeEC2InstanceLimitsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeEC2InstanceLimitsError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeEC2InstanceLimitsError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return DescribeEC2InstanceLimitsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeEC2InstanceLimitsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeEC2InstanceLimitsError::Unknown(String::from(body)),
         }
+        return DescribeEC2InstanceLimitsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeEC2InstanceLimitsError {
     fn from(err: serde_json::error::Error) -> DescribeEC2InstanceLimitsError {
-        DescribeEC2InstanceLimitsError::Unknown(err.description().to_string())
+        DescribeEC2InstanceLimitsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeEC2InstanceLimitsError {
@@ -5206,7 +5282,8 @@ impl Error for DescribeEC2InstanceLimitsError {
             DescribeEC2InstanceLimitsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEC2InstanceLimitsError::Unknown(ref cause) => cause,
+            DescribeEC2InstanceLimitsError::ParseError(ref cause) => cause,
+            DescribeEC2InstanceLimitsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5227,50 +5304,52 @@ pub enum DescribeFleetAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeFleetAttributesError {
-    pub fn from_body(body: &str) -> DescribeFleetAttributesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeFleetAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeFleetAttributesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeFleetAttributesError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeFleetAttributesError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeFleetAttributesError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeFleetAttributesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeFleetAttributesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeFleetAttributesError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeFleetAttributesError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeFleetAttributesError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeFleetAttributesError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeFleetAttributesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeFleetAttributesError::Unknown(String::from(body)),
         }
+        return DescribeFleetAttributesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeFleetAttributesError {
     fn from(err: serde_json::error::Error) -> DescribeFleetAttributesError {
-        DescribeFleetAttributesError::Unknown(err.description().to_string())
+        DescribeFleetAttributesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeFleetAttributesError {
@@ -5305,7 +5384,8 @@ impl Error for DescribeFleetAttributesError {
             DescribeFleetAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeFleetAttributesError::Unknown(ref cause) => cause,
+            DescribeFleetAttributesError::ParseError(ref cause) => cause,
+            DescribeFleetAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5326,50 +5406,50 @@ pub enum DescribeFleetCapacityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeFleetCapacityError {
-    pub fn from_body(body: &str) -> DescribeFleetCapacityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeFleetCapacityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeFleetCapacityError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeFleetCapacityError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeFleetCapacityError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeFleetCapacityError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeFleetCapacityError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeFleetCapacityError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeFleetCapacityError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DescribeFleetCapacityError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeFleetCapacityError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeFleetCapacityError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeFleetCapacityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeFleetCapacityError::Unknown(String::from(body)),
         }
+        return DescribeFleetCapacityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeFleetCapacityError {
     fn from(err: serde_json::error::Error) -> DescribeFleetCapacityError {
-        DescribeFleetCapacityError::Unknown(err.description().to_string())
+        DescribeFleetCapacityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeFleetCapacityError {
@@ -5404,7 +5484,8 @@ impl Error for DescribeFleetCapacityError {
             DescribeFleetCapacityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeFleetCapacityError::Unknown(ref cause) => cause,
+            DescribeFleetCapacityError::ParseError(ref cause) => cause,
+            DescribeFleetCapacityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5425,50 +5506,50 @@ pub enum DescribeFleetEventsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeFleetEventsError {
-    pub fn from_body(body: &str) -> DescribeFleetEventsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeFleetEventsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeFleetEventsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeFleetEventsError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeFleetEventsError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeFleetEventsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeFleetEventsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeFleetEventsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeFleetEventsError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DescribeFleetEventsError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeFleetEventsError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeFleetEventsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeFleetEventsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeFleetEventsError::Unknown(String::from(body)),
         }
+        return DescribeFleetEventsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeFleetEventsError {
     fn from(err: serde_json::error::Error) -> DescribeFleetEventsError {
-        DescribeFleetEventsError::Unknown(err.description().to_string())
+        DescribeFleetEventsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeFleetEventsError {
@@ -5503,7 +5584,8 @@ impl Error for DescribeFleetEventsError {
             DescribeFleetEventsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeFleetEventsError::Unknown(ref cause) => cause,
+            DescribeFleetEventsError::ParseError(ref cause) => cause,
+            DescribeFleetEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5524,50 +5606,54 @@ pub enum DescribeFleetPortSettingsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeFleetPortSettingsError {
-    pub fn from_body(body: &str) -> DescribeFleetPortSettingsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeFleetPortSettingsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeFleetPortSettingsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeFleetPortSettingsError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeFleetPortSettingsError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeFleetPortSettingsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeFleetPortSettingsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeFleetPortSettingsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeFleetPortSettingsError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeFleetPortSettingsError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeFleetPortSettingsError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeFleetPortSettingsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeFleetPortSettingsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeFleetPortSettingsError::Unknown(String::from(body)),
         }
+        return DescribeFleetPortSettingsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeFleetPortSettingsError {
     fn from(err: serde_json::error::Error) -> DescribeFleetPortSettingsError {
-        DescribeFleetPortSettingsError::Unknown(err.description().to_string())
+        DescribeFleetPortSettingsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeFleetPortSettingsError {
@@ -5602,7 +5688,8 @@ impl Error for DescribeFleetPortSettingsError {
             DescribeFleetPortSettingsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeFleetPortSettingsError::Unknown(ref cause) => cause,
+            DescribeFleetPortSettingsError::ParseError(ref cause) => cause,
+            DescribeFleetPortSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5623,50 +5710,54 @@ pub enum DescribeFleetUtilizationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeFleetUtilizationError {
-    pub fn from_body(body: &str) -> DescribeFleetUtilizationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeFleetUtilizationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeFleetUtilizationError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeFleetUtilizationError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeFleetUtilizationError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeFleetUtilizationError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeFleetUtilizationError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeFleetUtilizationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeFleetUtilizationError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeFleetUtilizationError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeFleetUtilizationError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeFleetUtilizationError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeFleetUtilizationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeFleetUtilizationError::Unknown(String::from(body)),
         }
+        return DescribeFleetUtilizationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeFleetUtilizationError {
     fn from(err: serde_json::error::Error) -> DescribeFleetUtilizationError {
-        DescribeFleetUtilizationError::Unknown(err.description().to_string())
+        DescribeFleetUtilizationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeFleetUtilizationError {
@@ -5701,7 +5792,8 @@ impl Error for DescribeFleetUtilizationError {
             DescribeFleetUtilizationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeFleetUtilizationError::Unknown(ref cause) => cause,
+            DescribeFleetUtilizationError::ParseError(ref cause) => cause,
+            DescribeFleetUtilizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5724,55 +5816,61 @@ pub enum DescribeGameSessionDetailsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGameSessionDetailsError {
-    pub fn from_body(body: &str) -> DescribeGameSessionDetailsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeGameSessionDetailsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => DescribeGameSessionDetailsError::InternalService(
-                        String::from(error_message),
-                    ),
-                    "InvalidRequestException" => {
-                        DescribeGameSessionDetailsError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeGameSessionDetailsError::NotFound(String::from(error_message))
-                    }
-                    "TerminalRoutingStrategyException" => {
-                        DescribeGameSessionDetailsError::TerminalRoutingStrategy(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeGameSessionDetailsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeGameSessionDetailsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeGameSessionDetailsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeGameSessionDetailsError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeGameSessionDetailsError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeGameSessionDetailsError::NotFound(String::from(error_message))
+                }
+                "TerminalRoutingStrategyException" => {
+                    return DescribeGameSessionDetailsError::TerminalRoutingStrategy(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return DescribeGameSessionDetailsError::Unauthorized(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeGameSessionDetailsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeGameSessionDetailsError::Unknown(String::from(body)),
         }
+        return DescribeGameSessionDetailsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeGameSessionDetailsError {
     fn from(err: serde_json::error::Error) -> DescribeGameSessionDetailsError {
-        DescribeGameSessionDetailsError::Unknown(err.description().to_string())
+        DescribeGameSessionDetailsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeGameSessionDetailsError {
@@ -5808,7 +5906,8 @@ impl Error for DescribeGameSessionDetailsError {
             DescribeGameSessionDetailsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeGameSessionDetailsError::Unknown(ref cause) => cause,
+            DescribeGameSessionDetailsError::ParseError(ref cause) => cause,
+            DescribeGameSessionDetailsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5829,52 +5928,56 @@ pub enum DescribeGameSessionPlacementError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGameSessionPlacementError {
-    pub fn from_body(body: &str) -> DescribeGameSessionPlacementError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeGameSessionPlacementError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeGameSessionPlacementError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => DescribeGameSessionPlacementError::InvalidRequest(
-                        String::from(error_message),
-                    ),
-                    "NotFoundException" => {
-                        DescribeGameSessionPlacementError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeGameSessionPlacementError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeGameSessionPlacementError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeGameSessionPlacementError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeGameSessionPlacementError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeGameSessionPlacementError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeGameSessionPlacementError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeGameSessionPlacementError::Unauthorized(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeGameSessionPlacementError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeGameSessionPlacementError::Unknown(String::from(body)),
         }
+        return DescribeGameSessionPlacementError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeGameSessionPlacementError {
     fn from(err: serde_json::error::Error) -> DescribeGameSessionPlacementError {
-        DescribeGameSessionPlacementError::Unknown(err.description().to_string())
+        DescribeGameSessionPlacementError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeGameSessionPlacementError {
@@ -5909,7 +6012,8 @@ impl Error for DescribeGameSessionPlacementError {
             DescribeGameSessionPlacementError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeGameSessionPlacementError::Unknown(ref cause) => cause,
+            DescribeGameSessionPlacementError::ParseError(ref cause) => cause,
+            DescribeGameSessionPlacementError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5930,50 +6034,54 @@ pub enum DescribeGameSessionQueuesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGameSessionQueuesError {
-    pub fn from_body(body: &str) -> DescribeGameSessionQueuesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeGameSessionQueuesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeGameSessionQueuesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeGameSessionQueuesError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeGameSessionQueuesError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeGameSessionQueuesError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeGameSessionQueuesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeGameSessionQueuesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeGameSessionQueuesError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeGameSessionQueuesError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeGameSessionQueuesError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeGameSessionQueuesError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeGameSessionQueuesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeGameSessionQueuesError::Unknown(String::from(body)),
         }
+        return DescribeGameSessionQueuesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeGameSessionQueuesError {
     fn from(err: serde_json::error::Error) -> DescribeGameSessionQueuesError {
-        DescribeGameSessionQueuesError::Unknown(err.description().to_string())
+        DescribeGameSessionQueuesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeGameSessionQueuesError {
@@ -6008,7 +6116,8 @@ impl Error for DescribeGameSessionQueuesError {
             DescribeGameSessionQueuesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeGameSessionQueuesError::Unknown(ref cause) => cause,
+            DescribeGameSessionQueuesError::ParseError(ref cause) => cause,
+            DescribeGameSessionQueuesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6031,55 +6140,55 @@ pub enum DescribeGameSessionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGameSessionsError {
-    pub fn from_body(body: &str) -> DescribeGameSessionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeGameSessionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeGameSessionsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeGameSessionsError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeGameSessionsError::NotFound(String::from(error_message))
-                    }
-                    "TerminalRoutingStrategyException" => {
-                        DescribeGameSessionsError::TerminalRoutingStrategy(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeGameSessionsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeGameSessionsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeGameSessionsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeGameSessionsError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DescribeGameSessionsError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeGameSessionsError::NotFound(String::from(error_message))
+                }
+                "TerminalRoutingStrategyException" => {
+                    return DescribeGameSessionsError::TerminalRoutingStrategy(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return DescribeGameSessionsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeGameSessionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeGameSessionsError::Unknown(String::from(body)),
         }
+        return DescribeGameSessionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeGameSessionsError {
     fn from(err: serde_json::error::Error) -> DescribeGameSessionsError {
-        DescribeGameSessionsError::Unknown(err.description().to_string())
+        DescribeGameSessionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeGameSessionsError {
@@ -6115,7 +6224,8 @@ impl Error for DescribeGameSessionsError {
             DescribeGameSessionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeGameSessionsError::Unknown(ref cause) => cause,
+            DescribeGameSessionsError::ParseError(ref cause) => cause,
+            DescribeGameSessionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6136,50 +6246,50 @@ pub enum DescribeInstancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeInstancesError {
-    pub fn from_body(body: &str) -> DescribeInstancesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeInstancesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeInstancesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeInstancesError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeInstancesError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeInstancesError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeInstancesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeInstancesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeInstancesError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DescribeInstancesError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeInstancesError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeInstancesError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeInstancesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeInstancesError::Unknown(String::from(body)),
         }
+        return DescribeInstancesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeInstancesError {
     fn from(err: serde_json::error::Error) -> DescribeInstancesError {
-        DescribeInstancesError::Unknown(err.description().to_string())
+        DescribeInstancesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeInstancesError {
@@ -6214,7 +6324,8 @@ impl Error for DescribeInstancesError {
             DescribeInstancesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeInstancesError::Unknown(ref cause) => cause,
+            DescribeInstancesError::ParseError(ref cause) => cause,
+            DescribeInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6233,47 +6344,47 @@ pub enum DescribeMatchmakingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeMatchmakingError {
-    pub fn from_body(body: &str) -> DescribeMatchmakingError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeMatchmakingError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeMatchmakingError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeMatchmakingError::InvalidRequest(String::from(error_message))
-                    }
-                    "UnsupportedRegionException" => {
-                        DescribeMatchmakingError::UnsupportedRegion(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeMatchmakingError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeMatchmakingError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeMatchmakingError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DescribeMatchmakingError::InvalidRequest(String::from(error_message))
+                }
+                "UnsupportedRegionException" => {
+                    return DescribeMatchmakingError::UnsupportedRegion(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeMatchmakingError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeMatchmakingError::Unknown(String::from(body)),
         }
+        return DescribeMatchmakingError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeMatchmakingError {
     fn from(err: serde_json::error::Error) -> DescribeMatchmakingError {
-        DescribeMatchmakingError::Unknown(err.description().to_string())
+        DescribeMatchmakingError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeMatchmakingError {
@@ -6307,7 +6418,8 @@ impl Error for DescribeMatchmakingError {
             DescribeMatchmakingError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeMatchmakingError::Unknown(ref cause) => cause,
+            DescribeMatchmakingError::ParseError(ref cause) => cause,
+            DescribeMatchmakingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6326,53 +6438,55 @@ pub enum DescribeMatchmakingConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeMatchmakingConfigurationsError {
-    pub fn from_body(body: &str) -> DescribeMatchmakingConfigurationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeMatchmakingConfigurationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeMatchmakingConfigurationsError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeMatchmakingConfigurationsError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnsupportedRegionException" => {
-                        DescribeMatchmakingConfigurationsError::UnsupportedRegion(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => DescribeMatchmakingConfigurationsError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DescribeMatchmakingConfigurationsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeMatchmakingConfigurationsError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeMatchmakingConfigurationsError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedRegionException" => {
+                    return DescribeMatchmakingConfigurationsError::UnsupportedRegion(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeMatchmakingConfigurationsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeMatchmakingConfigurationsError::Unknown(String::from(body)),
         }
+        return DescribeMatchmakingConfigurationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeMatchmakingConfigurationsError {
     fn from(err: serde_json::error::Error) -> DescribeMatchmakingConfigurationsError {
-        DescribeMatchmakingConfigurationsError::Unknown(err.description().to_string())
+        DescribeMatchmakingConfigurationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeMatchmakingConfigurationsError {
@@ -6406,7 +6520,8 @@ impl Error for DescribeMatchmakingConfigurationsError {
             DescribeMatchmakingConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeMatchmakingConfigurationsError::Unknown(ref cause) => cause,
+            DescribeMatchmakingConfigurationsError::ParseError(ref cause) => cause,
+            DescribeMatchmakingConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6427,54 +6542,56 @@ pub enum DescribeMatchmakingRuleSetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeMatchmakingRuleSetsError {
-    pub fn from_body(body: &str) -> DescribeMatchmakingRuleSetsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeMatchmakingRuleSetsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeMatchmakingRuleSetsError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => DescribeMatchmakingRuleSetsError::InvalidRequest(
-                        String::from(error_message),
-                    ),
-                    "NotFoundException" => {
-                        DescribeMatchmakingRuleSetsError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedRegionException" => {
-                        DescribeMatchmakingRuleSetsError::UnsupportedRegion(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeMatchmakingRuleSetsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeMatchmakingRuleSetsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeMatchmakingRuleSetsError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeMatchmakingRuleSetsError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeMatchmakingRuleSetsError::NotFound(String::from(error_message))
+                }
+                "UnsupportedRegionException" => {
+                    return DescribeMatchmakingRuleSetsError::UnsupportedRegion(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeMatchmakingRuleSetsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeMatchmakingRuleSetsError::Unknown(String::from(body)),
         }
+        return DescribeMatchmakingRuleSetsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeMatchmakingRuleSetsError {
     fn from(err: serde_json::error::Error) -> DescribeMatchmakingRuleSetsError {
-        DescribeMatchmakingRuleSetsError::Unknown(err.description().to_string())
+        DescribeMatchmakingRuleSetsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeMatchmakingRuleSetsError {
@@ -6509,7 +6626,8 @@ impl Error for DescribeMatchmakingRuleSetsError {
             DescribeMatchmakingRuleSetsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeMatchmakingRuleSetsError::Unknown(ref cause) => cause,
+            DescribeMatchmakingRuleSetsError::ParseError(ref cause) => cause,
+            DescribeMatchmakingRuleSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6530,50 +6648,50 @@ pub enum DescribePlayerSessionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribePlayerSessionsError {
-    pub fn from_body(body: &str) -> DescribePlayerSessionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribePlayerSessionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribePlayerSessionsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribePlayerSessionsError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribePlayerSessionsError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribePlayerSessionsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribePlayerSessionsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribePlayerSessionsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribePlayerSessionsError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return DescribePlayerSessionsError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribePlayerSessionsError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribePlayerSessionsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribePlayerSessionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribePlayerSessionsError::Unknown(String::from(body)),
         }
+        return DescribePlayerSessionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribePlayerSessionsError {
     fn from(err: serde_json::error::Error) -> DescribePlayerSessionsError {
-        DescribePlayerSessionsError::Unknown(err.description().to_string())
+        DescribePlayerSessionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribePlayerSessionsError {
@@ -6608,7 +6726,8 @@ impl Error for DescribePlayerSessionsError {
             DescribePlayerSessionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribePlayerSessionsError::Unknown(ref cause) => cause,
+            DescribePlayerSessionsError::ParseError(ref cause) => cause,
+            DescribePlayerSessionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6629,52 +6748,56 @@ pub enum DescribeRuntimeConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeRuntimeConfigurationError {
-    pub fn from_body(body: &str) -> DescribeRuntimeConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeRuntimeConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeRuntimeConfigurationError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => DescribeRuntimeConfigurationError::InvalidRequest(
-                        String::from(error_message),
-                    ),
-                    "NotFoundException" => {
-                        DescribeRuntimeConfigurationError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeRuntimeConfigurationError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeRuntimeConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeRuntimeConfigurationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeRuntimeConfigurationError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeRuntimeConfigurationError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeRuntimeConfigurationError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeRuntimeConfigurationError::Unauthorized(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeRuntimeConfigurationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeRuntimeConfigurationError::Unknown(String::from(body)),
         }
+        return DescribeRuntimeConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeRuntimeConfigurationError {
     fn from(err: serde_json::error::Error) -> DescribeRuntimeConfigurationError {
-        DescribeRuntimeConfigurationError::Unknown(err.description().to_string())
+        DescribeRuntimeConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeRuntimeConfigurationError {
@@ -6709,7 +6832,8 @@ impl Error for DescribeRuntimeConfigurationError {
             DescribeRuntimeConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeRuntimeConfigurationError::Unknown(ref cause) => cause,
+            DescribeRuntimeConfigurationError::ParseError(ref cause) => cause,
+            DescribeRuntimeConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6730,50 +6854,52 @@ pub enum DescribeScalingPoliciesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalingPoliciesError {
-    pub fn from_body(body: &str) -> DescribeScalingPoliciesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalingPoliciesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeScalingPoliciesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeScalingPoliciesError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DescribeScalingPoliciesError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        DescribeScalingPoliciesError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeScalingPoliciesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeScalingPoliciesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeScalingPoliciesError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeScalingPoliciesError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DescribeScalingPoliciesError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeScalingPoliciesError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeScalingPoliciesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeScalingPoliciesError::Unknown(String::from(body)),
         }
+        return DescribeScalingPoliciesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeScalingPoliciesError {
     fn from(err: serde_json::error::Error) -> DescribeScalingPoliciesError {
-        DescribeScalingPoliciesError::Unknown(err.description().to_string())
+        DescribeScalingPoliciesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeScalingPoliciesError {
@@ -6808,7 +6934,8 @@ impl Error for DescribeScalingPoliciesError {
             DescribeScalingPoliciesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeScalingPoliciesError::Unknown(ref cause) => cause,
+            DescribeScalingPoliciesError::ParseError(ref cause) => cause,
+            DescribeScalingPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6827,51 +6954,55 @@ pub enum DescribeVpcPeeringAuthorizationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeVpcPeeringAuthorizationsError {
-    pub fn from_body(body: &str) -> DescribeVpcPeeringAuthorizationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeVpcPeeringAuthorizationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeVpcPeeringAuthorizationsError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeVpcPeeringAuthorizationsError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedException" => DescribeVpcPeeringAuthorizationsError::Unauthorized(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        DescribeVpcPeeringAuthorizationsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeVpcPeeringAuthorizationsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeVpcPeeringAuthorizationsError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeVpcPeeringAuthorizationsError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return DescribeVpcPeeringAuthorizationsError::Unauthorized(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeVpcPeeringAuthorizationsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeVpcPeeringAuthorizationsError::Unknown(String::from(body)),
         }
+        return DescribeVpcPeeringAuthorizationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeVpcPeeringAuthorizationsError {
     fn from(err: serde_json::error::Error) -> DescribeVpcPeeringAuthorizationsError {
-        DescribeVpcPeeringAuthorizationsError::Unknown(err.description().to_string())
+        DescribeVpcPeeringAuthorizationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeVpcPeeringAuthorizationsError {
@@ -6905,7 +7036,8 @@ impl Error for DescribeVpcPeeringAuthorizationsError {
             DescribeVpcPeeringAuthorizationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeVpcPeeringAuthorizationsError::Unknown(ref cause) => cause,
+            DescribeVpcPeeringAuthorizationsError::ParseError(ref cause) => cause,
+            DescribeVpcPeeringAuthorizationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6926,54 +7058,56 @@ pub enum DescribeVpcPeeringConnectionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeVpcPeeringConnectionsError {
-    pub fn from_body(body: &str) -> DescribeVpcPeeringConnectionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeVpcPeeringConnectionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        DescribeVpcPeeringConnectionsError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        DescribeVpcPeeringConnectionsError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NotFoundException" => {
-                        DescribeVpcPeeringConnectionsError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => DescribeVpcPeeringConnectionsError::Unauthorized(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        DescribeVpcPeeringConnectionsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeVpcPeeringConnectionsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return DescribeVpcPeeringConnectionsError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DescribeVpcPeeringConnectionsError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DescribeVpcPeeringConnectionsError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return DescribeVpcPeeringConnectionsError::Unauthorized(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeVpcPeeringConnectionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeVpcPeeringConnectionsError::Unknown(String::from(body)),
         }
+        return DescribeVpcPeeringConnectionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeVpcPeeringConnectionsError {
     fn from(err: serde_json::error::Error) -> DescribeVpcPeeringConnectionsError {
-        DescribeVpcPeeringConnectionsError::Unknown(err.description().to_string())
+        DescribeVpcPeeringConnectionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeVpcPeeringConnectionsError {
@@ -7008,7 +7142,8 @@ impl Error for DescribeVpcPeeringConnectionsError {
             DescribeVpcPeeringConnectionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeVpcPeeringConnectionsError::Unknown(ref cause) => cause,
+            DescribeVpcPeeringConnectionsError::ParseError(ref cause) => cause,
+            DescribeVpcPeeringConnectionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7029,50 +7164,50 @@ pub enum GetGameSessionLogUrlError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetGameSessionLogUrlError {
-    pub fn from_body(body: &str) -> GetGameSessionLogUrlError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetGameSessionLogUrlError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        GetGameSessionLogUrlError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        GetGameSessionLogUrlError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        GetGameSessionLogUrlError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        GetGameSessionLogUrlError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetGameSessionLogUrlError::Validation(error_message.to_string())
-                    }
-                    _ => GetGameSessionLogUrlError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return GetGameSessionLogUrlError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return GetGameSessionLogUrlError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetGameSessionLogUrlError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return GetGameSessionLogUrlError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetGameSessionLogUrlError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetGameSessionLogUrlError::Unknown(String::from(body)),
         }
+        return GetGameSessionLogUrlError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetGameSessionLogUrlError {
     fn from(err: serde_json::error::Error) -> GetGameSessionLogUrlError {
-        GetGameSessionLogUrlError::Unknown(err.description().to_string())
+        GetGameSessionLogUrlError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetGameSessionLogUrlError {
@@ -7107,7 +7242,8 @@ impl Error for GetGameSessionLogUrlError {
             GetGameSessionLogUrlError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetGameSessionLogUrlError::Unknown(ref cause) => cause,
+            GetGameSessionLogUrlError::ParseError(ref cause) => cause,
+            GetGameSessionLogUrlError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7128,50 +7264,50 @@ pub enum GetInstanceAccessError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstanceAccessError {
-    pub fn from_body(body: &str) -> GetInstanceAccessError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetInstanceAccessError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        GetInstanceAccessError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        GetInstanceAccessError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        GetInstanceAccessError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        GetInstanceAccessError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetInstanceAccessError::Validation(error_message.to_string())
-                    }
-                    _ => GetInstanceAccessError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return GetInstanceAccessError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return GetInstanceAccessError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetInstanceAccessError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return GetInstanceAccessError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetInstanceAccessError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetInstanceAccessError::Unknown(String::from(body)),
         }
+        return GetInstanceAccessError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetInstanceAccessError {
     fn from(err: serde_json::error::Error) -> GetInstanceAccessError {
-        GetInstanceAccessError::Unknown(err.description().to_string())
+        GetInstanceAccessError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetInstanceAccessError {
@@ -7206,7 +7342,8 @@ impl Error for GetInstanceAccessError {
             GetInstanceAccessError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetInstanceAccessError::Unknown(ref cause) => cause,
+            GetInstanceAccessError::ParseError(ref cause) => cause,
+            GetInstanceAccessError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7225,47 +7362,47 @@ pub enum ListAliasesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAliasesError {
-    pub fn from_body(body: &str) -> ListAliasesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListAliasesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        ListAliasesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListAliasesError::InvalidRequest(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        ListAliasesError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListAliasesError::Validation(error_message.to_string())
-                    }
-                    _ => ListAliasesError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return ListAliasesError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return ListAliasesError::InvalidRequest(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return ListAliasesError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListAliasesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListAliasesError::Unknown(String::from(body)),
         }
+        return ListAliasesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListAliasesError {
     fn from(err: serde_json::error::Error) -> ListAliasesError {
-        ListAliasesError::Unknown(err.description().to_string())
+        ListAliasesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListAliasesError {
@@ -7297,7 +7434,8 @@ impl Error for ListAliasesError {
             ListAliasesError::Validation(ref cause) => cause,
             ListAliasesError::Credentials(ref err) => err.description(),
             ListAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListAliasesError::Unknown(ref cause) => cause,
+            ListAliasesError::ParseError(ref cause) => cause,
+            ListAliasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7316,45 +7454,47 @@ pub enum ListBuildsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListBuildsError {
-    pub fn from_body(body: &str) -> ListBuildsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListBuildsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        ListBuildsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListBuildsError::InvalidRequest(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        ListBuildsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => ListBuildsError::Validation(error_message.to_string()),
-                    _ => ListBuildsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return ListBuildsError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return ListBuildsError::InvalidRequest(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return ListBuildsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListBuildsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListBuildsError::Unknown(String::from(body)),
         }
+        return ListBuildsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListBuildsError {
     fn from(err: serde_json::error::Error) -> ListBuildsError {
-        ListBuildsError::Unknown(err.description().to_string())
+        ListBuildsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListBuildsError {
@@ -7386,7 +7526,8 @@ impl Error for ListBuildsError {
             ListBuildsError::Validation(ref cause) => cause,
             ListBuildsError::Credentials(ref err) => err.description(),
             ListBuildsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListBuildsError::Unknown(ref cause) => cause,
+            ListBuildsError::ParseError(ref cause) => cause,
+            ListBuildsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7407,46 +7548,50 @@ pub enum ListFleetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListFleetsError {
-    pub fn from_body(body: &str) -> ListFleetsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListFleetsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        ListFleetsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ListFleetsError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => ListFleetsError::NotFound(String::from(error_message)),
-                    "UnauthorizedException" => {
-                        ListFleetsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => ListFleetsError::Validation(error_message.to_string()),
-                    _ => ListFleetsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return ListFleetsError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return ListFleetsError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return ListFleetsError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return ListFleetsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListFleetsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListFleetsError::Unknown(String::from(body)),
         }
+        return ListFleetsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListFleetsError {
     fn from(err: serde_json::error::Error) -> ListFleetsError {
-        ListFleetsError::Unknown(err.description().to_string())
+        ListFleetsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListFleetsError {
@@ -7479,7 +7624,8 @@ impl Error for ListFleetsError {
             ListFleetsError::Validation(ref cause) => cause,
             ListFleetsError::Credentials(ref err) => err.description(),
             ListFleetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListFleetsError::Unknown(ref cause) => cause,
+            ListFleetsError::ParseError(ref cause) => cause,
+            ListFleetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7500,50 +7646,50 @@ pub enum PutScalingPolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutScalingPolicyError {
-    pub fn from_body(body: &str) -> PutScalingPolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutScalingPolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        PutScalingPolicyError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        PutScalingPolicyError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        PutScalingPolicyError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        PutScalingPolicyError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutScalingPolicyError::Validation(error_message.to_string())
-                    }
-                    _ => PutScalingPolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return PutScalingPolicyError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return PutScalingPolicyError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return PutScalingPolicyError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return PutScalingPolicyError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutScalingPolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutScalingPolicyError::Unknown(String::from(body)),
         }
+        return PutScalingPolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutScalingPolicyError {
     fn from(err: serde_json::error::Error) -> PutScalingPolicyError {
-        PutScalingPolicyError::Unknown(err.description().to_string())
+        PutScalingPolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutScalingPolicyError {
@@ -7576,7 +7722,8 @@ impl Error for PutScalingPolicyError {
             PutScalingPolicyError::Validation(ref cause) => cause,
             PutScalingPolicyError::Credentials(ref err) => err.description(),
             PutScalingPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutScalingPolicyError::Unknown(ref cause) => cause,
+            PutScalingPolicyError::ParseError(ref cause) => cause,
+            PutScalingPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7597,50 +7744,54 @@ pub enum RequestUploadCredentialsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RequestUploadCredentialsError {
-    pub fn from_body(body: &str) -> RequestUploadCredentialsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RequestUploadCredentialsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        RequestUploadCredentialsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        RequestUploadCredentialsError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        RequestUploadCredentialsError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        RequestUploadCredentialsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RequestUploadCredentialsError::Validation(error_message.to_string())
-                    }
-                    _ => RequestUploadCredentialsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return RequestUploadCredentialsError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return RequestUploadCredentialsError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RequestUploadCredentialsError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return RequestUploadCredentialsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RequestUploadCredentialsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RequestUploadCredentialsError::Unknown(String::from(body)),
         }
+        return RequestUploadCredentialsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RequestUploadCredentialsError {
     fn from(err: serde_json::error::Error) -> RequestUploadCredentialsError {
-        RequestUploadCredentialsError::Unknown(err.description().to_string())
+        RequestUploadCredentialsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RequestUploadCredentialsError {
@@ -7675,7 +7826,8 @@ impl Error for RequestUploadCredentialsError {
             RequestUploadCredentialsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RequestUploadCredentialsError::Unknown(ref cause) => cause,
+            RequestUploadCredentialsError::ParseError(ref cause) => cause,
+            RequestUploadCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7698,51 +7850,53 @@ pub enum ResolveAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ResolveAliasError {
-    pub fn from_body(body: &str) -> ResolveAliasError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ResolveAliasError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        ResolveAliasError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        ResolveAliasError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => ResolveAliasError::NotFound(String::from(error_message)),
-                    "TerminalRoutingStrategyException" => {
-                        ResolveAliasError::TerminalRoutingStrategy(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        ResolveAliasError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ResolveAliasError::Validation(error_message.to_string())
-                    }
-                    _ => ResolveAliasError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return ResolveAliasError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return ResolveAliasError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return ResolveAliasError::NotFound(String::from(error_message))
+                }
+                "TerminalRoutingStrategyException" => {
+                    return ResolveAliasError::TerminalRoutingStrategy(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return ResolveAliasError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ResolveAliasError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ResolveAliasError::Unknown(String::from(body)),
         }
+        return ResolveAliasError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ResolveAliasError {
     fn from(err: serde_json::error::Error) -> ResolveAliasError {
-        ResolveAliasError::Unknown(err.description().to_string())
+        ResolveAliasError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ResolveAliasError {
@@ -7776,7 +7930,8 @@ impl Error for ResolveAliasError {
             ResolveAliasError::Validation(ref cause) => cause,
             ResolveAliasError::Credentials(ref err) => err.description(),
             ResolveAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResolveAliasError::Unknown(ref cause) => cause,
+            ResolveAliasError::ParseError(ref cause) => cause,
+            ResolveAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7799,55 +7954,55 @@ pub enum SearchGameSessionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchGameSessionsError {
-    pub fn from_body(body: &str) -> SearchGameSessionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchGameSessionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        SearchGameSessionsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        SearchGameSessionsError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        SearchGameSessionsError::NotFound(String::from(error_message))
-                    }
-                    "TerminalRoutingStrategyException" => {
-                        SearchGameSessionsError::TerminalRoutingStrategy(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedException" => {
-                        SearchGameSessionsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SearchGameSessionsError::Validation(error_message.to_string())
-                    }
-                    _ => SearchGameSessionsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return SearchGameSessionsError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return SearchGameSessionsError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return SearchGameSessionsError::NotFound(String::from(error_message))
+                }
+                "TerminalRoutingStrategyException" => {
+                    return SearchGameSessionsError::TerminalRoutingStrategy(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return SearchGameSessionsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return SearchGameSessionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SearchGameSessionsError::Unknown(String::from(body)),
         }
+        return SearchGameSessionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchGameSessionsError {
     fn from(err: serde_json::error::Error) -> SearchGameSessionsError {
-        SearchGameSessionsError::Unknown(err.description().to_string())
+        SearchGameSessionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchGameSessionsError {
@@ -7883,7 +8038,8 @@ impl Error for SearchGameSessionsError {
             SearchGameSessionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SearchGameSessionsError::Unknown(ref cause) => cause,
+            SearchGameSessionsError::ParseError(ref cause) => cause,
+            SearchGameSessionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7904,50 +8060,50 @@ pub enum StartFleetActionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartFleetActionsError {
-    pub fn from_body(body: &str) -> StartFleetActionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartFleetActionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        StartFleetActionsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StartFleetActionsError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        StartFleetActionsError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        StartFleetActionsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartFleetActionsError::Validation(error_message.to_string())
-                    }
-                    _ => StartFleetActionsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return StartFleetActionsError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return StartFleetActionsError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return StartFleetActionsError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return StartFleetActionsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartFleetActionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartFleetActionsError::Unknown(String::from(body)),
         }
+        return StartFleetActionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartFleetActionsError {
     fn from(err: serde_json::error::Error) -> StartFleetActionsError {
-        StartFleetActionsError::Unknown(err.description().to_string())
+        StartFleetActionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartFleetActionsError {
@@ -7982,7 +8138,8 @@ impl Error for StartFleetActionsError {
             StartFleetActionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartFleetActionsError::Unknown(ref cause) => cause,
+            StartFleetActionsError::ParseError(ref cause) => cause,
+            StartFleetActionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8003,50 +8160,54 @@ pub enum StartGameSessionPlacementError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartGameSessionPlacementError {
-    pub fn from_body(body: &str) -> StartGameSessionPlacementError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartGameSessionPlacementError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        StartGameSessionPlacementError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StartGameSessionPlacementError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        StartGameSessionPlacementError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        StartGameSessionPlacementError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartGameSessionPlacementError::Validation(error_message.to_string())
-                    }
-                    _ => StartGameSessionPlacementError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return StartGameSessionPlacementError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return StartGameSessionPlacementError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return StartGameSessionPlacementError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return StartGameSessionPlacementError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartGameSessionPlacementError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartGameSessionPlacementError::Unknown(String::from(body)),
         }
+        return StartGameSessionPlacementError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartGameSessionPlacementError {
     fn from(err: serde_json::error::Error) -> StartGameSessionPlacementError {
-        StartGameSessionPlacementError::Unknown(err.description().to_string())
+        StartGameSessionPlacementError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartGameSessionPlacementError {
@@ -8081,7 +8242,8 @@ impl Error for StartGameSessionPlacementError {
             StartGameSessionPlacementError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartGameSessionPlacementError::Unknown(ref cause) => cause,
+            StartGameSessionPlacementError::ParseError(ref cause) => cause,
+            StartGameSessionPlacementError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8102,50 +8264,50 @@ pub enum StartMatchBackfillError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartMatchBackfillError {
-    pub fn from_body(body: &str) -> StartMatchBackfillError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartMatchBackfillError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        StartMatchBackfillError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StartMatchBackfillError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        StartMatchBackfillError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedRegionException" => {
-                        StartMatchBackfillError::UnsupportedRegion(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartMatchBackfillError::Validation(error_message.to_string())
-                    }
-                    _ => StartMatchBackfillError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return StartMatchBackfillError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return StartMatchBackfillError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return StartMatchBackfillError::NotFound(String::from(error_message))
+                }
+                "UnsupportedRegionException" => {
+                    return StartMatchBackfillError::UnsupportedRegion(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartMatchBackfillError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartMatchBackfillError::Unknown(String::from(body)),
         }
+        return StartMatchBackfillError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartMatchBackfillError {
     fn from(err: serde_json::error::Error) -> StartMatchBackfillError {
-        StartMatchBackfillError::Unknown(err.description().to_string())
+        StartMatchBackfillError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartMatchBackfillError {
@@ -8180,7 +8342,8 @@ impl Error for StartMatchBackfillError {
             StartMatchBackfillError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartMatchBackfillError::Unknown(ref cause) => cause,
+            StartMatchBackfillError::ParseError(ref cause) => cause,
+            StartMatchBackfillError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8201,50 +8364,50 @@ pub enum StartMatchmakingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartMatchmakingError {
-    pub fn from_body(body: &str) -> StartMatchmakingError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartMatchmakingError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        StartMatchmakingError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StartMatchmakingError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        StartMatchmakingError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedRegionException" => {
-                        StartMatchmakingError::UnsupportedRegion(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartMatchmakingError::Validation(error_message.to_string())
-                    }
-                    _ => StartMatchmakingError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return StartMatchmakingError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return StartMatchmakingError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return StartMatchmakingError::NotFound(String::from(error_message))
+                }
+                "UnsupportedRegionException" => {
+                    return StartMatchmakingError::UnsupportedRegion(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartMatchmakingError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartMatchmakingError::Unknown(String::from(body)),
         }
+        return StartMatchmakingError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartMatchmakingError {
     fn from(err: serde_json::error::Error) -> StartMatchmakingError {
-        StartMatchmakingError::Unknown(err.description().to_string())
+        StartMatchmakingError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartMatchmakingError {
@@ -8277,7 +8440,8 @@ impl Error for StartMatchmakingError {
             StartMatchmakingError::Validation(ref cause) => cause,
             StartMatchmakingError::Credentials(ref err) => err.description(),
             StartMatchmakingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartMatchmakingError::Unknown(ref cause) => cause,
+            StartMatchmakingError::ParseError(ref cause) => cause,
+            StartMatchmakingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8298,50 +8462,50 @@ pub enum StopFleetActionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopFleetActionsError {
-    pub fn from_body(body: &str) -> StopFleetActionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopFleetActionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        StopFleetActionsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StopFleetActionsError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        StopFleetActionsError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        StopFleetActionsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StopFleetActionsError::Validation(error_message.to_string())
-                    }
-                    _ => StopFleetActionsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return StopFleetActionsError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return StopFleetActionsError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return StopFleetActionsError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return StopFleetActionsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StopFleetActionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StopFleetActionsError::Unknown(String::from(body)),
         }
+        return StopFleetActionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopFleetActionsError {
     fn from(err: serde_json::error::Error) -> StopFleetActionsError {
-        StopFleetActionsError::Unknown(err.description().to_string())
+        StopFleetActionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopFleetActionsError {
@@ -8374,7 +8538,8 @@ impl Error for StopFleetActionsError {
             StopFleetActionsError::Validation(ref cause) => cause,
             StopFleetActionsError::Credentials(ref err) => err.description(),
             StopFleetActionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopFleetActionsError::Unknown(ref cause) => cause,
+            StopFleetActionsError::ParseError(ref cause) => cause,
+            StopFleetActionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8395,50 +8560,54 @@ pub enum StopGameSessionPlacementError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopGameSessionPlacementError {
-    pub fn from_body(body: &str) -> StopGameSessionPlacementError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopGameSessionPlacementError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        StopGameSessionPlacementError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StopGameSessionPlacementError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        StopGameSessionPlacementError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        StopGameSessionPlacementError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StopGameSessionPlacementError::Validation(error_message.to_string())
-                    }
-                    _ => StopGameSessionPlacementError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return StopGameSessionPlacementError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return StopGameSessionPlacementError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return StopGameSessionPlacementError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return StopGameSessionPlacementError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StopGameSessionPlacementError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StopGameSessionPlacementError::Unknown(String::from(body)),
         }
+        return StopGameSessionPlacementError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopGameSessionPlacementError {
     fn from(err: serde_json::error::Error) -> StopGameSessionPlacementError {
-        StopGameSessionPlacementError::Unknown(err.description().to_string())
+        StopGameSessionPlacementError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopGameSessionPlacementError {
@@ -8473,7 +8642,8 @@ impl Error for StopGameSessionPlacementError {
             StopGameSessionPlacementError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StopGameSessionPlacementError::Unknown(ref cause) => cause,
+            StopGameSessionPlacementError::ParseError(ref cause) => cause,
+            StopGameSessionPlacementError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8494,50 +8664,50 @@ pub enum StopMatchmakingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopMatchmakingError {
-    pub fn from_body(body: &str) -> StopMatchmakingError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopMatchmakingError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        StopMatchmakingError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        StopMatchmakingError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        StopMatchmakingError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedRegionException" => {
-                        StopMatchmakingError::UnsupportedRegion(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StopMatchmakingError::Validation(error_message.to_string())
-                    }
-                    _ => StopMatchmakingError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return StopMatchmakingError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return StopMatchmakingError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return StopMatchmakingError::NotFound(String::from(error_message))
+                }
+                "UnsupportedRegionException" => {
+                    return StopMatchmakingError::UnsupportedRegion(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StopMatchmakingError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StopMatchmakingError::Unknown(String::from(body)),
         }
+        return StopMatchmakingError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopMatchmakingError {
     fn from(err: serde_json::error::Error) -> StopMatchmakingError {
-        StopMatchmakingError::Unknown(err.description().to_string())
+        StopMatchmakingError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopMatchmakingError {
@@ -8570,7 +8740,8 @@ impl Error for StopMatchmakingError {
             StopMatchmakingError::Validation(ref cause) => cause,
             StopMatchmakingError::Credentials(ref err) => err.description(),
             StopMatchmakingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopMatchmakingError::Unknown(ref cause) => cause,
+            StopMatchmakingError::ParseError(ref cause) => cause,
+            StopMatchmakingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8591,48 +8762,50 @@ pub enum UpdateAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAliasError {
-    pub fn from_body(body: &str) -> UpdateAliasError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateAliasError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        UpdateAliasError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateAliasError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => UpdateAliasError::NotFound(String::from(error_message)),
-                    "UnauthorizedException" => {
-                        UpdateAliasError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateAliasError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateAliasError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return UpdateAliasError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return UpdateAliasError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateAliasError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return UpdateAliasError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateAliasError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateAliasError::Unknown(String::from(body)),
         }
+        return UpdateAliasError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateAliasError {
     fn from(err: serde_json::error::Error) -> UpdateAliasError {
-        UpdateAliasError::Unknown(err.description().to_string())
+        UpdateAliasError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateAliasError {
@@ -8665,7 +8838,8 @@ impl Error for UpdateAliasError {
             UpdateAliasError::Validation(ref cause) => cause,
             UpdateAliasError::Credentials(ref err) => err.description(),
             UpdateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateAliasError::Unknown(ref cause) => cause,
+            UpdateAliasError::ParseError(ref cause) => cause,
+            UpdateAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8686,48 +8860,50 @@ pub enum UpdateBuildError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateBuildError {
-    pub fn from_body(body: &str) -> UpdateBuildError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateBuildError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        UpdateBuildError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateBuildError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => UpdateBuildError::NotFound(String::from(error_message)),
-                    "UnauthorizedException" => {
-                        UpdateBuildError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateBuildError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateBuildError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return UpdateBuildError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return UpdateBuildError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateBuildError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return UpdateBuildError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateBuildError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateBuildError::Unknown(String::from(body)),
         }
+        return UpdateBuildError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateBuildError {
     fn from(err: serde_json::error::Error) -> UpdateBuildError {
-        UpdateBuildError::Unknown(err.description().to_string())
+        UpdateBuildError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateBuildError {
@@ -8760,7 +8936,8 @@ impl Error for UpdateBuildError {
             UpdateBuildError::Validation(ref cause) => cause,
             UpdateBuildError::Credentials(ref err) => err.description(),
             UpdateBuildError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateBuildError::Unknown(ref cause) => cause,
+            UpdateBuildError::ParseError(ref cause) => cause,
+            UpdateBuildError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8787,59 +8964,61 @@ pub enum UpdateFleetAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFleetAttributesError {
-    pub fn from_body(body: &str) -> UpdateFleetAttributesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateFleetAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConflictException" => {
-                        UpdateFleetAttributesError::Conflict(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpdateFleetAttributesError::InternalService(String::from(error_message))
-                    }
-                    "InvalidFleetStatusException" => {
-                        UpdateFleetAttributesError::InvalidFleetStatus(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateFleetAttributesError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateFleetAttributesError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateFleetAttributesError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        UpdateFleetAttributesError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateFleetAttributesError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateFleetAttributesError::Unknown(String::from(body)),
+            match *error_type {
+                "ConflictException" => {
+                    return UpdateFleetAttributesError::Conflict(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return UpdateFleetAttributesError::InternalService(String::from(error_message))
+                }
+                "InvalidFleetStatusException" => {
+                    return UpdateFleetAttributesError::InvalidFleetStatus(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return UpdateFleetAttributesError::InvalidRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateFleetAttributesError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateFleetAttributesError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return UpdateFleetAttributesError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateFleetAttributesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateFleetAttributesError::Unknown(String::from(body)),
         }
+        return UpdateFleetAttributesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateFleetAttributesError {
     fn from(err: serde_json::error::Error) -> UpdateFleetAttributesError {
-        UpdateFleetAttributesError::Unknown(err.description().to_string())
+        UpdateFleetAttributesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateFleetAttributesError {
@@ -8877,7 +9056,8 @@ impl Error for UpdateFleetAttributesError {
             UpdateFleetAttributesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateFleetAttributesError::Unknown(ref cause) => cause,
+            UpdateFleetAttributesError::ParseError(ref cause) => cause,
+            UpdateFleetAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8904,59 +9084,59 @@ pub enum UpdateFleetCapacityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFleetCapacityError {
-    pub fn from_body(body: &str) -> UpdateFleetCapacityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateFleetCapacityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConflictException" => {
-                        UpdateFleetCapacityError::Conflict(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpdateFleetCapacityError::InternalService(String::from(error_message))
-                    }
-                    "InvalidFleetStatusException" => {
-                        UpdateFleetCapacityError::InvalidFleetStatus(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateFleetCapacityError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateFleetCapacityError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateFleetCapacityError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        UpdateFleetCapacityError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateFleetCapacityError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateFleetCapacityError::Unknown(String::from(body)),
+            match *error_type {
+                "ConflictException" => {
+                    return UpdateFleetCapacityError::Conflict(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return UpdateFleetCapacityError::InternalService(String::from(error_message))
+                }
+                "InvalidFleetStatusException" => {
+                    return UpdateFleetCapacityError::InvalidFleetStatus(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return UpdateFleetCapacityError::InvalidRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateFleetCapacityError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateFleetCapacityError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return UpdateFleetCapacityError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateFleetCapacityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateFleetCapacityError::Unknown(String::from(body)),
         }
+        return UpdateFleetCapacityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateFleetCapacityError {
     fn from(err: serde_json::error::Error) -> UpdateFleetCapacityError {
-        UpdateFleetCapacityError::Unknown(err.description().to_string())
+        UpdateFleetCapacityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateFleetCapacityError {
@@ -8994,7 +9174,8 @@ impl Error for UpdateFleetCapacityError {
             UpdateFleetCapacityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateFleetCapacityError::Unknown(ref cause) => cause,
+            UpdateFleetCapacityError::ParseError(ref cause) => cause,
+            UpdateFleetCapacityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9021,61 +9202,63 @@ pub enum UpdateFleetPortSettingsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFleetPortSettingsError {
-    pub fn from_body(body: &str) -> UpdateFleetPortSettingsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateFleetPortSettingsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConflictException" => {
-                        UpdateFleetPortSettingsError::Conflict(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpdateFleetPortSettingsError::InternalService(String::from(error_message))
-                    }
-                    "InvalidFleetStatusException" => {
-                        UpdateFleetPortSettingsError::InvalidFleetStatus(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateFleetPortSettingsError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateFleetPortSettingsError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateFleetPortSettingsError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        UpdateFleetPortSettingsError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateFleetPortSettingsError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateFleetPortSettingsError::Unknown(String::from(body)),
+            match *error_type {
+                "ConflictException" => {
+                    return UpdateFleetPortSettingsError::Conflict(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return UpdateFleetPortSettingsError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidFleetStatusException" => {
+                    return UpdateFleetPortSettingsError::InvalidFleetStatus(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return UpdateFleetPortSettingsError::InvalidRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateFleetPortSettingsError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateFleetPortSettingsError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return UpdateFleetPortSettingsError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateFleetPortSettingsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateFleetPortSettingsError::Unknown(String::from(body)),
         }
+        return UpdateFleetPortSettingsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateFleetPortSettingsError {
     fn from(err: serde_json::error::Error) -> UpdateFleetPortSettingsError {
-        UpdateFleetPortSettingsError::Unknown(err.description().to_string())
+        UpdateFleetPortSettingsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateFleetPortSettingsError {
@@ -9113,7 +9296,8 @@ impl Error for UpdateFleetPortSettingsError {
             UpdateFleetPortSettingsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateFleetPortSettingsError::Unknown(ref cause) => cause,
+            UpdateFleetPortSettingsError::ParseError(ref cause) => cause,
+            UpdateFleetPortSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9138,58 +9322,58 @@ pub enum UpdateGameSessionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGameSessionError {
-    pub fn from_body(body: &str) -> UpdateGameSessionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateGameSessionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConflictException" => {
-                        UpdateGameSessionError::Conflict(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpdateGameSessionError::InternalService(String::from(error_message))
-                    }
-                    "InvalidGameSessionStatusException" => {
-                        UpdateGameSessionError::InvalidGameSessionStatus(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateGameSessionError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateGameSessionError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        UpdateGameSessionError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateGameSessionError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateGameSessionError::Unknown(String::from(body)),
+            match *error_type {
+                "ConflictException" => {
+                    return UpdateGameSessionError::Conflict(String::from(error_message))
                 }
+                "InternalServiceException" => {
+                    return UpdateGameSessionError::InternalService(String::from(error_message))
+                }
+                "InvalidGameSessionStatusException" => {
+                    return UpdateGameSessionError::InvalidGameSessionStatus(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return UpdateGameSessionError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateGameSessionError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return UpdateGameSessionError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateGameSessionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateGameSessionError::Unknown(String::from(body)),
         }
+        return UpdateGameSessionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateGameSessionError {
     fn from(err: serde_json::error::Error) -> UpdateGameSessionError {
-        UpdateGameSessionError::Unknown(err.description().to_string())
+        UpdateGameSessionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateGameSessionError {
@@ -9226,7 +9410,8 @@ impl Error for UpdateGameSessionError {
             UpdateGameSessionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateGameSessionError::Unknown(ref cause) => cause,
+            UpdateGameSessionError::ParseError(ref cause) => cause,
+            UpdateGameSessionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9247,50 +9432,50 @@ pub enum UpdateGameSessionQueueError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGameSessionQueueError {
-    pub fn from_body(body: &str) -> UpdateGameSessionQueueError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateGameSessionQueueError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        UpdateGameSessionQueueError::InternalService(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateGameSessionQueueError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateGameSessionQueueError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        UpdateGameSessionQueueError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateGameSessionQueueError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateGameSessionQueueError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return UpdateGameSessionQueueError::InternalService(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return UpdateGameSessionQueueError::InvalidRequest(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return UpdateGameSessionQueueError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return UpdateGameSessionQueueError::Unauthorized(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateGameSessionQueueError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateGameSessionQueueError::Unknown(String::from(body)),
         }
+        return UpdateGameSessionQueueError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateGameSessionQueueError {
     fn from(err: serde_json::error::Error) -> UpdateGameSessionQueueError {
-        UpdateGameSessionQueueError::Unknown(err.description().to_string())
+        UpdateGameSessionQueueError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateGameSessionQueueError {
@@ -9325,7 +9510,8 @@ impl Error for UpdateGameSessionQueueError {
             UpdateGameSessionQueueError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateGameSessionQueueError::Unknown(ref cause) => cause,
+            UpdateGameSessionQueueError::ParseError(ref cause) => cause,
+            UpdateGameSessionQueueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9346,56 +9532,60 @@ pub enum UpdateMatchmakingConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateMatchmakingConfigurationError {
-    pub fn from_body(body: &str) -> UpdateMatchmakingConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateMatchmakingConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => {
-                        UpdateMatchmakingConfigurationError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateMatchmakingConfigurationError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NotFoundException" => {
-                        UpdateMatchmakingConfigurationError::NotFound(String::from(error_message))
-                    }
-                    "UnsupportedRegionException" => {
-                        UpdateMatchmakingConfigurationError::UnsupportedRegion(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateMatchmakingConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateMatchmakingConfigurationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return UpdateMatchmakingConfigurationError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return UpdateMatchmakingConfigurationError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return UpdateMatchmakingConfigurationError::NotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedRegionException" => {
+                    return UpdateMatchmakingConfigurationError::UnsupportedRegion(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateMatchmakingConfigurationError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => UpdateMatchmakingConfigurationError::Unknown(String::from(body)),
         }
+        return UpdateMatchmakingConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateMatchmakingConfigurationError {
     fn from(err: serde_json::error::Error) -> UpdateMatchmakingConfigurationError {
-        UpdateMatchmakingConfigurationError::Unknown(err.description().to_string())
+        UpdateMatchmakingConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateMatchmakingConfigurationError {
@@ -9430,7 +9620,8 @@ impl Error for UpdateMatchmakingConfigurationError {
             UpdateMatchmakingConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateMatchmakingConfigurationError::Unknown(ref cause) => cause,
+            UpdateMatchmakingConfigurationError::ParseError(ref cause) => cause,
+            UpdateMatchmakingConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9453,55 +9644,61 @@ pub enum UpdateRuntimeConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRuntimeConfigurationError {
-    pub fn from_body(body: &str) -> UpdateRuntimeConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateRuntimeConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => UpdateRuntimeConfigurationError::InternalService(
-                        String::from(error_message),
-                    ),
-                    "InvalidFleetStatusException" => {
-                        UpdateRuntimeConfigurationError::InvalidFleetStatus(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateRuntimeConfigurationError::InvalidRequest(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateRuntimeConfigurationError::NotFound(String::from(error_message))
-                    }
-                    "UnauthorizedException" => {
-                        UpdateRuntimeConfigurationError::Unauthorized(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateRuntimeConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateRuntimeConfigurationError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return UpdateRuntimeConfigurationError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidFleetStatusException" => {
+                    return UpdateRuntimeConfigurationError::InvalidFleetStatus(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return UpdateRuntimeConfigurationError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return UpdateRuntimeConfigurationError::NotFound(String::from(error_message))
+                }
+                "UnauthorizedException" => {
+                    return UpdateRuntimeConfigurationError::Unauthorized(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateRuntimeConfigurationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateRuntimeConfigurationError::Unknown(String::from(body)),
         }
+        return UpdateRuntimeConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateRuntimeConfigurationError {
     fn from(err: serde_json::error::Error) -> UpdateRuntimeConfigurationError {
-        UpdateRuntimeConfigurationError::Unknown(err.description().to_string())
+        UpdateRuntimeConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateRuntimeConfigurationError {
@@ -9537,7 +9734,8 @@ impl Error for UpdateRuntimeConfigurationError {
             UpdateRuntimeConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateRuntimeConfigurationError::Unknown(ref cause) => cause,
+            UpdateRuntimeConfigurationError::ParseError(ref cause) => cause,
+            UpdateRuntimeConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9556,49 +9754,53 @@ pub enum ValidateMatchmakingRuleSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ValidateMatchmakingRuleSetError {
-    pub fn from_body(body: &str) -> ValidateMatchmakingRuleSetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ValidateMatchmakingRuleSetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceException" => ValidateMatchmakingRuleSetError::InternalService(
-                        String::from(error_message),
-                    ),
-                    "InvalidRequestException" => {
-                        ValidateMatchmakingRuleSetError::InvalidRequest(String::from(error_message))
-                    }
-                    "UnsupportedRegionException" => {
-                        ValidateMatchmakingRuleSetError::UnsupportedRegion(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ValidateMatchmakingRuleSetError::Validation(error_message.to_string())
-                    }
-                    _ => ValidateMatchmakingRuleSetError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceException" => {
+                    return ValidateMatchmakingRuleSetError::InternalService(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return ValidateMatchmakingRuleSetError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedRegionException" => {
+                    return ValidateMatchmakingRuleSetError::UnsupportedRegion(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ValidateMatchmakingRuleSetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ValidateMatchmakingRuleSetError::Unknown(String::from(body)),
         }
+        return ValidateMatchmakingRuleSetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ValidateMatchmakingRuleSetError {
     fn from(err: serde_json::error::Error) -> ValidateMatchmakingRuleSetError {
-        ValidateMatchmakingRuleSetError::Unknown(err.description().to_string())
+        ValidateMatchmakingRuleSetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ValidateMatchmakingRuleSetError {
@@ -9632,7 +9834,8 @@ impl Error for ValidateMatchmakingRuleSetError {
             ValidateMatchmakingRuleSetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ValidateMatchmakingRuleSetError::Unknown(ref cause) => cause,
+            ValidateMatchmakingRuleSetError::ParseError(ref cause) => cause,
+            ValidateMatchmakingRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10089,14 +10292,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<AcceptMatchOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AcceptMatchError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AcceptMatchError::from_response(response))),
+                )
             }
         })
     }
@@ -10124,14 +10329,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<CreateAliasOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateAliasError::from_response(response))),
+                )
             }
         })
     }
@@ -10159,14 +10366,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<CreateBuildOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateBuildError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateBuildError::from_response(response))),
+                )
             }
         })
     }
@@ -10194,14 +10403,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<CreateFleetOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateFleetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateFleetError::from_response(response))),
+                )
             }
         })
     }
@@ -10229,14 +10440,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<CreateGameSessionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateGameSessionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateGameSessionError::from_response(response))),
+                )
             }
         })
     }
@@ -10264,14 +10477,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<CreateGameSessionQueueOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateGameSessionQueueError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateGameSessionQueueError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10300,13 +10514,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<CreateMatchmakingConfigurationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateMatchmakingConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateMatchmakingConfigurationError::from_response(response))
                 }))
             }
         })
@@ -10335,13 +10548,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<CreateMatchmakingRuleSetOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateMatchmakingRuleSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateMatchmakingRuleSetError::from_response(response))
                 }))
             }
         })
@@ -10370,14 +10582,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<CreatePlayerSessionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePlayerSessionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreatePlayerSessionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10405,14 +10618,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<CreatePlayerSessionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePlayerSessionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreatePlayerSessionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10440,13 +10654,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<CreateVpcPeeringAuthorizationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateVpcPeeringAuthorizationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateVpcPeeringAuthorizationError::from_response(response))
                 }))
             }
         })
@@ -10475,13 +10688,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<CreateVpcPeeringConnectionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateVpcPeeringConnectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateVpcPeeringConnectionError::from_response(response))
                 }))
             }
         })
@@ -10500,11 +10712,12 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteAliasError::from_response(response))),
+                )
             }
         })
     }
@@ -10522,11 +10735,12 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBuildError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteBuildError::from_response(response))),
+                )
             }
         })
     }
@@ -10544,11 +10758,12 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteFleetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteFleetError::from_response(response))),
+                )
             }
         })
     }
@@ -10576,14 +10791,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DeleteGameSessionQueueOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteGameSessionQueueError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteGameSessionQueueError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10612,13 +10828,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DeleteMatchmakingConfigurationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteMatchmakingConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteMatchmakingConfigurationError::from_response(response))
                 }))
             }
         })
@@ -10640,11 +10855,11 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteScalingPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteScalingPolicyError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10672,13 +10887,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DeleteVpcPeeringAuthorizationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVpcPeeringAuthorizationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteVpcPeeringAuthorizationError::from_response(response))
                 }))
             }
         })
@@ -10707,13 +10921,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DeleteVpcPeeringConnectionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteVpcPeeringConnectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteVpcPeeringConnectionError::from_response(response))
                 }))
             }
         })
@@ -10742,14 +10955,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeAliasOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeAliasError::from_response(response))),
+                )
             }
         })
     }
@@ -10777,14 +10992,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeBuildOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeBuildError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeBuildError::from_response(response))),
+                )
             }
         })
     }
@@ -10812,13 +11029,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeEC2InstanceLimitsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEC2InstanceLimitsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeEC2InstanceLimitsError::from_response(response))
                 }))
             }
         })
@@ -10847,13 +11063,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeFleetAttributesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeFleetAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeFleetAttributesError::from_response(response))
                 }))
             }
         })
@@ -10882,14 +11097,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeFleetCapacityOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeFleetCapacityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeFleetCapacityError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10917,14 +11133,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeFleetEventsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeFleetEventsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeFleetEventsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10952,13 +11169,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeFleetPortSettingsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeFleetPortSettingsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeFleetPortSettingsError::from_response(response))
                 }))
             }
         })
@@ -10987,13 +11203,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeFleetUtilizationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeFleetUtilizationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeFleetUtilizationError::from_response(response))
                 }))
             }
         })
@@ -11022,13 +11237,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeGameSessionDetailsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeGameSessionDetailsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeGameSessionDetailsError::from_response(response))
                 }))
             }
         })
@@ -11057,13 +11271,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeGameSessionPlacementOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeGameSessionPlacementError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeGameSessionPlacementError::from_response(response))
                 }))
             }
         })
@@ -11092,13 +11305,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeGameSessionQueuesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeGameSessionQueuesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeGameSessionQueuesError::from_response(response))
                 }))
             }
         })
@@ -11127,14 +11339,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeGameSessionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeGameSessionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeGameSessionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -11162,14 +11375,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeInstancesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeInstancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeInstancesError::from_response(response))),
+                )
             }
         })
     }
@@ -11197,14 +11412,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeMatchmakingOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeMatchmakingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeMatchmakingError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -11233,12 +11449,13 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeMatchmakingConfigurationsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeMatchmakingConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeMatchmakingConfigurationsError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -11268,13 +11485,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeMatchmakingRuleSetsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeMatchmakingRuleSetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeMatchmakingRuleSetsError::from_response(response))
                 }))
             }
         })
@@ -11303,14 +11519,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribePlayerSessionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribePlayerSessionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribePlayerSessionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -11338,13 +11555,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeRuntimeConfigurationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeRuntimeConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeRuntimeConfigurationError::from_response(response))
                 }))
             }
         })
@@ -11373,13 +11589,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeScalingPoliciesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeScalingPoliciesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeScalingPoliciesError::from_response(response))
                 }))
             }
         })
@@ -11407,12 +11622,13 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeVpcPeeringAuthorizationsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeVpcPeeringAuthorizationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeVpcPeeringAuthorizationsError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -11442,13 +11658,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<DescribeVpcPeeringConnectionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeVpcPeeringConnectionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeVpcPeeringConnectionsError::from_response(response))
                 }))
             }
         })
@@ -11477,14 +11692,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<GetGameSessionLogUrlOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetGameSessionLogUrlError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetGameSessionLogUrlError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -11512,14 +11728,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<GetInstanceAccessOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetInstanceAccessError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetInstanceAccessError::from_response(response))),
+                )
             }
         })
     }
@@ -11547,14 +11765,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<ListAliasesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAliasesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListAliasesError::from_response(response))),
+                )
             }
         })
     }
@@ -11582,14 +11802,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<ListBuildsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListBuildsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListBuildsError::from_response(response))),
+                )
             }
         })
     }
@@ -11617,14 +11839,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<ListFleetsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListFleetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListFleetsError::from_response(response))),
+                )
             }
         })
     }
@@ -11652,14 +11876,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<PutScalingPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutScalingPolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutScalingPolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -11687,13 +11913,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<RequestUploadCredentialsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RequestUploadCredentialsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RequestUploadCredentialsError::from_response(response))
                 }))
             }
         })
@@ -11722,14 +11947,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<ResolveAliasOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResolveAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ResolveAliasError::from_response(response))),
+                )
             }
         })
     }
@@ -11757,14 +11984,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<SearchGameSessionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchGameSessionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchGameSessionsError::from_response(response))),
+                )
             }
         })
     }
@@ -11792,14 +12021,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<StartFleetActionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartFleetActionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartFleetActionsError::from_response(response))),
+                )
             }
         })
     }
@@ -11827,13 +12058,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<StartGameSessionPlacementOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartGameSessionPlacementError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StartGameSessionPlacementError::from_response(response))
                 }))
             }
         })
@@ -11862,14 +12092,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<StartMatchBackfillOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartMatchBackfillError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartMatchBackfillError::from_response(response))),
+                )
             }
         })
     }
@@ -11897,14 +12129,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<StartMatchmakingOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartMatchmakingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartMatchmakingError::from_response(response))),
+                )
             }
         })
     }
@@ -11932,14 +12166,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<StopFleetActionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopFleetActionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StopFleetActionsError::from_response(response))),
+                )
             }
         })
     }
@@ -11967,13 +12203,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<StopGameSessionPlacementOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopGameSessionPlacementError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StopGameSessionPlacementError::from_response(response))
                 }))
             }
         })
@@ -12002,14 +12237,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<StopMatchmakingOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopMatchmakingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StopMatchmakingError::from_response(response))),
+                )
             }
         })
     }
@@ -12037,14 +12274,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<UpdateAliasOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateAliasError::from_response(response))),
+                )
             }
         })
     }
@@ -12072,14 +12311,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<UpdateBuildOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateBuildError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateBuildError::from_response(response))),
+                )
             }
         })
     }
@@ -12107,14 +12348,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<UpdateFleetAttributesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateFleetAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateFleetAttributesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12142,14 +12384,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<UpdateFleetCapacityOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateFleetCapacityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateFleetCapacityError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12177,13 +12420,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<UpdateFleetPortSettingsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateFleetPortSettingsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateFleetPortSettingsError::from_response(response))
                 }))
             }
         })
@@ -12212,14 +12454,16 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<UpdateGameSessionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateGameSessionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateGameSessionError::from_response(response))),
+                )
             }
         })
     }
@@ -12247,14 +12491,15 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<UpdateGameSessionQueueOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateGameSessionQueueError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateGameSessionQueueError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12283,13 +12528,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<UpdateMatchmakingConfigurationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateMatchmakingConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateMatchmakingConfigurationError::from_response(response))
                 }))
             }
         })
@@ -12318,13 +12562,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<UpdateRuntimeConfigurationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateRuntimeConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateRuntimeConfigurationError::from_response(response))
                 }))
             }
         })
@@ -12353,13 +12596,12 @@ impl GameLift for GameLiftClient {
 
                     serde_json::from_str::<ValidateMatchmakingRuleSetOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ValidateMatchmakingRuleSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ValidateMatchmakingRuleSetError::from_response(response))
                 }))
             }
         })

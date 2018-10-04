@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Information about agents or connectors that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation, and whether the agent/connector configuration was updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -719,60 +719,62 @@ pub enum AssociateConfigurationItemsToApplicationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateConfigurationItemsToApplicationError {
-    pub fn from_body(body: &str) -> AssociateConfigurationItemsToApplicationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> AssociateConfigurationItemsToApplicationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        AssociateConfigurationItemsToApplicationError::AuthorizationError(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidParameterException" => {
-                        AssociateConfigurationItemsToApplicationError::InvalidParameter(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidParameterValueException" => {
-                        AssociateConfigurationItemsToApplicationError::InvalidParameterValue(
-                            String::from(error_message),
-                        )
-                    }
-                    "ServerInternalErrorException" => {
-                        AssociateConfigurationItemsToApplicationError::ServerInternalError(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        AssociateConfigurationItemsToApplicationError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
-                    _ => AssociateConfigurationItemsToApplicationError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return AssociateConfigurationItemsToApplicationError::AuthorizationError(
+                        String::from(error_message),
+                    )
                 }
+                "InvalidParameterException" => {
+                    return AssociateConfigurationItemsToApplicationError::InvalidParameter(
+                        String::from(error_message),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return AssociateConfigurationItemsToApplicationError::InvalidParameterValue(
+                        String::from(error_message),
+                    )
+                }
+                "ServerInternalErrorException" => {
+                    return AssociateConfigurationItemsToApplicationError::ServerInternalError(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return AssociateConfigurationItemsToApplicationError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => AssociateConfigurationItemsToApplicationError::Unknown(String::from(body)),
         }
+        return AssociateConfigurationItemsToApplicationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateConfigurationItemsToApplicationError {
     fn from(err: serde_json::error::Error) -> AssociateConfigurationItemsToApplicationError {
-        AssociateConfigurationItemsToApplicationError::Unknown(err.description().to_string())
+        AssociateConfigurationItemsToApplicationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateConfigurationItemsToApplicationError {
@@ -811,7 +813,8 @@ impl Error for AssociateConfigurationItemsToApplicationError {
             AssociateConfigurationItemsToApplicationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateConfigurationItemsToApplicationError::Unknown(ref cause) => cause,
+            AssociateConfigurationItemsToApplicationError::ParseError(ref cause) => cause,
+            AssociateConfigurationItemsToApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -832,50 +835,52 @@ pub enum CreateApplicationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateApplicationError {
-    pub fn from_body(body: &str) -> CreateApplicationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateApplicationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        CreateApplicationError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateApplicationError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        CreateApplicationError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ServerInternalErrorException" => {
-                        CreateApplicationError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateApplicationError::Validation(error_message.to_string())
-                    }
-                    _ => CreateApplicationError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return CreateApplicationError::AuthorizationError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return CreateApplicationError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return CreateApplicationError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerInternalErrorException" => {
+                    return CreateApplicationError::ServerInternalError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateApplicationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateApplicationError::Unknown(String::from(body)),
         }
+        return CreateApplicationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateApplicationError {
     fn from(err: serde_json::error::Error) -> CreateApplicationError {
-        CreateApplicationError::Unknown(err.description().to_string())
+        CreateApplicationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateApplicationError {
@@ -910,7 +915,8 @@ impl Error for CreateApplicationError {
             CreateApplicationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateApplicationError::Unknown(ref cause) => cause,
+            CreateApplicationError::ParseError(ref cause) => cause,
+            CreateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -933,51 +939,53 @@ pub enum CreateTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTagsError {
-    pub fn from_body(body: &str) -> CreateTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        CreateTagsError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateTagsError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        CreateTagsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateTagsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServerInternalErrorException" => {
-                        CreateTagsError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => CreateTagsError::Validation(error_message.to_string()),
-                    _ => CreateTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return CreateTagsError::AuthorizationError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return CreateTagsError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return CreateTagsError::InvalidParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateTagsError::ResourceNotFound(String::from(error_message))
+                }
+                "ServerInternalErrorException" => {
+                    return CreateTagsError::ServerInternalError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateTagsError::Unknown(String::from(body)),
         }
+        return CreateTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateTagsError {
     fn from(err: serde_json::error::Error) -> CreateTagsError {
-        CreateTagsError::Unknown(err.description().to_string())
+        CreateTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateTagsError {
@@ -1011,7 +1019,8 @@ impl Error for CreateTagsError {
             CreateTagsError::Validation(ref cause) => cause,
             CreateTagsError::Credentials(ref err) => err.description(),
             CreateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTagsError::Unknown(ref cause) => cause,
+            CreateTagsError::ParseError(ref cause) => cause,
+            CreateTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1032,50 +1041,52 @@ pub enum DeleteApplicationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationsError {
-    pub fn from_body(body: &str) -> DeleteApplicationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteApplicationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        DeleteApplicationsError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteApplicationsError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        DeleteApplicationsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ServerInternalErrorException" => {
-                        DeleteApplicationsError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteApplicationsError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteApplicationsError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return DeleteApplicationsError::AuthorizationError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DeleteApplicationsError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return DeleteApplicationsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerInternalErrorException" => {
+                    return DeleteApplicationsError::ServerInternalError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteApplicationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteApplicationsError::Unknown(String::from(body)),
         }
+        return DeleteApplicationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteApplicationsError {
     fn from(err: serde_json::error::Error) -> DeleteApplicationsError {
-        DeleteApplicationsError::Unknown(err.description().to_string())
+        DeleteApplicationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteApplicationsError {
@@ -1110,7 +1121,8 @@ impl Error for DeleteApplicationsError {
             DeleteApplicationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteApplicationsError::Unknown(ref cause) => cause,
+            DeleteApplicationsError::ParseError(ref cause) => cause,
+            DeleteApplicationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1133,51 +1145,53 @@ pub enum DeleteTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTagsError {
-    pub fn from_body(body: &str) -> DeleteTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        DeleteTagsError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteTagsError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        DeleteTagsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteTagsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServerInternalErrorException" => {
-                        DeleteTagsError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => DeleteTagsError::Validation(error_message.to_string()),
-                    _ => DeleteTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return DeleteTagsError::AuthorizationError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DeleteTagsError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return DeleteTagsError::InvalidParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteTagsError::ResourceNotFound(String::from(error_message))
+                }
+                "ServerInternalErrorException" => {
+                    return DeleteTagsError::ServerInternalError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteTagsError::Unknown(String::from(body)),
         }
+        return DeleteTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteTagsError {
     fn from(err: serde_json::error::Error) -> DeleteTagsError {
-        DeleteTagsError::Unknown(err.description().to_string())
+        DeleteTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteTagsError {
@@ -1211,7 +1225,8 @@ impl Error for DeleteTagsError {
             DeleteTagsError::Validation(ref cause) => cause,
             DeleteTagsError::Credentials(ref err) => err.description(),
             DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTagsError::Unknown(ref cause) => cause,
+            DeleteTagsError::ParseError(ref cause) => cause,
+            DeleteTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1232,50 +1247,50 @@ pub enum DescribeAgentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAgentsError {
-    pub fn from_body(body: &str) -> DescribeAgentsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAgentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        DescribeAgentsError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeAgentsError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeAgentsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ServerInternalErrorException" => {
-                        DescribeAgentsError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeAgentsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeAgentsError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return DescribeAgentsError::AuthorizationError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DescribeAgentsError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return DescribeAgentsError::InvalidParameterValue(String::from(error_message))
+                }
+                "ServerInternalErrorException" => {
+                    return DescribeAgentsError::ServerInternalError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeAgentsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeAgentsError::Unknown(String::from(body)),
         }
+        return DescribeAgentsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeAgentsError {
     fn from(err: serde_json::error::Error) -> DescribeAgentsError {
-        DescribeAgentsError::Unknown(err.description().to_string())
+        DescribeAgentsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeAgentsError {
@@ -1308,7 +1323,8 @@ impl Error for DescribeAgentsError {
             DescribeAgentsError::Validation(ref cause) => cause,
             DescribeAgentsError::Credentials(ref err) => err.description(),
             DescribeAgentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeAgentsError::Unknown(ref cause) => cause,
+            DescribeAgentsError::ParseError(ref cause) => cause,
+            DescribeAgentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1329,54 +1345,58 @@ pub enum DescribeConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationsError {
-    pub fn from_body(body: &str) -> DescribeConfigurationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        DescribeConfigurationsError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeConfigurationsError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeConfigurationsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServerInternalErrorException" => {
-                        DescribeConfigurationsError::ServerInternalError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeConfigurationsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeConfigurationsError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return DescribeConfigurationsError::AuthorizationError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterException" => {
+                    return DescribeConfigurationsError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return DescribeConfigurationsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerInternalErrorException" => {
+                    return DescribeConfigurationsError::ServerInternalError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeConfigurationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeConfigurationsError::Unknown(String::from(body)),
         }
+        return DescribeConfigurationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeConfigurationsError {
     fn from(err: serde_json::error::Error) -> DescribeConfigurationsError {
-        DescribeConfigurationsError::Unknown(err.description().to_string())
+        DescribeConfigurationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeConfigurationsError {
@@ -1411,7 +1431,8 @@ impl Error for DescribeConfigurationsError {
             DescribeConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeConfigurationsError::Unknown(ref cause) => cause,
+            DescribeConfigurationsError::ParseError(ref cause) => cause,
+            DescribeConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1434,63 +1455,63 @@ pub enum DescribeExportConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeExportConfigurationsError {
-    pub fn from_body(body: &str) -> DescribeExportConfigurationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeExportConfigurationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        DescribeExportConfigurationsError::AuthorizationError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeExportConfigurationsError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeExportConfigurationsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeExportConfigurationsError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServerInternalErrorException" => {
-                        DescribeExportConfigurationsError::ServerInternalError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeExportConfigurationsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeExportConfigurationsError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return DescribeExportConfigurationsError::AuthorizationError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterException" => {
+                    return DescribeExportConfigurationsError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return DescribeExportConfigurationsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeExportConfigurationsError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerInternalErrorException" => {
+                    return DescribeExportConfigurationsError::ServerInternalError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeExportConfigurationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeExportConfigurationsError::Unknown(String::from(body)),
         }
+        return DescribeExportConfigurationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeExportConfigurationsError {
     fn from(err: serde_json::error::Error) -> DescribeExportConfigurationsError {
-        DescribeExportConfigurationsError::Unknown(err.description().to_string())
+        DescribeExportConfigurationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeExportConfigurationsError {
@@ -1526,7 +1547,8 @@ impl Error for DescribeExportConfigurationsError {
             DescribeExportConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeExportConfigurationsError::Unknown(ref cause) => cause,
+            DescribeExportConfigurationsError::ParseError(ref cause) => cause,
+            DescribeExportConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1547,50 +1569,54 @@ pub enum DescribeExportTasksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeExportTasksError {
-    pub fn from_body(body: &str) -> DescribeExportTasksError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeExportTasksError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        DescribeExportTasksError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeExportTasksError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeExportTasksError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ServerInternalErrorException" => {
-                        DescribeExportTasksError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeExportTasksError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeExportTasksError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return DescribeExportTasksError::AuthorizationError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DescribeExportTasksError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return DescribeExportTasksError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerInternalErrorException" => {
+                    return DescribeExportTasksError::ServerInternalError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeExportTasksError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeExportTasksError::Unknown(String::from(body)),
         }
+        return DescribeExportTasksError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeExportTasksError {
     fn from(err: serde_json::error::Error) -> DescribeExportTasksError {
-        DescribeExportTasksError::Unknown(err.description().to_string())
+        DescribeExportTasksError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeExportTasksError {
@@ -1625,7 +1651,8 @@ impl Error for DescribeExportTasksError {
             DescribeExportTasksError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeExportTasksError::Unknown(ref cause) => cause,
+            DescribeExportTasksError::ParseError(ref cause) => cause,
+            DescribeExportTasksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1648,53 +1675,53 @@ pub enum DescribeTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_body(body: &str) -> DescribeTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        DescribeTagsError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeTagsError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeTagsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeTagsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServerInternalErrorException" => {
-                        DescribeTagsError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeTagsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return DescribeTagsError::AuthorizationError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DescribeTagsError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return DescribeTagsError::InvalidParameterValue(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeTagsError::ResourceNotFound(String::from(error_message))
+                }
+                "ServerInternalErrorException" => {
+                    return DescribeTagsError::ServerInternalError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTagsError::Unknown(String::from(body)),
         }
+        return DescribeTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTagsError {
     fn from(err: serde_json::error::Error) -> DescribeTagsError {
-        DescribeTagsError::Unknown(err.description().to_string())
+        DescribeTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTagsError {
@@ -1728,7 +1755,8 @@ impl Error for DescribeTagsError {
             DescribeTagsError::Validation(ref cause) => cause,
             DescribeTagsError::Credentials(ref err) => err.description(),
             DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::Unknown(ref cause) => cause,
+            DescribeTagsError::ParseError(ref cause) => cause,
+            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1749,64 +1777,64 @@ pub enum DisassociateConfigurationItemsFromApplicationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateConfigurationItemsFromApplicationError {
-    pub fn from_body(body: &str) -> DisassociateConfigurationItemsFromApplicationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> DisassociateConfigurationItemsFromApplicationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        DisassociateConfigurationItemsFromApplicationError::AuthorizationError(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidParameterException" => {
-                        DisassociateConfigurationItemsFromApplicationError::InvalidParameter(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidParameterValueException" => {
-                        DisassociateConfigurationItemsFromApplicationError::InvalidParameterValue(
-                            String::from(error_message),
-                        )
-                    }
-                    "ServerInternalErrorException" => {
-                        DisassociateConfigurationItemsFromApplicationError::ServerInternalError(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        DisassociateConfigurationItemsFromApplicationError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
-                    _ => DisassociateConfigurationItemsFromApplicationError::Unknown(String::from(
-                        body,
-                    )),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return DisassociateConfigurationItemsFromApplicationError::AuthorizationError(
+                        String::from(error_message),
+                    )
                 }
-            }
-            Err(_) => {
-                DisassociateConfigurationItemsFromApplicationError::Unknown(String::from(body))
+                "InvalidParameterException" => {
+                    return DisassociateConfigurationItemsFromApplicationError::InvalidParameter(
+                        String::from(error_message),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return DisassociateConfigurationItemsFromApplicationError::InvalidParameterValue(
+                        String::from(error_message),
+                    )
+                }
+                "ServerInternalErrorException" => {
+                    return DisassociateConfigurationItemsFromApplicationError::ServerInternalError(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DisassociateConfigurationItemsFromApplicationError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
         }
+        return DisassociateConfigurationItemsFromApplicationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateConfigurationItemsFromApplicationError {
     fn from(err: serde_json::error::Error) -> DisassociateConfigurationItemsFromApplicationError {
-        DisassociateConfigurationItemsFromApplicationError::Unknown(err.description().to_string())
+        DisassociateConfigurationItemsFromApplicationError::ParseError(
+            err.description().to_string(),
+        )
     }
 }
 impl From<CredentialsError> for DisassociateConfigurationItemsFromApplicationError {
@@ -1853,7 +1881,8 @@ impl Error for DisassociateConfigurationItemsFromApplicationError {
             DisassociateConfigurationItemsFromApplicationError::HttpDispatch(
                 ref dispatch_error,
             ) => dispatch_error.description(),
-            DisassociateConfigurationItemsFromApplicationError::Unknown(ref cause) => cause,
+            DisassociateConfigurationItemsFromApplicationError::ParseError(ref cause) => cause,
+            DisassociateConfigurationItemsFromApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1876,57 +1905,61 @@ pub enum ExportConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ExportConfigurationsError {
-    pub fn from_body(body: &str) -> ExportConfigurationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ExportConfigurationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        ExportConfigurationsError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ExportConfigurationsError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        ExportConfigurationsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "OperationNotPermittedException" => {
-                        ExportConfigurationsError::OperationNotPermitted(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServerInternalErrorException" => {
-                        ExportConfigurationsError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ExportConfigurationsError::Validation(error_message.to_string())
-                    }
-                    _ => ExportConfigurationsError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return ExportConfigurationsError::AuthorizationError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterException" => {
+                    return ExportConfigurationsError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return ExportConfigurationsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "OperationNotPermittedException" => {
+                    return ExportConfigurationsError::OperationNotPermitted(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerInternalErrorException" => {
+                    return ExportConfigurationsError::ServerInternalError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ExportConfigurationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ExportConfigurationsError::Unknown(String::from(body)),
         }
+        return ExportConfigurationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ExportConfigurationsError {
     fn from(err: serde_json::error::Error) -> ExportConfigurationsError {
-        ExportConfigurationsError::Unknown(err.description().to_string())
+        ExportConfigurationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ExportConfigurationsError {
@@ -1962,7 +1995,8 @@ impl Error for ExportConfigurationsError {
             ExportConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ExportConfigurationsError::Unknown(ref cause) => cause,
+            ExportConfigurationsError::ParseError(ref cause) => cause,
+            ExportConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1983,50 +2017,54 @@ pub enum GetDiscoverySummaryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDiscoverySummaryError {
-    pub fn from_body(body: &str) -> GetDiscoverySummaryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetDiscoverySummaryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        GetDiscoverySummaryError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        GetDiscoverySummaryError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        GetDiscoverySummaryError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ServerInternalErrorException" => {
-                        GetDiscoverySummaryError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetDiscoverySummaryError::Validation(error_message.to_string())
-                    }
-                    _ => GetDiscoverySummaryError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return GetDiscoverySummaryError::AuthorizationError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return GetDiscoverySummaryError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return GetDiscoverySummaryError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerInternalErrorException" => {
+                    return GetDiscoverySummaryError::ServerInternalError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetDiscoverySummaryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetDiscoverySummaryError::Unknown(String::from(body)),
         }
+        return GetDiscoverySummaryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetDiscoverySummaryError {
     fn from(err: serde_json::error::Error) -> GetDiscoverySummaryError {
-        GetDiscoverySummaryError::Unknown(err.description().to_string())
+        GetDiscoverySummaryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetDiscoverySummaryError {
@@ -2061,7 +2099,8 @@ impl Error for GetDiscoverySummaryError {
             GetDiscoverySummaryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetDiscoverySummaryError::Unknown(ref cause) => cause,
+            GetDiscoverySummaryError::ParseError(ref cause) => cause,
+            GetDiscoverySummaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2084,53 +2123,55 @@ pub enum ListConfigurationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListConfigurationsError {
-    pub fn from_body(body: &str) -> ListConfigurationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListConfigurationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        ListConfigurationsError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListConfigurationsError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        ListConfigurationsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListConfigurationsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ServerInternalErrorException" => {
-                        ListConfigurationsError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListConfigurationsError::Validation(error_message.to_string())
-                    }
-                    _ => ListConfigurationsError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return ListConfigurationsError::AuthorizationError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return ListConfigurationsError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return ListConfigurationsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return ListConfigurationsError::ResourceNotFound(String::from(error_message))
+                }
+                "ServerInternalErrorException" => {
+                    return ListConfigurationsError::ServerInternalError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListConfigurationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListConfigurationsError::Unknown(String::from(body)),
         }
+        return ListConfigurationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListConfigurationsError {
     fn from(err: serde_json::error::Error) -> ListConfigurationsError {
-        ListConfigurationsError::Unknown(err.description().to_string())
+        ListConfigurationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListConfigurationsError {
@@ -2166,7 +2207,8 @@ impl Error for ListConfigurationsError {
             ListConfigurationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListConfigurationsError::Unknown(ref cause) => cause,
+            ListConfigurationsError::ParseError(ref cause) => cause,
+            ListConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2187,50 +2229,54 @@ pub enum ListServerNeighborsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListServerNeighborsError {
-    pub fn from_body(body: &str) -> ListServerNeighborsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListServerNeighborsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        ListServerNeighborsError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListServerNeighborsError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        ListServerNeighborsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ServerInternalErrorException" => {
-                        ListServerNeighborsError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListServerNeighborsError::Validation(error_message.to_string())
-                    }
-                    _ => ListServerNeighborsError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return ListServerNeighborsError::AuthorizationError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return ListServerNeighborsError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return ListServerNeighborsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerInternalErrorException" => {
+                    return ListServerNeighborsError::ServerInternalError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListServerNeighborsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListServerNeighborsError::Unknown(String::from(body)),
         }
+        return ListServerNeighborsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListServerNeighborsError {
     fn from(err: serde_json::error::Error) -> ListServerNeighborsError {
-        ListServerNeighborsError::Unknown(err.description().to_string())
+        ListServerNeighborsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListServerNeighborsError {
@@ -2265,7 +2311,8 @@ impl Error for ListServerNeighborsError {
             ListServerNeighborsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListServerNeighborsError::Unknown(ref cause) => cause,
+            ListServerNeighborsError::ParseError(ref cause) => cause,
+            ListServerNeighborsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2286,58 +2333,58 @@ pub enum StartDataCollectionByAgentIdsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartDataCollectionByAgentIdsError {
-    pub fn from_body(body: &str) -> StartDataCollectionByAgentIdsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartDataCollectionByAgentIdsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        StartDataCollectionByAgentIdsError::AuthorizationError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        StartDataCollectionByAgentIdsError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        StartDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServerInternalErrorException" => {
-                        StartDataCollectionByAgentIdsError::ServerInternalError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        StartDataCollectionByAgentIdsError::Validation(error_message.to_string())
-                    }
-                    _ => StartDataCollectionByAgentIdsError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return StartDataCollectionByAgentIdsError::AuthorizationError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterException" => {
+                    return StartDataCollectionByAgentIdsError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return StartDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerInternalErrorException" => {
+                    return StartDataCollectionByAgentIdsError::ServerInternalError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return StartDataCollectionByAgentIdsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartDataCollectionByAgentIdsError::Unknown(String::from(body)),
         }
+        return StartDataCollectionByAgentIdsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartDataCollectionByAgentIdsError {
     fn from(err: serde_json::error::Error) -> StartDataCollectionByAgentIdsError {
-        StartDataCollectionByAgentIdsError::Unknown(err.description().to_string())
+        StartDataCollectionByAgentIdsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartDataCollectionByAgentIdsError {
@@ -2372,7 +2419,8 @@ impl Error for StartDataCollectionByAgentIdsError {
             StartDataCollectionByAgentIdsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartDataCollectionByAgentIdsError::Unknown(ref cause) => cause,
+            StartDataCollectionByAgentIdsError::ParseError(ref cause) => cause,
+            StartDataCollectionByAgentIdsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2395,53 +2443,53 @@ pub enum StartExportTaskError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartExportTaskError {
-    pub fn from_body(body: &str) -> StartExportTaskError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartExportTaskError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        StartExportTaskError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        StartExportTaskError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        StartExportTaskError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "OperationNotPermittedException" => {
-                        StartExportTaskError::OperationNotPermitted(String::from(error_message))
-                    }
-                    "ServerInternalErrorException" => {
-                        StartExportTaskError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartExportTaskError::Validation(error_message.to_string())
-                    }
-                    _ => StartExportTaskError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return StartExportTaskError::AuthorizationError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return StartExportTaskError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return StartExportTaskError::InvalidParameterValue(String::from(error_message))
+                }
+                "OperationNotPermittedException" => {
+                    return StartExportTaskError::OperationNotPermitted(String::from(error_message))
+                }
+                "ServerInternalErrorException" => {
+                    return StartExportTaskError::ServerInternalError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartExportTaskError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartExportTaskError::Unknown(String::from(body)),
         }
+        return StartExportTaskError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartExportTaskError {
     fn from(err: serde_json::error::Error) -> StartExportTaskError {
-        StartExportTaskError::Unknown(err.description().to_string())
+        StartExportTaskError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartExportTaskError {
@@ -2475,7 +2523,8 @@ impl Error for StartExportTaskError {
             StartExportTaskError::Validation(ref cause) => cause,
             StartExportTaskError::Credentials(ref err) => err.description(),
             StartExportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartExportTaskError::Unknown(ref cause) => cause,
+            StartExportTaskError::ParseError(ref cause) => cause,
+            StartExportTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2496,58 +2545,58 @@ pub enum StopDataCollectionByAgentIdsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopDataCollectionByAgentIdsError {
-    pub fn from_body(body: &str) -> StopDataCollectionByAgentIdsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopDataCollectionByAgentIdsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        StopDataCollectionByAgentIdsError::AuthorizationError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        StopDataCollectionByAgentIdsError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        StopDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServerInternalErrorException" => {
-                        StopDataCollectionByAgentIdsError::ServerInternalError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        StopDataCollectionByAgentIdsError::Validation(error_message.to_string())
-                    }
-                    _ => StopDataCollectionByAgentIdsError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return StopDataCollectionByAgentIdsError::AuthorizationError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterException" => {
+                    return StopDataCollectionByAgentIdsError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return StopDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerInternalErrorException" => {
+                    return StopDataCollectionByAgentIdsError::ServerInternalError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return StopDataCollectionByAgentIdsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StopDataCollectionByAgentIdsError::Unknown(String::from(body)),
         }
+        return StopDataCollectionByAgentIdsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopDataCollectionByAgentIdsError {
     fn from(err: serde_json::error::Error) -> StopDataCollectionByAgentIdsError {
-        StopDataCollectionByAgentIdsError::Unknown(err.description().to_string())
+        StopDataCollectionByAgentIdsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopDataCollectionByAgentIdsError {
@@ -2582,7 +2631,8 @@ impl Error for StopDataCollectionByAgentIdsError {
             StopDataCollectionByAgentIdsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StopDataCollectionByAgentIdsError::Unknown(ref cause) => cause,
+            StopDataCollectionByAgentIdsError::ParseError(ref cause) => cause,
+            StopDataCollectionByAgentIdsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2603,50 +2653,52 @@ pub enum UpdateApplicationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateApplicationError {
-    pub fn from_body(body: &str) -> UpdateApplicationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateApplicationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AuthorizationErrorException" => {
-                        UpdateApplicationError::AuthorizationError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateApplicationError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        UpdateApplicationError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ServerInternalErrorException" => {
-                        UpdateApplicationError::ServerInternalError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateApplicationError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateApplicationError::Unknown(String::from(body)),
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return UpdateApplicationError::AuthorizationError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return UpdateApplicationError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return UpdateApplicationError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerInternalErrorException" => {
+                    return UpdateApplicationError::ServerInternalError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateApplicationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateApplicationError::Unknown(String::from(body)),
         }
+        return UpdateApplicationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateApplicationError {
     fn from(err: serde_json::error::Error) -> UpdateApplicationError {
-        UpdateApplicationError::Unknown(err.description().to_string())
+        UpdateApplicationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateApplicationError {
@@ -2681,7 +2733,8 @@ impl Error for UpdateApplicationError {
             UpdateApplicationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateApplicationError::Unknown(ref cause) => cause,
+            UpdateApplicationError::ParseError(ref cause) => cause,
+            UpdateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2870,13 +2923,12 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<AssociateConfigurationItemsToApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateConfigurationItemsToApplicationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AssociateConfigurationItemsToApplicationError::from_response(response))
                 }))
             }
         })
@@ -2908,14 +2960,16 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<CreateApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateApplicationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateApplicationError::from_response(response))),
+                )
             }
         })
     }
@@ -2943,14 +2997,16 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<CreateTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -2981,14 +3037,16 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DeleteApplicationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteApplicationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteApplicationsError::from_response(response))),
+                )
             }
         })
     }
@@ -3016,14 +3074,16 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DeleteTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -3054,14 +3114,16 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DescribeAgentsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAgentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeAgentsError::from_response(response))),
+                )
             }
         })
     }
@@ -3092,14 +3154,15 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DescribeConfigurationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeConfigurationsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3130,13 +3193,12 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DescribeExportConfigurationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeExportConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeExportConfigurationsError::from_response(response))
                 }))
             }
         })
@@ -3168,14 +3230,15 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DescribeExportTasksResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeExportTasksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeExportTasksError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3206,14 +3269,16 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DescribeTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -3247,15 +3312,12 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DisassociateConfigurationItemsFromApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(
-                        DisassociateConfigurationItemsFromApplicationError::from_body(
-                            String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                        ),
-                    )
+                    Err(DisassociateConfigurationItemsFromApplicationError::from_response(response))
                 }))
             }
         })
@@ -3285,14 +3347,15 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<ExportConfigurationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ExportConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ExportConfigurationsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3321,14 +3384,15 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<GetDiscoverySummaryResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDiscoverySummaryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetDiscoverySummaryError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3359,14 +3423,16 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<ListConfigurationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListConfigurationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListConfigurationsError::from_response(response))),
+                )
             }
         })
     }
@@ -3397,14 +3463,15 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<ListServerNeighborsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListServerNeighborsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListServerNeighborsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3436,13 +3503,12 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<StartDataCollectionByAgentIdsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartDataCollectionByAgentIdsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StartDataCollectionByAgentIdsError::from_response(response))
                 }))
             }
         })
@@ -3474,14 +3540,16 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<StartExportTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartExportTaskError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartExportTaskError::from_response(response))),
+                )
             }
         })
     }
@@ -3512,13 +3580,12 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<StopDataCollectionByAgentIdsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopDataCollectionByAgentIdsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StopDataCollectionByAgentIdsError::from_response(response))
                 }))
             }
         })
@@ -3550,14 +3617,16 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<UpdateApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateApplicationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateApplicationError::from_response(response))),
+                )
             }
         })
     }

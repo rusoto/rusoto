@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Unit of work sent to an activity worker.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2753,48 +2753,48 @@ pub enum CountClosedWorkflowExecutionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CountClosedWorkflowExecutionsError {
-    pub fn from_body(body: &str) -> CountClosedWorkflowExecutionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CountClosedWorkflowExecutionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        CountClosedWorkflowExecutionsError::OperationNotPermittedFault(
-                            String::from(error_message),
-                        )
-                    }
-                    "UnknownResourceFault" => {
-                        CountClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CountClosedWorkflowExecutionsError::Validation(error_message.to_string())
-                    }
-                    _ => CountClosedWorkflowExecutionsError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return CountClosedWorkflowExecutionsError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    )
                 }
+                "UnknownResourceFault" => {
+                    return CountClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CountClosedWorkflowExecutionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CountClosedWorkflowExecutionsError::Unknown(String::from(body)),
         }
+        return CountClosedWorkflowExecutionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CountClosedWorkflowExecutionsError {
     fn from(err: serde_json::error::Error) -> CountClosedWorkflowExecutionsError {
-        CountClosedWorkflowExecutionsError::Unknown(err.description().to_string())
+        CountClosedWorkflowExecutionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CountClosedWorkflowExecutionsError {
@@ -2827,7 +2827,8 @@ impl Error for CountClosedWorkflowExecutionsError {
             CountClosedWorkflowExecutionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CountClosedWorkflowExecutionsError::Unknown(ref cause) => cause,
+            CountClosedWorkflowExecutionsError::ParseError(ref cause) => cause,
+            CountClosedWorkflowExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2844,48 +2845,48 @@ pub enum CountOpenWorkflowExecutionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CountOpenWorkflowExecutionsError {
-    pub fn from_body(body: &str) -> CountOpenWorkflowExecutionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CountOpenWorkflowExecutionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        CountOpenWorkflowExecutionsError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        CountOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CountOpenWorkflowExecutionsError::Validation(error_message.to_string())
-                    }
-                    _ => CountOpenWorkflowExecutionsError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return CountOpenWorkflowExecutionsError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    )
                 }
+                "UnknownResourceFault" => {
+                    return CountOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CountOpenWorkflowExecutionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CountOpenWorkflowExecutionsError::Unknown(String::from(body)),
         }
+        return CountOpenWorkflowExecutionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CountOpenWorkflowExecutionsError {
     fn from(err: serde_json::error::Error) -> CountOpenWorkflowExecutionsError {
-        CountOpenWorkflowExecutionsError::Unknown(err.description().to_string())
+        CountOpenWorkflowExecutionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CountOpenWorkflowExecutionsError {
@@ -2918,7 +2919,8 @@ impl Error for CountOpenWorkflowExecutionsError {
             CountOpenWorkflowExecutionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CountOpenWorkflowExecutionsError::Unknown(ref cause) => cause,
+            CountOpenWorkflowExecutionsError::ParseError(ref cause) => cause,
+            CountOpenWorkflowExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2935,46 +2937,48 @@ pub enum CountPendingActivityTasksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CountPendingActivityTasksError {
-    pub fn from_body(body: &str) -> CountPendingActivityTasksError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CountPendingActivityTasksError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        CountPendingActivityTasksError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => CountPendingActivityTasksError::UnknownResourceFault(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        CountPendingActivityTasksError::Validation(error_message.to_string())
-                    }
-                    _ => CountPendingActivityTasksError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return CountPendingActivityTasksError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "UnknownResourceFault" => {
+                    return CountPendingActivityTasksError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CountPendingActivityTasksError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CountPendingActivityTasksError::Unknown(String::from(body)),
         }
+        return CountPendingActivityTasksError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CountPendingActivityTasksError {
     fn from(err: serde_json::error::Error) -> CountPendingActivityTasksError {
-        CountPendingActivityTasksError::Unknown(err.description().to_string())
+        CountPendingActivityTasksError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CountPendingActivityTasksError {
@@ -3007,7 +3011,8 @@ impl Error for CountPendingActivityTasksError {
             CountPendingActivityTasksError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CountPendingActivityTasksError::Unknown(ref cause) => cause,
+            CountPendingActivityTasksError::ParseError(ref cause) => cause,
+            CountPendingActivityTasksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3024,46 +3029,48 @@ pub enum CountPendingDecisionTasksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CountPendingDecisionTasksError {
-    pub fn from_body(body: &str) -> CountPendingDecisionTasksError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CountPendingDecisionTasksError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        CountPendingDecisionTasksError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => CountPendingDecisionTasksError::UnknownResourceFault(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        CountPendingDecisionTasksError::Validation(error_message.to_string())
-                    }
-                    _ => CountPendingDecisionTasksError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return CountPendingDecisionTasksError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "UnknownResourceFault" => {
+                    return CountPendingDecisionTasksError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CountPendingDecisionTasksError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CountPendingDecisionTasksError::Unknown(String::from(body)),
         }
+        return CountPendingDecisionTasksError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CountPendingDecisionTasksError {
     fn from(err: serde_json::error::Error) -> CountPendingDecisionTasksError {
-        CountPendingDecisionTasksError::Unknown(err.description().to_string())
+        CountPendingDecisionTasksError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CountPendingDecisionTasksError {
@@ -3096,7 +3103,8 @@ impl Error for CountPendingDecisionTasksError {
             CountPendingDecisionTasksError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CountPendingDecisionTasksError::Unknown(ref cause) => cause,
+            CountPendingDecisionTasksError::ParseError(ref cause) => cause,
+            CountPendingDecisionTasksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3115,49 +3123,53 @@ pub enum DeprecateActivityTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeprecateActivityTypeError {
-    pub fn from_body(body: &str) -> DeprecateActivityTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeprecateActivityTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        DeprecateActivityTypeError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TypeDeprecatedFault" => {
-                        DeprecateActivityTypeError::TypeDeprecatedFault(String::from(error_message))
-                    }
-                    "UnknownResourceFault" => DeprecateActivityTypeError::UnknownResourceFault(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        DeprecateActivityTypeError::Validation(error_message.to_string())
-                    }
-                    _ => DeprecateActivityTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return DeprecateActivityTypeError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "TypeDeprecatedFault" => {
+                    return DeprecateActivityTypeError::TypeDeprecatedFault(String::from(
+                        error_message,
+                    ))
+                }
+                "UnknownResourceFault" => {
+                    return DeprecateActivityTypeError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeprecateActivityTypeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeprecateActivityTypeError::Unknown(String::from(body)),
         }
+        return DeprecateActivityTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeprecateActivityTypeError {
     fn from(err: serde_json::error::Error) -> DeprecateActivityTypeError {
-        DeprecateActivityTypeError::Unknown(err.description().to_string())
+        DeprecateActivityTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeprecateActivityTypeError {
@@ -3191,7 +3203,8 @@ impl Error for DeprecateActivityTypeError {
             DeprecateActivityTypeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeprecateActivityTypeError::Unknown(ref cause) => cause,
+            DeprecateActivityTypeError::ParseError(ref cause) => cause,
+            DeprecateActivityTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3210,49 +3223,49 @@ pub enum DeprecateDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeprecateDomainError {
-    pub fn from_body(body: &str) -> DeprecateDomainError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeprecateDomainError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DomainDeprecatedFault" => {
-                        DeprecateDomainError::DomainDeprecatedFault(String::from(error_message))
-                    }
-                    "OperationNotPermittedFault" => {
-                        DeprecateDomainError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        DeprecateDomainError::UnknownResourceFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeprecateDomainError::Validation(error_message.to_string())
-                    }
-                    _ => DeprecateDomainError::Unknown(String::from(body)),
+            match *error_type {
+                "DomainDeprecatedFault" => {
+                    return DeprecateDomainError::DomainDeprecatedFault(String::from(error_message))
                 }
+                "OperationNotPermittedFault" => {
+                    return DeprecateDomainError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
+                }
+                "UnknownResourceFault" => {
+                    return DeprecateDomainError::UnknownResourceFault(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeprecateDomainError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeprecateDomainError::Unknown(String::from(body)),
         }
+        return DeprecateDomainError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeprecateDomainError {
     fn from(err: serde_json::error::Error) -> DeprecateDomainError {
-        DeprecateDomainError::Unknown(err.description().to_string())
+        DeprecateDomainError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeprecateDomainError {
@@ -3284,7 +3297,8 @@ impl Error for DeprecateDomainError {
             DeprecateDomainError::Validation(ref cause) => cause,
             DeprecateDomainError::Credentials(ref err) => err.description(),
             DeprecateDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeprecateDomainError::Unknown(ref cause) => cause,
+            DeprecateDomainError::ParseError(ref cause) => cause,
+            DeprecateDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3303,49 +3317,53 @@ pub enum DeprecateWorkflowTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeprecateWorkflowTypeError {
-    pub fn from_body(body: &str) -> DeprecateWorkflowTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeprecateWorkflowTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        DeprecateWorkflowTypeError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TypeDeprecatedFault" => {
-                        DeprecateWorkflowTypeError::TypeDeprecatedFault(String::from(error_message))
-                    }
-                    "UnknownResourceFault" => DeprecateWorkflowTypeError::UnknownResourceFault(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        DeprecateWorkflowTypeError::Validation(error_message.to_string())
-                    }
-                    _ => DeprecateWorkflowTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return DeprecateWorkflowTypeError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "TypeDeprecatedFault" => {
+                    return DeprecateWorkflowTypeError::TypeDeprecatedFault(String::from(
+                        error_message,
+                    ))
+                }
+                "UnknownResourceFault" => {
+                    return DeprecateWorkflowTypeError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeprecateWorkflowTypeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeprecateWorkflowTypeError::Unknown(String::from(body)),
         }
+        return DeprecateWorkflowTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeprecateWorkflowTypeError {
     fn from(err: serde_json::error::Error) -> DeprecateWorkflowTypeError {
-        DeprecateWorkflowTypeError::Unknown(err.description().to_string())
+        DeprecateWorkflowTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeprecateWorkflowTypeError {
@@ -3379,7 +3397,8 @@ impl Error for DeprecateWorkflowTypeError {
             DeprecateWorkflowTypeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeprecateWorkflowTypeError::Unknown(ref cause) => cause,
+            DeprecateWorkflowTypeError::ParseError(ref cause) => cause,
+            DeprecateWorkflowTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3396,46 +3415,48 @@ pub enum DescribeActivityTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeActivityTypeError {
-    pub fn from_body(body: &str) -> DescribeActivityTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeActivityTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        DescribeActivityTypeError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        DescribeActivityTypeError::UnknownResourceFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeActivityTypeError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeActivityTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return DescribeActivityTypeError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "UnknownResourceFault" => {
+                    return DescribeActivityTypeError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeActivityTypeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeActivityTypeError::Unknown(String::from(body)),
         }
+        return DescribeActivityTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeActivityTypeError {
     fn from(err: serde_json::error::Error) -> DescribeActivityTypeError {
-        DescribeActivityTypeError::Unknown(err.description().to_string())
+        DescribeActivityTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeActivityTypeError {
@@ -3468,7 +3489,8 @@ impl Error for DescribeActivityTypeError {
             DescribeActivityTypeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeActivityTypeError::Unknown(ref cause) => cause,
+            DescribeActivityTypeError::ParseError(ref cause) => cause,
+            DescribeActivityTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3485,44 +3507,46 @@ pub enum DescribeDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDomainError {
-    pub fn from_body(body: &str) -> DescribeDomainError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeDomainError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        DescribeDomainError::OperationNotPermittedFault(String::from(error_message))
-                    }
-                    "UnknownResourceFault" => {
-                        DescribeDomainError::UnknownResourceFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeDomainError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeDomainError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return DescribeDomainError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "UnknownResourceFault" => {
+                    return DescribeDomainError::UnknownResourceFault(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeDomainError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeDomainError::Unknown(String::from(body)),
         }
+        return DescribeDomainError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeDomainError {
     fn from(err: serde_json::error::Error) -> DescribeDomainError {
-        DescribeDomainError::Unknown(err.description().to_string())
+        DescribeDomainError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeDomainError {
@@ -3553,7 +3577,8 @@ impl Error for DescribeDomainError {
             DescribeDomainError::Validation(ref cause) => cause,
             DescribeDomainError::Credentials(ref err) => err.description(),
             DescribeDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeDomainError::Unknown(ref cause) => cause,
+            DescribeDomainError::ParseError(ref cause) => cause,
+            DescribeDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3570,46 +3595,48 @@ pub enum DescribeWorkflowExecutionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeWorkflowExecutionError {
-    pub fn from_body(body: &str) -> DescribeWorkflowExecutionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeWorkflowExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        DescribeWorkflowExecutionError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => DescribeWorkflowExecutionError::UnknownResourceFault(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        DescribeWorkflowExecutionError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeWorkflowExecutionError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return DescribeWorkflowExecutionError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "UnknownResourceFault" => {
+                    return DescribeWorkflowExecutionError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeWorkflowExecutionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeWorkflowExecutionError::Unknown(String::from(body)),
         }
+        return DescribeWorkflowExecutionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeWorkflowExecutionError {
     fn from(err: serde_json::error::Error) -> DescribeWorkflowExecutionError {
-        DescribeWorkflowExecutionError::Unknown(err.description().to_string())
+        DescribeWorkflowExecutionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeWorkflowExecutionError {
@@ -3642,7 +3669,8 @@ impl Error for DescribeWorkflowExecutionError {
             DescribeWorkflowExecutionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeWorkflowExecutionError::Unknown(ref cause) => cause,
+            DescribeWorkflowExecutionError::ParseError(ref cause) => cause,
+            DescribeWorkflowExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3659,46 +3687,48 @@ pub enum DescribeWorkflowTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeWorkflowTypeError {
-    pub fn from_body(body: &str) -> DescribeWorkflowTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeWorkflowTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        DescribeWorkflowTypeError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        DescribeWorkflowTypeError::UnknownResourceFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeWorkflowTypeError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeWorkflowTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return DescribeWorkflowTypeError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "UnknownResourceFault" => {
+                    return DescribeWorkflowTypeError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeWorkflowTypeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeWorkflowTypeError::Unknown(String::from(body)),
         }
+        return DescribeWorkflowTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeWorkflowTypeError {
     fn from(err: serde_json::error::Error) -> DescribeWorkflowTypeError {
-        DescribeWorkflowTypeError::Unknown(err.description().to_string())
+        DescribeWorkflowTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeWorkflowTypeError {
@@ -3731,7 +3761,8 @@ impl Error for DescribeWorkflowTypeError {
             DescribeWorkflowTypeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeWorkflowTypeError::Unknown(ref cause) => cause,
+            DescribeWorkflowTypeError::ParseError(ref cause) => cause,
+            DescribeWorkflowTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3748,48 +3779,48 @@ pub enum GetWorkflowExecutionHistoryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetWorkflowExecutionHistoryError {
-    pub fn from_body(body: &str) -> GetWorkflowExecutionHistoryError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetWorkflowExecutionHistoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        GetWorkflowExecutionHistoryError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        GetWorkflowExecutionHistoryError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        GetWorkflowExecutionHistoryError::Validation(error_message.to_string())
-                    }
-                    _ => GetWorkflowExecutionHistoryError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return GetWorkflowExecutionHistoryError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    )
                 }
+                "UnknownResourceFault" => {
+                    return GetWorkflowExecutionHistoryError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetWorkflowExecutionHistoryError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetWorkflowExecutionHistoryError::Unknown(String::from(body)),
         }
+        return GetWorkflowExecutionHistoryError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetWorkflowExecutionHistoryError {
     fn from(err: serde_json::error::Error) -> GetWorkflowExecutionHistoryError {
-        GetWorkflowExecutionHistoryError::Unknown(err.description().to_string())
+        GetWorkflowExecutionHistoryError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetWorkflowExecutionHistoryError {
@@ -3822,7 +3853,8 @@ impl Error for GetWorkflowExecutionHistoryError {
             GetWorkflowExecutionHistoryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetWorkflowExecutionHistoryError::Unknown(ref cause) => cause,
+            GetWorkflowExecutionHistoryError::ParseError(ref cause) => cause,
+            GetWorkflowExecutionHistoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3839,46 +3871,46 @@ pub enum ListActivityTypesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListActivityTypesError {
-    pub fn from_body(body: &str) -> ListActivityTypesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListActivityTypesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        ListActivityTypesError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        ListActivityTypesError::UnknownResourceFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListActivityTypesError::Validation(error_message.to_string())
-                    }
-                    _ => ListActivityTypesError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return ListActivityTypesError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "UnknownResourceFault" => {
+                    return ListActivityTypesError::UnknownResourceFault(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListActivityTypesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListActivityTypesError::Unknown(String::from(body)),
         }
+        return ListActivityTypesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListActivityTypesError {
     fn from(err: serde_json::error::Error) -> ListActivityTypesError {
-        ListActivityTypesError::Unknown(err.description().to_string())
+        ListActivityTypesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListActivityTypesError {
@@ -3911,7 +3943,8 @@ impl Error for ListActivityTypesError {
             ListActivityTypesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListActivityTypesError::Unknown(ref cause) => cause,
+            ListActivityTypesError::ParseError(ref cause) => cause,
+            ListActivityTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3928,48 +3961,48 @@ pub enum ListClosedWorkflowExecutionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListClosedWorkflowExecutionsError {
-    pub fn from_body(body: &str) -> ListClosedWorkflowExecutionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListClosedWorkflowExecutionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        ListClosedWorkflowExecutionsError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        ListClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListClosedWorkflowExecutionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListClosedWorkflowExecutionsError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return ListClosedWorkflowExecutionsError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    )
                 }
+                "UnknownResourceFault" => {
+                    return ListClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListClosedWorkflowExecutionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListClosedWorkflowExecutionsError::Unknown(String::from(body)),
         }
+        return ListClosedWorkflowExecutionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListClosedWorkflowExecutionsError {
     fn from(err: serde_json::error::Error) -> ListClosedWorkflowExecutionsError {
-        ListClosedWorkflowExecutionsError::Unknown(err.description().to_string())
+        ListClosedWorkflowExecutionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListClosedWorkflowExecutionsError {
@@ -4002,7 +4035,8 @@ impl Error for ListClosedWorkflowExecutionsError {
             ListClosedWorkflowExecutionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListClosedWorkflowExecutionsError::Unknown(ref cause) => cause,
+            ListClosedWorkflowExecutionsError::ParseError(ref cause) => cause,
+            ListClosedWorkflowExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4017,41 +4051,41 @@ pub enum ListDomainsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDomainsError {
-    pub fn from_body(body: &str) -> ListDomainsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListDomainsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        ListDomainsError::OperationNotPermittedFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListDomainsError::Validation(error_message.to_string())
-                    }
-                    _ => ListDomainsError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return ListDomainsError::OperationNotPermittedFault(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListDomainsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListDomainsError::Unknown(String::from(body)),
         }
+        return ListDomainsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListDomainsError {
     fn from(err: serde_json::error::Error) -> ListDomainsError {
-        ListDomainsError::Unknown(err.description().to_string())
+        ListDomainsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListDomainsError {
@@ -4081,7 +4115,8 @@ impl Error for ListDomainsError {
             ListDomainsError::Validation(ref cause) => cause,
             ListDomainsError::Credentials(ref err) => err.description(),
             ListDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDomainsError::Unknown(ref cause) => cause,
+            ListDomainsError::ParseError(ref cause) => cause,
+            ListDomainsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4098,48 +4133,48 @@ pub enum ListOpenWorkflowExecutionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListOpenWorkflowExecutionsError {
-    pub fn from_body(body: &str) -> ListOpenWorkflowExecutionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListOpenWorkflowExecutionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        ListOpenWorkflowExecutionsError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        ListOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListOpenWorkflowExecutionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListOpenWorkflowExecutionsError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return ListOpenWorkflowExecutionsError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    )
                 }
+                "UnknownResourceFault" => {
+                    return ListOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListOpenWorkflowExecutionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListOpenWorkflowExecutionsError::Unknown(String::from(body)),
         }
+        return ListOpenWorkflowExecutionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListOpenWorkflowExecutionsError {
     fn from(err: serde_json::error::Error) -> ListOpenWorkflowExecutionsError {
-        ListOpenWorkflowExecutionsError::Unknown(err.description().to_string())
+        ListOpenWorkflowExecutionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListOpenWorkflowExecutionsError {
@@ -4172,7 +4207,8 @@ impl Error for ListOpenWorkflowExecutionsError {
             ListOpenWorkflowExecutionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListOpenWorkflowExecutionsError::Unknown(ref cause) => cause,
+            ListOpenWorkflowExecutionsError::ParseError(ref cause) => cause,
+            ListOpenWorkflowExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4189,46 +4225,46 @@ pub enum ListWorkflowTypesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListWorkflowTypesError {
-    pub fn from_body(body: &str) -> ListWorkflowTypesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListWorkflowTypesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        ListWorkflowTypesError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        ListWorkflowTypesError::UnknownResourceFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListWorkflowTypesError::Validation(error_message.to_string())
-                    }
-                    _ => ListWorkflowTypesError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return ListWorkflowTypesError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "UnknownResourceFault" => {
+                    return ListWorkflowTypesError::UnknownResourceFault(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListWorkflowTypesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListWorkflowTypesError::Unknown(String::from(body)),
         }
+        return ListWorkflowTypesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListWorkflowTypesError {
     fn from(err: serde_json::error::Error) -> ListWorkflowTypesError {
-        ListWorkflowTypesError::Unknown(err.description().to_string())
+        ListWorkflowTypesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListWorkflowTypesError {
@@ -4261,7 +4297,8 @@ impl Error for ListWorkflowTypesError {
             ListWorkflowTypesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListWorkflowTypesError::Unknown(ref cause) => cause,
+            ListWorkflowTypesError::ParseError(ref cause) => cause,
+            ListWorkflowTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4280,49 +4317,51 @@ pub enum PollForActivityTaskError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PollForActivityTaskError {
-    pub fn from_body(body: &str) -> PollForActivityTaskError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PollForActivityTaskError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "LimitExceededFault" => {
-                        PollForActivityTaskError::LimitExceededFault(String::from(error_message))
-                    }
-                    "OperationNotPermittedFault" => {
-                        PollForActivityTaskError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        PollForActivityTaskError::UnknownResourceFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PollForActivityTaskError::Validation(error_message.to_string())
-                    }
-                    _ => PollForActivityTaskError::Unknown(String::from(body)),
+            match *error_type {
+                "LimitExceededFault" => {
+                    return PollForActivityTaskError::LimitExceededFault(String::from(error_message))
                 }
+                "OperationNotPermittedFault" => {
+                    return PollForActivityTaskError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
+                }
+                "UnknownResourceFault" => {
+                    return PollForActivityTaskError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return PollForActivityTaskError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PollForActivityTaskError::Unknown(String::from(body)),
         }
+        return PollForActivityTaskError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PollForActivityTaskError {
     fn from(err: serde_json::error::Error) -> PollForActivityTaskError {
-        PollForActivityTaskError::Unknown(err.description().to_string())
+        PollForActivityTaskError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PollForActivityTaskError {
@@ -4356,7 +4395,8 @@ impl Error for PollForActivityTaskError {
             PollForActivityTaskError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PollForActivityTaskError::Unknown(ref cause) => cause,
+            PollForActivityTaskError::ParseError(ref cause) => cause,
+            PollForActivityTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4375,49 +4415,51 @@ pub enum PollForDecisionTaskError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PollForDecisionTaskError {
-    pub fn from_body(body: &str) -> PollForDecisionTaskError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PollForDecisionTaskError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "LimitExceededFault" => {
-                        PollForDecisionTaskError::LimitExceededFault(String::from(error_message))
-                    }
-                    "OperationNotPermittedFault" => {
-                        PollForDecisionTaskError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        PollForDecisionTaskError::UnknownResourceFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PollForDecisionTaskError::Validation(error_message.to_string())
-                    }
-                    _ => PollForDecisionTaskError::Unknown(String::from(body)),
+            match *error_type {
+                "LimitExceededFault" => {
+                    return PollForDecisionTaskError::LimitExceededFault(String::from(error_message))
                 }
+                "OperationNotPermittedFault" => {
+                    return PollForDecisionTaskError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
+                }
+                "UnknownResourceFault" => {
+                    return PollForDecisionTaskError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return PollForDecisionTaskError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PollForDecisionTaskError::Unknown(String::from(body)),
         }
+        return PollForDecisionTaskError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PollForDecisionTaskError {
     fn from(err: serde_json::error::Error) -> PollForDecisionTaskError {
-        PollForDecisionTaskError::Unknown(err.description().to_string())
+        PollForDecisionTaskError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PollForDecisionTaskError {
@@ -4451,7 +4493,8 @@ impl Error for PollForDecisionTaskError {
             PollForDecisionTaskError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PollForDecisionTaskError::Unknown(ref cause) => cause,
+            PollForDecisionTaskError::ParseError(ref cause) => cause,
+            PollForDecisionTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4468,48 +4511,48 @@ pub enum RecordActivityTaskHeartbeatError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RecordActivityTaskHeartbeatError {
-    pub fn from_body(body: &str) -> RecordActivityTaskHeartbeatError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RecordActivityTaskHeartbeatError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        RecordActivityTaskHeartbeatError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        RecordActivityTaskHeartbeatError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        RecordActivityTaskHeartbeatError::Validation(error_message.to_string())
-                    }
-                    _ => RecordActivityTaskHeartbeatError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return RecordActivityTaskHeartbeatError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    )
                 }
+                "UnknownResourceFault" => {
+                    return RecordActivityTaskHeartbeatError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RecordActivityTaskHeartbeatError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RecordActivityTaskHeartbeatError::Unknown(String::from(body)),
         }
+        return RecordActivityTaskHeartbeatError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RecordActivityTaskHeartbeatError {
     fn from(err: serde_json::error::Error) -> RecordActivityTaskHeartbeatError {
-        RecordActivityTaskHeartbeatError::Unknown(err.description().to_string())
+        RecordActivityTaskHeartbeatError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RecordActivityTaskHeartbeatError {
@@ -4542,7 +4585,8 @@ impl Error for RecordActivityTaskHeartbeatError {
             RecordActivityTaskHeartbeatError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RecordActivityTaskHeartbeatError::Unknown(ref cause) => cause,
+            RecordActivityTaskHeartbeatError::ParseError(ref cause) => cause,
+            RecordActivityTaskHeartbeatError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4563,52 +4607,58 @@ pub enum RegisterActivityTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterActivityTypeError {
-    pub fn from_body(body: &str) -> RegisterActivityTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterActivityTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "LimitExceededFault" => {
-                        RegisterActivityTypeError::LimitExceededFault(String::from(error_message))
-                    }
-                    "OperationNotPermittedFault" => {
-                        RegisterActivityTypeError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TypeAlreadyExistsFault" => RegisterActivityTypeError::TypeAlreadyExistsFault(
-                        String::from(error_message),
-                    ),
-                    "UnknownResourceFault" => {
-                        RegisterActivityTypeError::UnknownResourceFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RegisterActivityTypeError::Validation(error_message.to_string())
-                    }
-                    _ => RegisterActivityTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "LimitExceededFault" => {
+                    return RegisterActivityTypeError::LimitExceededFault(String::from(
+                        error_message,
+                    ))
                 }
+                "OperationNotPermittedFault" => {
+                    return RegisterActivityTypeError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
+                }
+                "TypeAlreadyExistsFault" => {
+                    return RegisterActivityTypeError::TypeAlreadyExistsFault(String::from(
+                        error_message,
+                    ))
+                }
+                "UnknownResourceFault" => {
+                    return RegisterActivityTypeError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RegisterActivityTypeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RegisterActivityTypeError::Unknown(String::from(body)),
         }
+        return RegisterActivityTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RegisterActivityTypeError {
     fn from(err: serde_json::error::Error) -> RegisterActivityTypeError {
-        RegisterActivityTypeError::Unknown(err.description().to_string())
+        RegisterActivityTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RegisterActivityTypeError {
@@ -4643,7 +4693,8 @@ impl Error for RegisterActivityTypeError {
             RegisterActivityTypeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RegisterActivityTypeError::Unknown(ref cause) => cause,
+            RegisterActivityTypeError::ParseError(ref cause) => cause,
+            RegisterActivityTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4662,47 +4713,51 @@ pub enum RegisterDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterDomainError {
-    pub fn from_body(body: &str) -> RegisterDomainError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterDomainError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DomainAlreadyExistsFault" => {
-                        RegisterDomainError::DomainAlreadyExistsFault(String::from(error_message))
-                    }
-                    "LimitExceededFault" => {
-                        RegisterDomainError::LimitExceededFault(String::from(error_message))
-                    }
-                    "OperationNotPermittedFault" => {
-                        RegisterDomainError::OperationNotPermittedFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RegisterDomainError::Validation(error_message.to_string())
-                    }
-                    _ => RegisterDomainError::Unknown(String::from(body)),
+            match *error_type {
+                "DomainAlreadyExistsFault" => {
+                    return RegisterDomainError::DomainAlreadyExistsFault(String::from(
+                        error_message,
+                    ))
                 }
+                "LimitExceededFault" => {
+                    return RegisterDomainError::LimitExceededFault(String::from(error_message))
+                }
+                "OperationNotPermittedFault" => {
+                    return RegisterDomainError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RegisterDomainError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RegisterDomainError::Unknown(String::from(body)),
         }
+        return RegisterDomainError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RegisterDomainError {
     fn from(err: serde_json::error::Error) -> RegisterDomainError {
-        RegisterDomainError::Unknown(err.description().to_string())
+        RegisterDomainError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RegisterDomainError {
@@ -4734,7 +4789,8 @@ impl Error for RegisterDomainError {
             RegisterDomainError::Validation(ref cause) => cause,
             RegisterDomainError::Credentials(ref err) => err.description(),
             RegisterDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RegisterDomainError::Unknown(ref cause) => cause,
+            RegisterDomainError::ParseError(ref cause) => cause,
+            RegisterDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4755,52 +4811,58 @@ pub enum RegisterWorkflowTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterWorkflowTypeError {
-    pub fn from_body(body: &str) -> RegisterWorkflowTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterWorkflowTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "LimitExceededFault" => {
-                        RegisterWorkflowTypeError::LimitExceededFault(String::from(error_message))
-                    }
-                    "OperationNotPermittedFault" => {
-                        RegisterWorkflowTypeError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TypeAlreadyExistsFault" => RegisterWorkflowTypeError::TypeAlreadyExistsFault(
-                        String::from(error_message),
-                    ),
-                    "UnknownResourceFault" => {
-                        RegisterWorkflowTypeError::UnknownResourceFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RegisterWorkflowTypeError::Validation(error_message.to_string())
-                    }
-                    _ => RegisterWorkflowTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "LimitExceededFault" => {
+                    return RegisterWorkflowTypeError::LimitExceededFault(String::from(
+                        error_message,
+                    ))
                 }
+                "OperationNotPermittedFault" => {
+                    return RegisterWorkflowTypeError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
+                }
+                "TypeAlreadyExistsFault" => {
+                    return RegisterWorkflowTypeError::TypeAlreadyExistsFault(String::from(
+                        error_message,
+                    ))
+                }
+                "UnknownResourceFault" => {
+                    return RegisterWorkflowTypeError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RegisterWorkflowTypeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RegisterWorkflowTypeError::Unknown(String::from(body)),
         }
+        return RegisterWorkflowTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RegisterWorkflowTypeError {
     fn from(err: serde_json::error::Error) -> RegisterWorkflowTypeError {
-        RegisterWorkflowTypeError::Unknown(err.description().to_string())
+        RegisterWorkflowTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RegisterWorkflowTypeError {
@@ -4835,7 +4897,8 @@ impl Error for RegisterWorkflowTypeError {
             RegisterWorkflowTypeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RegisterWorkflowTypeError::Unknown(ref cause) => cause,
+            RegisterWorkflowTypeError::ParseError(ref cause) => cause,
+            RegisterWorkflowTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4852,48 +4915,50 @@ pub enum RequestCancelWorkflowExecutionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RequestCancelWorkflowExecutionError {
-    pub fn from_body(body: &str) -> RequestCancelWorkflowExecutionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RequestCancelWorkflowExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        RequestCancelWorkflowExecutionError::OperationNotPermittedFault(
-                            String::from(error_message),
-                        )
-                    }
-                    "UnknownResourceFault" => {
-                        RequestCancelWorkflowExecutionError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        RequestCancelWorkflowExecutionError::Validation(error_message.to_string())
-                    }
-                    _ => RequestCancelWorkflowExecutionError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return RequestCancelWorkflowExecutionError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    )
                 }
+                "UnknownResourceFault" => {
+                    return RequestCancelWorkflowExecutionError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RequestCancelWorkflowExecutionError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => RequestCancelWorkflowExecutionError::Unknown(String::from(body)),
         }
+        return RequestCancelWorkflowExecutionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RequestCancelWorkflowExecutionError {
     fn from(err: serde_json::error::Error) -> RequestCancelWorkflowExecutionError {
-        RequestCancelWorkflowExecutionError::Unknown(err.description().to_string())
+        RequestCancelWorkflowExecutionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RequestCancelWorkflowExecutionError {
@@ -4926,7 +4991,8 @@ impl Error for RequestCancelWorkflowExecutionError {
             RequestCancelWorkflowExecutionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RequestCancelWorkflowExecutionError::Unknown(ref cause) => cause,
+            RequestCancelWorkflowExecutionError::ParseError(ref cause) => cause,
+            RequestCancelWorkflowExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4943,48 +5009,48 @@ pub enum RespondActivityTaskCanceledError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RespondActivityTaskCanceledError {
-    pub fn from_body(body: &str) -> RespondActivityTaskCanceledError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RespondActivityTaskCanceledError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        RespondActivityTaskCanceledError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        RespondActivityTaskCanceledError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        RespondActivityTaskCanceledError::Validation(error_message.to_string())
-                    }
-                    _ => RespondActivityTaskCanceledError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return RespondActivityTaskCanceledError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    )
                 }
+                "UnknownResourceFault" => {
+                    return RespondActivityTaskCanceledError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RespondActivityTaskCanceledError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RespondActivityTaskCanceledError::Unknown(String::from(body)),
         }
+        return RespondActivityTaskCanceledError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RespondActivityTaskCanceledError {
     fn from(err: serde_json::error::Error) -> RespondActivityTaskCanceledError {
-        RespondActivityTaskCanceledError::Unknown(err.description().to_string())
+        RespondActivityTaskCanceledError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RespondActivityTaskCanceledError {
@@ -5017,7 +5083,8 @@ impl Error for RespondActivityTaskCanceledError {
             RespondActivityTaskCanceledError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RespondActivityTaskCanceledError::Unknown(ref cause) => cause,
+            RespondActivityTaskCanceledError::ParseError(ref cause) => cause,
+            RespondActivityTaskCanceledError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5034,48 +5101,48 @@ pub enum RespondActivityTaskCompletedError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RespondActivityTaskCompletedError {
-    pub fn from_body(body: &str) -> RespondActivityTaskCompletedError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RespondActivityTaskCompletedError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        RespondActivityTaskCompletedError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        RespondActivityTaskCompletedError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        RespondActivityTaskCompletedError::Validation(error_message.to_string())
-                    }
-                    _ => RespondActivityTaskCompletedError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return RespondActivityTaskCompletedError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    )
                 }
+                "UnknownResourceFault" => {
+                    return RespondActivityTaskCompletedError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RespondActivityTaskCompletedError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RespondActivityTaskCompletedError::Unknown(String::from(body)),
         }
+        return RespondActivityTaskCompletedError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RespondActivityTaskCompletedError {
     fn from(err: serde_json::error::Error) -> RespondActivityTaskCompletedError {
-        RespondActivityTaskCompletedError::Unknown(err.description().to_string())
+        RespondActivityTaskCompletedError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RespondActivityTaskCompletedError {
@@ -5108,7 +5175,8 @@ impl Error for RespondActivityTaskCompletedError {
             RespondActivityTaskCompletedError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RespondActivityTaskCompletedError::Unknown(ref cause) => cause,
+            RespondActivityTaskCompletedError::ParseError(ref cause) => cause,
+            RespondActivityTaskCompletedError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5125,46 +5193,48 @@ pub enum RespondActivityTaskFailedError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RespondActivityTaskFailedError {
-    pub fn from_body(body: &str) -> RespondActivityTaskFailedError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RespondActivityTaskFailedError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        RespondActivityTaskFailedError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => RespondActivityTaskFailedError::UnknownResourceFault(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        RespondActivityTaskFailedError::Validation(error_message.to_string())
-                    }
-                    _ => RespondActivityTaskFailedError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return RespondActivityTaskFailedError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "UnknownResourceFault" => {
+                    return RespondActivityTaskFailedError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RespondActivityTaskFailedError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RespondActivityTaskFailedError::Unknown(String::from(body)),
         }
+        return RespondActivityTaskFailedError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RespondActivityTaskFailedError {
     fn from(err: serde_json::error::Error) -> RespondActivityTaskFailedError {
-        RespondActivityTaskFailedError::Unknown(err.description().to_string())
+        RespondActivityTaskFailedError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RespondActivityTaskFailedError {
@@ -5197,7 +5267,8 @@ impl Error for RespondActivityTaskFailedError {
             RespondActivityTaskFailedError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RespondActivityTaskFailedError::Unknown(ref cause) => cause,
+            RespondActivityTaskFailedError::ParseError(ref cause) => cause,
+            RespondActivityTaskFailedError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5214,48 +5285,48 @@ pub enum RespondDecisionTaskCompletedError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RespondDecisionTaskCompletedError {
-    pub fn from_body(body: &str) -> RespondDecisionTaskCompletedError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RespondDecisionTaskCompletedError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        RespondDecisionTaskCompletedError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        RespondDecisionTaskCompletedError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        RespondDecisionTaskCompletedError::Validation(error_message.to_string())
-                    }
-                    _ => RespondDecisionTaskCompletedError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return RespondDecisionTaskCompletedError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    )
                 }
+                "UnknownResourceFault" => {
+                    return RespondDecisionTaskCompletedError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RespondDecisionTaskCompletedError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RespondDecisionTaskCompletedError::Unknown(String::from(body)),
         }
+        return RespondDecisionTaskCompletedError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RespondDecisionTaskCompletedError {
     fn from(err: serde_json::error::Error) -> RespondDecisionTaskCompletedError {
-        RespondDecisionTaskCompletedError::Unknown(err.description().to_string())
+        RespondDecisionTaskCompletedError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RespondDecisionTaskCompletedError {
@@ -5288,7 +5359,8 @@ impl Error for RespondDecisionTaskCompletedError {
             RespondDecisionTaskCompletedError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RespondDecisionTaskCompletedError::Unknown(ref cause) => cause,
+            RespondDecisionTaskCompletedError::ParseError(ref cause) => cause,
+            RespondDecisionTaskCompletedError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5305,46 +5377,48 @@ pub enum SignalWorkflowExecutionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SignalWorkflowExecutionError {
-    pub fn from_body(body: &str) -> SignalWorkflowExecutionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SignalWorkflowExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        SignalWorkflowExecutionError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => SignalWorkflowExecutionError::UnknownResourceFault(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        SignalWorkflowExecutionError::Validation(error_message.to_string())
-                    }
-                    _ => SignalWorkflowExecutionError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return SignalWorkflowExecutionError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "UnknownResourceFault" => {
+                    return SignalWorkflowExecutionError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return SignalWorkflowExecutionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SignalWorkflowExecutionError::Unknown(String::from(body)),
         }
+        return SignalWorkflowExecutionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SignalWorkflowExecutionError {
     fn from(err: serde_json::error::Error) -> SignalWorkflowExecutionError {
-        SignalWorkflowExecutionError::Unknown(err.description().to_string())
+        SignalWorkflowExecutionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SignalWorkflowExecutionError {
@@ -5377,7 +5451,8 @@ impl Error for SignalWorkflowExecutionError {
             SignalWorkflowExecutionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SignalWorkflowExecutionError::Unknown(ref cause) => cause,
+            SignalWorkflowExecutionError::ParseError(ref cause) => cause,
+            SignalWorkflowExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5402,60 +5477,68 @@ pub enum StartWorkflowExecutionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartWorkflowExecutionError {
-    pub fn from_body(body: &str) -> StartWorkflowExecutionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartWorkflowExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DefaultUndefinedFault" => StartWorkflowExecutionError::DefaultUndefinedFault(
-                        String::from(error_message),
-                    ),
-                    "LimitExceededFault" => {
-                        StartWorkflowExecutionError::LimitExceededFault(String::from(error_message))
-                    }
-                    "OperationNotPermittedFault" => {
-                        StartWorkflowExecutionError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TypeDeprecatedFault" => StartWorkflowExecutionError::TypeDeprecatedFault(
-                        String::from(error_message),
-                    ),
-                    "UnknownResourceFault" => StartWorkflowExecutionError::UnknownResourceFault(
-                        String::from(error_message),
-                    ),
-                    "WorkflowExecutionAlreadyStartedFault" => {
-                        StartWorkflowExecutionError::WorkflowExecutionAlreadyStartedFault(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        StartWorkflowExecutionError::Validation(error_message.to_string())
-                    }
-                    _ => StartWorkflowExecutionError::Unknown(String::from(body)),
+            match *error_type {
+                "DefaultUndefinedFault" => {
+                    return StartWorkflowExecutionError::DefaultUndefinedFault(String::from(
+                        error_message,
+                    ))
                 }
+                "LimitExceededFault" => {
+                    return StartWorkflowExecutionError::LimitExceededFault(String::from(
+                        error_message,
+                    ))
+                }
+                "OperationNotPermittedFault" => {
+                    return StartWorkflowExecutionError::OperationNotPermittedFault(String::from(
+                        error_message,
+                    ))
+                }
+                "TypeDeprecatedFault" => {
+                    return StartWorkflowExecutionError::TypeDeprecatedFault(String::from(
+                        error_message,
+                    ))
+                }
+                "UnknownResourceFault" => {
+                    return StartWorkflowExecutionError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "WorkflowExecutionAlreadyStartedFault" => {
+                    return StartWorkflowExecutionError::WorkflowExecutionAlreadyStartedFault(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return StartWorkflowExecutionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartWorkflowExecutionError::Unknown(String::from(body)),
         }
+        return StartWorkflowExecutionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartWorkflowExecutionError {
     fn from(err: serde_json::error::Error) -> StartWorkflowExecutionError {
-        StartWorkflowExecutionError::Unknown(err.description().to_string())
+        StartWorkflowExecutionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartWorkflowExecutionError {
@@ -5492,7 +5575,8 @@ impl Error for StartWorkflowExecutionError {
             StartWorkflowExecutionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartWorkflowExecutionError::Unknown(ref cause) => cause,
+            StartWorkflowExecutionError::ParseError(ref cause) => cause,
+            StartWorkflowExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5509,48 +5593,48 @@ pub enum TerminateWorkflowExecutionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TerminateWorkflowExecutionError {
-    pub fn from_body(body: &str) -> TerminateWorkflowExecutionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TerminateWorkflowExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "OperationNotPermittedFault" => {
-                        TerminateWorkflowExecutionError::OperationNotPermittedFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnknownResourceFault" => {
-                        TerminateWorkflowExecutionError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        TerminateWorkflowExecutionError::Validation(error_message.to_string())
-                    }
-                    _ => TerminateWorkflowExecutionError::Unknown(String::from(body)),
+            match *error_type {
+                "OperationNotPermittedFault" => {
+                    return TerminateWorkflowExecutionError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    )
                 }
+                "UnknownResourceFault" => {
+                    return TerminateWorkflowExecutionError::UnknownResourceFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return TerminateWorkflowExecutionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TerminateWorkflowExecutionError::Unknown(String::from(body)),
         }
+        return TerminateWorkflowExecutionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TerminateWorkflowExecutionError {
     fn from(err: serde_json::error::Error) -> TerminateWorkflowExecutionError {
-        TerminateWorkflowExecutionError::Unknown(err.description().to_string())
+        TerminateWorkflowExecutionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TerminateWorkflowExecutionError {
@@ -5583,7 +5667,8 @@ impl Error for TerminateWorkflowExecutionError {
             TerminateWorkflowExecutionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            TerminateWorkflowExecutionError::Unknown(ref cause) => cause,
+            TerminateWorkflowExecutionError::ParseError(ref cause) => cause,
+            TerminateWorkflowExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5831,13 +5916,12 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<WorkflowExecutionCount>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CountClosedWorkflowExecutionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CountClosedWorkflowExecutionsError::from_response(response))
                 }))
             }
         })
@@ -5869,13 +5953,12 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<WorkflowExecutionCount>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CountOpenWorkflowExecutionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CountOpenWorkflowExecutionsError::from_response(response))
                 }))
             }
         })
@@ -5907,13 +5990,12 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<PendingTaskCount>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CountPendingActivityTasksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CountPendingActivityTasksError::from_response(response))
                 }))
             }
         })
@@ -5945,13 +6027,12 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<PendingTaskCount>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CountPendingDecisionTasksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CountPendingDecisionTasksError::from_response(response))
                 }))
             }
         })
@@ -5976,11 +6057,11 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeprecateActivityTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeprecateActivityTypeError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6001,11 +6082,12 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeprecateDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeprecateDomainError::from_response(response))),
+                )
             }
         })
     }
@@ -6029,11 +6111,11 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeprecateWorkflowTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeprecateWorkflowTypeError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6061,14 +6143,15 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<ActivityTypeDetail>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeActivityTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeActivityTypeError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6096,14 +6179,16 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<DomainDetail>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeDomainError::from_response(response))),
+                )
             }
         })
     }
@@ -6134,13 +6219,12 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<WorkflowExecutionDetail>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeWorkflowExecutionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeWorkflowExecutionError::from_response(response))
                 }))
             }
         })
@@ -6169,14 +6253,15 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<WorkflowTypeDetail>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeWorkflowTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeWorkflowTypeError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6210,9 +6295,7 @@ impl Swf for SwfClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetWorkflowExecutionHistoryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetWorkflowExecutionHistoryError::from_response(response))
                 }))
             }
         })
@@ -6241,14 +6324,16 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<ActivityTypeInfos>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListActivityTypesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListActivityTypesError::from_response(response))),
+                )
             }
         })
     }
@@ -6279,13 +6364,12 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<WorkflowExecutionInfos>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListClosedWorkflowExecutionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListClosedWorkflowExecutionsError::from_response(response))
                 }))
             }
         })
@@ -6311,14 +6395,16 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<DomainInfos>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDomainsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListDomainsError::from_response(response))),
+                )
             }
         })
     }
@@ -6349,13 +6435,12 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<WorkflowExecutionInfos>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListOpenWorkflowExecutionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListOpenWorkflowExecutionsError::from_response(response))
                 }))
             }
         })
@@ -6384,14 +6469,16 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<WorkflowTypeInfos>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListWorkflowTypesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListWorkflowTypesError::from_response(response))),
+                )
             }
         })
     }
@@ -6419,14 +6506,15 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<ActivityTask>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PollForActivityTaskError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PollForActivityTaskError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6454,14 +6542,15 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<DecisionTask>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PollForDecisionTaskError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PollForDecisionTaskError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6492,13 +6581,12 @@ impl Swf for SwfClient {
 
                     serde_json::from_str::<ActivityTaskStatus>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RecordActivityTaskHeartbeatError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RecordActivityTaskHeartbeatError::from_response(response))
                 }))
             }
         })
@@ -6520,11 +6608,11 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterActivityTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RegisterActivityTypeError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6542,11 +6630,12 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RegisterDomainError::from_response(response))),
+                )
             }
         })
     }
@@ -6567,11 +6656,11 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterWorkflowTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RegisterWorkflowTypeError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6596,9 +6685,7 @@ impl Swf for SwfClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RequestCancelWorkflowExecutionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RequestCancelWorkflowExecutionError::from_response(response))
                 }))
             }
         })
@@ -6624,9 +6711,7 @@ impl Swf for SwfClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RespondActivityTaskCanceledError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RespondActivityTaskCanceledError::from_response(response))
                 }))
             }
         })
@@ -6652,9 +6737,7 @@ impl Swf for SwfClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RespondActivityTaskCompletedError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RespondActivityTaskCompletedError::from_response(response))
                 }))
             }
         })
@@ -6680,9 +6763,7 @@ impl Swf for SwfClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RespondActivityTaskFailedError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RespondActivityTaskFailedError::from_response(response))
                 }))
             }
         })
@@ -6708,9 +6789,7 @@ impl Swf for SwfClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RespondDecisionTaskCompletedError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RespondDecisionTaskCompletedError::from_response(response))
                 }))
             }
         })
@@ -6736,9 +6815,7 @@ impl Swf for SwfClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SignalWorkflowExecutionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SignalWorkflowExecutionError::from_response(response))
                 }))
             }
         })
@@ -6772,11 +6849,11 @@ impl Swf for SwfClient {
                         .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartWorkflowExecutionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartWorkflowExecutionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6801,9 +6878,7 @@ impl Swf for SwfClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TerminateWorkflowExecutionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(TerminateWorkflowExecutionError::from_response(response))
                 }))
             }
         })

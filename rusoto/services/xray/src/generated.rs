@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>An alias for an edge.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -689,44 +689,44 @@ pub enum BatchGetTracesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetTracesError {
-    pub fn from_body(body: &str) -> BatchGetTracesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> BatchGetTracesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidRequestException" => {
-                        BatchGetTracesError::InvalidRequest(String::from(error_message))
-                    }
-                    "ThrottledException" => {
-                        BatchGetTracesError::Throttled(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        BatchGetTracesError::Validation(error_message.to_string())
-                    }
-                    _ => BatchGetTracesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidRequestException" => {
+                    return BatchGetTracesError::InvalidRequest(String::from(error_message))
                 }
+                "ThrottledException" => {
+                    return BatchGetTracesError::Throttled(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return BatchGetTracesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => BatchGetTracesError::Unknown(String::from(body)),
         }
+        return BatchGetTracesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for BatchGetTracesError {
     fn from(err: serde_json::error::Error) -> BatchGetTracesError {
-        BatchGetTracesError::Unknown(err.description().to_string())
+        BatchGetTracesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for BatchGetTracesError {
@@ -757,7 +757,8 @@ impl Error for BatchGetTracesError {
             BatchGetTracesError::Validation(ref cause) => cause,
             BatchGetTracesError::Credentials(ref err) => err.description(),
             BatchGetTracesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchGetTracesError::Unknown(ref cause) => cause,
+            BatchGetTracesError::ParseError(ref cause) => cause,
+            BatchGetTracesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -774,44 +775,44 @@ pub enum GetEncryptionConfigError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetEncryptionConfigError {
-    pub fn from_body(body: &str) -> GetEncryptionConfigError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetEncryptionConfigError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidRequestException" => {
-                        GetEncryptionConfigError::InvalidRequest(String::from(error_message))
-                    }
-                    "ThrottledException" => {
-                        GetEncryptionConfigError::Throttled(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetEncryptionConfigError::Validation(error_message.to_string())
-                    }
-                    _ => GetEncryptionConfigError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidRequestException" => {
+                    return GetEncryptionConfigError::InvalidRequest(String::from(error_message))
                 }
+                "ThrottledException" => {
+                    return GetEncryptionConfigError::Throttled(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetEncryptionConfigError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetEncryptionConfigError::Unknown(String::from(body)),
         }
+        return GetEncryptionConfigError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetEncryptionConfigError {
     fn from(err: serde_json::error::Error) -> GetEncryptionConfigError {
-        GetEncryptionConfigError::Unknown(err.description().to_string())
+        GetEncryptionConfigError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetEncryptionConfigError {
@@ -844,7 +845,8 @@ impl Error for GetEncryptionConfigError {
             GetEncryptionConfigError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetEncryptionConfigError::Unknown(ref cause) => cause,
+            GetEncryptionConfigError::ParseError(ref cause) => cause,
+            GetEncryptionConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -861,44 +863,44 @@ pub enum GetServiceGraphError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetServiceGraphError {
-    pub fn from_body(body: &str) -> GetServiceGraphError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetServiceGraphError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidRequestException" => {
-                        GetServiceGraphError::InvalidRequest(String::from(error_message))
-                    }
-                    "ThrottledException" => {
-                        GetServiceGraphError::Throttled(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetServiceGraphError::Validation(error_message.to_string())
-                    }
-                    _ => GetServiceGraphError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidRequestException" => {
+                    return GetServiceGraphError::InvalidRequest(String::from(error_message))
                 }
+                "ThrottledException" => {
+                    return GetServiceGraphError::Throttled(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetServiceGraphError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetServiceGraphError::Unknown(String::from(body)),
         }
+        return GetServiceGraphError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetServiceGraphError {
     fn from(err: serde_json::error::Error) -> GetServiceGraphError {
-        GetServiceGraphError::Unknown(err.description().to_string())
+        GetServiceGraphError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetServiceGraphError {
@@ -929,7 +931,8 @@ impl Error for GetServiceGraphError {
             GetServiceGraphError::Validation(ref cause) => cause,
             GetServiceGraphError::Credentials(ref err) => err.description(),
             GetServiceGraphError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetServiceGraphError::Unknown(ref cause) => cause,
+            GetServiceGraphError::ParseError(ref cause) => cause,
+            GetServiceGraphError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -946,44 +949,44 @@ pub enum GetTraceGraphError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetTraceGraphError {
-    pub fn from_body(body: &str) -> GetTraceGraphError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetTraceGraphError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidRequestException" => {
-                        GetTraceGraphError::InvalidRequest(String::from(error_message))
-                    }
-                    "ThrottledException" => {
-                        GetTraceGraphError::Throttled(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetTraceGraphError::Validation(error_message.to_string())
-                    }
-                    _ => GetTraceGraphError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidRequestException" => {
+                    return GetTraceGraphError::InvalidRequest(String::from(error_message))
                 }
+                "ThrottledException" => {
+                    return GetTraceGraphError::Throttled(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetTraceGraphError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetTraceGraphError::Unknown(String::from(body)),
         }
+        return GetTraceGraphError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetTraceGraphError {
     fn from(err: serde_json::error::Error) -> GetTraceGraphError {
-        GetTraceGraphError::Unknown(err.description().to_string())
+        GetTraceGraphError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetTraceGraphError {
@@ -1014,7 +1017,8 @@ impl Error for GetTraceGraphError {
             GetTraceGraphError::Validation(ref cause) => cause,
             GetTraceGraphError::Credentials(ref err) => err.description(),
             GetTraceGraphError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTraceGraphError::Unknown(ref cause) => cause,
+            GetTraceGraphError::ParseError(ref cause) => cause,
+            GetTraceGraphError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1031,44 +1035,44 @@ pub enum GetTraceSummariesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetTraceSummariesError {
-    pub fn from_body(body: &str) -> GetTraceSummariesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetTraceSummariesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidRequestException" => {
-                        GetTraceSummariesError::InvalidRequest(String::from(error_message))
-                    }
-                    "ThrottledException" => {
-                        GetTraceSummariesError::Throttled(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetTraceSummariesError::Validation(error_message.to_string())
-                    }
-                    _ => GetTraceSummariesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidRequestException" => {
+                    return GetTraceSummariesError::InvalidRequest(String::from(error_message))
                 }
+                "ThrottledException" => {
+                    return GetTraceSummariesError::Throttled(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetTraceSummariesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetTraceSummariesError::Unknown(String::from(body)),
         }
+        return GetTraceSummariesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetTraceSummariesError {
     fn from(err: serde_json::error::Error) -> GetTraceSummariesError {
-        GetTraceSummariesError::Unknown(err.description().to_string())
+        GetTraceSummariesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetTraceSummariesError {
@@ -1101,7 +1105,8 @@ impl Error for GetTraceSummariesError {
             GetTraceSummariesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetTraceSummariesError::Unknown(ref cause) => cause,
+            GetTraceSummariesError::ParseError(ref cause) => cause,
+            GetTraceSummariesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1118,44 +1123,44 @@ pub enum PutEncryptionConfigError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutEncryptionConfigError {
-    pub fn from_body(body: &str) -> PutEncryptionConfigError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutEncryptionConfigError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidRequestException" => {
-                        PutEncryptionConfigError::InvalidRequest(String::from(error_message))
-                    }
-                    "ThrottledException" => {
-                        PutEncryptionConfigError::Throttled(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutEncryptionConfigError::Validation(error_message.to_string())
-                    }
-                    _ => PutEncryptionConfigError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidRequestException" => {
+                    return PutEncryptionConfigError::InvalidRequest(String::from(error_message))
                 }
+                "ThrottledException" => {
+                    return PutEncryptionConfigError::Throttled(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutEncryptionConfigError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutEncryptionConfigError::Unknown(String::from(body)),
         }
+        return PutEncryptionConfigError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutEncryptionConfigError {
     fn from(err: serde_json::error::Error) -> PutEncryptionConfigError {
-        PutEncryptionConfigError::Unknown(err.description().to_string())
+        PutEncryptionConfigError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutEncryptionConfigError {
@@ -1188,7 +1193,8 @@ impl Error for PutEncryptionConfigError {
             PutEncryptionConfigError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutEncryptionConfigError::Unknown(ref cause) => cause,
+            PutEncryptionConfigError::ParseError(ref cause) => cause,
+            PutEncryptionConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1205,44 +1211,44 @@ pub enum PutTelemetryRecordsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutTelemetryRecordsError {
-    pub fn from_body(body: &str) -> PutTelemetryRecordsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutTelemetryRecordsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidRequestException" => {
-                        PutTelemetryRecordsError::InvalidRequest(String::from(error_message))
-                    }
-                    "ThrottledException" => {
-                        PutTelemetryRecordsError::Throttled(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutTelemetryRecordsError::Validation(error_message.to_string())
-                    }
-                    _ => PutTelemetryRecordsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidRequestException" => {
+                    return PutTelemetryRecordsError::InvalidRequest(String::from(error_message))
                 }
+                "ThrottledException" => {
+                    return PutTelemetryRecordsError::Throttled(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutTelemetryRecordsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutTelemetryRecordsError::Unknown(String::from(body)),
         }
+        return PutTelemetryRecordsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutTelemetryRecordsError {
     fn from(err: serde_json::error::Error) -> PutTelemetryRecordsError {
-        PutTelemetryRecordsError::Unknown(err.description().to_string())
+        PutTelemetryRecordsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutTelemetryRecordsError {
@@ -1275,7 +1281,8 @@ impl Error for PutTelemetryRecordsError {
             PutTelemetryRecordsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutTelemetryRecordsError::Unknown(ref cause) => cause,
+            PutTelemetryRecordsError::ParseError(ref cause) => cause,
+            PutTelemetryRecordsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1292,44 +1299,44 @@ pub enum PutTraceSegmentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutTraceSegmentsError {
-    pub fn from_body(body: &str) -> PutTraceSegmentsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutTraceSegmentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidRequestException" => {
-                        PutTraceSegmentsError::InvalidRequest(String::from(error_message))
-                    }
-                    "ThrottledException" => {
-                        PutTraceSegmentsError::Throttled(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutTraceSegmentsError::Validation(error_message.to_string())
-                    }
-                    _ => PutTraceSegmentsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidRequestException" => {
+                    return PutTraceSegmentsError::InvalidRequest(String::from(error_message))
                 }
+                "ThrottledException" => {
+                    return PutTraceSegmentsError::Throttled(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutTraceSegmentsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutTraceSegmentsError::Unknown(String::from(body)),
         }
+        return PutTraceSegmentsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutTraceSegmentsError {
     fn from(err: serde_json::error::Error) -> PutTraceSegmentsError {
-        PutTraceSegmentsError::Unknown(err.description().to_string())
+        PutTraceSegmentsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutTraceSegmentsError {
@@ -1360,7 +1367,8 @@ impl Error for PutTraceSegmentsError {
             PutTraceSegmentsError::Validation(ref cause) => cause,
             PutTraceSegmentsError::Credentials(ref err) => err.description(),
             PutTraceSegmentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutTraceSegmentsError::Unknown(ref cause) => cause,
+            PutTraceSegmentsError::ParseError(ref cause) => cause,
+            PutTraceSegmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1478,11 +1486,12 @@ impl XRay for XRayClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchGetTracesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchGetTracesError::from_response(response))),
+                )
             }
         })
     }
@@ -1513,11 +1522,11 @@ impl XRay for XRayClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetEncryptionConfigError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetEncryptionConfigError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1551,11 +1560,12 @@ impl XRay for XRayClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetServiceGraphError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetServiceGraphError::from_response(response))),
+                )
             }
         })
     }
@@ -1589,11 +1599,12 @@ impl XRay for XRayClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTraceGraphError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetTraceGraphError::from_response(response))),
+                )
             }
         })
     }
@@ -1627,11 +1638,12 @@ impl XRay for XRayClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetTraceSummariesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetTraceSummariesError::from_response(response))),
+                )
             }
         })
     }
@@ -1666,11 +1678,11 @@ impl XRay for XRayClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutEncryptionConfigError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutEncryptionConfigError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1705,11 +1717,11 @@ impl XRay for XRayClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutTelemetryRecordsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutTelemetryRecordsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1743,11 +1755,12 @@ impl XRay for XRayClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutTraceSegmentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutTraceSegmentsError::from_response(response))),
+                )
             }
         })
     }

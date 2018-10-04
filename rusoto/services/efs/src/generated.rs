@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -27,7 +27,7 @@ use rusoto_core::request::HttpDispatchError;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateFileSystemRequest {
@@ -384,56 +384,64 @@ pub enum CreateFileSystemError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateFileSystemError {
-    pub fn from_body(body: &str) -> CreateFileSystemError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateFileSystemError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequest" => CreateFileSystemError::BadRequest(String::from(error_message)),
-                    "FileSystemAlreadyExists" => {
-                        CreateFileSystemError::FileSystemAlreadyExists(String::from(error_message))
-                    }
-                    "FileSystemLimitExceeded" => {
-                        CreateFileSystemError::FileSystemLimitExceeded(String::from(error_message))
-                    }
-                    "InsufficientThroughputCapacity" => {
-                        CreateFileSystemError::InsufficientThroughputCapacity(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerError" => {
-                        CreateFileSystemError::InternalServerError(String::from(error_message))
-                    }
-                    "ThroughputLimitExceeded" => {
-                        CreateFileSystemError::ThroughputLimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateFileSystemError::Validation(error_message.to_string())
-                    }
-                    _ => CreateFileSystemError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequest" => {
+                    return CreateFileSystemError::BadRequest(String::from(error_message))
                 }
+                "FileSystemAlreadyExists" => {
+                    return CreateFileSystemError::FileSystemAlreadyExists(String::from(
+                        error_message,
+                    ))
+                }
+                "FileSystemLimitExceeded" => {
+                    return CreateFileSystemError::FileSystemLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "InsufficientThroughputCapacity" => {
+                    return CreateFileSystemError::InsufficientThroughputCapacity(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerError" => {
+                    return CreateFileSystemError::InternalServerError(String::from(error_message))
+                }
+                "ThroughputLimitExceeded" => {
+                    return CreateFileSystemError::ThroughputLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateFileSystemError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateFileSystemError::Unknown(String::from(body)),
         }
+        return CreateFileSystemError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateFileSystemError {
     fn from(err: serde_json::error::Error) -> CreateFileSystemError {
-        CreateFileSystemError::Unknown(err.description().to_string())
+        CreateFileSystemError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateFileSystemError {
@@ -468,7 +476,8 @@ impl Error for CreateFileSystemError {
             CreateFileSystemError::Validation(ref cause) => cause,
             CreateFileSystemError::Credentials(ref err) => err.description(),
             CreateFileSystemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateFileSystemError::Unknown(ref cause) => cause,
+            CreateFileSystemError::ParseError(ref cause) => cause,
+            CreateFileSystemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -505,80 +514,86 @@ pub enum CreateMountTargetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateMountTargetError {
-    pub fn from_body(body: &str) -> CreateMountTargetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateMountTargetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequest" => CreateMountTargetError::BadRequest(String::from(error_message)),
-                    "FileSystemNotFound" => {
-                        CreateMountTargetError::FileSystemNotFound(String::from(error_message))
-                    }
-                    "IncorrectFileSystemLifeCycleState" => {
-                        CreateMountTargetError::IncorrectFileSystemLifeCycleState(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerError" => {
-                        CreateMountTargetError::InternalServerError(String::from(error_message))
-                    }
-                    "IpAddressInUse" => {
-                        CreateMountTargetError::IpAddressInUse(String::from(error_message))
-                    }
-                    "MountTargetConflict" => {
-                        CreateMountTargetError::MountTargetConflict(String::from(error_message))
-                    }
-                    "NetworkInterfaceLimitExceeded" => {
-                        CreateMountTargetError::NetworkInterfaceLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoFreeAddressesInSubnet" => {
-                        CreateMountTargetError::NoFreeAddressesInSubnet(String::from(error_message))
-                    }
-                    "SecurityGroupLimitExceeded" => {
-                        CreateMountTargetError::SecurityGroupLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "SecurityGroupNotFound" => {
-                        CreateMountTargetError::SecurityGroupNotFound(String::from(error_message))
-                    }
-                    "SubnetNotFound" => {
-                        CreateMountTargetError::SubnetNotFound(String::from(error_message))
-                    }
-                    "UnsupportedAvailabilityZone" => {
-                        CreateMountTargetError::UnsupportedAvailabilityZone(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateMountTargetError::Validation(error_message.to_string())
-                    }
-                    _ => CreateMountTargetError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequest" => {
+                    return CreateMountTargetError::BadRequest(String::from(error_message))
                 }
+                "FileSystemNotFound" => {
+                    return CreateMountTargetError::FileSystemNotFound(String::from(error_message))
+                }
+                "IncorrectFileSystemLifeCycleState" => {
+                    return CreateMountTargetError::IncorrectFileSystemLifeCycleState(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerError" => {
+                    return CreateMountTargetError::InternalServerError(String::from(error_message))
+                }
+                "IpAddressInUse" => {
+                    return CreateMountTargetError::IpAddressInUse(String::from(error_message))
+                }
+                "MountTargetConflict" => {
+                    return CreateMountTargetError::MountTargetConflict(String::from(error_message))
+                }
+                "NetworkInterfaceLimitExceeded" => {
+                    return CreateMountTargetError::NetworkInterfaceLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "NoFreeAddressesInSubnet" => {
+                    return CreateMountTargetError::NoFreeAddressesInSubnet(String::from(
+                        error_message,
+                    ))
+                }
+                "SecurityGroupLimitExceeded" => {
+                    return CreateMountTargetError::SecurityGroupLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "SecurityGroupNotFound" => {
+                    return CreateMountTargetError::SecurityGroupNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "SubnetNotFound" => {
+                    return CreateMountTargetError::SubnetNotFound(String::from(error_message))
+                }
+                "UnsupportedAvailabilityZone" => {
+                    return CreateMountTargetError::UnsupportedAvailabilityZone(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateMountTargetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateMountTargetError::Unknown(String::from(body)),
         }
+        return CreateMountTargetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateMountTargetError {
     fn from(err: serde_json::error::Error) -> CreateMountTargetError {
-        CreateMountTargetError::Unknown(err.description().to_string())
+        CreateMountTargetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateMountTargetError {
@@ -621,7 +636,8 @@ impl Error for CreateMountTargetError {
             CreateMountTargetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateMountTargetError::Unknown(ref cause) => cause,
+            CreateMountTargetError::ParseError(ref cause) => cause,
+            CreateMountTargetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -640,43 +656,45 @@ pub enum CreateTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTagsError {
-    pub fn from_body(body: &str) -> CreateTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequest" => CreateTagsError::BadRequest(String::from(error_message)),
-                    "FileSystemNotFound" => {
-                        CreateTagsError::FileSystemNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        CreateTagsError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => CreateTagsError::Validation(error_message.to_string()),
-                    _ => CreateTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequest" => return CreateTagsError::BadRequest(String::from(error_message)),
+                "FileSystemNotFound" => {
+                    return CreateTagsError::FileSystemNotFound(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return CreateTagsError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateTagsError::Unknown(String::from(body)),
         }
+        return CreateTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateTagsError {
     fn from(err: serde_json::error::Error) -> CreateTagsError {
-        CreateTagsError::Unknown(err.description().to_string())
+        CreateTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateTagsError {
@@ -708,7 +726,8 @@ impl Error for CreateTagsError {
             CreateTagsError::Validation(ref cause) => cause,
             CreateTagsError::Credentials(ref err) => err.description(),
             CreateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTagsError::Unknown(ref cause) => cause,
+            CreateTagsError::ParseError(ref cause) => cause,
+            CreateTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -729,48 +748,50 @@ pub enum DeleteFileSystemError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFileSystemError {
-    pub fn from_body(body: &str) -> DeleteFileSystemError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteFileSystemError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequest" => DeleteFileSystemError::BadRequest(String::from(error_message)),
-                    "FileSystemInUse" => {
-                        DeleteFileSystemError::FileSystemInUse(String::from(error_message))
-                    }
-                    "FileSystemNotFound" => {
-                        DeleteFileSystemError::FileSystemNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DeleteFileSystemError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteFileSystemError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteFileSystemError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequest" => {
+                    return DeleteFileSystemError::BadRequest(String::from(error_message))
                 }
+                "FileSystemInUse" => {
+                    return DeleteFileSystemError::FileSystemInUse(String::from(error_message))
+                }
+                "FileSystemNotFound" => {
+                    return DeleteFileSystemError::FileSystemNotFound(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return DeleteFileSystemError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteFileSystemError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteFileSystemError::Unknown(String::from(body)),
         }
+        return DeleteFileSystemError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteFileSystemError {
     fn from(err: serde_json::error::Error) -> DeleteFileSystemError {
-        DeleteFileSystemError::Unknown(err.description().to_string())
+        DeleteFileSystemError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteFileSystemError {
@@ -803,7 +824,8 @@ impl Error for DeleteFileSystemError {
             DeleteFileSystemError::Validation(ref cause) => cause,
             DeleteFileSystemError::Credentials(ref err) => err.description(),
             DeleteFileSystemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFileSystemError::Unknown(ref cause) => cause,
+            DeleteFileSystemError::ParseError(ref cause) => cause,
+            DeleteFileSystemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -824,48 +846,50 @@ pub enum DeleteMountTargetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteMountTargetError {
-    pub fn from_body(body: &str) -> DeleteMountTargetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteMountTargetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequest" => DeleteMountTargetError::BadRequest(String::from(error_message)),
-                    "DependencyTimeout" => {
-                        DeleteMountTargetError::DependencyTimeout(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DeleteMountTargetError::InternalServerError(String::from(error_message))
-                    }
-                    "MountTargetNotFound" => {
-                        DeleteMountTargetError::MountTargetNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteMountTargetError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteMountTargetError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequest" => {
+                    return DeleteMountTargetError::BadRequest(String::from(error_message))
                 }
+                "DependencyTimeout" => {
+                    return DeleteMountTargetError::DependencyTimeout(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return DeleteMountTargetError::InternalServerError(String::from(error_message))
+                }
+                "MountTargetNotFound" => {
+                    return DeleteMountTargetError::MountTargetNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteMountTargetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteMountTargetError::Unknown(String::from(body)),
         }
+        return DeleteMountTargetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteMountTargetError {
     fn from(err: serde_json::error::Error) -> DeleteMountTargetError {
-        DeleteMountTargetError::Unknown(err.description().to_string())
+        DeleteMountTargetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteMountTargetError {
@@ -900,7 +924,8 @@ impl Error for DeleteMountTargetError {
             DeleteMountTargetError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteMountTargetError::Unknown(ref cause) => cause,
+            DeleteMountTargetError::ParseError(ref cause) => cause,
+            DeleteMountTargetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -919,43 +944,45 @@ pub enum DeleteTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTagsError {
-    pub fn from_body(body: &str) -> DeleteTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequest" => DeleteTagsError::BadRequest(String::from(error_message)),
-                    "FileSystemNotFound" => {
-                        DeleteTagsError::FileSystemNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DeleteTagsError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => DeleteTagsError::Validation(error_message.to_string()),
-                    _ => DeleteTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequest" => return DeleteTagsError::BadRequest(String::from(error_message)),
+                "FileSystemNotFound" => {
+                    return DeleteTagsError::FileSystemNotFound(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return DeleteTagsError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteTagsError::Unknown(String::from(body)),
         }
+        return DeleteTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteTagsError {
     fn from(err: serde_json::error::Error) -> DeleteTagsError {
-        DeleteTagsError::Unknown(err.description().to_string())
+        DeleteTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteTagsError {
@@ -987,7 +1014,8 @@ impl Error for DeleteTagsError {
             DeleteTagsError::Validation(ref cause) => cause,
             DeleteTagsError::Credentials(ref err) => err.description(),
             DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTagsError::Unknown(ref cause) => cause,
+            DeleteTagsError::ParseError(ref cause) => cause,
+            DeleteTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1006,47 +1034,49 @@ pub enum DescribeFileSystemsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeFileSystemsError {
-    pub fn from_body(body: &str) -> DescribeFileSystemsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeFileSystemsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequest" => {
-                        DescribeFileSystemsError::BadRequest(String::from(error_message))
-                    }
-                    "FileSystemNotFound" => {
-                        DescribeFileSystemsError::FileSystemNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DescribeFileSystemsError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeFileSystemsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeFileSystemsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequest" => {
+                    return DescribeFileSystemsError::BadRequest(String::from(error_message))
                 }
+                "FileSystemNotFound" => {
+                    return DescribeFileSystemsError::FileSystemNotFound(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return DescribeFileSystemsError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeFileSystemsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeFileSystemsError::Unknown(String::from(body)),
         }
+        return DescribeFileSystemsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeFileSystemsError {
     fn from(err: serde_json::error::Error) -> DescribeFileSystemsError {
-        DescribeFileSystemsError::Unknown(err.description().to_string())
+        DescribeFileSystemsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeFileSystemsError {
@@ -1080,7 +1110,8 @@ impl Error for DescribeFileSystemsError {
             DescribeFileSystemsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeFileSystemsError::Unknown(ref cause) => cause,
+            DescribeFileSystemsError::ParseError(ref cause) => cause,
+            DescribeFileSystemsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1101,56 +1132,60 @@ pub enum DescribeMountTargetSecurityGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeMountTargetSecurityGroupsError {
-    pub fn from_body(body: &str) -> DescribeMountTargetSecurityGroupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeMountTargetSecurityGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequest" => DescribeMountTargetSecurityGroupsError::BadRequest(
-                        String::from(error_message),
-                    ),
-                    "IncorrectMountTargetState" => {
-                        DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(
-                            String::from(error_message),
-                        )
-                    }
-                    "InternalServerError" => {
-                        DescribeMountTargetSecurityGroupsError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MountTargetNotFound" => {
-                        DescribeMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => DescribeMountTargetSecurityGroupsError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DescribeMountTargetSecurityGroupsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequest" => {
+                    return DescribeMountTargetSecurityGroupsError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "IncorrectMountTargetState" => {
+                    return DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(
+                        String::from(error_message),
+                    )
+                }
+                "InternalServerError" => {
+                    return DescribeMountTargetSecurityGroupsError::InternalServerError(
+                        String::from(error_message),
+                    )
+                }
+                "MountTargetNotFound" => {
+                    return DescribeMountTargetSecurityGroupsError::MountTargetNotFound(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DescribeMountTargetSecurityGroupsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeMountTargetSecurityGroupsError::Unknown(String::from(body)),
         }
+        return DescribeMountTargetSecurityGroupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeMountTargetSecurityGroupsError {
     fn from(err: serde_json::error::Error) -> DescribeMountTargetSecurityGroupsError {
-        DescribeMountTargetSecurityGroupsError::Unknown(err.description().to_string())
+        DescribeMountTargetSecurityGroupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeMountTargetSecurityGroupsError {
@@ -1185,7 +1220,8 @@ impl Error for DescribeMountTargetSecurityGroupsError {
             DescribeMountTargetSecurityGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeMountTargetSecurityGroupsError::Unknown(ref cause) => cause,
+            DescribeMountTargetSecurityGroupsError::ParseError(ref cause) => cause,
+            DescribeMountTargetSecurityGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1206,50 +1242,56 @@ pub enum DescribeMountTargetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeMountTargetsError {
-    pub fn from_body(body: &str) -> DescribeMountTargetsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeMountTargetsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequest" => {
-                        DescribeMountTargetsError::BadRequest(String::from(error_message))
-                    }
-                    "FileSystemNotFound" => {
-                        DescribeMountTargetsError::FileSystemNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DescribeMountTargetsError::InternalServerError(String::from(error_message))
-                    }
-                    "MountTargetNotFound" => {
-                        DescribeMountTargetsError::MountTargetNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeMountTargetsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeMountTargetsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequest" => {
+                    return DescribeMountTargetsError::BadRequest(String::from(error_message))
                 }
+                "FileSystemNotFound" => {
+                    return DescribeMountTargetsError::FileSystemNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerError" => {
+                    return DescribeMountTargetsError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "MountTargetNotFound" => {
+                    return DescribeMountTargetsError::MountTargetNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeMountTargetsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeMountTargetsError::Unknown(String::from(body)),
         }
+        return DescribeMountTargetsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeMountTargetsError {
     fn from(err: serde_json::error::Error) -> DescribeMountTargetsError {
-        DescribeMountTargetsError::Unknown(err.description().to_string())
+        DescribeMountTargetsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeMountTargetsError {
@@ -1284,7 +1326,8 @@ impl Error for DescribeMountTargetsError {
             DescribeMountTargetsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeMountTargetsError::Unknown(ref cause) => cause,
+            DescribeMountTargetsError::ParseError(ref cause) => cause,
+            DescribeMountTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1303,45 +1346,45 @@ pub enum DescribeTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_body(body: &str) -> DescribeTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequest" => DescribeTagsError::BadRequest(String::from(error_message)),
-                    "FileSystemNotFound" => {
-                        DescribeTagsError::FileSystemNotFound(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DescribeTagsError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeTagsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequest" => return DescribeTagsError::BadRequest(String::from(error_message)),
+                "FileSystemNotFound" => {
+                    return DescribeTagsError::FileSystemNotFound(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return DescribeTagsError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTagsError::Unknown(String::from(body)),
         }
+        return DescribeTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTagsError {
     fn from(err: serde_json::error::Error) -> DescribeTagsError {
-        DescribeTagsError::Unknown(err.description().to_string())
+        DescribeTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTagsError {
@@ -1373,7 +1416,8 @@ impl Error for DescribeTagsError {
             DescribeTagsError::Validation(ref cause) => cause,
             DescribeTagsError::Credentials(ref err) => err.description(),
             DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::Unknown(ref cause) => cause,
+            DescribeTagsError::ParseError(ref cause) => cause,
+            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1398,66 +1442,70 @@ pub enum ModifyMountTargetSecurityGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyMountTargetSecurityGroupsError {
-    pub fn from_body(body: &str) -> ModifyMountTargetSecurityGroupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyMountTargetSecurityGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequest" => ModifyMountTargetSecurityGroupsError::BadRequest(String::from(
+            match *error_type {
+                "BadRequest" => {
+                    return ModifyMountTargetSecurityGroupsError::BadRequest(String::from(
                         error_message,
-                    )),
-                    "IncorrectMountTargetState" => {
-                        ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(
-                            String::from(error_message),
-                        )
-                    }
-                    "InternalServerError" => {
-                        ModifyMountTargetSecurityGroupsError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MountTargetNotFound" => {
-                        ModifyMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "SecurityGroupLimitExceeded" => {
-                        ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(
-                            String::from(error_message),
-                        )
-                    }
-                    "SecurityGroupNotFound" => {
-                        ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ModifyMountTargetSecurityGroupsError::Validation(error_message.to_string())
-                    }
-                    _ => ModifyMountTargetSecurityGroupsError::Unknown(String::from(body)),
+                    ))
                 }
+                "IncorrectMountTargetState" => {
+                    return ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(
+                        String::from(error_message),
+                    )
+                }
+                "InternalServerError" => {
+                    return ModifyMountTargetSecurityGroupsError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "MountTargetNotFound" => {
+                    return ModifyMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "SecurityGroupLimitExceeded" => {
+                    return ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(
+                        String::from(error_message),
+                    )
+                }
+                "SecurityGroupNotFound" => {
+                    return ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return ModifyMountTargetSecurityGroupsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => ModifyMountTargetSecurityGroupsError::Unknown(String::from(body)),
         }
+        return ModifyMountTargetSecurityGroupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ModifyMountTargetSecurityGroupsError {
     fn from(err: serde_json::error::Error) -> ModifyMountTargetSecurityGroupsError {
-        ModifyMountTargetSecurityGroupsError::Unknown(err.description().to_string())
+        ModifyMountTargetSecurityGroupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ModifyMountTargetSecurityGroupsError {
@@ -1494,7 +1542,8 @@ impl Error for ModifyMountTargetSecurityGroupsError {
             ModifyMountTargetSecurityGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyMountTargetSecurityGroupsError::Unknown(ref cause) => cause,
+            ModifyMountTargetSecurityGroupsError::ParseError(ref cause) => cause,
+            ModifyMountTargetSecurityGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1521,61 +1570,65 @@ pub enum UpdateFileSystemError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFileSystemError {
-    pub fn from_body(body: &str) -> UpdateFileSystemError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateFileSystemError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequest" => UpdateFileSystemError::BadRequest(String::from(error_message)),
-                    "FileSystemNotFound" => {
-                        UpdateFileSystemError::FileSystemNotFound(String::from(error_message))
-                    }
-                    "IncorrectFileSystemLifeCycleState" => {
-                        UpdateFileSystemError::IncorrectFileSystemLifeCycleState(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InsufficientThroughputCapacity" => {
-                        UpdateFileSystemError::InsufficientThroughputCapacity(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerError" => {
-                        UpdateFileSystemError::InternalServerError(String::from(error_message))
-                    }
-                    "ThroughputLimitExceeded" => {
-                        UpdateFileSystemError::ThroughputLimitExceeded(String::from(error_message))
-                    }
-                    "TooManyRequests" => {
-                        UpdateFileSystemError::TooManyRequests(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateFileSystemError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateFileSystemError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequest" => {
+                    return UpdateFileSystemError::BadRequest(String::from(error_message))
                 }
+                "FileSystemNotFound" => {
+                    return UpdateFileSystemError::FileSystemNotFound(String::from(error_message))
+                }
+                "IncorrectFileSystemLifeCycleState" => {
+                    return UpdateFileSystemError::IncorrectFileSystemLifeCycleState(String::from(
+                        error_message,
+                    ))
+                }
+                "InsufficientThroughputCapacity" => {
+                    return UpdateFileSystemError::InsufficientThroughputCapacity(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerError" => {
+                    return UpdateFileSystemError::InternalServerError(String::from(error_message))
+                }
+                "ThroughputLimitExceeded" => {
+                    return UpdateFileSystemError::ThroughputLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyRequests" => {
+                    return UpdateFileSystemError::TooManyRequests(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateFileSystemError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateFileSystemError::Unknown(String::from(body)),
         }
+        return UpdateFileSystemError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateFileSystemError {
     fn from(err: serde_json::error::Error) -> UpdateFileSystemError {
-        UpdateFileSystemError::Unknown(err.description().to_string())
+        UpdateFileSystemError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateFileSystemError {
@@ -1611,7 +1664,8 @@ impl Error for UpdateFileSystemError {
             UpdateFileSystemError::Validation(ref cause) => cause,
             UpdateFileSystemError::Credentials(ref err) => err.description(),
             UpdateFileSystemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateFileSystemError::Unknown(ref cause) => cause,
+            UpdateFileSystemError::ParseError(ref cause) => cause,
+            UpdateFileSystemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1752,11 +1806,12 @@ impl Efs for EfsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateFileSystemError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateFileSystemError::from_response(response))),
+                )
             }
         })
     }
@@ -1791,11 +1846,12 @@ impl Efs for EfsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateMountTargetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateMountTargetError::from_response(response))),
+                )
             }
         })
     }
@@ -1822,11 +1878,12 @@ impl Efs for EfsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -1853,11 +1910,12 @@ impl Efs for EfsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteFileSystemError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteFileSystemError::from_response(response))),
+                )
             }
         })
     }
@@ -1884,11 +1942,12 @@ impl Efs for EfsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteMountTargetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteMountTargetError::from_response(response))),
+                )
             }
         })
     }
@@ -1915,11 +1974,12 @@ impl Efs for EfsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -1967,11 +2027,11 @@ impl Efs for EfsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeFileSystemsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeFileSystemsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -2012,8 +2072,8 @@ impl Efs for EfsClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeMountTargetSecurityGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeMountTargetSecurityGroupsError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -2063,11 +2123,11 @@ impl Efs for EfsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeMountTargetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeMountTargetsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -2111,11 +2171,12 @@ impl Efs for EfsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -2146,8 +2207,8 @@ impl Efs for EfsClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyMountTargetSecurityGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ModifyMountTargetSecurityGroupsError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -2187,11 +2248,12 @@ impl Efs for EfsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateFileSystemError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateFileSystemError::from_response(response))),
+                )
             }
         })
     }

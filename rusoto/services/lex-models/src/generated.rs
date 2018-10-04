@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -27,7 +27,7 @@ use rusoto_core::request::HttpDispatchError;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Provides information about a bot alias.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1715,7 +1715,7 @@ pub struct StartImportRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub payload: Vec<u8>,
     /// <p><p>Specifies the type of resource to export. Each resource also exports any resources that it depends on. </p> <ul> <li> <p>A bot exports dependent intents.</p> </li> <li> <p>An intent exports dependent slot types.</p> </li> </ul></p>
@@ -1822,56 +1822,56 @@ pub enum CreateBotVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBotVersionError {
-    pub fn from_body(body: &str) -> CreateBotVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateBotVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateBotVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        CreateBotVersionError::Conflict(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        CreateBotVersionError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateBotVersionError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        CreateBotVersionError::NotFound(String::from(error_message))
-                    }
-                    "PreconditionFailedException" => {
-                        CreateBotVersionError::PreconditionFailed(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateBotVersionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateBotVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateBotVersionError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return CreateBotVersionError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return CreateBotVersionError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateBotVersionError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreateBotVersionError::NotFound(String::from(error_message))
+                }
+                "PreconditionFailedException" => {
+                    return CreateBotVersionError::PreconditionFailed(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateBotVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateBotVersionError::Unknown(String::from(body)),
         }
+        return CreateBotVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateBotVersionError {
     fn from(err: serde_json::error::Error) -> CreateBotVersionError {
-        CreateBotVersionError::Unknown(err.description().to_string())
+        CreateBotVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateBotVersionError {
@@ -1906,7 +1906,8 @@ impl Error for CreateBotVersionError {
             CreateBotVersionError::Validation(ref cause) => cause,
             CreateBotVersionError::Credentials(ref err) => err.description(),
             CreateBotVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBotVersionError::Unknown(ref cause) => cause,
+            CreateBotVersionError::ParseError(ref cause) => cause,
+            CreateBotVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1931,56 +1932,56 @@ pub enum CreateIntentVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateIntentVersionError {
-    pub fn from_body(body: &str) -> CreateIntentVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateIntentVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateIntentVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        CreateIntentVersionError::Conflict(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        CreateIntentVersionError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateIntentVersionError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        CreateIntentVersionError::NotFound(String::from(error_message))
-                    }
-                    "PreconditionFailedException" => {
-                        CreateIntentVersionError::PreconditionFailed(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateIntentVersionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateIntentVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateIntentVersionError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return CreateIntentVersionError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return CreateIntentVersionError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateIntentVersionError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreateIntentVersionError::NotFound(String::from(error_message))
+                }
+                "PreconditionFailedException" => {
+                    return CreateIntentVersionError::PreconditionFailed(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateIntentVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateIntentVersionError::Unknown(String::from(body)),
         }
+        return CreateIntentVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateIntentVersionError {
     fn from(err: serde_json::error::Error) -> CreateIntentVersionError {
-        CreateIntentVersionError::Unknown(err.description().to_string())
+        CreateIntentVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateIntentVersionError {
@@ -2017,7 +2018,8 @@ impl Error for CreateIntentVersionError {
             CreateIntentVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateIntentVersionError::Unknown(ref cause) => cause,
+            CreateIntentVersionError::ParseError(ref cause) => cause,
+            CreateIntentVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2042,56 +2044,58 @@ pub enum CreateSlotTypeVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSlotTypeVersionError {
-    pub fn from_body(body: &str) -> CreateSlotTypeVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSlotTypeVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateSlotTypeVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        CreateSlotTypeVersionError::Conflict(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        CreateSlotTypeVersionError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateSlotTypeVersionError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        CreateSlotTypeVersionError::NotFound(String::from(error_message))
-                    }
-                    "PreconditionFailedException" => {
-                        CreateSlotTypeVersionError::PreconditionFailed(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateSlotTypeVersionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateSlotTypeVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateSlotTypeVersionError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return CreateSlotTypeVersionError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return CreateSlotTypeVersionError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateSlotTypeVersionError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return CreateSlotTypeVersionError::NotFound(String::from(error_message))
+                }
+                "PreconditionFailedException" => {
+                    return CreateSlotTypeVersionError::PreconditionFailed(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateSlotTypeVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateSlotTypeVersionError::Unknown(String::from(body)),
         }
+        return CreateSlotTypeVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateSlotTypeVersionError {
     fn from(err: serde_json::error::Error) -> CreateSlotTypeVersionError {
-        CreateSlotTypeVersionError::Unknown(err.description().to_string())
+        CreateSlotTypeVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateSlotTypeVersionError {
@@ -2128,7 +2132,8 @@ impl Error for CreateSlotTypeVersionError {
             CreateSlotTypeVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateSlotTypeVersionError::Unknown(ref cause) => cause,
+            CreateSlotTypeVersionError::ParseError(ref cause) => cause,
+            CreateSlotTypeVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2153,50 +2158,52 @@ pub enum DeleteBotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBotError {
-    pub fn from_body(body: &str) -> DeleteBotError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBotError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteBotError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => DeleteBotError::Conflict(String::from(error_message)),
-                    "InternalFailureException" => {
-                        DeleteBotError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteBotError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => DeleteBotError::NotFound(String::from(error_message)),
-                    "ResourceInUseException" => {
-                        DeleteBotError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => DeleteBotError::Validation(error_message.to_string()),
-                    _ => DeleteBotError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteBotError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => return DeleteBotError::Conflict(String::from(error_message)),
+                "InternalFailureException" => {
+                    return DeleteBotError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteBotError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => return DeleteBotError::NotFound(String::from(error_message)),
+                "ResourceInUseException" => {
+                    return DeleteBotError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteBotError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteBotError::Unknown(String::from(body)),
         }
+        return DeleteBotError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteBotError {
     fn from(err: serde_json::error::Error) -> DeleteBotError {
-        DeleteBotError::Unknown(err.description().to_string())
+        DeleteBotError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteBotError {
@@ -2231,7 +2238,8 @@ impl Error for DeleteBotError {
             DeleteBotError::Validation(ref cause) => cause,
             DeleteBotError::Credentials(ref err) => err.description(),
             DeleteBotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBotError::Unknown(ref cause) => cause,
+            DeleteBotError::ParseError(ref cause) => cause,
+            DeleteBotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2256,56 +2264,56 @@ pub enum DeleteBotAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBotAliasError {
-    pub fn from_body(body: &str) -> DeleteBotAliasError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBotAliasError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteBotAliasError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        DeleteBotAliasError::Conflict(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        DeleteBotAliasError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteBotAliasError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteBotAliasError::NotFound(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        DeleteBotAliasError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteBotAliasError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteBotAliasError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteBotAliasError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return DeleteBotAliasError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return DeleteBotAliasError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteBotAliasError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteBotAliasError::NotFound(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return DeleteBotAliasError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteBotAliasError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteBotAliasError::Unknown(String::from(body)),
         }
+        return DeleteBotAliasError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteBotAliasError {
     fn from(err: serde_json::error::Error) -> DeleteBotAliasError {
-        DeleteBotAliasError::Unknown(err.description().to_string())
+        DeleteBotAliasError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteBotAliasError {
@@ -2340,7 +2348,8 @@ impl Error for DeleteBotAliasError {
             DeleteBotAliasError::Validation(ref cause) => cause,
             DeleteBotAliasError::Credentials(ref err) => err.description(),
             DeleteBotAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBotAliasError::Unknown(ref cause) => cause,
+            DeleteBotAliasError::ParseError(ref cause) => cause,
+            DeleteBotAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2363,55 +2372,57 @@ pub enum DeleteBotChannelAssociationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBotChannelAssociationError {
-    pub fn from_body(body: &str) -> DeleteBotChannelAssociationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBotChannelAssociationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteBotChannelAssociationError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        DeleteBotChannelAssociationError::Conflict(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        DeleteBotChannelAssociationError::InternalFailure(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        DeleteBotChannelAssociationError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteBotChannelAssociationError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteBotChannelAssociationError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteBotChannelAssociationError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteBotChannelAssociationError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return DeleteBotChannelAssociationError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return DeleteBotChannelAssociationError::InternalFailure(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return DeleteBotChannelAssociationError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "NotFoundException" => {
+                    return DeleteBotChannelAssociationError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteBotChannelAssociationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteBotChannelAssociationError::Unknown(String::from(body)),
         }
+        return DeleteBotChannelAssociationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteBotChannelAssociationError {
     fn from(err: serde_json::error::Error) -> DeleteBotChannelAssociationError {
-        DeleteBotChannelAssociationError::Unknown(err.description().to_string())
+        DeleteBotChannelAssociationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteBotChannelAssociationError {
@@ -2447,7 +2458,8 @@ impl Error for DeleteBotChannelAssociationError {
             DeleteBotChannelAssociationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteBotChannelAssociationError::Unknown(ref cause) => cause,
+            DeleteBotChannelAssociationError::ParseError(ref cause) => cause,
+            DeleteBotChannelAssociationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2472,56 +2484,56 @@ pub enum DeleteBotVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBotVersionError {
-    pub fn from_body(body: &str) -> DeleteBotVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBotVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteBotVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        DeleteBotVersionError::Conflict(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        DeleteBotVersionError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteBotVersionError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteBotVersionError::NotFound(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        DeleteBotVersionError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteBotVersionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteBotVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteBotVersionError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return DeleteBotVersionError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return DeleteBotVersionError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteBotVersionError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteBotVersionError::NotFound(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return DeleteBotVersionError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteBotVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteBotVersionError::Unknown(String::from(body)),
         }
+        return DeleteBotVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteBotVersionError {
     fn from(err: serde_json::error::Error) -> DeleteBotVersionError {
-        DeleteBotVersionError::Unknown(err.description().to_string())
+        DeleteBotVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteBotVersionError {
@@ -2556,7 +2568,8 @@ impl Error for DeleteBotVersionError {
             DeleteBotVersionError::Validation(ref cause) => cause,
             DeleteBotVersionError::Credentials(ref err) => err.description(),
             DeleteBotVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBotVersionError::Unknown(ref cause) => cause,
+            DeleteBotVersionError::ParseError(ref cause) => cause,
+            DeleteBotVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2581,52 +2594,56 @@ pub enum DeleteIntentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIntentError {
-    pub fn from_body(body: &str) -> DeleteIntentError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteIntentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteIntentError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => DeleteIntentError::Conflict(String::from(error_message)),
-                    "InternalFailureException" => {
-                        DeleteIntentError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteIntentError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => DeleteIntentError::NotFound(String::from(error_message)),
-                    "ResourceInUseException" => {
-                        DeleteIntentError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteIntentError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteIntentError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteIntentError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return DeleteIntentError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return DeleteIntentError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteIntentError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteIntentError::NotFound(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return DeleteIntentError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteIntentError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteIntentError::Unknown(String::from(body)),
         }
+        return DeleteIntentError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteIntentError {
     fn from(err: serde_json::error::Error) -> DeleteIntentError {
-        DeleteIntentError::Unknown(err.description().to_string())
+        DeleteIntentError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteIntentError {
@@ -2661,7 +2678,8 @@ impl Error for DeleteIntentError {
             DeleteIntentError::Validation(ref cause) => cause,
             DeleteIntentError::Credentials(ref err) => err.description(),
             DeleteIntentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteIntentError::Unknown(ref cause) => cause,
+            DeleteIntentError::ParseError(ref cause) => cause,
+            DeleteIntentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2686,56 +2704,56 @@ pub enum DeleteIntentVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIntentVersionError {
-    pub fn from_body(body: &str) -> DeleteIntentVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteIntentVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteIntentVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        DeleteIntentVersionError::Conflict(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        DeleteIntentVersionError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteIntentVersionError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteIntentVersionError::NotFound(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        DeleteIntentVersionError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteIntentVersionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteIntentVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteIntentVersionError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return DeleteIntentVersionError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return DeleteIntentVersionError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteIntentVersionError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteIntentVersionError::NotFound(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return DeleteIntentVersionError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteIntentVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteIntentVersionError::Unknown(String::from(body)),
         }
+        return DeleteIntentVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteIntentVersionError {
     fn from(err: serde_json::error::Error) -> DeleteIntentVersionError {
-        DeleteIntentVersionError::Unknown(err.description().to_string())
+        DeleteIntentVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteIntentVersionError {
@@ -2772,7 +2790,8 @@ impl Error for DeleteIntentVersionError {
             DeleteIntentVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteIntentVersionError::Unknown(ref cause) => cause,
+            DeleteIntentVersionError::ParseError(ref cause) => cause,
+            DeleteIntentVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2797,56 +2816,56 @@ pub enum DeleteSlotTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSlotTypeError {
-    pub fn from_body(body: &str) -> DeleteSlotTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSlotTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteSlotTypeError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        DeleteSlotTypeError::Conflict(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        DeleteSlotTypeError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteSlotTypeError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteSlotTypeError::NotFound(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        DeleteSlotTypeError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteSlotTypeError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteSlotTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteSlotTypeError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return DeleteSlotTypeError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return DeleteSlotTypeError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteSlotTypeError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteSlotTypeError::NotFound(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return DeleteSlotTypeError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteSlotTypeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteSlotTypeError::Unknown(String::from(body)),
         }
+        return DeleteSlotTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteSlotTypeError {
     fn from(err: serde_json::error::Error) -> DeleteSlotTypeError {
-        DeleteSlotTypeError::Unknown(err.description().to_string())
+        DeleteSlotTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteSlotTypeError {
@@ -2881,7 +2900,8 @@ impl Error for DeleteSlotTypeError {
             DeleteSlotTypeError::Validation(ref cause) => cause,
             DeleteSlotTypeError::Credentials(ref err) => err.description(),
             DeleteSlotTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteSlotTypeError::Unknown(ref cause) => cause,
+            DeleteSlotTypeError::ParseError(ref cause) => cause,
+            DeleteSlotTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2906,56 +2926,56 @@ pub enum DeleteSlotTypeVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSlotTypeVersionError {
-    pub fn from_body(body: &str) -> DeleteSlotTypeVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSlotTypeVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteSlotTypeVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => {
-                        DeleteSlotTypeVersionError::Conflict(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        DeleteSlotTypeVersionError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteSlotTypeVersionError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteSlotTypeVersionError::NotFound(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        DeleteSlotTypeVersionError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteSlotTypeVersionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteSlotTypeVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteSlotTypeVersionError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return DeleteSlotTypeVersionError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return DeleteSlotTypeVersionError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteSlotTypeVersionError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteSlotTypeVersionError::NotFound(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return DeleteSlotTypeVersionError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteSlotTypeVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteSlotTypeVersionError::Unknown(String::from(body)),
         }
+        return DeleteSlotTypeVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteSlotTypeVersionError {
     fn from(err: serde_json::error::Error) -> DeleteSlotTypeVersionError {
-        DeleteSlotTypeVersionError::Unknown(err.description().to_string())
+        DeleteSlotTypeVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteSlotTypeVersionError {
@@ -2992,7 +3012,8 @@ impl Error for DeleteSlotTypeVersionError {
             DeleteSlotTypeVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteSlotTypeVersionError::Unknown(ref cause) => cause,
+            DeleteSlotTypeVersionError::ParseError(ref cause) => cause,
+            DeleteSlotTypeVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3013,50 +3034,50 @@ pub enum DeleteUtterancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUtterancesError {
-    pub fn from_body(body: &str) -> DeleteUtterancesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteUtterancesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteUtterancesError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        DeleteUtterancesError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        DeleteUtterancesError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        DeleteUtterancesError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteUtterancesError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteUtterancesError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteUtterancesError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return DeleteUtterancesError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return DeleteUtterancesError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return DeleteUtterancesError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteUtterancesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteUtterancesError::Unknown(String::from(body)),
         }
+        return DeleteUtterancesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteUtterancesError {
     fn from(err: serde_json::error::Error) -> DeleteUtterancesError {
-        DeleteUtterancesError::Unknown(err.description().to_string())
+        DeleteUtterancesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteUtterancesError {
@@ -3089,7 +3110,8 @@ impl Error for DeleteUtterancesError {
             DeleteUtterancesError::Validation(ref cause) => cause,
             DeleteUtterancesError::Credentials(ref err) => err.description(),
             DeleteUtterancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUtterancesError::Unknown(ref cause) => cause,
+            DeleteUtterancesError::ParseError(ref cause) => cause,
+            DeleteUtterancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3110,44 +3132,46 @@ pub enum GetBotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotError {
-    pub fn from_body(body: &str) -> GetBotError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetBotError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => GetBotError::BadRequest(String::from(error_message)),
-                    "InternalFailureException" => {
-                        GetBotError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetBotError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => GetBotError::NotFound(String::from(error_message)),
-                    "ValidationException" => GetBotError::Validation(error_message.to_string()),
-                    _ => GetBotError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetBotError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetBotError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetBotError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => return GetBotError::NotFound(String::from(error_message)),
+                "ValidationException" => return GetBotError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => GetBotError::Unknown(String::from(body)),
         }
+        return GetBotError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetBotError {
     fn from(err: serde_json::error::Error) -> GetBotError {
-        GetBotError::Unknown(err.description().to_string())
+        GetBotError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetBotError {
@@ -3180,7 +3204,8 @@ impl Error for GetBotError {
             GetBotError::Validation(ref cause) => cause,
             GetBotError::Credentials(ref err) => err.description(),
             GetBotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBotError::Unknown(ref cause) => cause,
+            GetBotError::ParseError(ref cause) => cause,
+            GetBotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3201,48 +3226,50 @@ pub enum GetBotAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotAliasError {
-    pub fn from_body(body: &str) -> GetBotAliasError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetBotAliasError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetBotAliasError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetBotAliasError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetBotAliasError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => GetBotAliasError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        GetBotAliasError::Validation(error_message.to_string())
-                    }
-                    _ => GetBotAliasError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetBotAliasError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetBotAliasError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetBotAliasError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetBotAliasError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetBotAliasError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetBotAliasError::Unknown(String::from(body)),
         }
+        return GetBotAliasError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetBotAliasError {
     fn from(err: serde_json::error::Error) -> GetBotAliasError {
-        GetBotAliasError::Unknown(err.description().to_string())
+        GetBotAliasError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetBotAliasError {
@@ -3275,7 +3302,8 @@ impl Error for GetBotAliasError {
             GetBotAliasError::Validation(ref cause) => cause,
             GetBotAliasError::Credentials(ref err) => err.description(),
             GetBotAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBotAliasError::Unknown(ref cause) => cause,
+            GetBotAliasError::ParseError(ref cause) => cause,
+            GetBotAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3294,47 +3322,47 @@ pub enum GetBotAliasesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotAliasesError {
-    pub fn from_body(body: &str) -> GetBotAliasesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetBotAliasesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetBotAliasesError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetBotAliasesError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetBotAliasesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetBotAliasesError::Validation(error_message.to_string())
-                    }
-                    _ => GetBotAliasesError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetBotAliasesError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetBotAliasesError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetBotAliasesError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetBotAliasesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetBotAliasesError::Unknown(String::from(body)),
         }
+        return GetBotAliasesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetBotAliasesError {
     fn from(err: serde_json::error::Error) -> GetBotAliasesError {
-        GetBotAliasesError::Unknown(err.description().to_string())
+        GetBotAliasesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetBotAliasesError {
@@ -3366,7 +3394,8 @@ impl Error for GetBotAliasesError {
             GetBotAliasesError::Validation(ref cause) => cause,
             GetBotAliasesError::Credentials(ref err) => err.description(),
             GetBotAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBotAliasesError::Unknown(ref cause) => cause,
+            GetBotAliasesError::ParseError(ref cause) => cause,
+            GetBotAliasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3387,50 +3416,52 @@ pub enum GetBotChannelAssociationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotChannelAssociationError {
-    pub fn from_body(body: &str) -> GetBotChannelAssociationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetBotChannelAssociationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetBotChannelAssociationError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetBotChannelAssociationError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetBotChannelAssociationError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        GetBotChannelAssociationError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetBotChannelAssociationError::Validation(error_message.to_string())
-                    }
-                    _ => GetBotChannelAssociationError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetBotChannelAssociationError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetBotChannelAssociationError::InternalFailure(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return GetBotChannelAssociationError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetBotChannelAssociationError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetBotChannelAssociationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetBotChannelAssociationError::Unknown(String::from(body)),
         }
+        return GetBotChannelAssociationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetBotChannelAssociationError {
     fn from(err: serde_json::error::Error) -> GetBotChannelAssociationError {
-        GetBotChannelAssociationError::Unknown(err.description().to_string())
+        GetBotChannelAssociationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetBotChannelAssociationError {
@@ -3465,7 +3496,8 @@ impl Error for GetBotChannelAssociationError {
             GetBotChannelAssociationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBotChannelAssociationError::Unknown(ref cause) => cause,
+            GetBotChannelAssociationError::ParseError(ref cause) => cause,
+            GetBotChannelAssociationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3484,47 +3516,51 @@ pub enum GetBotChannelAssociationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotChannelAssociationsError {
-    pub fn from_body(body: &str) -> GetBotChannelAssociationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetBotChannelAssociationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetBotChannelAssociationsError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetBotChannelAssociationsError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetBotChannelAssociationsError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetBotChannelAssociationsError::Validation(error_message.to_string())
-                    }
-                    _ => GetBotChannelAssociationsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetBotChannelAssociationsError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetBotChannelAssociationsError::InternalFailure(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return GetBotChannelAssociationsError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetBotChannelAssociationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetBotChannelAssociationsError::Unknown(String::from(body)),
         }
+        return GetBotChannelAssociationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetBotChannelAssociationsError {
     fn from(err: serde_json::error::Error) -> GetBotChannelAssociationsError {
-        GetBotChannelAssociationsError::Unknown(err.description().to_string())
+        GetBotChannelAssociationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetBotChannelAssociationsError {
@@ -3558,7 +3594,8 @@ impl Error for GetBotChannelAssociationsError {
             GetBotChannelAssociationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBotChannelAssociationsError::Unknown(ref cause) => cause,
+            GetBotChannelAssociationsError::ParseError(ref cause) => cause,
+            GetBotChannelAssociationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3579,50 +3616,50 @@ pub enum GetBotVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotVersionsError {
-    pub fn from_body(body: &str) -> GetBotVersionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetBotVersionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetBotVersionsError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetBotVersionsError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetBotVersionsError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        GetBotVersionsError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetBotVersionsError::Validation(error_message.to_string())
-                    }
-                    _ => GetBotVersionsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetBotVersionsError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetBotVersionsError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetBotVersionsError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetBotVersionsError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetBotVersionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetBotVersionsError::Unknown(String::from(body)),
         }
+        return GetBotVersionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetBotVersionsError {
     fn from(err: serde_json::error::Error) -> GetBotVersionsError {
-        GetBotVersionsError::Unknown(err.description().to_string())
+        GetBotVersionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetBotVersionsError {
@@ -3655,7 +3692,8 @@ impl Error for GetBotVersionsError {
             GetBotVersionsError::Validation(ref cause) => cause,
             GetBotVersionsError::Credentials(ref err) => err.description(),
             GetBotVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBotVersionsError::Unknown(ref cause) => cause,
+            GetBotVersionsError::ParseError(ref cause) => cause,
+            GetBotVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3676,44 +3714,46 @@ pub enum GetBotsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotsError {
-    pub fn from_body(body: &str) -> GetBotsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetBotsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => GetBotsError::BadRequest(String::from(error_message)),
-                    "InternalFailureException" => {
-                        GetBotsError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetBotsError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => GetBotsError::NotFound(String::from(error_message)),
-                    "ValidationException" => GetBotsError::Validation(error_message.to_string()),
-                    _ => GetBotsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetBotsError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetBotsError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetBotsError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => return GetBotsError::NotFound(String::from(error_message)),
+                "ValidationException" => return GetBotsError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => GetBotsError::Unknown(String::from(body)),
         }
+        return GetBotsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetBotsError {
     fn from(err: serde_json::error::Error) -> GetBotsError {
-        GetBotsError::Unknown(err.description().to_string())
+        GetBotsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetBotsError {
@@ -3746,7 +3786,8 @@ impl Error for GetBotsError {
             GetBotsError::Validation(ref cause) => cause,
             GetBotsError::Credentials(ref err) => err.description(),
             GetBotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBotsError::Unknown(ref cause) => cause,
+            GetBotsError::ParseError(ref cause) => cause,
+            GetBotsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3767,50 +3808,50 @@ pub enum GetBuiltinIntentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBuiltinIntentError {
-    pub fn from_body(body: &str) -> GetBuiltinIntentError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetBuiltinIntentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetBuiltinIntentError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetBuiltinIntentError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetBuiltinIntentError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        GetBuiltinIntentError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetBuiltinIntentError::Validation(error_message.to_string())
-                    }
-                    _ => GetBuiltinIntentError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetBuiltinIntentError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetBuiltinIntentError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetBuiltinIntentError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetBuiltinIntentError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetBuiltinIntentError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetBuiltinIntentError::Unknown(String::from(body)),
         }
+        return GetBuiltinIntentError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetBuiltinIntentError {
     fn from(err: serde_json::error::Error) -> GetBuiltinIntentError {
-        GetBuiltinIntentError::Unknown(err.description().to_string())
+        GetBuiltinIntentError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetBuiltinIntentError {
@@ -3843,7 +3884,8 @@ impl Error for GetBuiltinIntentError {
             GetBuiltinIntentError::Validation(ref cause) => cause,
             GetBuiltinIntentError::Credentials(ref err) => err.description(),
             GetBuiltinIntentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBuiltinIntentError::Unknown(ref cause) => cause,
+            GetBuiltinIntentError::ParseError(ref cause) => cause,
+            GetBuiltinIntentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3862,47 +3904,47 @@ pub enum GetBuiltinIntentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBuiltinIntentsError {
-    pub fn from_body(body: &str) -> GetBuiltinIntentsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetBuiltinIntentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetBuiltinIntentsError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetBuiltinIntentsError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetBuiltinIntentsError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetBuiltinIntentsError::Validation(error_message.to_string())
-                    }
-                    _ => GetBuiltinIntentsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetBuiltinIntentsError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetBuiltinIntentsError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetBuiltinIntentsError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetBuiltinIntentsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetBuiltinIntentsError::Unknown(String::from(body)),
         }
+        return GetBuiltinIntentsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetBuiltinIntentsError {
     fn from(err: serde_json::error::Error) -> GetBuiltinIntentsError {
-        GetBuiltinIntentsError::Unknown(err.description().to_string())
+        GetBuiltinIntentsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetBuiltinIntentsError {
@@ -3936,7 +3978,8 @@ impl Error for GetBuiltinIntentsError {
             GetBuiltinIntentsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBuiltinIntentsError::Unknown(ref cause) => cause,
+            GetBuiltinIntentsError::ParseError(ref cause) => cause,
+            GetBuiltinIntentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3955,47 +3998,47 @@ pub enum GetBuiltinSlotTypesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetBuiltinSlotTypesError {
-    pub fn from_body(body: &str) -> GetBuiltinSlotTypesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetBuiltinSlotTypesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetBuiltinSlotTypesError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetBuiltinSlotTypesError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetBuiltinSlotTypesError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetBuiltinSlotTypesError::Validation(error_message.to_string())
-                    }
-                    _ => GetBuiltinSlotTypesError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetBuiltinSlotTypesError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetBuiltinSlotTypesError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetBuiltinSlotTypesError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetBuiltinSlotTypesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetBuiltinSlotTypesError::Unknown(String::from(body)),
         }
+        return GetBuiltinSlotTypesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetBuiltinSlotTypesError {
     fn from(err: serde_json::error::Error) -> GetBuiltinSlotTypesError {
-        GetBuiltinSlotTypesError::Unknown(err.description().to_string())
+        GetBuiltinSlotTypesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetBuiltinSlotTypesError {
@@ -4029,7 +4072,8 @@ impl Error for GetBuiltinSlotTypesError {
             GetBuiltinSlotTypesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetBuiltinSlotTypesError::Unknown(ref cause) => cause,
+            GetBuiltinSlotTypesError::ParseError(ref cause) => cause,
+            GetBuiltinSlotTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4050,46 +4094,48 @@ pub enum GetExportError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetExportError {
-    pub fn from_body(body: &str) -> GetExportError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetExportError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetExportError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetExportError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetExportError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => GetExportError::NotFound(String::from(error_message)),
-                    "ValidationException" => GetExportError::Validation(error_message.to_string()),
-                    _ => GetExportError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetExportError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetExportError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetExportError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => return GetExportError::NotFound(String::from(error_message)),
+                "ValidationException" => {
+                    return GetExportError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetExportError::Unknown(String::from(body)),
         }
+        return GetExportError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetExportError {
     fn from(err: serde_json::error::Error) -> GetExportError {
-        GetExportError::Unknown(err.description().to_string())
+        GetExportError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetExportError {
@@ -4122,7 +4168,8 @@ impl Error for GetExportError {
             GetExportError::Validation(ref cause) => cause,
             GetExportError::Credentials(ref err) => err.description(),
             GetExportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetExportError::Unknown(ref cause) => cause,
+            GetExportError::ParseError(ref cause) => cause,
+            GetExportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4143,46 +4190,48 @@ pub enum GetImportError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetImportError {
-    pub fn from_body(body: &str) -> GetImportError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetImportError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetImportError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetImportError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetImportError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => GetImportError::NotFound(String::from(error_message)),
-                    "ValidationException" => GetImportError::Validation(error_message.to_string()),
-                    _ => GetImportError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetImportError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetImportError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetImportError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => return GetImportError::NotFound(String::from(error_message)),
+                "ValidationException" => {
+                    return GetImportError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetImportError::Unknown(String::from(body)),
         }
+        return GetImportError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetImportError {
     fn from(err: serde_json::error::Error) -> GetImportError {
-        GetImportError::Unknown(err.description().to_string())
+        GetImportError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetImportError {
@@ -4215,7 +4264,8 @@ impl Error for GetImportError {
             GetImportError::Validation(ref cause) => cause,
             GetImportError::Credentials(ref err) => err.description(),
             GetImportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetImportError::Unknown(ref cause) => cause,
+            GetImportError::ParseError(ref cause) => cause,
+            GetImportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4236,46 +4286,48 @@ pub enum GetIntentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetIntentError {
-    pub fn from_body(body: &str) -> GetIntentError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetIntentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetIntentError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetIntentError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetIntentError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => GetIntentError::NotFound(String::from(error_message)),
-                    "ValidationException" => GetIntentError::Validation(error_message.to_string()),
-                    _ => GetIntentError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetIntentError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetIntentError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetIntentError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => return GetIntentError::NotFound(String::from(error_message)),
+                "ValidationException" => {
+                    return GetIntentError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetIntentError::Unknown(String::from(body)),
         }
+        return GetIntentError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetIntentError {
     fn from(err: serde_json::error::Error) -> GetIntentError {
-        GetIntentError::Unknown(err.description().to_string())
+        GetIntentError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetIntentError {
@@ -4308,7 +4360,8 @@ impl Error for GetIntentError {
             GetIntentError::Validation(ref cause) => cause,
             GetIntentError::Credentials(ref err) => err.description(),
             GetIntentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetIntentError::Unknown(ref cause) => cause,
+            GetIntentError::ParseError(ref cause) => cause,
+            GetIntentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4329,50 +4382,50 @@ pub enum GetIntentVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetIntentVersionsError {
-    pub fn from_body(body: &str) -> GetIntentVersionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetIntentVersionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetIntentVersionsError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetIntentVersionsError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetIntentVersionsError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        GetIntentVersionsError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetIntentVersionsError::Validation(error_message.to_string())
-                    }
-                    _ => GetIntentVersionsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetIntentVersionsError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetIntentVersionsError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetIntentVersionsError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetIntentVersionsError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetIntentVersionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetIntentVersionsError::Unknown(String::from(body)),
         }
+        return GetIntentVersionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetIntentVersionsError {
     fn from(err: serde_json::error::Error) -> GetIntentVersionsError {
-        GetIntentVersionsError::Unknown(err.description().to_string())
+        GetIntentVersionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetIntentVersionsError {
@@ -4407,7 +4460,8 @@ impl Error for GetIntentVersionsError {
             GetIntentVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetIntentVersionsError::Unknown(ref cause) => cause,
+            GetIntentVersionsError::ParseError(ref cause) => cause,
+            GetIntentVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4428,46 +4482,50 @@ pub enum GetIntentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetIntentsError {
-    pub fn from_body(body: &str) -> GetIntentsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetIntentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetIntentsError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetIntentsError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetIntentsError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => GetIntentsError::NotFound(String::from(error_message)),
-                    "ValidationException" => GetIntentsError::Validation(error_message.to_string()),
-                    _ => GetIntentsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetIntentsError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetIntentsError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetIntentsError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetIntentsError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetIntentsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetIntentsError::Unknown(String::from(body)),
         }
+        return GetIntentsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetIntentsError {
     fn from(err: serde_json::error::Error) -> GetIntentsError {
-        GetIntentsError::Unknown(err.description().to_string())
+        GetIntentsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetIntentsError {
@@ -4500,7 +4558,8 @@ impl Error for GetIntentsError {
             GetIntentsError::Validation(ref cause) => cause,
             GetIntentsError::Credentials(ref err) => err.description(),
             GetIntentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetIntentsError::Unknown(ref cause) => cause,
+            GetIntentsError::ParseError(ref cause) => cause,
+            GetIntentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4521,48 +4580,50 @@ pub enum GetSlotTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSlotTypeError {
-    pub fn from_body(body: &str) -> GetSlotTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetSlotTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetSlotTypeError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetSlotTypeError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetSlotTypeError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => GetSlotTypeError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        GetSlotTypeError::Validation(error_message.to_string())
-                    }
-                    _ => GetSlotTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetSlotTypeError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetSlotTypeError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetSlotTypeError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetSlotTypeError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetSlotTypeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetSlotTypeError::Unknown(String::from(body)),
         }
+        return GetSlotTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetSlotTypeError {
     fn from(err: serde_json::error::Error) -> GetSlotTypeError {
-        GetSlotTypeError::Unknown(err.description().to_string())
+        GetSlotTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetSlotTypeError {
@@ -4595,7 +4656,8 @@ impl Error for GetSlotTypeError {
             GetSlotTypeError::Validation(ref cause) => cause,
             GetSlotTypeError::Credentials(ref err) => err.description(),
             GetSlotTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSlotTypeError::Unknown(ref cause) => cause,
+            GetSlotTypeError::ParseError(ref cause) => cause,
+            GetSlotTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4616,50 +4678,50 @@ pub enum GetSlotTypeVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSlotTypeVersionsError {
-    pub fn from_body(body: &str) -> GetSlotTypeVersionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetSlotTypeVersionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetSlotTypeVersionsError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetSlotTypeVersionsError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetSlotTypeVersionsError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        GetSlotTypeVersionsError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetSlotTypeVersionsError::Validation(error_message.to_string())
-                    }
-                    _ => GetSlotTypeVersionsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetSlotTypeVersionsError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetSlotTypeVersionsError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetSlotTypeVersionsError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetSlotTypeVersionsError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetSlotTypeVersionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetSlotTypeVersionsError::Unknown(String::from(body)),
         }
+        return GetSlotTypeVersionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetSlotTypeVersionsError {
     fn from(err: serde_json::error::Error) -> GetSlotTypeVersionsError {
-        GetSlotTypeVersionsError::Unknown(err.description().to_string())
+        GetSlotTypeVersionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetSlotTypeVersionsError {
@@ -4694,7 +4756,8 @@ impl Error for GetSlotTypeVersionsError {
             GetSlotTypeVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetSlotTypeVersionsError::Unknown(ref cause) => cause,
+            GetSlotTypeVersionsError::ParseError(ref cause) => cause,
+            GetSlotTypeVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4715,48 +4778,50 @@ pub enum GetSlotTypesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSlotTypesError {
-    pub fn from_body(body: &str) -> GetSlotTypesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetSlotTypesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetSlotTypesError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetSlotTypesError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetSlotTypesError::LimitExceeded(String::from(error_message))
-                    }
-                    "NotFoundException" => GetSlotTypesError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        GetSlotTypesError::Validation(error_message.to_string())
-                    }
-                    _ => GetSlotTypesError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetSlotTypesError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetSlotTypesError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetSlotTypesError::LimitExceeded(String::from(error_message))
+                }
+                "NotFoundException" => {
+                    return GetSlotTypesError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetSlotTypesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetSlotTypesError::Unknown(String::from(body)),
         }
+        return GetSlotTypesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetSlotTypesError {
     fn from(err: serde_json::error::Error) -> GetSlotTypesError {
-        GetSlotTypesError::Unknown(err.description().to_string())
+        GetSlotTypesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetSlotTypesError {
@@ -4789,7 +4854,8 @@ impl Error for GetSlotTypesError {
             GetSlotTypesError::Validation(ref cause) => cause,
             GetSlotTypesError::Credentials(ref err) => err.description(),
             GetSlotTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSlotTypesError::Unknown(ref cause) => cause,
+            GetSlotTypesError::ParseError(ref cause) => cause,
+            GetSlotTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4808,47 +4874,47 @@ pub enum GetUtterancesViewError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetUtterancesViewError {
-    pub fn from_body(body: &str) -> GetUtterancesViewError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetUtterancesViewError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetUtterancesViewError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        GetUtterancesViewError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        GetUtterancesViewError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetUtterancesViewError::Validation(error_message.to_string())
-                    }
-                    _ => GetUtterancesViewError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetUtterancesViewError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return GetUtterancesViewError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return GetUtterancesViewError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetUtterancesViewError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetUtterancesViewError::Unknown(String::from(body)),
         }
+        return GetUtterancesViewError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetUtterancesViewError {
     fn from(err: serde_json::error::Error) -> GetUtterancesViewError {
-        GetUtterancesViewError::Unknown(err.description().to_string())
+        GetUtterancesViewError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetUtterancesViewError {
@@ -4882,7 +4948,8 @@ impl Error for GetUtterancesViewError {
             GetUtterancesViewError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetUtterancesViewError::Unknown(ref cause) => cause,
+            GetUtterancesViewError::ParseError(ref cause) => cause,
+            GetUtterancesViewError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4905,47 +4972,49 @@ pub enum PutBotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBotError {
-    pub fn from_body(body: &str) -> PutBotError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutBotError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => PutBotError::BadRequest(String::from(error_message)),
-                    "ConflictException" => PutBotError::Conflict(String::from(error_message)),
-                    "InternalFailureException" => {
-                        PutBotError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PutBotError::LimitExceeded(String::from(error_message))
-                    }
-                    "PreconditionFailedException" => {
-                        PutBotError::PreconditionFailed(String::from(error_message))
-                    }
-                    "ValidationException" => PutBotError::Validation(error_message.to_string()),
-                    _ => PutBotError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return PutBotError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => return PutBotError::Conflict(String::from(error_message)),
+                "InternalFailureException" => {
+                    return PutBotError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PutBotError::LimitExceeded(String::from(error_message))
+                }
+                "PreconditionFailedException" => {
+                    return PutBotError::PreconditionFailed(String::from(error_message))
+                }
+                "ValidationException" => return PutBotError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => PutBotError::Unknown(String::from(body)),
         }
+        return PutBotError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutBotError {
     fn from(err: serde_json::error::Error) -> PutBotError {
-        PutBotError::Unknown(err.description().to_string())
+        PutBotError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutBotError {
@@ -4979,7 +5048,8 @@ impl Error for PutBotError {
             PutBotError::Validation(ref cause) => cause,
             PutBotError::Credentials(ref err) => err.description(),
             PutBotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBotError::Unknown(ref cause) => cause,
+            PutBotError::ParseError(ref cause) => cause,
+            PutBotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5002,51 +5072,53 @@ pub enum PutBotAliasError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutBotAliasError {
-    pub fn from_body(body: &str) -> PutBotAliasError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutBotAliasError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        PutBotAliasError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => PutBotAliasError::Conflict(String::from(error_message)),
-                    "InternalFailureException" => {
-                        PutBotAliasError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PutBotAliasError::LimitExceeded(String::from(error_message))
-                    }
-                    "PreconditionFailedException" => {
-                        PutBotAliasError::PreconditionFailed(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutBotAliasError::Validation(error_message.to_string())
-                    }
-                    _ => PutBotAliasError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return PutBotAliasError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return PutBotAliasError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return PutBotAliasError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PutBotAliasError::LimitExceeded(String::from(error_message))
+                }
+                "PreconditionFailedException" => {
+                    return PutBotAliasError::PreconditionFailed(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutBotAliasError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutBotAliasError::Unknown(String::from(body)),
         }
+        return PutBotAliasError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutBotAliasError {
     fn from(err: serde_json::error::Error) -> PutBotAliasError {
-        PutBotAliasError::Unknown(err.description().to_string())
+        PutBotAliasError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutBotAliasError {
@@ -5080,7 +5152,8 @@ impl Error for PutBotAliasError {
             PutBotAliasError::Validation(ref cause) => cause,
             PutBotAliasError::Credentials(ref err) => err.description(),
             PutBotAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBotAliasError::Unknown(ref cause) => cause,
+            PutBotAliasError::ParseError(ref cause) => cause,
+            PutBotAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5103,49 +5176,51 @@ pub enum PutIntentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutIntentError {
-    pub fn from_body(body: &str) -> PutIntentError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutIntentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        PutIntentError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => PutIntentError::Conflict(String::from(error_message)),
-                    "InternalFailureException" => {
-                        PutIntentError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PutIntentError::LimitExceeded(String::from(error_message))
-                    }
-                    "PreconditionFailedException" => {
-                        PutIntentError::PreconditionFailed(String::from(error_message))
-                    }
-                    "ValidationException" => PutIntentError::Validation(error_message.to_string()),
-                    _ => PutIntentError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return PutIntentError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => return PutIntentError::Conflict(String::from(error_message)),
+                "InternalFailureException" => {
+                    return PutIntentError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PutIntentError::LimitExceeded(String::from(error_message))
+                }
+                "PreconditionFailedException" => {
+                    return PutIntentError::PreconditionFailed(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutIntentError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutIntentError::Unknown(String::from(body)),
         }
+        return PutIntentError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutIntentError {
     fn from(err: serde_json::error::Error) -> PutIntentError {
-        PutIntentError::Unknown(err.description().to_string())
+        PutIntentError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutIntentError {
@@ -5179,7 +5254,8 @@ impl Error for PutIntentError {
             PutIntentError::Validation(ref cause) => cause,
             PutIntentError::Credentials(ref err) => err.description(),
             PutIntentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutIntentError::Unknown(ref cause) => cause,
+            PutIntentError::ParseError(ref cause) => cause,
+            PutIntentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5202,51 +5278,53 @@ pub enum PutSlotTypeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutSlotTypeError {
-    pub fn from_body(body: &str) -> PutSlotTypeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutSlotTypeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        PutSlotTypeError::BadRequest(String::from(error_message))
-                    }
-                    "ConflictException" => PutSlotTypeError::Conflict(String::from(error_message)),
-                    "InternalFailureException" => {
-                        PutSlotTypeError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PutSlotTypeError::LimitExceeded(String::from(error_message))
-                    }
-                    "PreconditionFailedException" => {
-                        PutSlotTypeError::PreconditionFailed(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutSlotTypeError::Validation(error_message.to_string())
-                    }
-                    _ => PutSlotTypeError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return PutSlotTypeError::BadRequest(String::from(error_message))
                 }
+                "ConflictException" => {
+                    return PutSlotTypeError::Conflict(String::from(error_message))
+                }
+                "InternalFailureException" => {
+                    return PutSlotTypeError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PutSlotTypeError::LimitExceeded(String::from(error_message))
+                }
+                "PreconditionFailedException" => {
+                    return PutSlotTypeError::PreconditionFailed(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutSlotTypeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutSlotTypeError::Unknown(String::from(body)),
         }
+        return PutSlotTypeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutSlotTypeError {
     fn from(err: serde_json::error::Error) -> PutSlotTypeError {
-        PutSlotTypeError::Unknown(err.description().to_string())
+        PutSlotTypeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutSlotTypeError {
@@ -5280,7 +5358,8 @@ impl Error for PutSlotTypeError {
             PutSlotTypeError::Validation(ref cause) => cause,
             PutSlotTypeError::Credentials(ref err) => err.description(),
             PutSlotTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutSlotTypeError::Unknown(ref cause) => cause,
+            PutSlotTypeError::ParseError(ref cause) => cause,
+            PutSlotTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5299,47 +5378,47 @@ pub enum StartImportError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartImportError {
-    pub fn from_body(body: &str) -> StartImportError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartImportError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        StartImportError::BadRequest(String::from(error_message))
-                    }
-                    "InternalFailureException" => {
-                        StartImportError::InternalFailure(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        StartImportError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartImportError::Validation(error_message.to_string())
-                    }
-                    _ => StartImportError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return StartImportError::BadRequest(String::from(error_message))
                 }
+                "InternalFailureException" => {
+                    return StartImportError::InternalFailure(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return StartImportError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartImportError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartImportError::Unknown(String::from(body)),
         }
+        return StartImportError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartImportError {
     fn from(err: serde_json::error::Error) -> StartImportError {
-        StartImportError::Unknown(err.description().to_string())
+        StartImportError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartImportError {
@@ -5371,7 +5450,8 @@ impl Error for StartImportError {
             StartImportError::Validation(ref cause) => cause,
             StartImportError::Credentials(ref err) => err.description(),
             StartImportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartImportError::Unknown(ref cause) => cause,
+            StartImportError::ParseError(ref cause) => cause,
+            StartImportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5644,11 +5724,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateBotVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateBotVersionError::from_response(response))),
+                )
             }
         })
     }
@@ -5684,11 +5765,11 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateIntentVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateIntentVersionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5724,11 +5805,11 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSlotTypeVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateSlotTypeVersionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5750,11 +5831,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteBotError::from_response(response))),
+                )
             }
         })
     }
@@ -5783,11 +5865,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBotAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteBotAliasError::from_response(response))),
+                )
             }
         })
     }
@@ -5818,9 +5901,7 @@ impl LexModels for LexModelsClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBotChannelAssociationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteBotChannelAssociationError::from_response(response))
                 }))
             }
         })
@@ -5850,11 +5931,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteBotVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteBotVersionError::from_response(response))),
+                )
             }
         })
     }
@@ -5876,11 +5958,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteIntentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteIntentError::from_response(response))),
+                )
             }
         })
     }
@@ -5909,11 +5992,11 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteIntentVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteIntentVersionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5938,11 +6021,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSlotTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteSlotTypeError::from_response(response))),
+                )
             }
         })
     }
@@ -5971,11 +6055,11 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSlotTypeVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteSlotTypeVersionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6004,11 +6088,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteUtterancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteUtterancesError::from_response(response))),
+                )
             }
         })
     }
@@ -6042,11 +6127,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBotError::from_response(response))),
+                )
             }
         })
     }
@@ -6083,11 +6169,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBotAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBotAliasError::from_response(response))),
+                )
             }
         })
     }
@@ -6132,11 +6219,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBotAliasesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBotAliasesError::from_response(response))),
+                )
             }
         })
     }
@@ -6176,9 +6264,7 @@ impl LexModels for LexModelsClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBotChannelAssociationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetBotChannelAssociationError::from_response(response))
                 }))
             }
         })
@@ -6230,9 +6316,7 @@ impl LexModels for LexModelsClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBotChannelAssociationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetBotChannelAssociationsError::from_response(response))
                 }))
             }
         })
@@ -6275,11 +6359,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBotVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBotVersionsError::from_response(response))),
+                )
             }
         })
     }
@@ -6321,11 +6406,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBotsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBotsError::from_response(response))),
+                )
             }
         })
     }
@@ -6358,11 +6444,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBuiltinIntentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBuiltinIntentError::from_response(response))),
+                )
             }
         })
     }
@@ -6411,11 +6498,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBuiltinIntentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetBuiltinIntentsError::from_response(response))),
+                )
             }
         })
     }
@@ -6464,11 +6552,11 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetBuiltinSlotTypesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetBuiltinSlotTypesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6508,11 +6596,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetExportError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetExportError::from_response(response))),
+                )
             }
         })
     }
@@ -6545,11 +6634,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetImportError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetImportError::from_response(response))),
+                )
             }
         })
     }
@@ -6586,11 +6676,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetIntentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetIntentError::from_response(response))),
+                )
             }
         })
     }
@@ -6633,11 +6724,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetIntentVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetIntentVersionsError::from_response(response))),
+                )
             }
         })
     }
@@ -6682,11 +6774,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetIntentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetIntentsError::from_response(response))),
+                )
             }
         })
     }
@@ -6723,11 +6816,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSlotTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetSlotTypeError::from_response(response))),
+                )
             }
         })
     }
@@ -6770,11 +6864,11 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSlotTypeVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetSlotTypeVersionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6819,11 +6913,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSlotTypesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetSlotTypesError::from_response(response))),
+                )
             }
         })
     }
@@ -6865,11 +6960,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetUtterancesViewError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetUtterancesViewError::from_response(response))),
+                )
             }
         })
     }
@@ -6901,11 +6997,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutBotError::from_response(response))),
+                )
             }
         })
     }
@@ -6944,11 +7041,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutBotAliasError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutBotAliasError::from_response(response))),
+                )
             }
         })
     }
@@ -6983,11 +7081,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutIntentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutIntentError::from_response(response))),
+                )
             }
         })
     }
@@ -7022,11 +7121,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutSlotTypeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutSlotTypeError::from_response(response))),
+                )
             }
         })
     }
@@ -7061,11 +7161,12 @@ impl LexModels for LexModelsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartImportError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartImportError::from_response(response))),
+                )
             }
         })
     }

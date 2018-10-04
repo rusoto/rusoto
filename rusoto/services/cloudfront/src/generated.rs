@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -8097,23 +8097,25 @@ pub enum CreateCloudFrontOriginAccessIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCloudFrontOriginAccessIdentityError {
-    pub fn from_body(body: &str) -> CreateCloudFrontOriginAccessIdentityError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "CloudFrontOriginAccessIdentityAlreadyExists" => CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => CreateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"MissingBody" => CreateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),"TooManyCloudFrontOriginAccessIdentities" => CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(String::from(parsed_error.message)),_ => CreateCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCloudFrontOriginAccessIdentityError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "CloudFrontOriginAccessIdentityAlreadyExists" => return CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => return CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => return CreateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"MissingBody" => return CreateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),"TooManyCloudFrontOriginAccessIdentities" => return CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(String::from(parsed_error.message)),_ => {}
                                 }
-                           },
-                           Err(_) => CreateCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
-                       }
+            }
+        }
+        CreateCloudFrontOriginAccessIdentityError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8128,7 +8130,7 @@ impl CreateCloudFrontOriginAccessIdentityError {
 impl From<XmlParseError> for CreateCloudFrontOriginAccessIdentityError {
     fn from(err: XmlParseError) -> CreateCloudFrontOriginAccessIdentityError {
         let XmlParseError(message) = err;
-        CreateCloudFrontOriginAccessIdentityError::Unknown(message.to_string())
+        CreateCloudFrontOriginAccessIdentityError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateCloudFrontOriginAccessIdentityError {
@@ -8162,7 +8164,8 @@ CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentiti
 CreateCloudFrontOriginAccessIdentityError::Validation(ref cause) => cause,
 CreateCloudFrontOriginAccessIdentityError::Credentials(ref err) => err.description(),
 CreateCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-CreateCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause
+CreateCloudFrontOriginAccessIdentityError::ParseError(ref cause) => cause,
+CreateCloudFrontOriginAccessIdentityError::Unknown(_) => "unknown error"
                         }
     }
 }
@@ -8255,165 +8258,225 @@ pub enum CreateDistributionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDistributionError {
-    pub fn from_body(body: &str) -> CreateDistributionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    CreateDistributionError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDistributionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return CreateDistributionError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "CNAMEAlreadyExists" => {
+                        return CreateDistributionError::CNAMEAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DistributionAlreadyExists" => {
+                        return CreateDistributionError::DistributionAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InconsistentQuantities" => {
+                        return CreateDistributionError::InconsistentQuantities(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return CreateDistributionError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidDefaultRootObject" => {
+                        return CreateDistributionError::InvalidDefaultRootObject(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidErrorCode" => {
+                        return CreateDistributionError::InvalidErrorCode(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidForwardCookies" => {
+                        return CreateDistributionError::InvalidForwardCookies(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidGeoRestrictionParameter" => {
+                        return CreateDistributionError::InvalidGeoRestrictionParameter(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidHeadersForS3Origin" => {
+                        return CreateDistributionError::InvalidHeadersForS3Origin(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidLambdaFunctionAssociation" => {
+                        return CreateDistributionError::InvalidLambdaFunctionAssociation(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidLocationCode" => {
+                        return CreateDistributionError::InvalidLocationCode(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidMinimumProtocolVersion" => {
+                        return CreateDistributionError::InvalidMinimumProtocolVersion(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidOrigin" => {
+                        return CreateDistributionError::InvalidOrigin(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidOriginAccessIdentity" => {
+                        return CreateDistributionError::InvalidOriginAccessIdentity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidOriginKeepaliveTimeout" => {
+                        return CreateDistributionError::InvalidOriginKeepaliveTimeout(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidOriginReadTimeout" => {
+                        return CreateDistributionError::InvalidOriginReadTimeout(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidProtocolSettings" => {
+                        return CreateDistributionError::InvalidProtocolSettings(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidQueryStringParameters" => {
+                        return CreateDistributionError::InvalidQueryStringParameters(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidRelativePath" => {
+                        return CreateDistributionError::InvalidRelativePath(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidRequiredProtocol" => {
+                        return CreateDistributionError::InvalidRequiredProtocol(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidResponseCode" => {
+                        return CreateDistributionError::InvalidResponseCode(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidTTLOrder" => {
+                        return CreateDistributionError::InvalidTTLOrder(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidViewerCertificate" => {
+                        return CreateDistributionError::InvalidViewerCertificate(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidWebACLId" => {
+                        return CreateDistributionError::InvalidWebACLId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingBody" => {
+                        return CreateDistributionError::MissingBody(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchOrigin" => {
+                        return CreateDistributionError::NoSuchOrigin(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyCacheBehaviors" => {
+                        return CreateDistributionError::TooManyCacheBehaviors(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyCertificates" => {
+                        return CreateDistributionError::TooManyCertificates(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyCookieNamesInWhiteList" => {
+                        return CreateDistributionError::TooManyCookieNamesInWhiteList(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyDistributionCNAMEs" => {
+                        return CreateDistributionError::TooManyDistributionCNAMEs(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyDistributions" => {
+                        return CreateDistributionError::TooManyDistributions(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyDistributionsWithLambdaAssociations" => {
+                        return CreateDistributionError::TooManyDistributionsWithLambdaAssociations(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyHeadersInForwardedValues" => {
+                        return CreateDistributionError::TooManyHeadersInForwardedValues(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyLambdaFunctionAssociations" => {
+                        return CreateDistributionError::TooManyLambdaFunctionAssociations(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyOriginCustomHeaders" => {
+                        return CreateDistributionError::TooManyOriginCustomHeaders(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyOrigins" => {
+                        return CreateDistributionError::TooManyOrigins(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyQueryStringParameters" => {
+                        return CreateDistributionError::TooManyQueryStringParameters(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTrustedSigners" => {
+                        return CreateDistributionError::TooManyTrustedSigners(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TrustedSignerDoesNotExist" => {
+                        return CreateDistributionError::TrustedSignerDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "CNAMEAlreadyExists" => {
-                    CreateDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message))
-                }
-                "DistributionAlreadyExists" => CreateDistributionError::DistributionAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "InconsistentQuantities" => CreateDistributionError::InconsistentQuantities(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidArgument" => {
-                    CreateDistributionError::InvalidArgument(String::from(parsed_error.message))
-                }
-                "InvalidDefaultRootObject" => CreateDistributionError::InvalidDefaultRootObject(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidErrorCode" => {
-                    CreateDistributionError::InvalidErrorCode(String::from(parsed_error.message))
-                }
-                "InvalidForwardCookies" => CreateDistributionError::InvalidForwardCookies(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidGeoRestrictionParameter" => {
-                    CreateDistributionError::InvalidGeoRestrictionParameter(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidHeadersForS3Origin" => CreateDistributionError::InvalidHeadersForS3Origin(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidLambdaFunctionAssociation" => {
-                    CreateDistributionError::InvalidLambdaFunctionAssociation(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidLocationCode" => {
-                    CreateDistributionError::InvalidLocationCode(String::from(parsed_error.message))
-                }
-                "InvalidMinimumProtocolVersion" => {
-                    CreateDistributionError::InvalidMinimumProtocolVersion(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidOrigin" => {
-                    CreateDistributionError::InvalidOrigin(String::from(parsed_error.message))
-                }
-                "InvalidOriginAccessIdentity" => {
-                    CreateDistributionError::InvalidOriginAccessIdentity(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidOriginKeepaliveTimeout" => {
-                    CreateDistributionError::InvalidOriginKeepaliveTimeout(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidOriginReadTimeout" => CreateDistributionError::InvalidOriginReadTimeout(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidProtocolSettings" => CreateDistributionError::InvalidProtocolSettings(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidQueryStringParameters" => {
-                    CreateDistributionError::InvalidQueryStringParameters(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidRelativePath" => {
-                    CreateDistributionError::InvalidRelativePath(String::from(parsed_error.message))
-                }
-                "InvalidRequiredProtocol" => CreateDistributionError::InvalidRequiredProtocol(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidResponseCode" => {
-                    CreateDistributionError::InvalidResponseCode(String::from(parsed_error.message))
-                }
-                "InvalidTTLOrder" => {
-                    CreateDistributionError::InvalidTTLOrder(String::from(parsed_error.message))
-                }
-                "InvalidViewerCertificate" => CreateDistributionError::InvalidViewerCertificate(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidWebACLId" => {
-                    CreateDistributionError::InvalidWebACLId(String::from(parsed_error.message))
-                }
-                "MissingBody" => {
-                    CreateDistributionError::MissingBody(String::from(parsed_error.message))
-                }
-                "NoSuchOrigin" => {
-                    CreateDistributionError::NoSuchOrigin(String::from(parsed_error.message))
-                }
-                "TooManyCacheBehaviors" => CreateDistributionError::TooManyCacheBehaviors(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyCertificates" => {
-                    CreateDistributionError::TooManyCertificates(String::from(parsed_error.message))
-                }
-                "TooManyCookieNamesInWhiteList" => {
-                    CreateDistributionError::TooManyCookieNamesInWhiteList(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyDistributionCNAMEs" => CreateDistributionError::TooManyDistributionCNAMEs(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyDistributions" => CreateDistributionError::TooManyDistributions(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyDistributionsWithLambdaAssociations" => {
-                    CreateDistributionError::TooManyDistributionsWithLambdaAssociations(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TooManyHeadersInForwardedValues" => {
-                    CreateDistributionError::TooManyHeadersInForwardedValues(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyLambdaFunctionAssociations" => {
-                    CreateDistributionError::TooManyLambdaFunctionAssociations(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyOriginCustomHeaders" => {
-                    CreateDistributionError::TooManyOriginCustomHeaders(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyOrigins" => {
-                    CreateDistributionError::TooManyOrigins(String::from(parsed_error.message))
-                }
-                "TooManyQueryStringParameters" => {
-                    CreateDistributionError::TooManyQueryStringParameters(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyTrustedSigners" => CreateDistributionError::TooManyTrustedSigners(
-                    String::from(parsed_error.message),
-                ),
-                "TrustedSignerDoesNotExist" => CreateDistributionError::TrustedSignerDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateDistributionError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateDistributionError::Unknown(body.to_string()),
+            }
         }
+        CreateDistributionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8428,7 +8491,7 @@ impl CreateDistributionError {
 impl From<XmlParseError> for CreateDistributionError {
     fn from(err: XmlParseError) -> CreateDistributionError {
         let XmlParseError(message) = err;
-        CreateDistributionError::Unknown(message.to_string())
+        CreateDistributionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateDistributionError {
@@ -8499,7 +8562,8 @@ impl Error for CreateDistributionError {
             CreateDistributionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateDistributionError::Unknown(ref cause) => cause,
+            CreateDistributionError::ParseError(ref cause) => cause,
+            CreateDistributionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8594,188 +8658,25 @@ pub enum CreateDistributionWithTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDistributionWithTagsError {
-    pub fn from_body(body: &str) -> CreateDistributionWithTagsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => CreateDistributionWithTagsError::AccessDenied(String::from(
-                    parsed_error.message,
-                )),
-                "CNAMEAlreadyExists" => CreateDistributionWithTagsError::CNAMEAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "DistributionAlreadyExists" => {
-                    CreateDistributionWithTagsError::DistributionAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InconsistentQuantities" => {
-                    CreateDistributionWithTagsError::InconsistentQuantities(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidArgument" => CreateDistributionWithTagsError::InvalidArgument(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidDefaultRootObject" => {
-                    CreateDistributionWithTagsError::InvalidDefaultRootObject(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidErrorCode" => CreateDistributionWithTagsError::InvalidErrorCode(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidForwardCookies" => CreateDistributionWithTagsError::InvalidForwardCookies(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidGeoRestrictionParameter" => {
-                    CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidHeadersForS3Origin" => {
-                    CreateDistributionWithTagsError::InvalidHeadersForS3Origin(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidLambdaFunctionAssociation" => {
-                    CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidLocationCode" => CreateDistributionWithTagsError::InvalidLocationCode(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidMinimumProtocolVersion" => {
-                    CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidOrigin" => CreateDistributionWithTagsError::InvalidOrigin(String::from(
-                    parsed_error.message,
-                )),
-                "InvalidOriginAccessIdentity" => {
-                    CreateDistributionWithTagsError::InvalidOriginAccessIdentity(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidOriginKeepaliveTimeout" => {
-                    CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidOriginReadTimeout" => {
-                    CreateDistributionWithTagsError::InvalidOriginReadTimeout(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidProtocolSettings" => {
-                    CreateDistributionWithTagsError::InvalidProtocolSettings(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidQueryStringParameters" => {
-                    CreateDistributionWithTagsError::InvalidQueryStringParameters(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidRelativePath" => CreateDistributionWithTagsError::InvalidRelativePath(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidRequiredProtocol" => {
-                    CreateDistributionWithTagsError::InvalidRequiredProtocol(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidResponseCode" => CreateDistributionWithTagsError::InvalidResponseCode(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidTTLOrder" => CreateDistributionWithTagsError::InvalidTTLOrder(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidTagging" => CreateDistributionWithTagsError::InvalidTagging(String::from(
-                    parsed_error.message,
-                )),
-                "InvalidViewerCertificate" => {
-                    CreateDistributionWithTagsError::InvalidViewerCertificate(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidWebACLId" => CreateDistributionWithTagsError::InvalidWebACLId(
-                    String::from(parsed_error.message),
-                ),
-                "MissingBody" => {
-                    CreateDistributionWithTagsError::MissingBody(String::from(parsed_error.message))
-                }
-                "NoSuchOrigin" => CreateDistributionWithTagsError::NoSuchOrigin(String::from(
-                    parsed_error.message,
-                )),
-                "TooManyCacheBehaviors" => CreateDistributionWithTagsError::TooManyCacheBehaviors(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyCertificates" => CreateDistributionWithTagsError::TooManyCertificates(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyCookieNamesInWhiteList" => {
-                    CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyDistributionCNAMEs" => {
-                    CreateDistributionWithTagsError::TooManyDistributionCNAMEs(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyDistributions" => CreateDistributionWithTagsError::TooManyDistributions(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyDistributionsWithLambdaAssociations" => {
-                    CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TooManyHeadersInForwardedValues" => {
-                    CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyLambdaFunctionAssociations" => {
-                    CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TooManyOriginCustomHeaders" => {
-                    CreateDistributionWithTagsError::TooManyOriginCustomHeaders(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyOrigins" => CreateDistributionWithTagsError::TooManyOrigins(String::from(
-                    parsed_error.message,
-                )),
-                "TooManyQueryStringParameters" => {
-                    CreateDistributionWithTagsError::TooManyQueryStringParameters(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyTrustedSigners" => CreateDistributionWithTagsError::TooManyTrustedSigners(
-                    String::from(parsed_error.message),
-                ),
-                "TrustedSignerDoesNotExist" => {
-                    CreateDistributionWithTagsError::TrustedSignerDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => CreateDistributionWithTagsError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateDistributionWithTagsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDistributionWithTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "AccessDenied" => return CreateDistributionWithTagsError::AccessDenied(String::from(parsed_error.message)),"CNAMEAlreadyExists" => return CreateDistributionWithTagsError::CNAMEAlreadyExists(String::from(parsed_error.message)),"DistributionAlreadyExists" => return CreateDistributionWithTagsError::DistributionAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => return CreateDistributionWithTagsError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => return CreateDistributionWithTagsError::InvalidArgument(String::from(parsed_error.message)),"InvalidDefaultRootObject" => return CreateDistributionWithTagsError::InvalidDefaultRootObject(String::from(parsed_error.message)),"InvalidErrorCode" => return CreateDistributionWithTagsError::InvalidErrorCode(String::from(parsed_error.message)),"InvalidForwardCookies" => return CreateDistributionWithTagsError::InvalidForwardCookies(String::from(parsed_error.message)),"InvalidGeoRestrictionParameter" => return CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(String::from(parsed_error.message)),"InvalidHeadersForS3Origin" => return CreateDistributionWithTagsError::InvalidHeadersForS3Origin(String::from(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(String::from(parsed_error.message)),"InvalidLocationCode" => return CreateDistributionWithTagsError::InvalidLocationCode(String::from(parsed_error.message)),"InvalidMinimumProtocolVersion" => return CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(String::from(parsed_error.message)),"InvalidOrigin" => return CreateDistributionWithTagsError::InvalidOrigin(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => return CreateDistributionWithTagsError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(String::from(parsed_error.message)),"InvalidOriginReadTimeout" => return CreateDistributionWithTagsError::InvalidOriginReadTimeout(String::from(parsed_error.message)),"InvalidProtocolSettings" => return CreateDistributionWithTagsError::InvalidProtocolSettings(String::from(parsed_error.message)),"InvalidQueryStringParameters" => return CreateDistributionWithTagsError::InvalidQueryStringParameters(String::from(parsed_error.message)),"InvalidRelativePath" => return CreateDistributionWithTagsError::InvalidRelativePath(String::from(parsed_error.message)),"InvalidRequiredProtocol" => return CreateDistributionWithTagsError::InvalidRequiredProtocol(String::from(parsed_error.message)),"InvalidResponseCode" => return CreateDistributionWithTagsError::InvalidResponseCode(String::from(parsed_error.message)),"InvalidTTLOrder" => return CreateDistributionWithTagsError::InvalidTTLOrder(String::from(parsed_error.message)),"InvalidTagging" => return CreateDistributionWithTagsError::InvalidTagging(String::from(parsed_error.message)),"InvalidViewerCertificate" => return CreateDistributionWithTagsError::InvalidViewerCertificate(String::from(parsed_error.message)),"InvalidWebACLId" => return CreateDistributionWithTagsError::InvalidWebACLId(String::from(parsed_error.message)),"MissingBody" => return CreateDistributionWithTagsError::MissingBody(String::from(parsed_error.message)),"NoSuchOrigin" => return CreateDistributionWithTagsError::NoSuchOrigin(String::from(parsed_error.message)),"TooManyCacheBehaviors" => return CreateDistributionWithTagsError::TooManyCacheBehaviors(String::from(parsed_error.message)),"TooManyCertificates" => return CreateDistributionWithTagsError::TooManyCertificates(String::from(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(String::from(parsed_error.message)),"TooManyDistributionCNAMEs" => return CreateDistributionWithTagsError::TooManyDistributionCNAMEs(String::from(parsed_error.message)),"TooManyDistributions" => return CreateDistributionWithTagsError::TooManyDistributions(String::from(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(String::from(parsed_error.message)),"TooManyHeadersInForwardedValues" => return CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(String::from(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(String::from(parsed_error.message)),"TooManyOriginCustomHeaders" => return CreateDistributionWithTagsError::TooManyOriginCustomHeaders(String::from(parsed_error.message)),"TooManyOrigins" => return CreateDistributionWithTagsError::TooManyOrigins(String::from(parsed_error.message)),"TooManyQueryStringParameters" => return CreateDistributionWithTagsError::TooManyQueryStringParameters(String::from(parsed_error.message)),"TooManyTrustedSigners" => return CreateDistributionWithTagsError::TooManyTrustedSigners(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => return CreateDistributionWithTagsError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        CreateDistributionWithTagsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8790,7 +8691,7 @@ impl CreateDistributionWithTagsError {
 impl From<XmlParseError> for CreateDistributionWithTagsError {
     fn from(err: XmlParseError) -> CreateDistributionWithTagsError {
         let XmlParseError(message) = err;
-        CreateDistributionWithTagsError::Unknown(message.to_string())
+        CreateDistributionWithTagsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateDistributionWithTagsError {
@@ -8864,7 +8765,8 @@ impl Error for CreateDistributionWithTagsError {
             CreateDistributionWithTagsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateDistributionWithTagsError::Unknown(ref cause) => cause,
+            CreateDistributionWithTagsError::ParseError(ref cause) => cause,
+            CreateDistributionWithTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8891,44 +8793,60 @@ pub enum CreateInvalidationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateInvalidationError {
-    pub fn from_body(body: &str) -> CreateInvalidationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    CreateInvalidationError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateInvalidationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return CreateInvalidationError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "BatchTooLarge" => {
+                        return CreateInvalidationError::BatchTooLarge(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InconsistentQuantities" => {
+                        return CreateInvalidationError::InconsistentQuantities(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return CreateInvalidationError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingBody" => {
+                        return CreateInvalidationError::MissingBody(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDistribution" => {
+                        return CreateInvalidationError::NoSuchDistribution(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyInvalidationsInProgress" => {
+                        return CreateInvalidationError::TooManyInvalidationsInProgress(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "BatchTooLarge" => {
-                    CreateInvalidationError::BatchTooLarge(String::from(parsed_error.message))
-                }
-                "InconsistentQuantities" => CreateInvalidationError::InconsistentQuantities(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidArgument" => {
-                    CreateInvalidationError::InvalidArgument(String::from(parsed_error.message))
-                }
-                "MissingBody" => {
-                    CreateInvalidationError::MissingBody(String::from(parsed_error.message))
-                }
-                "NoSuchDistribution" => {
-                    CreateInvalidationError::NoSuchDistribution(String::from(parsed_error.message))
-                }
-                "TooManyInvalidationsInProgress" => {
-                    CreateInvalidationError::TooManyInvalidationsInProgress(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => CreateInvalidationError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateInvalidationError::Unknown(body.to_string()),
+            }
         }
+        CreateInvalidationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8943,7 +8861,7 @@ impl CreateInvalidationError {
 impl From<XmlParseError> for CreateInvalidationError {
     fn from(err: XmlParseError) -> CreateInvalidationError {
         let XmlParseError(message) = err;
-        CreateInvalidationError::Unknown(message.to_string())
+        CreateInvalidationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateInvalidationError {
@@ -8981,7 +8899,8 @@ impl Error for CreateInvalidationError {
             CreateInvalidationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateInvalidationError::Unknown(ref cause) => cause,
+            CreateInvalidationError::ParseError(ref cause) => cause,
+            CreateInvalidationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9018,69 +8937,85 @@ pub enum CreateStreamingDistributionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStreamingDistributionError {
-    pub fn from_body(body: &str) -> CreateStreamingDistributionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => CreateStreamingDistributionError::AccessDenied(String::from(
-                    parsed_error.message,
-                )),
-                "CNAMEAlreadyExists" => CreateStreamingDistributionError::CNAMEAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "InconsistentQuantities" => {
-                    CreateStreamingDistributionError::InconsistentQuantities(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateStreamingDistributionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return CreateStreamingDistributionError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "CNAMEAlreadyExists" => {
+                        return CreateStreamingDistributionError::CNAMEAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InconsistentQuantities" => {
+                        return CreateStreamingDistributionError::InconsistentQuantities(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidArgument" => {
+                        return CreateStreamingDistributionError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidOrigin" => {
+                        return CreateStreamingDistributionError::InvalidOrigin(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidOriginAccessIdentity" => {
+                        return CreateStreamingDistributionError::InvalidOriginAccessIdentity(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "MissingBody" => {
+                        return CreateStreamingDistributionError::MissingBody(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StreamingDistributionAlreadyExists" => {
+                        return CreateStreamingDistributionError::StreamingDistributionAlreadyExists(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyStreamingDistributionCNAMEs" => {
+                        return CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyStreamingDistributions" => {
+                        return CreateStreamingDistributionError::TooManyStreamingDistributions(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyTrustedSigners" => {
+                        return CreateStreamingDistributionError::TooManyTrustedSigners(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TrustedSignerDoesNotExist" => {
+                        return CreateStreamingDistributionError::TrustedSignerDoesNotExist(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidArgument" => CreateStreamingDistributionError::InvalidArgument(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidOrigin" => CreateStreamingDistributionError::InvalidOrigin(String::from(
-                    parsed_error.message,
-                )),
-                "InvalidOriginAccessIdentity" => {
-                    CreateStreamingDistributionError::InvalidOriginAccessIdentity(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MissingBody" => CreateStreamingDistributionError::MissingBody(String::from(
-                    parsed_error.message,
-                )),
-                "StreamingDistributionAlreadyExists" => {
-                    CreateStreamingDistributionError::StreamingDistributionAlreadyExists(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TooManyStreamingDistributionCNAMEs" => {
-                    CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TooManyStreamingDistributions" => {
-                    CreateStreamingDistributionError::TooManyStreamingDistributions(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyTrustedSigners" => CreateStreamingDistributionError::TooManyTrustedSigners(
-                    String::from(parsed_error.message),
-                ),
-                "TrustedSignerDoesNotExist" => {
-                    CreateStreamingDistributionError::TrustedSignerDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => CreateStreamingDistributionError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateStreamingDistributionError::Unknown(body.to_string()),
+            }
         }
+        CreateStreamingDistributionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9095,7 +9030,7 @@ impl CreateStreamingDistributionError {
 impl From<XmlParseError> for CreateStreamingDistributionError {
     fn from(err: XmlParseError) -> CreateStreamingDistributionError {
         let XmlParseError(message) = err;
-        CreateStreamingDistributionError::Unknown(message.to_string())
+        CreateStreamingDistributionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateStreamingDistributionError {
@@ -9142,7 +9077,8 @@ impl Error for CreateStreamingDistributionError {
             CreateStreamingDistributionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateStreamingDistributionError::Unknown(ref cause) => cause,
+            CreateStreamingDistributionError::ParseError(ref cause) => cause,
+            CreateStreamingDistributionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9181,76 +9117,25 @@ pub enum CreateStreamingDistributionWithTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStreamingDistributionWithTagsError {
-    pub fn from_body(body: &str) -> CreateStreamingDistributionWithTagsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => CreateStreamingDistributionWithTagsError::AccessDenied(
-                    String::from(parsed_error.message),
-                ),
-                "CNAMEAlreadyExists" => {
-                    CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InconsistentQuantities" => {
-                    CreateStreamingDistributionWithTagsError::InconsistentQuantities(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidArgument" => CreateStreamingDistributionWithTagsError::InvalidArgument(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidOrigin" => CreateStreamingDistributionWithTagsError::InvalidOrigin(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidOriginAccessIdentity" => {
-                    CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidTagging" => CreateStreamingDistributionWithTagsError::InvalidTagging(
-                    String::from(parsed_error.message),
-                ),
-                "MissingBody" => CreateStreamingDistributionWithTagsError::MissingBody(
-                    String::from(parsed_error.message),
-                ),
-                "StreamingDistributionAlreadyExists" => {
-                    CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TooManyStreamingDistributionCNAMEs" => {
-                    CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TooManyStreamingDistributions" => {
-                    CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TooManyTrustedSigners" => {
-                    CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TrustedSignerDoesNotExist" => {
-                    CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => CreateStreamingDistributionWithTagsError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateStreamingDistributionWithTagsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateStreamingDistributionWithTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "AccessDenied" => return CreateStreamingDistributionWithTagsError::AccessDenied(String::from(parsed_error.message)),"CNAMEAlreadyExists" => return CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => return CreateStreamingDistributionWithTagsError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => return CreateStreamingDistributionWithTagsError::InvalidArgument(String::from(parsed_error.message)),"InvalidOrigin" => return CreateStreamingDistributionWithTagsError::InvalidOrigin(String::from(parsed_error.message)),"InvalidOriginAccessIdentity" => return CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(String::from(parsed_error.message)),"InvalidTagging" => return CreateStreamingDistributionWithTagsError::InvalidTagging(String::from(parsed_error.message)),"MissingBody" => return CreateStreamingDistributionWithTagsError::MissingBody(String::from(parsed_error.message)),"StreamingDistributionAlreadyExists" => return CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(String::from(parsed_error.message)),"TooManyStreamingDistributionCNAMEs" => return CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(String::from(parsed_error.message)),"TooManyStreamingDistributions" => return CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(String::from(parsed_error.message)),"TooManyTrustedSigners" => return CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(String::from(parsed_error.message)),"TrustedSignerDoesNotExist" => return CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        CreateStreamingDistributionWithTagsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9265,7 +9150,7 @@ impl CreateStreamingDistributionWithTagsError {
 impl From<XmlParseError> for CreateStreamingDistributionWithTagsError {
     fn from(err: XmlParseError) -> CreateStreamingDistributionWithTagsError {
         let XmlParseError(message) = err;
-        CreateStreamingDistributionWithTagsError::Unknown(message.to_string())
+        CreateStreamingDistributionWithTagsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateStreamingDistributionWithTagsError {
@@ -9317,7 +9202,8 @@ impl Error for CreateStreamingDistributionWithTagsError {
             CreateStreamingDistributionWithTagsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateStreamingDistributionWithTagsError::Unknown(ref cause) => cause,
+            CreateStreamingDistributionWithTagsError::ParseError(ref cause) => cause,
+            CreateStreamingDistributionWithTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9340,44 +9226,25 @@ pub enum DeleteCloudFrontOriginAccessIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCloudFrontOriginAccessIdentityError {
-    pub fn from_body(body: &str) -> DeleteCloudFrontOriginAccessIdentityError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => DeleteCloudFrontOriginAccessIdentityError::AccessDenied(
-                    String::from(parsed_error.message),
-                ),
-                "CloudFrontOriginAccessIdentityInUse" => {
-                    DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidIfMatchVersion" => {
-                    DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NoSuchCloudFrontOriginAccessIdentity" => {
-                    DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "PreconditionFailed" => {
-                    DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DeleteCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteCloudFrontOriginAccessIdentityError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "AccessDenied" => return DeleteCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"CloudFrontOriginAccessIdentityInUse" => return DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(String::from(parsed_error.message)),"InvalidIfMatchVersion" => return DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"PreconditionFailed" => return DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        DeleteCloudFrontOriginAccessIdentityError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9392,7 +9259,7 @@ impl DeleteCloudFrontOriginAccessIdentityError {
 impl From<XmlParseError> for DeleteCloudFrontOriginAccessIdentityError {
     fn from(err: XmlParseError) -> DeleteCloudFrontOriginAccessIdentityError {
         let XmlParseError(message) = err;
-        DeleteCloudFrontOriginAccessIdentityError::Unknown(message.to_string())
+        DeleteCloudFrontOriginAccessIdentityError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteCloudFrontOriginAccessIdentityError {
@@ -9432,7 +9299,8 @@ impl Error for DeleteCloudFrontOriginAccessIdentityError {
             DeleteCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause,
+            DeleteCloudFrontOriginAccessIdentityError::ParseError(ref cause) => cause,
+            DeleteCloudFrontOriginAccessIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9455,36 +9323,50 @@ pub enum DeleteDistributionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDistributionError {
-    pub fn from_body(body: &str) -> DeleteDistributionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    DeleteDistributionError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDistributionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return DeleteDistributionError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "DistributionNotDisabled" => {
+                        return DeleteDistributionError::DistributionNotDisabled(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return DeleteDistributionError::InvalidIfMatchVersion(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDistribution" => {
+                        return DeleteDistributionError::NoSuchDistribution(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PreconditionFailed" => {
+                        return DeleteDistributionError::PreconditionFailed(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "DistributionNotDisabled" => DeleteDistributionError::DistributionNotDisabled(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidIfMatchVersion" => DeleteDistributionError::InvalidIfMatchVersion(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchDistribution" => {
-                    DeleteDistributionError::NoSuchDistribution(String::from(parsed_error.message))
-                }
-                "PreconditionFailed" => {
-                    DeleteDistributionError::PreconditionFailed(String::from(parsed_error.message))
-                }
-                _ => DeleteDistributionError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteDistributionError::Unknown(body.to_string()),
+            }
         }
+        DeleteDistributionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9499,7 +9381,7 @@ impl DeleteDistributionError {
 impl From<XmlParseError> for DeleteDistributionError {
     fn from(err: XmlParseError) -> DeleteDistributionError {
         let XmlParseError(message) = err;
-        DeleteDistributionError::Unknown(message.to_string())
+        DeleteDistributionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteDistributionError {
@@ -9535,7 +9417,8 @@ impl Error for DeleteDistributionError {
             DeleteDistributionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteDistributionError::Unknown(ref cause) => cause,
+            DeleteDistributionError::ParseError(ref cause) => cause,
+            DeleteDistributionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9556,33 +9439,45 @@ pub enum DeleteServiceLinkedRoleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteServiceLinkedRoleError {
-    pub fn from_body(body: &str) -> DeleteServiceLinkedRoleError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    DeleteServiceLinkedRoleError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteServiceLinkedRoleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return DeleteServiceLinkedRoleError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return DeleteServiceLinkedRoleError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchResource" => {
+                        return DeleteServiceLinkedRoleError::NoSuchResource(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceInUse" => {
+                        return DeleteServiceLinkedRoleError::ResourceInUse(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidArgument" => DeleteServiceLinkedRoleError::InvalidArgument(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchResource" => {
-                    DeleteServiceLinkedRoleError::NoSuchResource(String::from(parsed_error.message))
-                }
-                "ResourceInUse" => {
-                    DeleteServiceLinkedRoleError::ResourceInUse(String::from(parsed_error.message))
-                }
-                _ => DeleteServiceLinkedRoleError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteServiceLinkedRoleError::Unknown(body.to_string()),
+            }
         }
+        DeleteServiceLinkedRoleError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9597,7 +9492,7 @@ impl DeleteServiceLinkedRoleError {
 impl From<XmlParseError> for DeleteServiceLinkedRoleError {
     fn from(err: XmlParseError) -> DeleteServiceLinkedRoleError {
         let XmlParseError(message) = err;
-        DeleteServiceLinkedRoleError::Unknown(message.to_string())
+        DeleteServiceLinkedRoleError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteServiceLinkedRoleError {
@@ -9632,7 +9527,8 @@ impl Error for DeleteServiceLinkedRoleError {
             DeleteServiceLinkedRoleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteServiceLinkedRoleError::Unknown(ref cause) => cause,
+            DeleteServiceLinkedRoleError::ParseError(ref cause) => cause,
+            DeleteServiceLinkedRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9655,40 +9551,50 @@ pub enum DeleteStreamingDistributionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteStreamingDistributionError {
-    pub fn from_body(body: &str) -> DeleteStreamingDistributionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => DeleteStreamingDistributionError::AccessDenied(String::from(
-                    parsed_error.message,
-                )),
-                "InvalidIfMatchVersion" => DeleteStreamingDistributionError::InvalidIfMatchVersion(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchStreamingDistribution" => {
-                    DeleteStreamingDistributionError::NoSuchStreamingDistribution(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteStreamingDistributionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return DeleteStreamingDistributionError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return DeleteStreamingDistributionError::InvalidIfMatchVersion(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NoSuchStreamingDistribution" => {
+                        return DeleteStreamingDistributionError::NoSuchStreamingDistribution(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "PreconditionFailed" => {
+                        return DeleteStreamingDistributionError::PreconditionFailed(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "StreamingDistributionNotDisabled" => {
+                        return DeleteStreamingDistributionError::StreamingDistributionNotDisabled(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "PreconditionFailed" => DeleteStreamingDistributionError::PreconditionFailed(
-                    String::from(parsed_error.message),
-                ),
-                "StreamingDistributionNotDisabled" => {
-                    DeleteStreamingDistributionError::StreamingDistributionNotDisabled(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => DeleteStreamingDistributionError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteStreamingDistributionError::Unknown(body.to_string()),
+            }
         }
+        DeleteStreamingDistributionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9703,7 +9609,7 @@ impl DeleteStreamingDistributionError {
 impl From<XmlParseError> for DeleteStreamingDistributionError {
     fn from(err: XmlParseError) -> DeleteStreamingDistributionError {
         let XmlParseError(message) = err;
-        DeleteStreamingDistributionError::Unknown(message.to_string())
+        DeleteStreamingDistributionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteStreamingDistributionError {
@@ -9739,7 +9645,8 @@ impl Error for DeleteStreamingDistributionError {
             DeleteStreamingDistributionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteStreamingDistributionError::Unknown(ref cause) => cause,
+            DeleteStreamingDistributionError::ParseError(ref cause) => cause,
+            DeleteStreamingDistributionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9756,29 +9663,25 @@ pub enum GetCloudFrontOriginAccessIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCloudFrontOriginAccessIdentityError {
-    pub fn from_body(body: &str) -> GetCloudFrontOriginAccessIdentityError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => GetCloudFrontOriginAccessIdentityError::AccessDenied(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchCloudFrontOriginAccessIdentity" => {
-                    GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => GetCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
-            },
-            Err(_) => GetCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> GetCloudFrontOriginAccessIdentityError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "AccessDenied" => return GetCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        GetCloudFrontOriginAccessIdentityError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9793,7 +9696,7 @@ impl GetCloudFrontOriginAccessIdentityError {
 impl From<XmlParseError> for GetCloudFrontOriginAccessIdentityError {
     fn from(err: XmlParseError) -> GetCloudFrontOriginAccessIdentityError {
         let XmlParseError(message) = err;
-        GetCloudFrontOriginAccessIdentityError::Unknown(message.to_string())
+        GetCloudFrontOriginAccessIdentityError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetCloudFrontOriginAccessIdentityError {
@@ -9828,7 +9731,8 @@ impl Error for GetCloudFrontOriginAccessIdentityError {
             GetCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause,
+            GetCloudFrontOriginAccessIdentityError::ParseError(ref cause) => cause,
+            GetCloudFrontOriginAccessIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9845,23 +9749,27 @@ pub enum GetCloudFrontOriginAccessIdentityConfigError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCloudFrontOriginAccessIdentityConfigError {
-    pub fn from_body(body: &str) -> GetCloudFrontOriginAccessIdentityConfigError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AccessDenied" => GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),_ => GetCloudFrontOriginAccessIdentityConfigError::Unknown(String::from(body))
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> GetCloudFrontOriginAccessIdentityConfigError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "AccessDenied" => return GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),_ => {}
                                 }
-                           },
-                           Err(_) => GetCloudFrontOriginAccessIdentityConfigError::Unknown(body.to_string())
-                       }
+            }
+        }
+        GetCloudFrontOriginAccessIdentityConfigError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9876,7 +9784,7 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
 impl From<XmlParseError> for GetCloudFrontOriginAccessIdentityConfigError {
     fn from(err: XmlParseError) -> GetCloudFrontOriginAccessIdentityConfigError {
         let XmlParseError(message) = err;
-        GetCloudFrontOriginAccessIdentityConfigError::Unknown(message.to_string())
+        GetCloudFrontOriginAccessIdentityConfigError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetCloudFrontOriginAccessIdentityConfigError {
@@ -9911,7 +9819,8 @@ impl Error for GetCloudFrontOriginAccessIdentityConfigError {
             GetCloudFrontOriginAccessIdentityConfigError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetCloudFrontOriginAccessIdentityConfigError::Unknown(ref cause) => cause,
+            GetCloudFrontOriginAccessIdentityConfigError::ParseError(ref cause) => cause,
+            GetCloudFrontOriginAccessIdentityConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9928,27 +9837,35 @@ pub enum GetDistributionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDistributionError {
-    pub fn from_body(body: &str) -> GetDistributionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    GetDistributionError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetDistributionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return GetDistributionError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDistribution" => {
+                        return GetDistributionError::NoSuchDistribution(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchDistribution" => {
-                    GetDistributionError::NoSuchDistribution(String::from(parsed_error.message))
-                }
-                _ => GetDistributionError::Unknown(String::from(body)),
-            },
-            Err(_) => GetDistributionError::Unknown(body.to_string()),
+            }
         }
+        GetDistributionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9963,7 +9880,7 @@ impl GetDistributionError {
 impl From<XmlParseError> for GetDistributionError {
     fn from(err: XmlParseError) -> GetDistributionError {
         let XmlParseError(message) = err;
-        GetDistributionError::Unknown(message.to_string())
+        GetDistributionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetDistributionError {
@@ -9994,7 +9911,8 @@ impl Error for GetDistributionError {
             GetDistributionError::Validation(ref cause) => cause,
             GetDistributionError::Credentials(ref err) => err.description(),
             GetDistributionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDistributionError::Unknown(ref cause) => cause,
+            GetDistributionError::ParseError(ref cause) => cause,
+            GetDistributionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10011,27 +9929,35 @@ pub enum GetDistributionConfigError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDistributionConfigError {
-    pub fn from_body(body: &str) -> GetDistributionConfigError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    GetDistributionConfigError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetDistributionConfigError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return GetDistributionConfigError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDistribution" => {
+                        return GetDistributionConfigError::NoSuchDistribution(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchDistribution" => GetDistributionConfigError::NoSuchDistribution(
-                    String::from(parsed_error.message),
-                ),
-                _ => GetDistributionConfigError::Unknown(String::from(body)),
-            },
-            Err(_) => GetDistributionConfigError::Unknown(body.to_string()),
+            }
         }
+        GetDistributionConfigError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10046,7 +9972,7 @@ impl GetDistributionConfigError {
 impl From<XmlParseError> for GetDistributionConfigError {
     fn from(err: XmlParseError) -> GetDistributionConfigError {
         let XmlParseError(message) = err;
-        GetDistributionConfigError::Unknown(message.to_string())
+        GetDistributionConfigError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetDistributionConfigError {
@@ -10079,7 +10005,8 @@ impl Error for GetDistributionConfigError {
             GetDistributionConfigError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetDistributionConfigError::Unknown(ref cause) => cause,
+            GetDistributionConfigError::ParseError(ref cause) => cause,
+            GetDistributionConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10098,30 +10025,40 @@ pub enum GetInvalidationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetInvalidationError {
-    pub fn from_body(body: &str) -> GetInvalidationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    GetInvalidationError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetInvalidationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return GetInvalidationError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDistribution" => {
+                        return GetInvalidationError::NoSuchDistribution(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchInvalidation" => {
+                        return GetInvalidationError::NoSuchInvalidation(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "NoSuchDistribution" => {
-                    GetInvalidationError::NoSuchDistribution(String::from(parsed_error.message))
-                }
-                "NoSuchInvalidation" => {
-                    GetInvalidationError::NoSuchInvalidation(String::from(parsed_error.message))
-                }
-                _ => GetInvalidationError::Unknown(String::from(body)),
-            },
-            Err(_) => GetInvalidationError::Unknown(body.to_string()),
+            }
         }
+        GetInvalidationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10136,7 +10073,7 @@ impl GetInvalidationError {
 impl From<XmlParseError> for GetInvalidationError {
     fn from(err: XmlParseError) -> GetInvalidationError {
         let XmlParseError(message) = err;
-        GetInvalidationError::Unknown(message.to_string())
+        GetInvalidationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetInvalidationError {
@@ -10168,7 +10105,8 @@ impl Error for GetInvalidationError {
             GetInvalidationError::Validation(ref cause) => cause,
             GetInvalidationError::Credentials(ref err) => err.description(),
             GetInvalidationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetInvalidationError::Unknown(ref cause) => cause,
+            GetInvalidationError::ParseError(ref cause) => cause,
+            GetInvalidationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10185,29 +10123,35 @@ pub enum GetStreamingDistributionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetStreamingDistributionError {
-    pub fn from_body(body: &str) -> GetStreamingDistributionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    GetStreamingDistributionError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetStreamingDistributionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return GetStreamingDistributionError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchStreamingDistribution" => {
+                        return GetStreamingDistributionError::NoSuchStreamingDistribution(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "NoSuchStreamingDistribution" => {
-                    GetStreamingDistributionError::NoSuchStreamingDistribution(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => GetStreamingDistributionError::Unknown(String::from(body)),
-            },
-            Err(_) => GetStreamingDistributionError::Unknown(body.to_string()),
+            }
         }
+        GetStreamingDistributionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10222,7 +10166,7 @@ impl GetStreamingDistributionError {
 impl From<XmlParseError> for GetStreamingDistributionError {
     fn from(err: XmlParseError) -> GetStreamingDistributionError {
         let XmlParseError(message) = err;
-        GetStreamingDistributionError::Unknown(message.to_string())
+        GetStreamingDistributionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetStreamingDistributionError {
@@ -10255,7 +10199,8 @@ impl Error for GetStreamingDistributionError {
             GetStreamingDistributionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetStreamingDistributionError::Unknown(ref cause) => cause,
+            GetStreamingDistributionError::ParseError(ref cause) => cause,
+            GetStreamingDistributionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10272,29 +10217,35 @@ pub enum GetStreamingDistributionConfigError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetStreamingDistributionConfigError {
-    pub fn from_body(body: &str) -> GetStreamingDistributionConfigError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => GetStreamingDistributionConfigError::AccessDenied(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchStreamingDistribution" => {
-                    GetStreamingDistributionConfigError::NoSuchStreamingDistribution(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> GetStreamingDistributionConfigError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return GetStreamingDistributionConfigError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchStreamingDistribution" => {
+                        return GetStreamingDistributionConfigError::NoSuchStreamingDistribution(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => GetStreamingDistributionConfigError::Unknown(String::from(body)),
-            },
-            Err(_) => GetStreamingDistributionConfigError::Unknown(body.to_string()),
+            }
         }
+        GetStreamingDistributionConfigError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10309,7 +10260,7 @@ impl GetStreamingDistributionConfigError {
 impl From<XmlParseError> for GetStreamingDistributionConfigError {
     fn from(err: XmlParseError) -> GetStreamingDistributionConfigError {
         let XmlParseError(message) = err;
-        GetStreamingDistributionConfigError::Unknown(message.to_string())
+        GetStreamingDistributionConfigError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetStreamingDistributionConfigError {
@@ -10342,7 +10293,8 @@ impl Error for GetStreamingDistributionConfigError {
             GetStreamingDistributionConfigError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetStreamingDistributionConfigError::Unknown(ref cause) => cause,
+            GetStreamingDistributionConfigError::ParseError(ref cause) => cause,
+            GetStreamingDistributionConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10357,24 +10309,30 @@ pub enum ListCloudFrontOriginAccessIdentitiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListCloudFrontOriginAccessIdentitiesError {
-    pub fn from_body(body: &str) -> ListCloudFrontOriginAccessIdentitiesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidArgument" => ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(
-                    String::from(parsed_error.message),
-                ),
-                _ => ListCloudFrontOriginAccessIdentitiesError::Unknown(String::from(body)),
-            },
-            Err(_) => ListCloudFrontOriginAccessIdentitiesError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListCloudFrontOriginAccessIdentitiesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
         }
+        ListCloudFrontOriginAccessIdentitiesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10389,7 +10347,7 @@ impl ListCloudFrontOriginAccessIdentitiesError {
 impl From<XmlParseError> for ListCloudFrontOriginAccessIdentitiesError {
     fn from(err: XmlParseError) -> ListCloudFrontOriginAccessIdentitiesError {
         let XmlParseError(message) = err;
-        ListCloudFrontOriginAccessIdentitiesError::Unknown(message.to_string())
+        ListCloudFrontOriginAccessIdentitiesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListCloudFrontOriginAccessIdentitiesError {
@@ -10421,7 +10379,8 @@ impl Error for ListCloudFrontOriginAccessIdentitiesError {
             ListCloudFrontOriginAccessIdentitiesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListCloudFrontOriginAccessIdentitiesError::Unknown(ref cause) => cause,
+            ListCloudFrontOriginAccessIdentitiesError::ParseError(ref cause) => cause,
+            ListCloudFrontOriginAccessIdentitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10436,24 +10395,30 @@ pub enum ListDistributionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDistributionsError {
-    pub fn from_body(body: &str) -> ListDistributionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidArgument" => {
-                    ListDistributionsError::InvalidArgument(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListDistributionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return ListDistributionsError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => ListDistributionsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListDistributionsError::Unknown(body.to_string()),
+            }
         }
+        ListDistributionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10468,7 +10433,7 @@ impl ListDistributionsError {
 impl From<XmlParseError> for ListDistributionsError {
     fn from(err: XmlParseError) -> ListDistributionsError {
         let XmlParseError(message) = err;
-        ListDistributionsError::Unknown(message.to_string())
+        ListDistributionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListDistributionsError {
@@ -10500,7 +10465,8 @@ impl Error for ListDistributionsError {
             ListDistributionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListDistributionsError::Unknown(ref cause) => cause,
+            ListDistributionsError::ParseError(ref cause) => cause,
+            ListDistributionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10517,27 +10483,35 @@ pub enum ListDistributionsByWebACLIdError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDistributionsByWebACLIdError {
-    pub fn from_body(body: &str) -> ListDistributionsByWebACLIdError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidArgument" => ListDistributionsByWebACLIdError::InvalidArgument(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidWebACLId" => ListDistributionsByWebACLIdError::InvalidWebACLId(
-                    String::from(parsed_error.message),
-                ),
-                _ => ListDistributionsByWebACLIdError::Unknown(String::from(body)),
-            },
-            Err(_) => ListDistributionsByWebACLIdError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListDistributionsByWebACLIdError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return ListDistributionsByWebACLIdError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidWebACLId" => {
+                        return ListDistributionsByWebACLIdError::InvalidWebACLId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        ListDistributionsByWebACLIdError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10552,7 +10526,7 @@ impl ListDistributionsByWebACLIdError {
 impl From<XmlParseError> for ListDistributionsByWebACLIdError {
     fn from(err: XmlParseError) -> ListDistributionsByWebACLIdError {
         let XmlParseError(message) = err;
-        ListDistributionsByWebACLIdError::Unknown(message.to_string())
+        ListDistributionsByWebACLIdError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListDistributionsByWebACLIdError {
@@ -10585,7 +10559,8 @@ impl Error for ListDistributionsByWebACLIdError {
             ListDistributionsByWebACLIdError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListDistributionsByWebACLIdError::Unknown(ref cause) => cause,
+            ListDistributionsByWebACLIdError::ParseError(ref cause) => cause,
+            ListDistributionsByWebACLIdError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10604,30 +10579,40 @@ pub enum ListInvalidationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListInvalidationsError {
-    pub fn from_body(body: &str) -> ListInvalidationsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    ListInvalidationsError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListInvalidationsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return ListInvalidationsError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return ListInvalidationsError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDistribution" => {
+                        return ListInvalidationsError::NoSuchDistribution(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidArgument" => {
-                    ListInvalidationsError::InvalidArgument(String::from(parsed_error.message))
-                }
-                "NoSuchDistribution" => {
-                    ListInvalidationsError::NoSuchDistribution(String::from(parsed_error.message))
-                }
-                _ => ListInvalidationsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListInvalidationsError::Unknown(body.to_string()),
+            }
         }
+        ListInvalidationsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10642,7 +10627,7 @@ impl ListInvalidationsError {
 impl From<XmlParseError> for ListInvalidationsError {
     fn from(err: XmlParseError) -> ListInvalidationsError {
         let XmlParseError(message) = err;
-        ListInvalidationsError::Unknown(message.to_string())
+        ListInvalidationsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListInvalidationsError {
@@ -10676,7 +10661,8 @@ impl Error for ListInvalidationsError {
             ListInvalidationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListInvalidationsError::Unknown(ref cause) => cause,
+            ListInvalidationsError::ParseError(ref cause) => cause,
+            ListInvalidationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10691,24 +10677,30 @@ pub enum ListStreamingDistributionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListStreamingDistributionsError {
-    pub fn from_body(body: &str) -> ListStreamingDistributionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidArgument" => ListStreamingDistributionsError::InvalidArgument(
-                    String::from(parsed_error.message),
-                ),
-                _ => ListStreamingDistributionsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListStreamingDistributionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> ListStreamingDistributionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return ListStreamingDistributionsError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
         }
+        ListStreamingDistributionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10723,7 +10715,7 @@ impl ListStreamingDistributionsError {
 impl From<XmlParseError> for ListStreamingDistributionsError {
     fn from(err: XmlParseError) -> ListStreamingDistributionsError {
         let XmlParseError(message) = err;
-        ListStreamingDistributionsError::Unknown(message.to_string())
+        ListStreamingDistributionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListStreamingDistributionsError {
@@ -10755,7 +10747,8 @@ impl Error for ListStreamingDistributionsError {
             ListStreamingDistributionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListStreamingDistributionsError::Unknown(ref cause) => cause,
+            ListStreamingDistributionsError::ParseError(ref cause) => cause,
+            ListStreamingDistributionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10776,33 +10769,45 @@ pub enum ListTagsForResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_body(body: &str) -> ListTagsForResourceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    ListTagsForResourceError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return ListTagsForResourceError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return ListTagsForResourceError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidTagging" => {
+                        return ListTagsForResourceError::InvalidTagging(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchResource" => {
+                        return ListTagsForResourceError::NoSuchResource(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidArgument" => {
-                    ListTagsForResourceError::InvalidArgument(String::from(parsed_error.message))
-                }
-                "InvalidTagging" => {
-                    ListTagsForResourceError::InvalidTagging(String::from(parsed_error.message))
-                }
-                "NoSuchResource" => {
-                    ListTagsForResourceError::NoSuchResource(String::from(parsed_error.message))
-                }
-                _ => ListTagsForResourceError::Unknown(String::from(body)),
-            },
-            Err(_) => ListTagsForResourceError::Unknown(body.to_string()),
+            }
         }
+        ListTagsForResourceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10817,7 +10822,7 @@ impl ListTagsForResourceError {
 impl From<XmlParseError> for ListTagsForResourceError {
     fn from(err: XmlParseError) -> ListTagsForResourceError {
         let XmlParseError(message) = err;
-        ListTagsForResourceError::Unknown(message.to_string())
+        ListTagsForResourceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListTagsForResourceError {
@@ -10852,7 +10857,8 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTagsForResourceError::Unknown(ref cause) => cause,
+            ListTagsForResourceError::ParseError(ref cause) => cause,
+            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10873,33 +10879,37 @@ pub enum TagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_body(body: &str) -> TagResourceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    TagResourceError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return TagResourceError::AccessDenied(String::from(parsed_error.message))
+                    }
+                    "InvalidArgument" => {
+                        return TagResourceError::InvalidArgument(String::from(parsed_error.message))
+                    }
+                    "InvalidTagging" => {
+                        return TagResourceError::InvalidTagging(String::from(parsed_error.message))
+                    }
+                    "NoSuchResource" => {
+                        return TagResourceError::NoSuchResource(String::from(parsed_error.message))
+                    }
+                    _ => {}
                 }
-                "InvalidArgument" => {
-                    TagResourceError::InvalidArgument(String::from(parsed_error.message))
-                }
-                "InvalidTagging" => {
-                    TagResourceError::InvalidTagging(String::from(parsed_error.message))
-                }
-                "NoSuchResource" => {
-                    TagResourceError::NoSuchResource(String::from(parsed_error.message))
-                }
-                _ => TagResourceError::Unknown(String::from(body)),
-            },
-            Err(_) => TagResourceError::Unknown(body.to_string()),
+            }
         }
+        TagResourceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10914,7 +10924,7 @@ impl TagResourceError {
 impl From<XmlParseError> for TagResourceError {
     fn from(err: XmlParseError) -> TagResourceError {
         let XmlParseError(message) = err;
-        TagResourceError::Unknown(message.to_string())
+        TagResourceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for TagResourceError {
@@ -10947,7 +10957,8 @@ impl Error for TagResourceError {
             TagResourceError::Validation(ref cause) => cause,
             TagResourceError::Credentials(ref err) => err.description(),
             TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::Unknown(ref cause) => cause,
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10968,33 +10979,43 @@ pub enum UntagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_body(body: &str) -> UntagResourceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    UntagResourceError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return UntagResourceError::AccessDenied(String::from(parsed_error.message))
+                    }
+                    "InvalidArgument" => {
+                        return UntagResourceError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidTagging" => {
+                        return UntagResourceError::InvalidTagging(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchResource" => {
+                        return UntagResourceError::NoSuchResource(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidArgument" => {
-                    UntagResourceError::InvalidArgument(String::from(parsed_error.message))
-                }
-                "InvalidTagging" => {
-                    UntagResourceError::InvalidTagging(String::from(parsed_error.message))
-                }
-                "NoSuchResource" => {
-                    UntagResourceError::NoSuchResource(String::from(parsed_error.message))
-                }
-                _ => UntagResourceError::Unknown(String::from(body)),
-            },
-            Err(_) => UntagResourceError::Unknown(body.to_string()),
+            }
         }
+        UntagResourceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11009,7 +11030,7 @@ impl UntagResourceError {
 impl From<XmlParseError> for UntagResourceError {
     fn from(err: XmlParseError) -> UntagResourceError {
         let XmlParseError(message) = err;
-        UntagResourceError::Unknown(message.to_string())
+        UntagResourceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UntagResourceError {
@@ -11042,7 +11063,8 @@ impl Error for UntagResourceError {
             UntagResourceError::Validation(ref cause) => cause,
             UntagResourceError::Credentials(ref err) => err.description(),
             UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::Unknown(ref cause) => cause,
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11071,53 +11093,25 @@ pub enum UpdateCloudFrontOriginAccessIdentityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateCloudFrontOriginAccessIdentityError {
-    pub fn from_body(body: &str) -> UpdateCloudFrontOriginAccessIdentityError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => UpdateCloudFrontOriginAccessIdentityError::AccessDenied(
-                    String::from(parsed_error.message),
-                ),
-                "IllegalUpdate" => UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(
-                    String::from(parsed_error.message),
-                ),
-                "InconsistentQuantities" => {
-                    UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidArgument" => UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidIfMatchVersion" => {
-                    UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MissingBody" => UpdateCloudFrontOriginAccessIdentityError::MissingBody(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchCloudFrontOriginAccessIdentity" => {
-                    UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "PreconditionFailed" => {
-                    UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => UpdateCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateCloudFrontOriginAccessIdentityError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "AccessDenied" => return UpdateCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"IllegalUpdate" => return UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(String::from(parsed_error.message)),"InconsistentQuantities" => return UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => return UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"InvalidIfMatchVersion" => return UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),"MissingBody" => return UpdateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"PreconditionFailed" => return UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        UpdateCloudFrontOriginAccessIdentityError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11132,7 +11126,7 @@ impl UpdateCloudFrontOriginAccessIdentityError {
 impl From<XmlParseError> for UpdateCloudFrontOriginAccessIdentityError {
     fn from(err: XmlParseError) -> UpdateCloudFrontOriginAccessIdentityError {
         let XmlParseError(message) = err;
-        UpdateCloudFrontOriginAccessIdentityError::Unknown(message.to_string())
+        UpdateCloudFrontOriginAccessIdentityError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateCloudFrontOriginAccessIdentityError {
@@ -11173,7 +11167,8 @@ impl Error for UpdateCloudFrontOriginAccessIdentityError {
             UpdateCloudFrontOriginAccessIdentityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause,
+            UpdateCloudFrontOriginAccessIdentityError::ParseError(ref cause) => cause,
+            UpdateCloudFrontOriginAccessIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11266,165 +11261,225 @@ pub enum UpdateDistributionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDistributionError {
-    pub fn from_body(body: &str) -> UpdateDistributionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => {
-                    UpdateDistributionError::AccessDenied(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateDistributionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return UpdateDistributionError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "CNAMEAlreadyExists" => {
+                        return UpdateDistributionError::CNAMEAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "IllegalUpdate" => {
+                        return UpdateDistributionError::IllegalUpdate(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InconsistentQuantities" => {
+                        return UpdateDistributionError::InconsistentQuantities(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidArgument" => {
+                        return UpdateDistributionError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidDefaultRootObject" => {
+                        return UpdateDistributionError::InvalidDefaultRootObject(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidErrorCode" => {
+                        return UpdateDistributionError::InvalidErrorCode(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidForwardCookies" => {
+                        return UpdateDistributionError::InvalidForwardCookies(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidGeoRestrictionParameter" => {
+                        return UpdateDistributionError::InvalidGeoRestrictionParameter(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidHeadersForS3Origin" => {
+                        return UpdateDistributionError::InvalidHeadersForS3Origin(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return UpdateDistributionError::InvalidIfMatchVersion(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidLambdaFunctionAssociation" => {
+                        return UpdateDistributionError::InvalidLambdaFunctionAssociation(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidLocationCode" => {
+                        return UpdateDistributionError::InvalidLocationCode(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidMinimumProtocolVersion" => {
+                        return UpdateDistributionError::InvalidMinimumProtocolVersion(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidOriginAccessIdentity" => {
+                        return UpdateDistributionError::InvalidOriginAccessIdentity(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidOriginKeepaliveTimeout" => {
+                        return UpdateDistributionError::InvalidOriginKeepaliveTimeout(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidOriginReadTimeout" => {
+                        return UpdateDistributionError::InvalidOriginReadTimeout(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidQueryStringParameters" => {
+                        return UpdateDistributionError::InvalidQueryStringParameters(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidRelativePath" => {
+                        return UpdateDistributionError::InvalidRelativePath(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidRequiredProtocol" => {
+                        return UpdateDistributionError::InvalidRequiredProtocol(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidResponseCode" => {
+                        return UpdateDistributionError::InvalidResponseCode(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidTTLOrder" => {
+                        return UpdateDistributionError::InvalidTTLOrder(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidViewerCertificate" => {
+                        return UpdateDistributionError::InvalidViewerCertificate(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidWebACLId" => {
+                        return UpdateDistributionError::InvalidWebACLId(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingBody" => {
+                        return UpdateDistributionError::MissingBody(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchDistribution" => {
+                        return UpdateDistributionError::NoSuchDistribution(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchOrigin" => {
+                        return UpdateDistributionError::NoSuchOrigin(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PreconditionFailed" => {
+                        return UpdateDistributionError::PreconditionFailed(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyCacheBehaviors" => {
+                        return UpdateDistributionError::TooManyCacheBehaviors(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyCertificates" => {
+                        return UpdateDistributionError::TooManyCertificates(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyCookieNamesInWhiteList" => {
+                        return UpdateDistributionError::TooManyCookieNamesInWhiteList(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyDistributionCNAMEs" => {
+                        return UpdateDistributionError::TooManyDistributionCNAMEs(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyDistributionsWithLambdaAssociations" => {
+                        return UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyHeadersInForwardedValues" => {
+                        return UpdateDistributionError::TooManyHeadersInForwardedValues(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyLambdaFunctionAssociations" => {
+                        return UpdateDistributionError::TooManyLambdaFunctionAssociations(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyOriginCustomHeaders" => {
+                        return UpdateDistributionError::TooManyOriginCustomHeaders(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyOrigins" => {
+                        return UpdateDistributionError::TooManyOrigins(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyQueryStringParameters" => {
+                        return UpdateDistributionError::TooManyQueryStringParameters(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyTrustedSigners" => {
+                        return UpdateDistributionError::TooManyTrustedSigners(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TrustedSignerDoesNotExist" => {
+                        return UpdateDistributionError::TrustedSignerDoesNotExist(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "CNAMEAlreadyExists" => {
-                    UpdateDistributionError::CNAMEAlreadyExists(String::from(parsed_error.message))
-                }
-                "IllegalUpdate" => {
-                    UpdateDistributionError::IllegalUpdate(String::from(parsed_error.message))
-                }
-                "InconsistentQuantities" => UpdateDistributionError::InconsistentQuantities(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidArgument" => {
-                    UpdateDistributionError::InvalidArgument(String::from(parsed_error.message))
-                }
-                "InvalidDefaultRootObject" => UpdateDistributionError::InvalidDefaultRootObject(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidErrorCode" => {
-                    UpdateDistributionError::InvalidErrorCode(String::from(parsed_error.message))
-                }
-                "InvalidForwardCookies" => UpdateDistributionError::InvalidForwardCookies(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidGeoRestrictionParameter" => {
-                    UpdateDistributionError::InvalidGeoRestrictionParameter(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidHeadersForS3Origin" => UpdateDistributionError::InvalidHeadersForS3Origin(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidIfMatchVersion" => UpdateDistributionError::InvalidIfMatchVersion(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidLambdaFunctionAssociation" => {
-                    UpdateDistributionError::InvalidLambdaFunctionAssociation(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidLocationCode" => {
-                    UpdateDistributionError::InvalidLocationCode(String::from(parsed_error.message))
-                }
-                "InvalidMinimumProtocolVersion" => {
-                    UpdateDistributionError::InvalidMinimumProtocolVersion(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidOriginAccessIdentity" => {
-                    UpdateDistributionError::InvalidOriginAccessIdentity(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidOriginKeepaliveTimeout" => {
-                    UpdateDistributionError::InvalidOriginKeepaliveTimeout(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidOriginReadTimeout" => UpdateDistributionError::InvalidOriginReadTimeout(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidQueryStringParameters" => {
-                    UpdateDistributionError::InvalidQueryStringParameters(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidRelativePath" => {
-                    UpdateDistributionError::InvalidRelativePath(String::from(parsed_error.message))
-                }
-                "InvalidRequiredProtocol" => UpdateDistributionError::InvalidRequiredProtocol(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidResponseCode" => {
-                    UpdateDistributionError::InvalidResponseCode(String::from(parsed_error.message))
-                }
-                "InvalidTTLOrder" => {
-                    UpdateDistributionError::InvalidTTLOrder(String::from(parsed_error.message))
-                }
-                "InvalidViewerCertificate" => UpdateDistributionError::InvalidViewerCertificate(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidWebACLId" => {
-                    UpdateDistributionError::InvalidWebACLId(String::from(parsed_error.message))
-                }
-                "MissingBody" => {
-                    UpdateDistributionError::MissingBody(String::from(parsed_error.message))
-                }
-                "NoSuchDistribution" => {
-                    UpdateDistributionError::NoSuchDistribution(String::from(parsed_error.message))
-                }
-                "NoSuchOrigin" => {
-                    UpdateDistributionError::NoSuchOrigin(String::from(parsed_error.message))
-                }
-                "PreconditionFailed" => {
-                    UpdateDistributionError::PreconditionFailed(String::from(parsed_error.message))
-                }
-                "TooManyCacheBehaviors" => UpdateDistributionError::TooManyCacheBehaviors(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyCertificates" => {
-                    UpdateDistributionError::TooManyCertificates(String::from(parsed_error.message))
-                }
-                "TooManyCookieNamesInWhiteList" => {
-                    UpdateDistributionError::TooManyCookieNamesInWhiteList(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyDistributionCNAMEs" => UpdateDistributionError::TooManyDistributionCNAMEs(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyDistributionsWithLambdaAssociations" => {
-                    UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TooManyHeadersInForwardedValues" => {
-                    UpdateDistributionError::TooManyHeadersInForwardedValues(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyLambdaFunctionAssociations" => {
-                    UpdateDistributionError::TooManyLambdaFunctionAssociations(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyOriginCustomHeaders" => {
-                    UpdateDistributionError::TooManyOriginCustomHeaders(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyOrigins" => {
-                    UpdateDistributionError::TooManyOrigins(String::from(parsed_error.message))
-                }
-                "TooManyQueryStringParameters" => {
-                    UpdateDistributionError::TooManyQueryStringParameters(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyTrustedSigners" => UpdateDistributionError::TooManyTrustedSigners(
-                    String::from(parsed_error.message),
-                ),
-                "TrustedSignerDoesNotExist" => UpdateDistributionError::TrustedSignerDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
-                _ => UpdateDistributionError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateDistributionError::Unknown(body.to_string()),
+            }
         }
+        UpdateDistributionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11439,7 +11494,7 @@ impl UpdateDistributionError {
 impl From<XmlParseError> for UpdateDistributionError {
     fn from(err: XmlParseError) -> UpdateDistributionError {
         let XmlParseError(message) = err;
-        UpdateDistributionError::Unknown(message.to_string())
+        UpdateDistributionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateDistributionError {
@@ -11510,7 +11565,8 @@ impl Error for UpdateDistributionError {
             UpdateDistributionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateDistributionError::Unknown(ref cause) => cause,
+            UpdateDistributionError::ParseError(ref cause) => cause,
+            UpdateDistributionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11549,70 +11605,90 @@ pub enum UpdateStreamingDistributionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateStreamingDistributionError {
-    pub fn from_body(body: &str) -> UpdateStreamingDistributionError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessDenied" => UpdateStreamingDistributionError::AccessDenied(String::from(
-                    parsed_error.message,
-                )),
-                "CNAMEAlreadyExists" => UpdateStreamingDistributionError::CNAMEAlreadyExists(
-                    String::from(parsed_error.message),
-                ),
-                "IllegalUpdate" => UpdateStreamingDistributionError::IllegalUpdate(String::from(
-                    parsed_error.message,
-                )),
-                "InconsistentQuantities" => {
-                    UpdateStreamingDistributionError::InconsistentQuantities(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateStreamingDistributionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessDenied" => {
+                        return UpdateStreamingDistributionError::AccessDenied(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "CNAMEAlreadyExists" => {
+                        return UpdateStreamingDistributionError::CNAMEAlreadyExists(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "IllegalUpdate" => {
+                        return UpdateStreamingDistributionError::IllegalUpdate(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InconsistentQuantities" => {
+                        return UpdateStreamingDistributionError::InconsistentQuantities(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidArgument" => {
+                        return UpdateStreamingDistributionError::InvalidArgument(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return UpdateStreamingDistributionError::InvalidIfMatchVersion(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidOriginAccessIdentity" => {
+                        return UpdateStreamingDistributionError::InvalidOriginAccessIdentity(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "MissingBody" => {
+                        return UpdateStreamingDistributionError::MissingBody(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchStreamingDistribution" => {
+                        return UpdateStreamingDistributionError::NoSuchStreamingDistribution(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "PreconditionFailed" => {
+                        return UpdateStreamingDistributionError::PreconditionFailed(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyStreamingDistributionCNAMEs" => {
+                        return UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TooManyTrustedSigners" => {
+                        return UpdateStreamingDistributionError::TooManyTrustedSigners(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "TrustedSignerDoesNotExist" => {
+                        return UpdateStreamingDistributionError::TrustedSignerDoesNotExist(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidArgument" => UpdateStreamingDistributionError::InvalidArgument(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidIfMatchVersion" => UpdateStreamingDistributionError::InvalidIfMatchVersion(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidOriginAccessIdentity" => {
-                    UpdateStreamingDistributionError::InvalidOriginAccessIdentity(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MissingBody" => UpdateStreamingDistributionError::MissingBody(String::from(
-                    parsed_error.message,
-                )),
-                "NoSuchStreamingDistribution" => {
-                    UpdateStreamingDistributionError::NoSuchStreamingDistribution(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "PreconditionFailed" => UpdateStreamingDistributionError::PreconditionFailed(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyStreamingDistributionCNAMEs" => {
-                    UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "TooManyTrustedSigners" => UpdateStreamingDistributionError::TooManyTrustedSigners(
-                    String::from(parsed_error.message),
-                ),
-                "TrustedSignerDoesNotExist" => {
-                    UpdateStreamingDistributionError::TrustedSignerDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => UpdateStreamingDistributionError::Unknown(String::from(body)),
-            },
-            Err(_) => UpdateStreamingDistributionError::Unknown(body.to_string()),
+            }
         }
+        UpdateStreamingDistributionError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11627,7 +11703,7 @@ impl UpdateStreamingDistributionError {
 impl From<XmlParseError> for UpdateStreamingDistributionError {
     fn from(err: XmlParseError) -> UpdateStreamingDistributionError {
         let XmlParseError(message) = err;
-        UpdateStreamingDistributionError::Unknown(message.to_string())
+        UpdateStreamingDistributionError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for UpdateStreamingDistributionError {
@@ -11673,7 +11749,8 @@ impl Error for UpdateStreamingDistributionError {
             UpdateStreamingDistributionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateStreamingDistributionError::Unknown(ref cause) => cause,
+            UpdateStreamingDistributionError::ParseError(ref cause) => cause,
+            UpdateStreamingDistributionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11915,8 +11992,8 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCloudFrontOriginAccessIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateCloudFrontOriginAccessIdentityError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -11975,11 +12052,12 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDistributionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateDistributionError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12038,9 +12116,7 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDistributionWithTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateDistributionWithTagsError::from_response(response))
                 }));
             }
 
@@ -12099,11 +12175,12 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateInvalidationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateInvalidationError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12155,9 +12232,7 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStreamingDistributionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateStreamingDistributionError::from_response(response))
                 }));
             }
 
@@ -12220,8 +12295,8 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStreamingDistributionWithTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateStreamingDistributionWithTagsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -12280,8 +12355,8 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCloudFrontOriginAccessIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DeleteCloudFrontOriginAccessIdentityError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -12306,11 +12381,12 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDistributionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteDistributionError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -12332,9 +12408,7 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteServiceLinkedRoleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteServiceLinkedRoleError::from_response(response))
                 }));
             }
 
@@ -12359,9 +12433,7 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteStreamingDistributionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteStreamingDistributionError::from_response(response))
                 }));
             }
 
@@ -12386,8 +12458,8 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCloudFrontOriginAccessIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetCloudFrontOriginAccessIdentityError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -12441,8 +12513,8 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCloudFrontOriginAccessIdentityConfigError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetCloudFrontOriginAccessIdentityConfigError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -12489,11 +12561,12 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDistributionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetDistributionError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12536,11 +12609,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDistributionConfigError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetDistributionConfigError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12587,11 +12660,12 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetInvalidationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetInvalidationError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12631,9 +12705,7 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetStreamingDistributionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetStreamingDistributionError::from_response(response))
                 }));
             }
 
@@ -12682,9 +12754,7 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetStreamingDistributionConfigError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetStreamingDistributionConfigError::from_response(response))
                 }));
             }
 
@@ -12743,8 +12813,8 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListCloudFrontOriginAccessIdentitiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ListCloudFrontOriginAccessIdentitiesError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -12796,11 +12866,12 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDistributionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListDistributionsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12852,9 +12923,7 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDistributionsByWebACLIdError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListDistributionsByWebACLIdError::from_response(response))
                 }));
             }
 
@@ -12906,11 +12975,12 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListInvalidationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListInvalidationsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12959,9 +13029,7 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStreamingDistributionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListStreamingDistributionsError::from_response(response))
                 }));
             }
 
@@ -13005,11 +13073,11 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsForResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13053,11 +13121,12 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -13081,11 +13150,12 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -13123,8 +13193,8 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateCloudFrontOriginAccessIdentityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(UpdateCloudFrontOriginAccessIdentityError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -13183,11 +13253,12 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateDistributionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateDistributionError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13246,9 +13317,7 @@ impl CloudFront for CloudFrontClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateStreamingDistributionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateStreamingDistributionError::from_response(response))
                 }));
             }
 

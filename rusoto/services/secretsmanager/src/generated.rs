@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelRotateSecretRequest {
@@ -73,7 +73,7 @@ pub struct CreateSecretRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub secret_binary: Option<Vec<u8>>,
     /// <p>(Optional) Specifies text data that you want to encrypt and store in this new version of the secret.</p> <p>Either <code>SecretString</code> or <code>SecretBinary</code> must have a value, but not both. They cannot both be empty.</p> <p>If you create a secret by using the Secrets Manager console then Secrets Manager puts the protected secret text in only the <code>SecretString</code> parameter. The Secrets Manager console stores the information as a JSON structure of key/value pairs that the Lambda rotation function knows how to parse.</p> <p>For storing multiple values, we recommend that you use a JSON text string argument and specify key/value pairs. For information on how to format a JSON parameter for the various command line tool environments, see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json">Using JSON for Parameters</a> in the <i>AWS CLI User Guide</i>. For example:</p> <p> <code>[{"username":"bob"},{"password":"abc123xyz456"}]</code> </p> <p>If your command-line tool or SDK requires quotation marks around the parameter, you should use single quotes to avoid confusion with the double quotes required in the JSON text. </p>
@@ -312,7 +312,7 @@ pub struct GetSecretValueResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub secret_binary: Option<Vec<u8>>,
     /// <p>The decrypted part of the protected secret information that was originally provided as a string.</p> <p>If you create this secret by using the Secrets Manager console then only the <code>SecretString</code> parameter contains data. Secrets Manager stores the information as a JSON structure of key/value pairs that the Lambda rotation function knows how to parse.</p> <p>If you store custom information in the secret by using the <a>CreateSecret</a>, <a>UpdateSecret</a>, or <a>PutSecretValue</a> API operations instead of the Secrets Manager console, or by using the <b>Other secret type</b> in the console, then you must code your Lambda rotation function to parse and interpret those values.</p>
@@ -425,7 +425,7 @@ pub struct PutSecretValueRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub secret_binary: Option<Vec<u8>>,
     /// <p>Specifies the secret to which you want to add a new version. You can specify either the Amazon Resource Name (ARN) or the friendly name of the secret. The secret must already exist.</p>
@@ -654,7 +654,7 @@ pub struct UpdateSecretRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub secret_binary: Option<Vec<u8>>,
     /// <p>Specifies the secret that you want to update or to which you want to add a new version. You can specify either the Amazon Resource Name (ARN) or the friendly name of the secret.</p>
@@ -729,50 +729,52 @@ pub enum CancelRotateSecretError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CancelRotateSecretError {
-    pub fn from_body(body: &str) -> CancelRotateSecretError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CancelRotateSecretError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        CancelRotateSecretError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CancelRotateSecretError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CancelRotateSecretError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CancelRotateSecretError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CancelRotateSecretError::Validation(error_message.to_string())
-                    }
-                    _ => CancelRotateSecretError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return CancelRotateSecretError::InternalServiceError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterException" => {
+                    return CancelRotateSecretError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return CancelRotateSecretError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CancelRotateSecretError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CancelRotateSecretError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CancelRotateSecretError::Unknown(String::from(body)),
         }
+        return CancelRotateSecretError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CancelRotateSecretError {
     fn from(err: serde_json::error::Error) -> CancelRotateSecretError {
-        CancelRotateSecretError::Unknown(err.description().to_string())
+        CancelRotateSecretError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CancelRotateSecretError {
@@ -807,7 +809,8 @@ impl Error for CancelRotateSecretError {
             CancelRotateSecretError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CancelRotateSecretError::Unknown(ref cause) => cause,
+            CancelRotateSecretError::ParseError(ref cause) => cause,
+            CancelRotateSecretError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -838,65 +841,65 @@ pub enum CreateSecretError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSecretError {
-    pub fn from_body(body: &str) -> CreateSecretError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSecretError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "EncryptionFailure" => {
-                        CreateSecretError::EncryptionFailure(String::from(error_message))
-                    }
-                    "InternalServiceError" => {
-                        CreateSecretError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateSecretError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        CreateSecretError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateSecretError::LimitExceeded(String::from(error_message))
-                    }
-                    "MalformedPolicyDocumentException" => {
-                        CreateSecretError::MalformedPolicyDocument(String::from(error_message))
-                    }
-                    "PreconditionNotMetException" => {
-                        CreateSecretError::PreconditionNotMet(String::from(error_message))
-                    }
-                    "ResourceExistsException" => {
-                        CreateSecretError::ResourceExists(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateSecretError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateSecretError::Validation(error_message.to_string())
-                    }
-                    _ => CreateSecretError::Unknown(String::from(body)),
+            match *error_type {
+                "EncryptionFailure" => {
+                    return CreateSecretError::EncryptionFailure(String::from(error_message))
                 }
+                "InternalServiceError" => {
+                    return CreateSecretError::InternalServiceError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return CreateSecretError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return CreateSecretError::InvalidRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateSecretError::LimitExceeded(String::from(error_message))
+                }
+                "MalformedPolicyDocumentException" => {
+                    return CreateSecretError::MalformedPolicyDocument(String::from(error_message))
+                }
+                "PreconditionNotMetException" => {
+                    return CreateSecretError::PreconditionNotMet(String::from(error_message))
+                }
+                "ResourceExistsException" => {
+                    return CreateSecretError::ResourceExists(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateSecretError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateSecretError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateSecretError::Unknown(String::from(body)),
         }
+        return CreateSecretError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateSecretError {
     fn from(err: serde_json::error::Error) -> CreateSecretError {
-        CreateSecretError::Unknown(err.description().to_string())
+        CreateSecretError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateSecretError {
@@ -934,7 +937,8 @@ impl Error for CreateSecretError {
             CreateSecretError::Validation(ref cause) => cause,
             CreateSecretError::Credentials(ref err) => err.description(),
             CreateSecretError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateSecretError::Unknown(ref cause) => cause,
+            CreateSecretError::ParseError(ref cause) => cause,
+            CreateSecretError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -953,47 +957,49 @@ pub enum DeleteResourcePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteResourcePolicyError {
-    pub fn from_body(body: &str) -> DeleteResourcePolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteResourcePolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        DeleteResourcePolicyError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteResourcePolicyError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteResourcePolicyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteResourcePolicyError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteResourcePolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return DeleteResourcePolicyError::InternalServiceError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidRequestException" => {
+                    return DeleteResourcePolicyError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteResourcePolicyError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteResourcePolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteResourcePolicyError::Unknown(String::from(body)),
         }
+        return DeleteResourcePolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteResourcePolicyError {
     fn from(err: serde_json::error::Error) -> DeleteResourcePolicyError {
-        DeleteResourcePolicyError::Unknown(err.description().to_string())
+        DeleteResourcePolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteResourcePolicyError {
@@ -1027,7 +1033,8 @@ impl Error for DeleteResourcePolicyError {
             DeleteResourcePolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteResourcePolicyError::Unknown(ref cause) => cause,
+            DeleteResourcePolicyError::ParseError(ref cause) => cause,
+            DeleteResourcePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1048,50 +1055,50 @@ pub enum DeleteSecretError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSecretError {
-    pub fn from_body(body: &str) -> DeleteSecretError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSecretError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        DeleteSecretError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteSecretError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        DeleteSecretError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteSecretError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteSecretError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteSecretError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return DeleteSecretError::InternalServiceError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DeleteSecretError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return DeleteSecretError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteSecretError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteSecretError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteSecretError::Unknown(String::from(body)),
         }
+        return DeleteSecretError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteSecretError {
     fn from(err: serde_json::error::Error) -> DeleteSecretError {
-        DeleteSecretError::Unknown(err.description().to_string())
+        DeleteSecretError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteSecretError {
@@ -1124,7 +1131,8 @@ impl Error for DeleteSecretError {
             DeleteSecretError::Validation(ref cause) => cause,
             DeleteSecretError::Credentials(ref err) => err.description(),
             DeleteSecretError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteSecretError::Unknown(ref cause) => cause,
+            DeleteSecretError::ParseError(ref cause) => cause,
+            DeleteSecretError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1141,44 +1149,44 @@ pub enum DescribeSecretError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSecretError {
-    pub fn from_body(body: &str) -> DescribeSecretError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSecretError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        DescribeSecretError::InternalServiceError(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeSecretError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeSecretError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeSecretError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return DescribeSecretError::InternalServiceError(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return DescribeSecretError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeSecretError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeSecretError::Unknown(String::from(body)),
         }
+        return DescribeSecretError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeSecretError {
     fn from(err: serde_json::error::Error) -> DescribeSecretError {
-        DescribeSecretError::Unknown(err.description().to_string())
+        DescribeSecretError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeSecretError {
@@ -1209,7 +1217,8 @@ impl Error for DescribeSecretError {
             DescribeSecretError::Validation(ref cause) => cause,
             DescribeSecretError::Credentials(ref err) => err.description(),
             DescribeSecretError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeSecretError::Unknown(ref cause) => cause,
+            DescribeSecretError::ParseError(ref cause) => cause,
+            DescribeSecretError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1228,47 +1237,47 @@ pub enum GetRandomPasswordError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetRandomPasswordError {
-    pub fn from_body(body: &str) -> GetRandomPasswordError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetRandomPasswordError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        GetRandomPasswordError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        GetRandomPasswordError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        GetRandomPasswordError::InvalidRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetRandomPasswordError::Validation(error_message.to_string())
-                    }
-                    _ => GetRandomPasswordError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return GetRandomPasswordError::InternalServiceError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return GetRandomPasswordError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return GetRandomPasswordError::InvalidRequest(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetRandomPasswordError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetRandomPasswordError::Unknown(String::from(body)),
         }
+        return GetRandomPasswordError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetRandomPasswordError {
     fn from(err: serde_json::error::Error) -> GetRandomPasswordError {
-        GetRandomPasswordError::Unknown(err.description().to_string())
+        GetRandomPasswordError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetRandomPasswordError {
@@ -1302,7 +1311,8 @@ impl Error for GetRandomPasswordError {
             GetRandomPasswordError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetRandomPasswordError::Unknown(ref cause) => cause,
+            GetRandomPasswordError::ParseError(ref cause) => cause,
+            GetRandomPasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1321,47 +1331,47 @@ pub enum GetResourcePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourcePolicyError {
-    pub fn from_body(body: &str) -> GetResourcePolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetResourcePolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        GetResourcePolicyError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        GetResourcePolicyError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetResourcePolicyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetResourcePolicyError::Validation(error_message.to_string())
-                    }
-                    _ => GetResourcePolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return GetResourcePolicyError::InternalServiceError(String::from(error_message))
                 }
+                "InvalidRequestException" => {
+                    return GetResourcePolicyError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetResourcePolicyError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetResourcePolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetResourcePolicyError::Unknown(String::from(body)),
         }
+        return GetResourcePolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetResourcePolicyError {
     fn from(err: serde_json::error::Error) -> GetResourcePolicyError {
-        GetResourcePolicyError::Unknown(err.description().to_string())
+        GetResourcePolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetResourcePolicyError {
@@ -1395,7 +1405,8 @@ impl Error for GetResourcePolicyError {
             GetResourcePolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetResourcePolicyError::Unknown(ref cause) => cause,
+            GetResourcePolicyError::ParseError(ref cause) => cause,
+            GetResourcePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1418,53 +1429,53 @@ pub enum GetSecretValueError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSecretValueError {
-    pub fn from_body(body: &str) -> GetSecretValueError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetSecretValueError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DecryptionFailure" => {
-                        GetSecretValueError::DecryptionFailure(String::from(error_message))
-                    }
-                    "InternalServiceError" => {
-                        GetSecretValueError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        GetSecretValueError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        GetSecretValueError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetSecretValueError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetSecretValueError::Validation(error_message.to_string())
-                    }
-                    _ => GetSecretValueError::Unknown(String::from(body)),
+            match *error_type {
+                "DecryptionFailure" => {
+                    return GetSecretValueError::DecryptionFailure(String::from(error_message))
                 }
+                "InternalServiceError" => {
+                    return GetSecretValueError::InternalServiceError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return GetSecretValueError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return GetSecretValueError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetSecretValueError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetSecretValueError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetSecretValueError::Unknown(String::from(body)),
         }
+        return GetSecretValueError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetSecretValueError {
     fn from(err: serde_json::error::Error) -> GetSecretValueError {
-        GetSecretValueError::Unknown(err.description().to_string())
+        GetSecretValueError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetSecretValueError {
@@ -1498,7 +1509,8 @@ impl Error for GetSecretValueError {
             GetSecretValueError::Validation(ref cause) => cause,
             GetSecretValueError::Credentials(ref err) => err.description(),
             GetSecretValueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSecretValueError::Unknown(ref cause) => cause,
+            GetSecretValueError::ParseError(ref cause) => cause,
+            GetSecretValueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1517,47 +1529,49 @@ pub enum ListSecretVersionIdsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListSecretVersionIdsError {
-    pub fn from_body(body: &str) -> ListSecretVersionIdsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListSecretVersionIdsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        ListSecretVersionIdsError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListSecretVersionIdsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListSecretVersionIdsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListSecretVersionIdsError::Validation(error_message.to_string())
-                    }
-                    _ => ListSecretVersionIdsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return ListSecretVersionIdsError::InternalServiceError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidNextTokenException" => {
+                    return ListSecretVersionIdsError::InvalidNextToken(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListSecretVersionIdsError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListSecretVersionIdsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListSecretVersionIdsError::Unknown(String::from(body)),
         }
+        return ListSecretVersionIdsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListSecretVersionIdsError {
     fn from(err: serde_json::error::Error) -> ListSecretVersionIdsError {
-        ListSecretVersionIdsError::Unknown(err.description().to_string())
+        ListSecretVersionIdsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListSecretVersionIdsError {
@@ -1591,7 +1605,8 @@ impl Error for ListSecretVersionIdsError {
             ListSecretVersionIdsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListSecretVersionIdsError::Unknown(ref cause) => cause,
+            ListSecretVersionIdsError::ParseError(ref cause) => cause,
+            ListSecretVersionIdsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1610,47 +1625,47 @@ pub enum ListSecretsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListSecretsError {
-    pub fn from_body(body: &str) -> ListSecretsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListSecretsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        ListSecretsError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidNextTokenException" => {
-                        ListSecretsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListSecretsError::InvalidParameter(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListSecretsError::Validation(error_message.to_string())
-                    }
-                    _ => ListSecretsError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return ListSecretsError::InternalServiceError(String::from(error_message))
                 }
+                "InvalidNextTokenException" => {
+                    return ListSecretsError::InvalidNextToken(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return ListSecretsError::InvalidParameter(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListSecretsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListSecretsError::Unknown(String::from(body)),
         }
+        return ListSecretsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListSecretsError {
     fn from(err: serde_json::error::Error) -> ListSecretsError {
-        ListSecretsError::Unknown(err.description().to_string())
+        ListSecretsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListSecretsError {
@@ -1682,7 +1697,8 @@ impl Error for ListSecretsError {
             ListSecretsError::Validation(ref cause) => cause,
             ListSecretsError::Credentials(ref err) => err.description(),
             ListSecretsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListSecretsError::Unknown(ref cause) => cause,
+            ListSecretsError::ParseError(ref cause) => cause,
+            ListSecretsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1705,53 +1721,55 @@ pub enum PutResourcePolicyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutResourcePolicyError {
-    pub fn from_body(body: &str) -> PutResourcePolicyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutResourcePolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        PutResourcePolicyError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        PutResourcePolicyError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        PutResourcePolicyError::InvalidRequest(String::from(error_message))
-                    }
-                    "MalformedPolicyDocumentException" => {
-                        PutResourcePolicyError::MalformedPolicyDocument(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        PutResourcePolicyError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutResourcePolicyError::Validation(error_message.to_string())
-                    }
-                    _ => PutResourcePolicyError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return PutResourcePolicyError::InternalServiceError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return PutResourcePolicyError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return PutResourcePolicyError::InvalidRequest(String::from(error_message))
+                }
+                "MalformedPolicyDocumentException" => {
+                    return PutResourcePolicyError::MalformedPolicyDocument(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return PutResourcePolicyError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutResourcePolicyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutResourcePolicyError::Unknown(String::from(body)),
         }
+        return PutResourcePolicyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutResourcePolicyError {
     fn from(err: serde_json::error::Error) -> PutResourcePolicyError {
-        PutResourcePolicyError::Unknown(err.description().to_string())
+        PutResourcePolicyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutResourcePolicyError {
@@ -1787,7 +1805,8 @@ impl Error for PutResourcePolicyError {
             PutResourcePolicyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutResourcePolicyError::Unknown(ref cause) => cause,
+            PutResourcePolicyError::ParseError(ref cause) => cause,
+            PutResourcePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1814,59 +1833,59 @@ pub enum PutSecretValueError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutSecretValueError {
-    pub fn from_body(body: &str) -> PutSecretValueError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutSecretValueError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "EncryptionFailure" => {
-                        PutSecretValueError::EncryptionFailure(String::from(error_message))
-                    }
-                    "InternalServiceError" => {
-                        PutSecretValueError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        PutSecretValueError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        PutSecretValueError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        PutSecretValueError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceExistsException" => {
-                        PutSecretValueError::ResourceExists(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        PutSecretValueError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutSecretValueError::Validation(error_message.to_string())
-                    }
-                    _ => PutSecretValueError::Unknown(String::from(body)),
+            match *error_type {
+                "EncryptionFailure" => {
+                    return PutSecretValueError::EncryptionFailure(String::from(error_message))
                 }
+                "InternalServiceError" => {
+                    return PutSecretValueError::InternalServiceError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return PutSecretValueError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return PutSecretValueError::InvalidRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return PutSecretValueError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceExistsException" => {
+                    return PutSecretValueError::ResourceExists(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return PutSecretValueError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutSecretValueError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutSecretValueError::Unknown(String::from(body)),
         }
+        return PutSecretValueError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutSecretValueError {
     fn from(err: serde_json::error::Error) -> PutSecretValueError {
-        PutSecretValueError::Unknown(err.description().to_string())
+        PutSecretValueError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutSecretValueError {
@@ -1902,7 +1921,8 @@ impl Error for PutSecretValueError {
             PutSecretValueError::Validation(ref cause) => cause,
             PutSecretValueError::Credentials(ref err) => err.description(),
             PutSecretValueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutSecretValueError::Unknown(ref cause) => cause,
+            PutSecretValueError::ParseError(ref cause) => cause,
+            PutSecretValueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1923,50 +1943,50 @@ pub enum RestoreSecretError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreSecretError {
-    pub fn from_body(body: &str) -> RestoreSecretError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RestoreSecretError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        RestoreSecretError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        RestoreSecretError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        RestoreSecretError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        RestoreSecretError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RestoreSecretError::Validation(error_message.to_string())
-                    }
-                    _ => RestoreSecretError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return RestoreSecretError::InternalServiceError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return RestoreSecretError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return RestoreSecretError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return RestoreSecretError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RestoreSecretError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RestoreSecretError::Unknown(String::from(body)),
         }
+        return RestoreSecretError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RestoreSecretError {
     fn from(err: serde_json::error::Error) -> RestoreSecretError {
-        RestoreSecretError::Unknown(err.description().to_string())
+        RestoreSecretError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RestoreSecretError {
@@ -1999,7 +2019,8 @@ impl Error for RestoreSecretError {
             RestoreSecretError::Validation(ref cause) => cause,
             RestoreSecretError::Credentials(ref err) => err.description(),
             RestoreSecretError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RestoreSecretError::Unknown(ref cause) => cause,
+            RestoreSecretError::ParseError(ref cause) => cause,
+            RestoreSecretError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2020,50 +2041,50 @@ pub enum RotateSecretError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RotateSecretError {
-    pub fn from_body(body: &str) -> RotateSecretError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RotateSecretError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        RotateSecretError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        RotateSecretError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        RotateSecretError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        RotateSecretError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RotateSecretError::Validation(error_message.to_string())
-                    }
-                    _ => RotateSecretError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return RotateSecretError::InternalServiceError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return RotateSecretError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return RotateSecretError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return RotateSecretError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RotateSecretError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RotateSecretError::Unknown(String::from(body)),
         }
+        return RotateSecretError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RotateSecretError {
     fn from(err: serde_json::error::Error) -> RotateSecretError {
-        RotateSecretError::Unknown(err.description().to_string())
+        RotateSecretError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RotateSecretError {
@@ -2096,7 +2117,8 @@ impl Error for RotateSecretError {
             RotateSecretError::Validation(ref cause) => cause,
             RotateSecretError::Credentials(ref err) => err.description(),
             RotateSecretError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RotateSecretError::Unknown(ref cause) => cause,
+            RotateSecretError::ParseError(ref cause) => cause,
+            RotateSecretError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2117,50 +2139,50 @@ pub enum TagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_body(body: &str) -> TagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        TagResourceError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        TagResourceError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        TagResourceError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        TagResourceError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        TagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => TagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return TagResourceError::InternalServiceError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return TagResourceError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return TagResourceError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return TagResourceError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return TagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TagResourceError::Unknown(String::from(body)),
         }
+        return TagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TagResourceError {
     fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::Unknown(err.description().to_string())
+        TagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TagResourceError {
@@ -2193,7 +2215,8 @@ impl Error for TagResourceError {
             TagResourceError::Validation(ref cause) => cause,
             TagResourceError::Credentials(ref err) => err.description(),
             TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::Unknown(ref cause) => cause,
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2214,50 +2237,50 @@ pub enum UntagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_body(body: &str) -> UntagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => {
-                        UntagResourceError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UntagResourceError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        UntagResourceError::InvalidRequest(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UntagResourceError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UntagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => UntagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return UntagResourceError::InternalServiceError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return UntagResourceError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return UntagResourceError::InvalidRequest(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UntagResourceError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UntagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UntagResourceError::Unknown(String::from(body)),
         }
+        return UntagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UntagResourceError {
     fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::Unknown(err.description().to_string())
+        UntagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UntagResourceError {
@@ -2290,7 +2313,8 @@ impl Error for UntagResourceError {
             UntagResourceError::Validation(ref cause) => cause,
             UntagResourceError::Credentials(ref err) => err.description(),
             UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::Unknown(ref cause) => cause,
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2321,65 +2345,65 @@ pub enum UpdateSecretError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSecretError {
-    pub fn from_body(body: &str) -> UpdateSecretError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSecretError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "EncryptionFailure" => {
-                        UpdateSecretError::EncryptionFailure(String::from(error_message))
-                    }
-                    "InternalServiceError" => {
-                        UpdateSecretError::InternalServiceError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateSecretError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateSecretError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateSecretError::LimitExceeded(String::from(error_message))
-                    }
-                    "MalformedPolicyDocumentException" => {
-                        UpdateSecretError::MalformedPolicyDocument(String::from(error_message))
-                    }
-                    "PreconditionNotMetException" => {
-                        UpdateSecretError::PreconditionNotMet(String::from(error_message))
-                    }
-                    "ResourceExistsException" => {
-                        UpdateSecretError::ResourceExists(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateSecretError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateSecretError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateSecretError::Unknown(String::from(body)),
+            match *error_type {
+                "EncryptionFailure" => {
+                    return UpdateSecretError::EncryptionFailure(String::from(error_message))
                 }
+                "InternalServiceError" => {
+                    return UpdateSecretError::InternalServiceError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return UpdateSecretError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return UpdateSecretError::InvalidRequest(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateSecretError::LimitExceeded(String::from(error_message))
+                }
+                "MalformedPolicyDocumentException" => {
+                    return UpdateSecretError::MalformedPolicyDocument(String::from(error_message))
+                }
+                "PreconditionNotMetException" => {
+                    return UpdateSecretError::PreconditionNotMet(String::from(error_message))
+                }
+                "ResourceExistsException" => {
+                    return UpdateSecretError::ResourceExists(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateSecretError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateSecretError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateSecretError::Unknown(String::from(body)),
         }
+        return UpdateSecretError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateSecretError {
     fn from(err: serde_json::error::Error) -> UpdateSecretError {
-        UpdateSecretError::Unknown(err.description().to_string())
+        UpdateSecretError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateSecretError {
@@ -2417,7 +2441,8 @@ impl Error for UpdateSecretError {
             UpdateSecretError::Validation(ref cause) => cause,
             UpdateSecretError::Credentials(ref err) => err.description(),
             UpdateSecretError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateSecretError::Unknown(ref cause) => cause,
+            UpdateSecretError::ParseError(ref cause) => cause,
+            UpdateSecretError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2440,53 +2465,61 @@ pub enum UpdateSecretVersionStageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSecretVersionStageError {
-    pub fn from_body(body: &str) -> UpdateSecretVersionStageError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSecretVersionStageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServiceError" => UpdateSecretVersionStageError::InternalServiceError(
-                        String::from(error_message),
-                    ),
-                    "InvalidParameterException" => {
-                        UpdateSecretVersionStageError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        UpdateSecretVersionStageError::InvalidRequest(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateSecretVersionStageError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateSecretVersionStageError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateSecretVersionStageError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateSecretVersionStageError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServiceError" => {
+                    return UpdateSecretVersionStageError::InternalServiceError(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterException" => {
+                    return UpdateSecretVersionStageError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return UpdateSecretVersionStageError::InvalidRequest(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return UpdateSecretVersionStageError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateSecretVersionStageError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateSecretVersionStageError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateSecretVersionStageError::Unknown(String::from(body)),
         }
+        return UpdateSecretVersionStageError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateSecretVersionStageError {
     fn from(err: serde_json::error::Error) -> UpdateSecretVersionStageError {
-        UpdateSecretVersionStageError::Unknown(err.description().to_string())
+        UpdateSecretVersionStageError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateSecretVersionStageError {
@@ -2522,7 +2555,8 @@ impl Error for UpdateSecretVersionStageError {
             UpdateSecretVersionStageError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateSecretVersionStageError::Unknown(ref cause) => cause,
+            UpdateSecretVersionStageError::ParseError(ref cause) => cause,
+            UpdateSecretVersionStageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2689,14 +2723,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<CancelRotateSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CancelRotateSecretError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CancelRotateSecretError::from_response(response))),
+                )
             }
         })
     }
@@ -2724,14 +2760,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<CreateSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSecretError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateSecretError::from_response(response))),
+                )
             }
         })
     }
@@ -2759,14 +2797,15 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<DeleteResourcePolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteResourcePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteResourcePolicyError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -2794,14 +2833,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<DeleteSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSecretError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteSecretError::from_response(response))),
+                )
             }
         })
     }
@@ -2829,14 +2870,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<DescribeSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSecretError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeSecretError::from_response(response))),
+                )
             }
         })
     }
@@ -2864,14 +2907,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<GetRandomPasswordResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetRandomPasswordError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetRandomPasswordError::from_response(response))),
+                )
             }
         })
     }
@@ -2899,14 +2944,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<GetResourcePolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetResourcePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetResourcePolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -2934,14 +2981,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<GetSecretValueResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSecretValueError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetSecretValueError::from_response(response))),
+                )
             }
         })
     }
@@ -2969,14 +3018,15 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<ListSecretVersionIdsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSecretVersionIdsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListSecretVersionIdsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3004,14 +3054,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<ListSecretsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSecretsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListSecretsError::from_response(response))),
+                )
             }
         })
     }
@@ -3039,14 +3091,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<PutResourcePolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutResourcePolicyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutResourcePolicyError::from_response(response))),
+                )
             }
         })
     }
@@ -3074,14 +3128,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<PutSecretValueResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutSecretValueError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutSecretValueError::from_response(response))),
+                )
             }
         })
     }
@@ -3109,14 +3165,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<RestoreSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreSecretError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RestoreSecretError::from_response(response))),
+                )
             }
         })
     }
@@ -3144,14 +3202,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<RotateSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RotateSecretError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RotateSecretError::from_response(response))),
+                )
             }
         })
     }
@@ -3169,11 +3229,12 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -3191,11 +3252,12 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -3223,14 +3285,16 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<UpdateSecretResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSecretError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateSecretError::from_response(response))),
+                )
             }
         })
     }
@@ -3258,13 +3322,12 @@ impl SecretsManager for SecretsManagerClient {
 
                     serde_json::from_str::<UpdateSecretVersionStageResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSecretVersionStageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateSecretVersionStageError::from_response(response))
                 }))
             }
         })

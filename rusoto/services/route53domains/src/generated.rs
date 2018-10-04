@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Information for one billing record.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -857,44 +857,44 @@ pub enum CheckDomainAvailabilityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CheckDomainAvailabilityError {
-    pub fn from_body(body: &str) -> CheckDomainAvailabilityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CheckDomainAvailabilityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        CheckDomainAvailabilityError::InvalidInput(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        CheckDomainAvailabilityError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CheckDomainAvailabilityError::Validation(error_message.to_string())
-                    }
-                    _ => CheckDomainAvailabilityError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return CheckDomainAvailabilityError::InvalidInput(String::from(error_message))
                 }
+                "UnsupportedTLD" => {
+                    return CheckDomainAvailabilityError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CheckDomainAvailabilityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CheckDomainAvailabilityError::Unknown(String::from(body)),
         }
+        return CheckDomainAvailabilityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CheckDomainAvailabilityError {
     fn from(err: serde_json::error::Error) -> CheckDomainAvailabilityError {
-        CheckDomainAvailabilityError::Unknown(err.description().to_string())
+        CheckDomainAvailabilityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CheckDomainAvailabilityError {
@@ -927,7 +927,8 @@ impl Error for CheckDomainAvailabilityError {
             CheckDomainAvailabilityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CheckDomainAvailabilityError::Unknown(ref cause) => cause,
+            CheckDomainAvailabilityError::ParseError(ref cause) => cause,
+            CheckDomainAvailabilityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -944,44 +945,48 @@ pub enum CheckDomainTransferabilityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CheckDomainTransferabilityError {
-    pub fn from_body(body: &str) -> CheckDomainTransferabilityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CheckDomainTransferabilityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        CheckDomainTransferabilityError::InvalidInput(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        CheckDomainTransferabilityError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CheckDomainTransferabilityError::Validation(error_message.to_string())
-                    }
-                    _ => CheckDomainTransferabilityError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return CheckDomainTransferabilityError::InvalidInput(String::from(
+                        error_message,
+                    ))
                 }
+                "UnsupportedTLD" => {
+                    return CheckDomainTransferabilityError::UnsupportedTLD(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CheckDomainTransferabilityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CheckDomainTransferabilityError::Unknown(String::from(body)),
         }
+        return CheckDomainTransferabilityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CheckDomainTransferabilityError {
     fn from(err: serde_json::error::Error) -> CheckDomainTransferabilityError {
-        CheckDomainTransferabilityError::Unknown(err.description().to_string())
+        CheckDomainTransferabilityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CheckDomainTransferabilityError {
@@ -1014,7 +1019,8 @@ impl Error for CheckDomainTransferabilityError {
             CheckDomainTransferabilityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CheckDomainTransferabilityError::Unknown(ref cause) => cause,
+            CheckDomainTransferabilityError::ParseError(ref cause) => cause,
+            CheckDomainTransferabilityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1033,47 +1039,49 @@ pub enum DeleteTagsForDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTagsForDomainError {
-    pub fn from_body(body: &str) -> DeleteTagsForDomainError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsForDomainError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        DeleteTagsForDomainError::InvalidInput(String::from(error_message))
-                    }
-                    "OperationLimitExceeded" => DeleteTagsForDomainError::OperationLimitExceeded(
-                        String::from(error_message),
-                    ),
-                    "UnsupportedTLD" => {
-                        DeleteTagsForDomainError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteTagsForDomainError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteTagsForDomainError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return DeleteTagsForDomainError::InvalidInput(String::from(error_message))
                 }
+                "OperationLimitExceeded" => {
+                    return DeleteTagsForDomainError::OperationLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedTLD" => {
+                    return DeleteTagsForDomainError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteTagsForDomainError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteTagsForDomainError::Unknown(String::from(body)),
         }
+        return DeleteTagsForDomainError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteTagsForDomainError {
     fn from(err: serde_json::error::Error) -> DeleteTagsForDomainError {
-        DeleteTagsForDomainError::Unknown(err.description().to_string())
+        DeleteTagsForDomainError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteTagsForDomainError {
@@ -1107,7 +1115,8 @@ impl Error for DeleteTagsForDomainError {
             DeleteTagsForDomainError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteTagsForDomainError::Unknown(ref cause) => cause,
+            DeleteTagsForDomainError::ParseError(ref cause) => cause,
+            DeleteTagsForDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1124,44 +1133,44 @@ pub enum DisableDomainAutoRenewError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisableDomainAutoRenewError {
-    pub fn from_body(body: &str) -> DisableDomainAutoRenewError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisableDomainAutoRenewError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        DisableDomainAutoRenewError::InvalidInput(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        DisableDomainAutoRenewError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DisableDomainAutoRenewError::Validation(error_message.to_string())
-                    }
-                    _ => DisableDomainAutoRenewError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return DisableDomainAutoRenewError::InvalidInput(String::from(error_message))
                 }
+                "UnsupportedTLD" => {
+                    return DisableDomainAutoRenewError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DisableDomainAutoRenewError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisableDomainAutoRenewError::Unknown(String::from(body)),
         }
+        return DisableDomainAutoRenewError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisableDomainAutoRenewError {
     fn from(err: serde_json::error::Error) -> DisableDomainAutoRenewError {
-        DisableDomainAutoRenewError::Unknown(err.description().to_string())
+        DisableDomainAutoRenewError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisableDomainAutoRenewError {
@@ -1194,7 +1203,8 @@ impl Error for DisableDomainAutoRenewError {
             DisableDomainAutoRenewError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisableDomainAutoRenewError::Unknown(ref cause) => cause,
+            DisableDomainAutoRenewError::ParseError(ref cause) => cause,
+            DisableDomainAutoRenewError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1217,55 +1227,61 @@ pub enum DisableDomainTransferLockError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisableDomainTransferLockError {
-    pub fn from_body(body: &str) -> DisableDomainTransferLockError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisableDomainTransferLockError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequest" => DisableDomainTransferLockError::DuplicateRequest(
-                        String::from(error_message),
-                    ),
-                    "InvalidInput" => {
-                        DisableDomainTransferLockError::InvalidInput(String::from(error_message))
-                    }
-                    "OperationLimitExceeded" => {
-                        DisableDomainTransferLockError::OperationLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TLDRulesViolation" => DisableDomainTransferLockError::TLDRulesViolation(
-                        String::from(error_message),
-                    ),
-                    "UnsupportedTLD" => {
-                        DisableDomainTransferLockError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DisableDomainTransferLockError::Validation(error_message.to_string())
-                    }
-                    _ => DisableDomainTransferLockError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequest" => {
+                    return DisableDomainTransferLockError::DuplicateRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidInput" => {
+                    return DisableDomainTransferLockError::InvalidInput(String::from(error_message))
+                }
+                "OperationLimitExceeded" => {
+                    return DisableDomainTransferLockError::OperationLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "TLDRulesViolation" => {
+                    return DisableDomainTransferLockError::TLDRulesViolation(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedTLD" => {
+                    return DisableDomainTransferLockError::UnsupportedTLD(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DisableDomainTransferLockError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisableDomainTransferLockError::Unknown(String::from(body)),
         }
+        return DisableDomainTransferLockError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisableDomainTransferLockError {
     fn from(err: serde_json::error::Error) -> DisableDomainTransferLockError {
-        DisableDomainTransferLockError::Unknown(err.description().to_string())
+        DisableDomainTransferLockError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisableDomainTransferLockError {
@@ -1301,7 +1317,8 @@ impl Error for DisableDomainTransferLockError {
             DisableDomainTransferLockError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisableDomainTransferLockError::Unknown(ref cause) => cause,
+            DisableDomainTransferLockError::ParseError(ref cause) => cause,
+            DisableDomainTransferLockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1320,47 +1337,49 @@ pub enum EnableDomainAutoRenewError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EnableDomainAutoRenewError {
-    pub fn from_body(body: &str) -> EnableDomainAutoRenewError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> EnableDomainAutoRenewError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        EnableDomainAutoRenewError::InvalidInput(String::from(error_message))
-                    }
-                    "TLDRulesViolation" => {
-                        EnableDomainAutoRenewError::TLDRulesViolation(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        EnableDomainAutoRenewError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        EnableDomainAutoRenewError::Validation(error_message.to_string())
-                    }
-                    _ => EnableDomainAutoRenewError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return EnableDomainAutoRenewError::InvalidInput(String::from(error_message))
                 }
+                "TLDRulesViolation" => {
+                    return EnableDomainAutoRenewError::TLDRulesViolation(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedTLD" => {
+                    return EnableDomainAutoRenewError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return EnableDomainAutoRenewError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => EnableDomainAutoRenewError::Unknown(String::from(body)),
         }
+        return EnableDomainAutoRenewError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for EnableDomainAutoRenewError {
     fn from(err: serde_json::error::Error) -> EnableDomainAutoRenewError {
-        EnableDomainAutoRenewError::Unknown(err.description().to_string())
+        EnableDomainAutoRenewError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for EnableDomainAutoRenewError {
@@ -1394,7 +1413,8 @@ impl Error for EnableDomainAutoRenewError {
             EnableDomainAutoRenewError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            EnableDomainAutoRenewError::Unknown(ref cause) => cause,
+            EnableDomainAutoRenewError::ParseError(ref cause) => cause,
+            EnableDomainAutoRenewError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1417,55 +1437,61 @@ pub enum EnableDomainTransferLockError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EnableDomainTransferLockError {
-    pub fn from_body(body: &str) -> EnableDomainTransferLockError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> EnableDomainTransferLockError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequest" => {
-                        EnableDomainTransferLockError::DuplicateRequest(String::from(error_message))
-                    }
-                    "InvalidInput" => {
-                        EnableDomainTransferLockError::InvalidInput(String::from(error_message))
-                    }
-                    "OperationLimitExceeded" => {
-                        EnableDomainTransferLockError::OperationLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TLDRulesViolation" => EnableDomainTransferLockError::TLDRulesViolation(
-                        String::from(error_message),
-                    ),
-                    "UnsupportedTLD" => {
-                        EnableDomainTransferLockError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        EnableDomainTransferLockError::Validation(error_message.to_string())
-                    }
-                    _ => EnableDomainTransferLockError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequest" => {
+                    return EnableDomainTransferLockError::DuplicateRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidInput" => {
+                    return EnableDomainTransferLockError::InvalidInput(String::from(error_message))
+                }
+                "OperationLimitExceeded" => {
+                    return EnableDomainTransferLockError::OperationLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "TLDRulesViolation" => {
+                    return EnableDomainTransferLockError::TLDRulesViolation(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedTLD" => {
+                    return EnableDomainTransferLockError::UnsupportedTLD(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return EnableDomainTransferLockError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => EnableDomainTransferLockError::Unknown(String::from(body)),
         }
+        return EnableDomainTransferLockError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for EnableDomainTransferLockError {
     fn from(err: serde_json::error::Error) -> EnableDomainTransferLockError {
-        EnableDomainTransferLockError::Unknown(err.description().to_string())
+        EnableDomainTransferLockError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for EnableDomainTransferLockError {
@@ -1501,7 +1527,8 @@ impl Error for EnableDomainTransferLockError {
             EnableDomainTransferLockError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            EnableDomainTransferLockError::Unknown(ref cause) => cause,
+            EnableDomainTransferLockError::ParseError(ref cause) => cause,
+            EnableDomainTransferLockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1520,49 +1547,53 @@ pub enum GetContactReachabilityStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetContactReachabilityStatusError {
-    pub fn from_body(body: &str) -> GetContactReachabilityStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetContactReachabilityStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        GetContactReachabilityStatusError::InvalidInput(String::from(error_message))
-                    }
-                    "OperationLimitExceeded" => {
-                        GetContactReachabilityStatusError::OperationLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnsupportedTLD" => GetContactReachabilityStatusError::UnsupportedTLD(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        GetContactReachabilityStatusError::Validation(error_message.to_string())
-                    }
-                    _ => GetContactReachabilityStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return GetContactReachabilityStatusError::InvalidInput(String::from(
+                        error_message,
+                    ))
                 }
+                "OperationLimitExceeded" => {
+                    return GetContactReachabilityStatusError::OperationLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedTLD" => {
+                    return GetContactReachabilityStatusError::UnsupportedTLD(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetContactReachabilityStatusError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetContactReachabilityStatusError::Unknown(String::from(body)),
         }
+        return GetContactReachabilityStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetContactReachabilityStatusError {
     fn from(err: serde_json::error::Error) -> GetContactReachabilityStatusError {
-        GetContactReachabilityStatusError::Unknown(err.description().to_string())
+        GetContactReachabilityStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetContactReachabilityStatusError {
@@ -1596,7 +1627,8 @@ impl Error for GetContactReachabilityStatusError {
             GetContactReachabilityStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetContactReachabilityStatusError::Unknown(ref cause) => cause,
+            GetContactReachabilityStatusError::ParseError(ref cause) => cause,
+            GetContactReachabilityStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1613,44 +1645,44 @@ pub enum GetDomainDetailError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDomainDetailError {
-    pub fn from_body(body: &str) -> GetDomainDetailError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetDomainDetailError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        GetDomainDetailError::InvalidInput(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        GetDomainDetailError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetDomainDetailError::Validation(error_message.to_string())
-                    }
-                    _ => GetDomainDetailError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return GetDomainDetailError::InvalidInput(String::from(error_message))
                 }
+                "UnsupportedTLD" => {
+                    return GetDomainDetailError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetDomainDetailError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetDomainDetailError::Unknown(String::from(body)),
         }
+        return GetDomainDetailError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetDomainDetailError {
     fn from(err: serde_json::error::Error) -> GetDomainDetailError {
-        GetDomainDetailError::Unknown(err.description().to_string())
+        GetDomainDetailError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetDomainDetailError {
@@ -1681,7 +1713,8 @@ impl Error for GetDomainDetailError {
             GetDomainDetailError::Validation(ref cause) => cause,
             GetDomainDetailError::Credentials(ref err) => err.description(),
             GetDomainDetailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDomainDetailError::Unknown(ref cause) => cause,
+            GetDomainDetailError::ParseError(ref cause) => cause,
+            GetDomainDetailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1698,44 +1731,44 @@ pub enum GetDomainSuggestionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDomainSuggestionsError {
-    pub fn from_body(body: &str) -> GetDomainSuggestionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetDomainSuggestionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        GetDomainSuggestionsError::InvalidInput(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        GetDomainSuggestionsError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetDomainSuggestionsError::Validation(error_message.to_string())
-                    }
-                    _ => GetDomainSuggestionsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return GetDomainSuggestionsError::InvalidInput(String::from(error_message))
                 }
+                "UnsupportedTLD" => {
+                    return GetDomainSuggestionsError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetDomainSuggestionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetDomainSuggestionsError::Unknown(String::from(body)),
         }
+        return GetDomainSuggestionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetDomainSuggestionsError {
     fn from(err: serde_json::error::Error) -> GetDomainSuggestionsError {
-        GetDomainSuggestionsError::Unknown(err.description().to_string())
+        GetDomainSuggestionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetDomainSuggestionsError {
@@ -1768,7 +1801,8 @@ impl Error for GetDomainSuggestionsError {
             GetDomainSuggestionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetDomainSuggestionsError::Unknown(ref cause) => cause,
+            GetDomainSuggestionsError::ParseError(ref cause) => cause,
+            GetDomainSuggestionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1783,41 +1817,41 @@ pub enum GetOperationDetailError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetOperationDetailError {
-    pub fn from_body(body: &str) -> GetOperationDetailError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetOperationDetailError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        GetOperationDetailError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetOperationDetailError::Validation(error_message.to_string())
-                    }
-                    _ => GetOperationDetailError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return GetOperationDetailError::InvalidInput(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetOperationDetailError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetOperationDetailError::Unknown(String::from(body)),
         }
+        return GetOperationDetailError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetOperationDetailError {
     fn from(err: serde_json::error::Error) -> GetOperationDetailError {
-        GetOperationDetailError::Unknown(err.description().to_string())
+        GetOperationDetailError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetOperationDetailError {
@@ -1849,7 +1883,8 @@ impl Error for GetOperationDetailError {
             GetOperationDetailError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetOperationDetailError::Unknown(ref cause) => cause,
+            GetOperationDetailError::ParseError(ref cause) => cause,
+            GetOperationDetailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1864,39 +1899,41 @@ pub enum ListDomainsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDomainsError {
-    pub fn from_body(body: &str) -> ListDomainsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListDomainsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => ListDomainsError::InvalidInput(String::from(error_message)),
-                    "ValidationException" => {
-                        ListDomainsError::Validation(error_message.to_string())
-                    }
-                    _ => ListDomainsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return ListDomainsError::InvalidInput(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListDomainsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListDomainsError::Unknown(String::from(body)),
         }
+        return ListDomainsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListDomainsError {
     fn from(err: serde_json::error::Error) -> ListDomainsError {
-        ListDomainsError::Unknown(err.description().to_string())
+        ListDomainsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListDomainsError {
@@ -1926,7 +1963,8 @@ impl Error for ListDomainsError {
             ListDomainsError::Validation(ref cause) => cause,
             ListDomainsError::Credentials(ref err) => err.description(),
             ListDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDomainsError::Unknown(ref cause) => cause,
+            ListDomainsError::ParseError(ref cause) => cause,
+            ListDomainsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1941,41 +1979,41 @@ pub enum ListOperationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListOperationsError {
-    pub fn from_body(body: &str) -> ListOperationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListOperationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        ListOperationsError::InvalidInput(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListOperationsError::Validation(error_message.to_string())
-                    }
-                    _ => ListOperationsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return ListOperationsError::InvalidInput(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListOperationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListOperationsError::Unknown(String::from(body)),
         }
+        return ListOperationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListOperationsError {
     fn from(err: serde_json::error::Error) -> ListOperationsError {
-        ListOperationsError::Unknown(err.description().to_string())
+        ListOperationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListOperationsError {
@@ -2005,7 +2043,8 @@ impl Error for ListOperationsError {
             ListOperationsError::Validation(ref cause) => cause,
             ListOperationsError::Credentials(ref err) => err.description(),
             ListOperationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListOperationsError::Unknown(ref cause) => cause,
+            ListOperationsError::ParseError(ref cause) => cause,
+            ListOperationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2024,47 +2063,49 @@ pub enum ListTagsForDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForDomainError {
-    pub fn from_body(body: &str) -> ListTagsForDomainError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForDomainError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        ListTagsForDomainError::InvalidInput(String::from(error_message))
-                    }
-                    "OperationLimitExceeded" => {
-                        ListTagsForDomainError::OperationLimitExceeded(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        ListTagsForDomainError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTagsForDomainError::Validation(error_message.to_string())
-                    }
-                    _ => ListTagsForDomainError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return ListTagsForDomainError::InvalidInput(String::from(error_message))
                 }
+                "OperationLimitExceeded" => {
+                    return ListTagsForDomainError::OperationLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedTLD" => {
+                    return ListTagsForDomainError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTagsForDomainError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTagsForDomainError::Unknown(String::from(body)),
         }
+        return ListTagsForDomainError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTagsForDomainError {
     fn from(err: serde_json::error::Error) -> ListTagsForDomainError {
-        ListTagsForDomainError::Unknown(err.description().to_string())
+        ListTagsForDomainError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTagsForDomainError {
@@ -2098,7 +2139,8 @@ impl Error for ListTagsForDomainError {
             ListTagsForDomainError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTagsForDomainError::Unknown(ref cause) => cause,
+            ListTagsForDomainError::ParseError(ref cause) => cause,
+            ListTagsForDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2123,56 +2165,56 @@ pub enum RegisterDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterDomainError {
-    pub fn from_body(body: &str) -> RegisterDomainError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterDomainError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DomainLimitExceeded" => {
-                        RegisterDomainError::DomainLimitExceeded(String::from(error_message))
-                    }
-                    "DuplicateRequest" => {
-                        RegisterDomainError::DuplicateRequest(String::from(error_message))
-                    }
-                    "InvalidInput" => {
-                        RegisterDomainError::InvalidInput(String::from(error_message))
-                    }
-                    "OperationLimitExceeded" => {
-                        RegisterDomainError::OperationLimitExceeded(String::from(error_message))
-                    }
-                    "TLDRulesViolation" => {
-                        RegisterDomainError::TLDRulesViolation(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        RegisterDomainError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RegisterDomainError::Validation(error_message.to_string())
-                    }
-                    _ => RegisterDomainError::Unknown(String::from(body)),
+            match *error_type {
+                "DomainLimitExceeded" => {
+                    return RegisterDomainError::DomainLimitExceeded(String::from(error_message))
                 }
+                "DuplicateRequest" => {
+                    return RegisterDomainError::DuplicateRequest(String::from(error_message))
+                }
+                "InvalidInput" => {
+                    return RegisterDomainError::InvalidInput(String::from(error_message))
+                }
+                "OperationLimitExceeded" => {
+                    return RegisterDomainError::OperationLimitExceeded(String::from(error_message))
+                }
+                "TLDRulesViolation" => {
+                    return RegisterDomainError::TLDRulesViolation(String::from(error_message))
+                }
+                "UnsupportedTLD" => {
+                    return RegisterDomainError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RegisterDomainError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RegisterDomainError::Unknown(String::from(body)),
         }
+        return RegisterDomainError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RegisterDomainError {
     fn from(err: serde_json::error::Error) -> RegisterDomainError {
-        RegisterDomainError::Unknown(err.description().to_string())
+        RegisterDomainError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RegisterDomainError {
@@ -2207,7 +2249,8 @@ impl Error for RegisterDomainError {
             RegisterDomainError::Validation(ref cause) => cause,
             RegisterDomainError::Credentials(ref err) => err.description(),
             RegisterDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RegisterDomainError::Unknown(ref cause) => cause,
+            RegisterDomainError::ParseError(ref cause) => cause,
+            RegisterDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2230,51 +2273,53 @@ pub enum RenewDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RenewDomainError {
-    pub fn from_body(body: &str) -> RenewDomainError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RenewDomainError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequest" => {
-                        RenewDomainError::DuplicateRequest(String::from(error_message))
-                    }
-                    "InvalidInput" => RenewDomainError::InvalidInput(String::from(error_message)),
-                    "OperationLimitExceeded" => {
-                        RenewDomainError::OperationLimitExceeded(String::from(error_message))
-                    }
-                    "TLDRulesViolation" => {
-                        RenewDomainError::TLDRulesViolation(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        RenewDomainError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RenewDomainError::Validation(error_message.to_string())
-                    }
-                    _ => RenewDomainError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequest" => {
+                    return RenewDomainError::DuplicateRequest(String::from(error_message))
                 }
+                "InvalidInput" => {
+                    return RenewDomainError::InvalidInput(String::from(error_message))
+                }
+                "OperationLimitExceeded" => {
+                    return RenewDomainError::OperationLimitExceeded(String::from(error_message))
+                }
+                "TLDRulesViolation" => {
+                    return RenewDomainError::TLDRulesViolation(String::from(error_message))
+                }
+                "UnsupportedTLD" => {
+                    return RenewDomainError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RenewDomainError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RenewDomainError::Unknown(String::from(body)),
         }
+        return RenewDomainError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RenewDomainError {
     fn from(err: serde_json::error::Error) -> RenewDomainError {
-        RenewDomainError::Unknown(err.description().to_string())
+        RenewDomainError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RenewDomainError {
@@ -2308,7 +2353,8 @@ impl Error for RenewDomainError {
             RenewDomainError::Validation(ref cause) => cause,
             RenewDomainError::Credentials(ref err) => err.description(),
             RenewDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RenewDomainError::Unknown(ref cause) => cause,
+            RenewDomainError::ParseError(ref cause) => cause,
+            RenewDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2327,49 +2373,55 @@ pub enum ResendContactReachabilityEmailError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ResendContactReachabilityEmailError {
-    pub fn from_body(body: &str) -> ResendContactReachabilityEmailError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ResendContactReachabilityEmailError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => ResendContactReachabilityEmailError::InvalidInput(
-                        String::from(error_message),
-                    ),
-                    "OperationLimitExceeded" => {
-                        ResendContactReachabilityEmailError::OperationLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnsupportedTLD" => ResendContactReachabilityEmailError::UnsupportedTLD(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        ResendContactReachabilityEmailError::Validation(error_message.to_string())
-                    }
-                    _ => ResendContactReachabilityEmailError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return ResendContactReachabilityEmailError::InvalidInput(String::from(
+                        error_message,
+                    ))
                 }
+                "OperationLimitExceeded" => {
+                    return ResendContactReachabilityEmailError::OperationLimitExceeded(
+                        String::from(error_message),
+                    )
+                }
+                "UnsupportedTLD" => {
+                    return ResendContactReachabilityEmailError::UnsupportedTLD(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ResendContactReachabilityEmailError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => ResendContactReachabilityEmailError::Unknown(String::from(body)),
         }
+        return ResendContactReachabilityEmailError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ResendContactReachabilityEmailError {
     fn from(err: serde_json::error::Error) -> ResendContactReachabilityEmailError {
-        ResendContactReachabilityEmailError::Unknown(err.description().to_string())
+        ResendContactReachabilityEmailError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ResendContactReachabilityEmailError {
@@ -2403,7 +2455,8 @@ impl Error for ResendContactReachabilityEmailError {
             ResendContactReachabilityEmailError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ResendContactReachabilityEmailError::Unknown(ref cause) => cause,
+            ResendContactReachabilityEmailError::ParseError(ref cause) => cause,
+            ResendContactReachabilityEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2420,44 +2473,44 @@ pub enum RetrieveDomainAuthCodeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RetrieveDomainAuthCodeError {
-    pub fn from_body(body: &str) -> RetrieveDomainAuthCodeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RetrieveDomainAuthCodeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        RetrieveDomainAuthCodeError::InvalidInput(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        RetrieveDomainAuthCodeError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RetrieveDomainAuthCodeError::Validation(error_message.to_string())
-                    }
-                    _ => RetrieveDomainAuthCodeError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return RetrieveDomainAuthCodeError::InvalidInput(String::from(error_message))
                 }
+                "UnsupportedTLD" => {
+                    return RetrieveDomainAuthCodeError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RetrieveDomainAuthCodeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RetrieveDomainAuthCodeError::Unknown(String::from(body)),
         }
+        return RetrieveDomainAuthCodeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RetrieveDomainAuthCodeError {
     fn from(err: serde_json::error::Error) -> RetrieveDomainAuthCodeError {
-        RetrieveDomainAuthCodeError::Unknown(err.description().to_string())
+        RetrieveDomainAuthCodeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RetrieveDomainAuthCodeError {
@@ -2490,7 +2543,8 @@ impl Error for RetrieveDomainAuthCodeError {
             RetrieveDomainAuthCodeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RetrieveDomainAuthCodeError::Unknown(ref cause) => cause,
+            RetrieveDomainAuthCodeError::ParseError(ref cause) => cause,
+            RetrieveDomainAuthCodeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2515,56 +2569,56 @@ pub enum TransferDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TransferDomainError {
-    pub fn from_body(body: &str) -> TransferDomainError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TransferDomainError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DomainLimitExceeded" => {
-                        TransferDomainError::DomainLimitExceeded(String::from(error_message))
-                    }
-                    "DuplicateRequest" => {
-                        TransferDomainError::DuplicateRequest(String::from(error_message))
-                    }
-                    "InvalidInput" => {
-                        TransferDomainError::InvalidInput(String::from(error_message))
-                    }
-                    "OperationLimitExceeded" => {
-                        TransferDomainError::OperationLimitExceeded(String::from(error_message))
-                    }
-                    "TLDRulesViolation" => {
-                        TransferDomainError::TLDRulesViolation(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        TransferDomainError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        TransferDomainError::Validation(error_message.to_string())
-                    }
-                    _ => TransferDomainError::Unknown(String::from(body)),
+            match *error_type {
+                "DomainLimitExceeded" => {
+                    return TransferDomainError::DomainLimitExceeded(String::from(error_message))
                 }
+                "DuplicateRequest" => {
+                    return TransferDomainError::DuplicateRequest(String::from(error_message))
+                }
+                "InvalidInput" => {
+                    return TransferDomainError::InvalidInput(String::from(error_message))
+                }
+                "OperationLimitExceeded" => {
+                    return TransferDomainError::OperationLimitExceeded(String::from(error_message))
+                }
+                "TLDRulesViolation" => {
+                    return TransferDomainError::TLDRulesViolation(String::from(error_message))
+                }
+                "UnsupportedTLD" => {
+                    return TransferDomainError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return TransferDomainError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TransferDomainError::Unknown(String::from(body)),
         }
+        return TransferDomainError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TransferDomainError {
     fn from(err: serde_json::error::Error) -> TransferDomainError {
-        TransferDomainError::Unknown(err.description().to_string())
+        TransferDomainError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TransferDomainError {
@@ -2599,7 +2653,8 @@ impl Error for TransferDomainError {
             TransferDomainError::Validation(ref cause) => cause,
             TransferDomainError::Credentials(ref err) => err.description(),
             TransferDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TransferDomainError::Unknown(ref cause) => cause,
+            TransferDomainError::ParseError(ref cause) => cause,
+            TransferDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2622,53 +2677,55 @@ pub enum UpdateDomainContactError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDomainContactError {
-    pub fn from_body(body: &str) -> UpdateDomainContactError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateDomainContactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequest" => {
-                        UpdateDomainContactError::DuplicateRequest(String::from(error_message))
-                    }
-                    "InvalidInput" => {
-                        UpdateDomainContactError::InvalidInput(String::from(error_message))
-                    }
-                    "OperationLimitExceeded" => UpdateDomainContactError::OperationLimitExceeded(
-                        String::from(error_message),
-                    ),
-                    "TLDRulesViolation" => {
-                        UpdateDomainContactError::TLDRulesViolation(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        UpdateDomainContactError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateDomainContactError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateDomainContactError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequest" => {
+                    return UpdateDomainContactError::DuplicateRequest(String::from(error_message))
                 }
+                "InvalidInput" => {
+                    return UpdateDomainContactError::InvalidInput(String::from(error_message))
+                }
+                "OperationLimitExceeded" => {
+                    return UpdateDomainContactError::OperationLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "TLDRulesViolation" => {
+                    return UpdateDomainContactError::TLDRulesViolation(String::from(error_message))
+                }
+                "UnsupportedTLD" => {
+                    return UpdateDomainContactError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateDomainContactError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateDomainContactError::Unknown(String::from(body)),
         }
+        return UpdateDomainContactError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateDomainContactError {
     fn from(err: serde_json::error::Error) -> UpdateDomainContactError {
-        UpdateDomainContactError::Unknown(err.description().to_string())
+        UpdateDomainContactError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateDomainContactError {
@@ -2704,7 +2761,8 @@ impl Error for UpdateDomainContactError {
             UpdateDomainContactError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateDomainContactError::Unknown(ref cause) => cause,
+            UpdateDomainContactError::ParseError(ref cause) => cause,
+            UpdateDomainContactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2727,55 +2785,63 @@ pub enum UpdateDomainContactPrivacyError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDomainContactPrivacyError {
-    pub fn from_body(body: &str) -> UpdateDomainContactPrivacyError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateDomainContactPrivacyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequest" => UpdateDomainContactPrivacyError::DuplicateRequest(
-                        String::from(error_message),
-                    ),
-                    "InvalidInput" => {
-                        UpdateDomainContactPrivacyError::InvalidInput(String::from(error_message))
-                    }
-                    "OperationLimitExceeded" => {
-                        UpdateDomainContactPrivacyError::OperationLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TLDRulesViolation" => UpdateDomainContactPrivacyError::TLDRulesViolation(
-                        String::from(error_message),
-                    ),
-                    "UnsupportedTLD" => {
-                        UpdateDomainContactPrivacyError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateDomainContactPrivacyError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateDomainContactPrivacyError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequest" => {
+                    return UpdateDomainContactPrivacyError::DuplicateRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidInput" => {
+                    return UpdateDomainContactPrivacyError::InvalidInput(String::from(
+                        error_message,
+                    ))
+                }
+                "OperationLimitExceeded" => {
+                    return UpdateDomainContactPrivacyError::OperationLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "TLDRulesViolation" => {
+                    return UpdateDomainContactPrivacyError::TLDRulesViolation(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedTLD" => {
+                    return UpdateDomainContactPrivacyError::UnsupportedTLD(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateDomainContactPrivacyError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateDomainContactPrivacyError::Unknown(String::from(body)),
         }
+        return UpdateDomainContactPrivacyError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateDomainContactPrivacyError {
     fn from(err: serde_json::error::Error) -> UpdateDomainContactPrivacyError {
-        UpdateDomainContactPrivacyError::Unknown(err.description().to_string())
+        UpdateDomainContactPrivacyError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateDomainContactPrivacyError {
@@ -2811,7 +2877,8 @@ impl Error for UpdateDomainContactPrivacyError {
             UpdateDomainContactPrivacyError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateDomainContactPrivacyError::Unknown(ref cause) => cause,
+            UpdateDomainContactPrivacyError::ParseError(ref cause) => cause,
+            UpdateDomainContactPrivacyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2834,55 +2901,59 @@ pub enum UpdateDomainNameserversError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDomainNameserversError {
-    pub fn from_body(body: &str) -> UpdateDomainNameserversError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateDomainNameserversError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DuplicateRequest" => {
-                        UpdateDomainNameserversError::DuplicateRequest(String::from(error_message))
-                    }
-                    "InvalidInput" => {
-                        UpdateDomainNameserversError::InvalidInput(String::from(error_message))
-                    }
-                    "OperationLimitExceeded" => {
-                        UpdateDomainNameserversError::OperationLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "TLDRulesViolation" => {
-                        UpdateDomainNameserversError::TLDRulesViolation(String::from(error_message))
-                    }
-                    "UnsupportedTLD" => {
-                        UpdateDomainNameserversError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateDomainNameserversError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateDomainNameserversError::Unknown(String::from(body)),
+            match *error_type {
+                "DuplicateRequest" => {
+                    return UpdateDomainNameserversError::DuplicateRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidInput" => {
+                    return UpdateDomainNameserversError::InvalidInput(String::from(error_message))
+                }
+                "OperationLimitExceeded" => {
+                    return UpdateDomainNameserversError::OperationLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "TLDRulesViolation" => {
+                    return UpdateDomainNameserversError::TLDRulesViolation(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedTLD" => {
+                    return UpdateDomainNameserversError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateDomainNameserversError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateDomainNameserversError::Unknown(String::from(body)),
         }
+        return UpdateDomainNameserversError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateDomainNameserversError {
     fn from(err: serde_json::error::Error) -> UpdateDomainNameserversError {
-        UpdateDomainNameserversError::Unknown(err.description().to_string())
+        UpdateDomainNameserversError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateDomainNameserversError {
@@ -2918,7 +2989,8 @@ impl Error for UpdateDomainNameserversError {
             UpdateDomainNameserversError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateDomainNameserversError::Unknown(ref cause) => cause,
+            UpdateDomainNameserversError::ParseError(ref cause) => cause,
+            UpdateDomainNameserversError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2937,47 +3009,49 @@ pub enum UpdateTagsForDomainError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTagsForDomainError {
-    pub fn from_body(body: &str) -> UpdateTagsForDomainError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateTagsForDomainError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => {
-                        UpdateTagsForDomainError::InvalidInput(String::from(error_message))
-                    }
-                    "OperationLimitExceeded" => UpdateTagsForDomainError::OperationLimitExceeded(
-                        String::from(error_message),
-                    ),
-                    "UnsupportedTLD" => {
-                        UpdateTagsForDomainError::UnsupportedTLD(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateTagsForDomainError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateTagsForDomainError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return UpdateTagsForDomainError::InvalidInput(String::from(error_message))
                 }
+                "OperationLimitExceeded" => {
+                    return UpdateTagsForDomainError::OperationLimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "UnsupportedTLD" => {
+                    return UpdateTagsForDomainError::UnsupportedTLD(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateTagsForDomainError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateTagsForDomainError::Unknown(String::from(body)),
         }
+        return UpdateTagsForDomainError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateTagsForDomainError {
     fn from(err: serde_json::error::Error) -> UpdateTagsForDomainError {
-        UpdateTagsForDomainError::Unknown(err.description().to_string())
+        UpdateTagsForDomainError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateTagsForDomainError {
@@ -3011,7 +3085,8 @@ impl Error for UpdateTagsForDomainError {
             UpdateTagsForDomainError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateTagsForDomainError::Unknown(ref cause) => cause,
+            UpdateTagsForDomainError::ParseError(ref cause) => cause,
+            UpdateTagsForDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3026,39 +3101,41 @@ pub enum ViewBillingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ViewBillingError {
-    pub fn from_body(body: &str) -> ViewBillingError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ViewBillingError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidInput" => ViewBillingError::InvalidInput(String::from(error_message)),
-                    "ValidationException" => {
-                        ViewBillingError::Validation(error_message.to_string())
-                    }
-                    _ => ViewBillingError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidInput" => {
+                    return ViewBillingError::InvalidInput(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ViewBillingError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ViewBillingError::Unknown(String::from(body)),
         }
+        return ViewBillingError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ViewBillingError {
     fn from(err: serde_json::error::Error) -> ViewBillingError {
-        ViewBillingError::Unknown(err.description().to_string())
+        ViewBillingError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ViewBillingError {
@@ -3088,7 +3165,8 @@ impl Error for ViewBillingError {
             ViewBillingError::Validation(ref cause) => cause,
             ViewBillingError::Credentials(ref err) => err.description(),
             ViewBillingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ViewBillingError::Unknown(ref cause) => cause,
+            ViewBillingError::ParseError(ref cause) => cause,
+            ViewBillingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3300,13 +3378,12 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<CheckDomainAvailabilityResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CheckDomainAvailabilityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CheckDomainAvailabilityError::from_response(response))
                 }))
             }
         })
@@ -3338,13 +3415,12 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<CheckDomainTransferabilityResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CheckDomainTransferabilityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CheckDomainTransferabilityError::from_response(response))
                 }))
             }
         })
@@ -3376,14 +3452,15 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<DeleteTagsForDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteTagsForDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteTagsForDomainError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3414,14 +3491,15 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<DisableDomainAutoRenewResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableDomainAutoRenewError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DisableDomainAutoRenewError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3452,13 +3530,12 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<DisableDomainTransferLockResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableDomainTransferLockError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DisableDomainTransferLockError::from_response(response))
                 }))
             }
         })
@@ -3490,14 +3567,15 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<EnableDomainAutoRenewResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableDomainAutoRenewError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(EnableDomainAutoRenewError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3528,13 +3606,12 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<EnableDomainTransferLockResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableDomainTransferLockError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(EnableDomainTransferLockError::from_response(response))
                 }))
             }
         })
@@ -3566,13 +3643,12 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<GetContactReachabilityStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetContactReachabilityStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetContactReachabilityStatusError::from_response(response))
                 }))
             }
         })
@@ -3601,14 +3677,16 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<GetDomainDetailResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDomainDetailError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetDomainDetailError::from_response(response))),
+                )
             }
         })
     }
@@ -3639,14 +3717,15 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<GetDomainSuggestionsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDomainSuggestionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetDomainSuggestionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3677,14 +3756,16 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<GetOperationDetailResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetOperationDetailError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetOperationDetailError::from_response(response))),
+                )
             }
         })
     }
@@ -3712,14 +3793,16 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<ListDomainsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDomainsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListDomainsError::from_response(response))),
+                )
             }
         })
     }
@@ -3747,14 +3830,16 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<ListOperationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListOperationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListOperationsError::from_response(response))),
+                )
             }
         })
     }
@@ -3782,14 +3867,16 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<ListTagsForDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsForDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTagsForDomainError::from_response(response))),
+                )
             }
         })
     }
@@ -3817,14 +3904,16 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<RegisterDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RegisterDomainError::from_response(response))),
+                )
             }
         })
     }
@@ -3852,14 +3941,16 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<RenewDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RenewDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RenewDomainError::from_response(response))),
+                )
             }
         })
     }
@@ -3891,13 +3982,12 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<ResendContactReachabilityEmailResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResendContactReachabilityEmailError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ResendContactReachabilityEmailError::from_response(response))
                 }))
             }
         })
@@ -3929,14 +4019,15 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<RetrieveDomainAuthCodeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RetrieveDomainAuthCodeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RetrieveDomainAuthCodeError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3964,14 +4055,16 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<TransferDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TransferDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TransferDomainError::from_response(response))),
+                )
             }
         })
     }
@@ -4002,14 +4095,15 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<UpdateDomainContactResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateDomainContactError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateDomainContactError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4040,13 +4134,12 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<UpdateDomainContactPrivacyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateDomainContactPrivacyError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateDomainContactPrivacyError::from_response(response))
                 }))
             }
         })
@@ -4078,13 +4171,12 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<UpdateDomainNameserversResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateDomainNameserversError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateDomainNameserversError::from_response(response))
                 }))
             }
         })
@@ -4116,14 +4208,15 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<UpdateTagsForDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTagsForDomainError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateTagsForDomainError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -4151,14 +4244,16 @@ impl Route53Domains for Route53DomainsClient {
 
                     serde_json::from_str::<ViewBillingResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ViewBillingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ViewBillingError::from_response(response))),
+                )
             }
         })
     }

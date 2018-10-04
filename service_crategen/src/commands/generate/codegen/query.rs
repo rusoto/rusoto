@@ -41,7 +41,7 @@ impl GenerateProtocol for QueryGenerator {
                     self.client.sign_and_dispatch(request, |response| {{
                         if !response.status.is_success() {{
                             return Box::new(response.buffer().from_err().and_then(|response| {{
-                                Err({error_type}::from_body(String::from_utf8_lossy(response.body.as_ref()).as_ref()))
+                                Err({error_type}::from_response(response))
                             }}));
                         }}
 

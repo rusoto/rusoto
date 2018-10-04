@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TranslateTextRequest {
@@ -77,61 +77,61 @@ pub enum TranslateTextError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TranslateTextError {
-    pub fn from_body(body: &str) -> TranslateTextError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TranslateTextError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DetectedLanguageLowConfidenceException" => {
-                        TranslateTextError::DetectedLanguageLowConfidence(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerException" => {
-                        TranslateTextError::InternalServer(String::from(error_message))
-                    }
-                    "InvalidRequestException" => {
-                        TranslateTextError::InvalidRequest(String::from(error_message))
-                    }
-                    "ServiceUnavailableException" => {
-                        TranslateTextError::ServiceUnavailable(String::from(error_message))
-                    }
-                    "TextSizeLimitExceededException" => {
-                        TranslateTextError::TextSizeLimitExceeded(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        TranslateTextError::TooManyRequests(String::from(error_message))
-                    }
-                    "UnsupportedLanguagePairException" => {
-                        TranslateTextError::UnsupportedLanguagePair(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        TranslateTextError::Validation(error_message.to_string())
-                    }
-                    _ => TranslateTextError::Unknown(String::from(body)),
+            match *error_type {
+                "DetectedLanguageLowConfidenceException" => {
+                    return TranslateTextError::DetectedLanguageLowConfidence(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerException" => {
+                    return TranslateTextError::InternalServer(String::from(error_message))
+                }
+                "InvalidRequestException" => {
+                    return TranslateTextError::InvalidRequest(String::from(error_message))
+                }
+                "ServiceUnavailableException" => {
+                    return TranslateTextError::ServiceUnavailable(String::from(error_message))
+                }
+                "TextSizeLimitExceededException" => {
+                    return TranslateTextError::TextSizeLimitExceeded(String::from(error_message))
+                }
+                "TooManyRequestsException" => {
+                    return TranslateTextError::TooManyRequests(String::from(error_message))
+                }
+                "UnsupportedLanguagePairException" => {
+                    return TranslateTextError::UnsupportedLanguagePair(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return TranslateTextError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TranslateTextError::Unknown(String::from(body)),
         }
+        return TranslateTextError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TranslateTextError {
     fn from(err: serde_json::error::Error) -> TranslateTextError {
-        TranslateTextError::Unknown(err.description().to_string())
+        TranslateTextError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TranslateTextError {
@@ -167,7 +167,8 @@ impl Error for TranslateTextError {
             TranslateTextError::Validation(ref cause) => cause,
             TranslateTextError::Credentials(ref err) => err.description(),
             TranslateTextError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TranslateTextError::Unknown(ref cause) => cause,
+            TranslateTextError::ParseError(ref cause) => cause,
+            TranslateTextError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -241,14 +242,16 @@ impl Translate for TranslateClient {
 
                     serde_json::from_str::<TranslateTextResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TranslateTextError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TranslateTextError::from_response(response))),
+                )
             }
         })
     }

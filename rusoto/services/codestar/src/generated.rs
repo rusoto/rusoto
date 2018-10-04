@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateTeamMemberRequest {
@@ -599,60 +599,62 @@ pub enum AssociateTeamMemberError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateTeamMemberError {
-    pub fn from_body(body: &str) -> AssociateTeamMemberError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateTeamMemberError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        AssociateTeamMemberError::ConcurrentModification(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidServiceRoleException" => {
-                        AssociateTeamMemberError::InvalidServiceRole(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        AssociateTeamMemberError::LimitExceeded(String::from(error_message))
-                    }
-                    "ProjectConfigurationException" => {
-                        AssociateTeamMemberError::ProjectConfiguration(String::from(error_message))
-                    }
-                    "ProjectNotFoundException" => {
-                        AssociateTeamMemberError::ProjectNotFound(String::from(error_message))
-                    }
-                    "TeamMemberAlreadyAssociatedException" => {
-                        AssociateTeamMemberError::TeamMemberAlreadyAssociated(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AssociateTeamMemberError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateTeamMemberError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return AssociateTeamMemberError::ConcurrentModification(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidServiceRoleException" => {
+                    return AssociateTeamMemberError::InvalidServiceRole(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return AssociateTeamMemberError::LimitExceeded(String::from(error_message))
+                }
+                "ProjectConfigurationException" => {
+                    return AssociateTeamMemberError::ProjectConfiguration(String::from(
+                        error_message,
+                    ))
+                }
+                "ProjectNotFoundException" => {
+                    return AssociateTeamMemberError::ProjectNotFound(String::from(error_message))
+                }
+                "TeamMemberAlreadyAssociatedException" => {
+                    return AssociateTeamMemberError::TeamMemberAlreadyAssociated(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AssociateTeamMemberError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AssociateTeamMemberError::Unknown(String::from(body)),
         }
+        return AssociateTeamMemberError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateTeamMemberError {
     fn from(err: serde_json::error::Error) -> AssociateTeamMemberError {
-        AssociateTeamMemberError::Unknown(err.description().to_string())
+        AssociateTeamMemberError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateTeamMemberError {
@@ -689,7 +691,8 @@ impl Error for AssociateTeamMemberError {
             AssociateTeamMemberError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateTeamMemberError::Unknown(ref cause) => cause,
+            AssociateTeamMemberError::ParseError(ref cause) => cause,
+            AssociateTeamMemberError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -714,56 +717,56 @@ pub enum CreateProjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateProjectError {
-    pub fn from_body(body: &str) -> CreateProjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateProjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        CreateProjectError::ConcurrentModification(String::from(error_message))
-                    }
-                    "InvalidServiceRoleException" => {
-                        CreateProjectError::InvalidServiceRole(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateProjectError::LimitExceeded(String::from(error_message))
-                    }
-                    "ProjectAlreadyExistsException" => {
-                        CreateProjectError::ProjectAlreadyExists(String::from(error_message))
-                    }
-                    "ProjectConfigurationException" => {
-                        CreateProjectError::ProjectConfiguration(String::from(error_message))
-                    }
-                    "ProjectCreationFailedException" => {
-                        CreateProjectError::ProjectCreationFailed(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateProjectError::Validation(error_message.to_string())
-                    }
-                    _ => CreateProjectError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return CreateProjectError::ConcurrentModification(String::from(error_message))
                 }
+                "InvalidServiceRoleException" => {
+                    return CreateProjectError::InvalidServiceRole(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateProjectError::LimitExceeded(String::from(error_message))
+                }
+                "ProjectAlreadyExistsException" => {
+                    return CreateProjectError::ProjectAlreadyExists(String::from(error_message))
+                }
+                "ProjectConfigurationException" => {
+                    return CreateProjectError::ProjectConfiguration(String::from(error_message))
+                }
+                "ProjectCreationFailedException" => {
+                    return CreateProjectError::ProjectCreationFailed(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateProjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateProjectError::Unknown(String::from(body)),
         }
+        return CreateProjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateProjectError {
     fn from(err: serde_json::error::Error) -> CreateProjectError {
-        CreateProjectError::Unknown(err.description().to_string())
+        CreateProjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateProjectError {
@@ -798,7 +801,8 @@ impl Error for CreateProjectError {
             CreateProjectError::Validation(ref cause) => cause,
             CreateProjectError::Credentials(ref err) => err.description(),
             CreateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateProjectError::Unknown(ref cause) => cause,
+            CreateProjectError::ParseError(ref cause) => cause,
+            CreateProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -813,43 +817,43 @@ pub enum CreateUserProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserProfileError {
-    pub fn from_body(body: &str) -> CreateUserProfileError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateUserProfileError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "UserProfileAlreadyExistsException" => {
-                        CreateUserProfileError::UserProfileAlreadyExists(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateUserProfileError::Validation(error_message.to_string())
-                    }
-                    _ => CreateUserProfileError::Unknown(String::from(body)),
+            match *error_type {
+                "UserProfileAlreadyExistsException" => {
+                    return CreateUserProfileError::UserProfileAlreadyExists(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return CreateUserProfileError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateUserProfileError::Unknown(String::from(body)),
         }
+        return CreateUserProfileError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateUserProfileError {
     fn from(err: serde_json::error::Error) -> CreateUserProfileError {
-        CreateUserProfileError::Unknown(err.description().to_string())
+        CreateUserProfileError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateUserProfileError {
@@ -881,7 +885,8 @@ impl Error for CreateUserProfileError {
             CreateUserProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateUserProfileError::Unknown(ref cause) => cause,
+            CreateUserProfileError::ParseError(ref cause) => cause,
+            CreateUserProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -898,44 +903,44 @@ pub enum DeleteProjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteProjectError {
-    pub fn from_body(body: &str) -> DeleteProjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteProjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        DeleteProjectError::ConcurrentModification(String::from(error_message))
-                    }
-                    "InvalidServiceRoleException" => {
-                        DeleteProjectError::InvalidServiceRole(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteProjectError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteProjectError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteProjectError::ConcurrentModification(String::from(error_message))
                 }
+                "InvalidServiceRoleException" => {
+                    return DeleteProjectError::InvalidServiceRole(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteProjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteProjectError::Unknown(String::from(body)),
         }
+        return DeleteProjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteProjectError {
     fn from(err: serde_json::error::Error) -> DeleteProjectError {
-        DeleteProjectError::Unknown(err.description().to_string())
+        DeleteProjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteProjectError {
@@ -966,7 +971,8 @@ impl Error for DeleteProjectError {
             DeleteProjectError::Validation(ref cause) => cause,
             DeleteProjectError::Credentials(ref err) => err.description(),
             DeleteProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteProjectError::Unknown(ref cause) => cause,
+            DeleteProjectError::ParseError(ref cause) => cause,
+            DeleteProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -979,38 +985,38 @@ pub enum DeleteUserProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserProfileError {
-    pub fn from_body(body: &str) -> DeleteUserProfileError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserProfileError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        DeleteUserProfileError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteUserProfileError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return DeleteUserProfileError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => DeleteUserProfileError::Unknown(String::from(body)),
         }
+        return DeleteUserProfileError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteUserProfileError {
     fn from(err: serde_json::error::Error) -> DeleteUserProfileError {
-        DeleteUserProfileError::Unknown(err.description().to_string())
+        DeleteUserProfileError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteUserProfileError {
@@ -1041,7 +1047,8 @@ impl Error for DeleteUserProfileError {
             DeleteUserProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteUserProfileError::Unknown(ref cause) => cause,
+            DeleteUserProfileError::ParseError(ref cause) => cause,
+            DeleteUserProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1062,50 +1069,50 @@ pub enum DescribeProjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeProjectError {
-    pub fn from_body(body: &str) -> DescribeProjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeProjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        DescribeProjectError::ConcurrentModification(String::from(error_message))
-                    }
-                    "InvalidServiceRoleException" => {
-                        DescribeProjectError::InvalidServiceRole(String::from(error_message))
-                    }
-                    "ProjectConfigurationException" => {
-                        DescribeProjectError::ProjectConfiguration(String::from(error_message))
-                    }
-                    "ProjectNotFoundException" => {
-                        DescribeProjectError::ProjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeProjectError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeProjectError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return DescribeProjectError::ConcurrentModification(String::from(error_message))
                 }
+                "InvalidServiceRoleException" => {
+                    return DescribeProjectError::InvalidServiceRole(String::from(error_message))
+                }
+                "ProjectConfigurationException" => {
+                    return DescribeProjectError::ProjectConfiguration(String::from(error_message))
+                }
+                "ProjectNotFoundException" => {
+                    return DescribeProjectError::ProjectNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeProjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeProjectError::Unknown(String::from(body)),
         }
+        return DescribeProjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeProjectError {
     fn from(err: serde_json::error::Error) -> DescribeProjectError {
-        DescribeProjectError::Unknown(err.description().to_string())
+        DescribeProjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeProjectError {
@@ -1138,7 +1145,8 @@ impl Error for DescribeProjectError {
             DescribeProjectError::Validation(ref cause) => cause,
             DescribeProjectError::Credentials(ref err) => err.description(),
             DescribeProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeProjectError::Unknown(ref cause) => cause,
+            DescribeProjectError::ParseError(ref cause) => cause,
+            DescribeProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1153,41 +1161,43 @@ pub enum DescribeUserProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUserProfileError {
-    pub fn from_body(body: &str) -> DescribeUserProfileError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeUserProfileError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "UserProfileNotFoundException" => {
-                        DescribeUserProfileError::UserProfileNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeUserProfileError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeUserProfileError::Unknown(String::from(body)),
+            match *error_type {
+                "UserProfileNotFoundException" => {
+                    return DescribeUserProfileError::UserProfileNotFound(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DescribeUserProfileError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeUserProfileError::Unknown(String::from(body)),
         }
+        return DescribeUserProfileError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeUserProfileError {
     fn from(err: serde_json::error::Error) -> DescribeUserProfileError {
-        DescribeUserProfileError::Unknown(err.description().to_string())
+        DescribeUserProfileError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeUserProfileError {
@@ -1219,7 +1229,8 @@ impl Error for DescribeUserProfileError {
             DescribeUserProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeUserProfileError::Unknown(ref cause) => cause,
+            DescribeUserProfileError::ParseError(ref cause) => cause,
+            DescribeUserProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1238,49 +1249,51 @@ pub enum DisassociateTeamMemberError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateTeamMemberError {
-    pub fn from_body(body: &str) -> DisassociateTeamMemberError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateTeamMemberError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        DisassociateTeamMemberError::ConcurrentModification(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidServiceRoleException" => {
-                        DisassociateTeamMemberError::InvalidServiceRole(String::from(error_message))
-                    }
-                    "ProjectNotFoundException" => {
-                        DisassociateTeamMemberError::ProjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DisassociateTeamMemberError::Validation(error_message.to_string())
-                    }
-                    _ => DisassociateTeamMemberError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return DisassociateTeamMemberError::ConcurrentModification(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidServiceRoleException" => {
+                    return DisassociateTeamMemberError::InvalidServiceRole(String::from(
+                        error_message,
+                    ))
+                }
+                "ProjectNotFoundException" => {
+                    return DisassociateTeamMemberError::ProjectNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DisassociateTeamMemberError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisassociateTeamMemberError::Unknown(String::from(body)),
         }
+        return DisassociateTeamMemberError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateTeamMemberError {
     fn from(err: serde_json::error::Error) -> DisassociateTeamMemberError {
-        DisassociateTeamMemberError::Unknown(err.description().to_string())
+        DisassociateTeamMemberError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateTeamMemberError {
@@ -1314,7 +1327,8 @@ impl Error for DisassociateTeamMemberError {
             DisassociateTeamMemberError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateTeamMemberError::Unknown(ref cause) => cause,
+            DisassociateTeamMemberError::ParseError(ref cause) => cause,
+            DisassociateTeamMemberError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1329,41 +1343,41 @@ pub enum ListProjectsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListProjectsError {
-    pub fn from_body(body: &str) -> ListProjectsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListProjectsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListProjectsError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListProjectsError::Validation(error_message.to_string())
-                    }
-                    _ => ListProjectsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListProjectsError::InvalidNextToken(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListProjectsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListProjectsError::Unknown(String::from(body)),
         }
+        return ListProjectsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListProjectsError {
     fn from(err: serde_json::error::Error) -> ListProjectsError {
-        ListProjectsError::Unknown(err.description().to_string())
+        ListProjectsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListProjectsError {
@@ -1393,7 +1407,8 @@ impl Error for ListProjectsError {
             ListProjectsError::Validation(ref cause) => cause,
             ListProjectsError::Credentials(ref err) => err.description(),
             ListProjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListProjectsError::Unknown(ref cause) => cause,
+            ListProjectsError::ParseError(ref cause) => cause,
+            ListProjectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1410,44 +1425,44 @@ pub enum ListResourcesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourcesError {
-    pub fn from_body(body: &str) -> ListResourcesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListResourcesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListResourcesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ProjectNotFoundException" => {
-                        ListResourcesError::ProjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListResourcesError::Validation(error_message.to_string())
-                    }
-                    _ => ListResourcesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListResourcesError::InvalidNextToken(String::from(error_message))
                 }
+                "ProjectNotFoundException" => {
+                    return ListResourcesError::ProjectNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListResourcesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListResourcesError::Unknown(String::from(body)),
         }
+        return ListResourcesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListResourcesError {
     fn from(err: serde_json::error::Error) -> ListResourcesError {
-        ListResourcesError::Unknown(err.description().to_string())
+        ListResourcesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListResourcesError {
@@ -1478,7 +1493,8 @@ impl Error for ListResourcesError {
             ListResourcesError::Validation(ref cause) => cause,
             ListResourcesError::Credentials(ref err) => err.description(),
             ListResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListResourcesError::Unknown(ref cause) => cause,
+            ListResourcesError::ParseError(ref cause) => cause,
+            ListResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1495,44 +1511,44 @@ pub enum ListTagsForProjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForProjectError {
-    pub fn from_body(body: &str) -> ListTagsForProjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForProjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListTagsForProjectError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ProjectNotFoundException" => {
-                        ListTagsForProjectError::ProjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTagsForProjectError::Validation(error_message.to_string())
-                    }
-                    _ => ListTagsForProjectError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListTagsForProjectError::InvalidNextToken(String::from(error_message))
                 }
+                "ProjectNotFoundException" => {
+                    return ListTagsForProjectError::ProjectNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTagsForProjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTagsForProjectError::Unknown(String::from(body)),
         }
+        return ListTagsForProjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTagsForProjectError {
     fn from(err: serde_json::error::Error) -> ListTagsForProjectError {
-        ListTagsForProjectError::Unknown(err.description().to_string())
+        ListTagsForProjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTagsForProjectError {
@@ -1565,7 +1581,8 @@ impl Error for ListTagsForProjectError {
             ListTagsForProjectError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTagsForProjectError::Unknown(ref cause) => cause,
+            ListTagsForProjectError::ParseError(ref cause) => cause,
+            ListTagsForProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1582,44 +1599,44 @@ pub enum ListTeamMembersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTeamMembersError {
-    pub fn from_body(body: &str) -> ListTeamMembersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTeamMembersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListTeamMembersError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ProjectNotFoundException" => {
-                        ListTeamMembersError::ProjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTeamMembersError::Validation(error_message.to_string())
-                    }
-                    _ => ListTeamMembersError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListTeamMembersError::InvalidNextToken(String::from(error_message))
                 }
+                "ProjectNotFoundException" => {
+                    return ListTeamMembersError::ProjectNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTeamMembersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTeamMembersError::Unknown(String::from(body)),
         }
+        return ListTeamMembersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTeamMembersError {
     fn from(err: serde_json::error::Error) -> ListTeamMembersError {
-        ListTeamMembersError::Unknown(err.description().to_string())
+        ListTeamMembersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTeamMembersError {
@@ -1650,7 +1667,8 @@ impl Error for ListTeamMembersError {
             ListTeamMembersError::Validation(ref cause) => cause,
             ListTeamMembersError::Credentials(ref err) => err.description(),
             ListTeamMembersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTeamMembersError::Unknown(ref cause) => cause,
+            ListTeamMembersError::ParseError(ref cause) => cause,
+            ListTeamMembersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1665,41 +1683,41 @@ pub enum ListUserProfilesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListUserProfilesError {
-    pub fn from_body(body: &str) -> ListUserProfilesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListUserProfilesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListUserProfilesError::InvalidNextToken(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListUserProfilesError::Validation(error_message.to_string())
-                    }
-                    _ => ListUserProfilesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListUserProfilesError::InvalidNextToken(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListUserProfilesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListUserProfilesError::Unknown(String::from(body)),
         }
+        return ListUserProfilesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListUserProfilesError {
     fn from(err: serde_json::error::Error) -> ListUserProfilesError {
-        ListUserProfilesError::Unknown(err.description().to_string())
+        ListUserProfilesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListUserProfilesError {
@@ -1729,7 +1747,8 @@ impl Error for ListUserProfilesError {
             ListUserProfilesError::Validation(ref cause) => cause,
             ListUserProfilesError::Credentials(ref err) => err.description(),
             ListUserProfilesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUserProfilesError::Unknown(ref cause) => cause,
+            ListUserProfilesError::ParseError(ref cause) => cause,
+            ListUserProfilesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1748,45 +1767,47 @@ pub enum TagProjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TagProjectError {
-    pub fn from_body(body: &str) -> TagProjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TagProjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        TagProjectError::ConcurrentModification(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        TagProjectError::LimitExceeded(String::from(error_message))
-                    }
-                    "ProjectNotFoundException" => {
-                        TagProjectError::ProjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => TagProjectError::Validation(error_message.to_string()),
-                    _ => TagProjectError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return TagProjectError::ConcurrentModification(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return TagProjectError::LimitExceeded(String::from(error_message))
+                }
+                "ProjectNotFoundException" => {
+                    return TagProjectError::ProjectNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return TagProjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TagProjectError::Unknown(String::from(body)),
         }
+        return TagProjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TagProjectError {
     fn from(err: serde_json::error::Error) -> TagProjectError {
-        TagProjectError::Unknown(err.description().to_string())
+        TagProjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TagProjectError {
@@ -1818,7 +1839,8 @@ impl Error for TagProjectError {
             TagProjectError::Validation(ref cause) => cause,
             TagProjectError::Credentials(ref err) => err.description(),
             TagProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagProjectError::Unknown(ref cause) => cause,
+            TagProjectError::ParseError(ref cause) => cause,
+            TagProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1837,47 +1859,47 @@ pub enum UntagProjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UntagProjectError {
-    pub fn from_body(body: &str) -> UntagProjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UntagProjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        UntagProjectError::ConcurrentModification(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UntagProjectError::LimitExceeded(String::from(error_message))
-                    }
-                    "ProjectNotFoundException" => {
-                        UntagProjectError::ProjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UntagProjectError::Validation(error_message.to_string())
-                    }
-                    _ => UntagProjectError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return UntagProjectError::ConcurrentModification(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return UntagProjectError::LimitExceeded(String::from(error_message))
+                }
+                "ProjectNotFoundException" => {
+                    return UntagProjectError::ProjectNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UntagProjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UntagProjectError::Unknown(String::from(body)),
         }
+        return UntagProjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UntagProjectError {
     fn from(err: serde_json::error::Error) -> UntagProjectError {
-        UntagProjectError::Unknown(err.description().to_string())
+        UntagProjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UntagProjectError {
@@ -1909,7 +1931,8 @@ impl Error for UntagProjectError {
             UntagProjectError::Validation(ref cause) => cause,
             UntagProjectError::Credentials(ref err) => err.description(),
             UntagProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagProjectError::Unknown(ref cause) => cause,
+            UntagProjectError::ParseError(ref cause) => cause,
+            UntagProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1924,41 +1947,41 @@ pub enum UpdateProjectError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateProjectError {
-    pub fn from_body(body: &str) -> UpdateProjectError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateProjectError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ProjectNotFoundException" => {
-                        UpdateProjectError::ProjectNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateProjectError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateProjectError::Unknown(String::from(body)),
+            match *error_type {
+                "ProjectNotFoundException" => {
+                    return UpdateProjectError::ProjectNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return UpdateProjectError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateProjectError::Unknown(String::from(body)),
         }
+        return UpdateProjectError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateProjectError {
     fn from(err: serde_json::error::Error) -> UpdateProjectError {
-        UpdateProjectError::Unknown(err.description().to_string())
+        UpdateProjectError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateProjectError {
@@ -1988,7 +2011,8 @@ impl Error for UpdateProjectError {
             UpdateProjectError::Validation(ref cause) => cause,
             UpdateProjectError::Credentials(ref err) => err.description(),
             UpdateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateProjectError::Unknown(ref cause) => cause,
+            UpdateProjectError::ParseError(ref cause) => cause,
+            UpdateProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2013,56 +2037,58 @@ pub enum UpdateTeamMemberError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTeamMemberError {
-    pub fn from_body(body: &str) -> UpdateTeamMemberError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateTeamMemberError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        UpdateTeamMemberError::ConcurrentModification(String::from(error_message))
-                    }
-                    "InvalidServiceRoleException" => {
-                        UpdateTeamMemberError::InvalidServiceRole(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        UpdateTeamMemberError::LimitExceeded(String::from(error_message))
-                    }
-                    "ProjectConfigurationException" => {
-                        UpdateTeamMemberError::ProjectConfiguration(String::from(error_message))
-                    }
-                    "ProjectNotFoundException" => {
-                        UpdateTeamMemberError::ProjectNotFound(String::from(error_message))
-                    }
-                    "TeamMemberNotFoundException" => {
-                        UpdateTeamMemberError::TeamMemberNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateTeamMemberError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateTeamMemberError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return UpdateTeamMemberError::ConcurrentModification(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidServiceRoleException" => {
+                    return UpdateTeamMemberError::InvalidServiceRole(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return UpdateTeamMemberError::LimitExceeded(String::from(error_message))
+                }
+                "ProjectConfigurationException" => {
+                    return UpdateTeamMemberError::ProjectConfiguration(String::from(error_message))
+                }
+                "ProjectNotFoundException" => {
+                    return UpdateTeamMemberError::ProjectNotFound(String::from(error_message))
+                }
+                "TeamMemberNotFoundException" => {
+                    return UpdateTeamMemberError::TeamMemberNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateTeamMemberError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateTeamMemberError::Unknown(String::from(body)),
         }
+        return UpdateTeamMemberError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateTeamMemberError {
     fn from(err: serde_json::error::Error) -> UpdateTeamMemberError {
-        UpdateTeamMemberError::Unknown(err.description().to_string())
+        UpdateTeamMemberError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateTeamMemberError {
@@ -2097,7 +2123,8 @@ impl Error for UpdateTeamMemberError {
             UpdateTeamMemberError::Validation(ref cause) => cause,
             UpdateTeamMemberError::Credentials(ref err) => err.description(),
             UpdateTeamMemberError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateTeamMemberError::Unknown(ref cause) => cause,
+            UpdateTeamMemberError::ParseError(ref cause) => cause,
+            UpdateTeamMemberError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2112,41 +2139,41 @@ pub enum UpdateUserProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserProfileError {
-    pub fn from_body(body: &str) -> UpdateUserProfileError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserProfileError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "UserProfileNotFoundException" => {
-                        UpdateUserProfileError::UserProfileNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateUserProfileError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateUserProfileError::Unknown(String::from(body)),
+            match *error_type {
+                "UserProfileNotFoundException" => {
+                    return UpdateUserProfileError::UserProfileNotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return UpdateUserProfileError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateUserProfileError::Unknown(String::from(body)),
         }
+        return UpdateUserProfileError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateUserProfileError {
     fn from(err: serde_json::error::Error) -> UpdateUserProfileError {
-        UpdateUserProfileError::Unknown(err.description().to_string())
+        UpdateUserProfileError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateUserProfileError {
@@ -2178,7 +2205,8 @@ impl Error for UpdateUserProfileError {
             UpdateUserProfileError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateUserProfileError::Unknown(ref cause) => cause,
+            UpdateUserProfileError::ParseError(ref cause) => cause,
+            UpdateUserProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2351,14 +2379,15 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<AssociateTeamMemberResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateTeamMemberError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AssociateTeamMemberError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -2386,14 +2415,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<CreateProjectResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateProjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateProjectError::from_response(response))),
+                )
             }
         })
     }
@@ -2421,14 +2452,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<CreateUserProfileResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateUserProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateUserProfileError::from_response(response))),
+                )
             }
         })
     }
@@ -2456,14 +2489,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<DeleteProjectResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteProjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteProjectError::from_response(response))),
+                )
             }
         })
     }
@@ -2491,14 +2526,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<DeleteUserProfileResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteUserProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteUserProfileError::from_response(response))),
+                )
             }
         })
     }
@@ -2526,14 +2563,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<DescribeProjectResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeProjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeProjectError::from_response(response))),
+                )
             }
         })
     }
@@ -2561,14 +2600,15 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<DescribeUserProfileResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeUserProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeUserProfileError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -2596,14 +2636,15 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<DisassociateTeamMemberResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateTeamMemberError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DisassociateTeamMemberError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -2631,14 +2672,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<ListProjectsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListProjectsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListProjectsError::from_response(response))),
+                )
             }
         })
     }
@@ -2666,14 +2709,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<ListResourcesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListResourcesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListResourcesError::from_response(response))),
+                )
             }
         })
     }
@@ -2701,14 +2746,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<ListTagsForProjectResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsForProjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTagsForProjectError::from_response(response))),
+                )
             }
         })
     }
@@ -2736,14 +2783,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<ListTeamMembersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTeamMembersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTeamMembersError::from_response(response))),
+                )
             }
         })
     }
@@ -2771,14 +2820,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<ListUserProfilesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListUserProfilesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListUserProfilesError::from_response(response))),
+                )
             }
         })
     }
@@ -2806,14 +2857,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<TagProjectResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagProjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagProjectError::from_response(response))),
+                )
             }
         })
     }
@@ -2841,14 +2894,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<UntagProjectResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagProjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagProjectError::from_response(response))),
+                )
             }
         })
     }
@@ -2876,14 +2931,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<UpdateProjectResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateProjectError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateProjectError::from_response(response))),
+                )
             }
         })
     }
@@ -2911,14 +2968,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<UpdateTeamMemberResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateTeamMemberError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateTeamMemberError::from_response(response))),
+                )
             }
         })
     }
@@ -2946,14 +3005,16 @@ impl CodeStar for CodeStarClient {
 
                     serde_json::from_str::<UpdateUserProfileResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateUserProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateUserProfileError::from_response(response))),
+                )
             }
         })
     }

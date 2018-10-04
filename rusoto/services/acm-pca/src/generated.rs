@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Contains information about the certificate subject. The certificate can be one issued by your private certificate authority (CA) or it can be your private CA certificate. The <b>Subject</b> field in the certificate identifies the entity that owns or controls the public key in the certificate. The entity can be a user, computer, device, or service. The <b>Subject</b> must contain an X.500 distinguished name (DN). A DN is a sequence of relative distinguished names (RDNs). The RDNs are separated by commas in the certificate. The DN must be unique for each entity, but your private CA can issue more than one certificate with the same DN to the same entity. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -346,7 +346,7 @@ pub struct ImportCertificateAuthorityCertificateRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub certificate: Vec<u8>,
     /// <p>The Amazon Resource Name (ARN) that was returned when you called <a>CreateCertificateAuthority</a>. This must be of the form: </p> <p> <code>arn:aws:acm-pca:<i>region</i>:<i>account</i>:certificate-authority/<i>12345678-1234-1234-1234-123456789012</i> </code> </p>
@@ -357,7 +357,7 @@ pub struct ImportCertificateAuthorityCertificateRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub certificate_chain: Vec<u8>,
 }
@@ -372,7 +372,7 @@ pub struct IssueCertificateRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub csr: Vec<u8>,
     /// <p>Custom string that can be used to distinguish between calls to the <b>IssueCertificate</b> operation. Idempotency tokens time out after one hour. Therefore, if you call <b>IssueCertificate</b> multiple times with the same idempotency token within 5 minutes, ACM PCA recognizes that you are requesting only one certificate and will issue only one. If you change the idempotency token for each call, PCA recognizes that you are requesting multiple certificates.</p>
@@ -548,47 +548,51 @@ pub enum CreateCertificateAuthorityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCertificateAuthorityError {
-    pub fn from_body(body: &str) -> CreateCertificateAuthorityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCertificateAuthorityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArgsException" => {
-                        CreateCertificateAuthorityError::InvalidArgs(String::from(error_message))
-                    }
-                    "InvalidPolicyException" => {
-                        CreateCertificateAuthorityError::InvalidPolicy(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateCertificateAuthorityError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateCertificateAuthorityError::Validation(error_message.to_string())
-                    }
-                    _ => CreateCertificateAuthorityError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArgsException" => {
+                    return CreateCertificateAuthorityError::InvalidArgs(String::from(error_message))
                 }
+                "InvalidPolicyException" => {
+                    return CreateCertificateAuthorityError::InvalidPolicy(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return CreateCertificateAuthorityError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateCertificateAuthorityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateCertificateAuthorityError::Unknown(String::from(body)),
         }
+        return CreateCertificateAuthorityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateCertificateAuthorityError {
     fn from(err: serde_json::error::Error) -> CreateCertificateAuthorityError {
-        CreateCertificateAuthorityError::Unknown(err.description().to_string())
+        CreateCertificateAuthorityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateCertificateAuthorityError {
@@ -622,7 +626,8 @@ impl Error for CreateCertificateAuthorityError {
             CreateCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateCertificateAuthorityError::Unknown(ref cause) => cause,
+            CreateCertificateAuthorityError::ParseError(ref cause) => cause,
+            CreateCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -647,70 +652,70 @@ pub enum CreateCertificateAuthorityAuditReportError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCertificateAuthorityAuditReportError {
-    pub fn from_body(body: &str) -> CreateCertificateAuthorityAuditReportError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCertificateAuthorityAuditReportError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArgsException" => {
-                        CreateCertificateAuthorityAuditReportError::InvalidArgs(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidArnException" => {
-                        CreateCertificateAuthorityAuditReportError::InvalidArn(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidStateException" => {
-                        CreateCertificateAuthorityAuditReportError::InvalidState(String::from(
-                            error_message,
-                        ))
-                    }
-                    "RequestFailedException" => {
-                        CreateCertificateAuthorityAuditReportError::RequestFailed(String::from(
-                            error_message,
-                        ))
-                    }
-                    "RequestInProgressException" => {
-                        CreateCertificateAuthorityAuditReportError::RequestInProgress(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateCertificateAuthorityAuditReportError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateCertificateAuthorityAuditReportError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
-                    _ => CreateCertificateAuthorityAuditReportError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArgsException" => {
+                    return CreateCertificateAuthorityAuditReportError::InvalidArgs(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidArnException" => {
+                    return CreateCertificateAuthorityAuditReportError::InvalidArn(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidStateException" => {
+                    return CreateCertificateAuthorityAuditReportError::InvalidState(String::from(
+                        error_message,
+                    ))
+                }
+                "RequestFailedException" => {
+                    return CreateCertificateAuthorityAuditReportError::RequestFailed(String::from(
+                        error_message,
+                    ))
+                }
+                "RequestInProgressException" => {
+                    return CreateCertificateAuthorityAuditReportError::RequestInProgress(
+                        String::from(error_message),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return CreateCertificateAuthorityAuditReportError::ResourceNotFound(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return CreateCertificateAuthorityAuditReportError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => CreateCertificateAuthorityAuditReportError::Unknown(String::from(body)),
         }
+        return CreateCertificateAuthorityAuditReportError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateCertificateAuthorityAuditReportError {
     fn from(err: serde_json::error::Error) -> CreateCertificateAuthorityAuditReportError {
-        CreateCertificateAuthorityAuditReportError::Unknown(err.description().to_string())
+        CreateCertificateAuthorityAuditReportError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateCertificateAuthorityAuditReportError {
@@ -747,7 +752,8 @@ impl Error for CreateCertificateAuthorityAuditReportError {
             CreateCertificateAuthorityAuditReportError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateCertificateAuthorityAuditReportError::Unknown(ref cause) => cause,
+            CreateCertificateAuthorityAuditReportError::ParseError(ref cause) => cause,
+            CreateCertificateAuthorityAuditReportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -768,54 +774,56 @@ pub enum DeleteCertificateAuthorityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCertificateAuthorityError {
-    pub fn from_body(body: &str) -> DeleteCertificateAuthorityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteCertificateAuthorityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        DeleteCertificateAuthorityError::ConcurrentModification(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidArnException" => {
-                        DeleteCertificateAuthorityError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidStateException" => {
-                        DeleteCertificateAuthorityError::InvalidState(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteCertificateAuthorityError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteCertificateAuthorityError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteCertificateAuthorityError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteCertificateAuthorityError::ConcurrentModification(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidArnException" => {
+                    return DeleteCertificateAuthorityError::InvalidArn(String::from(error_message))
+                }
+                "InvalidStateException" => {
+                    return DeleteCertificateAuthorityError::InvalidState(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteCertificateAuthorityError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteCertificateAuthorityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteCertificateAuthorityError::Unknown(String::from(body)),
         }
+        return DeleteCertificateAuthorityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteCertificateAuthorityError {
     fn from(err: serde_json::error::Error) -> DeleteCertificateAuthorityError {
-        DeleteCertificateAuthorityError::Unknown(err.description().to_string())
+        DeleteCertificateAuthorityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteCertificateAuthorityError {
@@ -850,7 +858,8 @@ impl Error for DeleteCertificateAuthorityError {
             DeleteCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteCertificateAuthorityError::Unknown(ref cause) => cause,
+            DeleteCertificateAuthorityError::ParseError(ref cause) => cause,
+            DeleteCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -867,46 +876,48 @@ pub enum DescribeCertificateAuthorityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCertificateAuthorityError {
-    pub fn from_body(body: &str) -> DescribeCertificateAuthorityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeCertificateAuthorityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArnException" => {
-                        DescribeCertificateAuthorityError::InvalidArn(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeCertificateAuthorityError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeCertificateAuthorityError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeCertificateAuthorityError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArnException" => {
+                    return DescribeCertificateAuthorityError::InvalidArn(String::from(
+                        error_message,
+                    ))
                 }
+                "ResourceNotFoundException" => {
+                    return DescribeCertificateAuthorityError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeCertificateAuthorityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeCertificateAuthorityError::Unknown(String::from(body)),
         }
+        return DescribeCertificateAuthorityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeCertificateAuthorityError {
     fn from(err: serde_json::error::Error) -> DescribeCertificateAuthorityError {
-        DescribeCertificateAuthorityError::Unknown(err.description().to_string())
+        DescribeCertificateAuthorityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeCertificateAuthorityError {
@@ -939,7 +950,8 @@ impl Error for DescribeCertificateAuthorityError {
             DescribeCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeCertificateAuthorityError::Unknown(ref cause) => cause,
+            DescribeCertificateAuthorityError::ParseError(ref cause) => cause,
+            DescribeCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -958,55 +970,57 @@ pub enum DescribeCertificateAuthorityAuditReportError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCertificateAuthorityAuditReportError {
-    pub fn from_body(body: &str) -> DescribeCertificateAuthorityAuditReportError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> DescribeCertificateAuthorityAuditReportError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArgsException" => {
-                        DescribeCertificateAuthorityAuditReportError::InvalidArgs(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidArnException" => {
-                        DescribeCertificateAuthorityAuditReportError::InvalidArn(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeCertificateAuthorityAuditReportError::ResourceNotFound(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        DescribeCertificateAuthorityAuditReportError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
-                    _ => DescribeCertificateAuthorityAuditReportError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArgsException" => {
+                    return DescribeCertificateAuthorityAuditReportError::InvalidArgs(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidArnException" => {
+                    return DescribeCertificateAuthorityAuditReportError::InvalidArn(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeCertificateAuthorityAuditReportError::ResourceNotFound(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return DescribeCertificateAuthorityAuditReportError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DescribeCertificateAuthorityAuditReportError::Unknown(String::from(body)),
         }
+        return DescribeCertificateAuthorityAuditReportError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeCertificateAuthorityAuditReportError {
     fn from(err: serde_json::error::Error) -> DescribeCertificateAuthorityAuditReportError {
-        DescribeCertificateAuthorityAuditReportError::Unknown(err.description().to_string())
+        DescribeCertificateAuthorityAuditReportError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeCertificateAuthorityAuditReportError {
@@ -1040,7 +1054,8 @@ impl Error for DescribeCertificateAuthorityAuditReportError {
             DescribeCertificateAuthorityAuditReportError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeCertificateAuthorityAuditReportError::Unknown(ref cause) => cause,
+            DescribeCertificateAuthorityAuditReportError::ParseError(ref cause) => cause,
+            DescribeCertificateAuthorityAuditReportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1063,53 +1078,53 @@ pub enum GetCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCertificateError {
-    pub fn from_body(body: &str) -> GetCertificateError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetCertificateError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArnException" => {
-                        GetCertificateError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidStateException" => {
-                        GetCertificateError::InvalidState(String::from(error_message))
-                    }
-                    "RequestFailedException" => {
-                        GetCertificateError::RequestFailed(String::from(error_message))
-                    }
-                    "RequestInProgressException" => {
-                        GetCertificateError::RequestInProgress(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetCertificateError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetCertificateError::Validation(error_message.to_string())
-                    }
-                    _ => GetCertificateError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArnException" => {
+                    return GetCertificateError::InvalidArn(String::from(error_message))
                 }
+                "InvalidStateException" => {
+                    return GetCertificateError::InvalidState(String::from(error_message))
+                }
+                "RequestFailedException" => {
+                    return GetCertificateError::RequestFailed(String::from(error_message))
+                }
+                "RequestInProgressException" => {
+                    return GetCertificateError::RequestInProgress(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return GetCertificateError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetCertificateError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetCertificateError::Unknown(String::from(body)),
         }
+        return GetCertificateError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetCertificateError {
     fn from(err: serde_json::error::Error) -> GetCertificateError {
-        GetCertificateError::Unknown(err.description().to_string())
+        GetCertificateError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetCertificateError {
@@ -1143,7 +1158,8 @@ impl Error for GetCertificateError {
             GetCertificateError::Validation(ref cause) => cause,
             GetCertificateError::Credentials(ref err) => err.description(),
             GetCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCertificateError::Unknown(ref cause) => cause,
+            GetCertificateError::ParseError(ref cause) => cause,
+            GetCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1162,51 +1178,55 @@ pub enum GetCertificateAuthorityCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCertificateAuthorityCertificateError {
-    pub fn from_body(body: &str) -> GetCertificateAuthorityCertificateError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetCertificateAuthorityCertificateError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArnException" => GetCertificateAuthorityCertificateError::InvalidArn(
-                        String::from(error_message),
-                    ),
-                    "InvalidStateException" => {
-                        GetCertificateAuthorityCertificateError::InvalidState(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetCertificateAuthorityCertificateError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => GetCertificateAuthorityCertificateError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => GetCertificateAuthorityCertificateError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArnException" => {
+                    return GetCertificateAuthorityCertificateError::InvalidArn(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidStateException" => {
+                    return GetCertificateAuthorityCertificateError::InvalidState(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetCertificateAuthorityCertificateError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetCertificateAuthorityCertificateError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => GetCertificateAuthorityCertificateError::Unknown(String::from(body)),
         }
+        return GetCertificateAuthorityCertificateError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetCertificateAuthorityCertificateError {
     fn from(err: serde_json::error::Error) -> GetCertificateAuthorityCertificateError {
-        GetCertificateAuthorityCertificateError::Unknown(err.description().to_string())
+        GetCertificateAuthorityCertificateError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetCertificateAuthorityCertificateError {
@@ -1240,7 +1260,8 @@ impl Error for GetCertificateAuthorityCertificateError {
             GetCertificateAuthorityCertificateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetCertificateAuthorityCertificateError::Unknown(ref cause) => cause,
+            GetCertificateAuthorityCertificateError::ParseError(ref cause) => cause,
+            GetCertificateAuthorityCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1263,57 +1284,61 @@ pub enum GetCertificateAuthorityCsrError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCertificateAuthorityCsrError {
-    pub fn from_body(body: &str) -> GetCertificateAuthorityCsrError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetCertificateAuthorityCsrError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArnException" => {
-                        GetCertificateAuthorityCsrError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidStateException" => {
-                        GetCertificateAuthorityCsrError::InvalidState(String::from(error_message))
-                    }
-                    "RequestFailedException" => {
-                        GetCertificateAuthorityCsrError::RequestFailed(String::from(error_message))
-                    }
-                    "RequestInProgressException" => {
-                        GetCertificateAuthorityCsrError::RequestInProgress(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetCertificateAuthorityCsrError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        GetCertificateAuthorityCsrError::Validation(error_message.to_string())
-                    }
-                    _ => GetCertificateAuthorityCsrError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArnException" => {
+                    return GetCertificateAuthorityCsrError::InvalidArn(String::from(error_message))
                 }
+                "InvalidStateException" => {
+                    return GetCertificateAuthorityCsrError::InvalidState(String::from(
+                        error_message,
+                    ))
+                }
+                "RequestFailedException" => {
+                    return GetCertificateAuthorityCsrError::RequestFailed(String::from(
+                        error_message,
+                    ))
+                }
+                "RequestInProgressException" => {
+                    return GetCertificateAuthorityCsrError::RequestInProgress(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetCertificateAuthorityCsrError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetCertificateAuthorityCsrError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetCertificateAuthorityCsrError::Unknown(String::from(body)),
         }
+        return GetCertificateAuthorityCsrError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetCertificateAuthorityCsrError {
     fn from(err: serde_json::error::Error) -> GetCertificateAuthorityCsrError {
-        GetCertificateAuthorityCsrError::Unknown(err.description().to_string())
+        GetCertificateAuthorityCsrError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetCertificateAuthorityCsrError {
@@ -1349,7 +1374,8 @@ impl Error for GetCertificateAuthorityCsrError {
             GetCertificateAuthorityCsrError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetCertificateAuthorityCsrError::Unknown(ref cause) => cause,
+            GetCertificateAuthorityCsrError::ParseError(ref cause) => cause,
+            GetCertificateAuthorityCsrError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1378,80 +1404,80 @@ pub enum ImportCertificateAuthorityCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ImportCertificateAuthorityCertificateError {
-    pub fn from_body(body: &str) -> ImportCertificateAuthorityCertificateError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ImportCertificateAuthorityCertificateError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "CertificateMismatchException" => {
-                        ImportCertificateAuthorityCertificateError::CertificateMismatch(
-                            String::from(error_message),
-                        )
-                    }
-                    "ConcurrentModificationException" => {
-                        ImportCertificateAuthorityCertificateError::ConcurrentModification(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidArnException" => {
-                        ImportCertificateAuthorityCertificateError::InvalidArn(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidStateException" => {
-                        ImportCertificateAuthorityCertificateError::InvalidState(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MalformedCertificateException" => {
-                        ImportCertificateAuthorityCertificateError::MalformedCertificate(
-                            String::from(error_message),
-                        )
-                    }
-                    "RequestFailedException" => {
-                        ImportCertificateAuthorityCertificateError::RequestFailed(String::from(
-                            error_message,
-                        ))
-                    }
-                    "RequestInProgressException" => {
-                        ImportCertificateAuthorityCertificateError::RequestInProgress(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        ImportCertificateAuthorityCertificateError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ImportCertificateAuthorityCertificateError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
-                    _ => ImportCertificateAuthorityCertificateError::Unknown(String::from(body)),
+            match *error_type {
+                "CertificateMismatchException" => {
+                    return ImportCertificateAuthorityCertificateError::CertificateMismatch(
+                        String::from(error_message),
+                    )
                 }
+                "ConcurrentModificationException" => {
+                    return ImportCertificateAuthorityCertificateError::ConcurrentModification(
+                        String::from(error_message),
+                    )
+                }
+                "InvalidArnException" => {
+                    return ImportCertificateAuthorityCertificateError::InvalidArn(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidStateException" => {
+                    return ImportCertificateAuthorityCertificateError::InvalidState(String::from(
+                        error_message,
+                    ))
+                }
+                "MalformedCertificateException" => {
+                    return ImportCertificateAuthorityCertificateError::MalformedCertificate(
+                        String::from(error_message),
+                    )
+                }
+                "RequestFailedException" => {
+                    return ImportCertificateAuthorityCertificateError::RequestFailed(String::from(
+                        error_message,
+                    ))
+                }
+                "RequestInProgressException" => {
+                    return ImportCertificateAuthorityCertificateError::RequestInProgress(
+                        String::from(error_message),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return ImportCertificateAuthorityCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return ImportCertificateAuthorityCertificateError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => ImportCertificateAuthorityCertificateError::Unknown(String::from(body)),
         }
+        return ImportCertificateAuthorityCertificateError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ImportCertificateAuthorityCertificateError {
     fn from(err: serde_json::error::Error) -> ImportCertificateAuthorityCertificateError {
-        ImportCertificateAuthorityCertificateError::Unknown(err.description().to_string())
+        ImportCertificateAuthorityCertificateError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ImportCertificateAuthorityCertificateError {
@@ -1490,7 +1516,8 @@ impl Error for ImportCertificateAuthorityCertificateError {
             ImportCertificateAuthorityCertificateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ImportCertificateAuthorityCertificateError::Unknown(ref cause) => cause,
+            ImportCertificateAuthorityCertificateError::ParseError(ref cause) => cause,
+            ImportCertificateAuthorityCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1515,56 +1542,56 @@ pub enum IssueCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl IssueCertificateError {
-    pub fn from_body(body: &str) -> IssueCertificateError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> IssueCertificateError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArgsException" => {
-                        IssueCertificateError::InvalidArgs(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        IssueCertificateError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidStateException" => {
-                        IssueCertificateError::InvalidState(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        IssueCertificateError::LimitExceeded(String::from(error_message))
-                    }
-                    "MalformedCSRException" => {
-                        IssueCertificateError::MalformedCSR(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        IssueCertificateError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        IssueCertificateError::Validation(error_message.to_string())
-                    }
-                    _ => IssueCertificateError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArgsException" => {
+                    return IssueCertificateError::InvalidArgs(String::from(error_message))
                 }
+                "InvalidArnException" => {
+                    return IssueCertificateError::InvalidArn(String::from(error_message))
+                }
+                "InvalidStateException" => {
+                    return IssueCertificateError::InvalidState(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return IssueCertificateError::LimitExceeded(String::from(error_message))
+                }
+                "MalformedCSRException" => {
+                    return IssueCertificateError::MalformedCSR(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return IssueCertificateError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return IssueCertificateError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => IssueCertificateError::Unknown(String::from(body)),
         }
+        return IssueCertificateError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for IssueCertificateError {
     fn from(err: serde_json::error::Error) -> IssueCertificateError {
-        IssueCertificateError::Unknown(err.description().to_string())
+        IssueCertificateError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for IssueCertificateError {
@@ -1599,7 +1626,8 @@ impl Error for IssueCertificateError {
             IssueCertificateError::Validation(ref cause) => cause,
             IssueCertificateError::Credentials(ref err) => err.description(),
             IssueCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            IssueCertificateError::Unknown(ref cause) => cause,
+            IssueCertificateError::ParseError(ref cause) => cause,
+            IssueCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1614,43 +1642,43 @@ pub enum ListCertificateAuthoritiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListCertificateAuthoritiesError {
-    pub fn from_body(body: &str) -> ListCertificateAuthoritiesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListCertificateAuthoritiesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidNextTokenException" => {
-                        ListCertificateAuthoritiesError::InvalidNextToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListCertificateAuthoritiesError::Validation(error_message.to_string())
-                    }
-                    _ => ListCertificateAuthoritiesError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidNextTokenException" => {
+                    return ListCertificateAuthoritiesError::InvalidNextToken(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return ListCertificateAuthoritiesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListCertificateAuthoritiesError::Unknown(String::from(body)),
         }
+        return ListCertificateAuthoritiesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListCertificateAuthoritiesError {
     fn from(err: serde_json::error::Error) -> ListCertificateAuthoritiesError {
-        ListCertificateAuthoritiesError::Unknown(err.description().to_string())
+        ListCertificateAuthoritiesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListCertificateAuthoritiesError {
@@ -1682,7 +1710,8 @@ impl Error for ListCertificateAuthoritiesError {
             ListCertificateAuthoritiesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListCertificateAuthoritiesError::Unknown(ref cause) => cause,
+            ListCertificateAuthoritiesError::ParseError(ref cause) => cause,
+            ListCertificateAuthoritiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1699,40 +1728,44 @@ pub enum ListTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsError {
-    pub fn from_body(body: &str) -> ListTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArnException" => ListTagsError::InvalidArn(String::from(error_message)),
-                    "ResourceNotFoundException" => {
-                        ListTagsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => ListTagsError::Validation(error_message.to_string()),
-                    _ => ListTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArnException" => {
+                    return ListTagsError::InvalidArn(String::from(error_message))
                 }
+                "ResourceNotFoundException" => {
+                    return ListTagsError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTagsError::Unknown(String::from(body)),
         }
+        return ListTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTagsError {
     fn from(err: serde_json::error::Error) -> ListTagsError {
-        ListTagsError::Unknown(err.description().to_string())
+        ListTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTagsError {
@@ -1763,7 +1796,8 @@ impl Error for ListTagsError {
             ListTagsError::Validation(ref cause) => cause,
             ListTagsError::Credentials(ref err) => err.description(),
             ListTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTagsError::Unknown(ref cause) => cause,
+            ListTagsError::ParseError(ref cause) => cause,
+            ListTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1782,49 +1816,51 @@ pub enum RestoreCertificateAuthorityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreCertificateAuthorityError {
-    pub fn from_body(body: &str) -> RestoreCertificateAuthorityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RestoreCertificateAuthorityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArnException" => {
-                        RestoreCertificateAuthorityError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidStateException" => {
-                        RestoreCertificateAuthorityError::InvalidState(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        RestoreCertificateAuthorityError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        RestoreCertificateAuthorityError::Validation(error_message.to_string())
-                    }
-                    _ => RestoreCertificateAuthorityError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArnException" => {
+                    return RestoreCertificateAuthorityError::InvalidArn(String::from(error_message))
                 }
+                "InvalidStateException" => {
+                    return RestoreCertificateAuthorityError::InvalidState(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RestoreCertificateAuthorityError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return RestoreCertificateAuthorityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RestoreCertificateAuthorityError::Unknown(String::from(body)),
         }
+        return RestoreCertificateAuthorityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RestoreCertificateAuthorityError {
     fn from(err: serde_json::error::Error) -> RestoreCertificateAuthorityError {
-        RestoreCertificateAuthorityError::Unknown(err.description().to_string())
+        RestoreCertificateAuthorityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RestoreCertificateAuthorityError {
@@ -1858,7 +1894,8 @@ impl Error for RestoreCertificateAuthorityError {
             RestoreCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RestoreCertificateAuthorityError::Unknown(ref cause) => cause,
+            RestoreCertificateAuthorityError::ParseError(ref cause) => cause,
+            RestoreCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1885,59 +1922,63 @@ pub enum RevokeCertificateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RevokeCertificateError {
-    pub fn from_body(body: &str) -> RevokeCertificateError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RevokeCertificateError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        RevokeCertificateError::ConcurrentModification(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        RevokeCertificateError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidStateException" => {
-                        RevokeCertificateError::InvalidState(String::from(error_message))
-                    }
-                    "RequestAlreadyProcessedException" => {
-                        RevokeCertificateError::RequestAlreadyProcessed(String::from(error_message))
-                    }
-                    "RequestFailedException" => {
-                        RevokeCertificateError::RequestFailed(String::from(error_message))
-                    }
-                    "RequestInProgressException" => {
-                        RevokeCertificateError::RequestInProgress(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        RevokeCertificateError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RevokeCertificateError::Validation(error_message.to_string())
-                    }
-                    _ => RevokeCertificateError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return RevokeCertificateError::ConcurrentModification(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidArnException" => {
+                    return RevokeCertificateError::InvalidArn(String::from(error_message))
+                }
+                "InvalidStateException" => {
+                    return RevokeCertificateError::InvalidState(String::from(error_message))
+                }
+                "RequestAlreadyProcessedException" => {
+                    return RevokeCertificateError::RequestAlreadyProcessed(String::from(
+                        error_message,
+                    ))
+                }
+                "RequestFailedException" => {
+                    return RevokeCertificateError::RequestFailed(String::from(error_message))
+                }
+                "RequestInProgressException" => {
+                    return RevokeCertificateError::RequestInProgress(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return RevokeCertificateError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RevokeCertificateError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RevokeCertificateError::Unknown(String::from(body)),
         }
+        return RevokeCertificateError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RevokeCertificateError {
     fn from(err: serde_json::error::Error) -> RevokeCertificateError {
-        RevokeCertificateError::Unknown(err.description().to_string())
+        RevokeCertificateError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RevokeCertificateError {
@@ -1975,7 +2016,8 @@ impl Error for RevokeCertificateError {
             RevokeCertificateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RevokeCertificateError::Unknown(ref cause) => cause,
+            RevokeCertificateError::ParseError(ref cause) => cause,
+            RevokeCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1998,53 +2040,55 @@ pub enum TagCertificateAuthorityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TagCertificateAuthorityError {
-    pub fn from_body(body: &str) -> TagCertificateAuthorityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TagCertificateAuthorityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArnException" => {
-                        TagCertificateAuthorityError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidStateException" => {
-                        TagCertificateAuthorityError::InvalidState(String::from(error_message))
-                    }
-                    "InvalidTagException" => {
-                        TagCertificateAuthorityError::InvalidTag(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        TagCertificateAuthorityError::ResourceNotFound(String::from(error_message))
-                    }
-                    "TooManyTagsException" => {
-                        TagCertificateAuthorityError::TooManyTags(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        TagCertificateAuthorityError::Validation(error_message.to_string())
-                    }
-                    _ => TagCertificateAuthorityError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArnException" => {
+                    return TagCertificateAuthorityError::InvalidArn(String::from(error_message))
                 }
+                "InvalidStateException" => {
+                    return TagCertificateAuthorityError::InvalidState(String::from(error_message))
+                }
+                "InvalidTagException" => {
+                    return TagCertificateAuthorityError::InvalidTag(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return TagCertificateAuthorityError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "TooManyTagsException" => {
+                    return TagCertificateAuthorityError::TooManyTags(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return TagCertificateAuthorityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TagCertificateAuthorityError::Unknown(String::from(body)),
         }
+        return TagCertificateAuthorityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TagCertificateAuthorityError {
     fn from(err: serde_json::error::Error) -> TagCertificateAuthorityError {
-        TagCertificateAuthorityError::Unknown(err.description().to_string())
+        TagCertificateAuthorityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TagCertificateAuthorityError {
@@ -2080,7 +2124,8 @@ impl Error for TagCertificateAuthorityError {
             TagCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            TagCertificateAuthorityError::Unknown(ref cause) => cause,
+            TagCertificateAuthorityError::ParseError(ref cause) => cause,
+            TagCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2101,52 +2146,52 @@ pub enum UntagCertificateAuthorityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UntagCertificateAuthorityError {
-    pub fn from_body(body: &str) -> UntagCertificateAuthorityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UntagCertificateAuthorityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidArnException" => {
-                        UntagCertificateAuthorityError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidStateException" => {
-                        UntagCertificateAuthorityError::InvalidState(String::from(error_message))
-                    }
-                    "InvalidTagException" => {
-                        UntagCertificateAuthorityError::InvalidTag(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UntagCertificateAuthorityError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UntagCertificateAuthorityError::Validation(error_message.to_string())
-                    }
-                    _ => UntagCertificateAuthorityError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidArnException" => {
+                    return UntagCertificateAuthorityError::InvalidArn(String::from(error_message))
                 }
+                "InvalidStateException" => {
+                    return UntagCertificateAuthorityError::InvalidState(String::from(error_message))
+                }
+                "InvalidTagException" => {
+                    return UntagCertificateAuthorityError::InvalidTag(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UntagCertificateAuthorityError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UntagCertificateAuthorityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UntagCertificateAuthorityError::Unknown(String::from(body)),
         }
+        return UntagCertificateAuthorityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UntagCertificateAuthorityError {
     fn from(err: serde_json::error::Error) -> UntagCertificateAuthorityError {
-        UntagCertificateAuthorityError::Unknown(err.description().to_string())
+        UntagCertificateAuthorityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UntagCertificateAuthorityError {
@@ -2181,7 +2226,8 @@ impl Error for UntagCertificateAuthorityError {
             UntagCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UntagCertificateAuthorityError::Unknown(ref cause) => cause,
+            UntagCertificateAuthorityError::ParseError(ref cause) => cause,
+            UntagCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2206,60 +2252,64 @@ pub enum UpdateCertificateAuthorityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateCertificateAuthorityError {
-    pub fn from_body(body: &str) -> UpdateCertificateAuthorityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateCertificateAuthorityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ConcurrentModificationException" => {
-                        UpdateCertificateAuthorityError::ConcurrentModification(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidArgsException" => {
-                        UpdateCertificateAuthorityError::InvalidArgs(String::from(error_message))
-                    }
-                    "InvalidArnException" => {
-                        UpdateCertificateAuthorityError::InvalidArn(String::from(error_message))
-                    }
-                    "InvalidPolicyException" => {
-                        UpdateCertificateAuthorityError::InvalidPolicy(String::from(error_message))
-                    }
-                    "InvalidStateException" => {
-                        UpdateCertificateAuthorityError::InvalidState(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateCertificateAuthorityError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateCertificateAuthorityError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateCertificateAuthorityError::Unknown(String::from(body)),
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return UpdateCertificateAuthorityError::ConcurrentModification(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidArgsException" => {
+                    return UpdateCertificateAuthorityError::InvalidArgs(String::from(error_message))
+                }
+                "InvalidArnException" => {
+                    return UpdateCertificateAuthorityError::InvalidArn(String::from(error_message))
+                }
+                "InvalidPolicyException" => {
+                    return UpdateCertificateAuthorityError::InvalidPolicy(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidStateException" => {
+                    return UpdateCertificateAuthorityError::InvalidState(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateCertificateAuthorityError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateCertificateAuthorityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateCertificateAuthorityError::Unknown(String::from(body)),
         }
+        return UpdateCertificateAuthorityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateCertificateAuthorityError {
     fn from(err: serde_json::error::Error) -> UpdateCertificateAuthorityError {
-        UpdateCertificateAuthorityError::Unknown(err.description().to_string())
+        UpdateCertificateAuthorityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateCertificateAuthorityError {
@@ -2296,7 +2346,8 @@ impl Error for UpdateCertificateAuthorityError {
             UpdateCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateCertificateAuthorityError::Unknown(ref cause) => cause,
+            UpdateCertificateAuthorityError::ParseError(ref cause) => cause,
+            UpdateCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2469,13 +2520,12 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<CreateCertificateAuthorityResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCertificateAuthorityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateCertificateAuthorityError::from_response(response))
                 }))
             }
         })
@@ -2510,12 +2560,13 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<CreateCertificateAuthorityAuditReportResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCertificateAuthorityAuditReportError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateCertificateAuthorityAuditReportError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -2539,9 +2590,7 @@ impl AcmPca for AcmPcaClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCertificateAuthorityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteCertificateAuthorityError::from_response(response))
                 }))
             }
         })
@@ -2570,13 +2619,12 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<DescribeCertificateAuthorityResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCertificateAuthorityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeCertificateAuthorityError::from_response(response))
                 }))
             }
         })
@@ -2611,12 +2659,13 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<DescribeCertificateAuthorityAuditReportResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCertificateAuthorityAuditReportError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeCertificateAuthorityAuditReportError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -2646,14 +2695,16 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<GetCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetCertificateError::from_response(response))),
+                )
             }
         })
     }
@@ -2687,12 +2738,13 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<GetCertificateAuthorityCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCertificateAuthorityCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetCertificateAuthorityCertificateError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -2722,13 +2774,12 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<GetCertificateAuthorityCsrResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCertificateAuthorityCsrError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetCertificateAuthorityCsrError::from_response(response))
                 }))
             }
         })
@@ -2754,8 +2805,8 @@ impl AcmPca for AcmPcaClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ImportCertificateAuthorityCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ImportCertificateAuthorityCertificateError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -2785,14 +2836,16 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<IssueCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(IssueCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(IssueCertificateError::from_response(response))),
+                )
             }
         })
     }
@@ -2820,13 +2873,12 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<ListCertificateAuthoritiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListCertificateAuthoritiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListCertificateAuthoritiesError::from_response(response))
                 }))
             }
         })
@@ -2852,14 +2904,16 @@ impl AcmPca for AcmPcaClient {
 
                     serde_json::from_str::<ListTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -2881,9 +2935,7 @@ impl AcmPca for AcmPcaClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RestoreCertificateAuthorityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RestoreCertificateAuthorityError::from_response(response))
                 }))
             }
         })
@@ -2905,11 +2957,12 @@ impl AcmPca for AcmPcaClient {
             if response.status.is_success() {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RevokeCertificateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RevokeCertificateError::from_response(response))),
+                )
             }
         })
     }
@@ -2931,9 +2984,7 @@ impl AcmPca for AcmPcaClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagCertificateAuthorityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(TagCertificateAuthorityError::from_response(response))
                 }))
             }
         })
@@ -2956,9 +3007,7 @@ impl AcmPca for AcmPcaClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagCertificateAuthorityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UntagCertificateAuthorityError::from_response(response))
                 }))
             }
         })
@@ -2981,9 +3030,7 @@ impl AcmPca for AcmPcaClient {
                 Box::new(future::ok(::std::mem::drop(response)))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateCertificateAuthorityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateCertificateAuthorityError::from_response(response))
                 }))
             }
         })

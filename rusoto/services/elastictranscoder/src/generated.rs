@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -27,7 +27,7 @@ use rusoto_core::request::HttpDispatchError;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>The file to be used as album art. There can be multiple artworks associated with an audio file, to a maximum of 20.</p> <p>To remove artwork or leave the artwork empty, you can either set <code>Artwork</code> to null, or set the <code>Merge Policy</code> to "Replace" and use an empty <code>Artwork</code> array.</p> <p>To pass through existing artwork unchanged, set the <code>Merge Policy</code> to "Prepend", "Append", or "Fallback", and use an empty <code>Artwork</code> array.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1409,51 +1409,53 @@ pub enum CancelJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CancelJobError {
-    pub fn from_body(body: &str) -> CancelJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CancelJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CancelJobError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        CancelJobError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CancelJobError::InternalService(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        CancelJobError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CancelJobError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => CancelJobError::Validation(error_message.to_string()),
-                    _ => CancelJobError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CancelJobError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return CancelJobError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return CancelJobError::InternalService(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return CancelJobError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CancelJobError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CancelJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CancelJobError::Unknown(String::from(body)),
         }
+        return CancelJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CancelJobError {
     fn from(err: serde_json::error::Error) -> CancelJobError {
-        CancelJobError::Unknown(err.description().to_string())
+        CancelJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CancelJobError {
@@ -1487,7 +1489,8 @@ impl Error for CancelJobError {
             CancelJobError::Validation(ref cause) => cause,
             CancelJobError::Credentials(ref err) => err.description(),
             CancelJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelJobError::Unknown(ref cause) => cause,
+            CancelJobError::ParseError(ref cause) => cause,
+            CancelJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1510,51 +1513,53 @@ pub enum CreateJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateJobError {
-    pub fn from_body(body: &str) -> CreateJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreateJobError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        CreateJobError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CreateJobError::InternalService(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateJobError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreateJobError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => CreateJobError::Validation(error_message.to_string()),
-                    _ => CreateJobError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateJobError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return CreateJobError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return CreateJobError::InternalService(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateJobError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreateJobError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateJobError::Unknown(String::from(body)),
         }
+        return CreateJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateJobError {
     fn from(err: serde_json::error::Error) -> CreateJobError {
-        CreateJobError::Unknown(err.description().to_string())
+        CreateJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateJobError {
@@ -1588,7 +1593,8 @@ impl Error for CreateJobError {
             CreateJobError::Validation(ref cause) => cause,
             CreateJobError::Credentials(ref err) => err.description(),
             CreateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateJobError::Unknown(ref cause) => cause,
+            CreateJobError::ParseError(ref cause) => cause,
+            CreateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1611,53 +1617,53 @@ pub enum CreatePipelineError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePipelineError {
-    pub fn from_body(body: &str) -> CreatePipelineError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePipelineError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreatePipelineError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        CreatePipelineError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CreatePipelineError::InternalService(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreatePipelineError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        CreatePipelineError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreatePipelineError::Validation(error_message.to_string())
-                    }
-                    _ => CreatePipelineError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreatePipelineError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return CreatePipelineError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return CreatePipelineError::InternalService(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreatePipelineError::LimitExceeded(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return CreatePipelineError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreatePipelineError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreatePipelineError::Unknown(String::from(body)),
         }
+        return CreatePipelineError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreatePipelineError {
     fn from(err: serde_json::error::Error) -> CreatePipelineError {
-        CreatePipelineError::Unknown(err.description().to_string())
+        CreatePipelineError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreatePipelineError {
@@ -1691,7 +1697,8 @@ impl Error for CreatePipelineError {
             CreatePipelineError::Validation(ref cause) => cause,
             CreatePipelineError::Credentials(ref err) => err.description(),
             CreatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePipelineError::Unknown(ref cause) => cause,
+            CreatePipelineError::ParseError(ref cause) => cause,
+            CreatePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1712,50 +1719,50 @@ pub enum CreatePresetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePresetError {
-    pub fn from_body(body: &str) -> CreatePresetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreatePresetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreatePresetError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        CreatePresetError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        CreatePresetError::InternalService(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreatePresetError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreatePresetError::Validation(error_message.to_string())
-                    }
-                    _ => CreatePresetError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreatePresetError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return CreatePresetError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return CreatePresetError::InternalService(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreatePresetError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreatePresetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreatePresetError::Unknown(String::from(body)),
         }
+        return CreatePresetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreatePresetError {
     fn from(err: serde_json::error::Error) -> CreatePresetError {
-        CreatePresetError::Unknown(err.description().to_string())
+        CreatePresetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreatePresetError {
@@ -1788,7 +1795,8 @@ impl Error for CreatePresetError {
             CreatePresetError::Validation(ref cause) => cause,
             CreatePresetError::Credentials(ref err) => err.description(),
             CreatePresetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePresetError::Unknown(ref cause) => cause,
+            CreatePresetError::ParseError(ref cause) => cause,
+            CreatePresetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1811,53 +1819,53 @@ pub enum DeletePipelineError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePipelineError {
-    pub fn from_body(body: &str) -> DeletePipelineError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePipelineError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DeletePipelineError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        DeletePipelineError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DeletePipelineError::InternalService(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        DeletePipelineError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeletePipelineError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeletePipelineError::Validation(error_message.to_string())
-                    }
-                    _ => DeletePipelineError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeletePipelineError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return DeletePipelineError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return DeletePipelineError::InternalService(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return DeletePipelineError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeletePipelineError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeletePipelineError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeletePipelineError::Unknown(String::from(body)),
         }
+        return DeletePipelineError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeletePipelineError {
     fn from(err: serde_json::error::Error) -> DeletePipelineError {
-        DeletePipelineError::Unknown(err.description().to_string())
+        DeletePipelineError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeletePipelineError {
@@ -1891,7 +1899,8 @@ impl Error for DeletePipelineError {
             DeletePipelineError::Validation(ref cause) => cause,
             DeletePipelineError::Credentials(ref err) => err.description(),
             DeletePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePipelineError::Unknown(ref cause) => cause,
+            DeletePipelineError::ParseError(ref cause) => cause,
+            DeletePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1912,50 +1921,50 @@ pub enum DeletePresetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePresetError {
-    pub fn from_body(body: &str) -> DeletePresetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePresetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DeletePresetError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        DeletePresetError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        DeletePresetError::InternalService(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeletePresetError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeletePresetError::Validation(error_message.to_string())
-                    }
-                    _ => DeletePresetError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeletePresetError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return DeletePresetError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return DeletePresetError::InternalService(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeletePresetError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeletePresetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeletePresetError::Unknown(String::from(body)),
         }
+        return DeletePresetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeletePresetError {
     fn from(err: serde_json::error::Error) -> DeletePresetError {
-        DeletePresetError::Unknown(err.description().to_string())
+        DeletePresetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeletePresetError {
@@ -1988,7 +1997,8 @@ impl Error for DeletePresetError {
             DeletePresetError::Validation(ref cause) => cause,
             DeletePresetError::Credentials(ref err) => err.description(),
             DeletePresetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePresetError::Unknown(ref cause) => cause,
+            DeletePresetError::ParseError(ref cause) => cause,
+            DeletePresetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2009,50 +2019,50 @@ pub enum ListJobsByPipelineError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListJobsByPipelineError {
-    pub fn from_body(body: &str) -> ListJobsByPipelineError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListJobsByPipelineError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListJobsByPipelineError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        ListJobsByPipelineError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListJobsByPipelineError::InternalService(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListJobsByPipelineError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListJobsByPipelineError::Validation(error_message.to_string())
-                    }
-                    _ => ListJobsByPipelineError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListJobsByPipelineError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return ListJobsByPipelineError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ListJobsByPipelineError::InternalService(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListJobsByPipelineError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListJobsByPipelineError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListJobsByPipelineError::Unknown(String::from(body)),
         }
+        return ListJobsByPipelineError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListJobsByPipelineError {
     fn from(err: serde_json::error::Error) -> ListJobsByPipelineError {
-        ListJobsByPipelineError::Unknown(err.description().to_string())
+        ListJobsByPipelineError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListJobsByPipelineError {
@@ -2087,7 +2097,8 @@ impl Error for ListJobsByPipelineError {
             ListJobsByPipelineError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListJobsByPipelineError::Unknown(ref cause) => cause,
+            ListJobsByPipelineError::ParseError(ref cause) => cause,
+            ListJobsByPipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2108,50 +2119,50 @@ pub enum ListJobsByStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListJobsByStatusError {
-    pub fn from_body(body: &str) -> ListJobsByStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListJobsByStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListJobsByStatusError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        ListJobsByStatusError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListJobsByStatusError::InternalService(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListJobsByStatusError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListJobsByStatusError::Validation(error_message.to_string())
-                    }
-                    _ => ListJobsByStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListJobsByStatusError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return ListJobsByStatusError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ListJobsByStatusError::InternalService(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ListJobsByStatusError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListJobsByStatusError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListJobsByStatusError::Unknown(String::from(body)),
         }
+        return ListJobsByStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListJobsByStatusError {
     fn from(err: serde_json::error::Error) -> ListJobsByStatusError {
-        ListJobsByStatusError::Unknown(err.description().to_string())
+        ListJobsByStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListJobsByStatusError {
@@ -2184,7 +2195,8 @@ impl Error for ListJobsByStatusError {
             ListJobsByStatusError::Validation(ref cause) => cause,
             ListJobsByStatusError::Credentials(ref err) => err.description(),
             ListJobsByStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListJobsByStatusError::Unknown(ref cause) => cause,
+            ListJobsByStatusError::ParseError(ref cause) => cause,
+            ListJobsByStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2203,47 +2215,47 @@ pub enum ListPipelinesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPipelinesError {
-    pub fn from_body(body: &str) -> ListPipelinesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListPipelinesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListPipelinesError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        ListPipelinesError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListPipelinesError::InternalService(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListPipelinesError::Validation(error_message.to_string())
-                    }
-                    _ => ListPipelinesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListPipelinesError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return ListPipelinesError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ListPipelinesError::InternalService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListPipelinesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListPipelinesError::Unknown(String::from(body)),
         }
+        return ListPipelinesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPipelinesError {
     fn from(err: serde_json::error::Error) -> ListPipelinesError {
-        ListPipelinesError::Unknown(err.description().to_string())
+        ListPipelinesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPipelinesError {
@@ -2275,7 +2287,8 @@ impl Error for ListPipelinesError {
             ListPipelinesError::Validation(ref cause) => cause,
             ListPipelinesError::Credentials(ref err) => err.description(),
             ListPipelinesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPipelinesError::Unknown(ref cause) => cause,
+            ListPipelinesError::ParseError(ref cause) => cause,
+            ListPipelinesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2294,47 +2307,47 @@ pub enum ListPresetsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListPresetsError {
-    pub fn from_body(body: &str) -> ListPresetsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListPresetsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListPresetsError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        ListPresetsError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ListPresetsError::InternalService(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListPresetsError::Validation(error_message.to_string())
-                    }
-                    _ => ListPresetsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListPresetsError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return ListPresetsError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ListPresetsError::InternalService(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListPresetsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListPresetsError::Unknown(String::from(body)),
         }
+        return ListPresetsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListPresetsError {
     fn from(err: serde_json::error::Error) -> ListPresetsError {
-        ListPresetsError::Unknown(err.description().to_string())
+        ListPresetsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListPresetsError {
@@ -2366,7 +2379,8 @@ impl Error for ListPresetsError {
             ListPresetsError::Validation(ref cause) => cause,
             ListPresetsError::Credentials(ref err) => err.description(),
             ListPresetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPresetsError::Unknown(ref cause) => cause,
+            ListPresetsError::ParseError(ref cause) => cause,
+            ListPresetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2387,48 +2401,48 @@ pub enum ReadJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ReadJobError {
-    pub fn from_body(body: &str) -> ReadJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ReadJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ReadJobError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        ReadJobError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ReadJobError::InternalService(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ReadJobError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => ReadJobError::Validation(error_message.to_string()),
-                    _ => ReadJobError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ReadJobError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return ReadJobError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ReadJobError::InternalService(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ReadJobError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => return ReadJobError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => ReadJobError::Unknown(String::from(body)),
         }
+        return ReadJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ReadJobError {
     fn from(err: serde_json::error::Error) -> ReadJobError {
-        ReadJobError::Unknown(err.description().to_string())
+        ReadJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ReadJobError {
@@ -2461,7 +2475,8 @@ impl Error for ReadJobError {
             ReadJobError::Validation(ref cause) => cause,
             ReadJobError::Credentials(ref err) => err.description(),
             ReadJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ReadJobError::Unknown(ref cause) => cause,
+            ReadJobError::ParseError(ref cause) => cause,
+            ReadJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2482,50 +2497,50 @@ pub enum ReadPipelineError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ReadPipelineError {
-    pub fn from_body(body: &str) -> ReadPipelineError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ReadPipelineError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ReadPipelineError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        ReadPipelineError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ReadPipelineError::InternalService(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ReadPipelineError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ReadPipelineError::Validation(error_message.to_string())
-                    }
-                    _ => ReadPipelineError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ReadPipelineError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return ReadPipelineError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ReadPipelineError::InternalService(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ReadPipelineError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ReadPipelineError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ReadPipelineError::Unknown(String::from(body)),
         }
+        return ReadPipelineError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ReadPipelineError {
     fn from(err: serde_json::error::Error) -> ReadPipelineError {
-        ReadPipelineError::Unknown(err.description().to_string())
+        ReadPipelineError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ReadPipelineError {
@@ -2558,7 +2573,8 @@ impl Error for ReadPipelineError {
             ReadPipelineError::Validation(ref cause) => cause,
             ReadPipelineError::Credentials(ref err) => err.description(),
             ReadPipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ReadPipelineError::Unknown(ref cause) => cause,
+            ReadPipelineError::ParseError(ref cause) => cause,
+            ReadPipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2579,48 +2595,50 @@ pub enum ReadPresetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ReadPresetError {
-    pub fn from_body(body: &str) -> ReadPresetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ReadPresetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ReadPresetError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        ReadPresetError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        ReadPresetError::InternalService(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ReadPresetError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => ReadPresetError::Validation(error_message.to_string()),
-                    _ => ReadPresetError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ReadPresetError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return ReadPresetError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return ReadPresetError::InternalService(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return ReadPresetError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ReadPresetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ReadPresetError::Unknown(String::from(body)),
         }
+        return ReadPresetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ReadPresetError {
     fn from(err: serde_json::error::Error) -> ReadPresetError {
-        ReadPresetError::Unknown(err.description().to_string())
+        ReadPresetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ReadPresetError {
@@ -2653,7 +2671,8 @@ impl Error for ReadPresetError {
             ReadPresetError::Validation(ref cause) => cause,
             ReadPresetError::Credentials(ref err) => err.description(),
             ReadPresetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ReadPresetError::Unknown(ref cause) => cause,
+            ReadPresetError::ParseError(ref cause) => cause,
+            ReadPresetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2674,48 +2693,50 @@ pub enum TestRoleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TestRoleError {
-    pub fn from_body(body: &str) -> TestRoleError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TestRoleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        TestRoleError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        TestRoleError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        TestRoleError::InternalService(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        TestRoleError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => TestRoleError::Validation(error_message.to_string()),
-                    _ => TestRoleError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return TestRoleError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return TestRoleError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return TestRoleError::InternalService(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return TestRoleError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return TestRoleError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TestRoleError::Unknown(String::from(body)),
         }
+        return TestRoleError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TestRoleError {
     fn from(err: serde_json::error::Error) -> TestRoleError {
-        TestRoleError::Unknown(err.description().to_string())
+        TestRoleError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TestRoleError {
@@ -2748,7 +2769,8 @@ impl Error for TestRoleError {
             TestRoleError::Validation(ref cause) => cause,
             TestRoleError::Credentials(ref err) => err.description(),
             TestRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TestRoleError::Unknown(ref cause) => cause,
+            TestRoleError::ParseError(ref cause) => cause,
+            TestRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2771,53 +2793,53 @@ pub enum UpdatePipelineError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePipelineError {
-    pub fn from_body(body: &str) -> UpdatePipelineError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdatePipelineError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpdatePipelineError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        UpdatePipelineError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpdatePipelineError::InternalService(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        UpdatePipelineError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdatePipelineError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdatePipelineError::Validation(error_message.to_string())
-                    }
-                    _ => UpdatePipelineError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdatePipelineError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return UpdatePipelineError::IncompatibleVersion(String::from(error_message))
+                }
+                "InternalServiceException" => {
+                    return UpdatePipelineError::InternalService(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return UpdatePipelineError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdatePipelineError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdatePipelineError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdatePipelineError::Unknown(String::from(body)),
         }
+        return UpdatePipelineError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdatePipelineError {
     fn from(err: serde_json::error::Error) -> UpdatePipelineError {
-        UpdatePipelineError::Unknown(err.description().to_string())
+        UpdatePipelineError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdatePipelineError {
@@ -2851,7 +2873,8 @@ impl Error for UpdatePipelineError {
             UpdatePipelineError::Validation(ref cause) => cause,
             UpdatePipelineError::Credentials(ref err) => err.description(),
             UpdatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdatePipelineError::Unknown(ref cause) => cause,
+            UpdatePipelineError::ParseError(ref cause) => cause,
+            UpdatePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2874,59 +2897,63 @@ pub enum UpdatePipelineNotificationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePipelineNotificationsError {
-    pub fn from_body(body: &str) -> UpdatePipelineNotificationsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdatePipelineNotificationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpdatePipelineNotificationsError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        UpdatePipelineNotificationsError::IncompatibleVersion(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServiceException" => {
-                        UpdatePipelineNotificationsError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceInUseException" => {
-                        UpdatePipelineNotificationsError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdatePipelineNotificationsError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdatePipelineNotificationsError::Validation(error_message.to_string())
-                    }
-                    _ => UpdatePipelineNotificationsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdatePipelineNotificationsError::AccessDenied(String::from(
+                        error_message,
+                    ))
                 }
+                "IncompatibleVersionException" => {
+                    return UpdatePipelineNotificationsError::IncompatibleVersion(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return UpdatePipelineNotificationsError::InternalService(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return UpdatePipelineNotificationsError::ResourceInUse(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdatePipelineNotificationsError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdatePipelineNotificationsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdatePipelineNotificationsError::Unknown(String::from(body)),
         }
+        return UpdatePipelineNotificationsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdatePipelineNotificationsError {
     fn from(err: serde_json::error::Error) -> UpdatePipelineNotificationsError {
-        UpdatePipelineNotificationsError::Unknown(err.description().to_string())
+        UpdatePipelineNotificationsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdatePipelineNotificationsError {
@@ -2962,7 +2989,8 @@ impl Error for UpdatePipelineNotificationsError {
             UpdatePipelineNotificationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdatePipelineNotificationsError::Unknown(ref cause) => cause,
+            UpdatePipelineNotificationsError::ParseError(ref cause) => cause,
+            UpdatePipelineNotificationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2985,53 +3013,55 @@ pub enum UpdatePipelineStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePipelineStatusError {
-    pub fn from_body(body: &str) -> UpdatePipelineStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdatePipelineStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpdatePipelineStatusError::AccessDenied(String::from(error_message))
-                    }
-                    "IncompatibleVersionException" => {
-                        UpdatePipelineStatusError::IncompatibleVersion(String::from(error_message))
-                    }
-                    "InternalServiceException" => {
-                        UpdatePipelineStatusError::InternalService(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        UpdatePipelineStatusError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdatePipelineStatusError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdatePipelineStatusError::Validation(error_message.to_string())
-                    }
-                    _ => UpdatePipelineStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdatePipelineStatusError::AccessDenied(String::from(error_message))
                 }
+                "IncompatibleVersionException" => {
+                    return UpdatePipelineStatusError::IncompatibleVersion(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return UpdatePipelineStatusError::InternalService(String::from(error_message))
+                }
+                "ResourceInUseException" => {
+                    return UpdatePipelineStatusError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return UpdatePipelineStatusError::ResourceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdatePipelineStatusError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdatePipelineStatusError::Unknown(String::from(body)),
         }
+        return UpdatePipelineStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdatePipelineStatusError {
     fn from(err: serde_json::error::Error) -> UpdatePipelineStatusError {
-        UpdatePipelineStatusError::Unknown(err.description().to_string())
+        UpdatePipelineStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdatePipelineStatusError {
@@ -3067,7 +3097,8 @@ impl Error for UpdatePipelineStatusError {
             UpdatePipelineStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdatePipelineStatusError::Unknown(ref cause) => cause,
+            UpdatePipelineStatusError::ParseError(ref cause) => cause,
+            UpdatePipelineStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3232,11 +3263,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CancelJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CancelJobError::from_response(response))),
+                )
             }
         })
     }
@@ -3271,11 +3303,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateJobError::from_response(response))),
+                )
             }
         })
     }
@@ -3310,11 +3343,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePipelineError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreatePipelineError::from_response(response))),
+                )
             }
         })
     }
@@ -3349,11 +3383,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreatePresetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreatePresetError::from_response(response))),
+                )
             }
         })
     }
@@ -3385,11 +3420,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePipelineError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeletePipelineError::from_response(response))),
+                )
             }
         })
     }
@@ -3421,11 +3457,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeletePresetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeletePresetError::from_response(response))),
+                )
             }
         })
     }
@@ -3470,11 +3507,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListJobsByPipelineError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListJobsByPipelineError::from_response(response))),
+                )
             }
         })
     }
@@ -3515,11 +3553,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListJobsByStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListJobsByStatusError::from_response(response))),
+                )
             }
         })
     }
@@ -3560,11 +3599,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPipelinesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListPipelinesError::from_response(response))),
+                )
             }
         })
     }
@@ -3605,11 +3645,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListPresetsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListPresetsError::from_response(response))),
+                )
             }
         })
     }
@@ -3638,11 +3679,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ReadJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ReadJobError::from_response(response))),
+                )
             }
         })
     }
@@ -3674,11 +3716,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ReadPipelineError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ReadPipelineError::from_response(response))),
+                )
             }
         })
     }
@@ -3710,11 +3753,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ReadPresetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ReadPresetError::from_response(response))),
+                )
             }
         })
     }
@@ -3746,11 +3790,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TestRoleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TestRoleError::from_response(response))),
+                )
             }
         })
     }
@@ -3785,11 +3830,12 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdatePipelineError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdatePipelineError::from_response(response))),
+                )
             }
         })
     }
@@ -3827,9 +3873,7 @@ impl Ets for EtsClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdatePipelineNotificationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdatePipelineNotificationsError::from_response(response))
                 }))
             }
         })
@@ -3866,11 +3910,11 @@ impl Ets for EtsClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdatePipelineStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdatePipelineStatusError::from_response(response))
+                    }),
+                )
             }
         })
     }

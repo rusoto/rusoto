@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -27,7 +27,7 @@ use rusoto_core::request::HttpDispatchError;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateRoleToGroupRequest {
@@ -2651,44 +2651,46 @@ pub enum AssociateRoleToGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateRoleToGroupError {
-    pub fn from_body(body: &str) -> AssociateRoleToGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateRoleToGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        AssociateRoleToGroupError::BadRequest(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        AssociateRoleToGroupError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AssociateRoleToGroupError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateRoleToGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return AssociateRoleToGroupError::BadRequest(String::from(error_message))
                 }
+                "InternalServerErrorException" => {
+                    return AssociateRoleToGroupError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AssociateRoleToGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AssociateRoleToGroupError::Unknown(String::from(body)),
         }
+        return AssociateRoleToGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateRoleToGroupError {
     fn from(err: serde_json::error::Error) -> AssociateRoleToGroupError {
-        AssociateRoleToGroupError::Unknown(err.description().to_string())
+        AssociateRoleToGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateRoleToGroupError {
@@ -2721,7 +2723,8 @@ impl Error for AssociateRoleToGroupError {
             AssociateRoleToGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateRoleToGroupError::Unknown(ref cause) => cause,
+            AssociateRoleToGroupError::ParseError(ref cause) => cause,
+            AssociateRoleToGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2738,46 +2741,48 @@ pub enum AssociateServiceRoleToAccountError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateServiceRoleToAccountError {
-    pub fn from_body(body: &str) -> AssociateServiceRoleToAccountError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateServiceRoleToAccountError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        AssociateServiceRoleToAccountError::BadRequest(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        AssociateServiceRoleToAccountError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AssociateServiceRoleToAccountError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateServiceRoleToAccountError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return AssociateServiceRoleToAccountError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerErrorException" => {
+                    return AssociateServiceRoleToAccountError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return AssociateServiceRoleToAccountError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AssociateServiceRoleToAccountError::Unknown(String::from(body)),
         }
+        return AssociateServiceRoleToAccountError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateServiceRoleToAccountError {
     fn from(err: serde_json::error::Error) -> AssociateServiceRoleToAccountError {
-        AssociateServiceRoleToAccountError::Unknown(err.description().to_string())
+        AssociateServiceRoleToAccountError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateServiceRoleToAccountError {
@@ -2810,7 +2815,8 @@ impl Error for AssociateServiceRoleToAccountError {
             AssociateServiceRoleToAccountError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateServiceRoleToAccountError::Unknown(ref cause) => cause,
+            AssociateServiceRoleToAccountError::ParseError(ref cause) => cause,
+            AssociateServiceRoleToAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2825,41 +2831,41 @@ pub enum CreateCoreDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCoreDefinitionError {
-    pub fn from_body(body: &str) -> CreateCoreDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCoreDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateCoreDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateCoreDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateCoreDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateCoreDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return CreateCoreDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateCoreDefinitionError::Unknown(String::from(body)),
         }
+        return CreateCoreDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateCoreDefinitionError {
     fn from(err: serde_json::error::Error) -> CreateCoreDefinitionError {
-        CreateCoreDefinitionError::Unknown(err.description().to_string())
+        CreateCoreDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateCoreDefinitionError {
@@ -2891,7 +2897,8 @@ impl Error for CreateCoreDefinitionError {
             CreateCoreDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateCoreDefinitionError::Unknown(ref cause) => cause,
+            CreateCoreDefinitionError::ParseError(ref cause) => cause,
+            CreateCoreDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2906,41 +2913,41 @@ pub enum CreateCoreDefinitionVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCoreDefinitionVersionError {
-    pub fn from_body(body: &str) -> CreateCoreDefinitionVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCoreDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateCoreDefinitionVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateCoreDefinitionVersionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateCoreDefinitionVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateCoreDefinitionVersionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return CreateCoreDefinitionVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateCoreDefinitionVersionError::Unknown(String::from(body)),
         }
+        return CreateCoreDefinitionVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateCoreDefinitionVersionError {
     fn from(err: serde_json::error::Error) -> CreateCoreDefinitionVersionError {
-        CreateCoreDefinitionVersionError::Unknown(err.description().to_string())
+        CreateCoreDefinitionVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateCoreDefinitionVersionError {
@@ -2972,7 +2979,8 @@ impl Error for CreateCoreDefinitionVersionError {
             CreateCoreDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateCoreDefinitionVersionError::Unknown(ref cause) => cause,
+            CreateCoreDefinitionVersionError::ParseError(ref cause) => cause,
+            CreateCoreDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2987,41 +2995,41 @@ pub enum CreateDeploymentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDeploymentError {
-    pub fn from_body(body: &str) -> CreateDeploymentError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDeploymentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateDeploymentError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateDeploymentError::Validation(error_message.to_string())
-                    }
-                    _ => CreateDeploymentError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateDeploymentError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return CreateDeploymentError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateDeploymentError::Unknown(String::from(body)),
         }
+        return CreateDeploymentError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateDeploymentError {
     fn from(err: serde_json::error::Error) -> CreateDeploymentError {
-        CreateDeploymentError::Unknown(err.description().to_string())
+        CreateDeploymentError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateDeploymentError {
@@ -3051,7 +3059,8 @@ impl Error for CreateDeploymentError {
             CreateDeploymentError::Validation(ref cause) => cause,
             CreateDeploymentError::Credentials(ref err) => err.description(),
             CreateDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDeploymentError::Unknown(ref cause) => cause,
+            CreateDeploymentError::ParseError(ref cause) => cause,
+            CreateDeploymentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3066,41 +3075,41 @@ pub enum CreateDeviceDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDeviceDefinitionError {
-    pub fn from_body(body: &str) -> CreateDeviceDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDeviceDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateDeviceDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateDeviceDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateDeviceDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateDeviceDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return CreateDeviceDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateDeviceDefinitionError::Unknown(String::from(body)),
         }
+        return CreateDeviceDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateDeviceDefinitionError {
     fn from(err: serde_json::error::Error) -> CreateDeviceDefinitionError {
-        CreateDeviceDefinitionError::Unknown(err.description().to_string())
+        CreateDeviceDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateDeviceDefinitionError {
@@ -3132,7 +3141,8 @@ impl Error for CreateDeviceDefinitionError {
             CreateDeviceDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateDeviceDefinitionError::Unknown(ref cause) => cause,
+            CreateDeviceDefinitionError::ParseError(ref cause) => cause,
+            CreateDeviceDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3147,41 +3157,43 @@ pub enum CreateDeviceDefinitionVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDeviceDefinitionVersionError {
-    pub fn from_body(body: &str) -> CreateDeviceDefinitionVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDeviceDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateDeviceDefinitionVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateDeviceDefinitionVersionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateDeviceDefinitionVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateDeviceDefinitionVersionError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return CreateDeviceDefinitionVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateDeviceDefinitionVersionError::Unknown(String::from(body)),
         }
+        return CreateDeviceDefinitionVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateDeviceDefinitionVersionError {
     fn from(err: serde_json::error::Error) -> CreateDeviceDefinitionVersionError {
-        CreateDeviceDefinitionVersionError::Unknown(err.description().to_string())
+        CreateDeviceDefinitionVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateDeviceDefinitionVersionError {
@@ -3213,7 +3225,8 @@ impl Error for CreateDeviceDefinitionVersionError {
             CreateDeviceDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateDeviceDefinitionVersionError::Unknown(ref cause) => cause,
+            CreateDeviceDefinitionVersionError::ParseError(ref cause) => cause,
+            CreateDeviceDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3228,41 +3241,41 @@ pub enum CreateFunctionDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateFunctionDefinitionError {
-    pub fn from_body(body: &str) -> CreateFunctionDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateFunctionDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateFunctionDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateFunctionDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateFunctionDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateFunctionDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return CreateFunctionDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateFunctionDefinitionError::Unknown(String::from(body)),
         }
+        return CreateFunctionDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateFunctionDefinitionError {
     fn from(err: serde_json::error::Error) -> CreateFunctionDefinitionError {
-        CreateFunctionDefinitionError::Unknown(err.description().to_string())
+        CreateFunctionDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateFunctionDefinitionError {
@@ -3294,7 +3307,8 @@ impl Error for CreateFunctionDefinitionError {
             CreateFunctionDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateFunctionDefinitionError::Unknown(ref cause) => cause,
+            CreateFunctionDefinitionError::ParseError(ref cause) => cause,
+            CreateFunctionDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3309,41 +3323,45 @@ pub enum CreateFunctionDefinitionVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateFunctionDefinitionVersionError {
-    pub fn from_body(body: &str) -> CreateFunctionDefinitionVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateFunctionDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => CreateFunctionDefinitionVersionError::BadRequest(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        CreateFunctionDefinitionVersionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateFunctionDefinitionVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateFunctionDefinitionVersionError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return CreateFunctionDefinitionVersionError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => CreateFunctionDefinitionVersionError::Unknown(String::from(body)),
         }
+        return CreateFunctionDefinitionVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateFunctionDefinitionVersionError {
     fn from(err: serde_json::error::Error) -> CreateFunctionDefinitionVersionError {
-        CreateFunctionDefinitionVersionError::Unknown(err.description().to_string())
+        CreateFunctionDefinitionVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateFunctionDefinitionVersionError {
@@ -3375,7 +3393,8 @@ impl Error for CreateFunctionDefinitionVersionError {
             CreateFunctionDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateFunctionDefinitionVersionError::Unknown(ref cause) => cause,
+            CreateFunctionDefinitionVersionError::ParseError(ref cause) => cause,
+            CreateFunctionDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3390,41 +3409,41 @@ pub enum CreateGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGroupError {
-    pub fn from_body(body: &str) -> CreateGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateGroupError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateGroupError::Validation(error_message.to_string())
-                    }
-                    _ => CreateGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateGroupError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return CreateGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateGroupError::Unknown(String::from(body)),
         }
+        return CreateGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateGroupError {
     fn from(err: serde_json::error::Error) -> CreateGroupError {
-        CreateGroupError::Unknown(err.description().to_string())
+        CreateGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateGroupError {
@@ -3454,7 +3473,8 @@ impl Error for CreateGroupError {
             CreateGroupError::Validation(ref cause) => cause,
             CreateGroupError::Credentials(ref err) => err.description(),
             CreateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateGroupError::Unknown(ref cause) => cause,
+            CreateGroupError::ParseError(ref cause) => cause,
+            CreateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3471,46 +3491,50 @@ pub enum CreateGroupCertificateAuthorityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGroupCertificateAuthorityError {
-    pub fn from_body(body: &str) -> CreateGroupCertificateAuthorityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateGroupCertificateAuthorityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => CreateGroupCertificateAuthorityError::BadRequest(
-                        String::from(error_message),
-                    ),
-                    "InternalServerErrorException" => {
-                        CreateGroupCertificateAuthorityError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateGroupCertificateAuthorityError::Validation(error_message.to_string())
-                    }
-                    _ => CreateGroupCertificateAuthorityError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateGroupCertificateAuthorityError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerErrorException" => {
+                    return CreateGroupCertificateAuthorityError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateGroupCertificateAuthorityError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => CreateGroupCertificateAuthorityError::Unknown(String::from(body)),
         }
+        return CreateGroupCertificateAuthorityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateGroupCertificateAuthorityError {
     fn from(err: serde_json::error::Error) -> CreateGroupCertificateAuthorityError {
-        CreateGroupCertificateAuthorityError::Unknown(err.description().to_string())
+        CreateGroupCertificateAuthorityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateGroupCertificateAuthorityError {
@@ -3543,7 +3567,8 @@ impl Error for CreateGroupCertificateAuthorityError {
             CreateGroupCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateGroupCertificateAuthorityError::Unknown(ref cause) => cause,
+            CreateGroupCertificateAuthorityError::ParseError(ref cause) => cause,
+            CreateGroupCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3558,41 +3583,41 @@ pub enum CreateGroupVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGroupVersionError {
-    pub fn from_body(body: &str) -> CreateGroupVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateGroupVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateGroupVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateGroupVersionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateGroupVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateGroupVersionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return CreateGroupVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateGroupVersionError::Unknown(String::from(body)),
         }
+        return CreateGroupVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateGroupVersionError {
     fn from(err: serde_json::error::Error) -> CreateGroupVersionError {
-        CreateGroupVersionError::Unknown(err.description().to_string())
+        CreateGroupVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateGroupVersionError {
@@ -3624,7 +3649,8 @@ impl Error for CreateGroupVersionError {
             CreateGroupVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateGroupVersionError::Unknown(ref cause) => cause,
+            CreateGroupVersionError::ParseError(ref cause) => cause,
+            CreateGroupVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3639,41 +3665,41 @@ pub enum CreateLoggerDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLoggerDefinitionError {
-    pub fn from_body(body: &str) -> CreateLoggerDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateLoggerDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateLoggerDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateLoggerDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateLoggerDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateLoggerDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return CreateLoggerDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateLoggerDefinitionError::Unknown(String::from(body)),
         }
+        return CreateLoggerDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateLoggerDefinitionError {
     fn from(err: serde_json::error::Error) -> CreateLoggerDefinitionError {
-        CreateLoggerDefinitionError::Unknown(err.description().to_string())
+        CreateLoggerDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateLoggerDefinitionError {
@@ -3705,7 +3731,8 @@ impl Error for CreateLoggerDefinitionError {
             CreateLoggerDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateLoggerDefinitionError::Unknown(ref cause) => cause,
+            CreateLoggerDefinitionError::ParseError(ref cause) => cause,
+            CreateLoggerDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3720,41 +3747,43 @@ pub enum CreateLoggerDefinitionVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLoggerDefinitionVersionError {
-    pub fn from_body(body: &str) -> CreateLoggerDefinitionVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateLoggerDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateLoggerDefinitionVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateLoggerDefinitionVersionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateLoggerDefinitionVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateLoggerDefinitionVersionError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return CreateLoggerDefinitionVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateLoggerDefinitionVersionError::Unknown(String::from(body)),
         }
+        return CreateLoggerDefinitionVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateLoggerDefinitionVersionError {
     fn from(err: serde_json::error::Error) -> CreateLoggerDefinitionVersionError {
-        CreateLoggerDefinitionVersionError::Unknown(err.description().to_string())
+        CreateLoggerDefinitionVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateLoggerDefinitionVersionError {
@@ -3786,7 +3815,8 @@ impl Error for CreateLoggerDefinitionVersionError {
             CreateLoggerDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateLoggerDefinitionVersionError::Unknown(ref cause) => cause,
+            CreateLoggerDefinitionVersionError::ParseError(ref cause) => cause,
+            CreateLoggerDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3801,41 +3831,41 @@ pub enum CreateResourceDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateResourceDefinitionError {
-    pub fn from_body(body: &str) -> CreateResourceDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateResourceDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateResourceDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateResourceDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateResourceDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateResourceDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return CreateResourceDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateResourceDefinitionError::Unknown(String::from(body)),
         }
+        return CreateResourceDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateResourceDefinitionError {
     fn from(err: serde_json::error::Error) -> CreateResourceDefinitionError {
-        CreateResourceDefinitionError::Unknown(err.description().to_string())
+        CreateResourceDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateResourceDefinitionError {
@@ -3867,7 +3897,8 @@ impl Error for CreateResourceDefinitionError {
             CreateResourceDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateResourceDefinitionError::Unknown(ref cause) => cause,
+            CreateResourceDefinitionError::ParseError(ref cause) => cause,
+            CreateResourceDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3882,41 +3913,45 @@ pub enum CreateResourceDefinitionVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateResourceDefinitionVersionError {
-    pub fn from_body(body: &str) -> CreateResourceDefinitionVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateResourceDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => CreateResourceDefinitionVersionError::BadRequest(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        CreateResourceDefinitionVersionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateResourceDefinitionVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateResourceDefinitionVersionError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return CreateResourceDefinitionVersionError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => CreateResourceDefinitionVersionError::Unknown(String::from(body)),
         }
+        return CreateResourceDefinitionVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateResourceDefinitionVersionError {
     fn from(err: serde_json::error::Error) -> CreateResourceDefinitionVersionError {
-        CreateResourceDefinitionVersionError::Unknown(err.description().to_string())
+        CreateResourceDefinitionVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateResourceDefinitionVersionError {
@@ -3948,7 +3983,8 @@ impl Error for CreateResourceDefinitionVersionError {
             CreateResourceDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateResourceDefinitionVersionError::Unknown(ref cause) => cause,
+            CreateResourceDefinitionVersionError::ParseError(ref cause) => cause,
+            CreateResourceDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3965,46 +4001,46 @@ pub enum CreateSoftwareUpdateJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSoftwareUpdateJobError {
-    pub fn from_body(body: &str) -> CreateSoftwareUpdateJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSoftwareUpdateJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateSoftwareUpdateJobError::BadRequest(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        CreateSoftwareUpdateJobError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateSoftwareUpdateJobError::Validation(error_message.to_string())
-                    }
-                    _ => CreateSoftwareUpdateJobError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateSoftwareUpdateJobError::BadRequest(String::from(error_message))
                 }
+                "InternalServerErrorException" => {
+                    return CreateSoftwareUpdateJobError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateSoftwareUpdateJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateSoftwareUpdateJobError::Unknown(String::from(body)),
         }
+        return CreateSoftwareUpdateJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateSoftwareUpdateJobError {
     fn from(err: serde_json::error::Error) -> CreateSoftwareUpdateJobError {
-        CreateSoftwareUpdateJobError::Unknown(err.description().to_string())
+        CreateSoftwareUpdateJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateSoftwareUpdateJobError {
@@ -4037,7 +4073,8 @@ impl Error for CreateSoftwareUpdateJobError {
             CreateSoftwareUpdateJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateSoftwareUpdateJobError::Unknown(ref cause) => cause,
+            CreateSoftwareUpdateJobError::ParseError(ref cause) => cause,
+            CreateSoftwareUpdateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4052,41 +4089,43 @@ pub enum CreateSubscriptionDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSubscriptionDefinitionError {
-    pub fn from_body(body: &str) -> CreateSubscriptionDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSubscriptionDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        CreateSubscriptionDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateSubscriptionDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateSubscriptionDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateSubscriptionDefinitionError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return CreateSubscriptionDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateSubscriptionDefinitionError::Unknown(String::from(body)),
         }
+        return CreateSubscriptionDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateSubscriptionDefinitionError {
     fn from(err: serde_json::error::Error) -> CreateSubscriptionDefinitionError {
-        CreateSubscriptionDefinitionError::Unknown(err.description().to_string())
+        CreateSubscriptionDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateSubscriptionDefinitionError {
@@ -4118,7 +4157,8 @@ impl Error for CreateSubscriptionDefinitionError {
             CreateSubscriptionDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateSubscriptionDefinitionError::Unknown(ref cause) => cause,
+            CreateSubscriptionDefinitionError::ParseError(ref cause) => cause,
+            CreateSubscriptionDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4133,41 +4173,45 @@ pub enum CreateSubscriptionDefinitionVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSubscriptionDefinitionVersionError {
-    pub fn from_body(body: &str) -> CreateSubscriptionDefinitionVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSubscriptionDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => CreateSubscriptionDefinitionVersionError::BadRequest(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => CreateSubscriptionDefinitionVersionError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => CreateSubscriptionDefinitionVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return CreateSubscriptionDefinitionVersionError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return CreateSubscriptionDefinitionVersionError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => CreateSubscriptionDefinitionVersionError::Unknown(String::from(body)),
         }
+        return CreateSubscriptionDefinitionVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateSubscriptionDefinitionVersionError {
     fn from(err: serde_json::error::Error) -> CreateSubscriptionDefinitionVersionError {
-        CreateSubscriptionDefinitionVersionError::Unknown(err.description().to_string())
+        CreateSubscriptionDefinitionVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateSubscriptionDefinitionVersionError {
@@ -4199,7 +4243,8 @@ impl Error for CreateSubscriptionDefinitionVersionError {
             CreateSubscriptionDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateSubscriptionDefinitionVersionError::Unknown(ref cause) => cause,
+            CreateSubscriptionDefinitionVersionError::ParseError(ref cause) => cause,
+            CreateSubscriptionDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4214,41 +4259,41 @@ pub enum DeleteCoreDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCoreDefinitionError {
-    pub fn from_body(body: &str) -> DeleteCoreDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteCoreDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteCoreDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteCoreDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteCoreDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteCoreDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteCoreDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteCoreDefinitionError::Unknown(String::from(body)),
         }
+        return DeleteCoreDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteCoreDefinitionError {
     fn from(err: serde_json::error::Error) -> DeleteCoreDefinitionError {
-        DeleteCoreDefinitionError::Unknown(err.description().to_string())
+        DeleteCoreDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteCoreDefinitionError {
@@ -4280,7 +4325,8 @@ impl Error for DeleteCoreDefinitionError {
             DeleteCoreDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteCoreDefinitionError::Unknown(ref cause) => cause,
+            DeleteCoreDefinitionError::ParseError(ref cause) => cause,
+            DeleteCoreDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4295,41 +4341,41 @@ pub enum DeleteDeviceDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDeviceDefinitionError {
-    pub fn from_body(body: &str) -> DeleteDeviceDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDeviceDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteDeviceDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteDeviceDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteDeviceDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteDeviceDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteDeviceDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteDeviceDefinitionError::Unknown(String::from(body)),
         }
+        return DeleteDeviceDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteDeviceDefinitionError {
     fn from(err: serde_json::error::Error) -> DeleteDeviceDefinitionError {
-        DeleteDeviceDefinitionError::Unknown(err.description().to_string())
+        DeleteDeviceDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteDeviceDefinitionError {
@@ -4361,7 +4407,8 @@ impl Error for DeleteDeviceDefinitionError {
             DeleteDeviceDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteDeviceDefinitionError::Unknown(ref cause) => cause,
+            DeleteDeviceDefinitionError::ParseError(ref cause) => cause,
+            DeleteDeviceDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4376,41 +4423,41 @@ pub enum DeleteFunctionDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFunctionDefinitionError {
-    pub fn from_body(body: &str) -> DeleteFunctionDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteFunctionDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteFunctionDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteFunctionDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteFunctionDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteFunctionDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteFunctionDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteFunctionDefinitionError::Unknown(String::from(body)),
         }
+        return DeleteFunctionDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteFunctionDefinitionError {
     fn from(err: serde_json::error::Error) -> DeleteFunctionDefinitionError {
-        DeleteFunctionDefinitionError::Unknown(err.description().to_string())
+        DeleteFunctionDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteFunctionDefinitionError {
@@ -4442,7 +4489,8 @@ impl Error for DeleteFunctionDefinitionError {
             DeleteFunctionDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteFunctionDefinitionError::Unknown(ref cause) => cause,
+            DeleteFunctionDefinitionError::ParseError(ref cause) => cause,
+            DeleteFunctionDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4457,41 +4505,41 @@ pub enum DeleteGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGroupError {
-    pub fn from_body(body: &str) -> DeleteGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteGroupError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteGroupError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteGroupError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteGroupError::Unknown(String::from(body)),
         }
+        return DeleteGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteGroupError {
     fn from(err: serde_json::error::Error) -> DeleteGroupError {
-        DeleteGroupError::Unknown(err.description().to_string())
+        DeleteGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteGroupError {
@@ -4521,7 +4569,8 @@ impl Error for DeleteGroupError {
             DeleteGroupError::Validation(ref cause) => cause,
             DeleteGroupError::Credentials(ref err) => err.description(),
             DeleteGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteGroupError::Unknown(ref cause) => cause,
+            DeleteGroupError::ParseError(ref cause) => cause,
+            DeleteGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4536,41 +4585,41 @@ pub enum DeleteLoggerDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLoggerDefinitionError {
-    pub fn from_body(body: &str) -> DeleteLoggerDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteLoggerDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteLoggerDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteLoggerDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteLoggerDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteLoggerDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteLoggerDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteLoggerDefinitionError::Unknown(String::from(body)),
         }
+        return DeleteLoggerDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteLoggerDefinitionError {
     fn from(err: serde_json::error::Error) -> DeleteLoggerDefinitionError {
-        DeleteLoggerDefinitionError::Unknown(err.description().to_string())
+        DeleteLoggerDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteLoggerDefinitionError {
@@ -4602,7 +4651,8 @@ impl Error for DeleteLoggerDefinitionError {
             DeleteLoggerDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteLoggerDefinitionError::Unknown(ref cause) => cause,
+            DeleteLoggerDefinitionError::ParseError(ref cause) => cause,
+            DeleteLoggerDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4617,41 +4667,41 @@ pub enum DeleteResourceDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteResourceDefinitionError {
-    pub fn from_body(body: &str) -> DeleteResourceDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteResourceDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteResourceDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteResourceDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteResourceDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteResourceDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteResourceDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteResourceDefinitionError::Unknown(String::from(body)),
         }
+        return DeleteResourceDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteResourceDefinitionError {
     fn from(err: serde_json::error::Error) -> DeleteResourceDefinitionError {
-        DeleteResourceDefinitionError::Unknown(err.description().to_string())
+        DeleteResourceDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteResourceDefinitionError {
@@ -4683,7 +4733,8 @@ impl Error for DeleteResourceDefinitionError {
             DeleteResourceDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteResourceDefinitionError::Unknown(ref cause) => cause,
+            DeleteResourceDefinitionError::ParseError(ref cause) => cause,
+            DeleteResourceDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4698,41 +4749,43 @@ pub enum DeleteSubscriptionDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSubscriptionDefinitionError {
-    pub fn from_body(body: &str) -> DeleteSubscriptionDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSubscriptionDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DeleteSubscriptionDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteSubscriptionDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteSubscriptionDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteSubscriptionDefinitionError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DeleteSubscriptionDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteSubscriptionDefinitionError::Unknown(String::from(body)),
         }
+        return DeleteSubscriptionDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteSubscriptionDefinitionError {
     fn from(err: serde_json::error::Error) -> DeleteSubscriptionDefinitionError {
-        DeleteSubscriptionDefinitionError::Unknown(err.description().to_string())
+        DeleteSubscriptionDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteSubscriptionDefinitionError {
@@ -4764,7 +4817,8 @@ impl Error for DeleteSubscriptionDefinitionError {
             DeleteSubscriptionDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteSubscriptionDefinitionError::Unknown(ref cause) => cause,
+            DeleteSubscriptionDefinitionError::ParseError(ref cause) => cause,
+            DeleteSubscriptionDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4781,46 +4835,46 @@ pub enum DisassociateRoleFromGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateRoleFromGroupError {
-    pub fn from_body(body: &str) -> DisassociateRoleFromGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateRoleFromGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        DisassociateRoleFromGroupError::BadRequest(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        DisassociateRoleFromGroupError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DisassociateRoleFromGroupError::Validation(error_message.to_string())
-                    }
-                    _ => DisassociateRoleFromGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return DisassociateRoleFromGroupError::BadRequest(String::from(error_message))
                 }
+                "InternalServerErrorException" => {
+                    return DisassociateRoleFromGroupError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DisassociateRoleFromGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisassociateRoleFromGroupError::Unknown(String::from(body)),
         }
+        return DisassociateRoleFromGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateRoleFromGroupError {
     fn from(err: serde_json::error::Error) -> DisassociateRoleFromGroupError {
-        DisassociateRoleFromGroupError::Unknown(err.description().to_string())
+        DisassociateRoleFromGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateRoleFromGroupError {
@@ -4853,7 +4907,8 @@ impl Error for DisassociateRoleFromGroupError {
             DisassociateRoleFromGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateRoleFromGroupError::Unknown(ref cause) => cause,
+            DisassociateRoleFromGroupError::ParseError(ref cause) => cause,
+            DisassociateRoleFromGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4868,43 +4923,45 @@ pub enum DisassociateServiceRoleFromAccountError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateServiceRoleFromAccountError {
-    pub fn from_body(body: &str) -> DisassociateServiceRoleFromAccountError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateServiceRoleFromAccountError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerErrorException" => {
-                        DisassociateServiceRoleFromAccountError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => DisassociateServiceRoleFromAccountError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => DisassociateServiceRoleFromAccountError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerErrorException" => {
+                    return DisassociateServiceRoleFromAccountError::InternalServerError(
+                        String::from(error_message),
+                    )
                 }
+                "ValidationException" => {
+                    return DisassociateServiceRoleFromAccountError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => DisassociateServiceRoleFromAccountError::Unknown(String::from(body)),
         }
+        return DisassociateServiceRoleFromAccountError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateServiceRoleFromAccountError {
     fn from(err: serde_json::error::Error) -> DisassociateServiceRoleFromAccountError {
-        DisassociateServiceRoleFromAccountError::Unknown(err.description().to_string())
+        DisassociateServiceRoleFromAccountError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateServiceRoleFromAccountError {
@@ -4936,7 +4993,8 @@ impl Error for DisassociateServiceRoleFromAccountError {
             DisassociateServiceRoleFromAccountError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateServiceRoleFromAccountError::Unknown(ref cause) => cause,
+            DisassociateServiceRoleFromAccountError::ParseError(ref cause) => cause,
+            DisassociateServiceRoleFromAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4953,44 +5011,44 @@ pub enum GetAssociatedRoleError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAssociatedRoleError {
-    pub fn from_body(body: &str) -> GetAssociatedRoleError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetAssociatedRoleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetAssociatedRoleError::BadRequest(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        GetAssociatedRoleError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetAssociatedRoleError::Validation(error_message.to_string())
-                    }
-                    _ => GetAssociatedRoleError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetAssociatedRoleError::BadRequest(String::from(error_message))
                 }
+                "InternalServerErrorException" => {
+                    return GetAssociatedRoleError::InternalServerError(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetAssociatedRoleError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetAssociatedRoleError::Unknown(String::from(body)),
         }
+        return GetAssociatedRoleError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetAssociatedRoleError {
     fn from(err: serde_json::error::Error) -> GetAssociatedRoleError {
-        GetAssociatedRoleError::Unknown(err.description().to_string())
+        GetAssociatedRoleError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetAssociatedRoleError {
@@ -5023,7 +5081,8 @@ impl Error for GetAssociatedRoleError {
             GetAssociatedRoleError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetAssociatedRoleError::Unknown(ref cause) => cause,
+            GetAssociatedRoleError::ParseError(ref cause) => cause,
+            GetAssociatedRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5040,44 +5099,46 @@ pub enum GetConnectivityInfoError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetConnectivityInfoError {
-    pub fn from_body(body: &str) -> GetConnectivityInfoError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetConnectivityInfoError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetConnectivityInfoError::BadRequest(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        GetConnectivityInfoError::InternalServerError(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetConnectivityInfoError::Validation(error_message.to_string())
-                    }
-                    _ => GetConnectivityInfoError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetConnectivityInfoError::BadRequest(String::from(error_message))
                 }
+                "InternalServerErrorException" => {
+                    return GetConnectivityInfoError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetConnectivityInfoError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetConnectivityInfoError::Unknown(String::from(body)),
         }
+        return GetConnectivityInfoError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetConnectivityInfoError {
     fn from(err: serde_json::error::Error) -> GetConnectivityInfoError {
-        GetConnectivityInfoError::Unknown(err.description().to_string())
+        GetConnectivityInfoError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetConnectivityInfoError {
@@ -5110,7 +5171,8 @@ impl Error for GetConnectivityInfoError {
             GetConnectivityInfoError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetConnectivityInfoError::Unknown(ref cause) => cause,
+            GetConnectivityInfoError::ParseError(ref cause) => cause,
+            GetConnectivityInfoError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5125,41 +5187,41 @@ pub enum GetCoreDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCoreDefinitionError {
-    pub fn from_body(body: &str) -> GetCoreDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetCoreDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetCoreDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetCoreDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => GetCoreDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetCoreDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetCoreDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetCoreDefinitionError::Unknown(String::from(body)),
         }
+        return GetCoreDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetCoreDefinitionError {
     fn from(err: serde_json::error::Error) -> GetCoreDefinitionError {
-        GetCoreDefinitionError::Unknown(err.description().to_string())
+        GetCoreDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetCoreDefinitionError {
@@ -5191,7 +5253,8 @@ impl Error for GetCoreDefinitionError {
             GetCoreDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetCoreDefinitionError::Unknown(ref cause) => cause,
+            GetCoreDefinitionError::ParseError(ref cause) => cause,
+            GetCoreDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5206,41 +5269,41 @@ pub enum GetCoreDefinitionVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCoreDefinitionVersionError {
-    pub fn from_body(body: &str) -> GetCoreDefinitionVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetCoreDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetCoreDefinitionVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetCoreDefinitionVersionError::Validation(error_message.to_string())
-                    }
-                    _ => GetCoreDefinitionVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetCoreDefinitionVersionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetCoreDefinitionVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetCoreDefinitionVersionError::Unknown(String::from(body)),
         }
+        return GetCoreDefinitionVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetCoreDefinitionVersionError {
     fn from(err: serde_json::error::Error) -> GetCoreDefinitionVersionError {
-        GetCoreDefinitionVersionError::Unknown(err.description().to_string())
+        GetCoreDefinitionVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetCoreDefinitionVersionError {
@@ -5272,7 +5335,8 @@ impl Error for GetCoreDefinitionVersionError {
             GetCoreDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetCoreDefinitionVersionError::Unknown(ref cause) => cause,
+            GetCoreDefinitionVersionError::ParseError(ref cause) => cause,
+            GetCoreDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5287,41 +5351,41 @@ pub enum GetDeploymentStatusError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeploymentStatusError {
-    pub fn from_body(body: &str) -> GetDeploymentStatusError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetDeploymentStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetDeploymentStatusError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetDeploymentStatusError::Validation(error_message.to_string())
-                    }
-                    _ => GetDeploymentStatusError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetDeploymentStatusError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetDeploymentStatusError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetDeploymentStatusError::Unknown(String::from(body)),
         }
+        return GetDeploymentStatusError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetDeploymentStatusError {
     fn from(err: serde_json::error::Error) -> GetDeploymentStatusError {
-        GetDeploymentStatusError::Unknown(err.description().to_string())
+        GetDeploymentStatusError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetDeploymentStatusError {
@@ -5353,7 +5417,8 @@ impl Error for GetDeploymentStatusError {
             GetDeploymentStatusError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetDeploymentStatusError::Unknown(ref cause) => cause,
+            GetDeploymentStatusError::ParseError(ref cause) => cause,
+            GetDeploymentStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5368,41 +5433,41 @@ pub enum GetDeviceDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeviceDefinitionError {
-    pub fn from_body(body: &str) -> GetDeviceDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetDeviceDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetDeviceDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetDeviceDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => GetDeviceDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetDeviceDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetDeviceDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetDeviceDefinitionError::Unknown(String::from(body)),
         }
+        return GetDeviceDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetDeviceDefinitionError {
     fn from(err: serde_json::error::Error) -> GetDeviceDefinitionError {
-        GetDeviceDefinitionError::Unknown(err.description().to_string())
+        GetDeviceDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetDeviceDefinitionError {
@@ -5434,7 +5499,8 @@ impl Error for GetDeviceDefinitionError {
             GetDeviceDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetDeviceDefinitionError::Unknown(ref cause) => cause,
+            GetDeviceDefinitionError::ParseError(ref cause) => cause,
+            GetDeviceDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5449,41 +5515,41 @@ pub enum GetDeviceDefinitionVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeviceDefinitionVersionError {
-    pub fn from_body(body: &str) -> GetDeviceDefinitionVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetDeviceDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetDeviceDefinitionVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetDeviceDefinitionVersionError::Validation(error_message.to_string())
-                    }
-                    _ => GetDeviceDefinitionVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetDeviceDefinitionVersionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetDeviceDefinitionVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetDeviceDefinitionVersionError::Unknown(String::from(body)),
         }
+        return GetDeviceDefinitionVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetDeviceDefinitionVersionError {
     fn from(err: serde_json::error::Error) -> GetDeviceDefinitionVersionError {
-        GetDeviceDefinitionVersionError::Unknown(err.description().to_string())
+        GetDeviceDefinitionVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetDeviceDefinitionVersionError {
@@ -5515,7 +5581,8 @@ impl Error for GetDeviceDefinitionVersionError {
             GetDeviceDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetDeviceDefinitionVersionError::Unknown(ref cause) => cause,
+            GetDeviceDefinitionVersionError::ParseError(ref cause) => cause,
+            GetDeviceDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5530,41 +5597,41 @@ pub enum GetFunctionDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetFunctionDefinitionError {
-    pub fn from_body(body: &str) -> GetFunctionDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetFunctionDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetFunctionDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetFunctionDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => GetFunctionDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetFunctionDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetFunctionDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetFunctionDefinitionError::Unknown(String::from(body)),
         }
+        return GetFunctionDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetFunctionDefinitionError {
     fn from(err: serde_json::error::Error) -> GetFunctionDefinitionError {
-        GetFunctionDefinitionError::Unknown(err.description().to_string())
+        GetFunctionDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetFunctionDefinitionError {
@@ -5596,7 +5663,8 @@ impl Error for GetFunctionDefinitionError {
             GetFunctionDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetFunctionDefinitionError::Unknown(ref cause) => cause,
+            GetFunctionDefinitionError::ParseError(ref cause) => cause,
+            GetFunctionDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5611,41 +5679,43 @@ pub enum GetFunctionDefinitionVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetFunctionDefinitionVersionError {
-    pub fn from_body(body: &str) -> GetFunctionDefinitionVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetFunctionDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetFunctionDefinitionVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetFunctionDefinitionVersionError::Validation(error_message.to_string())
-                    }
-                    _ => GetFunctionDefinitionVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetFunctionDefinitionVersionError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return GetFunctionDefinitionVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetFunctionDefinitionVersionError::Unknown(String::from(body)),
         }
+        return GetFunctionDefinitionVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetFunctionDefinitionVersionError {
     fn from(err: serde_json::error::Error) -> GetFunctionDefinitionVersionError {
-        GetFunctionDefinitionVersionError::Unknown(err.description().to_string())
+        GetFunctionDefinitionVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetFunctionDefinitionVersionError {
@@ -5677,7 +5747,8 @@ impl Error for GetFunctionDefinitionVersionError {
             GetFunctionDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetFunctionDefinitionVersionError::Unknown(ref cause) => cause,
+            GetFunctionDefinitionVersionError::ParseError(ref cause) => cause,
+            GetFunctionDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5692,37 +5763,41 @@ pub enum GetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupError {
-    pub fn from_body(body: &str) -> GetGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => GetGroupError::BadRequest(String::from(error_message)),
-                    "ValidationException" => GetGroupError::Validation(error_message.to_string()),
-                    _ => GetGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetGroupError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetGroupError::Unknown(String::from(body)),
         }
+        return GetGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetGroupError {
     fn from(err: serde_json::error::Error) -> GetGroupError {
-        GetGroupError::Unknown(err.description().to_string())
+        GetGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetGroupError {
@@ -5752,7 +5827,8 @@ impl Error for GetGroupError {
             GetGroupError::Validation(ref cause) => cause,
             GetGroupError::Credentials(ref err) => err.description(),
             GetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGroupError::Unknown(ref cause) => cause,
+            GetGroupError::ParseError(ref cause) => cause,
+            GetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5769,46 +5845,48 @@ pub enum GetGroupCertificateAuthorityError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupCertificateAuthorityError {
-    pub fn from_body(body: &str) -> GetGroupCertificateAuthorityError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetGroupCertificateAuthorityError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetGroupCertificateAuthorityError::BadRequest(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        GetGroupCertificateAuthorityError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        GetGroupCertificateAuthorityError::Validation(error_message.to_string())
-                    }
-                    _ => GetGroupCertificateAuthorityError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetGroupCertificateAuthorityError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerErrorException" => {
+                    return GetGroupCertificateAuthorityError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetGroupCertificateAuthorityError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetGroupCertificateAuthorityError::Unknown(String::from(body)),
         }
+        return GetGroupCertificateAuthorityError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetGroupCertificateAuthorityError {
     fn from(err: serde_json::error::Error) -> GetGroupCertificateAuthorityError {
-        GetGroupCertificateAuthorityError::Unknown(err.description().to_string())
+        GetGroupCertificateAuthorityError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetGroupCertificateAuthorityError {
@@ -5841,7 +5919,8 @@ impl Error for GetGroupCertificateAuthorityError {
             GetGroupCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetGroupCertificateAuthorityError::Unknown(ref cause) => cause,
+            GetGroupCertificateAuthorityError::ParseError(ref cause) => cause,
+            GetGroupCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5858,46 +5937,50 @@ pub enum GetGroupCertificateConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupCertificateConfigurationError {
-    pub fn from_body(body: &str) -> GetGroupCertificateConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetGroupCertificateConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => GetGroupCertificateConfigurationError::BadRequest(
-                        String::from(error_message),
-                    ),
-                    "InternalServerErrorException" => {
-                        GetGroupCertificateConfigurationError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        GetGroupCertificateConfigurationError::Validation(error_message.to_string())
-                    }
-                    _ => GetGroupCertificateConfigurationError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetGroupCertificateConfigurationError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerErrorException" => {
+                    return GetGroupCertificateConfigurationError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetGroupCertificateConfigurationError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => GetGroupCertificateConfigurationError::Unknown(String::from(body)),
         }
+        return GetGroupCertificateConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetGroupCertificateConfigurationError {
     fn from(err: serde_json::error::Error) -> GetGroupCertificateConfigurationError {
-        GetGroupCertificateConfigurationError::Unknown(err.description().to_string())
+        GetGroupCertificateConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetGroupCertificateConfigurationError {
@@ -5930,7 +6013,8 @@ impl Error for GetGroupCertificateConfigurationError {
             GetGroupCertificateConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetGroupCertificateConfigurationError::Unknown(ref cause) => cause,
+            GetGroupCertificateConfigurationError::ParseError(ref cause) => cause,
+            GetGroupCertificateConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5945,41 +6029,41 @@ pub enum GetGroupVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupVersionError {
-    pub fn from_body(body: &str) -> GetGroupVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetGroupVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetGroupVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetGroupVersionError::Validation(error_message.to_string())
-                    }
-                    _ => GetGroupVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetGroupVersionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetGroupVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetGroupVersionError::Unknown(String::from(body)),
         }
+        return GetGroupVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetGroupVersionError {
     fn from(err: serde_json::error::Error) -> GetGroupVersionError {
-        GetGroupVersionError::Unknown(err.description().to_string())
+        GetGroupVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetGroupVersionError {
@@ -6009,7 +6093,8 @@ impl Error for GetGroupVersionError {
             GetGroupVersionError::Validation(ref cause) => cause,
             GetGroupVersionError::Credentials(ref err) => err.description(),
             GetGroupVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGroupVersionError::Unknown(ref cause) => cause,
+            GetGroupVersionError::ParseError(ref cause) => cause,
+            GetGroupVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6024,41 +6109,41 @@ pub enum GetLoggerDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetLoggerDefinitionError {
-    pub fn from_body(body: &str) -> GetLoggerDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetLoggerDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetLoggerDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetLoggerDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => GetLoggerDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetLoggerDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetLoggerDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetLoggerDefinitionError::Unknown(String::from(body)),
         }
+        return GetLoggerDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetLoggerDefinitionError {
     fn from(err: serde_json::error::Error) -> GetLoggerDefinitionError {
-        GetLoggerDefinitionError::Unknown(err.description().to_string())
+        GetLoggerDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetLoggerDefinitionError {
@@ -6090,7 +6175,8 @@ impl Error for GetLoggerDefinitionError {
             GetLoggerDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetLoggerDefinitionError::Unknown(ref cause) => cause,
+            GetLoggerDefinitionError::ParseError(ref cause) => cause,
+            GetLoggerDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6105,41 +6191,41 @@ pub enum GetLoggerDefinitionVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetLoggerDefinitionVersionError {
-    pub fn from_body(body: &str) -> GetLoggerDefinitionVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetLoggerDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetLoggerDefinitionVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetLoggerDefinitionVersionError::Validation(error_message.to_string())
-                    }
-                    _ => GetLoggerDefinitionVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetLoggerDefinitionVersionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetLoggerDefinitionVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetLoggerDefinitionVersionError::Unknown(String::from(body)),
         }
+        return GetLoggerDefinitionVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetLoggerDefinitionVersionError {
     fn from(err: serde_json::error::Error) -> GetLoggerDefinitionVersionError {
-        GetLoggerDefinitionVersionError::Unknown(err.description().to_string())
+        GetLoggerDefinitionVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetLoggerDefinitionVersionError {
@@ -6171,7 +6257,8 @@ impl Error for GetLoggerDefinitionVersionError {
             GetLoggerDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetLoggerDefinitionVersionError::Unknown(ref cause) => cause,
+            GetLoggerDefinitionVersionError::ParseError(ref cause) => cause,
+            GetLoggerDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6186,41 +6273,41 @@ pub enum GetResourceDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourceDefinitionError {
-    pub fn from_body(body: &str) -> GetResourceDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetResourceDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetResourceDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetResourceDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => GetResourceDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetResourceDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetResourceDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetResourceDefinitionError::Unknown(String::from(body)),
         }
+        return GetResourceDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetResourceDefinitionError {
     fn from(err: serde_json::error::Error) -> GetResourceDefinitionError {
-        GetResourceDefinitionError::Unknown(err.description().to_string())
+        GetResourceDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetResourceDefinitionError {
@@ -6252,7 +6339,8 @@ impl Error for GetResourceDefinitionError {
             GetResourceDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetResourceDefinitionError::Unknown(ref cause) => cause,
+            GetResourceDefinitionError::ParseError(ref cause) => cause,
+            GetResourceDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6267,41 +6355,43 @@ pub enum GetResourceDefinitionVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourceDefinitionVersionError {
-    pub fn from_body(body: &str) -> GetResourceDefinitionVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetResourceDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetResourceDefinitionVersionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetResourceDefinitionVersionError::Validation(error_message.to_string())
-                    }
-                    _ => GetResourceDefinitionVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetResourceDefinitionVersionError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return GetResourceDefinitionVersionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetResourceDefinitionVersionError::Unknown(String::from(body)),
         }
+        return GetResourceDefinitionVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetResourceDefinitionVersionError {
     fn from(err: serde_json::error::Error) -> GetResourceDefinitionVersionError {
-        GetResourceDefinitionVersionError::Unknown(err.description().to_string())
+        GetResourceDefinitionVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetResourceDefinitionVersionError {
@@ -6333,7 +6423,8 @@ impl Error for GetResourceDefinitionVersionError {
             GetResourceDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetResourceDefinitionVersionError::Unknown(ref cause) => cause,
+            GetResourceDefinitionVersionError::ParseError(ref cause) => cause,
+            GetResourceDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6348,43 +6439,43 @@ pub enum GetServiceRoleForAccountError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetServiceRoleForAccountError {
-    pub fn from_body(body: &str) -> GetServiceRoleForAccountError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetServiceRoleForAccountError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalServerErrorException" => {
-                        GetServiceRoleForAccountError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        GetServiceRoleForAccountError::Validation(error_message.to_string())
-                    }
-                    _ => GetServiceRoleForAccountError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalServerErrorException" => {
+                    return GetServiceRoleForAccountError::InternalServerError(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return GetServiceRoleForAccountError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetServiceRoleForAccountError::Unknown(String::from(body)),
         }
+        return GetServiceRoleForAccountError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetServiceRoleForAccountError {
     fn from(err: serde_json::error::Error) -> GetServiceRoleForAccountError {
-        GetServiceRoleForAccountError::Unknown(err.description().to_string())
+        GetServiceRoleForAccountError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetServiceRoleForAccountError {
@@ -6416,7 +6507,8 @@ impl Error for GetServiceRoleForAccountError {
             GetServiceRoleForAccountError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetServiceRoleForAccountError::Unknown(ref cause) => cause,
+            GetServiceRoleForAccountError::ParseError(ref cause) => cause,
+            GetServiceRoleForAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6431,41 +6523,41 @@ pub enum GetSubscriptionDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSubscriptionDefinitionError {
-    pub fn from_body(body: &str) -> GetSubscriptionDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetSubscriptionDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        GetSubscriptionDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetSubscriptionDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => GetSubscriptionDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetSubscriptionDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetSubscriptionDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetSubscriptionDefinitionError::Unknown(String::from(body)),
         }
+        return GetSubscriptionDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetSubscriptionDefinitionError {
     fn from(err: serde_json::error::Error) -> GetSubscriptionDefinitionError {
-        GetSubscriptionDefinitionError::Unknown(err.description().to_string())
+        GetSubscriptionDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetSubscriptionDefinitionError {
@@ -6497,7 +6589,8 @@ impl Error for GetSubscriptionDefinitionError {
             GetSubscriptionDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetSubscriptionDefinitionError::Unknown(ref cause) => cause,
+            GetSubscriptionDefinitionError::ParseError(ref cause) => cause,
+            GetSubscriptionDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6512,41 +6605,45 @@ pub enum GetSubscriptionDefinitionVersionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSubscriptionDefinitionVersionError {
-    pub fn from_body(body: &str) -> GetSubscriptionDefinitionVersionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetSubscriptionDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => GetSubscriptionDefinitionVersionError::BadRequest(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        GetSubscriptionDefinitionVersionError::Validation(error_message.to_string())
-                    }
-                    _ => GetSubscriptionDefinitionVersionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return GetSubscriptionDefinitionVersionError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return GetSubscriptionDefinitionVersionError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => GetSubscriptionDefinitionVersionError::Unknown(String::from(body)),
         }
+        return GetSubscriptionDefinitionVersionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetSubscriptionDefinitionVersionError {
     fn from(err: serde_json::error::Error) -> GetSubscriptionDefinitionVersionError {
-        GetSubscriptionDefinitionVersionError::Unknown(err.description().to_string())
+        GetSubscriptionDefinitionVersionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetSubscriptionDefinitionVersionError {
@@ -6578,7 +6675,8 @@ impl Error for GetSubscriptionDefinitionVersionError {
             GetSubscriptionDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetSubscriptionDefinitionVersionError::Unknown(ref cause) => cause,
+            GetSubscriptionDefinitionVersionError::ParseError(ref cause) => cause,
+            GetSubscriptionDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6593,41 +6691,41 @@ pub enum ListCoreDefinitionVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListCoreDefinitionVersionsError {
-    pub fn from_body(body: &str) -> ListCoreDefinitionVersionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListCoreDefinitionVersionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListCoreDefinitionVersionsError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListCoreDefinitionVersionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListCoreDefinitionVersionsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListCoreDefinitionVersionsError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListCoreDefinitionVersionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListCoreDefinitionVersionsError::Unknown(String::from(body)),
         }
+        return ListCoreDefinitionVersionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListCoreDefinitionVersionsError {
     fn from(err: serde_json::error::Error) -> ListCoreDefinitionVersionsError {
-        ListCoreDefinitionVersionsError::Unknown(err.description().to_string())
+        ListCoreDefinitionVersionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListCoreDefinitionVersionsError {
@@ -6659,7 +6757,8 @@ impl Error for ListCoreDefinitionVersionsError {
             ListCoreDefinitionVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListCoreDefinitionVersionsError::Unknown(ref cause) => cause,
+            ListCoreDefinitionVersionsError::ParseError(ref cause) => cause,
+            ListCoreDefinitionVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6672,38 +6771,38 @@ pub enum ListCoreDefinitionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListCoreDefinitionsError {
-    pub fn from_body(body: &str) -> ListCoreDefinitionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListCoreDefinitionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        ListCoreDefinitionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListCoreDefinitionsError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return ListCoreDefinitionsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => ListCoreDefinitionsError::Unknown(String::from(body)),
         }
+        return ListCoreDefinitionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListCoreDefinitionsError {
     fn from(err: serde_json::error::Error) -> ListCoreDefinitionsError {
-        ListCoreDefinitionsError::Unknown(err.description().to_string())
+        ListCoreDefinitionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListCoreDefinitionsError {
@@ -6734,7 +6833,8 @@ impl Error for ListCoreDefinitionsError {
             ListCoreDefinitionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListCoreDefinitionsError::Unknown(ref cause) => cause,
+            ListCoreDefinitionsError::ParseError(ref cause) => cause,
+            ListCoreDefinitionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6749,41 +6849,41 @@ pub enum ListDeploymentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeploymentsError {
-    pub fn from_body(body: &str) -> ListDeploymentsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListDeploymentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListDeploymentsError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListDeploymentsError::Validation(error_message.to_string())
-                    }
-                    _ => ListDeploymentsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListDeploymentsError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListDeploymentsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListDeploymentsError::Unknown(String::from(body)),
         }
+        return ListDeploymentsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListDeploymentsError {
     fn from(err: serde_json::error::Error) -> ListDeploymentsError {
-        ListDeploymentsError::Unknown(err.description().to_string())
+        ListDeploymentsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListDeploymentsError {
@@ -6813,7 +6913,8 @@ impl Error for ListDeploymentsError {
             ListDeploymentsError::Validation(ref cause) => cause,
             ListDeploymentsError::Credentials(ref err) => err.description(),
             ListDeploymentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDeploymentsError::Unknown(ref cause) => cause,
+            ListDeploymentsError::ParseError(ref cause) => cause,
+            ListDeploymentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6828,41 +6929,43 @@ pub enum ListDeviceDefinitionVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeviceDefinitionVersionsError {
-    pub fn from_body(body: &str) -> ListDeviceDefinitionVersionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListDeviceDefinitionVersionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListDeviceDefinitionVersionsError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListDeviceDefinitionVersionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListDeviceDefinitionVersionsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListDeviceDefinitionVersionsError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return ListDeviceDefinitionVersionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListDeviceDefinitionVersionsError::Unknown(String::from(body)),
         }
+        return ListDeviceDefinitionVersionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListDeviceDefinitionVersionsError {
     fn from(err: serde_json::error::Error) -> ListDeviceDefinitionVersionsError {
-        ListDeviceDefinitionVersionsError::Unknown(err.description().to_string())
+        ListDeviceDefinitionVersionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListDeviceDefinitionVersionsError {
@@ -6894,7 +6997,8 @@ impl Error for ListDeviceDefinitionVersionsError {
             ListDeviceDefinitionVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListDeviceDefinitionVersionsError::Unknown(ref cause) => cause,
+            ListDeviceDefinitionVersionsError::ParseError(ref cause) => cause,
+            ListDeviceDefinitionVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6907,38 +7011,38 @@ pub enum ListDeviceDefinitionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeviceDefinitionsError {
-    pub fn from_body(body: &str) -> ListDeviceDefinitionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListDeviceDefinitionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        ListDeviceDefinitionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListDeviceDefinitionsError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return ListDeviceDefinitionsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => ListDeviceDefinitionsError::Unknown(String::from(body)),
         }
+        return ListDeviceDefinitionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListDeviceDefinitionsError {
     fn from(err: serde_json::error::Error) -> ListDeviceDefinitionsError {
-        ListDeviceDefinitionsError::Unknown(err.description().to_string())
+        ListDeviceDefinitionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListDeviceDefinitionsError {
@@ -6969,7 +7073,8 @@ impl Error for ListDeviceDefinitionsError {
             ListDeviceDefinitionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListDeviceDefinitionsError::Unknown(ref cause) => cause,
+            ListDeviceDefinitionsError::ParseError(ref cause) => cause,
+            ListDeviceDefinitionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6984,41 +7089,45 @@ pub enum ListFunctionDefinitionVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListFunctionDefinitionVersionsError {
-    pub fn from_body(body: &str) -> ListFunctionDefinitionVersionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListFunctionDefinitionVersionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListFunctionDefinitionVersionsError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListFunctionDefinitionVersionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListFunctionDefinitionVersionsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListFunctionDefinitionVersionsError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return ListFunctionDefinitionVersionsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => ListFunctionDefinitionVersionsError::Unknown(String::from(body)),
         }
+        return ListFunctionDefinitionVersionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListFunctionDefinitionVersionsError {
     fn from(err: serde_json::error::Error) -> ListFunctionDefinitionVersionsError {
-        ListFunctionDefinitionVersionsError::Unknown(err.description().to_string())
+        ListFunctionDefinitionVersionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListFunctionDefinitionVersionsError {
@@ -7050,7 +7159,8 @@ impl Error for ListFunctionDefinitionVersionsError {
             ListFunctionDefinitionVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListFunctionDefinitionVersionsError::Unknown(ref cause) => cause,
+            ListFunctionDefinitionVersionsError::ParseError(ref cause) => cause,
+            ListFunctionDefinitionVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7063,38 +7173,38 @@ pub enum ListFunctionDefinitionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListFunctionDefinitionsError {
-    pub fn from_body(body: &str) -> ListFunctionDefinitionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListFunctionDefinitionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        ListFunctionDefinitionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListFunctionDefinitionsError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return ListFunctionDefinitionsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => ListFunctionDefinitionsError::Unknown(String::from(body)),
         }
+        return ListFunctionDefinitionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListFunctionDefinitionsError {
     fn from(err: serde_json::error::Error) -> ListFunctionDefinitionsError {
-        ListFunctionDefinitionsError::Unknown(err.description().to_string())
+        ListFunctionDefinitionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListFunctionDefinitionsError {
@@ -7125,7 +7235,8 @@ impl Error for ListFunctionDefinitionsError {
             ListFunctionDefinitionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListFunctionDefinitionsError::Unknown(ref cause) => cause,
+            ListFunctionDefinitionsError::ParseError(ref cause) => cause,
+            ListFunctionDefinitionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7142,46 +7253,50 @@ pub enum ListGroupCertificateAuthoritiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupCertificateAuthoritiesError {
-    pub fn from_body(body: &str) -> ListGroupCertificateAuthoritiesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListGroupCertificateAuthoritiesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => ListGroupCertificateAuthoritiesError::BadRequest(
-                        String::from(error_message),
-                    ),
-                    "InternalServerErrorException" => {
-                        ListGroupCertificateAuthoritiesError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        ListGroupCertificateAuthoritiesError::Validation(error_message.to_string())
-                    }
-                    _ => ListGroupCertificateAuthoritiesError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListGroupCertificateAuthoritiesError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerErrorException" => {
+                    return ListGroupCertificateAuthoritiesError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ListGroupCertificateAuthoritiesError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => ListGroupCertificateAuthoritiesError::Unknown(String::from(body)),
         }
+        return ListGroupCertificateAuthoritiesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListGroupCertificateAuthoritiesError {
     fn from(err: serde_json::error::Error) -> ListGroupCertificateAuthoritiesError {
-        ListGroupCertificateAuthoritiesError::Unknown(err.description().to_string())
+        ListGroupCertificateAuthoritiesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListGroupCertificateAuthoritiesError {
@@ -7214,7 +7329,8 @@ impl Error for ListGroupCertificateAuthoritiesError {
             ListGroupCertificateAuthoritiesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListGroupCertificateAuthoritiesError::Unknown(ref cause) => cause,
+            ListGroupCertificateAuthoritiesError::ParseError(ref cause) => cause,
+            ListGroupCertificateAuthoritiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7229,41 +7345,41 @@ pub enum ListGroupVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupVersionsError {
-    pub fn from_body(body: &str) -> ListGroupVersionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListGroupVersionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListGroupVersionsError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListGroupVersionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListGroupVersionsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListGroupVersionsError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListGroupVersionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListGroupVersionsError::Unknown(String::from(body)),
         }
+        return ListGroupVersionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListGroupVersionsError {
     fn from(err: serde_json::error::Error) -> ListGroupVersionsError {
-        ListGroupVersionsError::Unknown(err.description().to_string())
+        ListGroupVersionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListGroupVersionsError {
@@ -7295,7 +7411,8 @@ impl Error for ListGroupVersionsError {
             ListGroupVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListGroupVersionsError::Unknown(ref cause) => cause,
+            ListGroupVersionsError::ParseError(ref cause) => cause,
+            ListGroupVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7308,36 +7425,38 @@ pub enum ListGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupsError {
-    pub fn from_body(body: &str) -> ListGroupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => ListGroupsError::Validation(error_message.to_string()),
-                    _ => ListGroupsError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return ListGroupsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => ListGroupsError::Unknown(String::from(body)),
         }
+        return ListGroupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListGroupsError {
     fn from(err: serde_json::error::Error) -> ListGroupsError {
-        ListGroupsError::Unknown(err.description().to_string())
+        ListGroupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListGroupsError {
@@ -7366,7 +7485,8 @@ impl Error for ListGroupsError {
             ListGroupsError::Validation(ref cause) => cause,
             ListGroupsError::Credentials(ref err) => err.description(),
             ListGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGroupsError::Unknown(ref cause) => cause,
+            ListGroupsError::ParseError(ref cause) => cause,
+            ListGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7381,41 +7501,43 @@ pub enum ListLoggerDefinitionVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListLoggerDefinitionVersionsError {
-    pub fn from_body(body: &str) -> ListLoggerDefinitionVersionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListLoggerDefinitionVersionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListLoggerDefinitionVersionsError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListLoggerDefinitionVersionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListLoggerDefinitionVersionsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListLoggerDefinitionVersionsError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return ListLoggerDefinitionVersionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListLoggerDefinitionVersionsError::Unknown(String::from(body)),
         }
+        return ListLoggerDefinitionVersionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListLoggerDefinitionVersionsError {
     fn from(err: serde_json::error::Error) -> ListLoggerDefinitionVersionsError {
-        ListLoggerDefinitionVersionsError::Unknown(err.description().to_string())
+        ListLoggerDefinitionVersionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListLoggerDefinitionVersionsError {
@@ -7447,7 +7569,8 @@ impl Error for ListLoggerDefinitionVersionsError {
             ListLoggerDefinitionVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListLoggerDefinitionVersionsError::Unknown(ref cause) => cause,
+            ListLoggerDefinitionVersionsError::ParseError(ref cause) => cause,
+            ListLoggerDefinitionVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7460,38 +7583,38 @@ pub enum ListLoggerDefinitionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListLoggerDefinitionsError {
-    pub fn from_body(body: &str) -> ListLoggerDefinitionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListLoggerDefinitionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        ListLoggerDefinitionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListLoggerDefinitionsError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return ListLoggerDefinitionsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => ListLoggerDefinitionsError::Unknown(String::from(body)),
         }
+        return ListLoggerDefinitionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListLoggerDefinitionsError {
     fn from(err: serde_json::error::Error) -> ListLoggerDefinitionsError {
-        ListLoggerDefinitionsError::Unknown(err.description().to_string())
+        ListLoggerDefinitionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListLoggerDefinitionsError {
@@ -7522,7 +7645,8 @@ impl Error for ListLoggerDefinitionsError {
             ListLoggerDefinitionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListLoggerDefinitionsError::Unknown(ref cause) => cause,
+            ListLoggerDefinitionsError::ParseError(ref cause) => cause,
+            ListLoggerDefinitionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7537,41 +7661,45 @@ pub enum ListResourceDefinitionVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourceDefinitionVersionsError {
-    pub fn from_body(body: &str) -> ListResourceDefinitionVersionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListResourceDefinitionVersionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ListResourceDefinitionVersionsError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListResourceDefinitionVersionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListResourceDefinitionVersionsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListResourceDefinitionVersionsError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return ListResourceDefinitionVersionsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => ListResourceDefinitionVersionsError::Unknown(String::from(body)),
         }
+        return ListResourceDefinitionVersionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListResourceDefinitionVersionsError {
     fn from(err: serde_json::error::Error) -> ListResourceDefinitionVersionsError {
-        ListResourceDefinitionVersionsError::Unknown(err.description().to_string())
+        ListResourceDefinitionVersionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListResourceDefinitionVersionsError {
@@ -7603,7 +7731,8 @@ impl Error for ListResourceDefinitionVersionsError {
             ListResourceDefinitionVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListResourceDefinitionVersionsError::Unknown(ref cause) => cause,
+            ListResourceDefinitionVersionsError::ParseError(ref cause) => cause,
+            ListResourceDefinitionVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7616,38 +7745,38 @@ pub enum ListResourceDefinitionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourceDefinitionsError {
-    pub fn from_body(body: &str) -> ListResourceDefinitionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListResourceDefinitionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        ListResourceDefinitionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListResourceDefinitionsError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return ListResourceDefinitionsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => ListResourceDefinitionsError::Unknown(String::from(body)),
         }
+        return ListResourceDefinitionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListResourceDefinitionsError {
     fn from(err: serde_json::error::Error) -> ListResourceDefinitionsError {
-        ListResourceDefinitionsError::Unknown(err.description().to_string())
+        ListResourceDefinitionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListResourceDefinitionsError {
@@ -7678,7 +7807,8 @@ impl Error for ListResourceDefinitionsError {
             ListResourceDefinitionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListResourceDefinitionsError::Unknown(ref cause) => cause,
+            ListResourceDefinitionsError::ParseError(ref cause) => cause,
+            ListResourceDefinitionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7693,41 +7823,45 @@ pub enum ListSubscriptionDefinitionVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListSubscriptionDefinitionVersionsError {
-    pub fn from_body(body: &str) -> ListSubscriptionDefinitionVersionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListSubscriptionDefinitionVersionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => ListSubscriptionDefinitionVersionsError::BadRequest(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => ListSubscriptionDefinitionVersionsError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => ListSubscriptionDefinitionVersionsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ListSubscriptionDefinitionVersionsError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return ListSubscriptionDefinitionVersionsError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => ListSubscriptionDefinitionVersionsError::Unknown(String::from(body)),
         }
+        return ListSubscriptionDefinitionVersionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListSubscriptionDefinitionVersionsError {
     fn from(err: serde_json::error::Error) -> ListSubscriptionDefinitionVersionsError {
-        ListSubscriptionDefinitionVersionsError::Unknown(err.description().to_string())
+        ListSubscriptionDefinitionVersionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListSubscriptionDefinitionVersionsError {
@@ -7759,7 +7893,8 @@ impl Error for ListSubscriptionDefinitionVersionsError {
             ListSubscriptionDefinitionVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListSubscriptionDefinitionVersionsError::Unknown(ref cause) => cause,
+            ListSubscriptionDefinitionVersionsError::ParseError(ref cause) => cause,
+            ListSubscriptionDefinitionVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7772,38 +7907,38 @@ pub enum ListSubscriptionDefinitionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListSubscriptionDefinitionsError {
-    pub fn from_body(body: &str) -> ListSubscriptionDefinitionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListSubscriptionDefinitionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        ListSubscriptionDefinitionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListSubscriptionDefinitionsError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return ListSubscriptionDefinitionsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => ListSubscriptionDefinitionsError::Unknown(String::from(body)),
         }
+        return ListSubscriptionDefinitionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListSubscriptionDefinitionsError {
     fn from(err: serde_json::error::Error) -> ListSubscriptionDefinitionsError {
-        ListSubscriptionDefinitionsError::Unknown(err.description().to_string())
+        ListSubscriptionDefinitionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListSubscriptionDefinitionsError {
@@ -7834,7 +7969,8 @@ impl Error for ListSubscriptionDefinitionsError {
             ListSubscriptionDefinitionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListSubscriptionDefinitionsError::Unknown(ref cause) => cause,
+            ListSubscriptionDefinitionsError::ParseError(ref cause) => cause,
+            ListSubscriptionDefinitionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7849,41 +7985,41 @@ pub enum ResetDeploymentsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ResetDeploymentsError {
-    pub fn from_body(body: &str) -> ResetDeploymentsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ResetDeploymentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        ResetDeploymentsError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ResetDeploymentsError::Validation(error_message.to_string())
-                    }
-                    _ => ResetDeploymentsError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return ResetDeploymentsError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ResetDeploymentsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ResetDeploymentsError::Unknown(String::from(body)),
         }
+        return ResetDeploymentsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ResetDeploymentsError {
     fn from(err: serde_json::error::Error) -> ResetDeploymentsError {
-        ResetDeploymentsError::Unknown(err.description().to_string())
+        ResetDeploymentsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ResetDeploymentsError {
@@ -7913,7 +8049,8 @@ impl Error for ResetDeploymentsError {
             ResetDeploymentsError::Validation(ref cause) => cause,
             ResetDeploymentsError::Credentials(ref err) => err.description(),
             ResetDeploymentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResetDeploymentsError::Unknown(ref cause) => cause,
+            ResetDeploymentsError::ParseError(ref cause) => cause,
+            ResetDeploymentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7930,46 +8067,46 @@ pub enum UpdateConnectivityInfoError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConnectivityInfoError {
-    pub fn from_body(body: &str) -> UpdateConnectivityInfoError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateConnectivityInfoError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateConnectivityInfoError::BadRequest(String::from(error_message))
-                    }
-                    "InternalServerErrorException" => {
-                        UpdateConnectivityInfoError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateConnectivityInfoError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateConnectivityInfoError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateConnectivityInfoError::BadRequest(String::from(error_message))
                 }
+                "InternalServerErrorException" => {
+                    return UpdateConnectivityInfoError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateConnectivityInfoError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateConnectivityInfoError::Unknown(String::from(body)),
         }
+        return UpdateConnectivityInfoError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateConnectivityInfoError {
     fn from(err: serde_json::error::Error) -> UpdateConnectivityInfoError {
-        UpdateConnectivityInfoError::Unknown(err.description().to_string())
+        UpdateConnectivityInfoError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateConnectivityInfoError {
@@ -8002,7 +8139,8 @@ impl Error for UpdateConnectivityInfoError {
             UpdateConnectivityInfoError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateConnectivityInfoError::Unknown(ref cause) => cause,
+            UpdateConnectivityInfoError::ParseError(ref cause) => cause,
+            UpdateConnectivityInfoError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8017,41 +8155,41 @@ pub enum UpdateCoreDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateCoreDefinitionError {
-    pub fn from_body(body: &str) -> UpdateCoreDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateCoreDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateCoreDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateCoreDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateCoreDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateCoreDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return UpdateCoreDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateCoreDefinitionError::Unknown(String::from(body)),
         }
+        return UpdateCoreDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateCoreDefinitionError {
     fn from(err: serde_json::error::Error) -> UpdateCoreDefinitionError {
-        UpdateCoreDefinitionError::Unknown(err.description().to_string())
+        UpdateCoreDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateCoreDefinitionError {
@@ -8083,7 +8221,8 @@ impl Error for UpdateCoreDefinitionError {
             UpdateCoreDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateCoreDefinitionError::Unknown(ref cause) => cause,
+            UpdateCoreDefinitionError::ParseError(ref cause) => cause,
+            UpdateCoreDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8098,41 +8237,41 @@ pub enum UpdateDeviceDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDeviceDefinitionError {
-    pub fn from_body(body: &str) -> UpdateDeviceDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateDeviceDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateDeviceDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateDeviceDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateDeviceDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateDeviceDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return UpdateDeviceDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateDeviceDefinitionError::Unknown(String::from(body)),
         }
+        return UpdateDeviceDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateDeviceDefinitionError {
     fn from(err: serde_json::error::Error) -> UpdateDeviceDefinitionError {
-        UpdateDeviceDefinitionError::Unknown(err.description().to_string())
+        UpdateDeviceDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateDeviceDefinitionError {
@@ -8164,7 +8303,8 @@ impl Error for UpdateDeviceDefinitionError {
             UpdateDeviceDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateDeviceDefinitionError::Unknown(ref cause) => cause,
+            UpdateDeviceDefinitionError::ParseError(ref cause) => cause,
+            UpdateDeviceDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8179,41 +8319,41 @@ pub enum UpdateFunctionDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFunctionDefinitionError {
-    pub fn from_body(body: &str) -> UpdateFunctionDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateFunctionDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateFunctionDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateFunctionDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateFunctionDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateFunctionDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return UpdateFunctionDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateFunctionDefinitionError::Unknown(String::from(body)),
         }
+        return UpdateFunctionDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateFunctionDefinitionError {
     fn from(err: serde_json::error::Error) -> UpdateFunctionDefinitionError {
-        UpdateFunctionDefinitionError::Unknown(err.description().to_string())
+        UpdateFunctionDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateFunctionDefinitionError {
@@ -8245,7 +8385,8 @@ impl Error for UpdateFunctionDefinitionError {
             UpdateFunctionDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateFunctionDefinitionError::Unknown(ref cause) => cause,
+            UpdateFunctionDefinitionError::ParseError(ref cause) => cause,
+            UpdateFunctionDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8260,41 +8401,41 @@ pub enum UpdateGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGroupError {
-    pub fn from_body(body: &str) -> UpdateGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateGroupError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateGroupError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateGroupError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return UpdateGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateGroupError::Unknown(String::from(body)),
         }
+        return UpdateGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateGroupError {
     fn from(err: serde_json::error::Error) -> UpdateGroupError {
-        UpdateGroupError::Unknown(err.description().to_string())
+        UpdateGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateGroupError {
@@ -8324,7 +8465,8 @@ impl Error for UpdateGroupError {
             UpdateGroupError::Validation(ref cause) => cause,
             UpdateGroupError::Credentials(ref err) => err.description(),
             UpdateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateGroupError::Unknown(ref cause) => cause,
+            UpdateGroupError::ParseError(ref cause) => cause,
+            UpdateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8341,46 +8483,50 @@ pub enum UpdateGroupCertificateConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGroupCertificateConfigurationError {
-    pub fn from_body(body: &str) -> UpdateGroupCertificateConfigurationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateGroupCertificateConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => UpdateGroupCertificateConfigurationError::BadRequest(
-                        String::from(error_message),
-                    ),
-                    "InternalServerErrorException" => {
-                        UpdateGroupCertificateConfigurationError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => UpdateGroupCertificateConfigurationError::Validation(
-                        error_message.to_string(),
-                    ),
-                    _ => UpdateGroupCertificateConfigurationError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateGroupCertificateConfigurationError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "InternalServerErrorException" => {
+                    return UpdateGroupCertificateConfigurationError::InternalServerError(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return UpdateGroupCertificateConfigurationError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => UpdateGroupCertificateConfigurationError::Unknown(String::from(body)),
         }
+        return UpdateGroupCertificateConfigurationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateGroupCertificateConfigurationError {
     fn from(err: serde_json::error::Error) -> UpdateGroupCertificateConfigurationError {
-        UpdateGroupCertificateConfigurationError::Unknown(err.description().to_string())
+        UpdateGroupCertificateConfigurationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateGroupCertificateConfigurationError {
@@ -8413,7 +8559,8 @@ impl Error for UpdateGroupCertificateConfigurationError {
             UpdateGroupCertificateConfigurationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateGroupCertificateConfigurationError::Unknown(ref cause) => cause,
+            UpdateGroupCertificateConfigurationError::ParseError(ref cause) => cause,
+            UpdateGroupCertificateConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8428,41 +8575,41 @@ pub enum UpdateLoggerDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateLoggerDefinitionError {
-    pub fn from_body(body: &str) -> UpdateLoggerDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateLoggerDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateLoggerDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateLoggerDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateLoggerDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateLoggerDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return UpdateLoggerDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateLoggerDefinitionError::Unknown(String::from(body)),
         }
+        return UpdateLoggerDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateLoggerDefinitionError {
     fn from(err: serde_json::error::Error) -> UpdateLoggerDefinitionError {
-        UpdateLoggerDefinitionError::Unknown(err.description().to_string())
+        UpdateLoggerDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateLoggerDefinitionError {
@@ -8494,7 +8641,8 @@ impl Error for UpdateLoggerDefinitionError {
             UpdateLoggerDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateLoggerDefinitionError::Unknown(ref cause) => cause,
+            UpdateLoggerDefinitionError::ParseError(ref cause) => cause,
+            UpdateLoggerDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8509,41 +8657,41 @@ pub enum UpdateResourceDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateResourceDefinitionError {
-    pub fn from_body(body: &str) -> UpdateResourceDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateResourceDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateResourceDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateResourceDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateResourceDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateResourceDefinitionError::BadRequest(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return UpdateResourceDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateResourceDefinitionError::Unknown(String::from(body)),
         }
+        return UpdateResourceDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateResourceDefinitionError {
     fn from(err: serde_json::error::Error) -> UpdateResourceDefinitionError {
-        UpdateResourceDefinitionError::Unknown(err.description().to_string())
+        UpdateResourceDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateResourceDefinitionError {
@@ -8575,7 +8723,8 @@ impl Error for UpdateResourceDefinitionError {
             UpdateResourceDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateResourceDefinitionError::Unknown(ref cause) => cause,
+            UpdateResourceDefinitionError::ParseError(ref cause) => cause,
+            UpdateResourceDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8590,41 +8739,43 @@ pub enum UpdateSubscriptionDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSubscriptionDefinitionError {
-    pub fn from_body(body: &str) -> UpdateSubscriptionDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSubscriptionDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "BadRequestException" => {
-                        UpdateSubscriptionDefinitionError::BadRequest(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateSubscriptionDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateSubscriptionDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "BadRequestException" => {
+                    return UpdateSubscriptionDefinitionError::BadRequest(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return UpdateSubscriptionDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateSubscriptionDefinitionError::Unknown(String::from(body)),
         }
+        return UpdateSubscriptionDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateSubscriptionDefinitionError {
     fn from(err: serde_json::error::Error) -> UpdateSubscriptionDefinitionError {
-        UpdateSubscriptionDefinitionError::Unknown(err.description().to_string())
+        UpdateSubscriptionDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateSubscriptionDefinitionError {
@@ -8656,7 +8807,8 @@ impl Error for UpdateSubscriptionDefinitionError {
             UpdateSubscriptionDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateSubscriptionDefinitionError::Unknown(ref cause) => cause,
+            UpdateSubscriptionDefinitionError::ParseError(ref cause) => cause,
+            UpdateSubscriptionDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9182,11 +9334,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateRoleToGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AssociateRoleToGroupError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9224,9 +9376,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateServiceRoleToAccountError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AssociateServiceRoleToAccountError::from_response(response))
                 }))
             }
         })
@@ -9266,11 +9416,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCoreDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateCoreDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9314,9 +9464,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCoreDefinitionVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateCoreDefinitionVersionError::from_response(response))
                 }))
             }
         })
@@ -9358,11 +9506,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDeploymentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateDeploymentError::from_response(response))),
+                )
             }
         })
     }
@@ -9401,11 +9550,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDeviceDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateDeviceDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9450,9 +9599,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateDeviceDefinitionVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateDeviceDefinitionVersionError::from_response(response))
                 }))
             }
         })
@@ -9493,9 +9640,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateFunctionDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateFunctionDefinitionError::from_response(response))
                 }))
             }
         })
@@ -9541,8 +9686,8 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateFunctionDefinitionVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateFunctionDefinitionVersionError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -9582,11 +9727,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateGroupError::from_response(response))),
+                )
             }
         })
     }
@@ -9628,8 +9774,8 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateGroupCertificateAuthorityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateGroupCertificateAuthorityError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -9673,11 +9819,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateGroupVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateGroupVersionError::from_response(response))),
+                )
             }
         })
     }
@@ -9716,11 +9863,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateLoggerDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateLoggerDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9765,9 +9912,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateLoggerDefinitionVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateLoggerDefinitionVersionError::from_response(response))
                 }))
             }
         })
@@ -9808,9 +9953,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateResourceDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateResourceDefinitionError::from_response(response))
                 }))
             }
         })
@@ -9856,8 +9999,8 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateResourceDefinitionVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateResourceDefinitionVersionError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -9899,9 +10042,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSoftwareUpdateJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateSoftwareUpdateJobError::from_response(response))
                 }))
             }
         })
@@ -9943,9 +10084,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSubscriptionDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateSubscriptionDefinitionError::from_response(response))
                 }))
             }
         })
@@ -9987,14 +10126,15 @@ impl GreenGrass for GreenGrassClient {
                     debug!("Response status: {}", response.status);
                     let result = serde_json::from_slice::<
                         CreateSubscriptionDefinitionVersionResponse,
-                    >(&body).unwrap();
+                    >(&body)
+                    .unwrap();
 
                     result
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSubscriptionDefinitionVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(CreateSubscriptionDefinitionVersionError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -10031,11 +10171,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCoreDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteCoreDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10070,11 +10210,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDeviceDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteDeviceDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10110,9 +10250,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteFunctionDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteFunctionDefinitionError::from_response(response))
                 }))
             }
         })
@@ -10144,11 +10282,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteGroupError::from_response(response))),
+                )
             }
         })
     }
@@ -10183,11 +10322,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteLoggerDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteLoggerDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10223,9 +10362,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteResourceDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteResourceDefinitionError::from_response(response))
                 }))
             }
         })
@@ -10263,9 +10400,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSubscriptionDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteSubscriptionDefinitionError::from_response(response))
                 }))
             }
         })
@@ -10302,9 +10437,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateRoleFromGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DisassociateRoleFromGroupError::from_response(response))
                 }))
             }
         })
@@ -10341,8 +10474,8 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateServiceRoleFromAccountError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DisassociateServiceRoleFromAccountError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -10379,11 +10512,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAssociatedRoleError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetAssociatedRoleError::from_response(response))),
+                )
             }
         })
     }
@@ -10418,11 +10552,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetConnectivityInfoError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetConnectivityInfoError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10457,11 +10591,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCoreDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetCoreDefinitionError::from_response(response))),
+                )
             }
         })
     }
@@ -10494,9 +10629,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCoreDefinitionVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetCoreDefinitionVersionError::from_response(response))
                 }))
             }
         })
@@ -10533,11 +10666,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDeploymentStatusError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetDeploymentStatusError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10572,11 +10705,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDeviceDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetDeviceDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10610,9 +10743,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDeviceDefinitionVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetDeviceDefinitionVersionError::from_response(response))
                 }))
             }
         })
@@ -10648,11 +10779,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFunctionDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetFunctionDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10686,9 +10817,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFunctionDefinitionVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetFunctionDefinitionVersionError::from_response(response))
                 }))
             }
         })
@@ -10717,11 +10846,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetGroupError::from_response(response))),
+                )
             }
         })
     }
@@ -10759,9 +10889,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetGroupCertificateAuthorityError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetGroupCertificateAuthorityError::from_response(response))
                 }))
             }
         })
@@ -10800,8 +10928,8 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetGroupCertificateConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetGroupCertificateConfigurationError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -10838,11 +10966,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetGroupVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetGroupVersionError::from_response(response))),
+                )
             }
         })
     }
@@ -10877,11 +11006,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetLoggerDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetLoggerDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10915,9 +11044,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetLoggerDefinitionVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetLoggerDefinitionVersionError::from_response(response))
                 }))
             }
         })
@@ -10953,11 +11080,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetResourceDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetResourceDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -10991,9 +11118,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetResourceDefinitionVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetResourceDefinitionVersionError::from_response(response))
                 }))
             }
         })
@@ -11026,9 +11151,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetServiceRoleForAccountError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetServiceRoleForAccountError::from_response(response))
                 }))
             }
         })
@@ -11065,9 +11188,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSubscriptionDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetSubscriptionDefinitionError::from_response(response))
                 }))
             }
         })
@@ -11103,8 +11224,8 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSubscriptionDefinitionVersionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(GetSubscriptionDefinitionVersionError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -11152,9 +11273,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListCoreDefinitionVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListCoreDefinitionVersionsError::from_response(response))
                 }))
             }
         })
@@ -11196,11 +11315,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListCoreDefinitionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListCoreDefinitionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -11243,11 +11362,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDeploymentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListDeploymentsError::from_response(response))),
+                )
             }
         })
     }
@@ -11293,9 +11413,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDeviceDefinitionVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListDeviceDefinitionVersionsError::from_response(response))
                 }))
             }
         })
@@ -11337,11 +11455,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDeviceDefinitionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListDeviceDefinitionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -11388,9 +11506,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListFunctionDefinitionVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListFunctionDefinitionVersionsError::from_response(response))
                 }))
             }
         })
@@ -11433,9 +11549,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListFunctionDefinitionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListFunctionDefinitionsError::from_response(response))
                 }))
             }
         })
@@ -11474,8 +11588,8 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListGroupCertificateAuthoritiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ListGroupCertificateAuthoritiesError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -11521,11 +11635,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListGroupVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListGroupVersionsError::from_response(response))),
+                )
             }
         })
     }
@@ -11565,11 +11680,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListGroupsError::from_response(response))),
+                )
             }
         })
     }
@@ -11615,9 +11731,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListLoggerDefinitionVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListLoggerDefinitionVersionsError::from_response(response))
                 }))
             }
         })
@@ -11659,11 +11773,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListLoggerDefinitionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListLoggerDefinitionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -11710,9 +11824,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListResourceDefinitionVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListResourceDefinitionVersionsError::from_response(response))
                 }))
             }
         })
@@ -11755,9 +11867,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListResourceDefinitionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListResourceDefinitionsError::from_response(response))
                 }))
             }
         })
@@ -11807,8 +11917,8 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSubscriptionDefinitionVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ListSubscriptionDefinitionVersionsError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -11853,9 +11963,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSubscriptionDefinitionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListSubscriptionDefinitionsError::from_response(response))
                 }))
             }
         })
@@ -11897,11 +12005,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResetDeploymentsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ResetDeploymentsError::from_response(response))),
+                )
             }
         })
     }
@@ -11939,11 +12048,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateConnectivityInfoError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateConnectivityInfoError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -11981,11 +12090,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateCoreDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateCoreDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12023,11 +12132,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateDeviceDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateDeviceDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12066,9 +12175,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateFunctionDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateFunctionDefinitionError::from_response(response))
                 }))
             }
         })
@@ -12103,11 +12210,12 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateGroupError::from_response(response))),
+                )
             }
         })
     }
@@ -12144,14 +12252,15 @@ impl GreenGrass for GreenGrassClient {
                     debug!("Response status: {}", response.status);
                     let result = serde_json::from_slice::<
                         UpdateGroupCertificateConfigurationResponse,
-                    >(&body).unwrap();
+                    >(&body)
+                    .unwrap();
 
                     result
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateGroupCertificateConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(UpdateGroupCertificateConfigurationError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -12191,11 +12300,11 @@ impl GreenGrass for GreenGrassClient {
                     result
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateLoggerDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateLoggerDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -12234,9 +12343,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateResourceDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateResourceDefinitionError::from_response(response))
                 }))
             }
         })
@@ -12277,9 +12384,7 @@ impl GreenGrass for GreenGrassClient {
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSubscriptionDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateSubscriptionDefinitionError::from_response(response))
                 }))
             }
         })

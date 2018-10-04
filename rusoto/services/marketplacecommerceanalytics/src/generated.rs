@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Container for the parameters to the GenerateDataSet operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -113,43 +113,43 @@ pub enum GenerateDataSetError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateDataSetError {
-    pub fn from_body(body: &str) -> GenerateDataSetError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GenerateDataSetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "MarketplaceCommerceAnalyticsException" => {
-                        GenerateDataSetError::MarketplaceCommerceAnalytics(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        GenerateDataSetError::Validation(error_message.to_string())
-                    }
-                    _ => GenerateDataSetError::Unknown(String::from(body)),
+            match *error_type {
+                "MarketplaceCommerceAnalyticsException" => {
+                    return GenerateDataSetError::MarketplaceCommerceAnalytics(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return GenerateDataSetError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GenerateDataSetError::Unknown(String::from(body)),
         }
+        return GenerateDataSetError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GenerateDataSetError {
     fn from(err: serde_json::error::Error) -> GenerateDataSetError {
-        GenerateDataSetError::Unknown(err.description().to_string())
+        GenerateDataSetError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GenerateDataSetError {
@@ -179,7 +179,8 @@ impl Error for GenerateDataSetError {
             GenerateDataSetError::Validation(ref cause) => cause,
             GenerateDataSetError::Credentials(ref err) => err.description(),
             GenerateDataSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GenerateDataSetError::Unknown(ref cause) => cause,
+            GenerateDataSetError::ParseError(ref cause) => cause,
+            GenerateDataSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -194,43 +195,43 @@ pub enum StartSupportDataExportError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartSupportDataExportError {
-    pub fn from_body(body: &str) -> StartSupportDataExportError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartSupportDataExportError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "MarketplaceCommerceAnalyticsException" => {
-                        StartSupportDataExportError::MarketplaceCommerceAnalytics(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        StartSupportDataExportError::Validation(error_message.to_string())
-                    }
-                    _ => StartSupportDataExportError::Unknown(String::from(body)),
+            match *error_type {
+                "MarketplaceCommerceAnalyticsException" => {
+                    return StartSupportDataExportError::MarketplaceCommerceAnalytics(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return StartSupportDataExportError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartSupportDataExportError::Unknown(String::from(body)),
         }
+        return StartSupportDataExportError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartSupportDataExportError {
     fn from(err: serde_json::error::Error) -> StartSupportDataExportError {
-        StartSupportDataExportError::Unknown(err.description().to_string())
+        StartSupportDataExportError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartSupportDataExportError {
@@ -262,7 +263,8 @@ impl Error for StartSupportDataExportError {
             StartSupportDataExportError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartSupportDataExportError::Unknown(ref cause) => cause,
+            StartSupportDataExportError::ParseError(ref cause) => cause,
+            StartSupportDataExportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -343,14 +345,16 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
 
                     serde_json::from_str::<GenerateDataSetResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GenerateDataSetError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GenerateDataSetError::from_response(response))),
+                )
             }
         })
     }
@@ -382,14 +386,15 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
 
                     serde_json::from_str::<StartSupportDataExportResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartSupportDataExportError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartSupportDataExportError::from_response(response))
+                    }),
+                )
             }
         })
     }

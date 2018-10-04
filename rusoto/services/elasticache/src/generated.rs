@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -7991,35 +7991,45 @@ pub enum AddTagsToResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsToResourceError {
-    pub fn from_body(body: &str) -> AddTagsToResourceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFound" => AddTagsToResourceError::CacheClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidARN" => {
-                    AddTagsToResourceError::InvalidARNFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> AddTagsToResourceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheClusterNotFound" => {
+                        return AddTagsToResourceError::CacheClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidARN" => {
+                        return AddTagsToResourceError::InvalidARNFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotNotFoundFault" => {
+                        return AddTagsToResourceError::SnapshotNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TagQuotaPerResourceExceeded" => {
+                        return AddTagsToResourceError::TagQuotaPerResourceExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "SnapshotNotFoundFault" => AddTagsToResourceError::SnapshotNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "TagQuotaPerResourceExceeded" => {
-                    AddTagsToResourceError::TagQuotaPerResourceExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => AddTagsToResourceError::Unknown(String::from(body)),
-            },
-            Err(_) => AddTagsToResourceError::Unknown(body.to_string()),
+            }
         }
+        AddTagsToResourceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8034,7 +8044,7 @@ impl AddTagsToResourceError {
 impl From<XmlParseError> for AddTagsToResourceError {
     fn from(err: XmlParseError) -> AddTagsToResourceError {
         let XmlParseError(message) = err;
-        AddTagsToResourceError::Unknown(message.to_string())
+        AddTagsToResourceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AddTagsToResourceError {
@@ -8069,7 +8079,8 @@ impl Error for AddTagsToResourceError {
             AddTagsToResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AddTagsToResourceError::Unknown(ref cause) => cause,
+            AddTagsToResourceError::ParseError(ref cause) => cause,
+            AddTagsToResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8092,46 +8103,25 @@ pub enum AuthorizeCacheSecurityGroupIngressError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AuthorizeCacheSecurityGroupIngressError {
-    pub fn from_body(body: &str) -> AuthorizeCacheSecurityGroupIngressError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationAlreadyExists" => {
-                    AuthorizeCacheSecurityGroupIngressError::AuthorizationAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "CacheSecurityGroupNotFound" => {
-                    AuthorizeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidCacheSecurityGroupState" => {
-                    AuthorizeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidParameterCombination" => {
-                    AuthorizeCacheSecurityGroupIngressError::InvalidParameterCombination(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidParameterValue" => {
-                    AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => AuthorizeCacheSecurityGroupIngressError::Unknown(String::from(body)),
-            },
-            Err(_) => AuthorizeCacheSecurityGroupIngressError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> AuthorizeCacheSecurityGroupIngressError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "AuthorizationAlreadyExists" => return AuthorizeCacheSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"CacheSecurityGroupNotFound" => return AuthorizeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidCacheSecurityGroupState" => return AuthorizeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombination" => return AuthorizeCacheSecurityGroupIngressError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => return AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        AuthorizeCacheSecurityGroupIngressError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8146,7 +8136,7 @@ impl AuthorizeCacheSecurityGroupIngressError {
 impl From<XmlParseError> for AuthorizeCacheSecurityGroupIngressError {
     fn from(err: XmlParseError) -> AuthorizeCacheSecurityGroupIngressError {
         let XmlParseError(message) = err;
-        AuthorizeCacheSecurityGroupIngressError::Unknown(message.to_string())
+        AuthorizeCacheSecurityGroupIngressError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for AuthorizeCacheSecurityGroupIngressError {
@@ -8190,7 +8180,8 @@ impl Error for AuthorizeCacheSecurityGroupIngressError {
             AuthorizeCacheSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AuthorizeCacheSecurityGroupIngressError::Unknown(ref cause) => cause,
+            AuthorizeCacheSecurityGroupIngressError::ParseError(ref cause) => cause,
+            AuthorizeCacheSecurityGroupIngressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8215,39 +8206,55 @@ pub enum CopySnapshotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CopySnapshotError {
-    pub fn from_body(body: &str) -> CopySnapshotError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombination" => CopySnapshotError::InvalidParameterCombination(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidParameterValue" => {
-                    CopySnapshotError::InvalidParameterValue(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CopySnapshotError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterCombination" => {
+                        return CopySnapshotError::InvalidParameterCombination(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return CopySnapshotError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidSnapshotState" => {
+                        return CopySnapshotError::InvalidSnapshotStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotAlreadyExistsFault" => {
+                        return CopySnapshotError::SnapshotAlreadyExistsFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotNotFoundFault" => {
+                        return CopySnapshotError::SnapshotNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotQuotaExceededFault" => {
+                        return CopySnapshotError::SnapshotQuotaExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidSnapshotState" => {
-                    CopySnapshotError::InvalidSnapshotStateFault(String::from(parsed_error.message))
-                }
-                "SnapshotAlreadyExistsFault" => CopySnapshotError::SnapshotAlreadyExistsFault(
-                    String::from(parsed_error.message),
-                ),
-                "SnapshotNotFoundFault" => {
-                    CopySnapshotError::SnapshotNotFoundFault(String::from(parsed_error.message))
-                }
-                "SnapshotQuotaExceededFault" => CopySnapshotError::SnapshotQuotaExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => CopySnapshotError::Unknown(String::from(body)),
-            },
-            Err(_) => CopySnapshotError::Unknown(body.to_string()),
+            }
         }
+        CopySnapshotError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8262,7 +8269,7 @@ impl CopySnapshotError {
 impl From<XmlParseError> for CopySnapshotError {
     fn from(err: XmlParseError) -> CopySnapshotError {
         let XmlParseError(message) = err;
-        CopySnapshotError::Unknown(message.to_string())
+        CopySnapshotError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CopySnapshotError {
@@ -8297,7 +8304,8 @@ impl Error for CopySnapshotError {
             CopySnapshotError::Validation(ref cause) => cause,
             CopySnapshotError::Credentials(ref err) => err.description(),
             CopySnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CopySnapshotError::Unknown(ref cause) => cause,
+            CopySnapshotError::ParseError(ref cause) => cause,
+            CopySnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8338,89 +8346,95 @@ pub enum CreateCacheClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCacheClusterError {
-    pub fn from_body(body: &str) -> CreateCacheClusterError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterAlreadyExists" => {
-                    CreateCacheClusterError::CacheClusterAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCacheClusterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheClusterAlreadyExists" => {
+                        return CreateCacheClusterError::CacheClusterAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "CacheParameterGroupNotFound" => {
+                        return CreateCacheClusterError::CacheParameterGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "CacheSecurityGroupNotFound" => {
+                        return CreateCacheClusterError::CacheSecurityGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "CacheSubnetGroupNotFoundFault" => {
+                        return CreateCacheClusterError::CacheSubnetGroupNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ClusterQuotaForCustomerExceeded" => {
+                        return CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InsufficientCacheClusterCapacity" => {
+                        return CreateCacheClusterError::InsufficientCacheClusterCapacityFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return CreateCacheClusterError::InvalidParameterCombination(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return CreateCacheClusterError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidReplicationGroupState" => {
+                        return CreateCacheClusterError::InvalidReplicationGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidVPCNetworkStateFault" => {
+                        return CreateCacheClusterError::InvalidVPCNetworkStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NodeQuotaForClusterExceeded" => {
+                        return CreateCacheClusterError::NodeQuotaForClusterExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NodeQuotaForCustomerExceeded" => {
+                        return CreateCacheClusterError::NodeQuotaForCustomerExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ReplicationGroupNotFoundFault" => {
+                        return CreateCacheClusterError::ReplicationGroupNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TagQuotaPerResourceExceeded" => {
+                        return CreateCacheClusterError::TagQuotaPerResourceExceeded(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "CacheParameterGroupNotFound" => {
-                    CreateCacheClusterError::CacheParameterGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CacheSecurityGroupNotFound" => {
-                    CreateCacheClusterError::CacheSecurityGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CacheSubnetGroupNotFoundFault" => {
-                    CreateCacheClusterError::CacheSubnetGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterQuotaForCustomerExceeded" => {
-                    CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InsufficientCacheClusterCapacity" => {
-                    CreateCacheClusterError::InsufficientCacheClusterCapacityFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterCombination" => {
-                    CreateCacheClusterError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => CreateCacheClusterError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidReplicationGroupState" => {
-                    CreateCacheClusterError::InvalidReplicationGroupStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidVPCNetworkStateFault" => {
-                    CreateCacheClusterError::InvalidVPCNetworkStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NodeQuotaForClusterExceeded" => {
-                    CreateCacheClusterError::NodeQuotaForClusterExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NodeQuotaForCustomerExceeded" => {
-                    CreateCacheClusterError::NodeQuotaForCustomerExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReplicationGroupNotFoundFault" => {
-                    CreateCacheClusterError::ReplicationGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TagQuotaPerResourceExceeded" => {
-                    CreateCacheClusterError::TagQuotaPerResourceExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => CreateCacheClusterError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateCacheClusterError::Unknown(body.to_string()),
+            }
         }
+        CreateCacheClusterError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8435,7 +8449,7 @@ impl CreateCacheClusterError {
 impl From<XmlParseError> for CreateCacheClusterError {
     fn from(err: XmlParseError) -> CreateCacheClusterError {
         let XmlParseError(message) = err;
-        CreateCacheClusterError::Unknown(message.to_string())
+        CreateCacheClusterError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateCacheClusterError {
@@ -8480,7 +8494,8 @@ impl Error for CreateCacheClusterError {
             CreateCacheClusterError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateCacheClusterError::Unknown(ref cause) => cause,
+            CreateCacheClusterError::ParseError(ref cause) => cause,
+            CreateCacheClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8503,44 +8518,50 @@ pub enum CreateCacheParameterGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCacheParameterGroupError {
-    pub fn from_body(body: &str) -> CreateCacheParameterGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheParameterGroupAlreadyExists" => {
-                    CreateCacheParameterGroupError::CacheParameterGroupAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCacheParameterGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheParameterGroupAlreadyExists" => {
+                        return CreateCacheParameterGroupError::CacheParameterGroupAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "CacheParameterGroupQuotaExceeded" => {
+                        return CreateCacheParameterGroupError::CacheParameterGroupQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidCacheParameterGroupState" => {
+                        return CreateCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return CreateCacheParameterGroupError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return CreateCacheParameterGroupError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "CacheParameterGroupQuotaExceeded" => {
-                    CreateCacheParameterGroupError::CacheParameterGroupQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidCacheParameterGroupState" => {
-                    CreateCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidParameterCombination" => {
-                    CreateCacheParameterGroupError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => CreateCacheParameterGroupError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateCacheParameterGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateCacheParameterGroupError::Unknown(body.to_string()),
+            }
         }
+        CreateCacheParameterGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8555,7 +8576,7 @@ impl CreateCacheParameterGroupError {
 impl From<XmlParseError> for CreateCacheParameterGroupError {
     fn from(err: XmlParseError) -> CreateCacheParameterGroupError {
         let XmlParseError(message) = err;
-        CreateCacheParameterGroupError::Unknown(message.to_string())
+        CreateCacheParameterGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateCacheParameterGroupError {
@@ -8597,7 +8618,8 @@ impl Error for CreateCacheParameterGroupError {
             CreateCacheParameterGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateCacheParameterGroupError::Unknown(ref cause) => cause,
+            CreateCacheParameterGroupError::ParseError(ref cause) => cause,
+            CreateCacheParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8618,39 +8640,45 @@ pub enum CreateCacheSecurityGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCacheSecurityGroupError {
-    pub fn from_body(body: &str) -> CreateCacheSecurityGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheSecurityGroupAlreadyExists" => {
-                    CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCacheSecurityGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheSecurityGroupAlreadyExists" => {
+                        return CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "QuotaExceeded.CacheSecurityGroup" => {
+                        return CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return CreateCacheSecurityGroupError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return CreateCacheSecurityGroupError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "QuotaExceeded.CacheSecurityGroup" => {
-                    CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidParameterCombination" => {
-                    CreateCacheSecurityGroupError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => CreateCacheSecurityGroupError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateCacheSecurityGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateCacheSecurityGroupError::Unknown(body.to_string()),
+            }
         }
+        CreateCacheSecurityGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8665,7 +8693,7 @@ impl CreateCacheSecurityGroupError {
 impl From<XmlParseError> for CreateCacheSecurityGroupError {
     fn from(err: XmlParseError) -> CreateCacheSecurityGroupError {
         let XmlParseError(message) = err;
-        CreateCacheSecurityGroupError::Unknown(message.to_string())
+        CreateCacheSecurityGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateCacheSecurityGroupError {
@@ -8700,7 +8728,8 @@ impl Error for CreateCacheSecurityGroupError {
             CreateCacheSecurityGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateCacheSecurityGroupError::Unknown(ref cause) => cause,
+            CreateCacheSecurityGroupError::ParseError(ref cause) => cause,
+            CreateCacheSecurityGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8721,39 +8750,45 @@ pub enum CreateCacheSubnetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCacheSubnetGroupError {
-    pub fn from_body(body: &str) -> CreateCacheSubnetGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheSubnetGroupAlreadyExists" => {
-                    CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCacheSubnetGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheSubnetGroupAlreadyExists" => {
+                        return CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "CacheSubnetGroupQuotaExceeded" => {
+                        return CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "CacheSubnetQuotaExceededFault" => {
+                        return CreateCacheSubnetGroupError::CacheSubnetQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidSubnet" => {
+                        return CreateCacheSubnetGroupError::InvalidSubnet(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "CacheSubnetGroupQuotaExceeded" => {
-                    CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CacheSubnetQuotaExceededFault" => {
-                    CreateCacheSubnetGroupError::CacheSubnetQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidSubnet" => {
-                    CreateCacheSubnetGroupError::InvalidSubnet(String::from(parsed_error.message))
-                }
-                _ => CreateCacheSubnetGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateCacheSubnetGroupError::Unknown(body.to_string()),
+            }
         }
+        CreateCacheSubnetGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8768,7 +8803,7 @@ impl CreateCacheSubnetGroupError {
 impl From<XmlParseError> for CreateCacheSubnetGroupError {
     fn from(err: XmlParseError) -> CreateCacheSubnetGroupError {
         let XmlParseError(message) = err;
-        CreateCacheSubnetGroupError::Unknown(message.to_string())
+        CreateCacheSubnetGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateCacheSubnetGroupError {
@@ -8803,7 +8838,8 @@ impl Error for CreateCacheSubnetGroupError {
             CreateCacheSubnetGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateCacheSubnetGroupError::Unknown(ref cause) => cause,
+            CreateCacheSubnetGroupError::ParseError(ref cause) => cause,
+            CreateCacheSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8846,92 +8882,25 @@ pub enum CreateReplicationGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateReplicationGroupError {
-    pub fn from_body(body: &str) -> CreateReplicationGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFound" => CreateReplicationGroupError::CacheClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "CacheParameterGroupNotFound" => {
-                    CreateReplicationGroupError::CacheParameterGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CacheSecurityGroupNotFound" => {
-                    CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CacheSubnetGroupNotFoundFault" => {
-                    CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterQuotaForCustomerExceeded" => {
-                    CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InsufficientCacheClusterCapacity" => {
-                    CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidCacheClusterState" => {
-                    CreateReplicationGroupError::InvalidCacheClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterCombination" => {
-                    CreateReplicationGroupError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => CreateReplicationGroupError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidVPCNetworkStateFault" => {
-                    CreateReplicationGroupError::InvalidVPCNetworkStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NodeGroupsPerReplicationGroupQuotaExceeded" => {
-                    CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "NodeQuotaForClusterExceeded" => {
-                    CreateReplicationGroupError::NodeQuotaForClusterExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NodeQuotaForCustomerExceeded" => {
-                    CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReplicationGroupAlreadyExists" => {
-                    CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TagQuotaPerResourceExceeded" => {
-                    CreateReplicationGroupError::TagQuotaPerResourceExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => CreateReplicationGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateReplicationGroupError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> CreateReplicationGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "CacheClusterNotFound" => return CreateReplicationGroupError::CacheClusterNotFoundFault(String::from(parsed_error.message)),"CacheParameterGroupNotFound" => return CreateReplicationGroupError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message)),"CacheSecurityGroupNotFound" => return CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"CacheSubnetGroupNotFoundFault" => return CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(String::from(parsed_error.message)),"ClusterQuotaForCustomerExceeded" => return CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(String::from(parsed_error.message)),"InsufficientCacheClusterCapacity" => return CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"InvalidCacheClusterState" => return CreateReplicationGroupError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidParameterCombination" => return CreateReplicationGroupError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => return CreateReplicationGroupError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => return CreateReplicationGroupError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(String::from(parsed_error.message)),"NodeQuotaForClusterExceeded" => return CreateReplicationGroupError::NodeQuotaForClusterExceededFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"ReplicationGroupAlreadyExists" => return CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(String::from(parsed_error.message)),"TagQuotaPerResourceExceeded" => return CreateReplicationGroupError::TagQuotaPerResourceExceeded(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        CreateReplicationGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8946,7 +8915,7 @@ impl CreateReplicationGroupError {
 impl From<XmlParseError> for CreateReplicationGroupError {
     fn from(err: XmlParseError) -> CreateReplicationGroupError {
         let XmlParseError(message) = err;
-        CreateReplicationGroupError::Unknown(message.to_string())
+        CreateReplicationGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateReplicationGroupError {
@@ -8994,7 +8963,8 @@ impl Error for CreateReplicationGroupError {
             CreateReplicationGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateReplicationGroupError::Unknown(ref cause) => cause,
+            CreateReplicationGroupError::ParseError(ref cause) => cause,
+            CreateReplicationGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9025,54 +8995,70 @@ pub enum CreateSnapshotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSnapshotError {
-    pub fn from_body(body: &str) -> CreateSnapshotError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFound" => CreateSnapshotError::CacheClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidCacheClusterState" => CreateSnapshotError::InvalidCacheClusterStateFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidParameterCombination" => CreateSnapshotError::InvalidParameterCombination(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidParameterValue" => {
-                    CreateSnapshotError::InvalidParameterValue(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSnapshotError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheClusterNotFound" => {
+                        return CreateSnapshotError::CacheClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidCacheClusterState" => {
+                        return CreateSnapshotError::InvalidCacheClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterCombination" => {
+                        return CreateSnapshotError::InvalidParameterCombination(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return CreateSnapshotError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidReplicationGroupState" => {
+                        return CreateSnapshotError::InvalidReplicationGroupStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ReplicationGroupNotFoundFault" => {
+                        return CreateSnapshotError::ReplicationGroupNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotAlreadyExistsFault" => {
+                        return CreateSnapshotError::SnapshotAlreadyExistsFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotFeatureNotSupportedFault" => {
+                        return CreateSnapshotError::SnapshotFeatureNotSupportedFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotQuotaExceededFault" => {
+                        return CreateSnapshotError::SnapshotQuotaExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidReplicationGroupState" => {
-                    CreateSnapshotError::InvalidReplicationGroupStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReplicationGroupNotFoundFault" => {
-                    CreateSnapshotError::ReplicationGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotAlreadyExistsFault" => CreateSnapshotError::SnapshotAlreadyExistsFault(
-                    String::from(parsed_error.message),
-                ),
-                "SnapshotFeatureNotSupportedFault" => {
-                    CreateSnapshotError::SnapshotFeatureNotSupportedFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotQuotaExceededFault" => CreateSnapshotError::SnapshotQuotaExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => CreateSnapshotError::Unknown(String::from(body)),
-            },
-            Err(_) => CreateSnapshotError::Unknown(body.to_string()),
+            }
         }
+        CreateSnapshotError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9087,7 +9073,7 @@ impl CreateSnapshotError {
 impl From<XmlParseError> for CreateSnapshotError {
     fn from(err: XmlParseError) -> CreateSnapshotError {
         let XmlParseError(message) = err;
-        CreateSnapshotError::Unknown(message.to_string())
+        CreateSnapshotError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for CreateSnapshotError {
@@ -9125,7 +9111,8 @@ impl Error for CreateSnapshotError {
             CreateSnapshotError::Validation(ref cause) => cause,
             CreateSnapshotError::Credentials(ref err) => err.description(),
             CreateSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateSnapshotError::Unknown(ref cause) => cause,
+            CreateSnapshotError::ParseError(ref cause) => cause,
+            CreateSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9152,52 +9139,60 @@ pub enum DeleteCacheClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCacheClusterError {
-    pub fn from_body(body: &str) -> DeleteCacheClusterError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFound" => DeleteCacheClusterError::CacheClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidCacheClusterState" => {
-                    DeleteCacheClusterError::InvalidCacheClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteCacheClusterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheClusterNotFound" => {
+                        return DeleteCacheClusterError::CacheClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidCacheClusterState" => {
+                        return DeleteCacheClusterError::InvalidCacheClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterCombination" => {
+                        return DeleteCacheClusterError::InvalidParameterCombination(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return DeleteCacheClusterError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotAlreadyExistsFault" => {
+                        return DeleteCacheClusterError::SnapshotAlreadyExistsFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotFeatureNotSupportedFault" => {
+                        return DeleteCacheClusterError::SnapshotFeatureNotSupportedFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SnapshotQuotaExceededFault" => {
+                        return DeleteCacheClusterError::SnapshotQuotaExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterCombination" => {
-                    DeleteCacheClusterError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => DeleteCacheClusterError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                "SnapshotAlreadyExistsFault" => {
-                    DeleteCacheClusterError::SnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotFeatureNotSupportedFault" => {
-                    DeleteCacheClusterError::SnapshotFeatureNotSupportedFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotQuotaExceededFault" => {
-                    DeleteCacheClusterError::SnapshotQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DeleteCacheClusterError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteCacheClusterError::Unknown(body.to_string()),
+            }
         }
+        DeleteCacheClusterError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9212,7 +9207,7 @@ impl DeleteCacheClusterError {
 impl From<XmlParseError> for DeleteCacheClusterError {
     fn from(err: XmlParseError) -> DeleteCacheClusterError {
         let XmlParseError(message) = err;
-        DeleteCacheClusterError::Unknown(message.to_string())
+        DeleteCacheClusterError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteCacheClusterError {
@@ -9250,7 +9245,8 @@ impl Error for DeleteCacheClusterError {
             DeleteCacheClusterError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteCacheClusterError::Unknown(ref cause) => cause,
+            DeleteCacheClusterError::ParseError(ref cause) => cause,
+            DeleteCacheClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9271,39 +9267,45 @@ pub enum DeleteCacheParameterGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCacheParameterGroupError {
-    pub fn from_body(body: &str) -> DeleteCacheParameterGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheParameterGroupNotFound" => {
-                    DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteCacheParameterGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheParameterGroupNotFound" => {
+                        return DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidCacheParameterGroupState" => {
+                        return DeleteCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return DeleteCacheParameterGroupError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return DeleteCacheParameterGroupError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidCacheParameterGroupState" => {
-                    DeleteCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidParameterCombination" => {
-                    DeleteCacheParameterGroupError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => DeleteCacheParameterGroupError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                _ => DeleteCacheParameterGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteCacheParameterGroupError::Unknown(body.to_string()),
+            }
         }
+        DeleteCacheParameterGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9318,7 +9320,7 @@ impl DeleteCacheParameterGroupError {
 impl From<XmlParseError> for DeleteCacheParameterGroupError {
     fn from(err: XmlParseError) -> DeleteCacheParameterGroupError {
         let XmlParseError(message) = err;
-        DeleteCacheParameterGroupError::Unknown(message.to_string())
+        DeleteCacheParameterGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteCacheParameterGroupError {
@@ -9355,7 +9357,8 @@ impl Error for DeleteCacheParameterGroupError {
             DeleteCacheParameterGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteCacheParameterGroupError::Unknown(ref cause) => cause,
+            DeleteCacheParameterGroupError::ParseError(ref cause) => cause,
+            DeleteCacheParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9376,39 +9379,45 @@ pub enum DeleteCacheSecurityGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCacheSecurityGroupError {
-    pub fn from_body(body: &str) -> DeleteCacheSecurityGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheSecurityGroupNotFound" => {
-                    DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteCacheSecurityGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheSecurityGroupNotFound" => {
+                        return DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidCacheSecurityGroupState" => {
+                        return DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return DeleteCacheSecurityGroupError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return DeleteCacheSecurityGroupError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidCacheSecurityGroupState" => {
-                    DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidParameterCombination" => {
-                    DeleteCacheSecurityGroupError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => DeleteCacheSecurityGroupError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                _ => DeleteCacheSecurityGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteCacheSecurityGroupError::Unknown(body.to_string()),
+            }
         }
+        DeleteCacheSecurityGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9423,7 +9432,7 @@ impl DeleteCacheSecurityGroupError {
 impl From<XmlParseError> for DeleteCacheSecurityGroupError {
     fn from(err: XmlParseError) -> DeleteCacheSecurityGroupError {
         let XmlParseError(message) = err;
-        DeleteCacheSecurityGroupError::Unknown(message.to_string())
+        DeleteCacheSecurityGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteCacheSecurityGroupError {
@@ -9458,7 +9467,8 @@ impl Error for DeleteCacheSecurityGroupError {
             DeleteCacheSecurityGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteCacheSecurityGroupError::Unknown(ref cause) => cause,
+            DeleteCacheSecurityGroupError::ParseError(ref cause) => cause,
+            DeleteCacheSecurityGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9475,29 +9485,35 @@ pub enum DeleteCacheSubnetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCacheSubnetGroupError {
-    pub fn from_body(body: &str) -> DeleteCacheSubnetGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheSubnetGroupInUse" => DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(
-                    String::from(parsed_error.message),
-                ),
-                "CacheSubnetGroupNotFoundFault" => {
-                    DeleteCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteCacheSubnetGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheSubnetGroupInUse" => {
+                        return DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "CacheSubnetGroupNotFoundFault" => {
+                        return DeleteCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DeleteCacheSubnetGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteCacheSubnetGroupError::Unknown(body.to_string()),
+            }
         }
+        DeleteCacheSubnetGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9512,7 +9528,7 @@ impl DeleteCacheSubnetGroupError {
 impl From<XmlParseError> for DeleteCacheSubnetGroupError {
     fn from(err: XmlParseError) -> DeleteCacheSubnetGroupError {
         let XmlParseError(message) = err;
-        DeleteCacheSubnetGroupError::Unknown(message.to_string())
+        DeleteCacheSubnetGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteCacheSubnetGroupError {
@@ -9545,7 +9561,8 @@ impl Error for DeleteCacheSubnetGroupError {
             DeleteCacheSubnetGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteCacheSubnetGroupError::Unknown(ref cause) => cause,
+            DeleteCacheSubnetGroupError::ParseError(ref cause) => cause,
+            DeleteCacheSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9572,54 +9589,60 @@ pub enum DeleteReplicationGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteReplicationGroupError {
-    pub fn from_body(body: &str) -> DeleteReplicationGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombination" => {
-                    DeleteReplicationGroupError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteReplicationGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterCombination" => {
+                        return DeleteReplicationGroupError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return DeleteReplicationGroupError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidReplicationGroupState" => {
+                        return DeleteReplicationGroupError::InvalidReplicationGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ReplicationGroupNotFoundFault" => {
+                        return DeleteReplicationGroupError::ReplicationGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SnapshotAlreadyExistsFault" => {
+                        return DeleteReplicationGroupError::SnapshotAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SnapshotFeatureNotSupportedFault" => {
+                        return DeleteReplicationGroupError::SnapshotFeatureNotSupportedFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "SnapshotQuotaExceededFault" => {
+                        return DeleteReplicationGroupError::SnapshotQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => DeleteReplicationGroupError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidReplicationGroupState" => {
-                    DeleteReplicationGroupError::InvalidReplicationGroupStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReplicationGroupNotFoundFault" => {
-                    DeleteReplicationGroupError::ReplicationGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotAlreadyExistsFault" => {
-                    DeleteReplicationGroupError::SnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotFeatureNotSupportedFault" => {
-                    DeleteReplicationGroupError::SnapshotFeatureNotSupportedFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotQuotaExceededFault" => {
-                    DeleteReplicationGroupError::SnapshotQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DeleteReplicationGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteReplicationGroupError::Unknown(body.to_string()),
+            }
         }
+        DeleteReplicationGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9634,7 +9657,7 @@ impl DeleteReplicationGroupError {
 impl From<XmlParseError> for DeleteReplicationGroupError {
     fn from(err: XmlParseError) -> DeleteReplicationGroupError {
         let XmlParseError(message) = err;
-        DeleteReplicationGroupError::Unknown(message.to_string())
+        DeleteReplicationGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteReplicationGroupError {
@@ -9672,7 +9695,8 @@ impl Error for DeleteReplicationGroupError {
             DeleteReplicationGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteReplicationGroupError::Unknown(ref cause) => cause,
+            DeleteReplicationGroupError::ParseError(ref cause) => cause,
+            DeleteReplicationGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9693,33 +9717,45 @@ pub enum DeleteSnapshotError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSnapshotError {
-    pub fn from_body(body: &str) -> DeleteSnapshotError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombination" => DeleteSnapshotError::InvalidParameterCombination(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidParameterValue" => {
-                    DeleteSnapshotError::InvalidParameterValue(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSnapshotError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterCombination" => {
+                        return DeleteSnapshotError::InvalidParameterCombination(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return DeleteSnapshotError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidSnapshotState" => {
+                        return DeleteSnapshotError::InvalidSnapshotStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotNotFoundFault" => {
+                        return DeleteSnapshotError::SnapshotNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidSnapshotState" => DeleteSnapshotError::InvalidSnapshotStateFault(
-                    String::from(parsed_error.message),
-                ),
-                "SnapshotNotFoundFault" => {
-                    DeleteSnapshotError::SnapshotNotFoundFault(String::from(parsed_error.message))
-                }
-                _ => DeleteSnapshotError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteSnapshotError::Unknown(body.to_string()),
+            }
         }
+        DeleteSnapshotError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9734,7 +9770,7 @@ impl DeleteSnapshotError {
 impl From<XmlParseError> for DeleteSnapshotError {
     fn from(err: XmlParseError) -> DeleteSnapshotError {
         let XmlParseError(message) = err;
-        DeleteSnapshotError::Unknown(message.to_string())
+        DeleteSnapshotError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteSnapshotError {
@@ -9767,7 +9803,8 @@ impl Error for DeleteSnapshotError {
             DeleteSnapshotError::Validation(ref cause) => cause,
             DeleteSnapshotError::Credentials(ref err) => err.description(),
             DeleteSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteSnapshotError::Unknown(ref cause) => cause,
+            DeleteSnapshotError::ParseError(ref cause) => cause,
+            DeleteSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9786,32 +9823,40 @@ pub enum DescribeCacheClustersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCacheClustersError {
-    pub fn from_body(body: &str) -> DescribeCacheClustersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFound" => DescribeCacheClustersError::CacheClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidParameterCombination" => {
-                    DescribeCacheClustersError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeCacheClustersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheClusterNotFound" => {
+                        return DescribeCacheClustersError::CacheClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterCombination" => {
+                        return DescribeCacheClustersError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return DescribeCacheClustersError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => DescribeCacheClustersError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeCacheClustersError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeCacheClustersError::Unknown(body.to_string()),
+            }
         }
+        DescribeCacheClustersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9826,7 +9871,7 @@ impl DescribeCacheClustersError {
 impl From<XmlParseError> for DescribeCacheClustersError {
     fn from(err: XmlParseError) -> DescribeCacheClustersError {
         let XmlParseError(message) = err;
-        DescribeCacheClustersError::Unknown(message.to_string())
+        DescribeCacheClustersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeCacheClustersError {
@@ -9860,7 +9905,8 @@ impl Error for DescribeCacheClustersError {
             DescribeCacheClustersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeCacheClustersError::Unknown(ref cause) => cause,
+            DescribeCacheClustersError::ParseError(ref cause) => cause,
+            DescribeCacheClustersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9873,21 +9919,25 @@ pub enum DescribeCacheEngineVersionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCacheEngineVersionsError {
-    pub fn from_body(body: &str) -> DescribeCacheEngineVersionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeCacheEngineVersionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeCacheEngineVersionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeCacheEngineVersionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeCacheEngineVersionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9902,7 +9952,7 @@ impl DescribeCacheEngineVersionsError {
 impl From<XmlParseError> for DescribeCacheEngineVersionsError {
     fn from(err: XmlParseError) -> DescribeCacheEngineVersionsError {
         let XmlParseError(message) = err;
-        DescribeCacheEngineVersionsError::Unknown(message.to_string())
+        DescribeCacheEngineVersionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeCacheEngineVersionsError {
@@ -9933,7 +9983,8 @@ impl Error for DescribeCacheEngineVersionsError {
             DescribeCacheEngineVersionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeCacheEngineVersionsError::Unknown(ref cause) => cause,
+            DescribeCacheEngineVersionsError::ParseError(ref cause) => cause,
+            DescribeCacheEngineVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9952,36 +10003,40 @@ pub enum DescribeCacheParameterGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCacheParameterGroupsError {
-    pub fn from_body(body: &str) -> DescribeCacheParameterGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheParameterGroupNotFound" => {
-                    DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeCacheParameterGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheParameterGroupNotFound" => {
+                        return DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return DescribeCacheParameterGroupsError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return DescribeCacheParameterGroupsError::InvalidParameterValue(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidParameterCombination" => {
-                    DescribeCacheParameterGroupsError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => {
-                    DescribeCacheParameterGroupsError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DescribeCacheParameterGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeCacheParameterGroupsError::Unknown(body.to_string()),
+            }
         }
+        DescribeCacheParameterGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9996,7 +10051,7 @@ impl DescribeCacheParameterGroupsError {
 impl From<XmlParseError> for DescribeCacheParameterGroupsError {
     fn from(err: XmlParseError) -> DescribeCacheParameterGroupsError {
         let XmlParseError(message) = err;
-        DescribeCacheParameterGroupsError::Unknown(message.to_string())
+        DescribeCacheParameterGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeCacheParameterGroupsError {
@@ -10030,7 +10085,8 @@ impl Error for DescribeCacheParameterGroupsError {
             DescribeCacheParameterGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeCacheParameterGroupsError::Unknown(ref cause) => cause,
+            DescribeCacheParameterGroupsError::ParseError(ref cause) => cause,
+            DescribeCacheParameterGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10049,34 +10105,40 @@ pub enum DescribeCacheParametersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCacheParametersError {
-    pub fn from_body(body: &str) -> DescribeCacheParametersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheParameterGroupNotFound" => {
-                    DescribeCacheParametersError::CacheParameterGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeCacheParametersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheParameterGroupNotFound" => {
+                        return DescribeCacheParametersError::CacheParameterGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return DescribeCacheParametersError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return DescribeCacheParametersError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterCombination" => {
-                    DescribeCacheParametersError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => DescribeCacheParametersError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeCacheParametersError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeCacheParametersError::Unknown(body.to_string()),
+            }
         }
+        DescribeCacheParametersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10091,7 +10153,7 @@ impl DescribeCacheParametersError {
 impl From<XmlParseError> for DescribeCacheParametersError {
     fn from(err: XmlParseError) -> DescribeCacheParametersError {
         let XmlParseError(message) = err;
-        DescribeCacheParametersError::Unknown(message.to_string())
+        DescribeCacheParametersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeCacheParametersError {
@@ -10125,7 +10187,8 @@ impl Error for DescribeCacheParametersError {
             DescribeCacheParametersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeCacheParametersError::Unknown(ref cause) => cause,
+            DescribeCacheParametersError::ParseError(ref cause) => cause,
+            DescribeCacheParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10144,34 +10207,40 @@ pub enum DescribeCacheSecurityGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCacheSecurityGroupsError {
-    pub fn from_body(body: &str) -> DescribeCacheSecurityGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheSecurityGroupNotFound" => {
-                    DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeCacheSecurityGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheSecurityGroupNotFound" => {
+                        return DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return DescribeCacheSecurityGroupsError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return DescribeCacheSecurityGroupsError::InvalidParameterValue(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidParameterCombination" => {
-                    DescribeCacheSecurityGroupsError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => DescribeCacheSecurityGroupsError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeCacheSecurityGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeCacheSecurityGroupsError::Unknown(body.to_string()),
+            }
         }
+        DescribeCacheSecurityGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10186,7 +10255,7 @@ impl DescribeCacheSecurityGroupsError {
 impl From<XmlParseError> for DescribeCacheSecurityGroupsError {
     fn from(err: XmlParseError) -> DescribeCacheSecurityGroupsError {
         let XmlParseError(message) = err;
-        DescribeCacheSecurityGroupsError::Unknown(message.to_string())
+        DescribeCacheSecurityGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeCacheSecurityGroupsError {
@@ -10220,7 +10289,8 @@ impl Error for DescribeCacheSecurityGroupsError {
             DescribeCacheSecurityGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeCacheSecurityGroupsError::Unknown(ref cause) => cause,
+            DescribeCacheSecurityGroupsError::ParseError(ref cause) => cause,
+            DescribeCacheSecurityGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10235,26 +10305,30 @@ pub enum DescribeCacheSubnetGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCacheSubnetGroupsError {
-    pub fn from_body(body: &str) -> DescribeCacheSubnetGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheSubnetGroupNotFoundFault" => {
-                    DescribeCacheSubnetGroupsError::CacheSubnetGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeCacheSubnetGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheSubnetGroupNotFoundFault" => {
+                        return DescribeCacheSubnetGroupsError::CacheSubnetGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                _ => DescribeCacheSubnetGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeCacheSubnetGroupsError::Unknown(body.to_string()),
+            }
         }
+        DescribeCacheSubnetGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10269,7 +10343,7 @@ impl DescribeCacheSubnetGroupsError {
 impl From<XmlParseError> for DescribeCacheSubnetGroupsError {
     fn from(err: XmlParseError) -> DescribeCacheSubnetGroupsError {
         let XmlParseError(message) = err;
-        DescribeCacheSubnetGroupsError::Unknown(message.to_string())
+        DescribeCacheSubnetGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeCacheSubnetGroupsError {
@@ -10301,7 +10375,8 @@ impl Error for DescribeCacheSubnetGroupsError {
             DescribeCacheSubnetGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeCacheSubnetGroupsError::Unknown(ref cause) => cause,
+            DescribeCacheSubnetGroupsError::ParseError(ref cause) => cause,
+            DescribeCacheSubnetGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10318,31 +10393,35 @@ pub enum DescribeEngineDefaultParametersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEngineDefaultParametersError {
-    pub fn from_body(body: &str) -> DescribeEngineDefaultParametersError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombination" => {
-                    DescribeEngineDefaultParametersError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEngineDefaultParametersError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterCombination" => {
+                        return DescribeEngineDefaultParametersError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return DescribeEngineDefaultParametersError::InvalidParameterValue(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => {
-                    DescribeEngineDefaultParametersError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DescribeEngineDefaultParametersError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeEngineDefaultParametersError::Unknown(body.to_string()),
+            }
         }
+        DescribeEngineDefaultParametersError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10357,7 +10436,7 @@ impl DescribeEngineDefaultParametersError {
 impl From<XmlParseError> for DescribeEngineDefaultParametersError {
     fn from(err: XmlParseError) -> DescribeEngineDefaultParametersError {
         let XmlParseError(message) = err;
-        DescribeEngineDefaultParametersError::Unknown(message.to_string())
+        DescribeEngineDefaultParametersError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeEngineDefaultParametersError {
@@ -10390,7 +10469,8 @@ impl Error for DescribeEngineDefaultParametersError {
             DescribeEngineDefaultParametersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeEngineDefaultParametersError::Unknown(ref cause) => cause,
+            DescribeEngineDefaultParametersError::ParseError(ref cause) => cause,
+            DescribeEngineDefaultParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10407,27 +10487,35 @@ pub enum DescribeEventsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventsError {
-    pub fn from_body(body: &str) -> DescribeEventsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombination" => DescribeEventsError::InvalidParameterCombination(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidParameterValue" => {
-                    DescribeEventsError::InvalidParameterValue(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterCombination" => {
+                        return DescribeEventsError::InvalidParameterCombination(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return DescribeEventsError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DescribeEventsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeEventsError::Unknown(body.to_string()),
+            }
         }
+        DescribeEventsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10442,7 +10530,7 @@ impl DescribeEventsError {
 impl From<XmlParseError> for DescribeEventsError {
     fn from(err: XmlParseError) -> DescribeEventsError {
         let XmlParseError(message) = err;
-        DescribeEventsError::Unknown(message.to_string())
+        DescribeEventsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeEventsError {
@@ -10473,7 +10561,8 @@ impl Error for DescribeEventsError {
             DescribeEventsError::Validation(ref cause) => cause,
             DescribeEventsError::Credentials(ref err) => err.description(),
             DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeEventsError::Unknown(ref cause) => cause,
+            DescribeEventsError::ParseError(ref cause) => cause,
+            DescribeEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10492,34 +10581,40 @@ pub enum DescribeReplicationGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReplicationGroupsError {
-    pub fn from_body(body: &str) -> DescribeReplicationGroupsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombination" => {
-                    DescribeReplicationGroupsError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeReplicationGroupsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterCombination" => {
+                        return DescribeReplicationGroupsError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return DescribeReplicationGroupsError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ReplicationGroupNotFoundFault" => {
+                        return DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => DescribeReplicationGroupsError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                "ReplicationGroupNotFoundFault" => {
-                    DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DescribeReplicationGroupsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeReplicationGroupsError::Unknown(body.to_string()),
+            }
         }
+        DescribeReplicationGroupsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10534,7 +10629,7 @@ impl DescribeReplicationGroupsError {
 impl From<XmlParseError> for DescribeReplicationGroupsError {
     fn from(err: XmlParseError) -> DescribeReplicationGroupsError {
         let XmlParseError(message) = err;
-        DescribeReplicationGroupsError::Unknown(message.to_string())
+        DescribeReplicationGroupsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeReplicationGroupsError {
@@ -10568,7 +10663,8 @@ impl Error for DescribeReplicationGroupsError {
             DescribeReplicationGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeReplicationGroupsError::Unknown(ref cause) => cause,
+            DescribeReplicationGroupsError::ParseError(ref cause) => cause,
+            DescribeReplicationGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10587,34 +10683,40 @@ pub enum DescribeReservedCacheNodesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReservedCacheNodesError {
-    pub fn from_body(body: &str) -> DescribeReservedCacheNodesError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombination" => {
-                    DescribeReservedCacheNodesError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeReservedCacheNodesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterCombination" => {
+                        return DescribeReservedCacheNodesError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return DescribeReservedCacheNodesError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ReservedCacheNodeNotFound" => {
+                        return DescribeReservedCacheNodesError::ReservedCacheNodeNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => DescribeReservedCacheNodesError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                "ReservedCacheNodeNotFound" => {
-                    DescribeReservedCacheNodesError::ReservedCacheNodeNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => DescribeReservedCacheNodesError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeReservedCacheNodesError::Unknown(body.to_string()),
+            }
         }
+        DescribeReservedCacheNodesError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10629,7 +10731,7 @@ impl DescribeReservedCacheNodesError {
 impl From<XmlParseError> for DescribeReservedCacheNodesError {
     fn from(err: XmlParseError) -> DescribeReservedCacheNodesError {
         let XmlParseError(message) = err;
-        DescribeReservedCacheNodesError::Unknown(message.to_string())
+        DescribeReservedCacheNodesError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeReservedCacheNodesError {
@@ -10663,7 +10765,8 @@ impl Error for DescribeReservedCacheNodesError {
             DescribeReservedCacheNodesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeReservedCacheNodesError::Unknown(ref cause) => cause,
+            DescribeReservedCacheNodesError::ParseError(ref cause) => cause,
+            DescribeReservedCacheNodesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10682,23 +10785,25 @@ pub enum DescribeReservedCacheNodesOfferingsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReservedCacheNodesOfferingsError {
-    pub fn from_body(body: &str) -> DescribeReservedCacheNodesOfferingsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "InvalidParameterCombination" => DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(String::from(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),_ => DescribeReservedCacheNodesOfferingsError::Unknown(String::from(body))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeReservedCacheNodesOfferingsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "InvalidParameterCombination" => return DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => return DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(String::from(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => return DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),_ => {}
                                 }
-                           },
-                           Err(_) => DescribeReservedCacheNodesOfferingsError::Unknown(body.to_string())
-                       }
+            }
+        }
+        DescribeReservedCacheNodesOfferingsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10713,7 +10818,7 @@ impl DescribeReservedCacheNodesOfferingsError {
 impl From<XmlParseError> for DescribeReservedCacheNodesOfferingsError {
     fn from(err: XmlParseError) -> DescribeReservedCacheNodesOfferingsError {
         let XmlParseError(message) = err;
-        DescribeReservedCacheNodesOfferingsError::Unknown(message.to_string())
+        DescribeReservedCacheNodesOfferingsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeReservedCacheNodesOfferingsError {
@@ -10751,7 +10856,8 @@ impl Error for DescribeReservedCacheNodesOfferingsError {
             DescribeReservedCacheNodesOfferingsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeReservedCacheNodesOfferingsError::Unknown(ref cause) => cause,
+            DescribeReservedCacheNodesOfferingsError::ParseError(ref cause) => cause,
+            DescribeReservedCacheNodesOfferingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10772,35 +10878,45 @@ pub enum DescribeSnapshotsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSnapshotsError {
-    pub fn from_body(body: &str) -> DescribeSnapshotsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFound" => DescribeSnapshotsError::CacheClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidParameterCombination" => {
-                    DescribeSnapshotsError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSnapshotsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheClusterNotFound" => {
+                        return DescribeSnapshotsError::CacheClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterCombination" => {
+                        return DescribeSnapshotsError::InvalidParameterCombination(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return DescribeSnapshotsError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotNotFoundFault" => {
+                        return DescribeSnapshotsError::SnapshotNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => DescribeSnapshotsError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                "SnapshotNotFoundFault" => DescribeSnapshotsError::SnapshotNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => DescribeSnapshotsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeSnapshotsError::Unknown(body.to_string()),
+            }
         }
+        DescribeSnapshotsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10815,7 +10931,7 @@ impl DescribeSnapshotsError {
 impl From<XmlParseError> for DescribeSnapshotsError {
     fn from(err: XmlParseError) -> DescribeSnapshotsError {
         let XmlParseError(message) = err;
-        DescribeSnapshotsError::Unknown(message.to_string())
+        DescribeSnapshotsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeSnapshotsError {
@@ -10850,7 +10966,8 @@ impl Error for DescribeSnapshotsError {
             DescribeSnapshotsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeSnapshotsError::Unknown(ref cause) => cause,
+            DescribeSnapshotsError::ParseError(ref cause) => cause,
+            DescribeSnapshotsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10871,41 +10988,45 @@ pub enum ListAllowedNodeTypeModificationsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAllowedNodeTypeModificationsError {
-    pub fn from_body(body: &str) -> ListAllowedNodeTypeModificationsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFound" => {
-                    ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ListAllowedNodeTypeModificationsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheClusterNotFound" => {
+                        return ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return ListAllowedNodeTypeModificationsError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return ListAllowedNodeTypeModificationsError::InvalidParameterValue(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ReplicationGroupNotFoundFault" => {
+                        return ListAllowedNodeTypeModificationsError::ReplicationGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "InvalidParameterCombination" => {
-                    ListAllowedNodeTypeModificationsError::InvalidParameterCombination(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidParameterValue" => {
-                    ListAllowedNodeTypeModificationsError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReplicationGroupNotFoundFault" => {
-                    ListAllowedNodeTypeModificationsError::ReplicationGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => ListAllowedNodeTypeModificationsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListAllowedNodeTypeModificationsError::Unknown(body.to_string()),
+            }
         }
+        ListAllowedNodeTypeModificationsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10920,7 +11041,7 @@ impl ListAllowedNodeTypeModificationsError {
 impl From<XmlParseError> for ListAllowedNodeTypeModificationsError {
     fn from(err: XmlParseError) -> ListAllowedNodeTypeModificationsError {
         let XmlParseError(message) = err;
-        ListAllowedNodeTypeModificationsError::Unknown(message.to_string())
+        ListAllowedNodeTypeModificationsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListAllowedNodeTypeModificationsError {
@@ -10957,7 +11078,8 @@ impl Error for ListAllowedNodeTypeModificationsError {
             ListAllowedNodeTypeModificationsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListAllowedNodeTypeModificationsError::Unknown(ref cause) => cause,
+            ListAllowedNodeTypeModificationsError::ParseError(ref cause) => cause,
+            ListAllowedNodeTypeModificationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10976,30 +11098,40 @@ pub enum ListTagsForResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_body(body: &str) -> ListTagsForResourceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFound" => ListTagsForResourceError::CacheClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidARN" => {
-                    ListTagsForResourceError::InvalidARNFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheClusterNotFound" => {
+                        return ListTagsForResourceError::CacheClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidARN" => {
+                        return ListTagsForResourceError::InvalidARNFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotNotFoundFault" => {
+                        return ListTagsForResourceError::SnapshotNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "SnapshotNotFoundFault" => ListTagsForResourceError::SnapshotNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                _ => ListTagsForResourceError::Unknown(String::from(body)),
-            },
-            Err(_) => ListTagsForResourceError::Unknown(body.to_string()),
+            }
         }
+        ListTagsForResourceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11014,7 +11146,7 @@ impl ListTagsForResourceError {
 impl From<XmlParseError> for ListTagsForResourceError {
     fn from(err: XmlParseError) -> ListTagsForResourceError {
         let XmlParseError(message) = err;
-        ListTagsForResourceError::Unknown(message.to_string())
+        ListTagsForResourceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListTagsForResourceError {
@@ -11048,7 +11180,8 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTagsForResourceError::Unknown(ref cause) => cause,
+            ListTagsForResourceError::ParseError(ref cause) => cause,
+            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11083,72 +11216,80 @@ pub enum ModifyCacheClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyCacheClusterError {
-    pub fn from_body(body: &str) -> ModifyCacheClusterError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFound" => ModifyCacheClusterError::CacheClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "CacheParameterGroupNotFound" => {
-                    ModifyCacheClusterError::CacheParameterGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyCacheClusterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheClusterNotFound" => {
+                        return ModifyCacheClusterError::CacheClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "CacheParameterGroupNotFound" => {
+                        return ModifyCacheClusterError::CacheParameterGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "CacheSecurityGroupNotFound" => {
+                        return ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InsufficientCacheClusterCapacity" => {
+                        return ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidCacheClusterState" => {
+                        return ModifyCacheClusterError::InvalidCacheClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidCacheSecurityGroupState" => {
+                        return ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return ModifyCacheClusterError::InvalidParameterCombination(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return ModifyCacheClusterError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidVPCNetworkStateFault" => {
+                        return ModifyCacheClusterError::InvalidVPCNetworkStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NodeQuotaForClusterExceeded" => {
+                        return ModifyCacheClusterError::NodeQuotaForClusterExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NodeQuotaForCustomerExceeded" => {
+                        return ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "CacheSecurityGroupNotFound" => {
-                    ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InsufficientCacheClusterCapacity" => {
-                    ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidCacheClusterState" => {
-                    ModifyCacheClusterError::InvalidCacheClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidCacheSecurityGroupState" => {
-                    ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterCombination" => {
-                    ModifyCacheClusterError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => ModifyCacheClusterError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidVPCNetworkStateFault" => {
-                    ModifyCacheClusterError::InvalidVPCNetworkStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NodeQuotaForClusterExceeded" => {
-                    ModifyCacheClusterError::NodeQuotaForClusterExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NodeQuotaForCustomerExceeded" => {
-                    ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => ModifyCacheClusterError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyCacheClusterError::Unknown(body.to_string()),
+            }
         }
+        ModifyCacheClusterError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11163,7 +11304,7 @@ impl ModifyCacheClusterError {
 impl From<XmlParseError> for ModifyCacheClusterError {
     fn from(err: XmlParseError) -> ModifyCacheClusterError {
         let XmlParseError(message) = err;
-        ModifyCacheClusterError::Unknown(message.to_string())
+        ModifyCacheClusterError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyCacheClusterError {
@@ -11205,7 +11346,8 @@ impl Error for ModifyCacheClusterError {
             ModifyCacheClusterError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyCacheClusterError::Unknown(ref cause) => cause,
+            ModifyCacheClusterError::ParseError(ref cause) => cause,
+            ModifyCacheClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11226,39 +11368,45 @@ pub enum ModifyCacheParameterGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyCacheParameterGroupError {
-    pub fn from_body(body: &str) -> ModifyCacheParameterGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheParameterGroupNotFound" => {
-                    ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyCacheParameterGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheParameterGroupNotFound" => {
+                        return ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidCacheParameterGroupState" => {
+                        return ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return ModifyCacheParameterGroupError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return ModifyCacheParameterGroupError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidCacheParameterGroupState" => {
-                    ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidParameterCombination" => {
-                    ModifyCacheParameterGroupError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => ModifyCacheParameterGroupError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                _ => ModifyCacheParameterGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyCacheParameterGroupError::Unknown(body.to_string()),
+            }
         }
+        ModifyCacheParameterGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11273,7 +11421,7 @@ impl ModifyCacheParameterGroupError {
 impl From<XmlParseError> for ModifyCacheParameterGroupError {
     fn from(err: XmlParseError) -> ModifyCacheParameterGroupError {
         let XmlParseError(message) = err;
-        ModifyCacheParameterGroupError::Unknown(message.to_string())
+        ModifyCacheParameterGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyCacheParameterGroupError {
@@ -11310,7 +11458,8 @@ impl Error for ModifyCacheParameterGroupError {
             ModifyCacheParameterGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyCacheParameterGroupError::Unknown(ref cause) => cause,
+            ModifyCacheParameterGroupError::ParseError(ref cause) => cause,
+            ModifyCacheParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11331,37 +11480,45 @@ pub enum ModifyCacheSubnetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyCacheSubnetGroupError {
-    pub fn from_body(body: &str) -> ModifyCacheSubnetGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheSubnetGroupNotFoundFault" => {
-                    ModifyCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyCacheSubnetGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheSubnetGroupNotFoundFault" => {
+                        return ModifyCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "CacheSubnetQuotaExceededFault" => {
+                        return ModifyCacheSubnetGroupError::CacheSubnetQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidSubnet" => {
+                        return ModifyCacheSubnetGroupError::InvalidSubnet(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SubnetInUse" => {
+                        return ModifyCacheSubnetGroupError::SubnetInUse(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "CacheSubnetQuotaExceededFault" => {
-                    ModifyCacheSubnetGroupError::CacheSubnetQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidSubnet" => {
-                    ModifyCacheSubnetGroupError::InvalidSubnet(String::from(parsed_error.message))
-                }
-                "SubnetInUse" => {
-                    ModifyCacheSubnetGroupError::SubnetInUse(String::from(parsed_error.message))
-                }
-                _ => ModifyCacheSubnetGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyCacheSubnetGroupError::Unknown(body.to_string()),
+            }
         }
+        ModifyCacheSubnetGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11376,7 +11533,7 @@ impl ModifyCacheSubnetGroupError {
 impl From<XmlParseError> for ModifyCacheSubnetGroupError {
     fn from(err: XmlParseError) -> ModifyCacheSubnetGroupError {
         let XmlParseError(message) = err;
-        ModifyCacheSubnetGroupError::Unknown(message.to_string())
+        ModifyCacheSubnetGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyCacheSubnetGroupError {
@@ -11411,7 +11568,8 @@ impl Error for ModifyCacheSubnetGroupError {
             ModifyCacheSubnetGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyCacheSubnetGroupError::Unknown(ref cause) => cause,
+            ModifyCacheSubnetGroupError::ParseError(ref cause) => cause,
+            ModifyCacheSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11450,82 +11608,90 @@ pub enum ModifyReplicationGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyReplicationGroupError {
-    pub fn from_body(body: &str) -> ModifyReplicationGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFound" => ModifyReplicationGroupError::CacheClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "CacheParameterGroupNotFound" => {
-                    ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyReplicationGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheClusterNotFound" => {
+                        return ModifyReplicationGroupError::CacheClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "CacheParameterGroupNotFound" => {
+                        return ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "CacheSecurityGroupNotFound" => {
+                        return ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InsufficientCacheClusterCapacity" => {
+                        return ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidCacheClusterState" => {
+                        return ModifyReplicationGroupError::InvalidCacheClusterStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidCacheSecurityGroupState" => {
+                        return ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return ModifyReplicationGroupError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return ModifyReplicationGroupError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidReplicationGroupState" => {
+                        return ModifyReplicationGroupError::InvalidReplicationGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidVPCNetworkStateFault" => {
+                        return ModifyReplicationGroupError::InvalidVPCNetworkStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NodeQuotaForClusterExceeded" => {
+                        return ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "NodeQuotaForCustomerExceeded" => {
+                        return ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "ReplicationGroupNotFoundFault" => {
+                        return ModifyReplicationGroupError::ReplicationGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    _ => {}
                 }
-                "CacheSecurityGroupNotFound" => {
-                    ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InsufficientCacheClusterCapacity" => {
-                    ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidCacheClusterState" => {
-                    ModifyReplicationGroupError::InvalidCacheClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidCacheSecurityGroupState" => {
-                    ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterCombination" => {
-                    ModifyReplicationGroupError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => ModifyReplicationGroupError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidReplicationGroupState" => {
-                    ModifyReplicationGroupError::InvalidReplicationGroupStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidVPCNetworkStateFault" => {
-                    ModifyReplicationGroupError::InvalidVPCNetworkStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NodeQuotaForClusterExceeded" => {
-                    ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NodeQuotaForCustomerExceeded" => {
-                    ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReplicationGroupNotFoundFault" => {
-                    ModifyReplicationGroupError::ReplicationGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => ModifyReplicationGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => ModifyReplicationGroupError::Unknown(body.to_string()),
+            }
         }
+        ModifyReplicationGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11540,7 +11706,7 @@ impl ModifyReplicationGroupError {
 impl From<XmlParseError> for ModifyReplicationGroupError {
     fn from(err: XmlParseError) -> ModifyReplicationGroupError {
         let XmlParseError(message) = err;
-        ModifyReplicationGroupError::Unknown(message.to_string())
+        ModifyReplicationGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyReplicationGroupError {
@@ -11584,7 +11750,8 @@ impl Error for ModifyReplicationGroupError {
             ModifyReplicationGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ModifyReplicationGroupError::Unknown(ref cause) => cause,
+            ModifyReplicationGroupError::ParseError(ref cause) => cause,
+            ModifyReplicationGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11615,23 +11782,27 @@ pub enum ModifyReplicationGroupShardConfigurationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyReplicationGroupShardConfigurationError {
-    pub fn from_body(body: &str) -> ModifyReplicationGroupShardConfigurationError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "InsufficientCacheClusterCapacity" => ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"InvalidCacheClusterState" => ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidParameterCombination" => ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidReplicationGroupState" => ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceeded" => ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),_ => ModifyReplicationGroupShardConfigurationError::Unknown(String::from(body))
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> ModifyReplicationGroupShardConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "InsufficientCacheClusterCapacity" => return ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"InvalidCacheClusterState" => return ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidParameterCombination" => return ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => return ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidReplicationGroupState" => return ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => return ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => return ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),_ => {}
                                 }
-                           },
-                           Err(_) => ModifyReplicationGroupShardConfigurationError::Unknown(body.to_string())
-                       }
+            }
+        }
+        ModifyReplicationGroupShardConfigurationError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11646,7 +11817,7 @@ impl ModifyReplicationGroupShardConfigurationError {
 impl From<XmlParseError> for ModifyReplicationGroupShardConfigurationError {
     fn from(err: XmlParseError) -> ModifyReplicationGroupShardConfigurationError {
         let XmlParseError(message) = err;
-        ModifyReplicationGroupShardConfigurationError::Unknown(message.to_string())
+        ModifyReplicationGroupShardConfigurationError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ModifyReplicationGroupShardConfigurationError {
@@ -11684,7 +11855,8 @@ ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(ref
 ModifyReplicationGroupShardConfigurationError::Validation(ref cause) => cause,
 ModifyReplicationGroupShardConfigurationError::Credentials(ref err) => err.description(),
 ModifyReplicationGroupShardConfigurationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-ModifyReplicationGroupShardConfigurationError::Unknown(ref cause) => cause
+ModifyReplicationGroupShardConfigurationError::ParseError(ref cause) => cause,
+ModifyReplicationGroupShardConfigurationError::Unknown(_) => "unknown error"
                         }
     }
 }
@@ -11707,46 +11879,25 @@ pub enum PurchaseReservedCacheNodesOfferingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PurchaseReservedCacheNodesOfferingError {
-    pub fn from_body(body: &str) -> PurchaseReservedCacheNodesOfferingError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombination" => {
-                    PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidParameterValue" => {
-                    PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReservedCacheNodeAlreadyExists" => {
-                    PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "ReservedCacheNodeQuotaExceeded" => {
-                    PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "ReservedCacheNodesOfferingNotFound" => {
-                    PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                _ => PurchaseReservedCacheNodesOfferingError::Unknown(String::from(body)),
-            },
-            Err(_) => PurchaseReservedCacheNodesOfferingError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> PurchaseReservedCacheNodesOfferingError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "InvalidParameterCombination" => return PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => return PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(String::from(parsed_error.message)),"ReservedCacheNodeAlreadyExists" => return PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(String::from(parsed_error.message)),"ReservedCacheNodeQuotaExceeded" => return PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(String::from(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => return PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        PurchaseReservedCacheNodesOfferingError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11761,7 +11912,7 @@ impl PurchaseReservedCacheNodesOfferingError {
 impl From<XmlParseError> for PurchaseReservedCacheNodesOfferingError {
     fn from(err: XmlParseError) -> PurchaseReservedCacheNodesOfferingError {
         let XmlParseError(message) = err;
-        PurchaseReservedCacheNodesOfferingError::Unknown(message.to_string())
+        PurchaseReservedCacheNodesOfferingError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PurchaseReservedCacheNodesOfferingError {
@@ -11805,7 +11956,8 @@ impl Error for PurchaseReservedCacheNodesOfferingError {
             PurchaseReservedCacheNodesOfferingError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PurchaseReservedCacheNodesOfferingError::Unknown(ref cause) => cause,
+            PurchaseReservedCacheNodesOfferingError::ParseError(ref cause) => cause,
+            PurchaseReservedCacheNodesOfferingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11822,29 +11974,35 @@ pub enum RebootCacheClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RebootCacheClusterError {
-    pub fn from_body(body: &str) -> RebootCacheClusterError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFound" => RebootCacheClusterError::CacheClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidCacheClusterState" => {
-                    RebootCacheClusterError::InvalidCacheClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> RebootCacheClusterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheClusterNotFound" => {
+                        return RebootCacheClusterError::CacheClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidCacheClusterState" => {
+                        return RebootCacheClusterError::InvalidCacheClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => RebootCacheClusterError::Unknown(String::from(body)),
-            },
-            Err(_) => RebootCacheClusterError::Unknown(body.to_string()),
+            }
         }
+        RebootCacheClusterError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11859,7 +12017,7 @@ impl RebootCacheClusterError {
 impl From<XmlParseError> for RebootCacheClusterError {
     fn from(err: XmlParseError) -> RebootCacheClusterError {
         let XmlParseError(message) = err;
-        RebootCacheClusterError::Unknown(message.to_string())
+        RebootCacheClusterError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RebootCacheClusterError {
@@ -11892,7 +12050,8 @@ impl Error for RebootCacheClusterError {
             RebootCacheClusterError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RebootCacheClusterError::Unknown(ref cause) => cause,
+            RebootCacheClusterError::ParseError(ref cause) => cause,
+            RebootCacheClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11913,33 +12072,45 @@ pub enum RemoveTagsFromResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsFromResourceError {
-    pub fn from_body(body: &str) -> RemoveTagsFromResourceError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFound" => RemoveTagsFromResourceError::CacheClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidARN" => {
-                    RemoveTagsFromResourceError::InvalidARNFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsFromResourceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheClusterNotFound" => {
+                        return RemoveTagsFromResourceError::CacheClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidARN" => {
+                        return RemoveTagsFromResourceError::InvalidARNFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "SnapshotNotFoundFault" => {
+                        return RemoveTagsFromResourceError::SnapshotNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TagNotFound" => {
+                        return RemoveTagsFromResourceError::TagNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "SnapshotNotFoundFault" => RemoveTagsFromResourceError::SnapshotNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "TagNotFound" => RemoveTagsFromResourceError::TagNotFoundFault(String::from(
-                    parsed_error.message,
-                )),
-                _ => RemoveTagsFromResourceError::Unknown(String::from(body)),
-            },
-            Err(_) => RemoveTagsFromResourceError::Unknown(body.to_string()),
+            }
         }
+        RemoveTagsFromResourceError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11954,7 +12125,7 @@ impl RemoveTagsFromResourceError {
 impl From<XmlParseError> for RemoveTagsFromResourceError {
     fn from(err: XmlParseError) -> RemoveTagsFromResourceError {
         let XmlParseError(message) = err;
-        RemoveTagsFromResourceError::Unknown(message.to_string())
+        RemoveTagsFromResourceError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RemoveTagsFromResourceError {
@@ -11989,7 +12160,8 @@ impl Error for RemoveTagsFromResourceError {
             RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RemoveTagsFromResourceError::Unknown(ref cause) => cause,
+            RemoveTagsFromResourceError::ParseError(ref cause) => cause,
+            RemoveTagsFromResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12010,39 +12182,45 @@ pub enum ResetCacheParameterGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ResetCacheParameterGroupError {
-    pub fn from_body(body: &str) -> ResetCacheParameterGroupError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheParameterGroupNotFound" => {
-                    ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> ResetCacheParameterGroupError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "CacheParameterGroupNotFound" => {
+                        return ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidCacheParameterGroupState" => {
+                        return ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterCombination" => {
+                        return ResetCacheParameterGroupError::InvalidParameterCombination(
+                            String::from(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return ResetCacheParameterGroupError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidCacheParameterGroupState" => {
-                    ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidParameterCombination" => {
-                    ResetCacheParameterGroupError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => ResetCacheParameterGroupError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                _ => ResetCacheParameterGroupError::Unknown(String::from(body)),
-            },
-            Err(_) => ResetCacheParameterGroupError::Unknown(body.to_string()),
+            }
         }
+        ResetCacheParameterGroupError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12057,7 +12235,7 @@ impl ResetCacheParameterGroupError {
 impl From<XmlParseError> for ResetCacheParameterGroupError {
     fn from(err: XmlParseError) -> ResetCacheParameterGroupError {
         let XmlParseError(message) = err;
-        ResetCacheParameterGroupError::Unknown(message.to_string())
+        ResetCacheParameterGroupError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ResetCacheParameterGroupError {
@@ -12092,7 +12270,8 @@ impl Error for ResetCacheParameterGroupError {
             ResetCacheParameterGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ResetCacheParameterGroupError::Unknown(ref cause) => cause,
+            ResetCacheParameterGroupError::ParseError(ref cause) => cause,
+            ResetCacheParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12115,46 +12294,25 @@ pub enum RevokeCacheSecurityGroupIngressError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RevokeCacheSecurityGroupIngressError {
-    pub fn from_body(body: &str) -> RevokeCacheSecurityGroupIngressError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFound" => {
-                    RevokeCacheSecurityGroupIngressError::AuthorizationNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CacheSecurityGroupNotFound" => {
-                    RevokeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidCacheSecurityGroupState" => {
-                    RevokeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidParameterCombination" => {
-                    RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValue" => {
-                    RevokeCacheSecurityGroupIngressError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => RevokeCacheSecurityGroupIngressError::Unknown(String::from(body)),
-            },
-            Err(_) => RevokeCacheSecurityGroupIngressError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> RevokeCacheSecurityGroupIngressError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "AuthorizationNotFound" => return RevokeCacheSecurityGroupIngressError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"CacheSecurityGroupNotFound" => return RevokeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidCacheSecurityGroupState" => return RevokeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message)),"InvalidParameterCombination" => return RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => return RevokeCacheSecurityGroupIngressError::InvalidParameterValue(String::from(parsed_error.message)),_ => {}
+                                }
+            }
         }
+        RevokeCacheSecurityGroupIngressError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12169,7 +12327,7 @@ impl RevokeCacheSecurityGroupIngressError {
 impl From<XmlParseError> for RevokeCacheSecurityGroupIngressError {
     fn from(err: XmlParseError) -> RevokeCacheSecurityGroupIngressError {
         let XmlParseError(message) = err;
-        RevokeCacheSecurityGroupIngressError::Unknown(message.to_string())
+        RevokeCacheSecurityGroupIngressError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for RevokeCacheSecurityGroupIngressError {
@@ -12209,7 +12367,8 @@ impl Error for RevokeCacheSecurityGroupIngressError {
             RevokeCacheSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RevokeCacheSecurityGroupIngressError::Unknown(ref cause) => cause,
+            RevokeCacheSecurityGroupIngressError::ParseError(ref cause) => cause,
+            RevokeCacheSecurityGroupIngressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12238,53 +12397,65 @@ pub enum TestFailoverError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TestFailoverError {
-    pub fn from_body(body: &str) -> TestFailoverError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "APICallRateForCustomerExceeded" => {
-                    TestFailoverError::APICallRateForCustomerExceededFault(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> TestFailoverError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "APICallRateForCustomerExceeded" => {
+                        return TestFailoverError::APICallRateForCustomerExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidCacheClusterState" => {
+                        return TestFailoverError::InvalidCacheClusterStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterCombination" => {
+                        return TestFailoverError::InvalidParameterCombination(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return TestFailoverError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidReplicationGroupState" => {
+                        return TestFailoverError::InvalidReplicationGroupStateFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NodeGroupNotFoundFault" => {
+                        return TestFailoverError::NodeGroupNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ReplicationGroupNotFoundFault" => {
+                        return TestFailoverError::ReplicationGroupNotFoundFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TestFailoverNotAvailableFault" => {
+                        return TestFailoverError::TestFailoverNotAvailableFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidCacheClusterState" => TestFailoverError::InvalidCacheClusterStateFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidParameterCombination" => TestFailoverError::InvalidParameterCombination(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidParameterValue" => {
-                    TestFailoverError::InvalidParameterValue(String::from(parsed_error.message))
-                }
-                "InvalidReplicationGroupState" => {
-                    TestFailoverError::InvalidReplicationGroupStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NodeGroupNotFoundFault" => {
-                    TestFailoverError::NodeGroupNotFoundFault(String::from(parsed_error.message))
-                }
-                "ReplicationGroupNotFoundFault" => {
-                    TestFailoverError::ReplicationGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TestFailoverNotAvailableFault" => {
-                    TestFailoverError::TestFailoverNotAvailableFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                _ => TestFailoverError::Unknown(String::from(body)),
-            },
-            Err(_) => TestFailoverError::Unknown(body.to_string()),
+            }
         }
+        TestFailoverError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12299,7 +12470,7 @@ impl TestFailoverError {
 impl From<XmlParseError> for TestFailoverError {
     fn from(err: XmlParseError) -> TestFailoverError {
         let XmlParseError(message) = err;
-        TestFailoverError::Unknown(message.to_string())
+        TestFailoverError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for TestFailoverError {
@@ -12336,7 +12507,8 @@ impl Error for TestFailoverError {
             TestFailoverError::Validation(ref cause) => cause,
             TestFailoverError::Credentials(ref err) => err.description(),
             TestFailoverError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TestFailoverError::Unknown(ref cause) => cause,
+            TestFailoverError::ParseError(ref cause) => cause,
+            TestFailoverError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12645,11 +12817,12 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AddTagsToResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AddTagsToResourceError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12701,8 +12874,8 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AuthorizeCacheSecurityGroupIngressError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(AuthorizeCacheSecurityGroupIngressError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -12754,11 +12927,12 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CopySnapshotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CopySnapshotError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12806,11 +12980,12 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCacheClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateCacheClusterError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12859,9 +13034,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCacheParameterGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateCacheParameterGroupError::from_response(response))
                 }));
             }
 
@@ -12911,9 +13084,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCacheSecurityGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateCacheSecurityGroupError::from_response(response))
                 }));
             }
 
@@ -12963,9 +13134,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCacheSubnetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateCacheSubnetGroupError::from_response(response))
                 }));
             }
 
@@ -13015,9 +13184,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReplicationGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(CreateReplicationGroupError::from_response(response))
                 }));
             }
 
@@ -13066,11 +13233,12 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSnapshotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateSnapshotError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13118,11 +13286,12 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCacheClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteCacheClusterError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13171,9 +13340,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCacheParameterGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteCacheParameterGroupError::from_response(response))
                 }));
             }
 
@@ -13200,9 +13367,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCacheSecurityGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteCacheSecurityGroupError::from_response(response))
                 }));
             }
 
@@ -13229,9 +13394,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCacheSubnetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteCacheSubnetGroupError::from_response(response))
                 }));
             }
 
@@ -13258,9 +13421,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReplicationGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteReplicationGroupError::from_response(response))
                 }));
             }
 
@@ -13309,11 +13470,12 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSnapshotError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteSnapshotError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13361,11 +13523,11 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheClustersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeCacheClustersError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13414,9 +13576,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheEngineVersionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeCacheEngineVersionsError::from_response(response))
                 }));
             }
 
@@ -13466,9 +13626,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheParameterGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeCacheParameterGroupsError::from_response(response))
                 }));
             }
 
@@ -13518,9 +13676,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheParametersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeCacheParametersError::from_response(response))
                 }));
             }
 
@@ -13570,9 +13726,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheSecurityGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeCacheSecurityGroupsError::from_response(response))
                 }));
             }
 
@@ -13622,9 +13776,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeCacheSubnetGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeCacheSubnetGroupsError::from_response(response))
                 }));
             }
 
@@ -13675,8 +13827,8 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEngineDefaultParametersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeEngineDefaultParametersError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -13728,11 +13880,12 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeEventsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13781,9 +13934,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReplicationGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeReplicationGroupsError::from_response(response))
                 }));
             }
 
@@ -13833,9 +13984,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReservedCacheNodesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeReservedCacheNodesError::from_response(response))
                 }));
             }
 
@@ -13886,8 +14035,8 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeReservedCacheNodesOfferingsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DescribeReservedCacheNodesOfferingsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -13937,11 +14086,12 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSnapshotsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeSnapshotsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13991,8 +14141,8 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAllowedNodeTypeModificationsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(ListAllowedNodeTypeModificationsError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -14044,11 +14194,11 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsForResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14096,11 +14246,12 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyCacheClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ModifyCacheClusterError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14149,9 +14300,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyCacheParameterGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ModifyCacheParameterGroupError::from_response(response))
                 }));
             }
 
@@ -14201,9 +14350,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyCacheSubnetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ModifyCacheSubnetGroupError::from_response(response))
                 }));
             }
 
@@ -14253,9 +14400,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyReplicationGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ModifyReplicationGroupError::from_response(response))
                 }));
             }
 
@@ -14312,9 +14457,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ModifyReplicationGroupShardConfigurationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ModifyReplicationGroupShardConfigurationError::from_response(response))
                 }));
             }
 
@@ -14369,8 +14512,8 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PurchaseReservedCacheNodesOfferingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(PurchaseReservedCacheNodesOfferingError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -14422,11 +14565,12 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RebootCacheClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RebootCacheClusterError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -14475,9 +14619,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RemoveTagsFromResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RemoveTagsFromResourceError::from_response(response))
                 }));
             }
 
@@ -14527,9 +14669,7 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResetCacheParameterGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ResetCacheParameterGroupError::from_response(response))
                 }));
             }
 
@@ -14580,8 +14720,8 @@ impl ElastiCache for ElastiCacheClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RevokeCacheSecurityGroupIngressError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(RevokeCacheSecurityGroupIngressError::from_response(
+                        response,
                     ))
                 }));
             }
@@ -14633,11 +14773,12 @@ impl ElastiCache for ElastiCacheClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TestFailoverError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TestFailoverError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

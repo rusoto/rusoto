@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>An address book with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1583,43 +1583,45 @@ pub enum AssociateContactWithAddressBookError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateContactWithAddressBookError {
-    pub fn from_body(body: &str) -> AssociateContactWithAddressBookError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateContactWithAddressBookError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "LimitExceededException" => {
-                        AssociateContactWithAddressBookError::LimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        AssociateContactWithAddressBookError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateContactWithAddressBookError::Unknown(String::from(body)),
+            match *error_type {
+                "LimitExceededException" => {
+                    return AssociateContactWithAddressBookError::LimitExceeded(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return AssociateContactWithAddressBookError::Validation(
+                        error_message.to_string(),
+                    )
+                }
+                _ => {}
             }
-            Err(_) => AssociateContactWithAddressBookError::Unknown(String::from(body)),
         }
+        return AssociateContactWithAddressBookError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateContactWithAddressBookError {
     fn from(err: serde_json::error::Error) -> AssociateContactWithAddressBookError {
-        AssociateContactWithAddressBookError::Unknown(err.description().to_string())
+        AssociateContactWithAddressBookError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateContactWithAddressBookError {
@@ -1651,7 +1653,8 @@ impl Error for AssociateContactWithAddressBookError {
             AssociateContactWithAddressBookError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateContactWithAddressBookError::Unknown(ref cause) => cause,
+            AssociateContactWithAddressBookError::ParseError(ref cause) => cause,
+            AssociateContactWithAddressBookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1667,46 +1670,46 @@ pub enum AssociateDeviceWithRoomError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateDeviceWithRoomError {
-    pub fn from_body(body: &str) -> AssociateDeviceWithRoomError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateDeviceWithRoomError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DeviceNotRegisteredException" => {
-                        AssociateDeviceWithRoomError::DeviceNotRegistered(String::from(
-                            error_message,
-                        ))
-                    }
-                    "LimitExceededException" => {
-                        AssociateDeviceWithRoomError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        AssociateDeviceWithRoomError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateDeviceWithRoomError::Unknown(String::from(body)),
+            match *error_type {
+                "DeviceNotRegisteredException" => {
+                    return AssociateDeviceWithRoomError::DeviceNotRegistered(String::from(
+                        error_message,
+                    ))
                 }
+                "LimitExceededException" => {
+                    return AssociateDeviceWithRoomError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return AssociateDeviceWithRoomError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => AssociateDeviceWithRoomError::Unknown(String::from(body)),
         }
+        return AssociateDeviceWithRoomError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateDeviceWithRoomError {
     fn from(err: serde_json::error::Error) -> AssociateDeviceWithRoomError {
-        AssociateDeviceWithRoomError::Unknown(err.description().to_string())
+        AssociateDeviceWithRoomError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateDeviceWithRoomError {
@@ -1739,7 +1742,8 @@ impl Error for AssociateDeviceWithRoomError {
             AssociateDeviceWithRoomError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateDeviceWithRoomError::Unknown(ref cause) => cause,
+            AssociateDeviceWithRoomError::ParseError(ref cause) => cause,
+            AssociateDeviceWithRoomError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1752,38 +1756,38 @@ pub enum AssociateSkillGroupWithRoomError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateSkillGroupWithRoomError {
-    pub fn from_body(body: &str) -> AssociateSkillGroupWithRoomError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateSkillGroupWithRoomError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        AssociateSkillGroupWithRoomError::Validation(error_message.to_string())
-                    }
-                    _ => AssociateSkillGroupWithRoomError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return AssociateSkillGroupWithRoomError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => AssociateSkillGroupWithRoomError::Unknown(String::from(body)),
         }
+        return AssociateSkillGroupWithRoomError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for AssociateSkillGroupWithRoomError {
     fn from(err: serde_json::error::Error) -> AssociateSkillGroupWithRoomError {
-        AssociateSkillGroupWithRoomError::Unknown(err.description().to_string())
+        AssociateSkillGroupWithRoomError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for AssociateSkillGroupWithRoomError {
@@ -1814,7 +1818,8 @@ impl Error for AssociateSkillGroupWithRoomError {
             AssociateSkillGroupWithRoomError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            AssociateSkillGroupWithRoomError::Unknown(ref cause) => cause,
+            AssociateSkillGroupWithRoomError::ParseError(ref cause) => cause,
+            AssociateSkillGroupWithRoomError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1831,44 +1836,44 @@ pub enum CreateAddressBookError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAddressBookError {
-    pub fn from_body(body: &str) -> CreateAddressBookError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateAddressBookError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AlreadyExistsException" => {
-                        CreateAddressBookError::AlreadyExists(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateAddressBookError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateAddressBookError::Validation(error_message.to_string())
-                    }
-                    _ => CreateAddressBookError::Unknown(String::from(body)),
+            match *error_type {
+                "AlreadyExistsException" => {
+                    return CreateAddressBookError::AlreadyExists(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return CreateAddressBookError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateAddressBookError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateAddressBookError::Unknown(String::from(body)),
         }
+        return CreateAddressBookError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateAddressBookError {
     fn from(err: serde_json::error::Error) -> CreateAddressBookError {
-        CreateAddressBookError::Unknown(err.description().to_string())
+        CreateAddressBookError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateAddressBookError {
@@ -1901,7 +1906,8 @@ impl Error for CreateAddressBookError {
             CreateAddressBookError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateAddressBookError::Unknown(ref cause) => cause,
+            CreateAddressBookError::ParseError(ref cause) => cause,
+            CreateAddressBookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1918,44 +1924,44 @@ pub enum CreateContactError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateContactError {
-    pub fn from_body(body: &str) -> CreateContactError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateContactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AlreadyExistsException" => {
-                        CreateContactError::AlreadyExists(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateContactError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateContactError::Validation(error_message.to_string())
-                    }
-                    _ => CreateContactError::Unknown(String::from(body)),
+            match *error_type {
+                "AlreadyExistsException" => {
+                    return CreateContactError::AlreadyExists(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return CreateContactError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateContactError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateContactError::Unknown(String::from(body)),
         }
+        return CreateContactError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateContactError {
     fn from(err: serde_json::error::Error) -> CreateContactError {
-        CreateContactError::Unknown(err.description().to_string())
+        CreateContactError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateContactError {
@@ -1986,7 +1992,8 @@ impl Error for CreateContactError {
             CreateContactError::Validation(ref cause) => cause,
             CreateContactError::Credentials(ref err) => err.description(),
             CreateContactError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateContactError::Unknown(ref cause) => cause,
+            CreateContactError::ParseError(ref cause) => cause,
+            CreateContactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2003,44 +2010,44 @@ pub enum CreateProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateProfileError {
-    pub fn from_body(body: &str) -> CreateProfileError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateProfileError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AlreadyExistsException" => {
-                        CreateProfileError::AlreadyExists(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateProfileError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateProfileError::Validation(error_message.to_string())
-                    }
-                    _ => CreateProfileError::Unknown(String::from(body)),
+            match *error_type {
+                "AlreadyExistsException" => {
+                    return CreateProfileError::AlreadyExists(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return CreateProfileError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateProfileError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateProfileError::Unknown(String::from(body)),
         }
+        return CreateProfileError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateProfileError {
     fn from(err: serde_json::error::Error) -> CreateProfileError {
-        CreateProfileError::Unknown(err.description().to_string())
+        CreateProfileError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateProfileError {
@@ -2071,7 +2078,8 @@ impl Error for CreateProfileError {
             CreateProfileError::Validation(ref cause) => cause,
             CreateProfileError::Credentials(ref err) => err.description(),
             CreateProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateProfileError::Unknown(ref cause) => cause,
+            CreateProfileError::ParseError(ref cause) => cause,
+            CreateProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2088,42 +2096,44 @@ pub enum CreateRoomError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRoomError {
-    pub fn from_body(body: &str) -> CreateRoomError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateRoomError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AlreadyExistsException" => {
-                        CreateRoomError::AlreadyExists(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateRoomError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => CreateRoomError::Validation(error_message.to_string()),
-                    _ => CreateRoomError::Unknown(String::from(body)),
+            match *error_type {
+                "AlreadyExistsException" => {
+                    return CreateRoomError::AlreadyExists(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return CreateRoomError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateRoomError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateRoomError::Unknown(String::from(body)),
         }
+        return CreateRoomError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateRoomError {
     fn from(err: serde_json::error::Error) -> CreateRoomError {
-        CreateRoomError::Unknown(err.description().to_string())
+        CreateRoomError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateRoomError {
@@ -2154,7 +2164,8 @@ impl Error for CreateRoomError {
             CreateRoomError::Validation(ref cause) => cause,
             CreateRoomError::Credentials(ref err) => err.description(),
             CreateRoomError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateRoomError::Unknown(ref cause) => cause,
+            CreateRoomError::ParseError(ref cause) => cause,
+            CreateRoomError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2171,44 +2182,44 @@ pub enum CreateSkillGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSkillGroupError {
-    pub fn from_body(body: &str) -> CreateSkillGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSkillGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AlreadyExistsException" => {
-                        CreateSkillGroupError::AlreadyExists(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateSkillGroupError::LimitExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateSkillGroupError::Validation(error_message.to_string())
-                    }
-                    _ => CreateSkillGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "AlreadyExistsException" => {
+                    return CreateSkillGroupError::AlreadyExists(String::from(error_message))
                 }
+                "LimitExceededException" => {
+                    return CreateSkillGroupError::LimitExceeded(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateSkillGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateSkillGroupError::Unknown(String::from(body)),
         }
+        return CreateSkillGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateSkillGroupError {
     fn from(err: serde_json::error::Error) -> CreateSkillGroupError {
-        CreateSkillGroupError::Unknown(err.description().to_string())
+        CreateSkillGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateSkillGroupError {
@@ -2239,7 +2250,8 @@ impl Error for CreateSkillGroupError {
             CreateSkillGroupError::Validation(ref cause) => cause,
             CreateSkillGroupError::Credentials(ref err) => err.description(),
             CreateSkillGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateSkillGroupError::Unknown(ref cause) => cause,
+            CreateSkillGroupError::ParseError(ref cause) => cause,
+            CreateSkillGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2256,42 +2268,44 @@ pub enum CreateUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserError {
-    pub fn from_body(body: &str) -> CreateUserError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateUserError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "LimitExceededException" => {
-                        CreateUserError::LimitExceeded(String::from(error_message))
-                    }
-                    "ResourceInUseException" => {
-                        CreateUserError::ResourceInUse(String::from(error_message))
-                    }
-                    "ValidationException" => CreateUserError::Validation(error_message.to_string()),
-                    _ => CreateUserError::Unknown(String::from(body)),
+            match *error_type {
+                "LimitExceededException" => {
+                    return CreateUserError::LimitExceeded(String::from(error_message))
                 }
+                "ResourceInUseException" => {
+                    return CreateUserError::ResourceInUse(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateUserError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateUserError::Unknown(String::from(body)),
         }
+        return CreateUserError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateUserError {
     fn from(err: serde_json::error::Error) -> CreateUserError {
-        CreateUserError::Unknown(err.description().to_string())
+        CreateUserError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateUserError {
@@ -2322,7 +2336,8 @@ impl Error for CreateUserError {
             CreateUserError::Validation(ref cause) => cause,
             CreateUserError::Credentials(ref err) => err.description(),
             CreateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateUserError::Unknown(ref cause) => cause,
+            CreateUserError::ParseError(ref cause) => cause,
+            CreateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2337,41 +2352,41 @@ pub enum DeleteAddressBookError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAddressBookError {
-    pub fn from_body(body: &str) -> DeleteAddressBookError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteAddressBookError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => {
-                        DeleteAddressBookError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteAddressBookError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteAddressBookError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return DeleteAddressBookError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteAddressBookError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteAddressBookError::Unknown(String::from(body)),
         }
+        return DeleteAddressBookError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteAddressBookError {
     fn from(err: serde_json::error::Error) -> DeleteAddressBookError {
-        DeleteAddressBookError::Unknown(err.description().to_string())
+        DeleteAddressBookError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteAddressBookError {
@@ -2403,7 +2418,8 @@ impl Error for DeleteAddressBookError {
             DeleteAddressBookError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteAddressBookError::Unknown(ref cause) => cause,
+            DeleteAddressBookError::ParseError(ref cause) => cause,
+            DeleteAddressBookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2418,41 +2434,41 @@ pub enum DeleteContactError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteContactError {
-    pub fn from_body(body: &str) -> DeleteContactError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteContactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => {
-                        DeleteContactError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteContactError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteContactError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return DeleteContactError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteContactError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteContactError::Unknown(String::from(body)),
         }
+        return DeleteContactError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteContactError {
     fn from(err: serde_json::error::Error) -> DeleteContactError {
-        DeleteContactError::Unknown(err.description().to_string())
+        DeleteContactError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteContactError {
@@ -2482,7 +2498,8 @@ impl Error for DeleteContactError {
             DeleteContactError::Validation(ref cause) => cause,
             DeleteContactError::Credentials(ref err) => err.description(),
             DeleteContactError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteContactError::Unknown(ref cause) => cause,
+            DeleteContactError::ParseError(ref cause) => cause,
+            DeleteContactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2497,41 +2514,41 @@ pub enum DeleteProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteProfileError {
-    pub fn from_body(body: &str) -> DeleteProfileError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteProfileError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => {
-                        DeleteProfileError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteProfileError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteProfileError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return DeleteProfileError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteProfileError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteProfileError::Unknown(String::from(body)),
         }
+        return DeleteProfileError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteProfileError {
     fn from(err: serde_json::error::Error) -> DeleteProfileError {
-        DeleteProfileError::Unknown(err.description().to_string())
+        DeleteProfileError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteProfileError {
@@ -2561,7 +2578,8 @@ impl Error for DeleteProfileError {
             DeleteProfileError::Validation(ref cause) => cause,
             DeleteProfileError::Credentials(ref err) => err.description(),
             DeleteProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteProfileError::Unknown(ref cause) => cause,
+            DeleteProfileError::ParseError(ref cause) => cause,
+            DeleteProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2576,37 +2594,41 @@ pub enum DeleteRoomError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRoomError {
-    pub fn from_body(body: &str) -> DeleteRoomError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteRoomError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => DeleteRoomError::NotFound(String::from(error_message)),
-                    "ValidationException" => DeleteRoomError::Validation(error_message.to_string()),
-                    _ => DeleteRoomError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return DeleteRoomError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteRoomError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteRoomError::Unknown(String::from(body)),
         }
+        return DeleteRoomError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteRoomError {
     fn from(err: serde_json::error::Error) -> DeleteRoomError {
-        DeleteRoomError::Unknown(err.description().to_string())
+        DeleteRoomError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteRoomError {
@@ -2636,7 +2658,8 @@ impl Error for DeleteRoomError {
             DeleteRoomError::Validation(ref cause) => cause,
             DeleteRoomError::Credentials(ref err) => err.description(),
             DeleteRoomError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteRoomError::Unknown(ref cause) => cause,
+            DeleteRoomError::ParseError(ref cause) => cause,
+            DeleteRoomError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2649,38 +2672,38 @@ pub enum DeleteRoomSkillParameterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRoomSkillParameterError {
-    pub fn from_body(body: &str) -> DeleteRoomSkillParameterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteRoomSkillParameterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        DeleteRoomSkillParameterError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteRoomSkillParameterError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return DeleteRoomSkillParameterError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => DeleteRoomSkillParameterError::Unknown(String::from(body)),
         }
+        return DeleteRoomSkillParameterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteRoomSkillParameterError {
     fn from(err: serde_json::error::Error) -> DeleteRoomSkillParameterError {
-        DeleteRoomSkillParameterError::Unknown(err.description().to_string())
+        DeleteRoomSkillParameterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteRoomSkillParameterError {
@@ -2711,7 +2734,8 @@ impl Error for DeleteRoomSkillParameterError {
             DeleteRoomSkillParameterError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteRoomSkillParameterError::Unknown(ref cause) => cause,
+            DeleteRoomSkillParameterError::ParseError(ref cause) => cause,
+            DeleteRoomSkillParameterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2726,41 +2750,41 @@ pub enum DeleteSkillGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSkillGroupError {
-    pub fn from_body(body: &str) -> DeleteSkillGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSkillGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => {
-                        DeleteSkillGroupError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteSkillGroupError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteSkillGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return DeleteSkillGroupError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteSkillGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteSkillGroupError::Unknown(String::from(body)),
         }
+        return DeleteSkillGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteSkillGroupError {
     fn from(err: serde_json::error::Error) -> DeleteSkillGroupError {
-        DeleteSkillGroupError::Unknown(err.description().to_string())
+        DeleteSkillGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteSkillGroupError {
@@ -2790,7 +2814,8 @@ impl Error for DeleteSkillGroupError {
             DeleteSkillGroupError::Validation(ref cause) => cause,
             DeleteSkillGroupError::Credentials(ref err) => err.description(),
             DeleteSkillGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteSkillGroupError::Unknown(ref cause) => cause,
+            DeleteSkillGroupError::ParseError(ref cause) => cause,
+            DeleteSkillGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2805,37 +2830,41 @@ pub enum DeleteUserError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserError {
-    pub fn from_body(body: &str) -> DeleteUserError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => DeleteUserError::NotFound(String::from(error_message)),
-                    "ValidationException" => DeleteUserError::Validation(error_message.to_string()),
-                    _ => DeleteUserError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return DeleteUserError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return DeleteUserError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteUserError::Unknown(String::from(body)),
         }
+        return DeleteUserError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteUserError {
     fn from(err: serde_json::error::Error) -> DeleteUserError {
-        DeleteUserError::Unknown(err.description().to_string())
+        DeleteUserError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteUserError {
@@ -2865,7 +2894,8 @@ impl Error for DeleteUserError {
             DeleteUserError::Validation(ref cause) => cause,
             DeleteUserError::Credentials(ref err) => err.description(),
             DeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUserError::Unknown(ref cause) => cause,
+            DeleteUserError::ParseError(ref cause) => cause,
+            DeleteUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2878,38 +2908,40 @@ pub enum DisassociateContactFromAddressBookError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateContactFromAddressBookError {
-    pub fn from_body(body: &str) -> DisassociateContactFromAddressBookError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateContactFromAddressBookError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => DisassociateContactFromAddressBookError::Validation(
+            match *error_type {
+                "ValidationException" => {
+                    return DisassociateContactFromAddressBookError::Validation(
                         error_message.to_string(),
-                    ),
-                    _ => DisassociateContactFromAddressBookError::Unknown(String::from(body)),
+                    )
                 }
+                _ => {}
             }
-            Err(_) => DisassociateContactFromAddressBookError::Unknown(String::from(body)),
         }
+        return DisassociateContactFromAddressBookError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateContactFromAddressBookError {
     fn from(err: serde_json::error::Error) -> DisassociateContactFromAddressBookError {
-        DisassociateContactFromAddressBookError::Unknown(err.description().to_string())
+        DisassociateContactFromAddressBookError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateContactFromAddressBookError {
@@ -2940,7 +2972,8 @@ impl Error for DisassociateContactFromAddressBookError {
             DisassociateContactFromAddressBookError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateContactFromAddressBookError::Unknown(ref cause) => cause,
+            DisassociateContactFromAddressBookError::ParseError(ref cause) => cause,
+            DisassociateContactFromAddressBookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2954,43 +2987,43 @@ pub enum DisassociateDeviceFromRoomError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateDeviceFromRoomError {
-    pub fn from_body(body: &str) -> DisassociateDeviceFromRoomError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateDeviceFromRoomError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DeviceNotRegisteredException" => {
-                        DisassociateDeviceFromRoomError::DeviceNotRegistered(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DisassociateDeviceFromRoomError::Validation(error_message.to_string())
-                    }
-                    _ => DisassociateDeviceFromRoomError::Unknown(String::from(body)),
+            match *error_type {
+                "DeviceNotRegisteredException" => {
+                    return DisassociateDeviceFromRoomError::DeviceNotRegistered(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DisassociateDeviceFromRoomError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisassociateDeviceFromRoomError::Unknown(String::from(body)),
         }
+        return DisassociateDeviceFromRoomError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateDeviceFromRoomError {
     fn from(err: serde_json::error::Error) -> DisassociateDeviceFromRoomError {
-        DisassociateDeviceFromRoomError::Unknown(err.description().to_string())
+        DisassociateDeviceFromRoomError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateDeviceFromRoomError {
@@ -3022,7 +3055,8 @@ impl Error for DisassociateDeviceFromRoomError {
             DisassociateDeviceFromRoomError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateDeviceFromRoomError::Unknown(ref cause) => cause,
+            DisassociateDeviceFromRoomError::ParseError(ref cause) => cause,
+            DisassociateDeviceFromRoomError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3035,38 +3069,40 @@ pub enum DisassociateSkillGroupFromRoomError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateSkillGroupFromRoomError {
-    pub fn from_body(body: &str) -> DisassociateSkillGroupFromRoomError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateSkillGroupFromRoomError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        DisassociateSkillGroupFromRoomError::Validation(error_message.to_string())
-                    }
-                    _ => DisassociateSkillGroupFromRoomError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return DisassociateSkillGroupFromRoomError::Validation(
+                        error_message.to_string(),
+                    )
                 }
+                _ => {}
             }
-            Err(_) => DisassociateSkillGroupFromRoomError::Unknown(String::from(body)),
         }
+        return DisassociateSkillGroupFromRoomError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateSkillGroupFromRoomError {
     fn from(err: serde_json::error::Error) -> DisassociateSkillGroupFromRoomError {
-        DisassociateSkillGroupFromRoomError::Unknown(err.description().to_string())
+        DisassociateSkillGroupFromRoomError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateSkillGroupFromRoomError {
@@ -3097,7 +3133,8 @@ impl Error for DisassociateSkillGroupFromRoomError {
             DisassociateSkillGroupFromRoomError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateSkillGroupFromRoomError::Unknown(ref cause) => cause,
+            DisassociateSkillGroupFromRoomError::ParseError(ref cause) => cause,
+            DisassociateSkillGroupFromRoomError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3112,41 +3149,41 @@ pub enum GetAddressBookError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetAddressBookError {
-    pub fn from_body(body: &str) -> GetAddressBookError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetAddressBookError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => {
-                        GetAddressBookError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetAddressBookError::Validation(error_message.to_string())
-                    }
-                    _ => GetAddressBookError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return GetAddressBookError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetAddressBookError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetAddressBookError::Unknown(String::from(body)),
         }
+        return GetAddressBookError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetAddressBookError {
     fn from(err: serde_json::error::Error) -> GetAddressBookError {
-        GetAddressBookError::Unknown(err.description().to_string())
+        GetAddressBookError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetAddressBookError {
@@ -3176,7 +3213,8 @@ impl Error for GetAddressBookError {
             GetAddressBookError::Validation(ref cause) => cause,
             GetAddressBookError::Credentials(ref err) => err.description(),
             GetAddressBookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetAddressBookError::Unknown(ref cause) => cause,
+            GetAddressBookError::ParseError(ref cause) => cause,
+            GetAddressBookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3191,37 +3229,41 @@ pub enum GetContactError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetContactError {
-    pub fn from_body(body: &str) -> GetContactError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetContactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => GetContactError::NotFound(String::from(error_message)),
-                    "ValidationException" => GetContactError::Validation(error_message.to_string()),
-                    _ => GetContactError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return GetContactError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetContactError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetContactError::Unknown(String::from(body)),
         }
+        return GetContactError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetContactError {
     fn from(err: serde_json::error::Error) -> GetContactError {
-        GetContactError::Unknown(err.description().to_string())
+        GetContactError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetContactError {
@@ -3251,7 +3293,8 @@ impl Error for GetContactError {
             GetContactError::Validation(ref cause) => cause,
             GetContactError::Credentials(ref err) => err.description(),
             GetContactError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetContactError::Unknown(ref cause) => cause,
+            GetContactError::ParseError(ref cause) => cause,
+            GetContactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3266,37 +3309,39 @@ pub enum GetDeviceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeviceError {
-    pub fn from_body(body: &str) -> GetDeviceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetDeviceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => GetDeviceError::NotFound(String::from(error_message)),
-                    "ValidationException" => GetDeviceError::Validation(error_message.to_string()),
-                    _ => GetDeviceError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => return GetDeviceError::NotFound(String::from(error_message)),
+                "ValidationException" => {
+                    return GetDeviceError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => GetDeviceError::Unknown(String::from(body)),
         }
+        return GetDeviceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetDeviceError {
     fn from(err: serde_json::error::Error) -> GetDeviceError {
-        GetDeviceError::Unknown(err.description().to_string())
+        GetDeviceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetDeviceError {
@@ -3326,7 +3371,8 @@ impl Error for GetDeviceError {
             GetDeviceError::Validation(ref cause) => cause,
             GetDeviceError::Credentials(ref err) => err.description(),
             GetDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDeviceError::Unknown(ref cause) => cause,
+            GetDeviceError::ParseError(ref cause) => cause,
+            GetDeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3341,37 +3387,41 @@ pub enum GetProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetProfileError {
-    pub fn from_body(body: &str) -> GetProfileError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetProfileError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => GetProfileError::NotFound(String::from(error_message)),
-                    "ValidationException" => GetProfileError::Validation(error_message.to_string()),
-                    _ => GetProfileError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return GetProfileError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetProfileError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetProfileError::Unknown(String::from(body)),
         }
+        return GetProfileError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetProfileError {
     fn from(err: serde_json::error::Error) -> GetProfileError {
-        GetProfileError::Unknown(err.description().to_string())
+        GetProfileError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetProfileError {
@@ -3401,7 +3451,8 @@ impl Error for GetProfileError {
             GetProfileError::Validation(ref cause) => cause,
             GetProfileError::Credentials(ref err) => err.description(),
             GetProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetProfileError::Unknown(ref cause) => cause,
+            GetProfileError::ParseError(ref cause) => cause,
+            GetProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3416,37 +3467,37 @@ pub enum GetRoomError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetRoomError {
-    pub fn from_body(body: &str) -> GetRoomError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetRoomError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => GetRoomError::NotFound(String::from(error_message)),
-                    "ValidationException" => GetRoomError::Validation(error_message.to_string()),
-                    _ => GetRoomError::Unknown(String::from(body)),
-                }
+            match *error_type {
+                "NotFoundException" => return GetRoomError::NotFound(String::from(error_message)),
+                "ValidationException" => return GetRoomError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => GetRoomError::Unknown(String::from(body)),
         }
+        return GetRoomError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetRoomError {
     fn from(err: serde_json::error::Error) -> GetRoomError {
-        GetRoomError::Unknown(err.description().to_string())
+        GetRoomError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetRoomError {
@@ -3476,7 +3527,8 @@ impl Error for GetRoomError {
             GetRoomError::Validation(ref cause) => cause,
             GetRoomError::Credentials(ref err) => err.description(),
             GetRoomError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRoomError::Unknown(ref cause) => cause,
+            GetRoomError::ParseError(ref cause) => cause,
+            GetRoomError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3491,41 +3543,41 @@ pub enum GetRoomSkillParameterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetRoomSkillParameterError {
-    pub fn from_body(body: &str) -> GetRoomSkillParameterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetRoomSkillParameterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => {
-                        GetRoomSkillParameterError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetRoomSkillParameterError::Validation(error_message.to_string())
-                    }
-                    _ => GetRoomSkillParameterError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return GetRoomSkillParameterError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetRoomSkillParameterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetRoomSkillParameterError::Unknown(String::from(body)),
         }
+        return GetRoomSkillParameterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetRoomSkillParameterError {
     fn from(err: serde_json::error::Error) -> GetRoomSkillParameterError {
-        GetRoomSkillParameterError::Unknown(err.description().to_string())
+        GetRoomSkillParameterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetRoomSkillParameterError {
@@ -3557,7 +3609,8 @@ impl Error for GetRoomSkillParameterError {
             GetRoomSkillParameterError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetRoomSkillParameterError::Unknown(ref cause) => cause,
+            GetRoomSkillParameterError::ParseError(ref cause) => cause,
+            GetRoomSkillParameterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3572,41 +3625,41 @@ pub enum GetSkillGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetSkillGroupError {
-    pub fn from_body(body: &str) -> GetSkillGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetSkillGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => {
-                        GetSkillGroupError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetSkillGroupError::Validation(error_message.to_string())
-                    }
-                    _ => GetSkillGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return GetSkillGroupError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetSkillGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetSkillGroupError::Unknown(String::from(body)),
         }
+        return GetSkillGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetSkillGroupError {
     fn from(err: serde_json::error::Error) -> GetSkillGroupError {
-        GetSkillGroupError::Unknown(err.description().to_string())
+        GetSkillGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetSkillGroupError {
@@ -3636,7 +3689,8 @@ impl Error for GetSkillGroupError {
             GetSkillGroupError::Validation(ref cause) => cause,
             GetSkillGroupError::Credentials(ref err) => err.description(),
             GetSkillGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSkillGroupError::Unknown(ref cause) => cause,
+            GetSkillGroupError::ParseError(ref cause) => cause,
+            GetSkillGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3651,41 +3705,41 @@ pub enum ListDeviceEventsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeviceEventsError {
-    pub fn from_body(body: &str) -> ListDeviceEventsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListDeviceEventsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => {
-                        ListDeviceEventsError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListDeviceEventsError::Validation(error_message.to_string())
-                    }
-                    _ => ListDeviceEventsError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return ListDeviceEventsError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ListDeviceEventsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListDeviceEventsError::Unknown(String::from(body)),
         }
+        return ListDeviceEventsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListDeviceEventsError {
     fn from(err: serde_json::error::Error) -> ListDeviceEventsError {
-        ListDeviceEventsError::Unknown(err.description().to_string())
+        ListDeviceEventsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListDeviceEventsError {
@@ -3715,7 +3769,8 @@ impl Error for ListDeviceEventsError {
             ListDeviceEventsError::Validation(ref cause) => cause,
             ListDeviceEventsError::Credentials(ref err) => err.description(),
             ListDeviceEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDeviceEventsError::Unknown(ref cause) => cause,
+            ListDeviceEventsError::ParseError(ref cause) => cause,
+            ListDeviceEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3728,36 +3783,38 @@ pub enum ListSkillsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListSkillsError {
-    pub fn from_body(body: &str) -> ListSkillsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListSkillsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => ListSkillsError::Validation(error_message.to_string()),
-                    _ => ListSkillsError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return ListSkillsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => ListSkillsError::Unknown(String::from(body)),
         }
+        return ListSkillsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListSkillsError {
     fn from(err: serde_json::error::Error) -> ListSkillsError {
-        ListSkillsError::Unknown(err.description().to_string())
+        ListSkillsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListSkillsError {
@@ -3786,7 +3843,8 @@ impl Error for ListSkillsError {
             ListSkillsError::Validation(ref cause) => cause,
             ListSkillsError::Credentials(ref err) => err.description(),
             ListSkillsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListSkillsError::Unknown(ref cause) => cause,
+            ListSkillsError::ParseError(ref cause) => cause,
+            ListSkillsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3801,37 +3859,39 @@ pub enum ListTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsError {
-    pub fn from_body(body: &str) -> ListTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => ListTagsError::NotFound(String::from(error_message)),
-                    "ValidationException" => ListTagsError::Validation(error_message.to_string()),
-                    _ => ListTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => return ListTagsError::NotFound(String::from(error_message)),
+                "ValidationException" => {
+                    return ListTagsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => ListTagsError::Unknown(String::from(body)),
         }
+        return ListTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTagsError {
     fn from(err: serde_json::error::Error) -> ListTagsError {
-        ListTagsError::Unknown(err.description().to_string())
+        ListTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTagsError {
@@ -3861,7 +3921,8 @@ impl Error for ListTagsError {
             ListTagsError::Validation(ref cause) => cause,
             ListTagsError::Credentials(ref err) => err.description(),
             ListTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTagsError::Unknown(ref cause) => cause,
+            ListTagsError::ParseError(ref cause) => cause,
+            ListTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3874,38 +3935,38 @@ pub enum PutRoomSkillParameterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutRoomSkillParameterError {
-    pub fn from_body(body: &str) -> PutRoomSkillParameterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutRoomSkillParameterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        PutRoomSkillParameterError::Validation(error_message.to_string())
-                    }
-                    _ => PutRoomSkillParameterError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return PutRoomSkillParameterError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => PutRoomSkillParameterError::Unknown(String::from(body)),
         }
+        return PutRoomSkillParameterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutRoomSkillParameterError {
     fn from(err: serde_json::error::Error) -> PutRoomSkillParameterError {
-        PutRoomSkillParameterError::Unknown(err.description().to_string())
+        PutRoomSkillParameterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutRoomSkillParameterError {
@@ -3936,7 +3997,8 @@ impl Error for PutRoomSkillParameterError {
             PutRoomSkillParameterError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            PutRoomSkillParameterError::Unknown(ref cause) => cause,
+            PutRoomSkillParameterError::ParseError(ref cause) => cause,
+            PutRoomSkillParameterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3951,39 +4013,41 @@ pub enum ResolveRoomError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ResolveRoomError {
-    pub fn from_body(body: &str) -> ResolveRoomError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ResolveRoomError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => ResolveRoomError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        ResolveRoomError::Validation(error_message.to_string())
-                    }
-                    _ => ResolveRoomError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return ResolveRoomError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return ResolveRoomError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ResolveRoomError::Unknown(String::from(body)),
         }
+        return ResolveRoomError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ResolveRoomError {
     fn from(err: serde_json::error::Error) -> ResolveRoomError {
-        ResolveRoomError::Unknown(err.description().to_string())
+        ResolveRoomError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ResolveRoomError {
@@ -4013,7 +4077,8 @@ impl Error for ResolveRoomError {
             ResolveRoomError::Validation(ref cause) => cause,
             ResolveRoomError::Credentials(ref err) => err.description(),
             ResolveRoomError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResolveRoomError::Unknown(ref cause) => cause,
+            ResolveRoomError::ParseError(ref cause) => cause,
+            ResolveRoomError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4028,41 +4093,41 @@ pub enum RevokeInvitationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RevokeInvitationError {
-    pub fn from_body(body: &str) -> RevokeInvitationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RevokeInvitationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => {
-                        RevokeInvitationError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RevokeInvitationError::Validation(error_message.to_string())
-                    }
-                    _ => RevokeInvitationError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return RevokeInvitationError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return RevokeInvitationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RevokeInvitationError::Unknown(String::from(body)),
         }
+        return RevokeInvitationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RevokeInvitationError {
     fn from(err: serde_json::error::Error) -> RevokeInvitationError {
-        RevokeInvitationError::Unknown(err.description().to_string())
+        RevokeInvitationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RevokeInvitationError {
@@ -4092,7 +4157,8 @@ impl Error for RevokeInvitationError {
             RevokeInvitationError::Validation(ref cause) => cause,
             RevokeInvitationError::Credentials(ref err) => err.description(),
             RevokeInvitationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RevokeInvitationError::Unknown(ref cause) => cause,
+            RevokeInvitationError::ParseError(ref cause) => cause,
+            RevokeInvitationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4105,38 +4171,38 @@ pub enum SearchAddressBooksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchAddressBooksError {
-    pub fn from_body(body: &str) -> SearchAddressBooksError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchAddressBooksError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        SearchAddressBooksError::Validation(error_message.to_string())
-                    }
-                    _ => SearchAddressBooksError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return SearchAddressBooksError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => SearchAddressBooksError::Unknown(String::from(body)),
         }
+        return SearchAddressBooksError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchAddressBooksError {
     fn from(err: serde_json::error::Error) -> SearchAddressBooksError {
-        SearchAddressBooksError::Unknown(err.description().to_string())
+        SearchAddressBooksError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchAddressBooksError {
@@ -4167,7 +4233,8 @@ impl Error for SearchAddressBooksError {
             SearchAddressBooksError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SearchAddressBooksError::Unknown(ref cause) => cause,
+            SearchAddressBooksError::ParseError(ref cause) => cause,
+            SearchAddressBooksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4180,38 +4247,38 @@ pub enum SearchContactsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchContactsError {
-    pub fn from_body(body: &str) -> SearchContactsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchContactsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        SearchContactsError::Validation(error_message.to_string())
-                    }
-                    _ => SearchContactsError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return SearchContactsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => SearchContactsError::Unknown(String::from(body)),
         }
+        return SearchContactsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchContactsError {
     fn from(err: serde_json::error::Error) -> SearchContactsError {
-        SearchContactsError::Unknown(err.description().to_string())
+        SearchContactsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchContactsError {
@@ -4240,7 +4307,8 @@ impl Error for SearchContactsError {
             SearchContactsError::Validation(ref cause) => cause,
             SearchContactsError::Credentials(ref err) => err.description(),
             SearchContactsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SearchContactsError::Unknown(ref cause) => cause,
+            SearchContactsError::ParseError(ref cause) => cause,
+            SearchContactsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4253,38 +4321,38 @@ pub enum SearchDevicesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchDevicesError {
-    pub fn from_body(body: &str) -> SearchDevicesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchDevicesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        SearchDevicesError::Validation(error_message.to_string())
-                    }
-                    _ => SearchDevicesError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return SearchDevicesError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => SearchDevicesError::Unknown(String::from(body)),
         }
+        return SearchDevicesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchDevicesError {
     fn from(err: serde_json::error::Error) -> SearchDevicesError {
-        SearchDevicesError::Unknown(err.description().to_string())
+        SearchDevicesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchDevicesError {
@@ -4313,7 +4381,8 @@ impl Error for SearchDevicesError {
             SearchDevicesError::Validation(ref cause) => cause,
             SearchDevicesError::Credentials(ref err) => err.description(),
             SearchDevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SearchDevicesError::Unknown(ref cause) => cause,
+            SearchDevicesError::ParseError(ref cause) => cause,
+            SearchDevicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4326,38 +4395,38 @@ pub enum SearchProfilesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchProfilesError {
-    pub fn from_body(body: &str) -> SearchProfilesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchProfilesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        SearchProfilesError::Validation(error_message.to_string())
-                    }
-                    _ => SearchProfilesError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return SearchProfilesError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => SearchProfilesError::Unknown(String::from(body)),
         }
+        return SearchProfilesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchProfilesError {
     fn from(err: serde_json::error::Error) -> SearchProfilesError {
-        SearchProfilesError::Unknown(err.description().to_string())
+        SearchProfilesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchProfilesError {
@@ -4386,7 +4455,8 @@ impl Error for SearchProfilesError {
             SearchProfilesError::Validation(ref cause) => cause,
             SearchProfilesError::Credentials(ref err) => err.description(),
             SearchProfilesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SearchProfilesError::Unknown(ref cause) => cause,
+            SearchProfilesError::ParseError(ref cause) => cause,
+            SearchProfilesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4399,38 +4469,38 @@ pub enum SearchRoomsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchRoomsError {
-    pub fn from_body(body: &str) -> SearchRoomsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchRoomsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        SearchRoomsError::Validation(error_message.to_string())
-                    }
-                    _ => SearchRoomsError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return SearchRoomsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => SearchRoomsError::Unknown(String::from(body)),
         }
+        return SearchRoomsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchRoomsError {
     fn from(err: serde_json::error::Error) -> SearchRoomsError {
-        SearchRoomsError::Unknown(err.description().to_string())
+        SearchRoomsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchRoomsError {
@@ -4459,7 +4529,8 @@ impl Error for SearchRoomsError {
             SearchRoomsError::Validation(ref cause) => cause,
             SearchRoomsError::Credentials(ref err) => err.description(),
             SearchRoomsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SearchRoomsError::Unknown(ref cause) => cause,
+            SearchRoomsError::ParseError(ref cause) => cause,
+            SearchRoomsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4472,38 +4543,38 @@ pub enum SearchSkillGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchSkillGroupsError {
-    pub fn from_body(body: &str) -> SearchSkillGroupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchSkillGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        SearchSkillGroupsError::Validation(error_message.to_string())
-                    }
-                    _ => SearchSkillGroupsError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return SearchSkillGroupsError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => SearchSkillGroupsError::Unknown(String::from(body)),
         }
+        return SearchSkillGroupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchSkillGroupsError {
     fn from(err: serde_json::error::Error) -> SearchSkillGroupsError {
-        SearchSkillGroupsError::Unknown(err.description().to_string())
+        SearchSkillGroupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchSkillGroupsError {
@@ -4534,7 +4605,8 @@ impl Error for SearchSkillGroupsError {
             SearchSkillGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SearchSkillGroupsError::Unknown(ref cause) => cause,
+            SearchSkillGroupsError::ParseError(ref cause) => cause,
+            SearchSkillGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4547,38 +4619,38 @@ pub enum SearchUsersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchUsersError {
-    pub fn from_body(body: &str) -> SearchUsersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchUsersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ValidationException" => {
-                        SearchUsersError::Validation(error_message.to_string())
-                    }
-                    _ => SearchUsersError::Unknown(String::from(body)),
+            match *error_type {
+                "ValidationException" => {
+                    return SearchUsersError::Validation(error_message.to_string())
                 }
+                _ => {}
             }
-            Err(_) => SearchUsersError::Unknown(String::from(body)),
         }
+        return SearchUsersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchUsersError {
     fn from(err: serde_json::error::Error) -> SearchUsersError {
-        SearchUsersError::Unknown(err.description().to_string())
+        SearchUsersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchUsersError {
@@ -4607,7 +4679,8 @@ impl Error for SearchUsersError {
             SearchUsersError::Validation(ref cause) => cause,
             SearchUsersError::Credentials(ref err) => err.description(),
             SearchUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SearchUsersError::Unknown(ref cause) => cause,
+            SearchUsersError::ParseError(ref cause) => cause,
+            SearchUsersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4624,44 +4697,44 @@ pub enum SendInvitationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SendInvitationError {
-    pub fn from_body(body: &str) -> SendInvitationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SendInvitationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidUserStatusException" => {
-                        SendInvitationError::InvalidUserStatus(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        SendInvitationError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SendInvitationError::Validation(error_message.to_string())
-                    }
-                    _ => SendInvitationError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidUserStatusException" => {
+                    return SendInvitationError::InvalidUserStatus(String::from(error_message))
                 }
+                "NotFoundException" => {
+                    return SendInvitationError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return SendInvitationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SendInvitationError::Unknown(String::from(body)),
         }
+        return SendInvitationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SendInvitationError {
     fn from(err: serde_json::error::Error) -> SendInvitationError {
-        SendInvitationError::Unknown(err.description().to_string())
+        SendInvitationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SendInvitationError {
@@ -4692,7 +4765,8 @@ impl Error for SendInvitationError {
             SendInvitationError::Validation(ref cause) => cause,
             SendInvitationError::Credentials(ref err) => err.description(),
             SendInvitationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SendInvitationError::Unknown(ref cause) => cause,
+            SendInvitationError::ParseError(ref cause) => cause,
+            SendInvitationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4706,41 +4780,41 @@ pub enum StartDeviceSyncError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartDeviceSyncError {
-    pub fn from_body(body: &str) -> StartDeviceSyncError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartDeviceSyncError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DeviceNotRegisteredException" => {
-                        StartDeviceSyncError::DeviceNotRegistered(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartDeviceSyncError::Validation(error_message.to_string())
-                    }
-                    _ => StartDeviceSyncError::Unknown(String::from(body)),
+            match *error_type {
+                "DeviceNotRegisteredException" => {
+                    return StartDeviceSyncError::DeviceNotRegistered(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return StartDeviceSyncError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartDeviceSyncError::Unknown(String::from(body)),
         }
+        return StartDeviceSyncError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartDeviceSyncError {
     fn from(err: serde_json::error::Error) -> StartDeviceSyncError {
-        StartDeviceSyncError::Unknown(err.description().to_string())
+        StartDeviceSyncError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartDeviceSyncError {
@@ -4770,7 +4844,8 @@ impl Error for StartDeviceSyncError {
             StartDeviceSyncError::Validation(ref cause) => cause,
             StartDeviceSyncError::Credentials(ref err) => err.description(),
             StartDeviceSyncError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartDeviceSyncError::Unknown(ref cause) => cause,
+            StartDeviceSyncError::ParseError(ref cause) => cause,
+            StartDeviceSyncError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4785,39 +4860,41 @@ pub enum TagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_body(body: &str) -> TagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => TagResourceError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        TagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => TagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return TagResourceError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return TagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TagResourceError::Unknown(String::from(body)),
         }
+        return TagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TagResourceError {
     fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::Unknown(err.description().to_string())
+        TagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TagResourceError {
@@ -4847,7 +4924,8 @@ impl Error for TagResourceError {
             TagResourceError::Validation(ref cause) => cause,
             TagResourceError::Credentials(ref err) => err.description(),
             TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::Unknown(ref cause) => cause,
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4862,41 +4940,41 @@ pub enum UntagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_body(body: &str) -> UntagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => {
-                        UntagResourceError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UntagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => UntagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return UntagResourceError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return UntagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UntagResourceError::Unknown(String::from(body)),
         }
+        return UntagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UntagResourceError {
     fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::Unknown(err.description().to_string())
+        UntagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UntagResourceError {
@@ -4926,7 +5004,8 @@ impl Error for UntagResourceError {
             UntagResourceError::Validation(ref cause) => cause,
             UntagResourceError::Credentials(ref err) => err.description(),
             UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::Unknown(ref cause) => cause,
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4943,44 +5022,44 @@ pub enum UpdateAddressBookError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAddressBookError {
-    pub fn from_body(body: &str) -> UpdateAddressBookError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateAddressBookError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NameInUseException" => {
-                        UpdateAddressBookError::NameInUse(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateAddressBookError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateAddressBookError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateAddressBookError::Unknown(String::from(body)),
+            match *error_type {
+                "NameInUseException" => {
+                    return UpdateAddressBookError::NameInUse(String::from(error_message))
                 }
+                "NotFoundException" => {
+                    return UpdateAddressBookError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateAddressBookError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateAddressBookError::Unknown(String::from(body)),
         }
+        return UpdateAddressBookError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateAddressBookError {
     fn from(err: serde_json::error::Error) -> UpdateAddressBookError {
-        UpdateAddressBookError::Unknown(err.description().to_string())
+        UpdateAddressBookError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateAddressBookError {
@@ -5013,7 +5092,8 @@ impl Error for UpdateAddressBookError {
             UpdateAddressBookError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateAddressBookError::Unknown(ref cause) => cause,
+            UpdateAddressBookError::ParseError(ref cause) => cause,
+            UpdateAddressBookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5028,41 +5108,41 @@ pub enum UpdateContactError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateContactError {
-    pub fn from_body(body: &str) -> UpdateContactError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateContactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NotFoundException" => {
-                        UpdateContactError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateContactError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateContactError::Unknown(String::from(body)),
+            match *error_type {
+                "NotFoundException" => {
+                    return UpdateContactError::NotFound(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return UpdateContactError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateContactError::Unknown(String::from(body)),
         }
+        return UpdateContactError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateContactError {
     fn from(err: serde_json::error::Error) -> UpdateContactError {
-        UpdateContactError::Unknown(err.description().to_string())
+        UpdateContactError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateContactError {
@@ -5092,7 +5172,8 @@ impl Error for UpdateContactError {
             UpdateContactError::Validation(ref cause) => cause,
             UpdateContactError::Credentials(ref err) => err.description(),
             UpdateContactError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateContactError::Unknown(ref cause) => cause,
+            UpdateContactError::ParseError(ref cause) => cause,
+            UpdateContactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5108,42 +5189,44 @@ pub enum UpdateDeviceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDeviceError {
-    pub fn from_body(body: &str) -> UpdateDeviceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateDeviceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "DeviceNotRegisteredException" => {
-                        UpdateDeviceError::DeviceNotRegistered(String::from(error_message))
-                    }
-                    "NotFoundException" => UpdateDeviceError::NotFound(String::from(error_message)),
-                    "ValidationException" => {
-                        UpdateDeviceError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateDeviceError::Unknown(String::from(body)),
+            match *error_type {
+                "DeviceNotRegisteredException" => {
+                    return UpdateDeviceError::DeviceNotRegistered(String::from(error_message))
                 }
+                "NotFoundException" => {
+                    return UpdateDeviceError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateDeviceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateDeviceError::Unknown(String::from(body)),
         }
+        return UpdateDeviceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateDeviceError {
     fn from(err: serde_json::error::Error) -> UpdateDeviceError {
-        UpdateDeviceError::Unknown(err.description().to_string())
+        UpdateDeviceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateDeviceError {
@@ -5174,7 +5257,8 @@ impl Error for UpdateDeviceError {
             UpdateDeviceError::Validation(ref cause) => cause,
             UpdateDeviceError::Credentials(ref err) => err.description(),
             UpdateDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateDeviceError::Unknown(ref cause) => cause,
+            UpdateDeviceError::ParseError(ref cause) => cause,
+            UpdateDeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5191,44 +5275,44 @@ pub enum UpdateProfileError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateProfileError {
-    pub fn from_body(body: &str) -> UpdateProfileError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateProfileError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NameInUseException" => {
-                        UpdateProfileError::NameInUse(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateProfileError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateProfileError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateProfileError::Unknown(String::from(body)),
+            match *error_type {
+                "NameInUseException" => {
+                    return UpdateProfileError::NameInUse(String::from(error_message))
                 }
+                "NotFoundException" => {
+                    return UpdateProfileError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateProfileError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateProfileError::Unknown(String::from(body)),
         }
+        return UpdateProfileError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateProfileError {
     fn from(err: serde_json::error::Error) -> UpdateProfileError {
-        UpdateProfileError::Unknown(err.description().to_string())
+        UpdateProfileError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateProfileError {
@@ -5259,7 +5343,8 @@ impl Error for UpdateProfileError {
             UpdateProfileError::Validation(ref cause) => cause,
             UpdateProfileError::Credentials(ref err) => err.description(),
             UpdateProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateProfileError::Unknown(ref cause) => cause,
+            UpdateProfileError::ParseError(ref cause) => cause,
+            UpdateProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5276,38 +5361,44 @@ pub enum UpdateRoomError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRoomError {
-    pub fn from_body(body: &str) -> UpdateRoomError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateRoomError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NameInUseException" => UpdateRoomError::NameInUse(String::from(error_message)),
-                    "NotFoundException" => UpdateRoomError::NotFound(String::from(error_message)),
-                    "ValidationException" => UpdateRoomError::Validation(error_message.to_string()),
-                    _ => UpdateRoomError::Unknown(String::from(body)),
+            match *error_type {
+                "NameInUseException" => {
+                    return UpdateRoomError::NameInUse(String::from(error_message))
                 }
+                "NotFoundException" => {
+                    return UpdateRoomError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateRoomError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateRoomError::Unknown(String::from(body)),
         }
+        return UpdateRoomError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateRoomError {
     fn from(err: serde_json::error::Error) -> UpdateRoomError {
-        UpdateRoomError::Unknown(err.description().to_string())
+        UpdateRoomError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateRoomError {
@@ -5338,7 +5429,8 @@ impl Error for UpdateRoomError {
             UpdateRoomError::Validation(ref cause) => cause,
             UpdateRoomError::Credentials(ref err) => err.description(),
             UpdateRoomError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateRoomError::Unknown(ref cause) => cause,
+            UpdateRoomError::ParseError(ref cause) => cause,
+            UpdateRoomError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5355,44 +5447,44 @@ pub enum UpdateSkillGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSkillGroupError {
-    pub fn from_body(body: &str) -> UpdateSkillGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSkillGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "NameInUseException" => {
-                        UpdateSkillGroupError::NameInUse(String::from(error_message))
-                    }
-                    "NotFoundException" => {
-                        UpdateSkillGroupError::NotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateSkillGroupError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateSkillGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "NameInUseException" => {
+                    return UpdateSkillGroupError::NameInUse(String::from(error_message))
                 }
+                "NotFoundException" => {
+                    return UpdateSkillGroupError::NotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateSkillGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateSkillGroupError::Unknown(String::from(body)),
         }
+        return UpdateSkillGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateSkillGroupError {
     fn from(err: serde_json::error::Error) -> UpdateSkillGroupError {
-        UpdateSkillGroupError::Unknown(err.description().to_string())
+        UpdateSkillGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateSkillGroupError {
@@ -5423,7 +5515,8 @@ impl Error for UpdateSkillGroupError {
             UpdateSkillGroupError::Validation(ref cause) => cause,
             UpdateSkillGroupError::Credentials(ref err) => err.description(),
             UpdateSkillGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateSkillGroupError::Unknown(ref cause) => cause,
+            UpdateSkillGroupError::ParseError(ref cause) => cause,
+            UpdateSkillGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5783,12 +5876,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<AssociateContactWithAddressBookResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateContactWithAddressBookError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(AssociateContactWithAddressBookError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -5818,13 +5912,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<AssociateDeviceWithRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateDeviceWithRoomError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AssociateDeviceWithRoomError::from_response(response))
                 }))
             }
         })
@@ -5856,13 +5949,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<AssociateSkillGroupWithRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AssociateSkillGroupWithRoomError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(AssociateSkillGroupWithRoomError::from_response(response))
                 }))
             }
         })
@@ -5891,14 +5983,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<CreateAddressBookResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateAddressBookError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateAddressBookError::from_response(response))),
+                )
             }
         })
     }
@@ -5926,14 +6020,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<CreateContactResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateContactError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateContactError::from_response(response))),
+                )
             }
         })
     }
@@ -5961,14 +6057,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<CreateProfileResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateProfileError::from_response(response))),
+                )
             }
         })
     }
@@ -5996,14 +6094,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<CreateRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateRoomError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateRoomError::from_response(response))),
+                )
             }
         })
     }
@@ -6031,14 +6131,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<CreateSkillGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSkillGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateSkillGroupError::from_response(response))),
+                )
             }
         })
     }
@@ -6066,14 +6168,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<CreateUserResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateUserError::from_response(response))),
+                )
             }
         })
     }
@@ -6101,14 +6205,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteAddressBookResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAddressBookError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteAddressBookError::from_response(response))),
+                )
             }
         })
     }
@@ -6136,14 +6242,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteContactResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteContactError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteContactError::from_response(response))),
+                )
             }
         })
     }
@@ -6171,14 +6279,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteProfileResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteProfileError::from_response(response))),
+                )
             }
         })
     }
@@ -6206,14 +6316,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteRoomError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteRoomError::from_response(response))),
+                )
             }
         })
     }
@@ -6241,13 +6353,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteRoomSkillParameterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteRoomSkillParameterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeleteRoomSkillParameterError::from_response(response))
                 }))
             }
         })
@@ -6276,14 +6387,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteSkillGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSkillGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteSkillGroupError::from_response(response))),
+                )
             }
         })
     }
@@ -6311,14 +6424,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DeleteUserResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteUserError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteUserError::from_response(response))),
+                )
             }
         })
     }
@@ -6352,12 +6467,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DisassociateContactFromAddressBookResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateContactFromAddressBookError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    Err(DisassociateContactFromAddressBookError::from_response(
+                        response,
                     ))
                 }))
             }
@@ -6390,13 +6506,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DisassociateDeviceFromRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateDeviceFromRoomError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DisassociateDeviceFromRoomError::from_response(response))
                 }))
             }
         })
@@ -6429,13 +6544,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<DisassociateSkillGroupFromRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateSkillGroupFromRoomError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DisassociateSkillGroupFromRoomError::from_response(response))
                 }))
             }
         })
@@ -6464,14 +6578,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetAddressBookResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetAddressBookError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetAddressBookError::from_response(response))),
+                )
             }
         })
     }
@@ -6499,14 +6615,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetContactResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetContactError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetContactError::from_response(response))),
+                )
             }
         })
     }
@@ -6534,14 +6652,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetDeviceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDeviceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetDeviceError::from_response(response))),
+                )
             }
         })
     }
@@ -6569,14 +6689,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetProfileResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetProfileError::from_response(response))),
+                )
             }
         })
     }
@@ -6601,14 +6723,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetRoomError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetRoomError::from_response(response))),
+                )
             }
         })
     }
@@ -6636,14 +6760,15 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetRoomSkillParameterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetRoomSkillParameterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetRoomSkillParameterError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6671,14 +6796,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<GetSkillGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetSkillGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetSkillGroupError::from_response(response))),
+                )
             }
         })
     }
@@ -6706,14 +6833,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<ListDeviceEventsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDeviceEventsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListDeviceEventsError::from_response(response))),
+                )
             }
         })
     }
@@ -6741,14 +6870,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<ListSkillsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListSkillsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListSkillsError::from_response(response))),
+                )
             }
         })
     }
@@ -6773,14 +6904,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<ListTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -6808,14 +6941,15 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<PutRoomSkillParameterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutRoomSkillParameterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutRoomSkillParameterError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6843,14 +6977,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<ResolveRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ResolveRoomError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ResolveRoomError::from_response(response))),
+                )
             }
         })
     }
@@ -6878,14 +7014,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<RevokeInvitationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RevokeInvitationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RevokeInvitationError::from_response(response))),
+                )
             }
         })
     }
@@ -6913,14 +7051,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchAddressBooksResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchAddressBooksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchAddressBooksError::from_response(response))),
+                )
             }
         })
     }
@@ -6948,14 +7088,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchContactsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchContactsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchContactsError::from_response(response))),
+                )
             }
         })
     }
@@ -6983,14 +7125,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchDevicesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchDevicesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchDevicesError::from_response(response))),
+                )
             }
         })
     }
@@ -7018,14 +7162,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchProfilesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchProfilesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchProfilesError::from_response(response))),
+                )
             }
         })
     }
@@ -7053,14 +7199,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchRoomsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchRoomsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchRoomsError::from_response(response))),
+                )
             }
         })
     }
@@ -7088,14 +7236,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchSkillGroupsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchSkillGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchSkillGroupsError::from_response(response))),
+                )
             }
         })
     }
@@ -7123,14 +7273,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SearchUsersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchUsersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchUsersError::from_response(response))),
+                )
             }
         })
     }
@@ -7158,14 +7310,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<SendInvitationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SendInvitationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SendInvitationError::from_response(response))),
+                )
             }
         })
     }
@@ -7193,14 +7347,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<StartDeviceSyncResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartDeviceSyncError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartDeviceSyncError::from_response(response))),
+                )
             }
         })
     }
@@ -7228,14 +7384,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<TagResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -7263,14 +7421,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UntagResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -7298,14 +7458,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UpdateAddressBookResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateAddressBookError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateAddressBookError::from_response(response))),
+                )
             }
         })
     }
@@ -7333,14 +7495,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UpdateContactResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateContactError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateContactError::from_response(response))),
+                )
             }
         })
     }
@@ -7368,14 +7532,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UpdateDeviceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateDeviceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateDeviceError::from_response(response))),
+                )
             }
         })
     }
@@ -7403,14 +7569,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UpdateProfileResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateProfileError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateProfileError::from_response(response))),
+                )
             }
         })
     }
@@ -7438,14 +7606,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UpdateRoomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateRoomError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateRoomError::from_response(response))),
+                )
             }
         })
     }
@@ -7473,14 +7643,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
                     serde_json::from_str::<UpdateSkillGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSkillGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateSkillGroupError::from_response(response))),
+                )
             }
         })
     }

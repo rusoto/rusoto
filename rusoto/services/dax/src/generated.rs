@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Contains all of the attributes of a specific DAX cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -899,87 +899,97 @@ pub enum CreateClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterError {
-    pub fn from_body(body: &str) -> CreateClusterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterAlreadyExistsFault" => {
-                        CreateClusterError::ClusterAlreadyExistsFault(String::from(error_message))
-                    }
-                    "ClusterQuotaForCustomerExceededFault" => {
-                        CreateClusterError::ClusterQuotaForCustomerExceededFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InsufficientClusterCapacityFault" => {
-                        CreateClusterError::InsufficientClusterCapacityFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidClusterStateFault" => {
-                        CreateClusterError::InvalidClusterStateFault(String::from(error_message))
-                    }
-                    "InvalidParameterCombinationException" => {
-                        CreateClusterError::InvalidParameterCombination(String::from(error_message))
-                    }
-                    "InvalidParameterGroupStateFault" => {
-                        CreateClusterError::InvalidParameterGroupStateFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        CreateClusterError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        CreateClusterError::InvalidVPCNetworkStateFault(String::from(error_message))
-                    }
-                    "NodeQuotaForClusterExceededFault" => {
-                        CreateClusterError::NodeQuotaForClusterExceededFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NodeQuotaForCustomerExceededFault" => {
-                        CreateClusterError::NodeQuotaForCustomerExceededFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ParameterGroupNotFoundFault" => {
-                        CreateClusterError::ParameterGroupNotFoundFault(String::from(error_message))
-                    }
-                    "SubnetGroupNotFoundFault" => {
-                        CreateClusterError::SubnetGroupNotFoundFault(String::from(error_message))
-                    }
-                    "TagQuotaPerResourceExceeded" => {
-                        CreateClusterError::TagQuotaPerResourceExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateClusterError::Validation(error_message.to_string())
-                    }
-                    _ => CreateClusterError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterAlreadyExistsFault" => {
+                    return CreateClusterError::ClusterAlreadyExistsFault(String::from(
+                        error_message,
+                    ))
                 }
+                "ClusterQuotaForCustomerExceededFault" => {
+                    return CreateClusterError::ClusterQuotaForCustomerExceededFault(String::from(
+                        error_message,
+                    ))
+                }
+                "InsufficientClusterCapacityFault" => {
+                    return CreateClusterError::InsufficientClusterCapacityFault(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidClusterStateFault" => {
+                    return CreateClusterError::InvalidClusterStateFault(String::from(error_message))
+                }
+                "InvalidParameterCombinationException" => {
+                    return CreateClusterError::InvalidParameterCombination(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterGroupStateFault" => {
+                    return CreateClusterError::InvalidParameterGroupStateFault(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return CreateClusterError::InvalidParameterValue(String::from(error_message))
+                }
+                "InvalidVPCNetworkStateFault" => {
+                    return CreateClusterError::InvalidVPCNetworkStateFault(String::from(
+                        error_message,
+                    ))
+                }
+                "NodeQuotaForClusterExceededFault" => {
+                    return CreateClusterError::NodeQuotaForClusterExceededFault(String::from(
+                        error_message,
+                    ))
+                }
+                "NodeQuotaForCustomerExceededFault" => {
+                    return CreateClusterError::NodeQuotaForCustomerExceededFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ParameterGroupNotFoundFault" => {
+                    return CreateClusterError::ParameterGroupNotFoundFault(String::from(
+                        error_message,
+                    ))
+                }
+                "SubnetGroupNotFoundFault" => {
+                    return CreateClusterError::SubnetGroupNotFoundFault(String::from(error_message))
+                }
+                "TagQuotaPerResourceExceeded" => {
+                    return CreateClusterError::TagQuotaPerResourceExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateClusterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateClusterError::Unknown(String::from(body)),
         }
+        return CreateClusterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateClusterError {
     fn from(err: serde_json::error::Error) -> CreateClusterError {
-        CreateClusterError::Unknown(err.description().to_string())
+        CreateClusterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateClusterError {
@@ -1021,7 +1031,8 @@ impl Error for CreateClusterError {
             CreateClusterError::Validation(ref cause) => cause,
             CreateClusterError::Credentials(ref err) => err.description(),
             CreateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateClusterError::Unknown(ref cause) => cause,
+            CreateClusterError::ParseError(ref cause) => cause,
+            CreateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1044,63 +1055,63 @@ pub enum CreateParameterGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateParameterGroupError {
-    pub fn from_body(body: &str) -> CreateParameterGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateParameterGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterCombinationException" => {
-                        CreateParameterGroupError::InvalidParameterCombination(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterGroupStateFault" => {
-                        CreateParameterGroupError::InvalidParameterGroupStateFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        CreateParameterGroupError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ParameterGroupAlreadyExistsFault" => {
-                        CreateParameterGroupError::ParameterGroupAlreadyExistsFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ParameterGroupQuotaExceededFault" => {
-                        CreateParameterGroupError::ParameterGroupQuotaExceededFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateParameterGroupError::Validation(error_message.to_string())
-                    }
-                    _ => CreateParameterGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterCombinationException" => {
+                    return CreateParameterGroupError::InvalidParameterCombination(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterGroupStateFault" => {
+                    return CreateParameterGroupError::InvalidParameterGroupStateFault(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return CreateParameterGroupError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ParameterGroupAlreadyExistsFault" => {
+                    return CreateParameterGroupError::ParameterGroupAlreadyExistsFault(
+                        String::from(error_message),
+                    )
+                }
+                "ParameterGroupQuotaExceededFault" => {
+                    return CreateParameterGroupError::ParameterGroupQuotaExceededFault(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return CreateParameterGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateParameterGroupError::Unknown(String::from(body)),
         }
+        return CreateParameterGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateParameterGroupError {
     fn from(err: serde_json::error::Error) -> CreateParameterGroupError {
-        CreateParameterGroupError::Unknown(err.description().to_string())
+        CreateParameterGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateParameterGroupError {
@@ -1136,7 +1147,8 @@ impl Error for CreateParameterGroupError {
             CreateParameterGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateParameterGroupError::Unknown(ref cause) => cause,
+            CreateParameterGroupError::ParseError(ref cause) => cause,
+            CreateParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1157,54 +1169,56 @@ pub enum CreateSubnetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSubnetGroupError {
-    pub fn from_body(body: &str) -> CreateSubnetGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSubnetGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidSubnet" => {
-                        CreateSubnetGroupError::InvalidSubnet(String::from(error_message))
-                    }
-                    "SubnetGroupAlreadyExistsFault" => {
-                        CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "SubnetGroupQuotaExceededFault" => {
-                        CreateSubnetGroupError::SubnetGroupQuotaExceededFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "SubnetQuotaExceededFault" => CreateSubnetGroupError::SubnetQuotaExceededFault(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        CreateSubnetGroupError::Validation(error_message.to_string())
-                    }
-                    _ => CreateSubnetGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidSubnet" => {
+                    return CreateSubnetGroupError::InvalidSubnet(String::from(error_message))
                 }
+                "SubnetGroupAlreadyExistsFault" => {
+                    return CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(String::from(
+                        error_message,
+                    ))
+                }
+                "SubnetGroupQuotaExceededFault" => {
+                    return CreateSubnetGroupError::SubnetGroupQuotaExceededFault(String::from(
+                        error_message,
+                    ))
+                }
+                "SubnetQuotaExceededFault" => {
+                    return CreateSubnetGroupError::SubnetQuotaExceededFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateSubnetGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateSubnetGroupError::Unknown(String::from(body)),
         }
+        return CreateSubnetGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateSubnetGroupError {
     fn from(err: serde_json::error::Error) -> CreateSubnetGroupError {
-        CreateSubnetGroupError::Unknown(err.description().to_string())
+        CreateSubnetGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateSubnetGroupError {
@@ -1239,7 +1253,8 @@ impl Error for CreateSubnetGroupError {
             CreateSubnetGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateSubnetGroupError::Unknown(ref cause) => cause,
+            CreateSubnetGroupError::ParseError(ref cause) => cause,
+            CreateSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1262,59 +1277,63 @@ pub enum DecreaseReplicationFactorError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DecreaseReplicationFactorError {
-    pub fn from_body(body: &str) -> DecreaseReplicationFactorError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DecreaseReplicationFactorError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterNotFoundFault" => DecreaseReplicationFactorError::ClusterNotFoundFault(
-                        String::from(error_message),
-                    ),
-                    "InvalidClusterStateFault" => {
-                        DecreaseReplicationFactorError::InvalidClusterStateFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterCombinationException" => {
-                        DecreaseReplicationFactorError::InvalidParameterCombination(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DecreaseReplicationFactorError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NodeNotFoundFault" => DecreaseReplicationFactorError::NodeNotFoundFault(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        DecreaseReplicationFactorError::Validation(error_message.to_string())
-                    }
-                    _ => DecreaseReplicationFactorError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterNotFoundFault" => {
+                    return DecreaseReplicationFactorError::ClusterNotFoundFault(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidClusterStateFault" => {
+                    return DecreaseReplicationFactorError::InvalidClusterStateFault(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterCombinationException" => {
+                    return DecreaseReplicationFactorError::InvalidParameterCombination(
+                        String::from(error_message),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return DecreaseReplicationFactorError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "NodeNotFoundFault" => {
+                    return DecreaseReplicationFactorError::NodeNotFoundFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DecreaseReplicationFactorError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DecreaseReplicationFactorError::Unknown(String::from(body)),
         }
+        return DecreaseReplicationFactorError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DecreaseReplicationFactorError {
     fn from(err: serde_json::error::Error) -> DecreaseReplicationFactorError {
-        DecreaseReplicationFactorError::Unknown(err.description().to_string())
+        DecreaseReplicationFactorError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DecreaseReplicationFactorError {
@@ -1350,7 +1369,8 @@ impl Error for DecreaseReplicationFactorError {
             DecreaseReplicationFactorError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DecreaseReplicationFactorError::Unknown(ref cause) => cause,
+            DecreaseReplicationFactorError::ParseError(ref cause) => cause,
+            DecreaseReplicationFactorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1371,50 +1391,52 @@ pub enum DeleteClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterError {
-    pub fn from_body(body: &str) -> DeleteClusterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterNotFoundFault" => {
-                        DeleteClusterError::ClusterNotFoundFault(String::from(error_message))
-                    }
-                    "InvalidClusterStateFault" => {
-                        DeleteClusterError::InvalidClusterStateFault(String::from(error_message))
-                    }
-                    "InvalidParameterCombinationException" => {
-                        DeleteClusterError::InvalidParameterCombination(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        DeleteClusterError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteClusterError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteClusterError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterNotFoundFault" => {
+                    return DeleteClusterError::ClusterNotFoundFault(String::from(error_message))
                 }
+                "InvalidClusterStateFault" => {
+                    return DeleteClusterError::InvalidClusterStateFault(String::from(error_message))
+                }
+                "InvalidParameterCombinationException" => {
+                    return DeleteClusterError::InvalidParameterCombination(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return DeleteClusterError::InvalidParameterValue(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteClusterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteClusterError::Unknown(String::from(body)),
         }
+        return DeleteClusterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteClusterError {
     fn from(err: serde_json::error::Error) -> DeleteClusterError {
-        DeleteClusterError::Unknown(err.description().to_string())
+        DeleteClusterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteClusterError {
@@ -1447,7 +1469,8 @@ impl Error for DeleteClusterError {
             DeleteClusterError::Validation(ref cause) => cause,
             DeleteClusterError::Credentials(ref err) => err.description(),
             DeleteClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteClusterError::Unknown(ref cause) => cause,
+            DeleteClusterError::ParseError(ref cause) => cause,
+            DeleteClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1468,58 +1491,58 @@ pub enum DeleteParameterGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteParameterGroupError {
-    pub fn from_body(body: &str) -> DeleteParameterGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteParameterGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterCombinationException" => {
-                        DeleteParameterGroupError::InvalidParameterCombination(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterGroupStateFault" => {
-                        DeleteParameterGroupError::InvalidParameterGroupStateFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DeleteParameterGroupError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ParameterGroupNotFoundFault" => {
-                        DeleteParameterGroupError::ParameterGroupNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteParameterGroupError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteParameterGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterCombinationException" => {
+                    return DeleteParameterGroupError::InvalidParameterCombination(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterGroupStateFault" => {
+                    return DeleteParameterGroupError::InvalidParameterGroupStateFault(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return DeleteParameterGroupError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ParameterGroupNotFoundFault" => {
+                    return DeleteParameterGroupError::ParameterGroupNotFoundFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteParameterGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteParameterGroupError::Unknown(String::from(body)),
         }
+        return DeleteParameterGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteParameterGroupError {
     fn from(err: serde_json::error::Error) -> DeleteParameterGroupError {
-        DeleteParameterGroupError::Unknown(err.description().to_string())
+        DeleteParameterGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteParameterGroupError {
@@ -1554,7 +1577,8 @@ impl Error for DeleteParameterGroupError {
             DeleteParameterGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteParameterGroupError::Unknown(ref cause) => cause,
+            DeleteParameterGroupError::ParseError(ref cause) => cause,
+            DeleteParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1571,44 +1595,48 @@ pub enum DeleteSubnetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSubnetGroupError {
-    pub fn from_body(body: &str) -> DeleteSubnetGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSubnetGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "SubnetGroupInUseFault" => {
-                        DeleteSubnetGroupError::SubnetGroupInUseFault(String::from(error_message))
-                    }
-                    "SubnetGroupNotFoundFault" => DeleteSubnetGroupError::SubnetGroupNotFoundFault(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        DeleteSubnetGroupError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteSubnetGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "SubnetGroupInUseFault" => {
+                    return DeleteSubnetGroupError::SubnetGroupInUseFault(String::from(
+                        error_message,
+                    ))
                 }
+                "SubnetGroupNotFoundFault" => {
+                    return DeleteSubnetGroupError::SubnetGroupNotFoundFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteSubnetGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteSubnetGroupError::Unknown(String::from(body)),
         }
+        return DeleteSubnetGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteSubnetGroupError {
     fn from(err: serde_json::error::Error) -> DeleteSubnetGroupError {
-        DeleteSubnetGroupError::Unknown(err.description().to_string())
+        DeleteSubnetGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteSubnetGroupError {
@@ -1641,7 +1669,8 @@ impl Error for DeleteSubnetGroupError {
             DeleteSubnetGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteSubnetGroupError::Unknown(ref cause) => cause,
+            DeleteSubnetGroupError::ParseError(ref cause) => cause,
+            DeleteSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1660,49 +1689,49 @@ pub enum DescribeClustersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClustersError {
-    pub fn from_body(body: &str) -> DescribeClustersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClustersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterNotFoundFault" => {
-                        DescribeClustersError::ClusterNotFoundFault(String::from(error_message))
-                    }
-                    "InvalidParameterCombinationException" => {
-                        DescribeClustersError::InvalidParameterCombination(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeClustersError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeClustersError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeClustersError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterNotFoundFault" => {
+                    return DescribeClustersError::ClusterNotFoundFault(String::from(error_message))
                 }
+                "InvalidParameterCombinationException" => {
+                    return DescribeClustersError::InvalidParameterCombination(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return DescribeClustersError::InvalidParameterValue(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeClustersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeClustersError::Unknown(String::from(body)),
         }
+        return DescribeClustersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeClustersError {
     fn from(err: serde_json::error::Error) -> DescribeClustersError {
-        DescribeClustersError::Unknown(err.description().to_string())
+        DescribeClustersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeClustersError {
@@ -1734,7 +1763,8 @@ impl Error for DescribeClustersError {
             DescribeClustersError::Validation(ref cause) => cause,
             DescribeClustersError::Credentials(ref err) => err.description(),
             DescribeClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeClustersError::Unknown(ref cause) => cause,
+            DescribeClustersError::ParseError(ref cause) => cause,
+            DescribeClustersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1751,48 +1781,48 @@ pub enum DescribeDefaultParametersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDefaultParametersError {
-    pub fn from_body(body: &str) -> DescribeDefaultParametersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeDefaultParametersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterCombinationException" => {
-                        DescribeDefaultParametersError::InvalidParameterCombination(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeDefaultParametersError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeDefaultParametersError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeDefaultParametersError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterCombinationException" => {
+                    return DescribeDefaultParametersError::InvalidParameterCombination(
+                        String::from(error_message),
+                    )
                 }
+                "InvalidParameterValueException" => {
+                    return DescribeDefaultParametersError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeDefaultParametersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeDefaultParametersError::Unknown(String::from(body)),
         }
+        return DescribeDefaultParametersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeDefaultParametersError {
     fn from(err: serde_json::error::Error) -> DescribeDefaultParametersError {
-        DescribeDefaultParametersError::Unknown(err.description().to_string())
+        DescribeDefaultParametersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeDefaultParametersError {
@@ -1825,7 +1855,8 @@ impl Error for DescribeDefaultParametersError {
             DescribeDefaultParametersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeDefaultParametersError::Unknown(ref cause) => cause,
+            DescribeDefaultParametersError::ParseError(ref cause) => cause,
+            DescribeDefaultParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1842,46 +1873,46 @@ pub enum DescribeEventsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventsError {
-    pub fn from_body(body: &str) -> DescribeEventsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterCombinationException" => {
-                        DescribeEventsError::InvalidParameterCombination(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeEventsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeEventsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeEventsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterCombinationException" => {
+                    return DescribeEventsError::InvalidParameterCombination(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterValueException" => {
+                    return DescribeEventsError::InvalidParameterValue(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeEventsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeEventsError::Unknown(String::from(body)),
         }
+        return DescribeEventsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeEventsError {
     fn from(err: serde_json::error::Error) -> DescribeEventsError {
-        DescribeEventsError::Unknown(err.description().to_string())
+        DescribeEventsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeEventsError {
@@ -1912,7 +1943,8 @@ impl Error for DescribeEventsError {
             DescribeEventsError::Validation(ref cause) => cause,
             DescribeEventsError::Credentials(ref err) => err.description(),
             DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeEventsError::Unknown(ref cause) => cause,
+            DescribeEventsError::ParseError(ref cause) => cause,
+            DescribeEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1931,53 +1963,53 @@ pub enum DescribeParameterGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeParameterGroupsError {
-    pub fn from_body(body: &str) -> DescribeParameterGroupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeParameterGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterCombinationException" => {
-                        DescribeParameterGroupsError::InvalidParameterCombination(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeParameterGroupsError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ParameterGroupNotFoundFault" => {
-                        DescribeParameterGroupsError::ParameterGroupNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeParameterGroupsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeParameterGroupsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterCombinationException" => {
+                    return DescribeParameterGroupsError::InvalidParameterCombination(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterValueException" => {
+                    return DescribeParameterGroupsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ParameterGroupNotFoundFault" => {
+                    return DescribeParameterGroupsError::ParameterGroupNotFoundFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeParameterGroupsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeParameterGroupsError::Unknown(String::from(body)),
         }
+        return DescribeParameterGroupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeParameterGroupsError {
     fn from(err: serde_json::error::Error) -> DescribeParameterGroupsError {
-        DescribeParameterGroupsError::Unknown(err.description().to_string())
+        DescribeParameterGroupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeParameterGroupsError {
@@ -2011,7 +2043,8 @@ impl Error for DescribeParameterGroupsError {
             DescribeParameterGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeParameterGroupsError::Unknown(ref cause) => cause,
+            DescribeParameterGroupsError::ParseError(ref cause) => cause,
+            DescribeParameterGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2030,51 +2063,53 @@ pub enum DescribeParametersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeParametersError {
-    pub fn from_body(body: &str) -> DescribeParametersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeParametersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterCombinationException" => {
-                        DescribeParametersError::InvalidParameterCombination(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        DescribeParametersError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ParameterGroupNotFoundFault" => {
-                        DescribeParametersError::ParameterGroupNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeParametersError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeParametersError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterCombinationException" => {
+                    return DescribeParametersError::InvalidParameterCombination(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterValueException" => {
+                    return DescribeParametersError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ParameterGroupNotFoundFault" => {
+                    return DescribeParametersError::ParameterGroupNotFoundFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DescribeParametersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeParametersError::Unknown(String::from(body)),
         }
+        return DescribeParametersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeParametersError {
     fn from(err: serde_json::error::Error) -> DescribeParametersError {
-        DescribeParametersError::Unknown(err.description().to_string())
+        DescribeParametersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeParametersError {
@@ -2108,7 +2143,8 @@ impl Error for DescribeParametersError {
             DescribeParametersError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeParametersError::Unknown(ref cause) => cause,
+            DescribeParametersError::ParseError(ref cause) => cause,
+            DescribeParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2123,43 +2159,43 @@ pub enum DescribeSubnetGroupsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSubnetGroupsError {
-    pub fn from_body(body: &str) -> DescribeSubnetGroupsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSubnetGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "SubnetGroupNotFoundFault" => {
-                        DescribeSubnetGroupsError::SubnetGroupNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DescribeSubnetGroupsError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeSubnetGroupsError::Unknown(String::from(body)),
+            match *error_type {
+                "SubnetGroupNotFoundFault" => {
+                    return DescribeSubnetGroupsError::SubnetGroupNotFoundFault(String::from(
+                        error_message,
+                    ))
                 }
+                "ValidationException" => {
+                    return DescribeSubnetGroupsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeSubnetGroupsError::Unknown(String::from(body)),
         }
+        return DescribeSubnetGroupsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeSubnetGroupsError {
     fn from(err: serde_json::error::Error) -> DescribeSubnetGroupsError {
-        DescribeSubnetGroupsError::Unknown(err.description().to_string())
+        DescribeSubnetGroupsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeSubnetGroupsError {
@@ -2191,7 +2227,8 @@ impl Error for DescribeSubnetGroupsError {
             DescribeSubnetGroupsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeSubnetGroupsError::Unknown(ref cause) => cause,
+            DescribeSubnetGroupsError::ParseError(ref cause) => cause,
+            DescribeSubnetGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2220,76 +2257,78 @@ pub enum IncreaseReplicationFactorError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl IncreaseReplicationFactorError {
-    pub fn from_body(body: &str) -> IncreaseReplicationFactorError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> IncreaseReplicationFactorError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterNotFoundFault" => IncreaseReplicationFactorError::ClusterNotFoundFault(
-                        String::from(error_message),
-                    ),
-                    "InsufficientClusterCapacityFault" => {
-                        IncreaseReplicationFactorError::InsufficientClusterCapacityFault(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidClusterStateFault" => {
-                        IncreaseReplicationFactorError::InvalidClusterStateFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterCombinationException" => {
-                        IncreaseReplicationFactorError::InvalidParameterCombination(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        IncreaseReplicationFactorError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidVPCNetworkStateFault" => {
-                        IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NodeQuotaForClusterExceededFault" => {
-                        IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(
-                            String::from(error_message),
-                        )
-                    }
-                    "NodeQuotaForCustomerExceededFault" => {
-                        IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(
-                            String::from(error_message),
-                        )
-                    }
-                    "ValidationException" => {
-                        IncreaseReplicationFactorError::Validation(error_message.to_string())
-                    }
-                    _ => IncreaseReplicationFactorError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterNotFoundFault" => {
+                    return IncreaseReplicationFactorError::ClusterNotFoundFault(String::from(
+                        error_message,
+                    ))
                 }
+                "InsufficientClusterCapacityFault" => {
+                    return IncreaseReplicationFactorError::InsufficientClusterCapacityFault(
+                        String::from(error_message),
+                    )
+                }
+                "InvalidClusterStateFault" => {
+                    return IncreaseReplicationFactorError::InvalidClusterStateFault(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterCombinationException" => {
+                    return IncreaseReplicationFactorError::InvalidParameterCombination(
+                        String::from(error_message),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return IncreaseReplicationFactorError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidVPCNetworkStateFault" => {
+                    return IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(
+                        String::from(error_message),
+                    )
+                }
+                "NodeQuotaForClusterExceededFault" => {
+                    return IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(
+                        String::from(error_message),
+                    )
+                }
+                "NodeQuotaForCustomerExceededFault" => {
+                    return IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(
+                        String::from(error_message),
+                    )
+                }
+                "ValidationException" => {
+                    return IncreaseReplicationFactorError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => IncreaseReplicationFactorError::Unknown(String::from(body)),
         }
+        return IncreaseReplicationFactorError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for IncreaseReplicationFactorError {
     fn from(err: serde_json::error::Error) -> IncreaseReplicationFactorError {
-        IncreaseReplicationFactorError::Unknown(err.description().to_string())
+        IncreaseReplicationFactorError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for IncreaseReplicationFactorError {
@@ -2328,7 +2367,8 @@ impl Error for IncreaseReplicationFactorError {
             IncreaseReplicationFactorError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            IncreaseReplicationFactorError::Unknown(ref cause) => cause,
+            IncreaseReplicationFactorError::ParseError(ref cause) => cause,
+            IncreaseReplicationFactorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2351,51 +2391,53 @@ pub enum ListTagsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsError {
-    pub fn from_body(body: &str) -> ListTagsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterNotFoundFault" => {
-                        ListTagsError::ClusterNotFoundFault(String::from(error_message))
-                    }
-                    "InvalidARNFault" => {
-                        ListTagsError::InvalidARNFault(String::from(error_message))
-                    }
-                    "InvalidClusterStateFault" => {
-                        ListTagsError::InvalidClusterStateFault(String::from(error_message))
-                    }
-                    "InvalidParameterCombinationException" => {
-                        ListTagsError::InvalidParameterCombination(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        ListTagsError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ValidationException" => ListTagsError::Validation(error_message.to_string()),
-                    _ => ListTagsError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterNotFoundFault" => {
+                    return ListTagsError::ClusterNotFoundFault(String::from(error_message))
                 }
+                "InvalidARNFault" => {
+                    return ListTagsError::InvalidARNFault(String::from(error_message))
+                }
+                "InvalidClusterStateFault" => {
+                    return ListTagsError::InvalidClusterStateFault(String::from(error_message))
+                }
+                "InvalidParameterCombinationException" => {
+                    return ListTagsError::InvalidParameterCombination(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return ListTagsError::InvalidParameterValue(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTagsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTagsError::Unknown(String::from(body)),
         }
+        return ListTagsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTagsError {
     fn from(err: serde_json::error::Error) -> ListTagsError {
-        ListTagsError::Unknown(err.description().to_string())
+        ListTagsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTagsError {
@@ -2429,7 +2471,8 @@ impl Error for ListTagsError {
             ListTagsError::Validation(ref cause) => cause,
             ListTagsError::Credentials(ref err) => err.description(),
             ListTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTagsError::Unknown(ref cause) => cause,
+            ListTagsError::ParseError(ref cause) => cause,
+            ListTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2452,51 +2495,53 @@ pub enum RebootNodeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RebootNodeError {
-    pub fn from_body(body: &str) -> RebootNodeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RebootNodeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterNotFoundFault" => {
-                        RebootNodeError::ClusterNotFoundFault(String::from(error_message))
-                    }
-                    "InvalidClusterStateFault" => {
-                        RebootNodeError::InvalidClusterStateFault(String::from(error_message))
-                    }
-                    "InvalidParameterCombinationException" => {
-                        RebootNodeError::InvalidParameterCombination(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        RebootNodeError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "NodeNotFoundFault" => {
-                        RebootNodeError::NodeNotFoundFault(String::from(error_message))
-                    }
-                    "ValidationException" => RebootNodeError::Validation(error_message.to_string()),
-                    _ => RebootNodeError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterNotFoundFault" => {
+                    return RebootNodeError::ClusterNotFoundFault(String::from(error_message))
                 }
+                "InvalidClusterStateFault" => {
+                    return RebootNodeError::InvalidClusterStateFault(String::from(error_message))
+                }
+                "InvalidParameterCombinationException" => {
+                    return RebootNodeError::InvalidParameterCombination(String::from(error_message))
+                }
+                "InvalidParameterValueException" => {
+                    return RebootNodeError::InvalidParameterValue(String::from(error_message))
+                }
+                "NodeNotFoundFault" => {
+                    return RebootNodeError::NodeNotFoundFault(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RebootNodeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RebootNodeError::Unknown(String::from(body)),
         }
+        return RebootNodeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RebootNodeError {
     fn from(err: serde_json::error::Error) -> RebootNodeError {
-        RebootNodeError::Unknown(err.description().to_string())
+        RebootNodeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RebootNodeError {
@@ -2530,7 +2575,8 @@ impl Error for RebootNodeError {
             RebootNodeError::Validation(ref cause) => cause,
             RebootNodeError::Credentials(ref err) => err.description(),
             RebootNodeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RebootNodeError::Unknown(ref cause) => cause,
+            RebootNodeError::ParseError(ref cause) => cause,
+            RebootNodeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2555,56 +2601,60 @@ pub enum TagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_body(body: &str) -> TagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterNotFoundFault" => {
-                        TagResourceError::ClusterNotFoundFault(String::from(error_message))
-                    }
-                    "InvalidARNFault" => {
-                        TagResourceError::InvalidARNFault(String::from(error_message))
-                    }
-                    "InvalidClusterStateFault" => {
-                        TagResourceError::InvalidClusterStateFault(String::from(error_message))
-                    }
-                    "InvalidParameterCombinationException" => {
-                        TagResourceError::InvalidParameterCombination(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        TagResourceError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "TagQuotaPerResourceExceeded" => {
-                        TagResourceError::TagQuotaPerResourceExceeded(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        TagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => TagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterNotFoundFault" => {
+                    return TagResourceError::ClusterNotFoundFault(String::from(error_message))
                 }
+                "InvalidARNFault" => {
+                    return TagResourceError::InvalidARNFault(String::from(error_message))
+                }
+                "InvalidClusterStateFault" => {
+                    return TagResourceError::InvalidClusterStateFault(String::from(error_message))
+                }
+                "InvalidParameterCombinationException" => {
+                    return TagResourceError::InvalidParameterCombination(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return TagResourceError::InvalidParameterValue(String::from(error_message))
+                }
+                "TagQuotaPerResourceExceeded" => {
+                    return TagResourceError::TagQuotaPerResourceExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return TagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => TagResourceError::Unknown(String::from(body)),
         }
+        return TagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for TagResourceError {
     fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::Unknown(err.description().to_string())
+        TagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for TagResourceError {
@@ -2639,7 +2689,8 @@ impl Error for TagResourceError {
             TagResourceError::Validation(ref cause) => cause,
             TagResourceError::Credentials(ref err) => err.description(),
             TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::Unknown(ref cause) => cause,
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2664,56 +2715,58 @@ pub enum UntagResourceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_body(body: &str) -> UntagResourceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterNotFoundFault" => {
-                        UntagResourceError::ClusterNotFoundFault(String::from(error_message))
-                    }
-                    "InvalidARNFault" => {
-                        UntagResourceError::InvalidARNFault(String::from(error_message))
-                    }
-                    "InvalidClusterStateFault" => {
-                        UntagResourceError::InvalidClusterStateFault(String::from(error_message))
-                    }
-                    "InvalidParameterCombinationException" => {
-                        UntagResourceError::InvalidParameterCombination(String::from(error_message))
-                    }
-                    "InvalidParameterValueException" => {
-                        UntagResourceError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "TagNotFoundFault" => {
-                        UntagResourceError::TagNotFoundFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UntagResourceError::Validation(error_message.to_string())
-                    }
-                    _ => UntagResourceError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterNotFoundFault" => {
+                    return UntagResourceError::ClusterNotFoundFault(String::from(error_message))
                 }
+                "InvalidARNFault" => {
+                    return UntagResourceError::InvalidARNFault(String::from(error_message))
+                }
+                "InvalidClusterStateFault" => {
+                    return UntagResourceError::InvalidClusterStateFault(String::from(error_message))
+                }
+                "InvalidParameterCombinationException" => {
+                    return UntagResourceError::InvalidParameterCombination(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return UntagResourceError::InvalidParameterValue(String::from(error_message))
+                }
+                "TagNotFoundFault" => {
+                    return UntagResourceError::TagNotFoundFault(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UntagResourceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UntagResourceError::Unknown(String::from(body)),
         }
+        return UntagResourceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UntagResourceError {
     fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::Unknown(err.description().to_string())
+        UntagResourceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UntagResourceError {
@@ -2748,7 +2801,8 @@ impl Error for UntagResourceError {
             UntagResourceError::Validation(ref cause) => cause,
             UntagResourceError::Credentials(ref err) => err.description(),
             UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::Unknown(ref cause) => cause,
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2773,58 +2827,62 @@ pub enum UpdateClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateClusterError {
-    pub fn from_body(body: &str) -> UpdateClusterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateClusterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterNotFoundFault" => {
-                        UpdateClusterError::ClusterNotFoundFault(String::from(error_message))
-                    }
-                    "InvalidClusterStateFault" => {
-                        UpdateClusterError::InvalidClusterStateFault(String::from(error_message))
-                    }
-                    "InvalidParameterCombinationException" => {
-                        UpdateClusterError::InvalidParameterCombination(String::from(error_message))
-                    }
-                    "InvalidParameterGroupStateFault" => {
-                        UpdateClusterError::InvalidParameterGroupStateFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        UpdateClusterError::InvalidParameterValue(String::from(error_message))
-                    }
-                    "ParameterGroupNotFoundFault" => {
-                        UpdateClusterError::ParameterGroupNotFoundFault(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateClusterError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateClusterError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterNotFoundFault" => {
+                    return UpdateClusterError::ClusterNotFoundFault(String::from(error_message))
                 }
+                "InvalidClusterStateFault" => {
+                    return UpdateClusterError::InvalidClusterStateFault(String::from(error_message))
+                }
+                "InvalidParameterCombinationException" => {
+                    return UpdateClusterError::InvalidParameterCombination(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterGroupStateFault" => {
+                    return UpdateClusterError::InvalidParameterGroupStateFault(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return UpdateClusterError::InvalidParameterValue(String::from(error_message))
+                }
+                "ParameterGroupNotFoundFault" => {
+                    return UpdateClusterError::ParameterGroupNotFoundFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateClusterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateClusterError::Unknown(String::from(body)),
         }
+        return UpdateClusterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateClusterError {
     fn from(err: serde_json::error::Error) -> UpdateClusterError {
-        UpdateClusterError::Unknown(err.description().to_string())
+        UpdateClusterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateClusterError {
@@ -2859,7 +2917,8 @@ impl Error for UpdateClusterError {
             UpdateClusterError::Validation(ref cause) => cause,
             UpdateClusterError::Credentials(ref err) => err.description(),
             UpdateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateClusterError::Unknown(ref cause) => cause,
+            UpdateClusterError::ParseError(ref cause) => cause,
+            UpdateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2880,58 +2939,58 @@ pub enum UpdateParameterGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateParameterGroupError {
-    pub fn from_body(body: &str) -> UpdateParameterGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateParameterGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterCombinationException" => {
-                        UpdateParameterGroupError::InvalidParameterCombination(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterGroupStateFault" => {
-                        UpdateParameterGroupError::InvalidParameterGroupStateFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterValueException" => {
-                        UpdateParameterGroupError::InvalidParameterValue(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ParameterGroupNotFoundFault" => {
-                        UpdateParameterGroupError::ParameterGroupNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateParameterGroupError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateParameterGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterCombinationException" => {
+                    return UpdateParameterGroupError::InvalidParameterCombination(String::from(
+                        error_message,
+                    ))
                 }
+                "InvalidParameterGroupStateFault" => {
+                    return UpdateParameterGroupError::InvalidParameterGroupStateFault(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return UpdateParameterGroupError::InvalidParameterValue(String::from(
+                        error_message,
+                    ))
+                }
+                "ParameterGroupNotFoundFault" => {
+                    return UpdateParameterGroupError::ParameterGroupNotFoundFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateParameterGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateParameterGroupError::Unknown(String::from(body)),
         }
+        return UpdateParameterGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateParameterGroupError {
     fn from(err: serde_json::error::Error) -> UpdateParameterGroupError {
-        UpdateParameterGroupError::Unknown(err.description().to_string())
+        UpdateParameterGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateParameterGroupError {
@@ -2966,7 +3025,8 @@ impl Error for UpdateParameterGroupError {
             UpdateParameterGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateParameterGroupError::Unknown(ref cause) => cause,
+            UpdateParameterGroupError::ParseError(ref cause) => cause,
+            UpdateParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2987,50 +3047,54 @@ pub enum UpdateSubnetGroupError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSubnetGroupError {
-    pub fn from_body(body: &str) -> UpdateSubnetGroupError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSubnetGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidSubnet" => {
-                        UpdateSubnetGroupError::InvalidSubnet(String::from(error_message))
-                    }
-                    "SubnetGroupNotFoundFault" => UpdateSubnetGroupError::SubnetGroupNotFoundFault(
-                        String::from(error_message),
-                    ),
-                    "SubnetInUse" => {
-                        UpdateSubnetGroupError::SubnetInUse(String::from(error_message))
-                    }
-                    "SubnetQuotaExceededFault" => UpdateSubnetGroupError::SubnetQuotaExceededFault(
-                        String::from(error_message),
-                    ),
-                    "ValidationException" => {
-                        UpdateSubnetGroupError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateSubnetGroupError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidSubnet" => {
+                    return UpdateSubnetGroupError::InvalidSubnet(String::from(error_message))
                 }
+                "SubnetGroupNotFoundFault" => {
+                    return UpdateSubnetGroupError::SubnetGroupNotFoundFault(String::from(
+                        error_message,
+                    ))
+                }
+                "SubnetInUse" => {
+                    return UpdateSubnetGroupError::SubnetInUse(String::from(error_message))
+                }
+                "SubnetQuotaExceededFault" => {
+                    return UpdateSubnetGroupError::SubnetQuotaExceededFault(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateSubnetGroupError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateSubnetGroupError::Unknown(String::from(body)),
         }
+        return UpdateSubnetGroupError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateSubnetGroupError {
     fn from(err: serde_json::error::Error) -> UpdateSubnetGroupError {
-        UpdateSubnetGroupError::Unknown(err.description().to_string())
+        UpdateSubnetGroupError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateSubnetGroupError {
@@ -3065,7 +3129,8 @@ impl Error for UpdateSubnetGroupError {
             UpdateSubnetGroupError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateSubnetGroupError::Unknown(ref cause) => cause,
+            UpdateSubnetGroupError::ParseError(ref cause) => cause,
+            UpdateSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3253,14 +3318,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<CreateClusterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateClusterError::from_response(response))),
+                )
             }
         })
     }
@@ -3288,14 +3355,15 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<CreateParameterGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateParameterGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateParameterGroupError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3323,14 +3391,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<CreateSubnetGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateSubnetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateSubnetGroupError::from_response(response))),
+                )
             }
         })
     }
@@ -3358,13 +3428,12 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<DecreaseReplicationFactorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DecreaseReplicationFactorError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DecreaseReplicationFactorError::from_response(response))
                 }))
             }
         })
@@ -3393,14 +3462,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<DeleteClusterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteClusterError::from_response(response))),
+                )
             }
         })
     }
@@ -3428,14 +3499,15 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<DeleteParameterGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteParameterGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteParameterGroupError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3463,14 +3535,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<DeleteSubnetGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteSubnetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteSubnetGroupError::from_response(response))),
+                )
             }
         })
     }
@@ -3498,14 +3572,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<DescribeClustersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClustersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeClustersError::from_response(response))),
+                )
             }
         })
     }
@@ -3533,13 +3609,12 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<DescribeDefaultParametersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeDefaultParametersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeDefaultParametersError::from_response(response))
                 }))
             }
         })
@@ -3568,14 +3643,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<DescribeEventsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeEventsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeEventsError::from_response(response))),
+                )
             }
         })
     }
@@ -3603,13 +3680,12 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<DescribeParameterGroupsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeParameterGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeParameterGroupsError::from_response(response))
                 }))
             }
         })
@@ -3638,14 +3714,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<DescribeParametersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeParametersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeParametersError::from_response(response))),
+                )
             }
         })
     }
@@ -3673,14 +3751,15 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<DescribeSubnetGroupsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeSubnetGroupsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeSubnetGroupsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3708,13 +3787,12 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<IncreaseReplicationFactorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(IncreaseReplicationFactorError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(IncreaseReplicationFactorError::from_response(response))
                 }))
             }
         })
@@ -3740,14 +3818,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<ListTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTagsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -3775,14 +3855,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<RebootNodeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RebootNodeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RebootNodeError::from_response(response))),
+                )
             }
         })
     }
@@ -3810,14 +3892,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<TagResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(TagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -3845,14 +3929,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<UntagResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UntagResourceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
             }
         })
     }
@@ -3880,14 +3966,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<UpdateClusterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateClusterError::from_response(response))),
+                )
             }
         })
     }
@@ -3915,14 +4003,15 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<UpdateParameterGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateParameterGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateParameterGroupError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3950,14 +4039,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
                     serde_json::from_str::<UpdateSubnetGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateSubnetGroupError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateSubnetGroupError::from_response(response))),
+                )
             }
         })
     }

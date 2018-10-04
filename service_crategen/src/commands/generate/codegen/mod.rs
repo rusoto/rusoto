@@ -129,7 +129,7 @@ fn generate<P, E>(writer: &mut FileWriter,
         #[allow(warnings)]
         use futures::future;
         use futures::Future;
-        use rusoto_core::request::DispatchSignedRequest;
+        use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
         use rusoto_core::region;
         use rusoto_core::{{Client, RusotoFuture}};
 

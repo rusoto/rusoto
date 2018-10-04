@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Object representing a Connector</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -405,74 +405,74 @@ pub enum CreateReplicationJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateReplicationJobError {
-    pub fn from_body(body: &str) -> CreateReplicationJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateReplicationJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalError" => {
-                        CreateReplicationJobError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateReplicationJobError::InvalidParameter(String::from(error_message))
-                    }
-                    "MissingRequiredParameterException" => {
-                        CreateReplicationJobError::MissingRequiredParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoConnectorsAvailableException" => {
-                        CreateReplicationJobError::NoConnectorsAvailable(String::from(
-                            error_message,
-                        ))
-                    }
-                    "OperationNotPermittedException" => {
-                        CreateReplicationJobError::OperationNotPermitted(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ReplicationJobAlreadyExistsException" => {
-                        CreateReplicationJobError::ReplicationJobAlreadyExists(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServerCannotBeReplicatedException" => {
-                        CreateReplicationJobError::ServerCannotBeReplicated(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedOperationException" => {
-                        CreateReplicationJobError::UnauthorizedOperation(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        CreateReplicationJobError::Validation(error_message.to_string())
-                    }
-                    _ => CreateReplicationJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalError" => {
+                    return CreateReplicationJobError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return CreateReplicationJobError::InvalidParameter(String::from(error_message))
+                }
+                "MissingRequiredParameterException" => {
+                    return CreateReplicationJobError::MissingRequiredParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "NoConnectorsAvailableException" => {
+                    return CreateReplicationJobError::NoConnectorsAvailable(String::from(
+                        error_message,
+                    ))
+                }
+                "OperationNotPermittedException" => {
+                    return CreateReplicationJobError::OperationNotPermitted(String::from(
+                        error_message,
+                    ))
+                }
+                "ReplicationJobAlreadyExistsException" => {
+                    return CreateReplicationJobError::ReplicationJobAlreadyExists(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerCannotBeReplicatedException" => {
+                    return CreateReplicationJobError::ServerCannotBeReplicated(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedOperationException" => {
+                    return CreateReplicationJobError::UnauthorizedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return CreateReplicationJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateReplicationJobError::Unknown(String::from(body)),
         }
+        return CreateReplicationJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateReplicationJobError {
     fn from(err: serde_json::error::Error) -> CreateReplicationJobError {
-        CreateReplicationJobError::Unknown(err.description().to_string())
+        CreateReplicationJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateReplicationJobError {
@@ -511,7 +511,8 @@ impl Error for CreateReplicationJobError {
             CreateReplicationJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateReplicationJobError::Unknown(ref cause) => cause,
+            CreateReplicationJobError::ParseError(ref cause) => cause,
+            CreateReplicationJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -534,61 +535,61 @@ pub enum DeleteReplicationJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteReplicationJobError {
-    pub fn from_body(body: &str) -> DeleteReplicationJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteReplicationJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterException" => {
-                        DeleteReplicationJobError::InvalidParameter(String::from(error_message))
-                    }
-                    "MissingRequiredParameterException" => {
-                        DeleteReplicationJobError::MissingRequiredParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "OperationNotPermittedException" => {
-                        DeleteReplicationJobError::OperationNotPermitted(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ReplicationJobNotFoundException" => {
-                        DeleteReplicationJobError::ReplicationJobNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedOperationException" => {
-                        DeleteReplicationJobError::UnauthorizedOperation(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DeleteReplicationJobError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteReplicationJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterException" => {
+                    return DeleteReplicationJobError::InvalidParameter(String::from(error_message))
                 }
+                "MissingRequiredParameterException" => {
+                    return DeleteReplicationJobError::MissingRequiredParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "OperationNotPermittedException" => {
+                    return DeleteReplicationJobError::OperationNotPermitted(String::from(
+                        error_message,
+                    ))
+                }
+                "ReplicationJobNotFoundException" => {
+                    return DeleteReplicationJobError::ReplicationJobNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedOperationException" => {
+                    return DeleteReplicationJobError::UnauthorizedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteReplicationJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteReplicationJobError::Unknown(String::from(body)),
         }
+        return DeleteReplicationJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteReplicationJobError {
     fn from(err: serde_json::error::Error) -> DeleteReplicationJobError {
-        DeleteReplicationJobError::Unknown(err.description().to_string())
+        DeleteReplicationJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteReplicationJobError {
@@ -624,7 +625,8 @@ impl Error for DeleteReplicationJobError {
             DeleteReplicationJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteReplicationJobError::Unknown(ref cause) => cause,
+            DeleteReplicationJobError::ParseError(ref cause) => cause,
+            DeleteReplicationJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -645,52 +647,56 @@ pub enum DeleteServerCatalogError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteServerCatalogError {
-    pub fn from_body(body: &str) -> DeleteServerCatalogError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteServerCatalogError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterException" => {
-                        DeleteServerCatalogError::InvalidParameter(String::from(error_message))
-                    }
-                    "MissingRequiredParameterException" => {
-                        DeleteServerCatalogError::MissingRequiredParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "OperationNotPermittedException" => {
-                        DeleteServerCatalogError::OperationNotPermitted(String::from(error_message))
-                    }
-                    "UnauthorizedOperationException" => {
-                        DeleteServerCatalogError::UnauthorizedOperation(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteServerCatalogError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteServerCatalogError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterException" => {
+                    return DeleteServerCatalogError::InvalidParameter(String::from(error_message))
                 }
+                "MissingRequiredParameterException" => {
+                    return DeleteServerCatalogError::MissingRequiredParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "OperationNotPermittedException" => {
+                    return DeleteServerCatalogError::OperationNotPermitted(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedOperationException" => {
+                    return DeleteServerCatalogError::UnauthorizedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DeleteServerCatalogError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteServerCatalogError::Unknown(String::from(body)),
         }
+        return DeleteServerCatalogError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteServerCatalogError {
     fn from(err: serde_json::error::Error) -> DeleteServerCatalogError {
-        DeleteServerCatalogError::Unknown(err.description().to_string())
+        DeleteServerCatalogError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteServerCatalogError {
@@ -725,7 +731,8 @@ impl Error for DeleteServerCatalogError {
             DeleteServerCatalogError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteServerCatalogError::Unknown(ref cause) => cause,
+            DeleteServerCatalogError::ParseError(ref cause) => cause,
+            DeleteServerCatalogError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -746,56 +753,56 @@ pub enum DisassociateConnectorError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateConnectorError {
-    pub fn from_body(body: &str) -> DisassociateConnectorError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateConnectorError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterException" => {
-                        DisassociateConnectorError::InvalidParameter(String::from(error_message))
-                    }
-                    "MissingRequiredParameterException" => {
-                        DisassociateConnectorError::MissingRequiredParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "OperationNotPermittedException" => {
-                        DisassociateConnectorError::OperationNotPermitted(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedOperationException" => {
-                        DisassociateConnectorError::UnauthorizedOperation(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        DisassociateConnectorError::Validation(error_message.to_string())
-                    }
-                    _ => DisassociateConnectorError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterException" => {
+                    return DisassociateConnectorError::InvalidParameter(String::from(error_message))
                 }
+                "MissingRequiredParameterException" => {
+                    return DisassociateConnectorError::MissingRequiredParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "OperationNotPermittedException" => {
+                    return DisassociateConnectorError::OperationNotPermitted(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedOperationException" => {
+                    return DisassociateConnectorError::UnauthorizedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return DisassociateConnectorError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DisassociateConnectorError::Unknown(String::from(body)),
         }
+        return DisassociateConnectorError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DisassociateConnectorError {
     fn from(err: serde_json::error::Error) -> DisassociateConnectorError {
-        DisassociateConnectorError::Unknown(err.description().to_string())
+        DisassociateConnectorError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DisassociateConnectorError {
@@ -830,7 +837,8 @@ impl Error for DisassociateConnectorError {
             DisassociateConnectorError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisassociateConnectorError::Unknown(ref cause) => cause,
+            DisassociateConnectorError::ParseError(ref cause) => cause,
+            DisassociateConnectorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -845,41 +853,41 @@ pub enum GetConnectorsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetConnectorsError {
-    pub fn from_body(body: &str) -> GetConnectorsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetConnectorsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "UnauthorizedOperationException" => {
-                        GetConnectorsError::UnauthorizedOperation(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetConnectorsError::Validation(error_message.to_string())
-                    }
-                    _ => GetConnectorsError::Unknown(String::from(body)),
+            match *error_type {
+                "UnauthorizedOperationException" => {
+                    return GetConnectorsError::UnauthorizedOperation(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetConnectorsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetConnectorsError::Unknown(String::from(body)),
         }
+        return GetConnectorsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetConnectorsError {
     fn from(err: serde_json::error::Error) -> GetConnectorsError {
-        GetConnectorsError::Unknown(err.description().to_string())
+        GetConnectorsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetConnectorsError {
@@ -909,7 +917,8 @@ impl Error for GetConnectorsError {
             GetConnectorsError::Validation(ref cause) => cause,
             GetConnectorsError::Credentials(ref err) => err.description(),
             GetConnectorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetConnectorsError::Unknown(ref cause) => cause,
+            GetConnectorsError::ParseError(ref cause) => cause,
+            GetConnectorsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -928,49 +937,51 @@ pub enum GetReplicationJobsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetReplicationJobsError {
-    pub fn from_body(body: &str) -> GetReplicationJobsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetReplicationJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterException" => {
-                        GetReplicationJobsError::InvalidParameter(String::from(error_message))
-                    }
-                    "MissingRequiredParameterException" => {
-                        GetReplicationJobsError::MissingRequiredParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedOperationException" => {
-                        GetReplicationJobsError::UnauthorizedOperation(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetReplicationJobsError::Validation(error_message.to_string())
-                    }
-                    _ => GetReplicationJobsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterException" => {
+                    return GetReplicationJobsError::InvalidParameter(String::from(error_message))
                 }
+                "MissingRequiredParameterException" => {
+                    return GetReplicationJobsError::MissingRequiredParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedOperationException" => {
+                    return GetReplicationJobsError::UnauthorizedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetReplicationJobsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetReplicationJobsError::Unknown(String::from(body)),
         }
+        return GetReplicationJobsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetReplicationJobsError {
     fn from(err: serde_json::error::Error) -> GetReplicationJobsError {
-        GetReplicationJobsError::Unknown(err.description().to_string())
+        GetReplicationJobsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetReplicationJobsError {
@@ -1004,7 +1015,8 @@ impl Error for GetReplicationJobsError {
             GetReplicationJobsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetReplicationJobsError::Unknown(ref cause) => cause,
+            GetReplicationJobsError::ParseError(ref cause) => cause,
+            GetReplicationJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1023,49 +1035,51 @@ pub enum GetReplicationRunsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetReplicationRunsError {
-    pub fn from_body(body: &str) -> GetReplicationRunsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetReplicationRunsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterException" => {
-                        GetReplicationRunsError::InvalidParameter(String::from(error_message))
-                    }
-                    "MissingRequiredParameterException" => {
-                        GetReplicationRunsError::MissingRequiredParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedOperationException" => {
-                        GetReplicationRunsError::UnauthorizedOperation(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetReplicationRunsError::Validation(error_message.to_string())
-                    }
-                    _ => GetReplicationRunsError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterException" => {
+                    return GetReplicationRunsError::InvalidParameter(String::from(error_message))
                 }
+                "MissingRequiredParameterException" => {
+                    return GetReplicationRunsError::MissingRequiredParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedOperationException" => {
+                    return GetReplicationRunsError::UnauthorizedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return GetReplicationRunsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetReplicationRunsError::Unknown(String::from(body)),
         }
+        return GetReplicationRunsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetReplicationRunsError {
     fn from(err: serde_json::error::Error) -> GetReplicationRunsError {
-        GetReplicationRunsError::Unknown(err.description().to_string())
+        GetReplicationRunsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetReplicationRunsError {
@@ -1099,7 +1113,8 @@ impl Error for GetReplicationRunsError {
             GetReplicationRunsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetReplicationRunsError::Unknown(ref cause) => cause,
+            GetReplicationRunsError::ParseError(ref cause) => cause,
+            GetReplicationRunsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1114,39 +1129,41 @@ pub enum GetServersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetServersError {
-    pub fn from_body(body: &str) -> GetServersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetServersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "UnauthorizedOperationException" => {
-                        GetServersError::UnauthorizedOperation(String::from(error_message))
-                    }
-                    "ValidationException" => GetServersError::Validation(error_message.to_string()),
-                    _ => GetServersError::Unknown(String::from(body)),
+            match *error_type {
+                "UnauthorizedOperationException" => {
+                    return GetServersError::UnauthorizedOperation(String::from(error_message))
                 }
+                "ValidationException" => {
+                    return GetServersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetServersError::Unknown(String::from(body)),
         }
+        return GetServersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetServersError {
     fn from(err: serde_json::error::Error) -> GetServersError {
-        GetServersError::Unknown(err.description().to_string())
+        GetServersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetServersError {
@@ -1176,7 +1193,8 @@ impl Error for GetServersError {
             GetServersError::Validation(ref cause) => cause,
             GetServersError::Credentials(ref err) => err.description(),
             GetServersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetServersError::Unknown(ref cause) => cause,
+            GetServersError::ParseError(ref cause) => cause,
+            GetServersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1199,55 +1217,61 @@ pub enum ImportServerCatalogError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ImportServerCatalogError {
-    pub fn from_body(body: &str) -> ImportServerCatalogError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ImportServerCatalogError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterException" => {
-                        ImportServerCatalogError::InvalidParameter(String::from(error_message))
-                    }
-                    "MissingRequiredParameterException" => {
-                        ImportServerCatalogError::MissingRequiredParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "NoConnectorsAvailableException" => {
-                        ImportServerCatalogError::NoConnectorsAvailable(String::from(error_message))
-                    }
-                    "OperationNotPermittedException" => {
-                        ImportServerCatalogError::OperationNotPermitted(String::from(error_message))
-                    }
-                    "UnauthorizedOperationException" => {
-                        ImportServerCatalogError::UnauthorizedOperation(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ImportServerCatalogError::Validation(error_message.to_string())
-                    }
-                    _ => ImportServerCatalogError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterException" => {
+                    return ImportServerCatalogError::InvalidParameter(String::from(error_message))
                 }
+                "MissingRequiredParameterException" => {
+                    return ImportServerCatalogError::MissingRequiredParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "NoConnectorsAvailableException" => {
+                    return ImportServerCatalogError::NoConnectorsAvailable(String::from(
+                        error_message,
+                    ))
+                }
+                "OperationNotPermittedException" => {
+                    return ImportServerCatalogError::OperationNotPermitted(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedOperationException" => {
+                    return ImportServerCatalogError::UnauthorizedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return ImportServerCatalogError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ImportServerCatalogError::Unknown(String::from(body)),
         }
+        return ImportServerCatalogError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ImportServerCatalogError {
     fn from(err: serde_json::error::Error) -> ImportServerCatalogError {
-        ImportServerCatalogError::Unknown(err.description().to_string())
+        ImportServerCatalogError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ImportServerCatalogError {
@@ -1283,7 +1307,8 @@ impl Error for ImportServerCatalogError {
             ImportServerCatalogError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ImportServerCatalogError::Unknown(ref cause) => cause,
+            ImportServerCatalogError::ParseError(ref cause) => cause,
+            ImportServerCatalogError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1306,63 +1331,63 @@ pub enum StartOnDemandReplicationRunError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartOnDemandReplicationRunError {
-    pub fn from_body(body: &str) -> StartOnDemandReplicationRunError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartOnDemandReplicationRunError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InvalidParameterException" => {
-                        StartOnDemandReplicationRunError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "MissingRequiredParameterException" => {
-                        StartOnDemandReplicationRunError::MissingRequiredParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "OperationNotPermittedException" => {
-                        StartOnDemandReplicationRunError::OperationNotPermitted(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ReplicationRunLimitExceededException" => {
-                        StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedOperationException" => {
-                        StartOnDemandReplicationRunError::UnauthorizedOperation(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        StartOnDemandReplicationRunError::Validation(error_message.to_string())
-                    }
-                    _ => StartOnDemandReplicationRunError::Unknown(String::from(body)),
+            match *error_type {
+                "InvalidParameterException" => {
+                    return StartOnDemandReplicationRunError::InvalidParameter(String::from(
+                        error_message,
+                    ))
                 }
+                "MissingRequiredParameterException" => {
+                    return StartOnDemandReplicationRunError::MissingRequiredParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "OperationNotPermittedException" => {
+                    return StartOnDemandReplicationRunError::OperationNotPermitted(String::from(
+                        error_message,
+                    ))
+                }
+                "ReplicationRunLimitExceededException" => {
+                    return StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(
+                        String::from(error_message),
+                    )
+                }
+                "UnauthorizedOperationException" => {
+                    return StartOnDemandReplicationRunError::UnauthorizedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return StartOnDemandReplicationRunError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartOnDemandReplicationRunError::Unknown(String::from(body)),
         }
+        return StartOnDemandReplicationRunError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartOnDemandReplicationRunError {
     fn from(err: serde_json::error::Error) -> StartOnDemandReplicationRunError {
-        StartOnDemandReplicationRunError::Unknown(err.description().to_string())
+        StartOnDemandReplicationRunError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartOnDemandReplicationRunError {
@@ -1398,7 +1423,8 @@ impl Error for StartOnDemandReplicationRunError {
             StartOnDemandReplicationRunError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartOnDemandReplicationRunError::Unknown(ref cause) => cause,
+            StartOnDemandReplicationRunError::ParseError(ref cause) => cause,
+            StartOnDemandReplicationRunError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1425,69 +1451,69 @@ pub enum UpdateReplicationJobError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateReplicationJobError {
-    pub fn from_body(body: &str) -> UpdateReplicationJobError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateReplicationJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "InternalError" => {
-                        UpdateReplicationJobError::InternalError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateReplicationJobError::InvalidParameter(String::from(error_message))
-                    }
-                    "MissingRequiredParameterException" => {
-                        UpdateReplicationJobError::MissingRequiredParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "OperationNotPermittedException" => {
-                        UpdateReplicationJobError::OperationNotPermitted(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ReplicationJobNotFoundException" => {
-                        UpdateReplicationJobError::ReplicationJobNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServerCannotBeReplicatedException" => {
-                        UpdateReplicationJobError::ServerCannotBeReplicated(String::from(
-                            error_message,
-                        ))
-                    }
-                    "UnauthorizedOperationException" => {
-                        UpdateReplicationJobError::UnauthorizedOperation(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ValidationException" => {
-                        UpdateReplicationJobError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateReplicationJobError::Unknown(String::from(body)),
+            match *error_type {
+                "InternalError" => {
+                    return UpdateReplicationJobError::InternalError(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return UpdateReplicationJobError::InvalidParameter(String::from(error_message))
+                }
+                "MissingRequiredParameterException" => {
+                    return UpdateReplicationJobError::MissingRequiredParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "OperationNotPermittedException" => {
+                    return UpdateReplicationJobError::OperationNotPermitted(String::from(
+                        error_message,
+                    ))
+                }
+                "ReplicationJobNotFoundException" => {
+                    return UpdateReplicationJobError::ReplicationJobNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerCannotBeReplicatedException" => {
+                    return UpdateReplicationJobError::ServerCannotBeReplicated(String::from(
+                        error_message,
+                    ))
+                }
+                "UnauthorizedOperationException" => {
+                    return UpdateReplicationJobError::UnauthorizedOperation(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return UpdateReplicationJobError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateReplicationJobError::Unknown(String::from(body)),
         }
+        return UpdateReplicationJobError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateReplicationJobError {
     fn from(err: serde_json::error::Error) -> UpdateReplicationJobError {
-        UpdateReplicationJobError::Unknown(err.description().to_string())
+        UpdateReplicationJobError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateReplicationJobError {
@@ -1525,7 +1551,8 @@ impl Error for UpdateReplicationJobError {
             UpdateReplicationJobError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateReplicationJobError::Unknown(ref cause) => cause,
+            UpdateReplicationJobError::ParseError(ref cause) => cause,
+            UpdateReplicationJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1657,14 +1684,15 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<CreateReplicationJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateReplicationJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateReplicationJobError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1695,14 +1723,15 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<DeleteReplicationJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteReplicationJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteReplicationJobError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1731,14 +1760,15 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<DeleteServerCatalogResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteServerCatalogError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteServerCatalogError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1769,14 +1799,15 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<DisassociateConnectorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisassociateConnectorError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DisassociateConnectorError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1807,14 +1838,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<GetConnectorsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetConnectorsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetConnectorsError::from_response(response))),
+                )
             }
         })
     }
@@ -1845,14 +1878,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<GetReplicationJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReplicationJobsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetReplicationJobsError::from_response(response))),
+                )
             }
         })
     }
@@ -1883,14 +1918,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<GetReplicationRunsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetReplicationRunsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetReplicationRunsError::from_response(response))),
+                )
             }
         })
     }
@@ -1921,14 +1958,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<GetServersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetServersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetServersError::from_response(response))),
+                )
             }
         })
     }
@@ -1957,14 +1996,15 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<ImportServerCatalogResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ImportServerCatalogError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ImportServerCatalogError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -1995,13 +2035,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<StartOnDemandReplicationRunResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartOnDemandReplicationRunError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StartOnDemandReplicationRunError::from_response(response))
                 }))
             }
         })
@@ -2033,14 +2072,15 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
                     serde_json::from_str::<UpdateReplicationJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateReplicationJobError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateReplicationJobError::from_response(response))
+                    }),
+                )
             }
         })
     }

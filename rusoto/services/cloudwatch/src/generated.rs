@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -3398,24 +3398,30 @@ pub enum DeleteAlarmsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAlarmsError {
-    pub fn from_body(body: &str) -> DeleteAlarmsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceNotFound" => {
-                    DeleteAlarmsError::ResourceNotFound(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteAlarmsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceNotFound" => {
+                        return DeleteAlarmsError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DeleteAlarmsError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteAlarmsError::Unknown(body.to_string()),
+            }
         }
+        DeleteAlarmsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3430,7 +3436,7 @@ impl DeleteAlarmsError {
 impl From<XmlParseError> for DeleteAlarmsError {
     fn from(err: XmlParseError) -> DeleteAlarmsError {
         let XmlParseError(message) = err;
-        DeleteAlarmsError::Unknown(message.to_string())
+        DeleteAlarmsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteAlarmsError {
@@ -3460,7 +3466,8 @@ impl Error for DeleteAlarmsError {
             DeleteAlarmsError::Validation(ref cause) => cause,
             DeleteAlarmsError::Credentials(ref err) => err.description(),
             DeleteAlarmsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteAlarmsError::Unknown(ref cause) => cause,
+            DeleteAlarmsError::ParseError(ref cause) => cause,
+            DeleteAlarmsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3479,30 +3486,40 @@ pub enum DeleteDashboardsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDashboardsError {
-    pub fn from_body(body: &str) -> DeleteDashboardsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceNotFound" => DeleteDashboardsError::DashboardNotFoundError(String::from(
-                    parsed_error.message,
-                )),
-                "InternalServiceError" => {
-                    DeleteDashboardsError::InternalServiceFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDashboardsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceNotFound" => {
+                        return DeleteDashboardsError::DashboardNotFoundError(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InternalServiceError" => {
+                        return DeleteDashboardsError::InternalServiceFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return DeleteDashboardsError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => {
-                    DeleteDashboardsError::InvalidParameterValue(String::from(parsed_error.message))
-                }
-                _ => DeleteDashboardsError::Unknown(String::from(body)),
-            },
-            Err(_) => DeleteDashboardsError::Unknown(body.to_string()),
+            }
         }
+        DeleteDashboardsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3517,7 +3534,7 @@ impl DeleteDashboardsError {
 impl From<XmlParseError> for DeleteDashboardsError {
     fn from(err: XmlParseError) -> DeleteDashboardsError {
         let XmlParseError(message) = err;
-        DeleteDashboardsError::Unknown(message.to_string())
+        DeleteDashboardsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DeleteDashboardsError {
@@ -3549,7 +3566,8 @@ impl Error for DeleteDashboardsError {
             DeleteDashboardsError::Validation(ref cause) => cause,
             DeleteDashboardsError::Credentials(ref err) => err.description(),
             DeleteDashboardsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDashboardsError::Unknown(ref cause) => cause,
+            DeleteDashboardsError::ParseError(ref cause) => cause,
+            DeleteDashboardsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3564,24 +3582,30 @@ pub enum DescribeAlarmHistoryError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAlarmHistoryError {
-    pub fn from_body(body: &str) -> DescribeAlarmHistoryError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => {
-                    DescribeAlarmHistoryError::InvalidNextToken(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAlarmHistoryError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return DescribeAlarmHistoryError::InvalidNextToken(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DescribeAlarmHistoryError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAlarmHistoryError::Unknown(body.to_string()),
+            }
         }
+        DescribeAlarmHistoryError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3596,7 +3620,7 @@ impl DescribeAlarmHistoryError {
 impl From<XmlParseError> for DescribeAlarmHistoryError {
     fn from(err: XmlParseError) -> DescribeAlarmHistoryError {
         let XmlParseError(message) = err;
-        DescribeAlarmHistoryError::Unknown(message.to_string())
+        DescribeAlarmHistoryError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAlarmHistoryError {
@@ -3628,7 +3652,8 @@ impl Error for DescribeAlarmHistoryError {
             DescribeAlarmHistoryError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAlarmHistoryError::Unknown(ref cause) => cause,
+            DescribeAlarmHistoryError::ParseError(ref cause) => cause,
+            DescribeAlarmHistoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3643,24 +3668,30 @@ pub enum DescribeAlarmsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAlarmsError {
-    pub fn from_body(body: &str) -> DescribeAlarmsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => {
-                    DescribeAlarmsError::InvalidNextToken(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAlarmsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return DescribeAlarmsError::InvalidNextToken(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => DescribeAlarmsError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAlarmsError::Unknown(body.to_string()),
+            }
         }
+        DescribeAlarmsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3675,7 +3706,7 @@ impl DescribeAlarmsError {
 impl From<XmlParseError> for DescribeAlarmsError {
     fn from(err: XmlParseError) -> DescribeAlarmsError {
         let XmlParseError(message) = err;
-        DescribeAlarmsError::Unknown(message.to_string())
+        DescribeAlarmsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAlarmsError {
@@ -3705,7 +3736,8 @@ impl Error for DescribeAlarmsError {
             DescribeAlarmsError::Validation(ref cause) => cause,
             DescribeAlarmsError::Credentials(ref err) => err.description(),
             DescribeAlarmsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeAlarmsError::Unknown(ref cause) => cause,
+            DescribeAlarmsError::ParseError(ref cause) => cause,
+            DescribeAlarmsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3718,21 +3750,25 @@ pub enum DescribeAlarmsForMetricError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAlarmsForMetricError {
-    pub fn from_body(body: &str) -> DescribeAlarmsForMetricError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DescribeAlarmsForMetricError::Unknown(String::from(body)),
-            },
-            Err(_) => DescribeAlarmsForMetricError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAlarmsForMetricError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DescribeAlarmsForMetricError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3747,7 +3783,7 @@ impl DescribeAlarmsForMetricError {
 impl From<XmlParseError> for DescribeAlarmsForMetricError {
     fn from(err: XmlParseError) -> DescribeAlarmsForMetricError {
         let XmlParseError(message) = err;
-        DescribeAlarmsForMetricError::Unknown(message.to_string())
+        DescribeAlarmsForMetricError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DescribeAlarmsForMetricError {
@@ -3778,7 +3814,8 @@ impl Error for DescribeAlarmsForMetricError {
             DescribeAlarmsForMetricError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeAlarmsForMetricError::Unknown(ref cause) => cause,
+            DescribeAlarmsForMetricError::ParseError(ref cause) => cause,
+            DescribeAlarmsForMetricError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3791,21 +3828,25 @@ pub enum DisableAlarmActionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DisableAlarmActionsError {
-    pub fn from_body(body: &str) -> DisableAlarmActionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => DisableAlarmActionsError::Unknown(String::from(body)),
-            },
-            Err(_) => DisableAlarmActionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> DisableAlarmActionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        DisableAlarmActionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3820,7 +3861,7 @@ impl DisableAlarmActionsError {
 impl From<XmlParseError> for DisableAlarmActionsError {
     fn from(err: XmlParseError) -> DisableAlarmActionsError {
         let XmlParseError(message) = err;
-        DisableAlarmActionsError::Unknown(message.to_string())
+        DisableAlarmActionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for DisableAlarmActionsError {
@@ -3851,7 +3892,8 @@ impl Error for DisableAlarmActionsError {
             DisableAlarmActionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DisableAlarmActionsError::Unknown(ref cause) => cause,
+            DisableAlarmActionsError::ParseError(ref cause) => cause,
+            DisableAlarmActionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3864,21 +3906,25 @@ pub enum EnableAlarmActionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl EnableAlarmActionsError {
-    pub fn from_body(body: &str) -> EnableAlarmActionsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                _ => EnableAlarmActionsError::Unknown(String::from(body)),
-            },
-            Err(_) => EnableAlarmActionsError::Unknown(body.to_string()),
+    pub fn from_response(res: BufferedHttpResponse) -> EnableAlarmActionsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
         }
+        EnableAlarmActionsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3893,7 +3939,7 @@ impl EnableAlarmActionsError {
 impl From<XmlParseError> for EnableAlarmActionsError {
     fn from(err: XmlParseError) -> EnableAlarmActionsError {
         let XmlParseError(message) = err;
-        EnableAlarmActionsError::Unknown(message.to_string())
+        EnableAlarmActionsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for EnableAlarmActionsError {
@@ -3924,7 +3970,8 @@ impl Error for EnableAlarmActionsError {
             EnableAlarmActionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            EnableAlarmActionsError::Unknown(ref cause) => cause,
+            EnableAlarmActionsError::ParseError(ref cause) => cause,
+            EnableAlarmActionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3943,30 +3990,40 @@ pub enum GetDashboardError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetDashboardError {
-    pub fn from_body(body: &str) -> GetDashboardError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceNotFound" => {
-                    GetDashboardError::DashboardNotFoundError(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetDashboardError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceNotFound" => {
+                        return GetDashboardError::DashboardNotFoundError(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InternalServiceError" => {
+                        return GetDashboardError::InternalServiceFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return GetDashboardError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InternalServiceError" => {
-                    GetDashboardError::InternalServiceFault(String::from(parsed_error.message))
-                }
-                "InvalidParameterValue" => {
-                    GetDashboardError::InvalidParameterValue(String::from(parsed_error.message))
-                }
-                _ => GetDashboardError::Unknown(String::from(body)),
-            },
-            Err(_) => GetDashboardError::Unknown(body.to_string()),
+            }
         }
+        GetDashboardError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3981,7 +4038,7 @@ impl GetDashboardError {
 impl From<XmlParseError> for GetDashboardError {
     fn from(err: XmlParseError) -> GetDashboardError {
         let XmlParseError(message) = err;
-        GetDashboardError::Unknown(message.to_string())
+        GetDashboardError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetDashboardError {
@@ -4013,7 +4070,8 @@ impl Error for GetDashboardError {
             GetDashboardError::Validation(ref cause) => cause,
             GetDashboardError::Credentials(ref err) => err.description(),
             GetDashboardError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDashboardError::Unknown(ref cause) => cause,
+            GetDashboardError::ParseError(ref cause) => cause,
+            GetDashboardError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4028,24 +4086,30 @@ pub enum GetMetricDataError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetMetricDataError {
-    pub fn from_body(body: &str) -> GetMetricDataError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidNextToken" => {
-                    GetMetricDataError::InvalidNextToken(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> GetMetricDataError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return GetMetricDataError::InvalidNextToken(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => GetMetricDataError::Unknown(String::from(body)),
-            },
-            Err(_) => GetMetricDataError::Unknown(body.to_string()),
+            }
         }
+        GetMetricDataError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -4060,7 +4124,7 @@ impl GetMetricDataError {
 impl From<XmlParseError> for GetMetricDataError {
     fn from(err: XmlParseError) -> GetMetricDataError {
         let XmlParseError(message) = err;
-        GetMetricDataError::Unknown(message.to_string())
+        GetMetricDataError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetMetricDataError {
@@ -4090,7 +4154,8 @@ impl Error for GetMetricDataError {
             GetMetricDataError::Validation(ref cause) => cause,
             GetMetricDataError::Credentials(ref err) => err.description(),
             GetMetricDataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetMetricDataError::Unknown(ref cause) => cause,
+            GetMetricDataError::ParseError(ref cause) => cause,
+            GetMetricDataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4111,35 +4176,45 @@ pub enum GetMetricStatisticsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetMetricStatisticsError {
-    pub fn from_body(body: &str) -> GetMetricStatisticsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InternalServiceError" => GetMetricStatisticsError::InternalServiceFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidParameterCombination" => {
-                    GetMetricStatisticsError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
+    pub fn from_response(res: BufferedHttpResponse) -> GetMetricStatisticsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InternalServiceError" => {
+                        return GetMetricStatisticsError::InternalServiceFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterCombination" => {
+                        return GetMetricStatisticsError::InvalidParameterCombination(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return GetMetricStatisticsError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return GetMetricStatisticsError::MissingRequiredParameter(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => GetMetricStatisticsError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                "MissingParameter" => GetMetricStatisticsError::MissingRequiredParameter(
-                    String::from(parsed_error.message),
-                ),
-                _ => GetMetricStatisticsError::Unknown(String::from(body)),
-            },
-            Err(_) => GetMetricStatisticsError::Unknown(body.to_string()),
+            }
         }
+        GetMetricStatisticsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -4154,7 +4229,7 @@ impl GetMetricStatisticsError {
 impl From<XmlParseError> for GetMetricStatisticsError {
     fn from(err: XmlParseError) -> GetMetricStatisticsError {
         let XmlParseError(message) = err;
-        GetMetricStatisticsError::Unknown(message.to_string())
+        GetMetricStatisticsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for GetMetricStatisticsError {
@@ -4189,7 +4264,8 @@ impl Error for GetMetricStatisticsError {
             GetMetricStatisticsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetMetricStatisticsError::Unknown(ref cause) => cause,
+            GetMetricStatisticsError::ParseError(ref cause) => cause,
+            GetMetricStatisticsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4206,27 +4282,35 @@ pub enum ListDashboardsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListDashboardsError {
-    pub fn from_body(body: &str) -> ListDashboardsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InternalServiceError" => {
-                    ListDashboardsError::InternalServiceFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListDashboardsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InternalServiceError" => {
+                        return ListDashboardsError::InternalServiceFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return ListDashboardsError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => {
-                    ListDashboardsError::InvalidParameterValue(String::from(parsed_error.message))
-                }
-                _ => ListDashboardsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListDashboardsError::Unknown(body.to_string()),
+            }
         }
+        ListDashboardsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -4241,7 +4325,7 @@ impl ListDashboardsError {
 impl From<XmlParseError> for ListDashboardsError {
     fn from(err: XmlParseError) -> ListDashboardsError {
         let XmlParseError(message) = err;
-        ListDashboardsError::Unknown(message.to_string())
+        ListDashboardsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListDashboardsError {
@@ -4272,7 +4356,8 @@ impl Error for ListDashboardsError {
             ListDashboardsError::Validation(ref cause) => cause,
             ListDashboardsError::Credentials(ref err) => err.description(),
             ListDashboardsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDashboardsError::Unknown(ref cause) => cause,
+            ListDashboardsError::ParseError(ref cause) => cause,
+            ListDashboardsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4289,27 +4374,35 @@ pub enum ListMetricsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListMetricsError {
-    pub fn from_body(body: &str) -> ListMetricsError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InternalServiceError" => {
-                    ListMetricsError::InternalServiceFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> ListMetricsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InternalServiceError" => {
+                        return ListMetricsError::InternalServiceFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return ListMetricsError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterValue" => {
-                    ListMetricsError::InvalidParameterValue(String::from(parsed_error.message))
-                }
-                _ => ListMetricsError::Unknown(String::from(body)),
-            },
-            Err(_) => ListMetricsError::Unknown(body.to_string()),
+            }
         }
+        ListMetricsError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -4324,7 +4417,7 @@ impl ListMetricsError {
 impl From<XmlParseError> for ListMetricsError {
     fn from(err: XmlParseError) -> ListMetricsError {
         let XmlParseError(message) = err;
-        ListMetricsError::Unknown(message.to_string())
+        ListMetricsError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for ListMetricsError {
@@ -4355,7 +4448,8 @@ impl Error for ListMetricsError {
             ListMetricsError::Validation(ref cause) => cause,
             ListMetricsError::Credentials(ref err) => err.description(),
             ListMetricsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListMetricsError::Unknown(ref cause) => cause,
+            ListMetricsError::ParseError(ref cause) => cause,
+            ListMetricsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4372,27 +4466,35 @@ pub enum PutDashboardError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutDashboardError {
-    pub fn from_body(body: &str) -> PutDashboardError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterInput" => PutDashboardError::DashboardInvalidInputError(
-                    String::from(parsed_error.message),
-                ),
-                "InternalServiceError" => {
-                    PutDashboardError::InternalServiceFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> PutDashboardError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidParameterInput" => {
+                        return PutDashboardError::DashboardInvalidInputError(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InternalServiceError" => {
+                        return PutDashboardError::InternalServiceFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => PutDashboardError::Unknown(String::from(body)),
-            },
-            Err(_) => PutDashboardError::Unknown(body.to_string()),
+            }
         }
+        PutDashboardError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -4407,7 +4509,7 @@ impl PutDashboardError {
 impl From<XmlParseError> for PutDashboardError {
     fn from(err: XmlParseError) -> PutDashboardError {
         let XmlParseError(message) = err;
-        PutDashboardError::Unknown(message.to_string())
+        PutDashboardError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutDashboardError {
@@ -4438,7 +4540,8 @@ impl Error for PutDashboardError {
             PutDashboardError::Validation(ref cause) => cause,
             PutDashboardError::Credentials(ref err) => err.description(),
             PutDashboardError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutDashboardError::Unknown(ref cause) => cause,
+            PutDashboardError::ParseError(ref cause) => cause,
+            PutDashboardError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4453,24 +4556,30 @@ pub enum PutMetricAlarmError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutMetricAlarmError {
-    pub fn from_body(body: &str) -> PutMetricAlarmError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => {
-                    PutMetricAlarmError::LimitExceededFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> PutMetricAlarmError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return PutMetricAlarmError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                _ => PutMetricAlarmError::Unknown(String::from(body)),
-            },
-            Err(_) => PutMetricAlarmError::Unknown(body.to_string()),
+            }
         }
+        PutMetricAlarmError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -4485,7 +4594,7 @@ impl PutMetricAlarmError {
 impl From<XmlParseError> for PutMetricAlarmError {
     fn from(err: XmlParseError) -> PutMetricAlarmError {
         let XmlParseError(message) = err;
-        PutMetricAlarmError::Unknown(message.to_string())
+        PutMetricAlarmError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutMetricAlarmError {
@@ -4515,7 +4624,8 @@ impl Error for PutMetricAlarmError {
             PutMetricAlarmError::Validation(ref cause) => cause,
             PutMetricAlarmError::Credentials(ref err) => err.description(),
             PutMetricAlarmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutMetricAlarmError::Unknown(ref cause) => cause,
+            PutMetricAlarmError::ParseError(ref cause) => cause,
+            PutMetricAlarmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4536,33 +4646,45 @@ pub enum PutMetricDataError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutMetricDataError {
-    pub fn from_body(body: &str) -> PutMetricDataError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InternalServiceError" => {
-                    PutMetricDataError::InternalServiceFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> PutMetricDataError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InternalServiceError" => {
+                        return PutMetricDataError::InternalServiceFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterCombination" => {
+                        return PutMetricDataError::InvalidParameterCombination(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return PutMetricDataError::InvalidParameterValue(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return PutMetricDataError::MissingRequiredParameter(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "InvalidParameterCombination" => PutMetricDataError::InvalidParameterCombination(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidParameterValue" => {
-                    PutMetricDataError::InvalidParameterValue(String::from(parsed_error.message))
-                }
-                "MissingParameter" => {
-                    PutMetricDataError::MissingRequiredParameter(String::from(parsed_error.message))
-                }
-                _ => PutMetricDataError::Unknown(String::from(body)),
-            },
-            Err(_) => PutMetricDataError::Unknown(body.to_string()),
+            }
         }
+        PutMetricDataError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -4577,7 +4699,7 @@ impl PutMetricDataError {
 impl From<XmlParseError> for PutMetricDataError {
     fn from(err: XmlParseError) -> PutMetricDataError {
         let XmlParseError(message) = err;
-        PutMetricDataError::Unknown(message.to_string())
+        PutMetricDataError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for PutMetricDataError {
@@ -4610,7 +4732,8 @@ impl Error for PutMetricDataError {
             PutMetricDataError::Validation(ref cause) => cause,
             PutMetricDataError::Credentials(ref err) => err.description(),
             PutMetricDataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutMetricDataError::Unknown(ref cause) => cause,
+            PutMetricDataError::ParseError(ref cause) => cause,
+            PutMetricDataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4627,27 +4750,35 @@ pub enum SetAlarmStateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SetAlarmStateError {
-    pub fn from_body(body: &str) -> SetAlarmStateError {
-        let reader = EventReader::new(body.as_bytes());
-        let mut stack = XmlResponse::new(reader.into_iter().peekable());
-        find_start_element(&mut stack);
-        match Self::deserialize(&mut stack) {
-            Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidFormat" => {
-                    SetAlarmStateError::InvalidFormatFault(String::from(parsed_error.message))
+    pub fn from_response(res: BufferedHttpResponse) -> SetAlarmStateError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidFormat" => {
+                        return SetAlarmStateError::InvalidFormatFault(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceNotFound" => {
+                        return SetAlarmStateError::ResourceNotFound(String::from(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
                 }
-                "ResourceNotFound" => {
-                    SetAlarmStateError::ResourceNotFound(String::from(parsed_error.message))
-                }
-                _ => SetAlarmStateError::Unknown(String::from(body)),
-            },
-            Err(_) => SetAlarmStateError::Unknown(body.to_string()),
+            }
         }
+        SetAlarmStateError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -4662,7 +4793,7 @@ impl SetAlarmStateError {
 impl From<XmlParseError> for SetAlarmStateError {
     fn from(err: XmlParseError) -> SetAlarmStateError {
         let XmlParseError(message) = err;
-        SetAlarmStateError::Unknown(message.to_string())
+        SetAlarmStateError::ParseError(message.to_string())
     }
 }
 impl From<CredentialsError> for SetAlarmStateError {
@@ -4693,7 +4824,8 @@ impl Error for SetAlarmStateError {
             SetAlarmStateError::Validation(ref cause) => cause,
             SetAlarmStateError::Credentials(ref err) => err.description(),
             SetAlarmStateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SetAlarmStateError::Unknown(ref cause) => cause,
+            SetAlarmStateError::ParseError(ref cause) => cause,
+            SetAlarmStateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4835,11 +4967,12 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAlarmsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteAlarmsError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -4864,11 +4997,12 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteDashboardsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteDashboardsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -4916,11 +5050,11 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAlarmHistoryError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeAlarmHistoryError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -4968,11 +5102,12 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAlarmsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeAlarmsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -5021,9 +5156,7 @@ impl CloudWatch for CloudWatchClient {
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeAlarmsForMetricError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeAlarmsForMetricError::from_response(response))
                 }));
             }
 
@@ -5072,11 +5205,11 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DisableAlarmActionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DisableAlarmActionsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -5101,11 +5234,12 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(EnableAlarmActionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(EnableAlarmActionsError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -5130,11 +5264,12 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetDashboardError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetDashboardError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -5182,11 +5317,12 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetMetricDataError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetMetricDataError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -5234,11 +5370,11 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetMetricStatisticsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetMetricStatisticsError::from_response(response))
+                    }),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -5286,11 +5422,12 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListDashboardsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListDashboardsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -5338,11 +5475,12 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListMetricsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListMetricsError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -5390,11 +5528,12 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutDashboardError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutDashboardError::from_response(response))),
+                );
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -5442,11 +5581,12 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutMetricAlarmError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutMetricAlarmError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -5468,11 +5608,12 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutMetricDataError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutMetricDataError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -5494,11 +5635,12 @@ impl CloudWatch for CloudWatchClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SetAlarmStateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }));
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SetAlarmStateError::from_response(response))),
+                );
             }
 
             Box::new(future::ok(::std::mem::drop(response)))

@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>An object representing a container instance or task attachment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2184,43 +2184,43 @@ pub enum CreateClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterError {
-    pub fn from_body(body: &str) -> CreateClusterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => CreateClusterError::Client(String::from(error_message)),
-                    "InvalidParameterException" => {
-                        CreateClusterError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => CreateClusterError::Server(String::from(error_message)),
-                    "ValidationException" => {
-                        CreateClusterError::Validation(error_message.to_string())
-                    }
-                    _ => CreateClusterError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => return CreateClusterError::Client(String::from(error_message)),
+                "InvalidParameterException" => {
+                    return CreateClusterError::InvalidParameter(String::from(error_message))
                 }
+                "ServerException" => return CreateClusterError::Server(String::from(error_message)),
+                "ValidationException" => {
+                    return CreateClusterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateClusterError::Unknown(String::from(body)),
         }
+        return CreateClusterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateClusterError {
     fn from(err: serde_json::error::Error) -> CreateClusterError {
-        CreateClusterError::Unknown(err.description().to_string())
+        CreateClusterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateClusterError {
@@ -2252,7 +2252,8 @@ impl Error for CreateClusterError {
             CreateClusterError::Validation(ref cause) => cause,
             CreateClusterError::Credentials(ref err) => err.description(),
             CreateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateClusterError::Unknown(ref cause) => cause,
+            CreateClusterError::ParseError(ref cause) => cause,
+            CreateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2281,60 +2282,60 @@ pub enum CreateServiceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateServiceError {
-    pub fn from_body(body: &str) -> CreateServiceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateServiceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreateServiceError::AccessDenied(String::from(error_message))
-                    }
-                    "ClientException" => CreateServiceError::Client(String::from(error_message)),
-                    "ClusterNotFoundException" => {
-                        CreateServiceError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateServiceError::InvalidParameter(String::from(error_message))
-                    }
-                    "PlatformTaskDefinitionIncompatibilityException" => {
-                        CreateServiceError::PlatformTaskDefinitionIncompatibility(String::from(
-                            error_message,
-                        ))
-                    }
-                    "PlatformUnknownException" => {
-                        CreateServiceError::PlatformUnknown(String::from(error_message))
-                    }
-                    "ServerException" => CreateServiceError::Server(String::from(error_message)),
-                    "UnsupportedFeatureException" => {
-                        CreateServiceError::UnsupportedFeature(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateServiceError::Validation(error_message.to_string())
-                    }
-                    _ => CreateServiceError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateServiceError::AccessDenied(String::from(error_message))
                 }
+                "ClientException" => return CreateServiceError::Client(String::from(error_message)),
+                "ClusterNotFoundException" => {
+                    return CreateServiceError::ClusterNotFound(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return CreateServiceError::InvalidParameter(String::from(error_message))
+                }
+                "PlatformTaskDefinitionIncompatibilityException" => {
+                    return CreateServiceError::PlatformTaskDefinitionIncompatibility(String::from(
+                        error_message,
+                    ))
+                }
+                "PlatformUnknownException" => {
+                    return CreateServiceError::PlatformUnknown(String::from(error_message))
+                }
+                "ServerException" => return CreateServiceError::Server(String::from(error_message)),
+                "UnsupportedFeatureException" => {
+                    return CreateServiceError::UnsupportedFeature(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateServiceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateServiceError::Unknown(String::from(body)),
         }
+        return CreateServiceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateServiceError {
     fn from(err: serde_json::error::Error) -> CreateServiceError {
-        CreateServiceError::Unknown(err.description().to_string())
+        CreateServiceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateServiceError {
@@ -2371,7 +2372,8 @@ impl Error for CreateServiceError {
             CreateServiceError::Validation(ref cause) => cause,
             CreateServiceError::Credentials(ref err) => err.description(),
             CreateServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateServiceError::Unknown(ref cause) => cause,
+            CreateServiceError::ParseError(ref cause) => cause,
+            CreateServiceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2390,47 +2392,47 @@ pub enum DeleteAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAttributesError {
-    pub fn from_body(body: &str) -> DeleteAttributesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterNotFoundException" => {
-                        DeleteAttributesError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteAttributesError::InvalidParameter(String::from(error_message))
-                    }
-                    "TargetNotFoundException" => {
-                        DeleteAttributesError::TargetNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteAttributesError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteAttributesError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterNotFoundException" => {
+                    return DeleteAttributesError::ClusterNotFound(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DeleteAttributesError::InvalidParameter(String::from(error_message))
+                }
+                "TargetNotFoundException" => {
+                    return DeleteAttributesError::TargetNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteAttributesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteAttributesError::Unknown(String::from(body)),
         }
+        return DeleteAttributesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteAttributesError {
     fn from(err: serde_json::error::Error) -> DeleteAttributesError {
-        DeleteAttributesError::Unknown(err.description().to_string())
+        DeleteAttributesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteAttributesError {
@@ -2462,7 +2464,8 @@ impl Error for DeleteAttributesError {
             DeleteAttributesError::Validation(ref cause) => cause,
             DeleteAttributesError::Credentials(ref err) => err.description(),
             DeleteAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteAttributesError::Unknown(ref cause) => cause,
+            DeleteAttributesError::ParseError(ref cause) => cause,
+            DeleteAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2489,57 +2492,57 @@ pub enum DeleteClusterError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterError {
-    pub fn from_body(body: &str) -> DeleteClusterError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => DeleteClusterError::Client(String::from(error_message)),
-                    "ClusterContainsContainerInstancesException" => {
-                        DeleteClusterError::ClusterContainsContainerInstances(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ClusterContainsServicesException" => {
-                        DeleteClusterError::ClusterContainsServices(String::from(error_message))
-                    }
-                    "ClusterContainsTasksException" => {
-                        DeleteClusterError::ClusterContainsTasks(String::from(error_message))
-                    }
-                    "ClusterNotFoundException" => {
-                        DeleteClusterError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteClusterError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => DeleteClusterError::Server(String::from(error_message)),
-                    "ValidationException" => {
-                        DeleteClusterError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteClusterError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => return DeleteClusterError::Client(String::from(error_message)),
+                "ClusterContainsContainerInstancesException" => {
+                    return DeleteClusterError::ClusterContainsContainerInstances(String::from(
+                        error_message,
+                    ))
                 }
+                "ClusterContainsServicesException" => {
+                    return DeleteClusterError::ClusterContainsServices(String::from(error_message))
+                }
+                "ClusterContainsTasksException" => {
+                    return DeleteClusterError::ClusterContainsTasks(String::from(error_message))
+                }
+                "ClusterNotFoundException" => {
+                    return DeleteClusterError::ClusterNotFound(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return DeleteClusterError::InvalidParameter(String::from(error_message))
+                }
+                "ServerException" => return DeleteClusterError::Server(String::from(error_message)),
+                "ValidationException" => {
+                    return DeleteClusterError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteClusterError::Unknown(String::from(body)),
         }
+        return DeleteClusterError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteClusterError {
     fn from(err: serde_json::error::Error) -> DeleteClusterError {
-        DeleteClusterError::Unknown(err.description().to_string())
+        DeleteClusterError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteClusterError {
@@ -2575,7 +2578,8 @@ impl Error for DeleteClusterError {
             DeleteClusterError::Validation(ref cause) => cause,
             DeleteClusterError::Credentials(ref err) => err.description(),
             DeleteClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteClusterError::Unknown(ref cause) => cause,
+            DeleteClusterError::ParseError(ref cause) => cause,
+            DeleteClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2598,49 +2602,49 @@ pub enum DeleteServiceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteServiceError {
-    pub fn from_body(body: &str) -> DeleteServiceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteServiceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => DeleteServiceError::Client(String::from(error_message)),
-                    "ClusterNotFoundException" => {
-                        DeleteServiceError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteServiceError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => DeleteServiceError::Server(String::from(error_message)),
-                    "ServiceNotFoundException" => {
-                        DeleteServiceError::ServiceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteServiceError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteServiceError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => return DeleteServiceError::Client(String::from(error_message)),
+                "ClusterNotFoundException" => {
+                    return DeleteServiceError::ClusterNotFound(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DeleteServiceError::InvalidParameter(String::from(error_message))
+                }
+                "ServerException" => return DeleteServiceError::Server(String::from(error_message)),
+                "ServiceNotFoundException" => {
+                    return DeleteServiceError::ServiceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteServiceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteServiceError::Unknown(String::from(body)),
         }
+        return DeleteServiceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteServiceError {
     fn from(err: serde_json::error::Error) -> DeleteServiceError {
-        DeleteServiceError::Unknown(err.description().to_string())
+        DeleteServiceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteServiceError {
@@ -2674,7 +2678,8 @@ impl Error for DeleteServiceError {
             DeleteServiceError::Validation(ref cause) => cause,
             DeleteServiceError::Credentials(ref err) => err.description(),
             DeleteServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteServiceError::Unknown(ref cause) => cause,
+            DeleteServiceError::ParseError(ref cause) => cause,
+            DeleteServiceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2695,54 +2700,54 @@ pub enum DeregisterContainerInstanceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterContainerInstanceError {
-    pub fn from_body(body: &str) -> DeregisterContainerInstanceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeregisterContainerInstanceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => {
-                        DeregisterContainerInstanceError::Client(String::from(error_message))
-                    }
-                    "ClusterNotFoundException" => {
-                        DeregisterContainerInstanceError::ClusterNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        DeregisterContainerInstanceError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServerException" => {
-                        DeregisterContainerInstanceError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeregisterContainerInstanceError::Validation(error_message.to_string())
-                    }
-                    _ => DeregisterContainerInstanceError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return DeregisterContainerInstanceError::Client(String::from(error_message))
                 }
+                "ClusterNotFoundException" => {
+                    return DeregisterContainerInstanceError::ClusterNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return DeregisterContainerInstanceError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerException" => {
+                    return DeregisterContainerInstanceError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeregisterContainerInstanceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeregisterContainerInstanceError::Unknown(String::from(body)),
         }
+        return DeregisterContainerInstanceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeregisterContainerInstanceError {
     fn from(err: serde_json::error::Error) -> DeregisterContainerInstanceError {
-        DeregisterContainerInstanceError::Unknown(err.description().to_string())
+        DeregisterContainerInstanceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeregisterContainerInstanceError {
@@ -2777,7 +2782,8 @@ impl Error for DeregisterContainerInstanceError {
             DeregisterContainerInstanceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeregisterContainerInstanceError::Unknown(ref cause) => cause,
+            DeregisterContainerInstanceError::ParseError(ref cause) => cause,
+            DeregisterContainerInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2796,47 +2802,49 @@ pub enum DeregisterTaskDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterTaskDefinitionError {
-    pub fn from_body(body: &str) -> DeregisterTaskDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeregisterTaskDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => {
-                        DeregisterTaskDefinitionError::Client(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeregisterTaskDefinitionError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => {
-                        DeregisterTaskDefinitionError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeregisterTaskDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => DeregisterTaskDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return DeregisterTaskDefinitionError::Client(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DeregisterTaskDefinitionError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerException" => {
+                    return DeregisterTaskDefinitionError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeregisterTaskDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeregisterTaskDefinitionError::Unknown(String::from(body)),
         }
+        return DeregisterTaskDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeregisterTaskDefinitionError {
     fn from(err: serde_json::error::Error) -> DeregisterTaskDefinitionError {
-        DeregisterTaskDefinitionError::Unknown(err.description().to_string())
+        DeregisterTaskDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeregisterTaskDefinitionError {
@@ -2870,7 +2878,8 @@ impl Error for DeregisterTaskDefinitionError {
             DeregisterTaskDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeregisterTaskDefinitionError::Unknown(ref cause) => cause,
+            DeregisterTaskDefinitionError::ParseError(ref cause) => cause,
+            DeregisterTaskDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2889,43 +2898,47 @@ pub enum DescribeClustersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClustersError {
-    pub fn from_body(body: &str) -> DescribeClustersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClustersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => DescribeClustersError::Client(String::from(error_message)),
-                    "InvalidParameterException" => {
-                        DescribeClustersError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => DescribeClustersError::Server(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeClustersError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeClustersError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return DescribeClustersError::Client(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DescribeClustersError::InvalidParameter(String::from(error_message))
+                }
+                "ServerException" => {
+                    return DescribeClustersError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeClustersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeClustersError::Unknown(String::from(body)),
         }
+        return DescribeClustersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeClustersError {
     fn from(err: serde_json::error::Error) -> DescribeClustersError {
-        DescribeClustersError::Unknown(err.description().to_string())
+        DescribeClustersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeClustersError {
@@ -2957,7 +2970,8 @@ impl Error for DescribeClustersError {
             DescribeClustersError::Validation(ref cause) => cause,
             DescribeClustersError::Credentials(ref err) => err.description(),
             DescribeClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeClustersError::Unknown(ref cause) => cause,
+            DescribeClustersError::ParseError(ref cause) => cause,
+            DescribeClustersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2978,52 +2992,54 @@ pub enum DescribeContainerInstancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeContainerInstancesError {
-    pub fn from_body(body: &str) -> DescribeContainerInstancesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeContainerInstancesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => {
-                        DescribeContainerInstancesError::Client(String::from(error_message))
-                    }
-                    "ClusterNotFoundException" => DescribeContainerInstancesError::ClusterNotFound(
-                        String::from(error_message),
-                    ),
-                    "InvalidParameterException" => {
-                        DescribeContainerInstancesError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServerException" => {
-                        DescribeContainerInstancesError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeContainerInstancesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeContainerInstancesError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return DescribeContainerInstancesError::Client(String::from(error_message))
                 }
+                "ClusterNotFoundException" => {
+                    return DescribeContainerInstancesError::ClusterNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return DescribeContainerInstancesError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerException" => {
+                    return DescribeContainerInstancesError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeContainerInstancesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeContainerInstancesError::Unknown(String::from(body)),
         }
+        return DescribeContainerInstancesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeContainerInstancesError {
     fn from(err: serde_json::error::Error) -> DescribeContainerInstancesError {
-        DescribeContainerInstancesError::Unknown(err.description().to_string())
+        DescribeContainerInstancesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeContainerInstancesError {
@@ -3058,7 +3074,8 @@ impl Error for DescribeContainerInstancesError {
             DescribeContainerInstancesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeContainerInstancesError::Unknown(ref cause) => cause,
+            DescribeContainerInstancesError::ParseError(ref cause) => cause,
+            DescribeContainerInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3079,46 +3096,50 @@ pub enum DescribeServicesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeServicesError {
-    pub fn from_body(body: &str) -> DescribeServicesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeServicesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => DescribeServicesError::Client(String::from(error_message)),
-                    "ClusterNotFoundException" => {
-                        DescribeServicesError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeServicesError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => DescribeServicesError::Server(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeServicesError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeServicesError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return DescribeServicesError::Client(String::from(error_message))
                 }
+                "ClusterNotFoundException" => {
+                    return DescribeServicesError::ClusterNotFound(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return DescribeServicesError::InvalidParameter(String::from(error_message))
+                }
+                "ServerException" => {
+                    return DescribeServicesError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeServicesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeServicesError::Unknown(String::from(body)),
         }
+        return DescribeServicesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeServicesError {
     fn from(err: serde_json::error::Error) -> DescribeServicesError {
-        DescribeServicesError::Unknown(err.description().to_string())
+        DescribeServicesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeServicesError {
@@ -3151,7 +3172,8 @@ impl Error for DescribeServicesError {
             DescribeServicesError::Validation(ref cause) => cause,
             DescribeServicesError::Credentials(ref err) => err.description(),
             DescribeServicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeServicesError::Unknown(ref cause) => cause,
+            DescribeServicesError::ParseError(ref cause) => cause,
+            DescribeServicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3170,47 +3192,49 @@ pub enum DescribeTaskDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTaskDefinitionError {
-    pub fn from_body(body: &str) -> DescribeTaskDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTaskDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => {
-                        DescribeTaskDefinitionError::Client(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeTaskDefinitionError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => {
-                        DescribeTaskDefinitionError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeTaskDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTaskDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return DescribeTaskDefinitionError::Client(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DescribeTaskDefinitionError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerException" => {
+                    return DescribeTaskDefinitionError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeTaskDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTaskDefinitionError::Unknown(String::from(body)),
         }
+        return DescribeTaskDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTaskDefinitionError {
     fn from(err: serde_json::error::Error) -> DescribeTaskDefinitionError {
-        DescribeTaskDefinitionError::Unknown(err.description().to_string())
+        DescribeTaskDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTaskDefinitionError {
@@ -3244,7 +3268,8 @@ impl Error for DescribeTaskDefinitionError {
             DescribeTaskDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeTaskDefinitionError::Unknown(ref cause) => cause,
+            DescribeTaskDefinitionError::ParseError(ref cause) => cause,
+            DescribeTaskDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3265,46 +3290,46 @@ pub enum DescribeTasksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTasksError {
-    pub fn from_body(body: &str) -> DescribeTasksError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeTasksError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => DescribeTasksError::Client(String::from(error_message)),
-                    "ClusterNotFoundException" => {
-                        DescribeTasksError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DescribeTasksError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => DescribeTasksError::Server(String::from(error_message)),
-                    "ValidationException" => {
-                        DescribeTasksError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeTasksError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => return DescribeTasksError::Client(String::from(error_message)),
+                "ClusterNotFoundException" => {
+                    return DescribeTasksError::ClusterNotFound(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return DescribeTasksError::InvalidParameter(String::from(error_message))
+                }
+                "ServerException" => return DescribeTasksError::Server(String::from(error_message)),
+                "ValidationException" => {
+                    return DescribeTasksError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeTasksError::Unknown(String::from(body)),
         }
+        return DescribeTasksError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeTasksError {
     fn from(err: serde_json::error::Error) -> DescribeTasksError {
-        DescribeTasksError::Unknown(err.description().to_string())
+        DescribeTasksError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeTasksError {
@@ -3337,7 +3362,8 @@ impl Error for DescribeTasksError {
             DescribeTasksError::Validation(ref cause) => cause,
             DescribeTasksError::Credentials(ref err) => err.description(),
             DescribeTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTasksError::Unknown(ref cause) => cause,
+            DescribeTasksError::ParseError(ref cause) => cause,
+            DescribeTasksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3354,44 +3380,44 @@ pub enum DiscoverPollEndpointError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DiscoverPollEndpointError {
-    pub fn from_body(body: &str) -> DiscoverPollEndpointError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DiscoverPollEndpointError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => {
-                        DiscoverPollEndpointError::Client(String::from(error_message))
-                    }
-                    "ServerException" => {
-                        DiscoverPollEndpointError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DiscoverPollEndpointError::Validation(error_message.to_string())
-                    }
-                    _ => DiscoverPollEndpointError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return DiscoverPollEndpointError::Client(String::from(error_message))
                 }
+                "ServerException" => {
+                    return DiscoverPollEndpointError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DiscoverPollEndpointError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DiscoverPollEndpointError::Unknown(String::from(body)),
         }
+        return DiscoverPollEndpointError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DiscoverPollEndpointError {
     fn from(err: serde_json::error::Error) -> DiscoverPollEndpointError {
-        DiscoverPollEndpointError::Unknown(err.description().to_string())
+        DiscoverPollEndpointError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DiscoverPollEndpointError {
@@ -3424,7 +3450,8 @@ impl Error for DiscoverPollEndpointError {
             DiscoverPollEndpointError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DiscoverPollEndpointError::Unknown(ref cause) => cause,
+            DiscoverPollEndpointError::ParseError(ref cause) => cause,
+            DiscoverPollEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3441,44 +3468,44 @@ pub enum ListAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListAttributesError {
-    pub fn from_body(body: &str) -> ListAttributesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClusterNotFoundException" => {
-                        ListAttributesError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListAttributesError::InvalidParameter(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListAttributesError::Validation(error_message.to_string())
-                    }
-                    _ => ListAttributesError::Unknown(String::from(body)),
+            match *error_type {
+                "ClusterNotFoundException" => {
+                    return ListAttributesError::ClusterNotFound(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return ListAttributesError::InvalidParameter(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListAttributesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListAttributesError::Unknown(String::from(body)),
         }
+        return ListAttributesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListAttributesError {
     fn from(err: serde_json::error::Error) -> ListAttributesError {
-        ListAttributesError::Unknown(err.description().to_string())
+        ListAttributesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListAttributesError {
@@ -3509,7 +3536,8 @@ impl Error for ListAttributesError {
             ListAttributesError::Validation(ref cause) => cause,
             ListAttributesError::Credentials(ref err) => err.description(),
             ListAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListAttributesError::Unknown(ref cause) => cause,
+            ListAttributesError::ParseError(ref cause) => cause,
+            ListAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3528,43 +3556,43 @@ pub enum ListClustersError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListClustersError {
-    pub fn from_body(body: &str) -> ListClustersError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListClustersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => ListClustersError::Client(String::from(error_message)),
-                    "InvalidParameterException" => {
-                        ListClustersError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => ListClustersError::Server(String::from(error_message)),
-                    "ValidationException" => {
-                        ListClustersError::Validation(error_message.to_string())
-                    }
-                    _ => ListClustersError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => return ListClustersError::Client(String::from(error_message)),
+                "InvalidParameterException" => {
+                    return ListClustersError::InvalidParameter(String::from(error_message))
                 }
+                "ServerException" => return ListClustersError::Server(String::from(error_message)),
+                "ValidationException" => {
+                    return ListClustersError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListClustersError::Unknown(String::from(body)),
         }
+        return ListClustersError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListClustersError {
     fn from(err: serde_json::error::Error) -> ListClustersError {
-        ListClustersError::Unknown(err.description().to_string())
+        ListClustersError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListClustersError {
@@ -3596,7 +3624,8 @@ impl Error for ListClustersError {
             ListClustersError::Validation(ref cause) => cause,
             ListClustersError::Credentials(ref err) => err.description(),
             ListClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListClustersError::Unknown(ref cause) => cause,
+            ListClustersError::ParseError(ref cause) => cause,
+            ListClustersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3617,50 +3646,52 @@ pub enum ListContainerInstancesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListContainerInstancesError {
-    pub fn from_body(body: &str) -> ListContainerInstancesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListContainerInstancesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => {
-                        ListContainerInstancesError::Client(String::from(error_message))
-                    }
-                    "ClusterNotFoundException" => {
-                        ListContainerInstancesError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListContainerInstancesError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => {
-                        ListContainerInstancesError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListContainerInstancesError::Validation(error_message.to_string())
-                    }
-                    _ => ListContainerInstancesError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return ListContainerInstancesError::Client(String::from(error_message))
                 }
+                "ClusterNotFoundException" => {
+                    return ListContainerInstancesError::ClusterNotFound(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return ListContainerInstancesError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerException" => {
+                    return ListContainerInstancesError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListContainerInstancesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListContainerInstancesError::Unknown(String::from(body)),
         }
+        return ListContainerInstancesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListContainerInstancesError {
     fn from(err: serde_json::error::Error) -> ListContainerInstancesError {
-        ListContainerInstancesError::Unknown(err.description().to_string())
+        ListContainerInstancesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListContainerInstancesError {
@@ -3695,7 +3726,8 @@ impl Error for ListContainerInstancesError {
             ListContainerInstancesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListContainerInstancesError::Unknown(ref cause) => cause,
+            ListContainerInstancesError::ParseError(ref cause) => cause,
+            ListContainerInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3716,46 +3748,46 @@ pub enum ListServicesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListServicesError {
-    pub fn from_body(body: &str) -> ListServicesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListServicesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => ListServicesError::Client(String::from(error_message)),
-                    "ClusterNotFoundException" => {
-                        ListServicesError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListServicesError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => ListServicesError::Server(String::from(error_message)),
-                    "ValidationException" => {
-                        ListServicesError::Validation(error_message.to_string())
-                    }
-                    _ => ListServicesError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => return ListServicesError::Client(String::from(error_message)),
+                "ClusterNotFoundException" => {
+                    return ListServicesError::ClusterNotFound(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return ListServicesError::InvalidParameter(String::from(error_message))
+                }
+                "ServerException" => return ListServicesError::Server(String::from(error_message)),
+                "ValidationException" => {
+                    return ListServicesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListServicesError::Unknown(String::from(body)),
         }
+        return ListServicesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListServicesError {
     fn from(err: serde_json::error::Error) -> ListServicesError {
-        ListServicesError::Unknown(err.description().to_string())
+        ListServicesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListServicesError {
@@ -3788,7 +3820,8 @@ impl Error for ListServicesError {
             ListServicesError::Validation(ref cause) => cause,
             ListServicesError::Credentials(ref err) => err.description(),
             ListServicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListServicesError::Unknown(ref cause) => cause,
+            ListServicesError::ParseError(ref cause) => cause,
+            ListServicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3807,49 +3840,49 @@ pub enum ListTaskDefinitionFamiliesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTaskDefinitionFamiliesError {
-    pub fn from_body(body: &str) -> ListTaskDefinitionFamiliesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTaskDefinitionFamiliesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => {
-                        ListTaskDefinitionFamiliesError::Client(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListTaskDefinitionFamiliesError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServerException" => {
-                        ListTaskDefinitionFamiliesError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTaskDefinitionFamiliesError::Validation(error_message.to_string())
-                    }
-                    _ => ListTaskDefinitionFamiliesError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return ListTaskDefinitionFamiliesError::Client(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return ListTaskDefinitionFamiliesError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerException" => {
+                    return ListTaskDefinitionFamiliesError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTaskDefinitionFamiliesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTaskDefinitionFamiliesError::Unknown(String::from(body)),
         }
+        return ListTaskDefinitionFamiliesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTaskDefinitionFamiliesError {
     fn from(err: serde_json::error::Error) -> ListTaskDefinitionFamiliesError {
-        ListTaskDefinitionFamiliesError::Unknown(err.description().to_string())
+        ListTaskDefinitionFamiliesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTaskDefinitionFamiliesError {
@@ -3883,7 +3916,8 @@ impl Error for ListTaskDefinitionFamiliesError {
             ListTaskDefinitionFamiliesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTaskDefinitionFamiliesError::Unknown(ref cause) => cause,
+            ListTaskDefinitionFamiliesError::ParseError(ref cause) => cause,
+            ListTaskDefinitionFamiliesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3902,47 +3936,47 @@ pub enum ListTaskDefinitionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTaskDefinitionsError {
-    pub fn from_body(body: &str) -> ListTaskDefinitionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTaskDefinitionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => {
-                        ListTaskDefinitionsError::Client(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListTaskDefinitionsError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => {
-                        ListTaskDefinitionsError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListTaskDefinitionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListTaskDefinitionsError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return ListTaskDefinitionsError::Client(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return ListTaskDefinitionsError::InvalidParameter(String::from(error_message))
+                }
+                "ServerException" => {
+                    return ListTaskDefinitionsError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTaskDefinitionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTaskDefinitionsError::Unknown(String::from(body)),
         }
+        return ListTaskDefinitionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTaskDefinitionsError {
     fn from(err: serde_json::error::Error) -> ListTaskDefinitionsError {
-        ListTaskDefinitionsError::Unknown(err.description().to_string())
+        ListTaskDefinitionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTaskDefinitionsError {
@@ -3976,7 +4010,8 @@ impl Error for ListTaskDefinitionsError {
             ListTaskDefinitionsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListTaskDefinitionsError::Unknown(ref cause) => cause,
+            ListTaskDefinitionsError::ParseError(ref cause) => cause,
+            ListTaskDefinitionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3999,47 +4034,49 @@ pub enum ListTasksError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListTasksError {
-    pub fn from_body(body: &str) -> ListTasksError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListTasksError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => ListTasksError::Client(String::from(error_message)),
-                    "ClusterNotFoundException" => {
-                        ListTasksError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListTasksError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => ListTasksError::Server(String::from(error_message)),
-                    "ServiceNotFoundException" => {
-                        ListTasksError::ServiceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => ListTasksError::Validation(error_message.to_string()),
-                    _ => ListTasksError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => return ListTasksError::Client(String::from(error_message)),
+                "ClusterNotFoundException" => {
+                    return ListTasksError::ClusterNotFound(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return ListTasksError::InvalidParameter(String::from(error_message))
+                }
+                "ServerException" => return ListTasksError::Server(String::from(error_message)),
+                "ServiceNotFoundException" => {
+                    return ListTasksError::ServiceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListTasksError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListTasksError::Unknown(String::from(body)),
         }
+        return ListTasksError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListTasksError {
     fn from(err: serde_json::error::Error) -> ListTasksError {
-        ListTasksError::Unknown(err.description().to_string())
+        ListTasksError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListTasksError {
@@ -4073,7 +4110,8 @@ impl Error for ListTasksError {
             ListTasksError::Validation(ref cause) => cause,
             ListTasksError::Credentials(ref err) => err.description(),
             ListTasksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTasksError::Unknown(ref cause) => cause,
+            ListTasksError::ParseError(ref cause) => cause,
+            ListTasksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4094,50 +4132,50 @@ pub enum PutAttributesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl PutAttributesError {
-    pub fn from_body(body: &str) -> PutAttributesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> PutAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AttributeLimitExceededException" => {
-                        PutAttributesError::AttributeLimitExceeded(String::from(error_message))
-                    }
-                    "ClusterNotFoundException" => {
-                        PutAttributesError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        PutAttributesError::InvalidParameter(String::from(error_message))
-                    }
-                    "TargetNotFoundException" => {
-                        PutAttributesError::TargetNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        PutAttributesError::Validation(error_message.to_string())
-                    }
-                    _ => PutAttributesError::Unknown(String::from(body)),
+            match *error_type {
+                "AttributeLimitExceededException" => {
+                    return PutAttributesError::AttributeLimitExceeded(String::from(error_message))
                 }
+                "ClusterNotFoundException" => {
+                    return PutAttributesError::ClusterNotFound(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return PutAttributesError::InvalidParameter(String::from(error_message))
+                }
+                "TargetNotFoundException" => {
+                    return PutAttributesError::TargetNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return PutAttributesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => PutAttributesError::Unknown(String::from(body)),
         }
+        return PutAttributesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for PutAttributesError {
     fn from(err: serde_json::error::Error) -> PutAttributesError {
-        PutAttributesError::Unknown(err.description().to_string())
+        PutAttributesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for PutAttributesError {
@@ -4170,7 +4208,8 @@ impl Error for PutAttributesError {
             PutAttributesError::Validation(ref cause) => cause,
             PutAttributesError::Credentials(ref err) => err.description(),
             PutAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutAttributesError::Unknown(ref cause) => cause,
+            PutAttributesError::ParseError(ref cause) => cause,
+            PutAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4189,49 +4228,49 @@ pub enum RegisterContainerInstanceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterContainerInstanceError {
-    pub fn from_body(body: &str) -> RegisterContainerInstanceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterContainerInstanceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => {
-                        RegisterContainerInstanceError::Client(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        RegisterContainerInstanceError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServerException" => {
-                        RegisterContainerInstanceError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RegisterContainerInstanceError::Validation(error_message.to_string())
-                    }
-                    _ => RegisterContainerInstanceError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return RegisterContainerInstanceError::Client(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return RegisterContainerInstanceError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerException" => {
+                    return RegisterContainerInstanceError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RegisterContainerInstanceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RegisterContainerInstanceError::Unknown(String::from(body)),
         }
+        return RegisterContainerInstanceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RegisterContainerInstanceError {
     fn from(err: serde_json::error::Error) -> RegisterContainerInstanceError {
-        RegisterContainerInstanceError::Unknown(err.description().to_string())
+        RegisterContainerInstanceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RegisterContainerInstanceError {
@@ -4265,7 +4304,8 @@ impl Error for RegisterContainerInstanceError {
             RegisterContainerInstanceError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RegisterContainerInstanceError::Unknown(ref cause) => cause,
+            RegisterContainerInstanceError::ParseError(ref cause) => cause,
+            RegisterContainerInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4284,47 +4324,49 @@ pub enum RegisterTaskDefinitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterTaskDefinitionError {
-    pub fn from_body(body: &str) -> RegisterTaskDefinitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterTaskDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => {
-                        RegisterTaskDefinitionError::Client(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        RegisterTaskDefinitionError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => {
-                        RegisterTaskDefinitionError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RegisterTaskDefinitionError::Validation(error_message.to_string())
-                    }
-                    _ => RegisterTaskDefinitionError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return RegisterTaskDefinitionError::Client(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return RegisterTaskDefinitionError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerException" => {
+                    return RegisterTaskDefinitionError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RegisterTaskDefinitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RegisterTaskDefinitionError::Unknown(String::from(body)),
         }
+        return RegisterTaskDefinitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RegisterTaskDefinitionError {
     fn from(err: serde_json::error::Error) -> RegisterTaskDefinitionError {
-        RegisterTaskDefinitionError::Unknown(err.description().to_string())
+        RegisterTaskDefinitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RegisterTaskDefinitionError {
@@ -4358,7 +4400,8 @@ impl Error for RegisterTaskDefinitionError {
             RegisterTaskDefinitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RegisterTaskDefinitionError::Unknown(ref cause) => cause,
+            RegisterTaskDefinitionError::ParseError(ref cause) => cause,
+            RegisterTaskDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4389,59 +4432,59 @@ pub enum RunTaskError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RunTaskError {
-    pub fn from_body(body: &str) -> RunTaskError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RunTaskError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        RunTaskError::AccessDenied(String::from(error_message))
-                    }
-                    "BlockedException" => RunTaskError::Blocked(String::from(error_message)),
-                    "ClientException" => RunTaskError::Client(String::from(error_message)),
-                    "ClusterNotFoundException" => {
-                        RunTaskError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        RunTaskError::InvalidParameter(String::from(error_message))
-                    }
-                    "PlatformTaskDefinitionIncompatibilityException" => {
-                        RunTaskError::PlatformTaskDefinitionIncompatibility(String::from(
-                            error_message,
-                        ))
-                    }
-                    "PlatformUnknownException" => {
-                        RunTaskError::PlatformUnknown(String::from(error_message))
-                    }
-                    "ServerException" => RunTaskError::Server(String::from(error_message)),
-                    "UnsupportedFeatureException" => {
-                        RunTaskError::UnsupportedFeature(String::from(error_message))
-                    }
-                    "ValidationException" => RunTaskError::Validation(error_message.to_string()),
-                    _ => RunTaskError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return RunTaskError::AccessDenied(String::from(error_message))
                 }
+                "BlockedException" => return RunTaskError::Blocked(String::from(error_message)),
+                "ClientException" => return RunTaskError::Client(String::from(error_message)),
+                "ClusterNotFoundException" => {
+                    return RunTaskError::ClusterNotFound(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return RunTaskError::InvalidParameter(String::from(error_message))
+                }
+                "PlatformTaskDefinitionIncompatibilityException" => {
+                    return RunTaskError::PlatformTaskDefinitionIncompatibility(String::from(
+                        error_message,
+                    ))
+                }
+                "PlatformUnknownException" => {
+                    return RunTaskError::PlatformUnknown(String::from(error_message))
+                }
+                "ServerException" => return RunTaskError::Server(String::from(error_message)),
+                "UnsupportedFeatureException" => {
+                    return RunTaskError::UnsupportedFeature(String::from(error_message))
+                }
+                "ValidationException" => return RunTaskError::Validation(error_message.to_string()),
+                _ => {}
             }
-            Err(_) => RunTaskError::Unknown(String::from(body)),
         }
+        return RunTaskError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RunTaskError {
     fn from(err: serde_json::error::Error) -> RunTaskError {
-        RunTaskError::Unknown(err.description().to_string())
+        RunTaskError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RunTaskError {
@@ -4479,7 +4522,8 @@ impl Error for RunTaskError {
             RunTaskError::Validation(ref cause) => cause,
             RunTaskError::Credentials(ref err) => err.description(),
             RunTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RunTaskError::Unknown(ref cause) => cause,
+            RunTaskError::ParseError(ref cause) => cause,
+            RunTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4500,44 +4544,46 @@ pub enum StartTaskError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartTaskError {
-    pub fn from_body(body: &str) -> StartTaskError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartTaskError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => StartTaskError::Client(String::from(error_message)),
-                    "ClusterNotFoundException" => {
-                        StartTaskError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        StartTaskError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => StartTaskError::Server(String::from(error_message)),
-                    "ValidationException" => StartTaskError::Validation(error_message.to_string()),
-                    _ => StartTaskError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => return StartTaskError::Client(String::from(error_message)),
+                "ClusterNotFoundException" => {
+                    return StartTaskError::ClusterNotFound(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return StartTaskError::InvalidParameter(String::from(error_message))
+                }
+                "ServerException" => return StartTaskError::Server(String::from(error_message)),
+                "ValidationException" => {
+                    return StartTaskError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartTaskError::Unknown(String::from(body)),
         }
+        return StartTaskError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartTaskError {
     fn from(err: serde_json::error::Error) -> StartTaskError {
-        StartTaskError::Unknown(err.description().to_string())
+        StartTaskError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartTaskError {
@@ -4570,7 +4616,8 @@ impl Error for StartTaskError {
             StartTaskError::Validation(ref cause) => cause,
             StartTaskError::Credentials(ref err) => err.description(),
             StartTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartTaskError::Unknown(ref cause) => cause,
+            StartTaskError::ParseError(ref cause) => cause,
+            StartTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4591,44 +4638,46 @@ pub enum StopTaskError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopTaskError {
-    pub fn from_body(body: &str) -> StopTaskError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopTaskError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => StopTaskError::Client(String::from(error_message)),
-                    "ClusterNotFoundException" => {
-                        StopTaskError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        StopTaskError::InvalidParameter(String::from(error_message))
-                    }
-                    "ServerException" => StopTaskError::Server(String::from(error_message)),
-                    "ValidationException" => StopTaskError::Validation(error_message.to_string()),
-                    _ => StopTaskError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => return StopTaskError::Client(String::from(error_message)),
+                "ClusterNotFoundException" => {
+                    return StopTaskError::ClusterNotFound(String::from(error_message))
                 }
+                "InvalidParameterException" => {
+                    return StopTaskError::InvalidParameter(String::from(error_message))
+                }
+                "ServerException" => return StopTaskError::Server(String::from(error_message)),
+                "ValidationException" => {
+                    return StopTaskError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StopTaskError::Unknown(String::from(body)),
         }
+        return StopTaskError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopTaskError {
     fn from(err: serde_json::error::Error) -> StopTaskError {
-        StopTaskError::Unknown(err.description().to_string())
+        StopTaskError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopTaskError {
@@ -4661,7 +4710,8 @@ impl Error for StopTaskError {
             StopTaskError::Validation(ref cause) => cause,
             StopTaskError::Credentials(ref err) => err.description(),
             StopTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopTaskError::Unknown(ref cause) => cause,
+            StopTaskError::ParseError(ref cause) => cause,
+            StopTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4680,47 +4730,49 @@ pub enum SubmitContainerStateChangeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SubmitContainerStateChangeError {
-    pub fn from_body(body: &str) -> SubmitContainerStateChangeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SubmitContainerStateChangeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        SubmitContainerStateChangeError::AccessDenied(String::from(error_message))
-                    }
-                    "ClientException" => {
-                        SubmitContainerStateChangeError::Client(String::from(error_message))
-                    }
-                    "ServerException" => {
-                        SubmitContainerStateChangeError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SubmitContainerStateChangeError::Validation(error_message.to_string())
-                    }
-                    _ => SubmitContainerStateChangeError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return SubmitContainerStateChangeError::AccessDenied(String::from(
+                        error_message,
+                    ))
                 }
+                "ClientException" => {
+                    return SubmitContainerStateChangeError::Client(String::from(error_message))
+                }
+                "ServerException" => {
+                    return SubmitContainerStateChangeError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return SubmitContainerStateChangeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SubmitContainerStateChangeError::Unknown(String::from(body)),
         }
+        return SubmitContainerStateChangeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SubmitContainerStateChangeError {
     fn from(err: serde_json::error::Error) -> SubmitContainerStateChangeError {
-        SubmitContainerStateChangeError::Unknown(err.description().to_string())
+        SubmitContainerStateChangeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SubmitContainerStateChangeError {
@@ -4754,7 +4806,8 @@ impl Error for SubmitContainerStateChangeError {
             SubmitContainerStateChangeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SubmitContainerStateChangeError::Unknown(ref cause) => cause,
+            SubmitContainerStateChangeError::ParseError(ref cause) => cause,
+            SubmitContainerStateChangeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4773,47 +4826,47 @@ pub enum SubmitTaskStateChangeError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SubmitTaskStateChangeError {
-    pub fn from_body(body: &str) -> SubmitTaskStateChangeError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SubmitTaskStateChangeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        SubmitTaskStateChangeError::AccessDenied(String::from(error_message))
-                    }
-                    "ClientException" => {
-                        SubmitTaskStateChangeError::Client(String::from(error_message))
-                    }
-                    "ServerException" => {
-                        SubmitTaskStateChangeError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SubmitTaskStateChangeError::Validation(error_message.to_string())
-                    }
-                    _ => SubmitTaskStateChangeError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return SubmitTaskStateChangeError::AccessDenied(String::from(error_message))
                 }
+                "ClientException" => {
+                    return SubmitTaskStateChangeError::Client(String::from(error_message))
+                }
+                "ServerException" => {
+                    return SubmitTaskStateChangeError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return SubmitTaskStateChangeError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SubmitTaskStateChangeError::Unknown(String::from(body)),
         }
+        return SubmitTaskStateChangeError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SubmitTaskStateChangeError {
     fn from(err: serde_json::error::Error) -> SubmitTaskStateChangeError {
-        SubmitTaskStateChangeError::Unknown(err.description().to_string())
+        SubmitTaskStateChangeError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SubmitTaskStateChangeError {
@@ -4847,7 +4900,8 @@ impl Error for SubmitTaskStateChangeError {
             SubmitTaskStateChangeError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SubmitTaskStateChangeError::Unknown(ref cause) => cause,
+            SubmitTaskStateChangeError::ParseError(ref cause) => cause,
+            SubmitTaskStateChangeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4874,59 +4928,59 @@ pub enum UpdateContainerAgentError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateContainerAgentError {
-    pub fn from_body(body: &str) -> UpdateContainerAgentError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateContainerAgentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => {
-                        UpdateContainerAgentError::Client(String::from(error_message))
-                    }
-                    "ClusterNotFoundException" => {
-                        UpdateContainerAgentError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateContainerAgentError::InvalidParameter(String::from(error_message))
-                    }
-                    "MissingVersionException" => {
-                        UpdateContainerAgentError::MissingVersion(String::from(error_message))
-                    }
-                    "NoUpdateAvailableException" => {
-                        UpdateContainerAgentError::NoUpdateAvailable(String::from(error_message))
-                    }
-                    "ServerException" => {
-                        UpdateContainerAgentError::Server(String::from(error_message))
-                    }
-                    "UpdateInProgressException" => {
-                        UpdateContainerAgentError::UpdateInProgress(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateContainerAgentError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateContainerAgentError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return UpdateContainerAgentError::Client(String::from(error_message))
                 }
+                "ClusterNotFoundException" => {
+                    return UpdateContainerAgentError::ClusterNotFound(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return UpdateContainerAgentError::InvalidParameter(String::from(error_message))
+                }
+                "MissingVersionException" => {
+                    return UpdateContainerAgentError::MissingVersion(String::from(error_message))
+                }
+                "NoUpdateAvailableException" => {
+                    return UpdateContainerAgentError::NoUpdateAvailable(String::from(error_message))
+                }
+                "ServerException" => {
+                    return UpdateContainerAgentError::Server(String::from(error_message))
+                }
+                "UpdateInProgressException" => {
+                    return UpdateContainerAgentError::UpdateInProgress(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateContainerAgentError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateContainerAgentError::Unknown(String::from(body)),
         }
+        return UpdateContainerAgentError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateContainerAgentError {
     fn from(err: serde_json::error::Error) -> UpdateContainerAgentError {
-        UpdateContainerAgentError::Unknown(err.description().to_string())
+        UpdateContainerAgentError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateContainerAgentError {
@@ -4964,7 +5018,8 @@ impl Error for UpdateContainerAgentError {
             UpdateContainerAgentError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateContainerAgentError::Unknown(ref cause) => cause,
+            UpdateContainerAgentError::ParseError(ref cause) => cause,
+            UpdateContainerAgentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4985,54 +5040,54 @@ pub enum UpdateContainerInstancesStateError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateContainerInstancesStateError {
-    pub fn from_body(body: &str) -> UpdateContainerInstancesStateError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateContainerInstancesStateError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "ClientException" => {
-                        UpdateContainerInstancesStateError::Client(String::from(error_message))
-                    }
-                    "ClusterNotFoundException" => {
-                        UpdateContainerInstancesStateError::ClusterNotFound(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateContainerInstancesStateError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ServerException" => {
-                        UpdateContainerInstancesStateError::Server(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateContainerInstancesStateError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateContainerInstancesStateError::Unknown(String::from(body)),
+            match *error_type {
+                "ClientException" => {
+                    return UpdateContainerInstancesStateError::Client(String::from(error_message))
                 }
+                "ClusterNotFoundException" => {
+                    return UpdateContainerInstancesStateError::ClusterNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return UpdateContainerInstancesStateError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "ServerException" => {
+                    return UpdateContainerInstancesStateError::Server(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateContainerInstancesStateError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateContainerInstancesStateError::Unknown(String::from(body)),
         }
+        return UpdateContainerInstancesStateError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateContainerInstancesStateError {
     fn from(err: serde_json::error::Error) -> UpdateContainerInstancesStateError {
-        UpdateContainerInstancesStateError::Unknown(err.description().to_string())
+        UpdateContainerInstancesStateError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateContainerInstancesStateError {
@@ -5067,7 +5122,8 @@ impl Error for UpdateContainerInstancesStateError {
             UpdateContainerInstancesStateError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            UpdateContainerInstancesStateError::Unknown(ref cause) => cause,
+            UpdateContainerInstancesStateError::ParseError(ref cause) => cause,
+            UpdateContainerInstancesStateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5098,63 +5154,63 @@ pub enum UpdateServiceError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateServiceError {
-    pub fn from_body(body: &str) -> UpdateServiceError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateServiceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        UpdateServiceError::AccessDenied(String::from(error_message))
-                    }
-                    "ClientException" => UpdateServiceError::Client(String::from(error_message)),
-                    "ClusterNotFoundException" => {
-                        UpdateServiceError::ClusterNotFound(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        UpdateServiceError::InvalidParameter(String::from(error_message))
-                    }
-                    "PlatformTaskDefinitionIncompatibilityException" => {
-                        UpdateServiceError::PlatformTaskDefinitionIncompatibility(String::from(
-                            error_message,
-                        ))
-                    }
-                    "PlatformUnknownException" => {
-                        UpdateServiceError::PlatformUnknown(String::from(error_message))
-                    }
-                    "ServerException" => UpdateServiceError::Server(String::from(error_message)),
-                    "ServiceNotActiveException" => {
-                        UpdateServiceError::ServiceNotActive(String::from(error_message))
-                    }
-                    "ServiceNotFoundException" => {
-                        UpdateServiceError::ServiceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        UpdateServiceError::Validation(error_message.to_string())
-                    }
-                    _ => UpdateServiceError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdateServiceError::AccessDenied(String::from(error_message))
                 }
+                "ClientException" => return UpdateServiceError::Client(String::from(error_message)),
+                "ClusterNotFoundException" => {
+                    return UpdateServiceError::ClusterNotFound(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return UpdateServiceError::InvalidParameter(String::from(error_message))
+                }
+                "PlatformTaskDefinitionIncompatibilityException" => {
+                    return UpdateServiceError::PlatformTaskDefinitionIncompatibility(String::from(
+                        error_message,
+                    ))
+                }
+                "PlatformUnknownException" => {
+                    return UpdateServiceError::PlatformUnknown(String::from(error_message))
+                }
+                "ServerException" => return UpdateServiceError::Server(String::from(error_message)),
+                "ServiceNotActiveException" => {
+                    return UpdateServiceError::ServiceNotActive(String::from(error_message))
+                }
+                "ServiceNotFoundException" => {
+                    return UpdateServiceError::ServiceNotFound(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return UpdateServiceError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => UpdateServiceError::Unknown(String::from(body)),
         }
+        return UpdateServiceError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for UpdateServiceError {
     fn from(err: serde_json::error::Error) -> UpdateServiceError {
-        UpdateServiceError::Unknown(err.description().to_string())
+        UpdateServiceError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for UpdateServiceError {
@@ -5192,7 +5248,8 @@ impl Error for UpdateServiceError {
             UpdateServiceError::Validation(ref cause) => cause,
             UpdateServiceError::Credentials(ref err) => err.description(),
             UpdateServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateServiceError::Unknown(ref cause) => cause,
+            UpdateServiceError::ParseError(ref cause) => cause,
+            UpdateServiceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5440,14 +5497,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<CreateClusterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateClusterError::from_response(response))),
+                )
             }
         })
     }
@@ -5478,14 +5537,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<CreateServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateServiceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateServiceError::from_response(response))),
+                )
             }
         })
     }
@@ -5516,14 +5577,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DeleteAttributesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteAttributesError::from_response(response))),
+                )
             }
         })
     }
@@ -5554,14 +5617,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DeleteClusterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteClusterError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteClusterError::from_response(response))),
+                )
             }
         })
     }
@@ -5592,14 +5657,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DeleteServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteServiceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteServiceError::from_response(response))),
+                )
             }
         })
     }
@@ -5630,13 +5697,12 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DeregisterContainerInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeregisterContainerInstanceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeregisterContainerInstanceError::from_response(response))
                 }))
             }
         })
@@ -5668,13 +5734,12 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DeregisterTaskDefinitionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeregisterTaskDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DeregisterTaskDefinitionError::from_response(response))
                 }))
             }
         })
@@ -5706,14 +5771,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DescribeClustersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeClustersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeClustersError::from_response(response))),
+                )
             }
         })
     }
@@ -5744,13 +5811,12 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DescribeContainerInstancesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeContainerInstancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeContainerInstancesError::from_response(response))
                 }))
             }
         })
@@ -5782,14 +5848,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DescribeServicesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeServicesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeServicesError::from_response(response))),
+                )
             }
         })
     }
@@ -5820,14 +5888,15 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DescribeTaskDefinitionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTaskDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeTaskDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5858,14 +5927,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DescribeTasksResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeTasksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeTasksError::from_response(response))),
+                )
             }
         })
     }
@@ -5896,14 +5967,15 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DiscoverPollEndpointResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DiscoverPollEndpointError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DiscoverPollEndpointError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5934,14 +6006,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListAttributesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListAttributesError::from_response(response))),
+                )
             }
         })
     }
@@ -5972,14 +6046,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListClustersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListClustersError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListClustersError::from_response(response))),
+                )
             }
         })
     }
@@ -6010,14 +6086,15 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListContainerInstancesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListContainerInstancesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListContainerInstancesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6048,14 +6125,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListServicesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListServicesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListServicesError::from_response(response))),
+                )
             }
         })
     }
@@ -6086,13 +6165,12 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListTaskDefinitionFamiliesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTaskDefinitionFamiliesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(ListTaskDefinitionFamiliesError::from_response(response))
                 }))
             }
         })
@@ -6124,14 +6202,15 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListTaskDefinitionsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTaskDefinitionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTaskDefinitionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6162,14 +6241,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListTasksResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListTasksError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTasksError::from_response(response))),
+                )
             }
         })
     }
@@ -6200,14 +6281,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<PutAttributesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(PutAttributesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutAttributesError::from_response(response))),
+                )
             }
         })
     }
@@ -6238,13 +6321,12 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<RegisterContainerInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterContainerInstanceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(RegisterContainerInstanceError::from_response(response))
                 }))
             }
         })
@@ -6276,14 +6358,15 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<RegisterTaskDefinitionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RegisterTaskDefinitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RegisterTaskDefinitionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6308,14 +6391,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<RunTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RunTaskError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RunTaskError::from_response(response))),
+                )
             }
         })
     }
@@ -6346,14 +6431,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<StartTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartTaskError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartTaskError::from_response(response))),
+                )
             }
         })
     }
@@ -6381,14 +6468,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<StopTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopTaskError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StopTaskError::from_response(response))),
+                )
             }
         })
     }
@@ -6419,13 +6508,12 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<SubmitContainerStateChangeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SubmitContainerStateChangeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(SubmitContainerStateChangeError::from_response(response))
                 }))
             }
         })
@@ -6457,14 +6545,15 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<SubmitTaskStateChangeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SubmitTaskStateChangeError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(SubmitTaskStateChangeError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6495,14 +6584,15 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<UpdateContainerAgentResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateContainerAgentError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateContainerAgentError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6534,13 +6624,12 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<UpdateContainerInstancesStateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateContainerInstancesStateError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(UpdateContainerInstancesStateError::from_response(response))
                 }))
             }
         })
@@ -6572,14 +6661,16 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<UpdateServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(UpdateServiceError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateServiceError::from_response(response))),
+                )
             }
         })
     }

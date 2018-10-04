@@ -18,7 +18,7 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::region;
-use rusoto_core::request::DispatchSignedRequest;
+use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoFuture};
 
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
@@ -26,7 +26,7 @@ use rusoto_core::request::HttpDispatchError;
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-use serde_json::from_str;
+use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Structure containing the estimated age range, in years, for a face.</p> <p>Rekognition estimates an age-range for faces detected in the input image. Estimated age ranges can overlap; a face of a 5 year old may have an estimated range of 4-6 whilst the face of a 6 year old may have an estimated range of 4-8.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -960,7 +960,7 @@ pub struct Image {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub bytes: Option<Vec<u8>>,
     /// <p>Identifies an S3 object as the image source.</p>
@@ -1762,64 +1762,64 @@ pub enum CompareFacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CompareFacesError {
-    pub fn from_body(body: &str) -> CompareFacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CompareFacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CompareFacesError::AccessDenied(String::from(error_message))
-                    }
-                    "ImageTooLargeException" => {
-                        CompareFacesError::ImageTooLarge(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        CompareFacesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidImageFormatException" => {
-                        CompareFacesError::InvalidImageFormat(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CompareFacesError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        CompareFacesError::InvalidS3Object(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        CompareFacesError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        CompareFacesError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CompareFacesError::Validation(error_message.to_string())
-                    }
-                    _ => CompareFacesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CompareFacesError::AccessDenied(String::from(error_message))
                 }
+                "ImageTooLargeException" => {
+                    return CompareFacesError::ImageTooLarge(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return CompareFacesError::InternalServerError(String::from(error_message))
+                }
+                "InvalidImageFormatException" => {
+                    return CompareFacesError::InvalidImageFormat(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return CompareFacesError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidS3ObjectException" => {
+                    return CompareFacesError::InvalidS3Object(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return CompareFacesError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return CompareFacesError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CompareFacesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CompareFacesError::Unknown(String::from(body)),
         }
+        return CompareFacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CompareFacesError {
     fn from(err: serde_json::error::Error) -> CompareFacesError {
-        CompareFacesError::Unknown(err.description().to_string())
+        CompareFacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CompareFacesError {
@@ -1856,7 +1856,8 @@ impl Error for CompareFacesError {
             CompareFacesError::Validation(ref cause) => cause,
             CompareFacesError::Credentials(ref err) => err.description(),
             CompareFacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CompareFacesError::Unknown(ref cause) => cause,
+            CompareFacesError::ParseError(ref cause) => cause,
+            CompareFacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1881,58 +1882,58 @@ pub enum CreateCollectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCollectionError {
-    pub fn from_body(body: &str) -> CreateCollectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCollectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreateCollectionError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        CreateCollectionError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateCollectionError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        CreateCollectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceAlreadyExistsException" => {
-                        CreateCollectionError::ResourceAlreadyExists(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        CreateCollectionError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateCollectionError::Validation(error_message.to_string())
-                    }
-                    _ => CreateCollectionError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateCollectionError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return CreateCollectionError::InternalServerError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return CreateCollectionError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return CreateCollectionError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return CreateCollectionError::ResourceAlreadyExists(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return CreateCollectionError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateCollectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateCollectionError::Unknown(String::from(body)),
         }
+        return CreateCollectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateCollectionError {
     fn from(err: serde_json::error::Error) -> CreateCollectionError {
-        CreateCollectionError::Unknown(err.description().to_string())
+        CreateCollectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateCollectionError {
@@ -1967,7 +1968,8 @@ impl Error for CreateCollectionError {
             CreateCollectionError::Validation(ref cause) => cause,
             CreateCollectionError::Credentials(ref err) => err.description(),
             CreateCollectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateCollectionError::Unknown(ref cause) => cause,
+            CreateCollectionError::ParseError(ref cause) => cause,
+            CreateCollectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1994,61 +1996,63 @@ pub enum CreateStreamProcessorError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStreamProcessorError {
-    pub fn from_body(body: &str) -> CreateStreamProcessorError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> CreateStreamProcessorError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        CreateStreamProcessorError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        CreateStreamProcessorError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        CreateStreamProcessorError::InvalidParameter(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        CreateStreamProcessorError::LimitExceeded(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        CreateStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceInUseException" => {
-                        CreateStreamProcessorError::ResourceInUse(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        CreateStreamProcessorError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        CreateStreamProcessorError::Validation(error_message.to_string())
-                    }
-                    _ => CreateStreamProcessorError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateStreamProcessorError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return CreateStreamProcessorError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return CreateStreamProcessorError::InvalidParameter(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return CreateStreamProcessorError::LimitExceeded(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return CreateStreamProcessorError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return CreateStreamProcessorError::ResourceInUse(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return CreateStreamProcessorError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return CreateStreamProcessorError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => CreateStreamProcessorError::Unknown(String::from(body)),
         }
+        return CreateStreamProcessorError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for CreateStreamProcessorError {
     fn from(err: serde_json::error::Error) -> CreateStreamProcessorError {
-        CreateStreamProcessorError::Unknown(err.description().to_string())
+        CreateStreamProcessorError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for CreateStreamProcessorError {
@@ -2086,7 +2090,8 @@ impl Error for CreateStreamProcessorError {
             CreateStreamProcessorError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            CreateStreamProcessorError::Unknown(ref cause) => cause,
+            CreateStreamProcessorError::ParseError(ref cause) => cause,
+            CreateStreamProcessorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2111,58 +2116,58 @@ pub enum DeleteCollectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCollectionError {
-    pub fn from_body(body: &str) -> DeleteCollectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteCollectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DeleteCollectionError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DeleteCollectionError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteCollectionError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        DeleteCollectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteCollectionError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        DeleteCollectionError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteCollectionError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteCollectionError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeleteCollectionError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return DeleteCollectionError::InternalServerError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return DeleteCollectionError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return DeleteCollectionError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteCollectionError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return DeleteCollectionError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteCollectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteCollectionError::Unknown(String::from(body)),
         }
+        return DeleteCollectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteCollectionError {
     fn from(err: serde_json::error::Error) -> DeleteCollectionError {
-        DeleteCollectionError::Unknown(err.description().to_string())
+        DeleteCollectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteCollectionError {
@@ -2197,7 +2202,8 @@ impl Error for DeleteCollectionError {
             DeleteCollectionError::Validation(ref cause) => cause,
             DeleteCollectionError::Credentials(ref err) => err.description(),
             DeleteCollectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteCollectionError::Unknown(ref cause) => cause,
+            DeleteCollectionError::ParseError(ref cause) => cause,
+            DeleteCollectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2222,56 +2228,58 @@ pub enum DeleteFacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFacesError {
-    pub fn from_body(body: &str) -> DeleteFacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteFacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DeleteFacesError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DeleteFacesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteFacesError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        DeleteFacesError::ProvisionedThroughputExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteFacesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        DeleteFacesError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteFacesError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteFacesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeleteFacesError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return DeleteFacesError::InternalServerError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return DeleteFacesError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return DeleteFacesError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteFacesError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return DeleteFacesError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteFacesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteFacesError::Unknown(String::from(body)),
         }
+        return DeleteFacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteFacesError {
     fn from(err: serde_json::error::Error) -> DeleteFacesError {
-        DeleteFacesError::Unknown(err.description().to_string())
+        DeleteFacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteFacesError {
@@ -2306,7 +2314,8 @@ impl Error for DeleteFacesError {
             DeleteFacesError::Validation(ref cause) => cause,
             DeleteFacesError::Credentials(ref err) => err.description(),
             DeleteFacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFacesError::Unknown(ref cause) => cause,
+            DeleteFacesError::ParseError(ref cause) => cause,
+            DeleteFacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2333,61 +2342,63 @@ pub enum DeleteStreamProcessorError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteStreamProcessorError {
-    pub fn from_body(body: &str) -> DeleteStreamProcessorError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteStreamProcessorError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DeleteStreamProcessorError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DeleteStreamProcessorError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DeleteStreamProcessorError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        DeleteStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceInUseException" => {
-                        DeleteStreamProcessorError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteStreamProcessorError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        DeleteStreamProcessorError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DeleteStreamProcessorError::Validation(error_message.to_string())
-                    }
-                    _ => DeleteStreamProcessorError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeleteStreamProcessorError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return DeleteStreamProcessorError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return DeleteStreamProcessorError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return DeleteStreamProcessorError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return DeleteStreamProcessorError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteStreamProcessorError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return DeleteStreamProcessorError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DeleteStreamProcessorError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DeleteStreamProcessorError::Unknown(String::from(body)),
         }
+        return DeleteStreamProcessorError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DeleteStreamProcessorError {
     fn from(err: serde_json::error::Error) -> DeleteStreamProcessorError {
-        DeleteStreamProcessorError::Unknown(err.description().to_string())
+        DeleteStreamProcessorError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DeleteStreamProcessorError {
@@ -2425,7 +2436,8 @@ impl Error for DeleteStreamProcessorError {
             DeleteStreamProcessorError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DeleteStreamProcessorError::Unknown(ref cause) => cause,
+            DeleteStreamProcessorError::ParseError(ref cause) => cause,
+            DeleteStreamProcessorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2450,58 +2462,64 @@ pub enum DescribeStreamProcessorError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStreamProcessorError {
-    pub fn from_body(body: &str) -> DescribeStreamProcessorError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeStreamProcessorError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DescribeStreamProcessorError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => DescribeStreamProcessorError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidParameterException" => {
-                        DescribeStreamProcessorError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        DescribeStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeStreamProcessorError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        DescribeStreamProcessorError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DescribeStreamProcessorError::Validation(error_message.to_string())
-                    }
-                    _ => DescribeStreamProcessorError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DescribeStreamProcessorError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return DescribeStreamProcessorError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return DescribeStreamProcessorError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return DescribeStreamProcessorError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeStreamProcessorError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return DescribeStreamProcessorError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DescribeStreamProcessorError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DescribeStreamProcessorError::Unknown(String::from(body)),
         }
+        return DescribeStreamProcessorError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DescribeStreamProcessorError {
     fn from(err: serde_json::error::Error) -> DescribeStreamProcessorError {
-        DescribeStreamProcessorError::Unknown(err.description().to_string())
+        DescribeStreamProcessorError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DescribeStreamProcessorError {
@@ -2538,7 +2556,8 @@ impl Error for DescribeStreamProcessorError {
             DescribeStreamProcessorError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DescribeStreamProcessorError::Unknown(ref cause) => cause,
+            DescribeStreamProcessorError::ParseError(ref cause) => cause,
+            DescribeStreamProcessorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2567,62 +2586,64 @@ pub enum DetectFacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetectFacesError {
-    pub fn from_body(body: &str) -> DetectFacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetectFacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DetectFacesError::AccessDenied(String::from(error_message))
-                    }
-                    "ImageTooLargeException" => {
-                        DetectFacesError::ImageTooLarge(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DetectFacesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidImageFormatException" => {
-                        DetectFacesError::InvalidImageFormat(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DetectFacesError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        DetectFacesError::InvalidS3Object(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        DetectFacesError::ProvisionedThroughputExceeded(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        DetectFacesError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DetectFacesError::Validation(error_message.to_string())
-                    }
-                    _ => DetectFacesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DetectFacesError::AccessDenied(String::from(error_message))
                 }
+                "ImageTooLargeException" => {
+                    return DetectFacesError::ImageTooLarge(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return DetectFacesError::InternalServerError(String::from(error_message))
+                }
+                "InvalidImageFormatException" => {
+                    return DetectFacesError::InvalidImageFormat(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return DetectFacesError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidS3ObjectException" => {
+                    return DetectFacesError::InvalidS3Object(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return DetectFacesError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return DetectFacesError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DetectFacesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetectFacesError::Unknown(String::from(body)),
         }
+        return DetectFacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetectFacesError {
     fn from(err: serde_json::error::Error) -> DetectFacesError {
-        DetectFacesError::Unknown(err.description().to_string())
+        DetectFacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetectFacesError {
@@ -2659,7 +2680,8 @@ impl Error for DetectFacesError {
             DetectFacesError::Validation(ref cause) => cause,
             DetectFacesError::Credentials(ref err) => err.description(),
             DetectFacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectFacesError::Unknown(ref cause) => cause,
+            DetectFacesError::ParseError(ref cause) => cause,
+            DetectFacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2688,64 +2710,64 @@ pub enum DetectLabelsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetectLabelsError {
-    pub fn from_body(body: &str) -> DetectLabelsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetectLabelsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DetectLabelsError::AccessDenied(String::from(error_message))
-                    }
-                    "ImageTooLargeException" => {
-                        DetectLabelsError::ImageTooLarge(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DetectLabelsError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidImageFormatException" => {
-                        DetectLabelsError::InvalidImageFormat(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DetectLabelsError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        DetectLabelsError::InvalidS3Object(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        DetectLabelsError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        DetectLabelsError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DetectLabelsError::Validation(error_message.to_string())
-                    }
-                    _ => DetectLabelsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DetectLabelsError::AccessDenied(String::from(error_message))
                 }
+                "ImageTooLargeException" => {
+                    return DetectLabelsError::ImageTooLarge(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return DetectLabelsError::InternalServerError(String::from(error_message))
+                }
+                "InvalidImageFormatException" => {
+                    return DetectLabelsError::InvalidImageFormat(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return DetectLabelsError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidS3ObjectException" => {
+                    return DetectLabelsError::InvalidS3Object(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return DetectLabelsError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return DetectLabelsError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DetectLabelsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetectLabelsError::Unknown(String::from(body)),
         }
+        return DetectLabelsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetectLabelsError {
     fn from(err: serde_json::error::Error) -> DetectLabelsError {
-        DetectLabelsError::Unknown(err.description().to_string())
+        DetectLabelsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetectLabelsError {
@@ -2782,7 +2804,8 @@ impl Error for DetectLabelsError {
             DetectLabelsError::Validation(ref cause) => cause,
             DetectLabelsError::Credentials(ref err) => err.description(),
             DetectLabelsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectLabelsError::Unknown(ref cause) => cause,
+            DetectLabelsError::ParseError(ref cause) => cause,
+            DetectLabelsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2811,64 +2834,70 @@ pub enum DetectModerationLabelsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetectModerationLabelsError {
-    pub fn from_body(body: &str) -> DetectModerationLabelsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetectModerationLabelsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DetectModerationLabelsError::AccessDenied(String::from(error_message))
-                    }
-                    "ImageTooLargeException" => {
-                        DetectModerationLabelsError::ImageTooLarge(String::from(error_message))
-                    }
-                    "InternalServerError" => DetectModerationLabelsError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidImageFormatException" => {
-                        DetectModerationLabelsError::InvalidImageFormat(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DetectModerationLabelsError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        DetectModerationLabelsError::InvalidS3Object(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        DetectModerationLabelsError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        DetectModerationLabelsError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        DetectModerationLabelsError::Validation(error_message.to_string())
-                    }
-                    _ => DetectModerationLabelsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DetectModerationLabelsError::AccessDenied(String::from(error_message))
                 }
+                "ImageTooLargeException" => {
+                    return DetectModerationLabelsError::ImageTooLarge(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return DetectModerationLabelsError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidImageFormatException" => {
+                    return DetectModerationLabelsError::InvalidImageFormat(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return DetectModerationLabelsError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidS3ObjectException" => {
+                    return DetectModerationLabelsError::InvalidS3Object(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return DetectModerationLabelsError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return DetectModerationLabelsError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DetectModerationLabelsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetectModerationLabelsError::Unknown(String::from(body)),
         }
+        return DetectModerationLabelsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetectModerationLabelsError {
     fn from(err: serde_json::error::Error) -> DetectModerationLabelsError {
-        DetectModerationLabelsError::Unknown(err.description().to_string())
+        DetectModerationLabelsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetectModerationLabelsError {
@@ -2907,7 +2936,8 @@ impl Error for DetectModerationLabelsError {
             DetectModerationLabelsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            DetectModerationLabelsError::Unknown(ref cause) => cause,
+            DetectModerationLabelsError::ParseError(ref cause) => cause,
+            DetectModerationLabelsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2936,60 +2966,64 @@ pub enum DetectTextError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl DetectTextError {
-    pub fn from_body(body: &str) -> DetectTextError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> DetectTextError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        DetectTextError::AccessDenied(String::from(error_message))
-                    }
-                    "ImageTooLargeException" => {
-                        DetectTextError::ImageTooLarge(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        DetectTextError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidImageFormatException" => {
-                        DetectTextError::InvalidImageFormat(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        DetectTextError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        DetectTextError::InvalidS3Object(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        DetectTextError::ProvisionedThroughputExceeded(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        DetectTextError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => DetectTextError::Validation(error_message.to_string()),
-                    _ => DetectTextError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DetectTextError::AccessDenied(String::from(error_message))
                 }
+                "ImageTooLargeException" => {
+                    return DetectTextError::ImageTooLarge(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return DetectTextError::InternalServerError(String::from(error_message))
+                }
+                "InvalidImageFormatException" => {
+                    return DetectTextError::InvalidImageFormat(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return DetectTextError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidS3ObjectException" => {
+                    return DetectTextError::InvalidS3Object(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return DetectTextError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return DetectTextError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return DetectTextError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => DetectTextError::Unknown(String::from(body)),
         }
+        return DetectTextError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for DetectTextError {
     fn from(err: serde_json::error::Error) -> DetectTextError {
-        DetectTextError::Unknown(err.description().to_string())
+        DetectTextError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for DetectTextError {
@@ -3026,7 +3060,8 @@ impl Error for DetectTextError {
             DetectTextError::Validation(ref cause) => cause,
             DetectTextError::Credentials(ref err) => err.description(),
             DetectTextError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectTextError::Unknown(ref cause) => cause,
+            DetectTextError::ParseError(ref cause) => cause,
+            DetectTextError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3051,58 +3086,58 @@ pub enum GetCelebrityInfoError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCelebrityInfoError {
-    pub fn from_body(body: &str) -> GetCelebrityInfoError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetCelebrityInfoError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetCelebrityInfoError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        GetCelebrityInfoError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        GetCelebrityInfoError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        GetCelebrityInfoError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetCelebrityInfoError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        GetCelebrityInfoError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetCelebrityInfoError::Validation(error_message.to_string())
-                    }
-                    _ => GetCelebrityInfoError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetCelebrityInfoError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return GetCelebrityInfoError::InternalServerError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return GetCelebrityInfoError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return GetCelebrityInfoError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetCelebrityInfoError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return GetCelebrityInfoError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetCelebrityInfoError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetCelebrityInfoError::Unknown(String::from(body)),
         }
+        return GetCelebrityInfoError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetCelebrityInfoError {
     fn from(err: serde_json::error::Error) -> GetCelebrityInfoError {
-        GetCelebrityInfoError::Unknown(err.description().to_string())
+        GetCelebrityInfoError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetCelebrityInfoError {
@@ -3137,7 +3172,8 @@ impl Error for GetCelebrityInfoError {
             GetCelebrityInfoError::Validation(ref cause) => cause,
             GetCelebrityInfoError::Credentials(ref err) => err.description(),
             GetCelebrityInfoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCelebrityInfoError::Unknown(ref cause) => cause,
+            GetCelebrityInfoError::ParseError(ref cause) => cause,
+            GetCelebrityInfoError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3164,63 +3200,69 @@ pub enum GetCelebrityRecognitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetCelebrityRecognitionError {
-    pub fn from_body(body: &str) -> GetCelebrityRecognitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetCelebrityRecognitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetCelebrityRecognitionError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => GetCelebrityRecognitionError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidPaginationTokenException" => {
-                        GetCelebrityRecognitionError::InvalidPaginationToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        GetCelebrityRecognitionError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        GetCelebrityRecognitionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetCelebrityRecognitionError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        GetCelebrityRecognitionError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetCelebrityRecognitionError::Validation(error_message.to_string())
-                    }
-                    _ => GetCelebrityRecognitionError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetCelebrityRecognitionError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return GetCelebrityRecognitionError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidPaginationTokenException" => {
+                    return GetCelebrityRecognitionError::InvalidPaginationToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return GetCelebrityRecognitionError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return GetCelebrityRecognitionError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return GetCelebrityRecognitionError::ResourceNotFound(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return GetCelebrityRecognitionError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetCelebrityRecognitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetCelebrityRecognitionError::Unknown(String::from(body)),
         }
+        return GetCelebrityRecognitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetCelebrityRecognitionError {
     fn from(err: serde_json::error::Error) -> GetCelebrityRecognitionError {
-        GetCelebrityRecognitionError::Unknown(err.description().to_string())
+        GetCelebrityRecognitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetCelebrityRecognitionError {
@@ -3258,7 +3300,8 @@ impl Error for GetCelebrityRecognitionError {
             GetCelebrityRecognitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetCelebrityRecognitionError::Unknown(ref cause) => cause,
+            GetCelebrityRecognitionError::ParseError(ref cause) => cause,
+            GetCelebrityRecognitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3285,63 +3328,65 @@ pub enum GetContentModerationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetContentModerationError {
-    pub fn from_body(body: &str) -> GetContentModerationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetContentModerationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetContentModerationError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        GetContentModerationError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidPaginationTokenException" => {
-                        GetContentModerationError::InvalidPaginationToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        GetContentModerationError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        GetContentModerationError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetContentModerationError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        GetContentModerationError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetContentModerationError::Validation(error_message.to_string())
-                    }
-                    _ => GetContentModerationError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetContentModerationError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return GetContentModerationError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidPaginationTokenException" => {
+                    return GetContentModerationError::InvalidPaginationToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return GetContentModerationError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return GetContentModerationError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetContentModerationError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return GetContentModerationError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetContentModerationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetContentModerationError::Unknown(String::from(body)),
         }
+        return GetContentModerationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetContentModerationError {
     fn from(err: serde_json::error::Error) -> GetContentModerationError {
-        GetContentModerationError::Unknown(err.description().to_string())
+        GetContentModerationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetContentModerationError {
@@ -3379,7 +3424,8 @@ impl Error for GetContentModerationError {
             GetContentModerationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetContentModerationError::Unknown(ref cause) => cause,
+            GetContentModerationError::ParseError(ref cause) => cause,
+            GetContentModerationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3406,61 +3452,63 @@ pub enum GetFaceDetectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetFaceDetectionError {
-    pub fn from_body(body: &str) -> GetFaceDetectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetFaceDetectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetFaceDetectionError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        GetFaceDetectionError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidPaginationTokenException" => {
-                        GetFaceDetectionError::InvalidPaginationToken(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        GetFaceDetectionError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        GetFaceDetectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetFaceDetectionError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        GetFaceDetectionError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetFaceDetectionError::Validation(error_message.to_string())
-                    }
-                    _ => GetFaceDetectionError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetFaceDetectionError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return GetFaceDetectionError::InternalServerError(String::from(error_message))
+                }
+                "InvalidPaginationTokenException" => {
+                    return GetFaceDetectionError::InvalidPaginationToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return GetFaceDetectionError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return GetFaceDetectionError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetFaceDetectionError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return GetFaceDetectionError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetFaceDetectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetFaceDetectionError::Unknown(String::from(body)),
         }
+        return GetFaceDetectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetFaceDetectionError {
     fn from(err: serde_json::error::Error) -> GetFaceDetectionError {
-        GetFaceDetectionError::Unknown(err.description().to_string())
+        GetFaceDetectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetFaceDetectionError {
@@ -3496,7 +3544,8 @@ impl Error for GetFaceDetectionError {
             GetFaceDetectionError::Validation(ref cause) => cause,
             GetFaceDetectionError::Credentials(ref err) => err.description(),
             GetFaceDetectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFaceDetectionError::Unknown(ref cause) => cause,
+            GetFaceDetectionError::ParseError(ref cause) => cause,
+            GetFaceDetectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3523,61 +3572,61 @@ pub enum GetFaceSearchError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetFaceSearchError {
-    pub fn from_body(body: &str) -> GetFaceSearchError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetFaceSearchError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetFaceSearchError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        GetFaceSearchError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidPaginationTokenException" => {
-                        GetFaceSearchError::InvalidPaginationToken(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        GetFaceSearchError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        GetFaceSearchError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetFaceSearchError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        GetFaceSearchError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetFaceSearchError::Validation(error_message.to_string())
-                    }
-                    _ => GetFaceSearchError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetFaceSearchError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return GetFaceSearchError::InternalServerError(String::from(error_message))
+                }
+                "InvalidPaginationTokenException" => {
+                    return GetFaceSearchError::InvalidPaginationToken(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return GetFaceSearchError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return GetFaceSearchError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetFaceSearchError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return GetFaceSearchError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetFaceSearchError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetFaceSearchError::Unknown(String::from(body)),
         }
+        return GetFaceSearchError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetFaceSearchError {
     fn from(err: serde_json::error::Error) -> GetFaceSearchError {
-        GetFaceSearchError::Unknown(err.description().to_string())
+        GetFaceSearchError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetFaceSearchError {
@@ -3613,7 +3662,8 @@ impl Error for GetFaceSearchError {
             GetFaceSearchError::Validation(ref cause) => cause,
             GetFaceSearchError::Credentials(ref err) => err.description(),
             GetFaceSearchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFaceSearchError::Unknown(ref cause) => cause,
+            GetFaceSearchError::ParseError(ref cause) => cause,
+            GetFaceSearchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3640,61 +3690,63 @@ pub enum GetLabelDetectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetLabelDetectionError {
-    pub fn from_body(body: &str) -> GetLabelDetectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetLabelDetectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetLabelDetectionError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        GetLabelDetectionError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidPaginationTokenException" => {
-                        GetLabelDetectionError::InvalidPaginationToken(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        GetLabelDetectionError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        GetLabelDetectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetLabelDetectionError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        GetLabelDetectionError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetLabelDetectionError::Validation(error_message.to_string())
-                    }
-                    _ => GetLabelDetectionError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetLabelDetectionError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return GetLabelDetectionError::InternalServerError(String::from(error_message))
+                }
+                "InvalidPaginationTokenException" => {
+                    return GetLabelDetectionError::InvalidPaginationToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return GetLabelDetectionError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return GetLabelDetectionError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetLabelDetectionError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return GetLabelDetectionError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetLabelDetectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetLabelDetectionError::Unknown(String::from(body)),
         }
+        return GetLabelDetectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetLabelDetectionError {
     fn from(err: serde_json::error::Error) -> GetLabelDetectionError {
-        GetLabelDetectionError::Unknown(err.description().to_string())
+        GetLabelDetectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetLabelDetectionError {
@@ -3732,7 +3784,8 @@ impl Error for GetLabelDetectionError {
             GetLabelDetectionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetLabelDetectionError::Unknown(ref cause) => cause,
+            GetLabelDetectionError::ParseError(ref cause) => cause,
+            GetLabelDetectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3759,61 +3812,63 @@ pub enum GetPersonTrackingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl GetPersonTrackingError {
-    pub fn from_body(body: &str) -> GetPersonTrackingError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> GetPersonTrackingError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        GetPersonTrackingError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        GetPersonTrackingError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidPaginationTokenException" => {
-                        GetPersonTrackingError::InvalidPaginationToken(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        GetPersonTrackingError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        GetPersonTrackingError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetPersonTrackingError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        GetPersonTrackingError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetPersonTrackingError::Validation(error_message.to_string())
-                    }
-                    _ => GetPersonTrackingError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetPersonTrackingError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return GetPersonTrackingError::InternalServerError(String::from(error_message))
+                }
+                "InvalidPaginationTokenException" => {
+                    return GetPersonTrackingError::InvalidPaginationToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return GetPersonTrackingError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return GetPersonTrackingError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return GetPersonTrackingError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return GetPersonTrackingError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return GetPersonTrackingError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => GetPersonTrackingError::Unknown(String::from(body)),
         }
+        return GetPersonTrackingError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for GetPersonTrackingError {
     fn from(err: serde_json::error::Error) -> GetPersonTrackingError {
-        GetPersonTrackingError::Unknown(err.description().to_string())
+        GetPersonTrackingError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for GetPersonTrackingError {
@@ -3851,7 +3906,8 @@ impl Error for GetPersonTrackingError {
             GetPersonTrackingError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            GetPersonTrackingError::Unknown(ref cause) => cause,
+            GetPersonTrackingError::ParseError(ref cause) => cause,
+            GetPersonTrackingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3882,63 +3938,67 @@ pub enum IndexFacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl IndexFacesError {
-    pub fn from_body(body: &str) -> IndexFacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> IndexFacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        IndexFacesError::AccessDenied(String::from(error_message))
-                    }
-                    "ImageTooLargeException" => {
-                        IndexFacesError::ImageTooLarge(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        IndexFacesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidImageFormatException" => {
-                        IndexFacesError::InvalidImageFormat(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        IndexFacesError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        IndexFacesError::InvalidS3Object(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        IndexFacesError::ProvisionedThroughputExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        IndexFacesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        IndexFacesError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => IndexFacesError::Validation(error_message.to_string()),
-                    _ => IndexFacesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return IndexFacesError::AccessDenied(String::from(error_message))
                 }
+                "ImageTooLargeException" => {
+                    return IndexFacesError::ImageTooLarge(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return IndexFacesError::InternalServerError(String::from(error_message))
+                }
+                "InvalidImageFormatException" => {
+                    return IndexFacesError::InvalidImageFormat(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return IndexFacesError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidS3ObjectException" => {
+                    return IndexFacesError::InvalidS3Object(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return IndexFacesError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return IndexFacesError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return IndexFacesError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return IndexFacesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => IndexFacesError::Unknown(String::from(body)),
         }
+        return IndexFacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for IndexFacesError {
     fn from(err: serde_json::error::Error) -> IndexFacesError {
-        IndexFacesError::Unknown(err.description().to_string())
+        IndexFacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for IndexFacesError {
@@ -3976,7 +4036,8 @@ impl Error for IndexFacesError {
             IndexFacesError::Validation(ref cause) => cause,
             IndexFacesError::Credentials(ref err) => err.description(),
             IndexFacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            IndexFacesError::Unknown(ref cause) => cause,
+            IndexFacesError::ParseError(ref cause) => cause,
+            IndexFacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4003,61 +4064,61 @@ pub enum ListCollectionsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListCollectionsError {
-    pub fn from_body(body: &str) -> ListCollectionsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListCollectionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListCollectionsError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        ListCollectionsError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidPaginationTokenException" => {
-                        ListCollectionsError::InvalidPaginationToken(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListCollectionsError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        ListCollectionsError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListCollectionsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        ListCollectionsError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListCollectionsError::Validation(error_message.to_string())
-                    }
-                    _ => ListCollectionsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListCollectionsError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return ListCollectionsError::InternalServerError(String::from(error_message))
+                }
+                "InvalidPaginationTokenException" => {
+                    return ListCollectionsError::InvalidPaginationToken(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return ListCollectionsError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return ListCollectionsError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return ListCollectionsError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return ListCollectionsError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListCollectionsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListCollectionsError::Unknown(String::from(body)),
         }
+        return ListCollectionsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListCollectionsError {
     fn from(err: serde_json::error::Error) -> ListCollectionsError {
-        ListCollectionsError::Unknown(err.description().to_string())
+        ListCollectionsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListCollectionsError {
@@ -4093,7 +4154,8 @@ impl Error for ListCollectionsError {
             ListCollectionsError::Validation(ref cause) => cause,
             ListCollectionsError::Credentials(ref err) => err.description(),
             ListCollectionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListCollectionsError::Unknown(ref cause) => cause,
+            ListCollectionsError::ParseError(ref cause) => cause,
+            ListCollectionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4120,57 +4182,61 @@ pub enum ListFacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListFacesError {
-    pub fn from_body(body: &str) -> ListFacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListFacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListFacesError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        ListFacesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidPaginationTokenException" => {
-                        ListFacesError::InvalidPaginationToken(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        ListFacesError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        ListFacesError::ProvisionedThroughputExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        ListFacesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        ListFacesError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => ListFacesError::Validation(error_message.to_string()),
-                    _ => ListFacesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListFacesError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return ListFacesError::InternalServerError(String::from(error_message))
+                }
+                "InvalidPaginationTokenException" => {
+                    return ListFacesError::InvalidPaginationToken(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return ListFacesError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return ListFacesError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return ListFacesError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return ListFacesError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListFacesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListFacesError::Unknown(String::from(body)),
         }
+        return ListFacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListFacesError {
     fn from(err: serde_json::error::Error) -> ListFacesError {
-        ListFacesError::Unknown(err.description().to_string())
+        ListFacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListFacesError {
@@ -4206,7 +4272,8 @@ impl Error for ListFacesError {
             ListFacesError::Validation(ref cause) => cause,
             ListFacesError::Credentials(ref err) => err.description(),
             ListFacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListFacesError::Unknown(ref cause) => cause,
+            ListFacesError::ParseError(ref cause) => cause,
+            ListFacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4231,60 +4298,62 @@ pub enum ListStreamProcessorsError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl ListStreamProcessorsError {
-    pub fn from_body(body: &str) -> ListStreamProcessorsError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> ListStreamProcessorsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        ListStreamProcessorsError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        ListStreamProcessorsError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidPaginationTokenException" => {
-                        ListStreamProcessorsError::InvalidPaginationToken(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidParameterException" => {
-                        ListStreamProcessorsError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        ListStreamProcessorsError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        ListStreamProcessorsError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        ListStreamProcessorsError::Validation(error_message.to_string())
-                    }
-                    _ => ListStreamProcessorsError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListStreamProcessorsError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return ListStreamProcessorsError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidPaginationTokenException" => {
+                    return ListStreamProcessorsError::InvalidPaginationToken(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return ListStreamProcessorsError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return ListStreamProcessorsError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return ListStreamProcessorsError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return ListStreamProcessorsError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => ListStreamProcessorsError::Unknown(String::from(body)),
         }
+        return ListStreamProcessorsError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for ListStreamProcessorsError {
     fn from(err: serde_json::error::Error) -> ListStreamProcessorsError {
-        ListStreamProcessorsError::Unknown(err.description().to_string())
+        ListStreamProcessorsError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for ListStreamProcessorsError {
@@ -4321,7 +4390,8 @@ impl Error for ListStreamProcessorsError {
             ListStreamProcessorsError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            ListStreamProcessorsError::Unknown(ref cause) => cause,
+            ListStreamProcessorsError::ParseError(ref cause) => cause,
+            ListStreamProcessorsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4350,64 +4420,68 @@ pub enum RecognizeCelebritiesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl RecognizeCelebritiesError {
-    pub fn from_body(body: &str) -> RecognizeCelebritiesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> RecognizeCelebritiesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        RecognizeCelebritiesError::AccessDenied(String::from(error_message))
-                    }
-                    "ImageTooLargeException" => {
-                        RecognizeCelebritiesError::ImageTooLarge(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        RecognizeCelebritiesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidImageFormatException" => {
-                        RecognizeCelebritiesError::InvalidImageFormat(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        RecognizeCelebritiesError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        RecognizeCelebritiesError::InvalidS3Object(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        RecognizeCelebritiesError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        RecognizeCelebritiesError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        RecognizeCelebritiesError::Validation(error_message.to_string())
-                    }
-                    _ => RecognizeCelebritiesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return RecognizeCelebritiesError::AccessDenied(String::from(error_message))
                 }
+                "ImageTooLargeException" => {
+                    return RecognizeCelebritiesError::ImageTooLarge(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return RecognizeCelebritiesError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidImageFormatException" => {
+                    return RecognizeCelebritiesError::InvalidImageFormat(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RecognizeCelebritiesError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidS3ObjectException" => {
+                    return RecognizeCelebritiesError::InvalidS3Object(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RecognizeCelebritiesError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RecognizeCelebritiesError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return RecognizeCelebritiesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => RecognizeCelebritiesError::Unknown(String::from(body)),
         }
+        return RecognizeCelebritiesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for RecognizeCelebritiesError {
     fn from(err: serde_json::error::Error) -> RecognizeCelebritiesError {
-        RecognizeCelebritiesError::Unknown(err.description().to_string())
+        RecognizeCelebritiesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for RecognizeCelebritiesError {
@@ -4446,7 +4520,8 @@ impl Error for RecognizeCelebritiesError {
             RecognizeCelebritiesError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            RecognizeCelebritiesError::Unknown(ref cause) => cause,
+            RecognizeCelebritiesError::ParseError(ref cause) => cause,
+            RecognizeCelebritiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4471,56 +4546,58 @@ pub enum SearchFacesError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchFacesError {
-    pub fn from_body(body: &str) -> SearchFacesError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchFacesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        SearchFacesError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        SearchFacesError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        SearchFacesError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        SearchFacesError::ProvisionedThroughputExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        SearchFacesError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        SearchFacesError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SearchFacesError::Validation(error_message.to_string())
-                    }
-                    _ => SearchFacesError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return SearchFacesError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return SearchFacesError::InternalServerError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return SearchFacesError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return SearchFacesError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return SearchFacesError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return SearchFacesError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return SearchFacesError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SearchFacesError::Unknown(String::from(body)),
         }
+        return SearchFacesError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchFacesError {
     fn from(err: serde_json::error::Error) -> SearchFacesError {
-        SearchFacesError::Unknown(err.description().to_string())
+        SearchFacesError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchFacesError {
@@ -4555,7 +4632,8 @@ impl Error for SearchFacesError {
             SearchFacesError::Validation(ref cause) => cause,
             SearchFacesError::Credentials(ref err) => err.description(),
             SearchFacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SearchFacesError::Unknown(ref cause) => cause,
+            SearchFacesError::ParseError(ref cause) => cause,
+            SearchFacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4586,67 +4664,67 @@ pub enum SearchFacesByImageError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl SearchFacesByImageError {
-    pub fn from_body(body: &str) -> SearchFacesByImageError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> SearchFacesByImageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        SearchFacesByImageError::AccessDenied(String::from(error_message))
-                    }
-                    "ImageTooLargeException" => {
-                        SearchFacesByImageError::ImageTooLarge(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        SearchFacesByImageError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidImageFormatException" => {
-                        SearchFacesByImageError::InvalidImageFormat(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        SearchFacesByImageError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        SearchFacesByImageError::InvalidS3Object(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        SearchFacesByImageError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        SearchFacesByImageError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        SearchFacesByImageError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        SearchFacesByImageError::Validation(error_message.to_string())
-                    }
-                    _ => SearchFacesByImageError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return SearchFacesByImageError::AccessDenied(String::from(error_message))
                 }
+                "ImageTooLargeException" => {
+                    return SearchFacesByImageError::ImageTooLarge(String::from(error_message))
+                }
+                "InternalServerError" => {
+                    return SearchFacesByImageError::InternalServerError(String::from(error_message))
+                }
+                "InvalidImageFormatException" => {
+                    return SearchFacesByImageError::InvalidImageFormat(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return SearchFacesByImageError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidS3ObjectException" => {
+                    return SearchFacesByImageError::InvalidS3Object(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return SearchFacesByImageError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return SearchFacesByImageError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return SearchFacesByImageError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return SearchFacesByImageError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => SearchFacesByImageError::Unknown(String::from(body)),
         }
+        return SearchFacesByImageError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for SearchFacesByImageError {
     fn from(err: serde_json::error::Error) -> SearchFacesByImageError {
-        SearchFacesByImageError::Unknown(err.description().to_string())
+        SearchFacesByImageError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for SearchFacesByImageError {
@@ -4686,7 +4764,8 @@ impl Error for SearchFacesByImageError {
             SearchFacesByImageError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            SearchFacesByImageError::Unknown(ref cause) => cause,
+            SearchFacesByImageError::ParseError(ref cause) => cause,
+            SearchFacesByImageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4717,71 +4796,79 @@ pub enum StartCelebrityRecognitionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartCelebrityRecognitionError {
-    pub fn from_body(body: &str) -> StartCelebrityRecognitionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartCelebrityRecognitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        StartCelebrityRecognitionError::AccessDenied(String::from(error_message))
-                    }
-                    "IdempotentParameterMismatchException" => {
-                        StartCelebrityRecognitionError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerError" => StartCelebrityRecognitionError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidParameterException" => {
-                        StartCelebrityRecognitionError::InvalidParameter(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidS3ObjectException" => {
-                        StartCelebrityRecognitionError::InvalidS3Object(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        StartCelebrityRecognitionError::LimitExceeded(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        StartCelebrityRecognitionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        StartCelebrityRecognitionError::Throttling(String::from(error_message))
-                    }
-                    "VideoTooLargeException" => {
-                        StartCelebrityRecognitionError::VideoTooLarge(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartCelebrityRecognitionError::Validation(error_message.to_string())
-                    }
-                    _ => StartCelebrityRecognitionError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return StartCelebrityRecognitionError::AccessDenied(String::from(error_message))
                 }
+                "IdempotentParameterMismatchException" => {
+                    return StartCelebrityRecognitionError::IdempotentParameterMismatch(
+                        String::from(error_message),
+                    )
+                }
+                "InternalServerError" => {
+                    return StartCelebrityRecognitionError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return StartCelebrityRecognitionError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidS3ObjectException" => {
+                    return StartCelebrityRecognitionError::InvalidS3Object(String::from(
+                        error_message,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return StartCelebrityRecognitionError::LimitExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return StartCelebrityRecognitionError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
+                    )
+                }
+                "ThrottlingException" => {
+                    return StartCelebrityRecognitionError::Throttling(String::from(error_message))
+                }
+                "VideoTooLargeException" => {
+                    return StartCelebrityRecognitionError::VideoTooLarge(String::from(
+                        error_message,
+                    ))
+                }
+                "ValidationException" => {
+                    return StartCelebrityRecognitionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartCelebrityRecognitionError::Unknown(String::from(body)),
         }
+        return StartCelebrityRecognitionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartCelebrityRecognitionError {
     fn from(err: serde_json::error::Error) -> StartCelebrityRecognitionError {
-        StartCelebrityRecognitionError::Unknown(err.description().to_string())
+        StartCelebrityRecognitionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartCelebrityRecognitionError {
@@ -4821,7 +4908,8 @@ impl Error for StartCelebrityRecognitionError {
             StartCelebrityRecognitionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartCelebrityRecognitionError::Unknown(ref cause) => cause,
+            StartCelebrityRecognitionError::ParseError(ref cause) => cause,
+            StartCelebrityRecognitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4852,69 +4940,73 @@ pub enum StartContentModerationError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartContentModerationError {
-    pub fn from_body(body: &str) -> StartContentModerationError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartContentModerationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        StartContentModerationError::AccessDenied(String::from(error_message))
-                    }
-                    "IdempotentParameterMismatchException" => {
-                        StartContentModerationError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerError" => StartContentModerationError::InternalServerError(
-                        String::from(error_message),
-                    ),
-                    "InvalidParameterException" => {
-                        StartContentModerationError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        StartContentModerationError::InvalidS3Object(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        StartContentModerationError::LimitExceeded(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        StartContentModerationError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        StartContentModerationError::Throttling(String::from(error_message))
-                    }
-                    "VideoTooLargeException" => {
-                        StartContentModerationError::VideoTooLarge(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartContentModerationError::Validation(error_message.to_string())
-                    }
-                    _ => StartContentModerationError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return StartContentModerationError::AccessDenied(String::from(error_message))
                 }
+                "IdempotentParameterMismatchException" => {
+                    return StartContentModerationError::IdempotentParameterMismatch(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerError" => {
+                    return StartContentModerationError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return StartContentModerationError::InvalidParameter(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidS3ObjectException" => {
+                    return StartContentModerationError::InvalidS3Object(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return StartContentModerationError::LimitExceeded(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return StartContentModerationError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return StartContentModerationError::Throttling(String::from(error_message))
+                }
+                "VideoTooLargeException" => {
+                    return StartContentModerationError::VideoTooLarge(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartContentModerationError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartContentModerationError::Unknown(String::from(body)),
         }
+        return StartContentModerationError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartContentModerationError {
     fn from(err: serde_json::error::Error) -> StartContentModerationError {
-        StartContentModerationError::Unknown(err.description().to_string())
+        StartContentModerationError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartContentModerationError {
@@ -4954,7 +5046,8 @@ impl Error for StartContentModerationError {
             StartContentModerationError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartContentModerationError::Unknown(ref cause) => cause,
+            StartContentModerationError::ParseError(ref cause) => cause,
+            StartContentModerationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4985,69 +5078,69 @@ pub enum StartFaceDetectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartFaceDetectionError {
-    pub fn from_body(body: &str) -> StartFaceDetectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartFaceDetectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        StartFaceDetectionError::AccessDenied(String::from(error_message))
-                    }
-                    "IdempotentParameterMismatchException" => {
-                        StartFaceDetectionError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerError" => {
-                        StartFaceDetectionError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        StartFaceDetectionError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        StartFaceDetectionError::InvalidS3Object(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        StartFaceDetectionError::LimitExceeded(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        StartFaceDetectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        StartFaceDetectionError::Throttling(String::from(error_message))
-                    }
-                    "VideoTooLargeException" => {
-                        StartFaceDetectionError::VideoTooLarge(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartFaceDetectionError::Validation(error_message.to_string())
-                    }
-                    _ => StartFaceDetectionError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return StartFaceDetectionError::AccessDenied(String::from(error_message))
                 }
+                "IdempotentParameterMismatchException" => {
+                    return StartFaceDetectionError::IdempotentParameterMismatch(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerError" => {
+                    return StartFaceDetectionError::InternalServerError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return StartFaceDetectionError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidS3ObjectException" => {
+                    return StartFaceDetectionError::InvalidS3Object(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return StartFaceDetectionError::LimitExceeded(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return StartFaceDetectionError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return StartFaceDetectionError::Throttling(String::from(error_message))
+                }
+                "VideoTooLargeException" => {
+                    return StartFaceDetectionError::VideoTooLarge(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartFaceDetectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartFaceDetectionError::Unknown(String::from(body)),
         }
+        return StartFaceDetectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartFaceDetectionError {
     fn from(err: serde_json::error::Error) -> StartFaceDetectionError {
-        StartFaceDetectionError::Unknown(err.description().to_string())
+        StartFaceDetectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartFaceDetectionError {
@@ -5087,7 +5180,8 @@ impl Error for StartFaceDetectionError {
             StartFaceDetectionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartFaceDetectionError::Unknown(ref cause) => cause,
+            StartFaceDetectionError::ParseError(ref cause) => cause,
+            StartFaceDetectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5120,72 +5214,72 @@ pub enum StartFaceSearchError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartFaceSearchError {
-    pub fn from_body(body: &str) -> StartFaceSearchError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartFaceSearchError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        StartFaceSearchError::AccessDenied(String::from(error_message))
-                    }
-                    "IdempotentParameterMismatchException" => {
-                        StartFaceSearchError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerError" => {
-                        StartFaceSearchError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        StartFaceSearchError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        StartFaceSearchError::InvalidS3Object(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        StartFaceSearchError::LimitExceeded(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        StartFaceSearchError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        StartFaceSearchError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        StartFaceSearchError::Throttling(String::from(error_message))
-                    }
-                    "VideoTooLargeException" => {
-                        StartFaceSearchError::VideoTooLarge(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartFaceSearchError::Validation(error_message.to_string())
-                    }
-                    _ => StartFaceSearchError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return StartFaceSearchError::AccessDenied(String::from(error_message))
                 }
+                "IdempotentParameterMismatchException" => {
+                    return StartFaceSearchError::IdempotentParameterMismatch(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerError" => {
+                    return StartFaceSearchError::InternalServerError(String::from(error_message))
+                }
+                "InvalidParameterException" => {
+                    return StartFaceSearchError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidS3ObjectException" => {
+                    return StartFaceSearchError::InvalidS3Object(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return StartFaceSearchError::LimitExceeded(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return StartFaceSearchError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return StartFaceSearchError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return StartFaceSearchError::Throttling(String::from(error_message))
+                }
+                "VideoTooLargeException" => {
+                    return StartFaceSearchError::VideoTooLarge(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartFaceSearchError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartFaceSearchError::Unknown(String::from(body)),
         }
+        return StartFaceSearchError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartFaceSearchError {
     fn from(err: serde_json::error::Error) -> StartFaceSearchError {
-        StartFaceSearchError::Unknown(err.description().to_string())
+        StartFaceSearchError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartFaceSearchError {
@@ -5224,7 +5318,8 @@ impl Error for StartFaceSearchError {
             StartFaceSearchError::Validation(ref cause) => cause,
             StartFaceSearchError::Credentials(ref err) => err.description(),
             StartFaceSearchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartFaceSearchError::Unknown(ref cause) => cause,
+            StartFaceSearchError::ParseError(ref cause) => cause,
+            StartFaceSearchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5255,69 +5350,71 @@ pub enum StartLabelDetectionError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartLabelDetectionError {
-    pub fn from_body(body: &str) -> StartLabelDetectionError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartLabelDetectionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        StartLabelDetectionError::AccessDenied(String::from(error_message))
-                    }
-                    "IdempotentParameterMismatchException" => {
-                        StartLabelDetectionError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerError" => {
-                        StartLabelDetectionError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        StartLabelDetectionError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        StartLabelDetectionError::InvalidS3Object(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        StartLabelDetectionError::LimitExceeded(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        StartLabelDetectionError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        StartLabelDetectionError::Throttling(String::from(error_message))
-                    }
-                    "VideoTooLargeException" => {
-                        StartLabelDetectionError::VideoTooLarge(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartLabelDetectionError::Validation(error_message.to_string())
-                    }
-                    _ => StartLabelDetectionError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return StartLabelDetectionError::AccessDenied(String::from(error_message))
                 }
+                "IdempotentParameterMismatchException" => {
+                    return StartLabelDetectionError::IdempotentParameterMismatch(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerError" => {
+                    return StartLabelDetectionError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return StartLabelDetectionError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidS3ObjectException" => {
+                    return StartLabelDetectionError::InvalidS3Object(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return StartLabelDetectionError::LimitExceeded(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return StartLabelDetectionError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return StartLabelDetectionError::Throttling(String::from(error_message))
+                }
+                "VideoTooLargeException" => {
+                    return StartLabelDetectionError::VideoTooLarge(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartLabelDetectionError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartLabelDetectionError::Unknown(String::from(body)),
         }
+        return StartLabelDetectionError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartLabelDetectionError {
     fn from(err: serde_json::error::Error) -> StartLabelDetectionError {
-        StartLabelDetectionError::Unknown(err.description().to_string())
+        StartLabelDetectionError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartLabelDetectionError {
@@ -5357,7 +5454,8 @@ impl Error for StartLabelDetectionError {
             StartLabelDetectionError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartLabelDetectionError::Unknown(ref cause) => cause,
+            StartLabelDetectionError::ParseError(ref cause) => cause,
+            StartLabelDetectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5388,69 +5486,71 @@ pub enum StartPersonTrackingError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartPersonTrackingError {
-    pub fn from_body(body: &str) -> StartPersonTrackingError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartPersonTrackingError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        StartPersonTrackingError::AccessDenied(String::from(error_message))
-                    }
-                    "IdempotentParameterMismatchException" => {
-                        StartPersonTrackingError::IdempotentParameterMismatch(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InternalServerError" => {
-                        StartPersonTrackingError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        StartPersonTrackingError::InvalidParameter(String::from(error_message))
-                    }
-                    "InvalidS3ObjectException" => {
-                        StartPersonTrackingError::InvalidS3Object(String::from(error_message))
-                    }
-                    "LimitExceededException" => {
-                        StartPersonTrackingError::LimitExceeded(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        StartPersonTrackingError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ThrottlingException" => {
-                        StartPersonTrackingError::Throttling(String::from(error_message))
-                    }
-                    "VideoTooLargeException" => {
-                        StartPersonTrackingError::VideoTooLarge(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartPersonTrackingError::Validation(error_message.to_string())
-                    }
-                    _ => StartPersonTrackingError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return StartPersonTrackingError::AccessDenied(String::from(error_message))
                 }
+                "IdempotentParameterMismatchException" => {
+                    return StartPersonTrackingError::IdempotentParameterMismatch(String::from(
+                        error_message,
+                    ))
+                }
+                "InternalServerError" => {
+                    return StartPersonTrackingError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return StartPersonTrackingError::InvalidParameter(String::from(error_message))
+                }
+                "InvalidS3ObjectException" => {
+                    return StartPersonTrackingError::InvalidS3Object(String::from(error_message))
+                }
+                "LimitExceededException" => {
+                    return StartPersonTrackingError::LimitExceeded(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return StartPersonTrackingError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return StartPersonTrackingError::Throttling(String::from(error_message))
+                }
+                "VideoTooLargeException" => {
+                    return StartPersonTrackingError::VideoTooLarge(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartPersonTrackingError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartPersonTrackingError::Unknown(String::from(body)),
         }
+        return StartPersonTrackingError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartPersonTrackingError {
     fn from(err: serde_json::error::Error) -> StartPersonTrackingError {
-        StartPersonTrackingError::Unknown(err.description().to_string())
+        StartPersonTrackingError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartPersonTrackingError {
@@ -5490,7 +5590,8 @@ impl Error for StartPersonTrackingError {
             StartPersonTrackingError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartPersonTrackingError::Unknown(ref cause) => cause,
+            StartPersonTrackingError::ParseError(ref cause) => cause,
+            StartPersonTrackingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5517,61 +5618,63 @@ pub enum StartStreamProcessorError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StartStreamProcessorError {
-    pub fn from_body(body: &str) -> StartStreamProcessorError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StartStreamProcessorError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        StartStreamProcessorError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        StartStreamProcessorError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        StartStreamProcessorError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        StartStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceInUseException" => {
-                        StartStreamProcessorError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        StartStreamProcessorError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        StartStreamProcessorError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StartStreamProcessorError::Validation(error_message.to_string())
-                    }
-                    _ => StartStreamProcessorError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return StartStreamProcessorError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return StartStreamProcessorError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return StartStreamProcessorError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return StartStreamProcessorError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return StartStreamProcessorError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return StartStreamProcessorError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return StartStreamProcessorError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StartStreamProcessorError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StartStreamProcessorError::Unknown(String::from(body)),
         }
+        return StartStreamProcessorError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StartStreamProcessorError {
     fn from(err: serde_json::error::Error) -> StartStreamProcessorError {
-        StartStreamProcessorError::Unknown(err.description().to_string())
+        StartStreamProcessorError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StartStreamProcessorError {
@@ -5609,7 +5712,8 @@ impl Error for StartStreamProcessorError {
             StartStreamProcessorError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StartStreamProcessorError::Unknown(ref cause) => cause,
+            StartStreamProcessorError::ParseError(ref cause) => cause,
+            StartStreamProcessorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5636,61 +5740,63 @@ pub enum StopStreamProcessorError {
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
     Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
     /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
+    Unknown(BufferedHttpResponse),
 }
 
 impl StopStreamProcessorError {
-    pub fn from_body(body: &str) -> StopStreamProcessorError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json
-                    .get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+    pub fn from_response(res: BufferedHttpResponse) -> StopStreamProcessorError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
 
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
 
-                match *error_type {
-                    "AccessDeniedException" => {
-                        StopStreamProcessorError::AccessDenied(String::from(error_message))
-                    }
-                    "InternalServerError" => {
-                        StopStreamProcessorError::InternalServerError(String::from(error_message))
-                    }
-                    "InvalidParameterException" => {
-                        StopStreamProcessorError::InvalidParameter(String::from(error_message))
-                    }
-                    "ProvisionedThroughputExceededException" => {
-                        StopStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceInUseException" => {
-                        StopStreamProcessorError::ResourceInUse(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        StopStreamProcessorError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ThrottlingException" => {
-                        StopStreamProcessorError::Throttling(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        StopStreamProcessorError::Validation(error_message.to_string())
-                    }
-                    _ => StopStreamProcessorError::Unknown(String::from(body)),
+            match *error_type {
+                "AccessDeniedException" => {
+                    return StopStreamProcessorError::AccessDenied(String::from(error_message))
                 }
+                "InternalServerError" => {
+                    return StopStreamProcessorError::InternalServerError(String::from(
+                        error_message,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return StopStreamProcessorError::InvalidParameter(String::from(error_message))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return StopStreamProcessorError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return StopStreamProcessorError::ResourceInUse(String::from(error_message))
+                }
+                "ResourceNotFoundException" => {
+                    return StopStreamProcessorError::ResourceNotFound(String::from(error_message))
+                }
+                "ThrottlingException" => {
+                    return StopStreamProcessorError::Throttling(String::from(error_message))
+                }
+                "ValidationException" => {
+                    return StopStreamProcessorError::Validation(error_message.to_string())
+                }
+                _ => {}
             }
-            Err(_) => StopStreamProcessorError::Unknown(String::from(body)),
         }
+        return StopStreamProcessorError::Unknown(res);
     }
 }
 
 impl From<serde_json::error::Error> for StopStreamProcessorError {
     fn from(err: serde_json::error::Error) -> StopStreamProcessorError {
-        StopStreamProcessorError::Unknown(err.description().to_string())
+        StopStreamProcessorError::ParseError(err.description().to_string())
     }
 }
 impl From<CredentialsError> for StopStreamProcessorError {
@@ -5728,7 +5834,8 @@ impl Error for StopStreamProcessorError {
             StopStreamProcessorError::HttpDispatch(ref dispatch_error) => {
                 dispatch_error.description()
             }
-            StopStreamProcessorError::Unknown(ref cause) => cause,
+            StopStreamProcessorError::ParseError(ref cause) => cause,
+            StopStreamProcessorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5991,14 +6098,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<CompareFacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CompareFacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CompareFacesError::from_response(response))),
+                )
             }
         })
     }
@@ -6026,14 +6135,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<CreateCollectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateCollectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateCollectionError::from_response(response))),
+                )
             }
         })
     }
@@ -6061,14 +6172,15 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<CreateStreamProcessorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(CreateStreamProcessorError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateStreamProcessorError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6096,14 +6208,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DeleteCollectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteCollectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteCollectionError::from_response(response))),
+                )
             }
         })
     }
@@ -6131,14 +6245,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DeleteFacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteFacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteFacesError::from_response(response))),
+                )
             }
         })
     }
@@ -6166,14 +6282,15 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DeleteStreamProcessorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DeleteStreamProcessorError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteStreamProcessorError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6201,13 +6318,12 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DescribeStreamProcessorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DescribeStreamProcessorError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(DescribeStreamProcessorError::from_response(response))
                 }))
             }
         })
@@ -6236,14 +6352,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DetectFacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetectFacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetectFacesError::from_response(response))),
+                )
             }
         })
     }
@@ -6271,14 +6389,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DetectLabelsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetectLabelsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetectLabelsError::from_response(response))),
+                )
             }
         })
     }
@@ -6306,14 +6426,15 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DetectModerationLabelsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetectModerationLabelsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DetectModerationLabelsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6341,14 +6462,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<DetectTextResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(DetectTextError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetectTextError::from_response(response))),
+                )
             }
         })
     }
@@ -6376,14 +6499,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetCelebrityInfoResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCelebrityInfoError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetCelebrityInfoError::from_response(response))),
+                )
             }
         })
     }
@@ -6411,13 +6536,12 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetCelebrityRecognitionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetCelebrityRecognitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(GetCelebrityRecognitionError::from_response(response))
                 }))
             }
         })
@@ -6446,14 +6570,15 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetContentModerationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetContentModerationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetContentModerationError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6481,14 +6606,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetFaceDetectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFaceDetectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetFaceDetectionError::from_response(response))),
+                )
             }
         })
     }
@@ -6516,14 +6643,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetFaceSearchResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetFaceSearchError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetFaceSearchError::from_response(response))),
+                )
             }
         })
     }
@@ -6551,14 +6680,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetLabelDetectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetLabelDetectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetLabelDetectionError::from_response(response))),
+                )
             }
         })
     }
@@ -6586,14 +6717,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<GetPersonTrackingResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(GetPersonTrackingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetPersonTrackingError::from_response(response))),
+                )
             }
         })
     }
@@ -6621,14 +6754,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<IndexFacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(IndexFacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(IndexFacesError::from_response(response))),
+                )
             }
         })
     }
@@ -6656,14 +6791,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<ListCollectionsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListCollectionsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListCollectionsError::from_response(response))),
+                )
             }
         })
     }
@@ -6691,14 +6828,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<ListFacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListFacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListFacesError::from_response(response))),
+                )
             }
         })
     }
@@ -6726,14 +6865,15 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<ListStreamProcessorsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(ListStreamProcessorsError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListStreamProcessorsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6761,14 +6901,15 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<RecognizeCelebritiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(RecognizeCelebritiesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RecognizeCelebritiesError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6796,14 +6937,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<SearchFacesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchFacesError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchFacesError::from_response(response))),
+                )
             }
         })
     }
@@ -6831,14 +6974,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<SearchFacesByImageResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(SearchFacesByImageError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SearchFacesByImageError::from_response(response))),
+                )
             }
         })
     }
@@ -6869,13 +7014,12 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartCelebrityRecognitionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartCelebrityRecognitionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
+                    Err(StartCelebrityRecognitionError::from_response(response))
                 }))
             }
         })
@@ -6904,14 +7048,15 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartContentModerationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartContentModerationError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartContentModerationError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -6939,14 +7084,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartFaceDetectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartFaceDetectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartFaceDetectionError::from_response(response))),
+                )
             }
         })
     }
@@ -6974,14 +7121,16 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartFaceSearchResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartFaceSearchError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartFaceSearchError::from_response(response))),
+                )
             }
         })
     }
@@ -7009,14 +7158,15 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartLabelDetectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartLabelDetectionError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartLabelDetectionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -7044,14 +7194,15 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartPersonTrackingResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartPersonTrackingError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartPersonTrackingError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -7079,14 +7230,15 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StartStreamProcessorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StartStreamProcessorError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartStreamProcessorError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -7114,14 +7266,15 @@ impl Rekognition for RekognitionClient {
 
                     serde_json::from_str::<StopStreamProcessorResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
-                Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(StopStreamProcessorError::from_body(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                    ))
-                }))
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StopStreamProcessorError::from_response(response))
+                    }),
+                )
             }
         })
     }
