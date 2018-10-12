@@ -23,7 +23,7 @@
 - rusoto_credential uses Serde derives for credentials instead of hand written code
 - Add MediaStore support
 - Expose raw BufferedHttpResponse on ::Unknown error variants
-- Switch Ceph test to use the `Mimic` release instead of `Luminous`
+- Removed Ceph test for `Luminous`
 
 ## [0.34.0] - 2018-09-05
 
