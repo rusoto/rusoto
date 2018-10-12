@@ -13,9 +13,11 @@ use regex::Regex;
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials, non_empty_env_var};
 
+const AWS_CONFIG_FILE: &str = "AWS_CONFIG_FILE";
 const AWS_PROFILE: &str = "AWS_PROFILE";
 const AWS_SHARED_CREDENTIALS_FILE: &str = "AWS_SHARED_CREDENTIALS_FILE";
 const DEFAULT: &str = "default";
+const REGION: &str = "region";
 
 /// Provides AWS credentials from a profile in a credentials file.
 #[derive(Clone, Debug)]
@@ -55,6 +57,46 @@ impl ProfileProvider {
         F: Into<PathBuf>
     {
         ProfileProvider::with_configuration(file_path, ProfileProvider::default_profile_name())
+    }
+
+    /// Attempts to resolve a region value associated with the current profile from
+    /// `~/.aws/config` or the file associated with the `AWS_CONFIG_FILE` environment variable.
+    /// As these fields do not require a region field to be defined, an `Option` type is returned
+    ///
+    /// For a the ful region resolution chain, use the `Default` impl for `rusoto_core::Region`
+    pub fn region() -> Result<Option<String>, CredentialsError> {
+        let location = ProfileProvider::default_config_location();
+        location.map(|location| {
+            parse_config_file(&location)
+                .and_then(|config| {
+                    config.get(& ProfileProvider::default_profile_name())
+                        .and_then(|props| props.get(REGION)).map(|value| value.to_owned())
+                })
+        })
+    }
+
+    /// Default config file location:
+    /// 1: if set and not empty, use the value from environment variable ```AWS_CONFIG_FILE```
+    /// 2. otherwise return `~/.aws/config` (Linux/Mac) resp. `%USERPROFILE%\.aws\config` (Windows)
+    fn default_config_location() -> Result<PathBuf, CredentialsError> {
+        let env = non_empty_env_var(AWS_CONFIG_FILE);
+        match env {
+            Some(path) => Ok(PathBuf::from(path)),
+            None => ProfileProvider::hardcoded_config_location(),
+        }
+    }
+
+    fn hardcoded_config_location() -> Result<PathBuf, CredentialsError> {
+        match home_dir() {
+            Some(mut home_path) => {
+                home_path.push(".aws");
+                home_path.push("config");
+                Ok(home_path)
+            }
+            None => Err(CredentialsError::new(
+                "Failed to determine home directory.",
+            )),
+        }
     }
 
     /// Default credentials file location:
@@ -144,6 +186,56 @@ impl ProvideAwsCredentials for ProfileProvider {
     }
 }
 
+// should probably constantize with lazy_static!
+fn new_profile_regex() -> Regex {
+    Regex::new(r"^\[(profile )?([^\]]+)\]$").expect("Failed to compile regex")
+}
+
+fn parse_config_file(file_path: &Path) -> Option<HashMap<String, HashMap<String, String>>> {
+    match fs::metadata(file_path) {
+        Err(_) => {
+            return None
+        }
+        Ok(metadata) => {
+            if !metadata.is_file() {
+                return None
+            }
+        }
+    };
+    let profile_regex = new_profile_regex();
+    let file = File::open(file_path).expect("expected file");
+    let file_lines = BufReader::new(&file);
+    let result: (HashMap<String, HashMap<String, String>>, Option<String>) =
+        file_lines.lines()
+            .filter_map(|line| {
+                line.ok()
+                    .map(|l| l.trim_matches(' ').to_owned())
+                    .filter(|l| !l.starts_with('#') || !l.is_empty())
+            })
+            .fold(
+                Default::default(), |(mut result, profile), line| {
+                    if profile_regex.is_match(&line) {
+                        let caps = profile_regex.captures(&line).unwrap();
+                        let next_profile = caps.get(2).map(|value| value.as_str().to_string());
+                        (result, next_profile)
+                    } else {
+                        match &line.splitn(2, '=').map(|value| value.trim_matches(' ')).collect::<Vec<&str>>()[..] {
+                            [key, value] if !key.is_empty() && !value.is_empty() => {
+                                if let Some(current) = profile.clone() {
+                                    let values = result.entry(current)
+                                        .or_insert_with(HashMap::new);
+                                    (*values).insert(key.to_string(), value.to_string());
+                                }
+                                (result, profile)
+                            }
+                            _ => (result, profile)
+                        }
+                    }
+                }
+            );
+    Some(result.0)
+}
+
 /// Parses a Credentials file into a Map of <`ProfileName`, `AwsCredentials`>
 fn parse_credentials_file(
     file_path: &Path,
@@ -167,7 +259,7 @@ fn parse_credentials_file(
 
     let file = try!(File::open(file_path));
 
-    let profile_regex = Regex::new(r"^\[(profile )?([^\]]+)\]$").expect("Failed to compile regex");
+    let profile_regex = new_profile_regex();
     let mut profiles: HashMap<String, AwsCredentials> = HashMap::new();
     let mut access_key: Option<String> = None;
     let mut secret_key: Option<String> = None;
@@ -288,6 +380,44 @@ mod tests {
     }
 
     #[test]
+    fn parse_config_file_default_profile() {
+        let result = super::parse_config_file(
+            Path::new("tests/sample-data/default_config"),
+        );
+        assert!(result.is_some());
+        let profiles = result.unwrap();
+        assert_eq!(profiles.len(), 1);
+         let default_profile = profiles.get(DEFAULT).expect(
+            "No Default profile in default_profile_credentials",
+        );
+        assert_eq!(default_profile.get(REGION), Some(&"us-east-2".to_string()));
+        assert_eq!(default_profile.get("output"), Some(&"json".to_string()));
+    }
+
+    #[test]
+    fn parse_config_file_multiple_profiles() {
+        let result = super::parse_config_file(
+            Path::new("tests/sample-data/multiple_profile_config"),
+        );
+        assert!(result.is_some());
+
+        let profiles = result.unwrap();
+        assert_eq!(profiles.len(), 3);
+
+        let foo_profile = profiles.get("foo").expect(
+            "No foo profile in multiple_profile_credentials",
+        );
+        assert_eq!(foo_profile.get(REGION), Some(&"us-east-3".to_string()));
+        assert_eq!(foo_profile.get("output"), Some(&"json".to_string()));
+
+        let bar_profile = profiles.get("bar").expect(
+            "No bar profile in multiple_profile_credentials",
+        );
+        assert_eq!(bar_profile.get(REGION), Some(&"us-east-4".to_string()));
+        assert_eq!(bar_profile.get("output"), Some(&"json".to_string()));
+    }
+
+    #[test]
     fn parse_credentials_file_default_profile() {
         let result = super::parse_credentials_file(
             Path::new("tests/sample-data/default_profile_credentials"),
@@ -384,7 +514,7 @@ mod tests {
         assert_eq!(creds.unwrap().aws_access_key_id(), "bar_access_key");
         env::remove_var(AWS_SHARED_CREDENTIALS_FILE);
         env::remove_var(AWS_PROFILE);
-    } 
+    }
 
     #[test]
     fn profile_provider_bad_profile() {
