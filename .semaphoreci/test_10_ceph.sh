@@ -12,7 +12,7 @@ cd "$GIT_ROOT/integration_tests"
 # http://docs.ceph.com/docs/master/releases/schedule/
 
 ./docker_test_run.py \
-    --docker-image "ceph/daemon:latest-luminous" \
+    --docker-image "ceph/daemon:latest-mimic" \
     --docker-image "ceph/daemon" \
     --port=9000 \
     --run-opt=-p=9000:8080 \
