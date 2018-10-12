@@ -23,7 +23,7 @@ To use `rusoto_workdocs` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_workdocs = "0.34.0"
+rusoto_workdocs = "0.35.0"
 ```
 
 ## Contributing

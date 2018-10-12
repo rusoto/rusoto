@@ -2950,8 +2950,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<AssociateConfigurationItemsToApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2987,8 +2986,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<CreateApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3024,8 +3022,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<CreateTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3064,8 +3061,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DeleteApplicationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3101,8 +3097,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DeleteTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3141,8 +3136,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DescribeAgentsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3181,8 +3175,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DescribeConfigurationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3220,8 +3213,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DescribeExportConfigurationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3257,8 +3249,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DescribeExportTasksResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3296,8 +3287,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DescribeTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3339,8 +3329,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<DisassociateConfigurationItemsFromApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3374,8 +3363,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<ExportConfigurationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3411,8 +3399,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<GetDiscoverySummaryResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3450,8 +3437,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<ListConfigurationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3490,8 +3476,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<ListServerNeighborsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3530,8 +3515,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<StartDataCollectionByAgentIdsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3567,8 +3551,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<StartExportTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3607,8 +3590,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<StopDataCollectionByAgentIdsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3644,8 +3626,7 @@ impl Discovery for DiscoveryClient {
 
                     serde_json::from_str::<UpdateApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

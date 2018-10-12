@@ -7,7 +7,7 @@ license = "MIT"
 name = "rusoto_sts"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.34.0"
+version = "0.35.0"
 homepage = "https://www.rusoto.org/"
 
 [build-dependencies]
@@ -19,7 +19,7 @@ serde_urlencoded = "0.5"
 xml-rs = "0.7"
 
 [dependencies.rusoto_core]
-version = "0.34.0"
+version = "0.35.0"
 path = "../../core"
 default-features = false
 [dev-dependencies.rusoto_mock]

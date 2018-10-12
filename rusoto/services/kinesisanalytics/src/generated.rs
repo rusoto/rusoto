@@ -3117,8 +3117,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<AddApplicationCloudWatchLoggingOptionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3156,8 +3155,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<AddApplicationInputResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3198,8 +3196,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<AddApplicationInputProcessingConfigurationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3235,8 +3232,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<AddApplicationOutputResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3277,8 +3273,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<AddApplicationReferenceDataSourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3316,8 +3311,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<CreateApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3356,8 +3350,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<DeleteApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3399,8 +3392,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<DeleteApplicationCloudWatchLoggingOptionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3439,8 +3431,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<DeleteApplicationInputProcessingConfigurationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3476,8 +3467,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<DeleteApplicationOutputResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3516,8 +3506,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<DeleteApplicationReferenceDataSourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -3555,8 +3544,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<DescribeApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3594,8 +3582,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<DiscoverInputSchemaResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3630,8 +3617,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<ListApplicationsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3667,8 +3653,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<StartApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3704,8 +3689,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<StopApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -3744,8 +3728,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
                     serde_json::from_str::<UpdateApplicationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

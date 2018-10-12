@@ -23,7 +23,7 @@ To use `rusoto_ses` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_ses = "0.34.0"
+rusoto_ses = "0.35.0"
 ```
 
 ## Contributing

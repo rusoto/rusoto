@@ -23,7 +23,7 @@ To use `rusoto_application_autoscaling` in your application, add it as a depende
 
 ```toml
 [dependencies]
-rusoto_application_autoscaling = "0.34.0"
+rusoto_application_autoscaling = "0.35.0"
 ```
 
 ## Contributing

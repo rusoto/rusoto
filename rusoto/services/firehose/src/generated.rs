@@ -874,7 +874,7 @@ pub struct Record {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default
+        default,
     )]
     pub data: Vec<u8>,
 }
@@ -2414,8 +2414,7 @@ impl KinesisFirehose for KinesisFirehoseClient {
 
                     serde_json::from_str::<CreateDeliveryStreamOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2450,8 +2449,7 @@ impl KinesisFirehose for KinesisFirehoseClient {
 
                     serde_json::from_str::<DeleteDeliveryStreamOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2486,8 +2484,7 @@ impl KinesisFirehose for KinesisFirehoseClient {
 
                     serde_json::from_str::<DescribeDeliveryStreamOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2522,8 +2519,7 @@ impl KinesisFirehose for KinesisFirehoseClient {
 
                     serde_json::from_str::<ListDeliveryStreamsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2561,8 +2557,7 @@ impl KinesisFirehose for KinesisFirehoseClient {
 
                     serde_json::from_str::<ListTagsForDeliveryStreamOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2592,8 +2587,7 @@ impl KinesisFirehose for KinesisFirehoseClient {
 
                     serde_json::from_str::<PutRecordOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2629,8 +2623,7 @@ impl KinesisFirehose for KinesisFirehoseClient {
 
                     serde_json::from_str::<PutRecordBatchOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2666,8 +2659,7 @@ impl KinesisFirehose for KinesisFirehoseClient {
 
                     serde_json::from_str::<TagDeliveryStreamOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2703,8 +2695,7 @@ impl KinesisFirehose for KinesisFirehoseClient {
 
                     serde_json::from_str::<UntagDeliveryStreamOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2739,8 +2730,7 @@ impl KinesisFirehose for KinesisFirehoseClient {
 
                     serde_json::from_str::<UpdateDestinationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

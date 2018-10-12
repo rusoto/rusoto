@@ -4696,8 +4696,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<AcknowledgeJobOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -4736,8 +4735,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<AcknowledgeThirdPartyJobOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4773,8 +4771,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<CreateCustomActionTypeOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -4809,8 +4806,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<CreatePipelineOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -4897,8 +4893,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<DeleteWebhookOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -4938,8 +4933,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<DeregisterWebhookWithThirdPartyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5030,8 +5024,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<GetJobDetailsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5067,8 +5060,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<GetPipelineOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5104,8 +5096,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<GetPipelineExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5140,8 +5131,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<GetPipelineStateOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5180,8 +5170,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<GetThirdPartyJobDetailsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5214,8 +5203,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<ListActionTypesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5254,8 +5242,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<ListPipelineExecutionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5290,8 +5277,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<ListPipelinesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5327,8 +5313,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<ListWebhooksOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5364,8 +5349,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<PollForJobsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5404,8 +5388,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<PollForThirdPartyJobsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5440,8 +5423,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<PutActionRevisionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5477,8 +5459,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<PutApprovalResultOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5616,8 +5597,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<PutWebhookOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5656,8 +5636,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<RegisterWebhookWithThirdPartyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5690,8 +5669,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<RetryStageExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5729,8 +5707,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<StartPipelineExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -5765,8 +5742,7 @@ impl CodePipeline for CodePipelineClient {
 
                     serde_json::from_str::<UpdatePipelineOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

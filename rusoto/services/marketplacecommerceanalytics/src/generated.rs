@@ -347,8 +347,7 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
 
                     serde_json::from_str::<GenerateDataSetResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -388,8 +387,7 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
 
                     serde_json::from_str::<StartSupportDataExportResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

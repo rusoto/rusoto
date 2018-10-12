@@ -1631,8 +1631,7 @@ impl CostExplorer for CostExplorerClient {
 
                     serde_json::from_str::<GetCostAndUsageResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1668,8 +1667,7 @@ impl CostExplorer for CostExplorerClient {
 
                     serde_json::from_str::<GetDimensionValuesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1708,8 +1706,7 @@ impl CostExplorer for CostExplorerClient {
 
                     serde_json::from_str::<GetReservationCoverageResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1750,8 +1747,7 @@ impl CostExplorer for CostExplorerClient {
 
                     serde_json::from_str::<GetReservationPurchaseRecommendationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1789,8 +1785,7 @@ impl CostExplorer for CostExplorerClient {
 
                     serde_json::from_str::<GetReservationUtilizationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1820,8 +1815,7 @@ impl CostExplorer for CostExplorerClient {
 
                     serde_json::from_str::<GetTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

@@ -6122,8 +6122,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<AddIpRoutesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6162,8 +6161,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<AddTagsToResourceResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6202,8 +6200,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<CancelSchemaExtensionResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6238,8 +6235,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<ConnectDirectoryResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6275,8 +6271,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<CreateAliasResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6312,8 +6307,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<CreateComputerResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6352,8 +6346,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<CreateConditionalForwarderResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6386,8 +6379,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<CreateDirectoryResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6426,8 +6418,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<CreateMicrosoftADResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6463,8 +6454,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<CreateSnapshotResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6500,8 +6490,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<CreateTrustResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6540,8 +6529,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DeleteConditionalForwarderResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6574,8 +6562,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DeleteDirectoryResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6611,8 +6598,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DeleteSnapshotResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6648,8 +6634,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DeleteTrustResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6688,8 +6673,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DeregisterEventTopicResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6727,8 +6711,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DescribeConditionalForwardersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6764,8 +6747,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DescribeDirectoriesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6803,8 +6785,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DescribeDomainControllersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6840,8 +6821,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DescribeEventTopicsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6879,8 +6859,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DescribeSnapshotsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6916,8 +6895,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DescribeTrustsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6953,8 +6931,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DisableRadiusResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -6990,8 +6967,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<DisableSsoResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7027,8 +7003,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<EnableRadiusResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7061,8 +7036,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<EnableSsoResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7099,8 +7073,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<GetDirectoryLimitsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7139,8 +7112,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<GetSnapshotLimitsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7176,8 +7148,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<ListIpRoutesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7216,8 +7187,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<ListSchemaExtensionsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7255,8 +7225,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<ListTagsForResourceResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7294,8 +7263,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<RegisterEventTopicResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7331,8 +7299,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<RemoveIpRoutesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7371,8 +7338,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<RemoveTagsFromResourceResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7410,8 +7376,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<ResetUserPasswordResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7450,8 +7415,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<RestoreFromSnapshotResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7489,8 +7453,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<StartSchemaExtensionResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7528,8 +7491,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<UpdateConditionalForwarderResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7566,8 +7528,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<UpdateNumberOfDomainControllersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7602,8 +7563,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<UpdateRadiusResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7639,8 +7599,7 @@ impl DirectoryService for DirectoryServiceClient {
 
                     serde_json::from_str::<VerifyTrustResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

@@ -23,7 +23,7 @@ To use `rusoto_ce` in your application, add it as a dependency in your `Cargo.to
 
 ```toml
 [dependencies]
-rusoto_ce = "0.34.0"
+rusoto_ce = "0.35.0"
 ```
 
 ## Contributing

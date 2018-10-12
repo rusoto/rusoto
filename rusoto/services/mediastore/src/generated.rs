@@ -1284,8 +1284,7 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<CreateContainerOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1321,8 +1320,7 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<DeleteContainerOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1358,8 +1356,7 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<DeleteContainerPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1394,8 +1391,7 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<DeleteCorsPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1431,8 +1427,7 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<DescribeContainerOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1468,8 +1463,7 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<GetContainerPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1505,8 +1499,7 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<GetCorsPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1542,8 +1535,7 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<ListContainersOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1579,8 +1571,7 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<PutContainerPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1616,8 +1607,7 @@ impl MediaStore for MediaStoreClient {
 
                     serde_json::from_str::<PutCorsPolicyOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

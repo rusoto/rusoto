@@ -1753,8 +1753,7 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DeleteScalingPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1792,8 +1791,7 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DeleteScheduledActionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1831,8 +1829,7 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DeregisterScalableTargetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1868,8 +1865,7 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DescribeScalableTargetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1905,8 +1901,7 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DescribeScalingActivitiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1942,8 +1937,7 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DescribeScalingPoliciesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1979,8 +1973,7 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<DescribeScheduledActionsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2013,8 +2006,7 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<PutScalingPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2050,8 +2042,7 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<PutScheduledActionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2090,8 +2081,7 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
 
                     serde_json::from_str::<RegisterScalableTargetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

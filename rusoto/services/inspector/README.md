@@ -23,7 +23,7 @@ To use `rusoto_inspector` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_inspector = "0.34.0"
+rusoto_inspector = "0.35.0"
 ```
 
 ## Contributing

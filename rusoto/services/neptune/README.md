@@ -23,7 +23,7 @@ To use `rusoto_neptune` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_neptune = "0.34.0"
+rusoto_neptune = "0.35.0"
 ```
 
 ## Contributing

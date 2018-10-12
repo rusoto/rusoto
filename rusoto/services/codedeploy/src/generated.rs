@@ -7217,8 +7217,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<BatchGetApplicationRevisionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7251,8 +7250,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<BatchGetApplicationsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7290,8 +7288,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<BatchGetDeploymentGroupsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7327,8 +7324,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<BatchGetDeploymentInstancesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7361,8 +7357,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<BatchGetDeploymentsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7400,8 +7395,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<BatchGetOnPremisesInstancesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7460,8 +7454,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<CreateApplicationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7497,8 +7490,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<CreateDeploymentOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7534,8 +7526,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<CreateDeploymentConfigOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7570,8 +7561,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<CreateDeploymentGroupOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7657,8 +7647,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<DeleteDeploymentGroupOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7696,8 +7685,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<DeleteGitHubAccountTokenOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7756,8 +7744,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<GetApplicationOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7793,8 +7780,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<GetApplicationRevisionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7829,8 +7815,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<GetDeploymentOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7866,8 +7851,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<GetDeploymentConfigOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7902,8 +7886,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<GetDeploymentGroupOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7939,8 +7922,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<GetDeploymentInstanceOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -7975,8 +7957,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<GetOnPremisesInstanceOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -8014,8 +7995,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<ListApplicationRevisionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8048,8 +8028,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<ListApplicationsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -8085,8 +8064,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<ListDeploymentConfigsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -8121,8 +8099,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<ListDeploymentGroupsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -8160,8 +8137,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<ListDeploymentInstancesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8194,8 +8170,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<ListDeploymentsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -8234,8 +8209,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<ListGitHubAccountTokenNamesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8271,8 +8245,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<ListOnPremisesInstancesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8311,8 +8284,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<PutLifecycleEventHookExecutionStatusOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8455,8 +8427,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<StopDeploymentOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -8518,8 +8489,7 @@ impl CodeDeploy for CodeDeployClient {
 
                     serde_json::from_str::<UpdateDeploymentGroupOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

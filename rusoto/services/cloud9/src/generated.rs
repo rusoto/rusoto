@@ -1655,8 +1655,7 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<CreateEnvironmentEC2Result>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1694,8 +1693,7 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<CreateEnvironmentMembershipResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1731,8 +1729,7 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<DeleteEnvironmentResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1771,8 +1768,7 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<DeleteEnvironmentMembershipResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1809,8 +1805,7 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<DescribeEnvironmentMembershipsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1846,8 +1841,7 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<DescribeEnvironmentStatusResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1883,8 +1877,7 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<DescribeEnvironmentsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1922,8 +1915,7 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<ListEnvironmentsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1962,8 +1954,7 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<UpdateEnvironmentResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -2002,8 +1993,7 @@ impl Cloud9 for Cloud9Client {
 
                     serde_json::from_str::<UpdateEnvironmentMembershipResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {

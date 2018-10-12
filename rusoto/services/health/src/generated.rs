@@ -1068,8 +1068,7 @@ impl AWSHealth for AWSHealthClient {
 
                     serde_json::from_str::<DescribeAffectedEntitiesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1105,8 +1104,7 @@ impl AWSHealth for AWSHealthClient {
 
                     serde_json::from_str::<DescribeEntityAggregatesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1139,8 +1137,7 @@ impl AWSHealth for AWSHealthClient {
 
                     serde_json::from_str::<DescribeEventAggregatesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1173,8 +1170,7 @@ impl AWSHealth for AWSHealthClient {
 
                     serde_json::from_str::<DescribeEventDetailsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1209,8 +1205,7 @@ impl AWSHealth for AWSHealthClient {
 
                     serde_json::from_str::<DescribeEventTypesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1246,8 +1241,7 @@ impl AWSHealth for AWSHealthClient {
 
                     serde_json::from_str::<DescribeEventsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

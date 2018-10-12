@@ -1028,8 +1028,7 @@ impl Macie for MacieClient {
 
                     serde_json::from_str::<AssociateS3ResourcesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1087,8 +1086,7 @@ impl Macie for MacieClient {
 
                     serde_json::from_str::<DisassociateS3ResourcesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -1121,8 +1119,7 @@ impl Macie for MacieClient {
 
                     serde_json::from_str::<ListMemberAccountsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1158,8 +1155,7 @@ impl Macie for MacieClient {
 
                     serde_json::from_str::<ListS3ResourcesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(
@@ -1195,8 +1191,7 @@ impl Macie for MacieClient {
 
                     serde_json::from_str::<UpdateS3ResourcesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    )
-                    .unwrap()
+                    ).unwrap()
                 }))
             } else {
                 Box::new(

@@ -23,7 +23,7 @@ To use `rusoto_codecommit` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_codecommit = "0.34.0"
+rusoto_codecommit = "0.35.0"
 ```
 
 ## Contributing
