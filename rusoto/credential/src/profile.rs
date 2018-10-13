@@ -210,7 +210,7 @@ fn parse_config_file(file_path: &Path) -> Option<HashMap<String, HashMap<String,
             .filter_map(|line| {
                 line.ok()
                     .map(|l| l.trim_matches(' ').to_owned())
-                    .filter(|l| !l.starts_with('#') || !l.is_empty())
+                    .into_iter().find(|l| !l.starts_with('#') || !l.is_empty())
             })
             .fold(
                 Default::default(), |(mut result, profile), line| {
