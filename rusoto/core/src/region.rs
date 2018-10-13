@@ -247,12 +247,12 @@ impl Display for ParseRegionError {
 
 impl Default for Region {
     fn default() -> Region {
-        match std::env::var("AWS_DEFAULT_REGION").or_else(|| std::env::var("AWS_REGION")) {
+        match std::env::var("AWS_DEFAULT_REGION").or_else(|_| std::env::var("AWS_REGION")) {
             Ok(ref v) =>
                 Region::from_str(v).unwrap_or(Region::UsEast1),
             Err(_) => {
                 match ProfileProvider::region() {
-                    Some(region) => Region::from_str(region).unwrap_or(Region::UsEast1),
+                    Ok(Some(region)) => Region::from_str(&region).unwrap_or(Region::UsEast1),
                     _ => Region::UsEast1,
                 }
             }
