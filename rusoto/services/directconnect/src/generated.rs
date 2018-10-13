@@ -962,7 +962,7 @@ pub struct Loa {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub loa_content: Option<Vec<u8>>,
     #[serde(rename = "loaContentType")]
@@ -5628,7 +5628,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5663,7 +5664,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5699,7 +5701,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualInterface>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5737,7 +5740,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualInterface>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5770,7 +5774,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5803,7 +5808,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5836,7 +5842,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualInterface>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5869,7 +5876,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<ConfirmConnectionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5909,7 +5917,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<ConfirmPrivateVirtualInterfaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5946,7 +5955,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<ConfirmPublicVirtualInterfaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5979,7 +5989,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<CreateBGPPeerResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6015,7 +6026,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6051,7 +6063,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<CreateDirectConnectGatewayResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6090,7 +6103,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<CreateDirectConnectGatewayAssociationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6125,7 +6139,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Interconnect>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6196,7 +6211,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualInterface>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6232,7 +6248,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualInterface>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6265,7 +6282,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DeleteBGPPeerResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6301,7 +6319,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6337,7 +6356,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DeleteDirectConnectGatewayResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6376,7 +6396,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DeleteDirectConnectGatewayAssociationResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6411,7 +6432,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DeleteInterconnectResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6479,7 +6501,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DeleteVirtualInterfaceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6514,7 +6537,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DescribeConnectionLoaResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6549,7 +6573,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connections>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6587,7 +6612,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connections>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6628,7 +6654,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DescribeDirectConnectGatewayAssociationsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6667,7 +6694,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DescribeDirectConnectGatewayAttachmentsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6705,7 +6733,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DescribeDirectConnectGatewaysResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6738,7 +6767,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connections>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6771,7 +6801,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DescribeInterconnectLoaResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6804,7 +6835,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Interconnects>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6899,7 +6931,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Locations>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6935,7 +6968,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<DescribeTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6969,7 +7003,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualGateways>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7002,7 +7037,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<VirtualInterfaces>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7038,7 +7074,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<Connection>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7071,7 +7108,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<TagResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -7107,7 +7145,8 @@ impl DirectConnect for DirectConnectClient {
 
                     serde_json::from_str::<UntagResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

@@ -410,7 +410,7 @@ pub struct FunctionCode {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub zip_file: Option<Vec<u8>>,
 }
@@ -636,7 +636,7 @@ pub struct InvocationRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub payload: Option<Vec<u8>>,
     /// <p>You can use this optional parameter to specify a Lambda function version or alias name. If you specify a function version, the API uses the qualified function ARN to invoke a specific Lambda function. If you specify an alias name, the API uses the alias ARN to invoke the Lambda function version to which the alias points.</p> <p>If you don't provide this parameter, then the API uses unqualified function ARN which results in invocation of the <code>$LATEST</code> version.</p>
@@ -671,7 +671,7 @@ pub struct InvokeAsyncRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub invoke_args: Vec<u8>,
 }
@@ -1003,7 +1003,7 @@ pub struct UpdateFunctionCodeRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub zip_file: Option<Vec<u8>>,
 }

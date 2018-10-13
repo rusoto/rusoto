@@ -5539,7 +5539,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<CreateClusterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5578,7 +5579,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<CreateServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5617,7 +5619,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DeleteAttributesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5656,7 +5659,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DeleteClusterResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5695,7 +5699,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DeleteServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5734,7 +5739,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DeregisterContainerInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5770,7 +5776,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DeregisterTaskDefinitionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5806,7 +5813,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DescribeClustersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5845,7 +5853,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DescribeContainerInstancesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5881,7 +5890,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DescribeServicesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5920,7 +5930,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DescribeTaskDefinitionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5958,7 +5969,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DescribeTasksResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5997,7 +6009,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<DiscoverPollEndpointResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6035,7 +6048,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListAttributesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6074,7 +6088,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListClustersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6113,7 +6128,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListContainerInstancesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6151,7 +6167,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListServicesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6190,7 +6207,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListTaskDefinitionFamiliesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6226,7 +6244,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListTaskDefinitionsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6264,7 +6283,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<ListTasksResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6303,7 +6323,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<PutAttributesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6342,7 +6363,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<RegisterContainerInstanceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6378,7 +6400,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<RegisterTaskDefinitionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6410,7 +6433,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<RunTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6449,7 +6473,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<StartTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6485,7 +6510,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<StopTaskResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6524,7 +6550,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<SubmitContainerStateChangeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6560,7 +6587,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<SubmitTaskStateChangeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6598,7 +6626,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<UpdateContainerAgentResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6637,7 +6666,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<UpdateContainerInstancesStateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6673,7 +6703,8 @@ impl Ecs for EcsClient {
 
                     serde_json::from_str::<UpdateServiceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

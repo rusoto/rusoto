@@ -9795,7 +9795,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<CloneStackResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -9828,7 +9829,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<CreateAppResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -9864,7 +9866,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<CreateDeploymentResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -9900,7 +9903,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<CreateInstanceResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -9936,7 +9940,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<CreateLayerResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -9972,7 +9977,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<CreateStackResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10008,7 +10014,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<CreateUserProfileResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10290,7 +10297,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeAgentVersionsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10325,7 +10333,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeAppsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10361,7 +10370,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeCommandsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10397,7 +10407,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeDeploymentsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10432,7 +10443,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeEcsClustersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10467,7 +10479,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeElasticIpsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10506,7 +10519,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeElasticLoadBalancersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -10539,7 +10553,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeInstancesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10575,7 +10590,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeLayersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10614,7 +10630,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeLoadBasedAutoScalingResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -10645,7 +10662,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeMyUserProfileResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10678,7 +10696,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeOperatingSystemsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -10711,7 +10730,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribePermissionsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10746,7 +10766,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeRaidArraysResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10782,7 +10803,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeRdsDbInstancesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10817,7 +10839,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeServiceErrorsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10858,7 +10881,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeStackProvisioningParametersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -10893,7 +10917,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeStackSummaryResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10928,7 +10953,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeStacksResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10967,7 +10993,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeTimeBasedAutoScalingResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -11000,7 +11027,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeUserProfilesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11035,7 +11063,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<DescribeVolumesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11122,7 +11151,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<GetHostnameSuggestionResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11157,7 +11187,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<GrantAccessResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11190,7 +11221,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<ListTagsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11252,7 +11284,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<RegisterEcsClusterResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11288,7 +11321,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<RegisterElasticIpResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11324,7 +11358,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<RegisterInstanceResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11385,7 +11420,8 @@ impl OpsWorks for OpsWorksClient {
 
                     serde_json::from_str::<RegisterVolumeResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

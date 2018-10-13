@@ -1943,7 +1943,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<CreateBudgetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1979,7 +1980,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<CreateNotificationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2015,7 +2017,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<CreateSubscriberResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2051,7 +2054,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DeleteBudgetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2087,7 +2091,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DeleteNotificationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2123,7 +2128,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DeleteSubscriberResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2159,7 +2165,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DescribeBudgetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2195,7 +2202,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DescribeBudgetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2235,7 +2243,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DescribeNotificationsForBudgetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2274,7 +2283,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<DescribeSubscribersForNotificationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2309,7 +2319,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<UpdateBudgetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2345,7 +2356,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<UpdateNotificationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2381,7 +2393,8 @@ impl Budgets for BudgetsClient {
 
                     serde_json::from_str::<UpdateSubscriberResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

@@ -118,7 +118,7 @@ pub struct ByteMatchTuple {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub target_string: Vec<u8>,
     /// <p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>TargetString</code> before inspecting a request for a match.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system commandline command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \ " ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\f, formfeed, decimal 12</p> </li> <li> <p>\t, tab, decimal 9</p> </li> <li> <p>\n, newline, decimal 10</p> </li> <li> <p>\r, carriage return, decimal 13</p> </li> <li> <p>\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a "less than" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p>
@@ -10461,7 +10461,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<AssociateWebACLResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10500,7 +10501,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<CreateByteMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10536,7 +10538,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<CreateGeoMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10572,7 +10575,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<CreateIPSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10611,7 +10615,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<CreateRateBasedRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10649,7 +10654,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<CreateRegexMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10687,7 +10693,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<CreateRegexPatternSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10722,7 +10729,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<CreateRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10758,7 +10766,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<CreateRuleGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10797,7 +10806,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<CreateSizeConstraintSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -10833,7 +10843,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<CreateSqlInjectionMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -10866,7 +10877,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<CreateWebACLResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10902,7 +10914,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<CreateXssMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10941,7 +10954,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeleteByteMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -10977,7 +10991,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeleteGeoMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11013,7 +11028,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeleteIPSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11052,7 +11068,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeletePermissionPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11090,7 +11107,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeleteRateBasedRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11128,7 +11146,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeleteRegexMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11166,7 +11185,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeleteRegexPatternSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11201,7 +11221,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeleteRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11237,7 +11258,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeleteRuleGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11276,7 +11298,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeleteSizeConstraintSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -11312,7 +11335,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeleteSqlInjectionMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -11345,7 +11369,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeleteWebACLResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11381,7 +11406,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DeleteXssMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11420,7 +11446,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<DisassociateWebACLResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11456,7 +11483,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetByteMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11488,7 +11516,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetChangeTokenResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11527,7 +11556,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetChangeTokenStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11562,7 +11592,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetGeoMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11595,7 +11626,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetIPSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11634,7 +11666,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetPermissionPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11669,7 +11702,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetRateBasedRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11708,7 +11742,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetRateBasedRuleManagedKeysResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -11741,7 +11776,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetRegexMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11780,7 +11816,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetRegexPatternSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11813,7 +11850,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11849,7 +11887,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetRuleGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11888,7 +11927,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetSampledRequestsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11927,7 +11967,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetSizeConstraintSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -11965,7 +12006,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetSqlInjectionMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -11998,7 +12040,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetWebACLResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12037,7 +12080,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetWebACLForResourceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12072,7 +12116,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<GetXssMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12112,7 +12157,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListActivatedRulesInRuleGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -12145,7 +12191,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListByteMatchSetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12181,7 +12228,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListGeoMatchSetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12217,7 +12265,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListIPSetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12256,7 +12305,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListRateBasedRulesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12295,7 +12345,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListRegexMatchSetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12334,7 +12385,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListRegexPatternSetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12372,7 +12424,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListResourcesForWebACLResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12407,7 +12460,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListRuleGroupsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12443,7 +12497,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListRulesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12482,7 +12537,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListSizeConstraintSetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12520,7 +12576,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListSqlInjectionMatchSetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -12556,7 +12613,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListSubscribedRuleGroupsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -12589,7 +12647,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListWebACLsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12625,7 +12684,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<ListXssMatchSetsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12664,7 +12724,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<PutPermissionPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12702,7 +12763,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<UpdateByteMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12738,7 +12800,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<UpdateGeoMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12774,7 +12837,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<UpdateIPSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12813,7 +12877,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<UpdateRateBasedRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12851,7 +12916,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<UpdateRegexMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12889,7 +12955,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<UpdateRegexPatternSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12924,7 +12991,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<UpdateRuleResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12960,7 +13028,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<UpdateRuleGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -12999,7 +13068,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<UpdateSizeConstraintSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -13035,7 +13105,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<UpdateSqlInjectionMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -13068,7 +13139,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<UpdateWebACLResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -13104,7 +13176,8 @@ impl WAFRegional for WAFRegionalClient {
 
                     serde_json::from_str::<UpdateXssMatchSetResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

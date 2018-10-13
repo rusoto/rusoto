@@ -2665,7 +2665,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<CancelClusterResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2701,7 +2702,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<CancelJobResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2740,7 +2742,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<CreateAddressResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2779,7 +2782,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<CreateClusterResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2815,7 +2819,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<CreateJobResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2854,7 +2859,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<DescribeAddressResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2893,7 +2899,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<DescribeAddressesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2932,7 +2939,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<DescribeClusterResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -2971,7 +2979,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<DescribeJobResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3010,7 +3019,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<GetJobManifestResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3049,7 +3059,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<GetJobUnlockCodeResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3084,7 +3095,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<GetSnowballUsageResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3123,7 +3135,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<ListClusterJobsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3162,7 +3175,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<ListClustersResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3201,7 +3215,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<ListCompatibleImagesResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3233,7 +3248,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<ListJobsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3272,7 +3288,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<UpdateClusterResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -3308,7 +3325,8 @@ impl Snowball for SnowballClient {
 
                     serde_json::from_str::<UpdateJobResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

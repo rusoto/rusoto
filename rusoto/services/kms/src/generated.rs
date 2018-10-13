@@ -158,7 +158,7 @@ pub struct DecryptRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub ciphertext_blob: Vec<u8>,
     /// <p>The encryption context. If this was specified in the <a>Encrypt</a> function, it must be specified here or the decryption operation will fail. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html">Encryption Context</a>.</p>
@@ -183,7 +183,7 @@ pub struct DecryptResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub plaintext: Option<Vec<u8>>,
 }
@@ -268,7 +268,7 @@ pub struct EncryptRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub plaintext: Vec<u8>,
 }
@@ -281,7 +281,7 @@ pub struct EncryptResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>The ID of the key used during encryption.</p>
@@ -321,7 +321,7 @@ pub struct GenerateDataKeyResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>The identifier of the CMK under which the data encryption key was generated and encrypted.</p>
@@ -333,7 +333,7 @@ pub struct GenerateDataKeyResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub plaintext: Option<Vec<u8>>,
 }
@@ -369,7 +369,7 @@ pub struct GenerateDataKeyWithoutPlaintextResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>The identifier of the CMK under which the data encryption key was generated and encrypted.</p>
@@ -394,7 +394,7 @@ pub struct GenerateRandomResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub plaintext: Option<Vec<u8>>,
 }
@@ -455,7 +455,7 @@ pub struct GetParametersForImportResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub import_token: Option<Vec<u8>>,
     /// <p>The identifier of the CMK to use in a subsequent <a>ImportKeyMaterial</a> request. This is the same CMK specified in the <code>GetParametersForImport</code> request.</p>
@@ -471,7 +471,7 @@ pub struct GetParametersForImportResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub public_key: Option<Vec<u8>>,
 }
@@ -538,7 +538,7 @@ pub struct ImportKeyMaterialRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub encrypted_key_material: Vec<u8>,
     /// <p>Specifies whether the key material expires. The default is <code>KEY_MATERIAL_EXPIRES</code>, in which case you must include the <code>ValidTo</code> parameter. When this parameter is set to <code>KEY_MATERIAL_DOES_NOT_EXPIRE</code>, you must omit the <code>ValidTo</code> parameter.</p>
@@ -550,7 +550,7 @@ pub struct ImportKeyMaterialRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub import_token: Vec<u8>,
     /// <p>The identifier of the CMK to import the key material into. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
@@ -834,7 +834,7 @@ pub struct ReEncryptRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub ciphertext_blob: Vec<u8>,
     /// <p>Encryption context to use when the data is reencrypted.</p>
@@ -862,7 +862,7 @@ pub struct ReEncryptResponse {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>Unique identifier of the CMK used to reencrypt the data.</p>
@@ -5076,7 +5076,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<CancelKeyDeletionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5135,7 +5136,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<CreateGrantResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5171,7 +5173,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<CreateKeyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5204,7 +5207,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<DecryptResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5286,7 +5290,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<DescribeKeyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5417,7 +5422,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<EncryptResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5453,7 +5459,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<GenerateDataKeyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5493,7 +5500,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<GenerateDataKeyWithoutPlaintextResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5528,7 +5536,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<GenerateRandomResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5564,7 +5573,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<GetKeyPolicyResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5600,7 +5610,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<GetKeyRotationStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5635,7 +5646,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<GetParametersForImportResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5670,7 +5682,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ImportKeyMaterialResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5706,7 +5719,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ListAliasesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5742,7 +5756,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ListGrantsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5778,7 +5793,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ListKeyPoliciesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5811,7 +5827,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ListKeysResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5847,7 +5864,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ListResourceTagsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5883,7 +5901,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ListGrantsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -5941,7 +5960,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ReEncryptResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -6023,7 +6043,8 @@ impl Kms for KmsClient {
 
                     serde_json::from_str::<ScheduleKeyDeletionResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

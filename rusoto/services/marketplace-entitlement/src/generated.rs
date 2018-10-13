@@ -269,7 +269,8 @@ impl MarketplaceEntitlement for MarketplaceEntitlementClient {
 
                     serde_json::from_str::<GetEntitlementsResult>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

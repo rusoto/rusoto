@@ -1594,7 +1594,8 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<BatchGetNamedQueryOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1630,7 +1631,8 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<BatchGetQueryExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1665,7 +1667,8 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<CreateNamedQueryOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1701,7 +1704,8 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<DeleteNamedQueryOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1737,7 +1741,8 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<GetNamedQueryOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1773,7 +1778,8 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<GetQueryExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1809,7 +1815,8 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<GetQueryResultsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1845,7 +1852,8 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<ListNamedQueriesOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1881,7 +1889,8 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<ListQueryExecutionsOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1916,7 +1925,8 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<StartQueryExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -1951,7 +1961,8 @@ impl Athena for AthenaClient {
 
                     serde_json::from_str::<StopQueryExecutionOutput>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(

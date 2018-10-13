@@ -1181,7 +1181,7 @@ pub struct UploadArchiveInput {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub body: Option<Vec<u8>>,
     /// <p>The SHA256 tree hash of the data being uploaded.</p>
@@ -1230,7 +1230,7 @@ pub struct UploadMultipartPartInput {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub body: Option<Vec<u8>>,
     /// <p>The SHA256 tree hash of the data being uploaded.</p>

@@ -2802,7 +2802,7 @@ pub struct SetUICustomizationRequest {
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
         serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
-        default,
+        default
     )]
     pub image_file: Option<Vec<u8>>,
     /// <p>The user pool ID for the user pool.</p>
@@ -16403,7 +16403,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AddCustomAttributesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -16469,7 +16470,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminConfirmSignUpResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -16508,7 +16510,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminCreateUserResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -16576,7 +16579,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminDeleteUserAttributesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -16612,7 +16616,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminDisableProviderForUserResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -16648,7 +16653,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminDisableUserResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -16687,7 +16693,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminEnableUserResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -16755,7 +16762,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminGetDeviceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -16794,7 +16802,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminGetUserResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -16833,7 +16842,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminInitiateAuthResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -16872,7 +16882,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminLinkProviderForUserResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -16908,7 +16919,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminListDevicesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -16947,7 +16959,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminListGroupsForUserResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -16985,7 +16998,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminListUserAuthEventsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17047,7 +17061,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminResetUserPasswordResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17085,7 +17100,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminRespondToAuthChallengeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17121,7 +17137,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminSetUserMFAPreferenceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17157,7 +17174,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminSetUserSettingsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17195,7 +17213,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminUpdateAuthEventFeedbackResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17231,7 +17250,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminUpdateDeviceStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17267,7 +17287,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminUpdateUserAttributesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -17303,7 +17324,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AdminUserGlobalSignOutResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17341,7 +17363,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<AssociateSoftwareTokenResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17379,7 +17402,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ChangePasswordResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17418,7 +17442,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ConfirmDeviceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17457,7 +17482,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ConfirmForgotPasswordResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17495,7 +17521,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ConfirmSignUpResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17534,7 +17561,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<CreateGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17573,7 +17601,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<CreateIdentityProviderResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17611,7 +17640,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<CreateResourceServerResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17649,7 +17679,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<CreateUserImportJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17687,7 +17718,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<CreateUserPoolResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17726,7 +17758,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<CreateUserPoolClientResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17764,7 +17797,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<CreateUserPoolDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -17910,7 +17944,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<DeleteUserAttributesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18005,7 +18040,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<DeleteUserPoolDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18043,7 +18079,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<DescribeIdentityProviderResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18079,7 +18116,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<DescribeResourceServerResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18117,7 +18155,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<DescribeRiskConfigurationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18153,7 +18192,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<DescribeUserImportJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18191,7 +18231,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<DescribeUserPoolResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18230,7 +18271,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<DescribeUserPoolClientResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18268,7 +18310,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<DescribeUserPoolDomainResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18332,7 +18375,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ForgotPasswordResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18371,7 +18415,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<GetCSVHeaderResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18410,7 +18455,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<GetDeviceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18443,7 +18489,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<GetGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18483,7 +18530,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<GetIdentityProviderByIdentifierResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18521,7 +18569,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<GetSigningCertificateResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18559,7 +18608,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<GetUICustomizationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18592,7 +18642,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<GetUserResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18632,7 +18683,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<GetUserAttributeVerificationCodeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -18670,7 +18722,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<GetUserPoolMfaConfigResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18708,7 +18761,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<GlobalSignOutResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18747,7 +18801,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<InitiateAuthResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18786,7 +18841,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ListDevicesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18825,7 +18881,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ListGroupsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18864,7 +18921,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ListIdentityProvidersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18902,7 +18960,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ListResourceServersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18940,7 +18999,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ListUserImportJobsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -18979,7 +19039,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ListUserPoolClientsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19017,7 +19078,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ListUserPoolsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19056,7 +19118,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ListUsersResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19095,7 +19158,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ListUsersInGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19134,7 +19198,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<ResendConfirmationCodeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19172,7 +19237,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<RespondToAuthChallengeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19210,7 +19276,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<SetRiskConfigurationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19248,7 +19315,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<SetUICustomizationResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19287,7 +19355,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<SetUserMFAPreferenceResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19325,7 +19394,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<SetUserPoolMfaConfigResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19363,7 +19433,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<SetUserSettingsResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19396,7 +19467,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<SignUpResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19435,7 +19507,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<StartUserImportJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19474,7 +19547,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<StopUserImportJobResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19513,7 +19587,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<UpdateAuthEventFeedbackResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -19549,7 +19624,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<UpdateDeviceStatusResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19588,7 +19664,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<UpdateGroupResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19627,7 +19704,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<UpdateIdentityProviderResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19665,7 +19743,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<UpdateResourceServerResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19703,7 +19782,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<UpdateUserAttributesResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19741,7 +19821,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<UpdateUserPoolResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19780,7 +19861,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<UpdateUserPoolClientResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19818,7 +19900,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<VerifySoftwareTokenResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
@@ -19856,7 +19939,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
                     serde_json::from_str::<VerifyUserAttributeResponse>(
                         String::from_utf8_lossy(body.as_ref()).as_ref(),
-                    ).unwrap()
+                    )
+                    .unwrap()
                 }))
             } else {
                 Box::new(
