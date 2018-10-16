@@ -379,7 +379,7 @@ impl<C> DispatchSignedRequest for HttpClient<C>
             hyper_headers.insert("user-agent", DEFAULT_USER_AGENT.parse().unwrap());
         }
 
-        let mut final_uri = format!("{}://{}{}", request.scheme(), request.hostname(), request.canonical_path());
+        let mut final_uri = format!("{}://{}{}", request.scheme(), request.hostname(), request.path);
         if !request.canonical_query_string().is_empty() {
             final_uri = final_uri + &format!("?{}", request.canonical_query_string());
         }
