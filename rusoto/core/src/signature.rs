@@ -368,7 +368,7 @@ impl SignedRequest {
             None => {
                 canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
                                             &self.method,
-                                            self.canonical_uri,
+                                            utf8_percent_encode(&self.canonical_uri, StrictPathEncodeSet).collect::<String>(),
                                             self.canonical_query_string,
                                             canonical_headers,
                                             signed_headers,
@@ -379,7 +379,7 @@ impl SignedRequest {
                 let (digest, len) = digest_payload(&payload);
                 canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
                                             &self.method,
-                                            self.canonical_uri,
+                                            utf8_percent_encode(&self.canonical_uri, StrictPathEncodeSet).collect::<String>(),
                                             self.canonical_query_string,
                                             canonical_headers,
                                             signed_headers,
@@ -389,7 +389,7 @@ impl SignedRequest {
             Some(SignedRequestPayload::Stream(len, _)) => {
                 canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
                                             &self.method,
-                                            self.canonical_uri,
+                                            utf8_percent_encode(&self.canonical_uri, StrictPathEncodeSet).collect::<String>(),
                                             self.canonical_query_string,
                                             canonical_headers,
                                             signed_headers,
