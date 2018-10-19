@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "mock",
     "rusoto/core",
     "rusoto/credential",
     "rusoto/services/acm",
@@ -128,6 +129,5 @@ members = [
 exclude = [
     "helpers",
     "integration_tests",
-    "mock",
     "service_crategen",
 ]

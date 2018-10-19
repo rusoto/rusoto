@@ -1,5 +1,33 @@
-//! Mock request dispatcher and credentials for unit testing services
-
+//! Mock request dispatcher and credentials for unit testing rusoto AWS service clients
+//!
+//! All rusoto generated service clients come with a constuctor function named `new_with` which
+//! accepts three arguments
+//!
+//! * A `rusoto_core::DispatchSignedRequest` implementation
+//! * A `rusoto_core::credential::ProvideAwsCredentials` implementation
+//! * A `rusoto_core::Region`
+//!
+//! This crate provides mock implementations to satisfy the first two.
+//!
+//! # Example
+//!
+//! ```rust
+//! extern crate rusoto_mock;
+//! // extern crate rusoto_s3;
+//!
+//! use rusoto_mock::{MockCredentialsProvider, MockRequestDispatcher, MockResponseReader};
+//!
+//! fn main() {
+//!    // let s3 = rusoto_s3::S3Client::new_with(
+//!    //   MockRequestDispatcher::default().with_body(
+//!    //      MockResponseReader::read_response("test-data", "s3-response.json")
+//!    //   ),
+//!    //   MockCredentialsProvider,
+//!    //   Default::default()
+//!    // );
+//! }
+//! ```
+#![deny(missing_docs)]
 extern crate chrono;
 extern crate futures;
 extern crate http;
@@ -18,6 +46,8 @@ use futures::future::{FutureResult, ok};
 use futures::stream::once;
 use http::{HttpTryFrom, StatusCode};
 
+/// Provides a set of credentials that always resolve
+/// successfully
 pub struct MockCredentialsProvider;
 
 impl ProvideAwsCredentials for MockCredentialsProvider {
@@ -31,6 +61,14 @@ impl ProvideAwsCredentials for MockCredentialsProvider {
     }
 }
 
+/// Composes mock API responses
+///
+/// A Default is provided which returns an successful response with an empty body
+///
+/// These can be constructed using either a Default implementation or
+///  with the [with_status](method.with_status) function.
+///
+#[derive(Default)]
 pub struct MockRequestDispatcher {
     status: StatusCode,
     body: Vec<u8>,
@@ -39,26 +77,31 @@ pub struct MockRequestDispatcher {
 }
 
 impl MockRequestDispatcher {
+    /// Returns a instance that mocks the status code that would
+    /// be returned from AWS
     pub fn with_status(status: u16) -> MockRequestDispatcher {
         MockRequestDispatcher {
             status: StatusCode::try_from(status).unwrap(),
-            body: b"".to_vec(),
-            headers: HashMap::new(),
-            request_checker: None,
+            ..MockRequestDispatcher::default()
         }
     }
 
+    /// Mocks the service response body what would be
+    /// returned from AWS
     pub fn with_body(mut self, body: &str) -> MockRequestDispatcher {
         self.body = body.as_bytes().to_vec();
         self
     }
 
+    /// Mocks the signed request checking applied to a request before sending
+    /// to AWS
     pub fn with_request_checker<F>(mut self, checker: F) -> MockRequestDispatcher
         where F: Fn(&SignedRequest) + Send + Sync + 'static {
         self.request_checker = Some(Box::new(checker));
         self
     }
 
+    /// Mocks a single service header that would be returned from AWS
     pub fn with_header(mut self, key: &str, value: &str) -> MockRequestDispatcher {
         self.headers.insert(key.into(), value.into());
         self
@@ -80,10 +123,13 @@ impl DispatchSignedRequest for MockRequestDispatcher {
     }
 }
 
+/// An interface for producing response body content
 pub trait ReadMockResponse {
+    /// Return a response body string for a given directory and file name
     fn read_response(dir_name: &str, file_name: &str) -> String;
 }
 
+/// Reads response body content from disk
 pub struct MockResponseReader;
 
 impl ReadMockResponse for MockResponseReader {
