@@ -18,7 +18,8 @@ homepage = "https://www.rusoto.org/"
 chrono = "0.4.0"
 futures = "0.1.16"
 http = "0.1.7"
-
+serde = "1.0.2"
+serde_json = "1.0.2"
 [dependencies.clippy]
 optional = true
 version = "0.0"

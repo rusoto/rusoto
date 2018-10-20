@@ -4,6 +4,8 @@ extern crate chrono;
 extern crate futures;
 extern crate http;
 extern crate rusoto_core;
+extern crate serde;
+extern crate serde_json;
 
 use std::fs::File;
 use std::io::Read;
@@ -13,6 +15,7 @@ use std::time::Duration;
 use rusoto_core::{DispatchSignedRequest, HttpDispatchError};
 use rusoto_core::credential::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
 use rusoto_core::request::{Headers, HttpResponse};
+use serde::Serialize;
 use rusoto_core::signature::SignedRequest;
 use futures::future::{FutureResult, ok};
 use futures::stream::once;
@@ -50,6 +53,12 @@ impl MockRequestDispatcher {
 
     pub fn with_body(mut self, body: &str) -> MockRequestDispatcher {
         self.body = body.as_bytes().to_vec();
+        self
+    }
+
+    pub fn with_json_body<B>(mut self, body: B) -> MockRequestDispatcher
+        where B: Serialize {
+        self.body = serde_json::to_vec(&body).expect("failed to deserialize into json");
         self
     }
 
