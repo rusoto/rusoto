@@ -9,7 +9,7 @@ use self::json::JsonGenerator;
 use self::query::QueryGenerator;
 use self::rest_json::RestJsonGenerator;
 use self::rest_xml::RestXmlGenerator;
-use self::error_types::{GenerateErrorTypes, JsonErrorTypes, XmlErrorTypes};
+use self::error_types::{GenerateErrorTypes, JsonErrorTypes, RestJsonErrorTypes, XmlErrorTypes};
 use self::tests::generate_tests;
 use self::type_filter::filter_types;
 use util;
@@ -81,7 +81,7 @@ pub fn generate_source(service: &Service, writer: &mut FileWriter) -> IoResult {
     match service.protocol() {
         "json" => generate(writer, service, JsonGenerator, JsonErrorTypes),
         "query" | "ec2" => generate(writer, service, QueryGenerator, XmlErrorTypes),
-        "rest-json" => generate(writer, service, RestJsonGenerator, JsonErrorTypes),
+        "rest-json" => generate(writer, service, RestJsonGenerator, RestJsonErrorTypes),
         "rest-xml" => generate(writer, service, RestXmlGenerator, XmlErrorTypes),
         protocol => panic!("Unknown protocol {}", protocol),
     }
