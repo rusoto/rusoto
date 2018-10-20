@@ -1103,18 +1103,32 @@ pub enum AddPermissionError {
 }
 
 impl AddPermissionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> AddPermissionError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return AddPermissionError::InvalidParameterValue(String::from(error_message))
                 }
@@ -1215,18 +1229,32 @@ pub enum CreateAliasError {
 }
 
 impl CreateAliasError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> CreateAliasError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return CreateAliasError::InvalidParameterValue(String::from(error_message))
                 }
@@ -1317,18 +1345,32 @@ pub enum CreateEventSourceMappingError {
 }
 
 impl CreateEventSourceMappingError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> CreateEventSourceMappingError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return CreateEventSourceMappingError::InvalidParameterValue(String::from(
                         error_message,
@@ -1433,18 +1475,32 @@ pub enum CreateFunctionError {
 }
 
 impl CreateFunctionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> CreateFunctionError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "CodeStorageExceededException" => {
                     return CreateFunctionError::CodeStorageExceeded(String::from(error_message))
                 }
@@ -1537,18 +1593,32 @@ pub enum DeleteAliasError {
 }
 
 impl DeleteAliasError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> DeleteAliasError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return DeleteAliasError::InvalidParameterValue(String::from(error_message))
                 }
@@ -1631,18 +1701,32 @@ pub enum DeleteEventSourceMappingError {
 }
 
 impl DeleteEventSourceMappingError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> DeleteEventSourceMappingError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return DeleteEventSourceMappingError::InvalidParameterValue(String::from(
                         error_message,
@@ -1743,18 +1827,32 @@ pub enum DeleteFunctionError {
 }
 
 impl DeleteFunctionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> DeleteFunctionError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return DeleteFunctionError::InvalidParameterValue(String::from(error_message))
                 }
@@ -1845,18 +1943,32 @@ pub enum DeleteFunctionConcurrencyError {
 }
 
 impl DeleteFunctionConcurrencyError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> DeleteFunctionConcurrencyError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return DeleteFunctionConcurrencyError::InvalidParameterValue(String::from(
                         error_message,
@@ -1947,18 +2059,32 @@ pub enum GetAccountSettingsError {
 }
 
 impl GetAccountSettingsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> GetAccountSettingsError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "ServiceException" => {
                     return GetAccountSettingsError::Service(String::from(error_message))
                 }
@@ -2039,18 +2165,32 @@ pub enum GetAliasError {
 }
 
 impl GetAliasError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> GetAliasError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return GetAliasError::InvalidParameterValue(String::from(error_message))
                 }
@@ -2135,18 +2275,32 @@ pub enum GetEventSourceMappingError {
 }
 
 impl GetEventSourceMappingError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> GetEventSourceMappingError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return GetEventSourceMappingError::InvalidParameterValue(String::from(
                         error_message,
@@ -2237,18 +2391,32 @@ pub enum GetFunctionError {
 }
 
 impl GetFunctionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> GetFunctionError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return GetFunctionError::InvalidParameterValue(String::from(error_message))
                 }
@@ -2333,18 +2501,32 @@ pub enum GetFunctionConfigurationError {
 }
 
 impl GetFunctionConfigurationError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> GetFunctionConfigurationError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return GetFunctionConfigurationError::InvalidParameterValue(String::from(
                         error_message,
@@ -2439,18 +2621,32 @@ pub enum GetPolicyError {
 }
 
 impl GetPolicyError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> GetPolicyError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return GetPolicyError::InvalidParameterValue(String::from(error_message))
                 }
@@ -2567,18 +2763,32 @@ pub enum InvokeError {
 }
 
 impl InvokeError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> InvokeError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "EC2AccessDeniedException" => {
                     return InvokeError::EC2AccessDenied(String::from(error_message))
                 }
@@ -2725,18 +2935,32 @@ pub enum InvokeAsyncError {
 }
 
 impl InvokeAsyncError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> InvokeAsyncError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidRequestContentException" => {
                     return InvokeAsyncError::InvalidRequestContent(String::from(error_message))
                 }
@@ -2821,18 +3045,32 @@ pub enum ListAliasesError {
 }
 
 impl ListAliasesError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> ListAliasesError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return ListAliasesError::InvalidParameterValue(String::from(error_message))
                 }
@@ -2917,18 +3155,32 @@ pub enum ListEventSourceMappingsError {
 }
 
 impl ListEventSourceMappingsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> ListEventSourceMappingsError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return ListEventSourceMappingsError::InvalidParameterValue(String::from(
                         error_message,
@@ -3021,18 +3273,32 @@ pub enum ListFunctionsError {
 }
 
 impl ListFunctionsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> ListFunctionsError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return ListFunctionsError::InvalidParameterValue(String::from(error_message))
                 }
@@ -3115,18 +3381,32 @@ pub enum ListTagsError {
 }
 
 impl ListTagsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> ListTagsError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return ListTagsError::InvalidParameterValue(String::from(error_message))
                 }
@@ -3211,18 +3491,32 @@ pub enum ListVersionsByFunctionError {
 }
 
 impl ListVersionsByFunctionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> ListVersionsByFunctionError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return ListVersionsByFunctionError::InvalidParameterValue(String::from(
                         error_message,
@@ -3319,18 +3613,32 @@ pub enum PublishVersionError {
 }
 
 impl PublishVersionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> PublishVersionError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "CodeStorageExceededException" => {
                     return PublishVersionError::CodeStorageExceeded(String::from(error_message))
                 }
@@ -3425,18 +3733,32 @@ pub enum PutFunctionConcurrencyError {
 }
 
 impl PutFunctionConcurrencyError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> PutFunctionConcurrencyError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return PutFunctionConcurrencyError::InvalidParameterValue(String::from(
                         error_message,
@@ -3531,18 +3853,32 @@ pub enum RemovePermissionError {
 }
 
 impl RemovePermissionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> RemovePermissionError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return RemovePermissionError::InvalidParameterValue(String::from(error_message))
                 }
@@ -3633,18 +3969,32 @@ pub enum TagResourceError {
 }
 
 impl TagResourceError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return TagResourceError::InvalidParameterValue(String::from(error_message))
                 }
@@ -3729,18 +4079,32 @@ pub enum UntagResourceError {
 }
 
 impl UntagResourceError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return UntagResourceError::InvalidParameterValue(String::from(error_message))
                 }
@@ -3829,18 +4193,32 @@ pub enum UpdateAliasError {
 }
 
 impl UpdateAliasError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> UpdateAliasError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return UpdateAliasError::InvalidParameterValue(String::from(error_message))
                 }
@@ -3933,18 +4311,32 @@ pub enum UpdateEventSourceMappingError {
 }
 
 impl UpdateEventSourceMappingError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> UpdateEventSourceMappingError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return UpdateEventSourceMappingError::InvalidParameterValue(String::from(
                         error_message,
@@ -4053,18 +4445,32 @@ pub enum UpdateFunctionCodeError {
 }
 
 impl UpdateFunctionCodeError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> UpdateFunctionCodeError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "CodeStorageExceededException" => {
                     return UpdateFunctionCodeError::CodeStorageExceeded(String::from(error_message))
                 }
@@ -4167,18 +4573,32 @@ pub enum UpdateFunctionConfigurationError {
 }
 
 impl UpdateFunctionConfigurationError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
     pub fn from_response(res: BufferedHttpResponse) -> UpdateFunctionConfigurationError {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
-            let raw_error_type = json
-                .get("__type")
-                .and_then(|e| e.as_str())
-                .unwrap_or("Unknown");
-            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
 
-            let pieces: Vec<&str> = raw_error_type.split("#").collect();
-            let error_type = pieces.last().expect("Expected error type");
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
 
-            match *error_type {
+            match error_type {
                 "InvalidParameterValueException" => {
                     return UpdateFunctionConfigurationError::InvalidParameterValue(String::from(
                         error_message,
