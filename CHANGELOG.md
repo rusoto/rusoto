@@ -24,7 +24,7 @@
 - Add MediaStore support
 - Expose raw BufferedHttpResponse on ::Unknown error variants
 - Removed Ceph test for `Luminous`
-- Fix error parsing for services using boto's `rest-json` protocol published prior to this release . The following services crates were affected.
+- Fix error parsing for services using boto's `rest-json` protocol published prior to this release . The following service crates were affected.
   * `apigateway`, `batch`, `clouddirectory`, `cloudsearchdomain`, `cognito-sync`,
   `efs`, `eks`, `elastictranscoder`, `glacier`, `greengrass`, `guardduty`, `iot`,
   `lambda`, `lex-models`, `lex-runtime`, `mq`, `polly`, `serverlessrepo`,
