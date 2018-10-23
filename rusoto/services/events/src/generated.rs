@@ -76,6 +76,7 @@ pub struct DeleteRuleRequest {
 pub struct DescribeEventBusRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEventBusResponse {
     /// <p>The Amazon Resource Name (ARN) of the account permitted to write events to the current account.</p>
     #[serde(rename = "Arn")]
@@ -99,6 +100,7 @@ pub struct DescribeRuleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeRuleResponse {
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     #[serde(rename = "Arn")]
@@ -192,6 +194,7 @@ pub struct ListRuleNamesByTargetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListRuleNamesByTargetResponse {
     /// <p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>
     #[serde(rename = "NextToken")]
@@ -220,6 +223,7 @@ pub struct ListRulesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListRulesResponse {
     /// <p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>
     #[serde(rename = "NextToken")]
@@ -247,6 +251,7 @@ pub struct ListTargetsByRuleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTargetsByRuleResponse {
     /// <p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>
     #[serde(rename = "NextToken")]
@@ -291,6 +296,7 @@ pub struct PutEventsRequestEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutEventsResponse {
     /// <p>The successfully and unsuccessfully ingested events results. If the ingestion was successful, the entry has the event ID in it. Otherwise, you can use the error code and error message to identify the problem with the entry.</p>
     #[serde(rename = "Entries")]
@@ -304,6 +310,7 @@ pub struct PutEventsResponse {
 
 /// <p>Represents an event that failed to be submitted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutEventsResultEntry {
     /// <p>The error code that indicates why the event submission failed.</p>
     #[serde(rename = "ErrorCode")]
@@ -360,6 +367,7 @@ pub struct PutRuleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutRuleResponse {
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     #[serde(rename = "RuleArn")]
@@ -378,6 +386,7 @@ pub struct PutTargetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutTargetsResponse {
     /// <p>The failed target entries.</p>
     #[serde(rename = "FailedEntries")]
@@ -391,6 +400,7 @@ pub struct PutTargetsResponse {
 
 /// <p>Represents a target that failed to be added to a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutTargetsResultEntry {
     /// <p>The error code that indicates why the target addition failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>
     #[serde(rename = "ErrorCode")]
@@ -424,6 +434,7 @@ pub struct RemoveTargetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveTargetsResponse {
     /// <p>The failed target entries.</p>
     #[serde(rename = "FailedEntries")]
@@ -437,6 +448,7 @@ pub struct RemoveTargetsResponse {
 
 /// <p>Represents a target that failed to be removed from a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveTargetsResultEntry {
     /// <p>The error code that indicates why the target removal failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>
     #[serde(rename = "ErrorCode")]
@@ -454,6 +466,7 @@ pub struct RemoveTargetsResultEntry {
 
 /// <p>Contains information about a rule in Amazon CloudWatch Events.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Rule {
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     #[serde(rename = "Arn")]
@@ -571,6 +584,7 @@ pub struct TestEventPatternRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TestEventPatternResponse {
     /// <p>Indicates whether the event matches the event pattern.</p>
     #[serde(rename = "Result")]

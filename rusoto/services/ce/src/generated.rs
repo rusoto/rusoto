@@ -30,6 +30,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>The amount of instance usage that a reservation covered.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Coverage {
     /// <p>The amount of instance usage that a reservation covered, in hours.</p>
     #[serde(rename = "CoverageHours")]
@@ -39,6 +40,7 @@ pub struct Coverage {
 
 /// <p>Reservation coverage for a specified period, in hours.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CoverageByTime {
     /// <p>The groups of instances that are covered by a reservation.</p>
     #[serde(rename = "Groups")]
@@ -56,6 +58,7 @@ pub struct CoverageByTime {
 
 /// <p>How long a running instance either used a reservation or was On-Demand.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CoverageHours {
     /// <p>The percentage of instance hours that are covered by a reservation.</p>
     #[serde(rename = "CoverageHoursPercentage")]
@@ -101,6 +104,7 @@ pub struct DimensionValues {
 
 /// <p>The metadata of a specific type that you can use to filter and group your results. You can use <code>GetDimensionValues</code> to find specific values.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DimensionValuesWithAttributes {
     /// <p>The attribute that applies to a specific <code>Dimension</code>.</p>
     #[serde(rename = "Attributes")]
@@ -114,6 +118,7 @@ pub struct DimensionValuesWithAttributes {
 
 /// <p>Details about the EC2 instances that AWS recommends that you purchase.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EC2InstanceDetails {
     /// <p>The Availability Zone of the recommended reservation.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -160,6 +165,7 @@ pub struct EC2Specification {
 
 /// <p>Details about the ES instances that AWS recommends that you purchase.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ESInstanceDetails {
     /// <p>Whether the recommendation is for a current generation instance.</p>
     #[serde(rename = "CurrentGeneration")]
@@ -185,6 +191,7 @@ pub struct ESInstanceDetails {
 
 /// <p>Details about the ElastiCache instances that AWS recommends that you purchase.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ElastiCacheInstanceDetails {
     /// <p>Whether the recommendation is for a current generation instance.</p>
     #[serde(rename = "CurrentGeneration")]
@@ -266,6 +273,7 @@ pub struct GetCostAndUsageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetCostAndUsageResponse {
     /// <p>The groups that are specified by the <code>Filter</code> or <code>GroupBy</code> parameters in the request.</p>
     #[serde(rename = "GroupDefinitions")]
@@ -304,6 +312,7 @@ pub struct GetDimensionValuesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDimensionValuesResponse {
     /// <p><p>The filters that you used to filter your request. Some dimensions are available only for a specific context:</p> <p>If you set the context to <code>COST<em>AND</em>USAGE</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>DATABASE<em>ENGINE - The Amazon Relational Database Service database. Examples are Aurora or MySQL.</p> </li> <li> <p>INSTANCE</em>TYPE - The type of EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LEGAL<em>ENTITY</em>NAME - The name of the organization that sells you AWS services, such as Amazon Web Services.</p> </li> <li> <p>LINKED<em>ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>OPERATING</em>SYSTEM - The operating system. Examples are Windows or Linux.</p> </li> <li> <p>OPERATION - The action performed. Examples include <code>RunInstance</code> and <code>CreateBucket</code>.</p> </li> <li> <p>PLATFORM - The EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>PURCHASE<em>TYPE - The reservation type of the purchase to which this usage is related. Examples include On-Demand Instances and Standard Reserved Instances.</p> </li> <li> <p>SERVICE - The AWS service such as Amazon DynamoDB.</p> </li> <li> <p>USAGE</em>TYPE - The type of usage. An example is DataTransfer-In-Bytes. The response for the <code>GetDimensionValues</code> operation includes a unit attribute. Examples include GB and Hrs.</p> </li> <li> <p>USAGE<em>TYPE</em>GROUP - The grouping of common usage types. An example is EC2: CloudWatch – Alarms. The response for this operation includes a unit attribute.</p> </li> <li> <p>RECORD<em>TYPE - The different types of charges such as RI fees, usage costs, tax refunds, and credits.</p> </li> </ul> <p>If you set the context to <code>RESERVATIONS</code>, you can use the following dimensions for searching:</p> <ul> <li> <p>AZ - The Availability Zone. An example is <code>us-east-1a</code>.</p> </li> <li> <p>CACHE</em>ENGINE - The Amazon ElastiCache operating system. Examples are Windows or Linux.</p> </li> <li> <p>DEPLOYMENT<em>OPTION - The scope of Amazon Relational Database Service deployments. Valid values are <code>SingleAZ</code> and <code>MultiAZ</code>.</p> </li> <li> <p>INSTANCE</em>TYPE - The type of EC2 instance. An example is <code>m4.xlarge</code>.</p> </li> <li> <p>LINKED_ACCOUNT - The description in the attribute map that includes the full name of the member account. The value field contains the AWS ID of the member account.</p> </li> <li> <p>PLATFORM - The EC2 operating system. Examples are Windows or Linux.</p> </li> <li> <p>REGION - The AWS Region.</p> </li> <li> <p>SCOPE (Utilization only) - The scope of a Reserved Instance (RI). Values are regional or a single Availability Zone.</p> </li> <li> <p>TAG (Coverage only) - The tags that are associated with a Reserved Instance (RI).</p> </li> <li> <p>TENANCY - The tenancy of a resource. Examples are shared or dedicated.</p> </li> </ul></p>
     #[serde(rename = "DimensionValues")]
@@ -345,6 +354,7 @@ pub struct GetReservationCoverageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetReservationCoverageResponse {
     /// <p>The amount of time that your reservations covered.</p>
     #[serde(rename = "CoveragesByTime")]
@@ -399,6 +409,7 @@ pub struct GetReservationPurchaseRecommendationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetReservationPurchaseRecommendationResponse {
     /// <p>Information about this specific recommendation call, such as the time stamp for when Cost Explorer generated this recommendation.</p>
     #[serde(rename = "Metadata")]
@@ -438,6 +449,7 @@ pub struct GetReservationUtilizationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetReservationUtilizationResponse {
     /// <p>The token for the next set of retrievable results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
     #[serde(rename = "NextPageToken")]
@@ -472,6 +484,7 @@ pub struct GetTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetTagsResponse {
     /// <p>The token for the next set of retrievable results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
     #[serde(rename = "NextPageToken")]
@@ -490,6 +503,7 @@ pub struct GetTagsResponse {
 
 /// <p>One level of grouped data within the results.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Group {
     /// <p>The keys that are included in this group.</p>
     #[serde(rename = "Keys")]
@@ -516,6 +530,7 @@ pub struct GroupDefinition {
 
 /// <p>Details about the instances that AWS recommends that you purchase.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceDetails {
     /// <p>The EC2 instances that AWS recommends that you purchase.</p>
     #[serde(rename = "EC2InstanceDetails")]
@@ -541,6 +556,7 @@ pub struct InstanceDetails {
 
 /// <p>The aggregated value for a metric.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MetricValue {
     /// <p>The actual number that represents the metric.</p>
     #[serde(rename = "Amount")]
@@ -554,6 +570,7 @@ pub struct MetricValue {
 
 /// <p>Details about the RDS instances that AWS recommends that you purchase.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RDSInstanceDetails {
     /// <p>Whether the recommendation is for a current generation instance. </p>
     #[serde(rename = "CurrentGeneration")]
@@ -595,6 +612,7 @@ pub struct RDSInstanceDetails {
 
 /// <p>Details about the Amazon Redshift instances that AWS recommends that you purchase.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RedshiftInstanceDetails {
     /// <p>Whether the recommendation is for a current generation instance.</p>
     #[serde(rename = "CurrentGeneration")]
@@ -620,6 +638,7 @@ pub struct RedshiftInstanceDetails {
 
 /// <p>The aggregated numbers for your Reserved Instance (RI) usage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReservationAggregates {
     /// <p>The monthly cost of your RI, amortized over the RI period.</p>
     #[serde(rename = "AmortizedRecurringFee")]
@@ -665,6 +684,7 @@ pub struct ReservationAggregates {
 
 /// <p>A group of reservations that share a set of attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReservationCoverageGroup {
     /// <p>The attributes for this group of reservations.</p>
     #[serde(rename = "Attributes")]
@@ -678,6 +698,7 @@ pub struct ReservationCoverageGroup {
 
 /// <p>A specific reservation that AWS recommends for purchase.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReservationPurchaseRecommendation {
     /// <p>The account scope that AWS recommends that you purchase this instance for. For example, you can purchase this reservation for an entire organization in AWS Organizations.</p>
     #[serde(rename = "AccountScope")]
@@ -711,6 +732,7 @@ pub struct ReservationPurchaseRecommendation {
 
 /// <p>Details about your recommended reservation purchase.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReservationPurchaseRecommendationDetail {
     /// <p>The average number of normalized units that you used in an hour during the historical period. AWS uses this to calculate your recommended reservation purchases.</p>
     #[serde(rename = "AverageNormalizedUnitsUsedPerHour")]
@@ -788,6 +810,7 @@ pub struct ReservationPurchaseRecommendationDetail {
 
 /// <p>Information about this specific recommendation, such as the time stamp for when AWS made a specific recommendation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReservationPurchaseRecommendationMetadata {
     /// <p>The time stamp for when AWS made this recommendation.</p>
     #[serde(rename = "GenerationTimestamp")]
@@ -801,6 +824,7 @@ pub struct ReservationPurchaseRecommendationMetadata {
 
 /// <p>A summary about this recommendation, such as the currency code, the amount that AWS estimates that you could save, and the total amount of reservation to purchase.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReservationPurchaseRecommendationSummary {
     /// <p>The currency code used for this recommendation.</p>
     #[serde(rename = "CurrencyCode")]
@@ -818,6 +842,7 @@ pub struct ReservationPurchaseRecommendationSummary {
 
 /// <p>A group of Reserved Instances (RIs) that share a set of attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReservationUtilizationGroup {
     /// <p>The attributes for this group of RIs.</p>
     #[serde(rename = "Attributes")]
@@ -839,6 +864,7 @@ pub struct ReservationUtilizationGroup {
 
 /// <p>The result that is associated with a time period.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResultByTime {
     /// <p>Whether this result is estimated.</p>
     #[serde(rename = "Estimated")]
@@ -882,6 +908,7 @@ pub struct TagValues {
 
 /// <p>The amount of utilization, in hours.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UtilizationByTime {
     /// <p>The groups that are included in this utilization result.</p>
     #[serde(rename = "Groups")]

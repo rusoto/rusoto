@@ -90,6 +90,7 @@ pub struct ApplicationPolicyStatement {
 
 /// <p>Summary of details about the application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ApplicationSummary {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -249,6 +250,7 @@ pub struct CreateApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateApplicationResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -331,6 +333,7 @@ pub struct CreateApplicationVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateApplicationVersionResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -398,6 +401,7 @@ pub struct CreateCloudFormationChangeSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateCloudFormationChangeSetResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -434,6 +438,7 @@ pub struct GetApplicationPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetApplicationPolicyResponse {
     /// <p>An array of policy statements applied to the application.</p>
     #[serde(rename = "Statements")]
@@ -453,6 +458,7 @@ pub struct GetApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetApplicationResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -517,6 +523,7 @@ pub struct ListApplicationVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListApplicationVersionsResponse {
     /// <p>The token to request the next page of results.</p>
     #[serde(rename = "NextToken")]
@@ -541,6 +548,7 @@ pub struct ListApplicationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListApplicationsResponse {
     /// <p>An array of application summaries.</p>
     #[serde(rename = "Applications")]
@@ -554,6 +562,7 @@ pub struct ListApplicationsResponse {
 
 /// <p>Parameters supported by the application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ParameterDefinition {
     /// <p>A regular expression that represents the patterns to allow for String types.</p>
     #[serde(rename = "AllowedPattern")]
@@ -647,6 +656,7 @@ pub struct PutApplicationPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutApplicationPolicyResponse {
     /// <p>An array of policy statements applied to the application.</p>
     #[serde(rename = "Statements")]
@@ -705,6 +715,7 @@ pub struct UpdateApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateApplicationResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -755,6 +766,7 @@ pub struct UpdateApplicationResponse {
 
 /// <p>Application version details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Version {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -781,6 +793,7 @@ pub struct Version {
 
 /// <p>An application version summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VersionSummary {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]

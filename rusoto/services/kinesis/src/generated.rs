@@ -73,6 +73,7 @@ pub struct DeleteStreamInput {
 pub struct DescribeLimitsInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeLimitsOutput {
     /// <p>The number of open shards.</p>
     #[serde(rename = "OpenShardCount")]
@@ -100,6 +101,7 @@ pub struct DescribeStreamInput {
 
 /// <p>Represents the output for <code>DescribeStream</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeStreamOutput {
     /// <p>The current status of the stream, the stream Amazon Resource Name (ARN), an array of shard objects that comprise the stream, and whether there are more shards available.</p>
     #[serde(rename = "StreamDescription")]
@@ -114,6 +116,7 @@ pub struct DescribeStreamSummaryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeStreamSummaryOutput {
     /// <p>A <a>StreamDescriptionSummary</a> containing information about the stream.</p>
     #[serde(rename = "StreamDescriptionSummary")]
@@ -144,6 +147,7 @@ pub struct EnableEnhancedMonitoringInput {
 
 /// <p>Represents enhanced metrics types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EnhancedMetrics {
     /// <p>List of shard-level metrics.</p> <p>The following are the valid shard-level metrics. The value "<code>ALL</code>" enhances every metric.</p> <ul> <li> <p> <code>IncomingBytes</code> </p> </li> <li> <p> <code>IncomingRecords</code> </p> </li> <li> <p> <code>OutgoingBytes</code> </p> </li> <li> <p> <code>OutgoingRecords</code> </p> </li> <li> <p> <code>WriteProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>ReadProvisionedThroughputExceeded</code> </p> </li> <li> <p> <code>IteratorAgeMilliseconds</code> </p> </li> <li> <p> <code>ALL</code> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/monitoring-with-cloudwatch.html">Monitoring the Amazon Kinesis Data Streams Service with Amazon CloudWatch</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p>
     #[serde(rename = "ShardLevelMetrics")]
@@ -153,6 +157,7 @@ pub struct EnhancedMetrics {
 
 /// <p>Represents the output for <a>EnableEnhancedMonitoring</a> and <a>DisableEnhancedMonitoring</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EnhancedMonitoringOutput {
     /// <p>Represents the current state of the metrics that are in the enhanced state before the operation.</p>
     #[serde(rename = "CurrentShardLevelMetrics")]
@@ -182,6 +187,7 @@ pub struct GetRecordsInput {
 
 /// <p>Represents the output for <a>GetRecords</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetRecordsOutput {
     /// <p>The number of milliseconds the <a>GetRecords</a> response is from the tip of the stream, indicating how far behind current time the consumer is. A value of zero indicates that record processing is caught up, and there are no new records to process at this moment.</p>
     #[serde(rename = "MillisBehindLatest")]
@@ -220,6 +226,7 @@ pub struct GetShardIteratorInput {
 
 /// <p>Represents the output for <code>GetShardIterator</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetShardIteratorOutput {
     /// <p>The position in the shard from which to start reading data records sequentially. A shard iterator specifies this position using the sequence number of a data record in a shard.</p>
     #[serde(rename = "ShardIterator")]
@@ -229,6 +236,7 @@ pub struct GetShardIteratorOutput {
 
 /// <p>The range of possible hash key values for the shard, which is a set of ordered contiguous positive integers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct HashKeyRange {
     /// <p>The ending hash key of the hash key range.</p>
     #[serde(rename = "EndingHashKey")]
@@ -274,6 +282,7 @@ pub struct ListShardsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListShardsOutput {
     /// <p><p>When the number of shards in the data stream is greater than the default value for the <code>MaxResults</code> parameter, or if you explicitly specify a value for <code>MaxResults</code> that is less than the number of shards in the data stream, the response includes a pagination token named <code>NextToken</code>. You can specify this <code>NextToken</code> value in a subsequent call to <code>ListShards</code> to list the next set of shards. For more information about the use of this pagination token when calling the <code>ListShards</code> operation, see <a>ListShardsInput$NextToken</a>.</p> <important> <p>Tokens expire after 300 seconds. When you obtain a value for <code>NextToken</code> in the response to a call to <code>ListShards</code>, you have 300 seconds to use that value. If you specify an expired token in a call to <code>ListShards</code>, you get <code>ExpiredNextTokenException</code>.</p> </important></p>
     #[serde(rename = "NextToken")]
@@ -300,6 +309,7 @@ pub struct ListStreamsInput {
 
 /// <p>Represents the output for <code>ListStreams</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListStreamsOutput {
     /// <p>If set to <code>true</code>, there are more streams available to list.</p>
     #[serde(rename = "HasMoreStreams")]
@@ -327,6 +337,7 @@ pub struct ListTagsForStreamInput {
 
 /// <p>Represents the output for <code>ListTagsForStream</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForStreamOutput {
     /// <p>If set to <code>true</code>, more tags are available. To request additional tags, set <code>ExclusiveStartTagKey</code> to the key of the last tag returned.</p>
     #[serde(rename = "HasMoreTags")]
@@ -379,6 +390,7 @@ pub struct PutRecordInput {
 
 /// <p>Represents the output for <code>PutRecord</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutRecordOutput {
     /// <p><p>The encryption type to use on the record. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records in the stream.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records in the stream using a customer-managed AWS KMS key.</p> </li> </ul></p>
     #[serde(rename = "EncryptionType")]
@@ -405,6 +417,7 @@ pub struct PutRecordsInput {
 
 /// <p> <code>PutRecords</code> results.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutRecordsOutput {
     /// <p><p>The encryption type used on the records. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records using a customer-managed AWS KMS key.</p> </li> </ul></p>
     #[serde(rename = "EncryptionType")]
@@ -441,6 +454,7 @@ pub struct PutRecordsRequestEntry {
 
 /// <p>Represents the result of an individual record from a <code>PutRecords</code> request. A record that is successfully added to a stream includes <code>SequenceNumber</code> and <code>ShardId</code> in the result. A record that fails to be added to the stream includes <code>ErrorCode</code> and <code>ErrorMessage</code> in the result.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutRecordsResultEntry {
     /// <p>The error code for an individual record result. <code>ErrorCodes</code> can be either <code>ProvisionedThroughputExceededException</code> or <code>InternalFailure</code>.</p>
     #[serde(rename = "ErrorCode")]
@@ -462,6 +476,7 @@ pub struct PutRecordsResultEntry {
 
 /// <p>The unit of data of the Kinesis data stream, which is composed of a sequence number, a partition key, and a data blob.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Record {
     /// <p>The approximate time that the record was inserted into the stream.</p>
     #[serde(rename = "ApproximateArrivalTimestamp")]
@@ -500,6 +515,7 @@ pub struct RemoveTagsFromStreamInput {
 
 /// <p>The range of possible sequence numbers for the shard.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SequenceNumberRange {
     /// <p>The ending sequence number for the range. Shards that are in the OPEN state have an ending sequence number of <code>null</code>.</p>
     #[serde(rename = "EndingSequenceNumber")]
@@ -512,6 +528,7 @@ pub struct SequenceNumberRange {
 
 /// <p>A uniquely identified group of data records in a Kinesis data stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Shard {
     /// <p>The shard ID of the shard adjacent to the shard's parent.</p>
     #[serde(rename = "AdjacentParentShardId")]
@@ -574,6 +591,7 @@ pub struct StopStreamEncryptionInput {
 
 /// <p>Represents the output for <a>DescribeStream</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StreamDescription {
     /// <p><p>The server-side encryption type used on the stream. This parameter can be one of the following values:</p> <ul> <li> <p> <code>NONE</code>: Do not encrypt the records in the stream.</p> </li> <li> <p> <code>KMS</code>: Use server-side encryption on the records in the stream using a customer-managed AWS KMS key.</p> </li> </ul></p>
     #[serde(rename = "EncryptionType")]
@@ -611,6 +629,7 @@ pub struct StreamDescription {
 
 /// <p>Represents the output for <a>DescribeStreamSummary</a> </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StreamDescriptionSummary {
     /// <p><p>The encryption type used. This value is one of the following:</p> <ul> <li> <p> <code>KMS</code> </p> </li> <li> <p> <code>NONE</code> </p> </li> </ul></p>
     #[serde(rename = "EncryptionType")]
@@ -645,6 +664,7 @@ pub struct StreamDescriptionSummary {
 
 /// <p>Metadata assigned to the stream, consisting of a key-value pair.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Tag {
     /// <p>A unique identifier for the tag. Maximum length: 128 characters. Valid characters: Unicode letters, digits, white space, _ . / = + - % @</p>
     #[serde(rename = "Key")]
@@ -669,6 +689,7 @@ pub struct UpdateShardCountInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateShardCountOutput {
     /// <p>The current number of shards.</p>
     #[serde(rename = "CurrentShardCount")]

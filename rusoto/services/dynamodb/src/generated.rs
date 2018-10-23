@@ -103,6 +103,7 @@ pub struct AttributeValueUpdate {
 
 /// <p>Represents the properties of the scaling policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AutoScalingPolicyDescription {
     /// <p>The name of the scaling policy.</p>
     #[serde(rename = "PolicyName")]
@@ -130,6 +131,7 @@ pub struct AutoScalingPolicyUpdate {
 
 /// <p>Represents the autoscaling settings for a global table or global secondary index.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AutoScalingSettingsDescription {
     /// <p>Disabled autoscaling for this global table or global secondary index.</p>
     #[serde(rename = "AutoScalingDisabled")]
@@ -180,6 +182,7 @@ pub struct AutoScalingSettingsUpdate {
 
 /// <p>Represents the properties of a target tracking scaling policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AutoScalingTargetTrackingScalingPolicyConfigurationDescription {
     /// <p>Indicates whether scale in by the target tracking policy is disabled. If the value is true, scale in is disabled and the target tracking policy won't remove capacity from the scalable resource. Otherwise, scale in is enabled and the target tracking policy can remove capacity from the scalable resource. The default value is false.</p>
     #[serde(rename = "DisableScaleIn")]
@@ -220,6 +223,7 @@ pub struct AutoScalingTargetTrackingScalingPolicyConfigurationUpdate {
 
 /// <p>Contains the description of the backup created for the table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BackupDescription {
     /// <p>Contains the details of the backup created for the table. </p>
     #[serde(rename = "BackupDetails")]
@@ -237,6 +241,7 @@ pub struct BackupDescription {
 
 /// <p>Contains the details of the backup created for the table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BackupDetails {
     /// <p>ARN associated with the backup.</p>
     #[serde(rename = "BackupArn")]
@@ -258,6 +263,7 @@ pub struct BackupDetails {
 
 /// <p>Contains details for the backup.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BackupSummary {
     /// <p>ARN associated with the backup.</p>
     #[serde(rename = "BackupArn")]
@@ -306,6 +312,7 @@ pub struct BatchGetItemInput {
 
 /// <p>Represents the output of a <code>BatchGetItem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchGetItemOutput {
     /// <p><p>The read capacity units consumed by the entire <code>BatchGetItem</code> operation.</p> <p>Each element consists of:</p> <ul> <li> <p> <code>TableName</code> - The table that consumed the provisioned throughput.</p> </li> <li> <p> <code>CapacityUnits</code> - The total number of capacity units consumed.</p> </li> </ul></p>
     #[serde(rename = "ConsumedCapacity")]
@@ -343,6 +350,7 @@ pub struct BatchWriteItemInput {
 
 /// <p>Represents the output of a <code>BatchWriteItem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchWriteItemOutput {
     /// <p><p>The capacity units consumed by the entire <code>BatchWriteItem</code> operation.</p> <p>Each element consists of:</p> <ul> <li> <p> <code>TableName</code> - The table that consumed the provisioned throughput.</p> </li> <li> <p> <code>CapacityUnits</code> - The total number of capacity units consumed.</p> </li> </ul></p>
     #[serde(rename = "ConsumedCapacity")]
@@ -361,6 +369,7 @@ pub struct BatchWriteItemOutput {
 
 /// <p>Represents the amount of provisioned throughput capacity consumed on a table or an index.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Capacity {
     /// <p>The total number of capacity units consumed on a table or an index.</p>
     #[serde(rename = "CapacityUnits")]
@@ -382,6 +391,7 @@ pub struct Condition {
 
 /// <p>The capacity units consumed by an operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the request asked for it. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConsumedCapacity {
     /// <p>The total number of capacity units consumed by the operation.</p>
     #[serde(rename = "CapacityUnits")]
@@ -407,6 +417,7 @@ pub struct ConsumedCapacity {
 
 /// <p>Represents the continuous backups and point in time recovery settings on the table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ContinuousBackupsDescription {
     /// <p> <code>ContinuousBackupsStatus</code> can be one of the following states : ENABLED, DISABLED</p>
     #[serde(rename = "ContinuousBackupsStatus")]
@@ -428,6 +439,7 @@ pub struct CreateBackupInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateBackupOutput {
     /// <p>Contains the details of the backup created for the table.</p>
     #[serde(rename = "BackupDetails")]
@@ -463,6 +475,7 @@ pub struct CreateGlobalTableInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateGlobalTableOutput {
     /// <p>Contains the details of the global table.</p>
     #[serde(rename = "GlobalTableDescription")]
@@ -513,6 +526,7 @@ pub struct CreateTableInput {
 
 /// <p>Represents the output of a <code>CreateTable</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateTableOutput {
     /// <p>Represents the properties of the table.</p>
     #[serde(rename = "TableDescription")]
@@ -528,6 +542,7 @@ pub struct DeleteBackupInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteBackupOutput {
     /// <p>Contains the description of the backup created for the table.</p>
     #[serde(rename = "BackupDescription")]
@@ -587,6 +602,7 @@ pub struct DeleteItemInput {
 
 /// <p>Represents the output of a <code>DeleteItem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteItemOutput {
     /// <p>A map of attribute names to <code>AttributeValue</code> objects, representing the item as it appeared before the <code>DeleteItem</code> operation. This map appears in the response only if <code>ReturnValues</code> was specified as <code>ALL_OLD</code> in the request.</p>
     #[serde(rename = "Attributes")]
@@ -628,6 +644,7 @@ pub struct DeleteTableInput {
 
 /// <p>Represents the output of a <code>DeleteTable</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTableOutput {
     /// <p>Represents the properties of a table.</p>
     #[serde(rename = "TableDescription")]
@@ -643,6 +660,7 @@ pub struct DescribeBackupInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeBackupOutput {
     /// <p>Contains the description of the backup created for the table.</p>
     #[serde(rename = "BackupDescription")]
@@ -658,6 +676,7 @@ pub struct DescribeContinuousBackupsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeContinuousBackupsOutput {
     /// <p>Represents the continuous backups and point in time recovery settings on the table.</p>
     #[serde(rename = "ContinuousBackupsDescription")]
@@ -673,6 +692,7 @@ pub struct DescribeGlobalTableInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeGlobalTableOutput {
     /// <p>Contains the details of the global table.</p>
     #[serde(rename = "GlobalTableDescription")]
@@ -688,6 +708,7 @@ pub struct DescribeGlobalTableSettingsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeGlobalTableSettingsOutput {
     /// <p>The name of the global table.</p>
     #[serde(rename = "GlobalTableName")]
@@ -705,6 +726,7 @@ pub struct DescribeLimitsInput {}
 
 /// <p>Represents the output of a <code>DescribeLimits</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeLimitsOutput {
     /// <p>The maximum total read capacity units that your account allows you to provision across all of your tables in this region.</p>
     #[serde(rename = "AccountMaxReadCapacityUnits")]
@@ -734,6 +756,7 @@ pub struct DescribeTableInput {
 
 /// <p>Represents the output of a <code>DescribeTable</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTableOutput {
     /// <p>The properties of the table.</p>
     #[serde(rename = "Table")]
@@ -749,6 +772,7 @@ pub struct DescribeTimeToLiveInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTimeToLiveOutput {
     /// <p><p/></p>
     #[serde(rename = "TimeToLiveDescription")]
@@ -809,6 +833,7 @@ pub struct GetItemInput {
 
 /// <p>Represents the output of a <code>GetItem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetItemOutput {
     /// <p>The capacity units consumed by the <code>GetItem</code> operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the <code>ReturnConsumedCapacity</code> parameter was specified. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConsumedCapacity")]
@@ -839,6 +864,7 @@ pub struct GlobalSecondaryIndex {
 
 /// <p>Represents the properties of a global secondary index.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GlobalSecondaryIndexDescription {
     /// <p><p>Indicates whether the index is currently backfilling. <i>Backfilling</i> is the process of reading items from the table and determining whether they can be added to the index. (Not all items will qualify: For example, a partition key cannot have any duplicate values.) If an item can be added to the index, DynamoDB will do so. After all items have been processed, the backfilling operation is complete and <code>Backfilling</code> is false.</p> <note> <p>For indexes that were created during a <code>CreateTable</code> operation, the <code>Backfilling</code> attribute does not appear in the <code>DescribeTable</code> output.</p> </note></p>
     #[serde(rename = "Backfilling")]
@@ -880,6 +906,7 @@ pub struct GlobalSecondaryIndexDescription {
 
 /// <p>Represents the properties of a global secondary index for the table when the backup was created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GlobalSecondaryIndexInfo {
     /// <p>The name of the global secondary index.</p>
     #[serde(rename = "IndexName")]
@@ -918,6 +945,7 @@ pub struct GlobalSecondaryIndexUpdate {
 
 /// <p>Represents the properties of a global table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GlobalTable {
     /// <p>The global table name.</p>
     #[serde(rename = "GlobalTableName")]
@@ -931,6 +959,7 @@ pub struct GlobalTable {
 
 /// <p>Contains details about the global table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GlobalTableDescription {
     /// <p>The creation time of the global table.</p>
     #[serde(rename = "CreationDateTime")]
@@ -972,6 +1001,7 @@ pub struct GlobalTableGlobalSecondaryIndexSettingsUpdate {
 
 /// <p>Information about item collections, if any, that were affected by the operation. <code>ItemCollectionMetrics</code> is only returned if the request asked for it. If the table does not have any local secondary indexes, this information is not returned in the response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ItemCollectionMetrics {
     /// <p>The partition key value of the item collection. This value is the same as the partition key value of the item.</p>
     #[serde(rename = "ItemCollectionKey")]
@@ -1043,6 +1073,7 @@ pub struct ListBackupsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListBackupsOutput {
     /// <p>List of <code>BackupSummary</code> objects.</p>
     #[serde(rename = "BackupSummaries")]
@@ -1071,6 +1102,7 @@ pub struct ListGlobalTablesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListGlobalTablesOutput {
     /// <p>List of global table names.</p>
     #[serde(rename = "GlobalTables")]
@@ -1097,6 +1129,7 @@ pub struct ListTablesInput {
 
 /// <p>Represents the output of a <code>ListTables</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTablesOutput {
     /// <p>The name of the last table in the current page of results. Use this value as the <code>ExclusiveStartTableName</code> in a new request to obtain the next page of results, until all the table names are returned.</p> <p>If you do not receive a <code>LastEvaluatedTableName</code> value in the response, this means that there are no more table names to be retrieved.</p>
     #[serde(rename = "LastEvaluatedTableName")]
@@ -1120,6 +1153,7 @@ pub struct ListTagsOfResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsOfResourceOutput {
     /// <p>If this value is returned, there are additional results to be displayed. To retrieve them, call ListTagsOfResource again, with NextToken set to this value.</p>
     #[serde(rename = "NextToken")]
@@ -1147,6 +1181,7 @@ pub struct LocalSecondaryIndex {
 
 /// <p>Represents the properties of a local secondary index.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LocalSecondaryIndexDescription {
     /// <p>The Amazon Resource Name (ARN) that uniquely identifies the index.</p>
     #[serde(rename = "IndexArn")]
@@ -1176,6 +1211,7 @@ pub struct LocalSecondaryIndexDescription {
 
 /// <p>Represents the properties of a local secondary index for the table when the backup was created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LocalSecondaryIndexInfo {
     /// <p>Represents the name of the local secondary index.</p>
     #[serde(rename = "IndexName")]
@@ -1193,6 +1229,7 @@ pub struct LocalSecondaryIndexInfo {
 
 /// <p>The description of the point in time settings applied to the table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PointInTimeRecoveryDescription {
     /// <p>Specifies the earliest point in time you can restore your table to. It You can restore your table to any point in time during the last 35 days. </p>
     #[serde(rename = "EarliestRestorableDateTime")]
@@ -1242,6 +1279,7 @@ pub struct ProvisionedThroughput {
 
 /// <p>Represents the provisioned throughput settings for the table, consisting of read and write capacity units, along with data about increases and decreases.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProvisionedThroughputDescription {
     /// <p>The date and time of the last provisioned throughput decrease for this table.</p>
     #[serde(rename = "LastDecreaseDateTime")]
@@ -1309,6 +1347,7 @@ pub struct PutItemInput {
 
 /// <p>Represents the output of a <code>PutItem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutItemOutput {
     /// <p>The attribute values as they appeared before the <code>PutItem</code> operation, but only if <code>ReturnValues</code> is specified as <code>ALL_OLD</code> in the request. Each element consists of an attribute name and an attribute value.</p>
     #[serde(rename = "Attributes")]
@@ -1405,6 +1444,7 @@ pub struct QueryInput {
 
 /// <p>Represents the output of a <code>Query</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct QueryOutput {
     /// <p>The capacity units consumed by the <code>Query</code> operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the <code>ReturnConsumedCapacity</code> parameter was specified For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConsumedCapacity")]
@@ -1439,6 +1479,7 @@ pub struct Replica {
 
 /// <p>Contains the details of the replica.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicaDescription {
     /// <p>The name of the region.</p>
     #[serde(rename = "RegionName")]
@@ -1448,6 +1489,7 @@ pub struct ReplicaDescription {
 
 /// <p>Represents the properties of a global secondary index.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicaGlobalSecondaryIndexSettingsDescription {
     /// <p>The name of the global secondary index. The name must be unique among all other indexes on this table.</p>
     #[serde(rename = "IndexName")]
@@ -1492,6 +1534,7 @@ pub struct ReplicaGlobalSecondaryIndexSettingsUpdate {
 
 /// <p>Represents the properties of a replica.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReplicaSettingsDescription {
     /// <p>The region name of the replica.</p>
     #[serde(rename = "RegionName")]
@@ -1562,6 +1605,7 @@ pub struct ReplicaUpdate {
 
 /// <p>Contains details for the restore.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RestoreSummary {
     /// <p>Point in time or source backup time.</p>
     #[serde(rename = "RestoreDateTime")]
@@ -1590,6 +1634,7 @@ pub struct RestoreTableFromBackupInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RestoreTableFromBackupOutput {
     /// <p>The description of the table created from an existing backup.</p>
     #[serde(rename = "TableDescription")]
@@ -1616,6 +1661,7 @@ pub struct RestoreTableToPointInTimeInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RestoreTableToPointInTimeOutput {
     /// <p>Represents the properties of a table.</p>
     #[serde(rename = "TableDescription")]
@@ -1625,6 +1671,7 @@ pub struct RestoreTableToPointInTimeOutput {
 
 /// <p>The description of the server-side encryption status on the specified table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SSEDescription {
     /// <p>The KMS master key ARN used for the KMS encryption.</p>
     #[serde(rename = "KMSMasterKeyArn")]
@@ -1717,6 +1764,7 @@ pub struct ScanInput {
 
 /// <p>Represents the output of a <code>Scan</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScanOutput {
     /// <p>The capacity units consumed by the <code>Scan</code> operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the <code>ReturnConsumedCapacity</code> parameter was specified. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConsumedCapacity")]
@@ -1742,6 +1790,7 @@ pub struct ScanOutput {
 
 /// <p>Contains the details of the table when the backup was created. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SourceTableDetails {
     /// <p>Number of items in the table. Please note this is an approximate value. </p>
     #[serde(rename = "ItemCount")]
@@ -1774,6 +1823,7 @@ pub struct SourceTableDetails {
 
 /// <p>Contains the details of the features enabled on the table when the backup was created. For example, LSIs, GSIs, streams, TTL. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SourceTableFeatureDetails {
     /// <p>Represents the GSI properties for the table when the backup was created. It includes the IndexName, KeySchema, Projection and ProvisionedThroughput for the GSIs on the table at the time of backup. </p>
     #[serde(rename = "GlobalSecondaryIndexes")]
@@ -1812,6 +1862,7 @@ pub struct StreamSpecification {
 
 /// <p>Represents the properties of a table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TableDescription {
     /// <p><p>An array of <code>AttributeDefinition</code> objects. Each of these objects describes one attribute in the table and index key schema.</p> <p>Each <code>AttributeDefinition</code> object in this array is composed of:</p> <ul> <li> <p> <code>AttributeName</code> - The name of the attribute.</p> </li> <li> <p> <code>AttributeType</code> - The data type for the attribute.</p> </li> </ul></p>
     #[serde(rename = "AttributeDefinitions")]
@@ -1906,6 +1957,7 @@ pub struct TagResourceInput {
 
 /// <p>The description of the Time to Live (TTL) status on the specified table. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TimeToLiveDescription {
     /// <p> The name of the Time to Live attribute for items in the table.</p>
     #[serde(rename = "AttributeName")]
@@ -1949,6 +2001,7 @@ pub struct UpdateContinuousBackupsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateContinuousBackupsOutput {
     /// <p>Represents the continuous backups and point in time recovery settings on the table.</p>
     #[serde(rename = "ContinuousBackupsDescription")]
@@ -1978,6 +2031,7 @@ pub struct UpdateGlobalTableInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateGlobalTableOutput {
     /// <p>Contains the details of the global table.</p>
     #[serde(rename = "GlobalTableDescription")]
@@ -2011,6 +2065,7 @@ pub struct UpdateGlobalTableSettingsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateGlobalTableSettingsOutput {
     /// <p>The name of the global table.</p>
     #[serde(rename = "GlobalTableName")]
@@ -2074,6 +2129,7 @@ pub struct UpdateItemInput {
 
 /// <p>Represents the output of an <code>UpdateItem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateItemOutput {
     /// <p>A map of attribute values as they appear before or after the <code>UpdateItem</code> operation, as determined by the <code>ReturnValues</code> parameter.</p> <p>The <code>Attributes</code> map is only present if <code>ReturnValues</code> was specified as something other than <code>NONE</code> in the request. Each element represents one attribute.</p>
     #[serde(rename = "Attributes")]
@@ -2115,6 +2171,7 @@ pub struct UpdateTableInput {
 
 /// <p>Represents the output of an <code>UpdateTable</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateTableOutput {
     /// <p>Represents the properties of the table.</p>
     #[serde(rename = "TableDescription")]
@@ -2134,6 +2191,7 @@ pub struct UpdateTimeToLiveInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateTimeToLiveOutput {
     /// <p>Represents the output of an <code>UpdateTimeToLive</code> operation.</p>
     #[serde(rename = "TimeToLiveSpecification")]

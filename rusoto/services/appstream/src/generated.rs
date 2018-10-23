@@ -30,6 +30,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Describes an application in the application catalog.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Application {
     /// <p>The application name for display.</p>
     #[serde(rename = "DisplayName")]
@@ -72,6 +73,7 @@ pub struct AssociateFleetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateFleetResult {}
 
 /// <p>Describes the capacity for a fleet.</p>
@@ -84,6 +86,7 @@ pub struct ComputeCapacity {
 
 /// <p>Describes the capacity status for a fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ComputeCapacityStatus {
     /// <p>The number of currently available instances that can be used to stream sessions.</p>
     #[serde(rename = "Available")]
@@ -120,6 +123,7 @@ pub struct CopyImageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CopyImageResponse {
     /// <p>The name of the destination image.</p>
     #[serde(rename = "DestinationImageName")]
@@ -141,6 +145,7 @@ pub struct CreateDirectoryConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDirectoryConfigResult {
     /// <p>Information about the directory configuration.</p>
     #[serde(rename = "DirectoryConfig")]
@@ -202,6 +207,7 @@ pub struct CreateFleetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateFleetResult {
     /// <p>Information about the fleet.</p>
     #[serde(rename = "Fleet")]
@@ -252,6 +258,7 @@ pub struct CreateImageBuilderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateImageBuilderResult {
     /// <p>Information about the image builder.</p>
     #[serde(rename = "ImageBuilder")]
@@ -271,6 +278,7 @@ pub struct CreateImageBuilderStreamingURLRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateImageBuilderStreamingURLResult {
     /// <p>The elapsed time, in seconds after the Unix epoch, when this URL expires.</p>
     #[serde(rename = "Expires")]
@@ -314,6 +322,7 @@ pub struct CreateStackRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateStackResult {
     /// <p>Information about the stack.</p>
     #[serde(rename = "Stack")]
@@ -347,6 +356,7 @@ pub struct CreateStreamingURLRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateStreamingURLResult {
     /// <p>The elapsed time, in seconds after the Unix epoch, when this URL expires.</p>
     #[serde(rename = "Expires")]
@@ -366,6 +376,7 @@ pub struct DeleteDirectoryConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDirectoryConfigResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -376,6 +387,7 @@ pub struct DeleteFleetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteFleetResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -386,6 +398,7 @@ pub struct DeleteImageBuilderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteImageBuilderResult {
     /// <p>Information about the image builder.</p>
     #[serde(rename = "ImageBuilder")]
@@ -404,6 +417,7 @@ pub struct DeleteImagePermissionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteImagePermissionsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -414,6 +428,7 @@ pub struct DeleteImageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteImageResult {
     /// <p>Information about the image.</p>
     #[serde(rename = "Image")]
@@ -429,6 +444,7 @@ pub struct DeleteStackRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteStackResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -448,6 +464,7 @@ pub struct DescribeDirectoryConfigsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDirectoryConfigsResult {
     /// <p>Information about the directory configurations. Note that although the response syntax in this topic includes the account password, this password is not returned in the actual response. </p>
     #[serde(rename = "DirectoryConfigs")]
@@ -472,6 +489,7 @@ pub struct DescribeFleetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeFleetsResult {
     /// <p>Information about the fleets.</p>
     #[serde(rename = "Fleets")]
@@ -500,6 +518,7 @@ pub struct DescribeImageBuildersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeImageBuildersResult {
     /// <p>Information about the image builders.</p>
     #[serde(rename = "ImageBuilders")]
@@ -531,6 +550,7 @@ pub struct DescribeImagePermissionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeImagePermissionsResult {
     /// <p>The name of the private image.</p>
     #[serde(rename = "Name")]
@@ -571,6 +591,7 @@ pub struct DescribeImagesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeImagesResult {
     /// <p>Information about the images.</p>
     #[serde(rename = "Images")]
@@ -609,6 +630,7 @@ pub struct DescribeSessionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSessionsResult {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
     #[serde(rename = "NextToken")]
@@ -633,6 +655,7 @@ pub struct DescribeStacksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeStacksResult {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
     #[serde(rename = "NextToken")]
@@ -646,6 +669,7 @@ pub struct DescribeStacksResult {
 
 /// <p>Configuration information for the directory used to join domains.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DirectoryConfig {
     /// <p>The time the directory configuration was created.</p>
     #[serde(rename = "CreatedTime")]
@@ -675,6 +699,7 @@ pub struct DisassociateFleetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateFleetResult {}
 
 /// <p>Contains the information needed to join a Microsoft Active Directory domain.</p>
@@ -698,10 +723,12 @@ pub struct ExpireSessionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ExpireSessionResult {}
 
 /// <p>Contains the parameters for a fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Fleet {
     /// <p>The ARN for the fleet.</p>
     #[serde(rename = "Arn")]
@@ -770,6 +797,7 @@ pub struct Fleet {
 
 /// <p>Describes a fleet error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FleetError {
     /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
@@ -783,6 +811,7 @@ pub struct FleetError {
 
 /// <p>Describes an image.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Image {
     /// <p>The applications associated with the image.</p>
     #[serde(rename = "Applications")]
@@ -847,6 +876,7 @@ pub struct Image {
 
 /// <p>Describes a streaming instance used for editing an image. New images are created from a snapshot through an image builder.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImageBuilder {
     /// <p>The version of the AppStream 2.0 agent that is currently being used by this image builder. </p>
     #[serde(rename = "AppstreamAgentVersion")]
@@ -911,6 +941,7 @@ pub struct ImageBuilder {
 
 /// <p>Describes the reason why the last image builder state change occurred.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImageBuilderStateChangeReason {
     /// <p>The state change reason code.</p>
     #[serde(rename = "Code")]
@@ -937,6 +968,7 @@ pub struct ImagePermissions {
 
 /// <p>Describes the reason why the last image state change occurred.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImageStateChangeReason {
     /// <p>The state change reason code.</p>
     #[serde(rename = "Code")]
@@ -960,6 +992,7 @@ pub struct ListAssociatedFleetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListAssociatedFleetsResult {
     /// <p>The name of the fleet.</p>
     #[serde(rename = "Names")]
@@ -983,6 +1016,7 @@ pub struct ListAssociatedStacksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListAssociatedStacksResult {
     /// <p>The name of the stack.</p>
     #[serde(rename = "Names")]
@@ -1002,6 +1036,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The information about the tags.</p>
     #[serde(rename = "Tags")]
@@ -1011,6 +1046,7 @@ pub struct ListTagsForResourceResponse {
 
 /// <p>The network details of the fleet instance for the streaming session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NetworkAccessConfiguration {
     /// <p>The resource identifier of the elastic network interface that is attached to instances in your VPC. All network interfaces have the eni-xxxxxxxx resource identifier.</p>
     #[serde(rename = "EniId")]
@@ -1024,6 +1060,7 @@ pub struct NetworkAccessConfiguration {
 
 /// <p>Describes a resource error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResourceError {
     /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
@@ -1052,6 +1089,7 @@ pub struct ServiceAccountCredentials {
 
 /// <p>Describes a streaming session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Session {
     /// <p>The authentication method. The user is authenticated using a streaming URL (<code>API</code>) or SAML federation (<code>SAML</code>).</p>
     #[serde(rename = "AuthenticationType")]
@@ -1080,6 +1118,7 @@ pub struct Session {
 
 /// <p>Describes the permissions that are available to the specified AWS account for a shared image.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SharedImagePermissions {
     /// <p>Describes the permissions for a shared image.</p>
     #[serde(rename = "imagePermissions")]
@@ -1091,6 +1130,7 @@ pub struct SharedImagePermissions {
 
 /// <p>Describes a stack.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Stack {
     /// <p>The ARN of the stack.</p>
     #[serde(rename = "Arn")]
@@ -1135,6 +1175,7 @@ pub struct Stack {
 
 /// <p>Describes a stack error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StackError {
     /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
@@ -1154,6 +1195,7 @@ pub struct StartFleetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartFleetResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1168,6 +1210,7 @@ pub struct StartImageBuilderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartImageBuilderResult {
     /// <p>Information about the image builder.</p>
     #[serde(rename = "ImageBuilder")]
@@ -1183,6 +1226,7 @@ pub struct StopFleetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopFleetResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1193,6 +1237,7 @@ pub struct StopImageBuilderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopImageBuilderResult {
     /// <p>Information about the image builder.</p>
     #[serde(rename = "ImageBuilder")]
@@ -1227,6 +1272,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1240,6 +1286,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1258,6 +1305,7 @@ pub struct UpdateDirectoryConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDirectoryConfigResult {
     /// <p>Information about the Directory Config object.</p>
     #[serde(rename = "DirectoryConfig")]
@@ -1322,6 +1370,7 @@ pub struct UpdateFleetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateFleetResult {
     /// <p>Information about the fleet.</p>
     #[serde(rename = "Fleet")]
@@ -1343,6 +1392,7 @@ pub struct UpdateImagePermissionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateImagePermissionsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1381,6 +1431,7 @@ pub struct UpdateStackRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateStackResult {
     /// <p>Information about the stack.</p>
     #[serde(rename = "Stack")]

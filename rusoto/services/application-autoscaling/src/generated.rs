@@ -30,6 +30,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents a CloudWatch alarm associated with a scaling policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Alarm {
     /// <p>The Amazon Resource Name (ARN) of the alarm.</p>
     #[serde(rename = "AlarmARN")]
@@ -78,6 +79,7 @@ pub struct DeleteScalingPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteScalingPolicyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -98,6 +100,7 @@ pub struct DeleteScheduledActionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteScheduledActionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -114,6 +117,7 @@ pub struct DeregisterScalableTargetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterScalableTargetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -140,6 +144,7 @@ pub struct DescribeScalableTargetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeScalableTargetsResponse {
     /// <p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -175,6 +180,7 @@ pub struct DescribeScalingActivitiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeScalingActivitiesResponse {
     /// <p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -214,6 +220,7 @@ pub struct DescribeScalingPoliciesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeScalingPoliciesResponse {
     /// <p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -253,6 +260,7 @@ pub struct DescribeScheduledActionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeScheduledActionsResponse {
     /// <p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -317,6 +325,7 @@ pub struct PutScalingPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutScalingPolicyResponse {
     /// <p>The CloudWatch alarms created for the target tracking policy.</p>
     #[serde(rename = "Alarms")]
@@ -361,6 +370,7 @@ pub struct PutScheduledActionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutScheduledActionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -389,10 +399,12 @@ pub struct RegisterScalableTargetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterScalableTargetResponse {}
 
 /// <p>Represents a scalable target.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScalableTarget {
     /// <p>The Unix timestamp for when the scalable target was created.</p>
     #[serde(rename = "CreationTime")]
@@ -432,6 +444,7 @@ pub struct ScalableTargetAction {
 
 /// <p>Represents a scaling activity.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScalingActivity {
     /// <p>The unique identifier of the scaling activity.</p>
     #[serde(rename = "ActivityId")]
@@ -473,6 +486,7 @@ pub struct ScalingActivity {
 
 /// <p>Represents a scaling policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScalingPolicy {
     /// <p>The CloudWatch alarms associated with the scaling policy.</p>
     #[serde(rename = "Alarms")]
@@ -512,6 +526,7 @@ pub struct ScalingPolicy {
 
 /// <p>Represents a scheduled action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScheduledAction {
     /// <p>The date and time that the scheduled action was created.</p>
     #[serde(rename = "CreationTime")]

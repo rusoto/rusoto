@@ -46,6 +46,7 @@ pub struct AccountAggregationSource {
 
 /// <p>Indicates whether an AWS Config rule is compliant based on account ID, region, compliance, and rule name.</p> <p>A rule is compliant if all of the resources that the rule evaluated comply with it. It is noncompliant if any of these resources do not comply.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AggregateComplianceByConfigRule {
     /// <p>The 12-digit account ID of the source account.</p>
     #[serde(rename = "AccountId")]
@@ -67,6 +68,7 @@ pub struct AggregateComplianceByConfigRule {
 
 /// <p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AggregateComplianceCount {
     /// <p>The number of compliant and noncompliant AWS Config rules.</p>
     #[serde(rename = "ComplianceSummary")]
@@ -80,6 +82,7 @@ pub struct AggregateComplianceCount {
 
 /// <p>The details of an AWS Config evaluation for an account ID and region in an aggregator. Provides the AWS resource that was evaluated, the compliance of the resource, related time stamps, and supplementary information. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AggregateEvaluationResult {
     /// <p>The 12-digit account ID of the source account.</p>
     #[serde(rename = "AccountId")]
@@ -113,6 +116,7 @@ pub struct AggregateEvaluationResult {
 
 /// <p>The current sync status between the source and the aggregator account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AggregatedSourceStatus {
     /// <p>The region authorized to collect aggregated data.</p>
     #[serde(rename = "AwsRegion")]
@@ -146,6 +150,7 @@ pub struct AggregatedSourceStatus {
 
 /// <p>An object that represents the authorizations granted to aggregator accounts and regions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AggregationAuthorization {
     /// <p>The Amazon Resource Name (ARN) of the aggregation object.</p>
     #[serde(rename = "AggregationAuthorizationArn")]
@@ -167,6 +172,7 @@ pub struct AggregationAuthorization {
 
 /// <p>The detailed configuration of a specified resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BaseConfigurationItem {
     /// <p>The 12 digit AWS account ID associated with the resource.</p>
     #[serde(rename = "accountId")]
@@ -234,6 +240,7 @@ pub struct BatchGetResourceConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchGetResourceConfigResponse {
     /// <p>A list that contains the current configuration of one or more resources.</p>
     #[serde(rename = "baseConfigurationItems")]
@@ -247,6 +254,7 @@ pub struct BatchGetResourceConfigResponse {
 
 /// <p>Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Compliance {
     /// <p>The number of AWS resources or AWS Config rules that cause a result of <code>NON_COMPLIANT</code>, up to a maximum number.</p>
     #[serde(rename = "ComplianceContributorCount")]
@@ -260,6 +268,7 @@ pub struct Compliance {
 
 /// <p>Indicates whether an AWS Config rule is compliant. A rule is compliant if all of the resources that the rule evaluated comply with it. A rule is noncompliant if any of these resources do not comply.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ComplianceByConfigRule {
     /// <p>Indicates whether the AWS Config rule is compliant.</p>
     #[serde(rename = "Compliance")]
@@ -273,6 +282,7 @@ pub struct ComplianceByConfigRule {
 
 /// <p>Indicates whether an AWS resource that is evaluated according to one or more AWS Config rules is compliant. A resource is compliant if it complies with all of the rules that evaluate it. A resource is noncompliant if it does not comply with one or more of these rules.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ComplianceByResource {
     /// <p>Indicates whether the AWS resource complies with all of the AWS Config rules that evaluated it.</p>
     #[serde(rename = "Compliance")]
@@ -290,6 +300,7 @@ pub struct ComplianceByResource {
 
 /// <p>The number of AWS resources or AWS Config rules responsible for the current compliance of the item, up to a maximum number.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ComplianceContributorCount {
     /// <p>Indicates whether the maximum count is reached.</p>
     #[serde(rename = "CapExceeded")]
@@ -303,6 +314,7 @@ pub struct ComplianceContributorCount {
 
 /// <p>The number of AWS Config rules or AWS resources that are compliant and noncompliant.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ComplianceSummary {
     /// <p>The time that AWS Config created the compliance summary.</p>
     #[serde(rename = "ComplianceSummaryTimestamp")]
@@ -320,6 +332,7 @@ pub struct ComplianceSummary {
 
 /// <p>The number of AWS resources of a specific type that are compliant or noncompliant, up to a maximum of 100 for each.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ComplianceSummaryByResourceType {
     /// <p>The number of AWS resources that are compliant or noncompliant, up to a maximum of 100 for each.</p>
     #[serde(rename = "ComplianceSummary")]
@@ -333,6 +346,7 @@ pub struct ComplianceSummaryByResourceType {
 
 /// <p>Provides status of the delivery of the snapshot or the configuration history to the specified Amazon S3 bucket. Also provides the status of notifications about the Amazon S3 delivery to the specified Amazon SNS topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfigExportDeliveryInfo {
     /// <p>The time of the last attempted delivery.</p>
     #[serde(rename = "lastAttemptTime")]
@@ -436,6 +450,7 @@ pub struct ConfigRuleComplianceSummaryFilters {
 
 /// <p>Status information for your AWS managed Config rules. The status includes information such as the last time the rule ran, the last time it failed, and the related error for the last failure.</p> <p>This action does not return status information about custom AWS Config rules.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfigRuleEvaluationStatus {
     /// <p>The Amazon Resource Name (ARN) of the AWS Config rule.</p>
     #[serde(rename = "ConfigRuleArn")]
@@ -494,6 +509,7 @@ pub struct ConfigSnapshotDeliveryProperties {
 
 /// <p>A list that contains the status of the delivery of the configuration stream notification to the Amazon SNS topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfigStreamDeliveryInfo {
     /// <p>The error code from the last attempted delivery.</p>
     #[serde(rename = "lastErrorCode")]
@@ -515,6 +531,7 @@ pub struct ConfigStreamDeliveryInfo {
 
 /// <p>The details about the configuration aggregator, including information about source accounts, regions, and metadata of the aggregator. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfigurationAggregator {
     /// <p>Provides a list of source accounts and regions to be aggregated.</p>
     #[serde(rename = "AccountAggregationSources")]
@@ -544,6 +561,7 @@ pub struct ConfigurationAggregator {
 
 /// <p>A list that contains detailed configurations of a specified resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfigurationItem {
     /// <p>The 12-digit AWS account ID associated with the resource.</p>
     #[serde(rename = "accountId")]
@@ -638,6 +656,7 @@ pub struct ConfigurationRecorder {
 
 /// <p>The current status of the configuration recorder.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfigurationRecorderStatus {
     /// <p>The error code indicating that the recording failed.</p>
     #[serde(rename = "lastErrorCode")]
@@ -724,6 +743,7 @@ pub struct DeleteEvaluationResultsRequest {
 
 /// <p>The output when you delete the evaluation results for the specified AWS Config rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteEvaluationResultsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -753,6 +773,7 @@ pub struct DeliverConfigSnapshotRequest {
 
 /// <p>The output for the <a>DeliverConfigSnapshot</a> action, in JSON format.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeliverConfigSnapshotResponse {
     /// <p>The ID of the snapshot that is being created.</p>
     #[serde(rename = "configSnapshotId")]
@@ -787,6 +808,7 @@ pub struct DeliveryChannel {
 
 /// <p>The status of a specified delivery channel.</p> <p>Valid values: <code>Success</code> | <code>Failure</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeliveryChannelStatus {
     /// <p>A list that contains the status of the delivery of the configuration history to the specified Amazon S3 bucket.</p>
     #[serde(rename = "configHistoryDeliveryInfo")]
@@ -826,6 +848,7 @@ pub struct DescribeAggregateComplianceByConfigRulesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAggregateComplianceByConfigRulesResponse {
     /// <p>Returns a list of AggregateComplianceByConfigRule object.</p>
     #[serde(rename = "AggregateComplianceByConfigRules")]
@@ -850,6 +873,7 @@ pub struct DescribeAggregationAuthorizationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeAggregationAuthorizationsResponse {
     /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
     #[serde(rename = "AggregationAuthorizations")]
@@ -880,6 +904,7 @@ pub struct DescribeComplianceByConfigRuleRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeComplianceByConfigRuleResponse {
     /// <p>Indicates whether each of the specified AWS Config rules is compliant.</p>
     #[serde(rename = "ComplianceByConfigRules")]
@@ -918,6 +943,7 @@ pub struct DescribeComplianceByResourceRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeComplianceByResourceResponse {
     /// <p>Indicates whether the specified AWS resource complies with all of the AWS Config rules that evaluate it.</p>
     #[serde(rename = "ComplianceByResources")]
@@ -948,6 +974,7 @@ pub struct DescribeConfigRuleEvaluationStatusRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConfigRuleEvaluationStatusResponse {
     /// <p>Status information about your AWS managed Config rules.</p>
     #[serde(rename = "ConfigRulesEvaluationStatus")]
@@ -974,6 +1001,7 @@ pub struct DescribeConfigRulesRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConfigRulesResponse {
     /// <p>The details about your AWS Config rules.</p>
     #[serde(rename = "ConfigRules")]
@@ -1005,6 +1033,7 @@ pub struct DescribeConfigurationAggregatorSourcesStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConfigurationAggregatorSourcesStatusResponse {
     /// <p>Returns an AggregatedSourceStatus object. </p>
     #[serde(rename = "AggregatedSourceStatusList")]
@@ -1033,6 +1062,7 @@ pub struct DescribeConfigurationAggregatorsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConfigurationAggregatorsResponse {
     /// <p>Returns a ConfigurationAggregators object.</p>
     #[serde(rename = "ConfigurationAggregators")]
@@ -1055,6 +1085,7 @@ pub struct DescribeConfigurationRecorderStatusRequest {
 
 /// <p>The output for the <a>DescribeConfigurationRecorderStatus</a> action, in JSON format.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConfigurationRecorderStatusResponse {
     /// <p>A list that contains status of the specified recorders.</p>
     #[serde(rename = "ConfigurationRecordersStatus")]
@@ -1073,6 +1104,7 @@ pub struct DescribeConfigurationRecordersRequest {
 
 /// <p>The output for the <a>DescribeConfigurationRecorders</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConfigurationRecordersResponse {
     /// <p>A list that contains the descriptions of the specified configuration recorders.</p>
     #[serde(rename = "ConfigurationRecorders")]
@@ -1091,6 +1123,7 @@ pub struct DescribeDeliveryChannelStatusRequest {
 
 /// <p>The output for the <a>DescribeDeliveryChannelStatus</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDeliveryChannelStatusResponse {
     /// <p>A list that contains the status of a specified delivery channel.</p>
     #[serde(rename = "DeliveryChannelsStatus")]
@@ -1109,6 +1142,7 @@ pub struct DescribeDeliveryChannelsRequest {
 
 /// <p>The output for the <a>DescribeDeliveryChannels</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDeliveryChannelsResponse {
     /// <p>A list that contains the descriptions of the specified delivery channel.</p>
     #[serde(rename = "DeliveryChannels")]
@@ -1129,6 +1163,7 @@ pub struct DescribePendingAggregationRequestsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribePendingAggregationRequestsResponse {
     /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
@@ -1153,6 +1188,7 @@ pub struct DescribeRetentionConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeRetentionConfigurationsResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
     #[serde(rename = "NextToken")]
@@ -1187,6 +1223,7 @@ pub struct Evaluation {
 
 /// <p>The details of an AWS Config evaluation. Provides the AWS resource that was evaluated, the compliance of the resource, related time stamps, and supplementary information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EvaluationResult {
     /// <p>Supplementary information about how the evaluation determined the compliance.</p>
     #[serde(rename = "Annotation")]
@@ -1216,6 +1253,7 @@ pub struct EvaluationResult {
 
 /// <p>Uniquely identifies an evaluation result.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EvaluationResultIdentifier {
     /// <p>Identifies an AWS Config rule used to evaluate an AWS resource, and provides the type and ID of the evaluated resource.</p>
     #[serde(rename = "EvaluationResultQualifier")]
@@ -1229,6 +1267,7 @@ pub struct EvaluationResultIdentifier {
 
 /// <p>Identifies an AWS Config rule that evaluated an AWS resource, and provides the type and ID of the resource that the rule evaluated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EvaluationResultQualifier {
     /// <p>The name of the AWS Config rule that was used in the evaluation.</p>
     #[serde(rename = "ConfigRuleName")]
@@ -1273,6 +1312,7 @@ pub struct GetAggregateComplianceDetailsByConfigRuleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetAggregateComplianceDetailsByConfigRuleResponse {
     /// <p>Returns an AggregateEvaluationResults object.</p>
     #[serde(rename = "AggregateEvaluationResults")]
@@ -1308,6 +1348,7 @@ pub struct GetAggregateConfigRuleComplianceSummaryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetAggregateConfigRuleComplianceSummaryResponse {
     /// <p>Returns a list of AggregateComplianceCounts object.</p>
     #[serde(rename = "AggregateComplianceCounts")]
@@ -1345,6 +1386,7 @@ pub struct GetComplianceDetailsByConfigRuleRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetComplianceDetailsByConfigRuleResponse {
     /// <p>Indicates whether the AWS resource complies with the specified AWS Config rule.</p>
     #[serde(rename = "EvaluationResults")]
@@ -1377,6 +1419,7 @@ pub struct GetComplianceDetailsByResourceRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetComplianceDetailsByResourceResponse {
     /// <p>Indicates whether the specified AWS resource complies each AWS Config rule.</p>
     #[serde(rename = "EvaluationResults")]
@@ -1390,6 +1433,7 @@ pub struct GetComplianceDetailsByResourceResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetComplianceSummaryByConfigRuleResponse {
     /// <p>The number of AWS Config rules that are compliant and the number that are noncompliant, up to a maximum of 25 for each.</p>
     #[serde(rename = "ComplianceSummary")]
@@ -1408,6 +1452,7 @@ pub struct GetComplianceSummaryByResourceTypeRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetComplianceSummaryByResourceTypeResponse {
     /// <p>The number of resources that are compliant and the number that are noncompliant. If one or more resource types were provided with the request, the numbers are returned for each resource type. The maximum number returned is 100.</p>
     #[serde(rename = "ComplianceSummariesByResourceType")]
@@ -1432,6 +1477,7 @@ pub struct GetDiscoveredResourceCountsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDiscoveredResourceCountsResponse {
     /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
     #[serde(rename = "nextToken")]
@@ -1480,6 +1526,7 @@ pub struct GetResourceConfigHistoryRequest {
 
 /// <p>The output for the <a>GetResourceConfigHistory</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetResourceConfigHistoryResponse {
     /// <p>A list that contains the configuration history of one or more resources.</p>
     #[serde(rename = "configurationItems")]
@@ -1521,6 +1568,7 @@ pub struct ListDiscoveredResourcesRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDiscoveredResourcesResponse {
     /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
     #[serde(rename = "nextToken")]
@@ -1550,6 +1598,7 @@ pub struct OrganizationAggregationSource {
 
 /// <p>An object that represents the account ID and region of an aggregator account that is requesting authorization but is not yet authorized.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PendingAggregationRequest {
     /// <p>The 12-digit account ID of the account requesting to aggregate data.</p>
     #[serde(rename = "RequesterAccountId")]
@@ -1572,6 +1621,7 @@ pub struct PutAggregationAuthorizationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutAggregationAuthorizationResponse {
     /// <p>Returns an AggregationAuthorization object. </p>
     #[serde(rename = "AggregationAuthorization")]
@@ -1602,6 +1652,7 @@ pub struct PutConfigurationAggregatorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutConfigurationAggregatorResponse {
     /// <p>Returns a ConfigurationAggregator object.</p>
     #[serde(rename = "ConfigurationAggregator")]
@@ -1643,6 +1694,7 @@ pub struct PutEvaluationsRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutEvaluationsResponse {
     /// <p>Requests that failed because of a client or server error.</p>
     #[serde(rename = "FailedEvaluations")]
@@ -1658,6 +1710,7 @@ pub struct PutRetentionConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutRetentionConfigurationResponse {
     /// <p>Returns a retention configuration object.</p>
     #[serde(rename = "RetentionConfiguration")]
@@ -1684,6 +1737,7 @@ pub struct RecordingGroup {
 
 /// <p>The relationship of the related resource to the main resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Relationship {
     /// <p>The type of relationship with the related resource.</p>
     #[serde(rename = "relationshipName")]
@@ -1705,6 +1759,7 @@ pub struct Relationship {
 
 /// <p>An object that contains the resource type and the number of resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResourceCount {
     /// <p>The number of resources.</p>
     #[serde(rename = "count")]
@@ -1718,6 +1773,7 @@ pub struct ResourceCount {
 
 /// <p>The details that identify a resource that is discovered by AWS Config, including the resource type, ID, and (if available) the custom resource name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResourceIdentifier {
     /// <p>The time that the resource was deleted.</p>
     #[serde(rename = "resourceDeletionTime")]
@@ -1750,6 +1806,7 @@ pub struct ResourceKey {
 
 /// <p>An object with the name of the retention configuration and the retention period in days. The object stores the configuration for data retention in AWS Config.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RetentionConfiguration {
     /// <p>The name of the retention configuration object.</p>
     #[serde(rename = "Name")]
@@ -1823,6 +1880,7 @@ pub struct StartConfigRulesEvaluationRequest {
 
 /// <p>The output when you start the evaluation for the specified AWS Config rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartConfigRulesEvaluationResponse {}
 
 /// <p>The input for the <a>StartConfigurationRecorder</a> action.</p>

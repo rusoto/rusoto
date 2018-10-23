@@ -131,6 +131,7 @@ pub struct AssociateVirtualInterfaceRequest {
 
 /// <p>A structure containing information about a BGP peer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BGPPeer {
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -168,6 +169,7 @@ pub struct ConfirmConnectionRequest {
 
 /// <p>The response received when ConfirmConnection is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfirmConnectionResponse {
     #[serde(rename = "connectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -191,6 +193,7 @@ pub struct ConfirmPrivateVirtualInterfaceRequest {
 
 /// <p>The response received when ConfirmPrivateVirtualInterface is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfirmPrivateVirtualInterfaceResponse {
     #[serde(rename = "virtualInterfaceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -206,6 +209,7 @@ pub struct ConfirmPublicVirtualInterfaceRequest {
 
 /// <p>The response received when ConfirmPublicVirtualInterface is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConfirmPublicVirtualInterfaceResponse {
     #[serde(rename = "virtualInterfaceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -214,6 +218,7 @@ pub struct ConfirmPublicVirtualInterfaceResponse {
 
 /// <p>A connection represents the physical network connection between the AWS Direct Connect location and the customer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Connection {
     /// <p>Deprecated in favor of awsDeviceV2.</p> <p>The Direct Connection endpoint which the physical connection terminates on.</p>
     #[serde(rename = "awsDevice")]
@@ -264,6 +269,7 @@ pub struct Connection {
 
 /// <p>A structure containing a list of connections.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Connections {
     /// <p>A list of connections.</p>
     #[serde(rename = "connections")]
@@ -286,6 +292,7 @@ pub struct CreateBGPPeerRequest {
 
 /// <p>The response received when CreateBGPPeer is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateBGPPeerResponse {
     #[serde(rename = "virtualInterface")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -319,6 +326,7 @@ pub struct CreateDirectConnectGatewayAssociationRequest {
 
 /// <p>Container for the response from the CreateDirectConnectGatewayAssociation API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDirectConnectGatewayAssociationResult {
     /// <p>The direct connect gateway association to be created.</p>
     #[serde(rename = "directConnectGatewayAssociation")]
@@ -340,6 +348,7 @@ pub struct CreateDirectConnectGatewayRequest {
 
 /// <p>Container for the response from the CreateDirectConnectGateway API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDirectConnectGatewayResult {
     /// <p>The direct connect gateway to be created.</p>
     #[serde(rename = "directConnectGateway")]
@@ -422,6 +431,7 @@ pub struct DeleteBGPPeerRequest {
 
 /// <p>The response received when DeleteBGPPeer is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteBGPPeerResponse {
     #[serde(rename = "virtualInterface")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -448,6 +458,7 @@ pub struct DeleteDirectConnectGatewayAssociationRequest {
 
 /// <p>Container for the response from the DeleteDirectConnectGatewayAssociation API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDirectConnectGatewayAssociationResult {
     /// <p>The direct connect gateway association to be deleted.</p>
     #[serde(rename = "directConnectGatewayAssociation")]
@@ -465,6 +476,7 @@ pub struct DeleteDirectConnectGatewayRequest {
 
 /// <p>Container for the response from the DeleteDirectConnectGateway API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDirectConnectGatewayResult {
     /// <p>The direct connect gateway to be deleted.</p>
     #[serde(rename = "directConnectGateway")]
@@ -481,6 +493,7 @@ pub struct DeleteInterconnectRequest {
 
 /// <p>The response received when DeleteInterconnect is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteInterconnectResponse {
     #[serde(rename = "interconnectState")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -504,6 +517,7 @@ pub struct DeleteVirtualInterfaceRequest {
 
 /// <p>The response received when DeleteVirtualInterface is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteVirtualInterfaceResponse {
     #[serde(rename = "virtualInterfaceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -526,6 +540,7 @@ pub struct DescribeConnectionLoaRequest {
 
 /// <p>The response received when DescribeConnectionLoa is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConnectionLoaResponse {
     #[serde(rename = "loa")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -571,6 +586,7 @@ pub struct DescribeDirectConnectGatewayAssociationsRequest {
 
 /// <p>Container for the response from the DescribeDirectConnectGatewayAssociations API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAssociationsResult {
     /// <p>Information about the direct connect gateway associations.</p>
     #[serde(rename = "directConnectGatewayAssociations")]
@@ -604,6 +620,7 @@ pub struct DescribeDirectConnectGatewayAttachmentsRequest {
 
 /// <p>Container for the response from the DescribeDirectConnectGatewayAttachments API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAttachmentsResult {
     /// <p>Information about the direct connect gateway attachments.</p>
     #[serde(rename = "directConnectGatewayAttachments")]
@@ -633,6 +650,7 @@ pub struct DescribeDirectConnectGatewaysRequest {
 
 /// <p>Container for the response from the DescribeDirectConnectGateways API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDirectConnectGatewaysResult {
     /// <p>Information about the direct connect gateways.</p>
     #[serde(rename = "directConnectGateways")]
@@ -667,6 +685,7 @@ pub struct DescribeInterconnectLoaRequest {
 
 /// <p>The response received when DescribeInterconnectLoa is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeInterconnectLoaResponse {
     #[serde(rename = "loa")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -716,6 +735,7 @@ pub struct DescribeTagsRequest {
 
 /// <p>The response received when DescribeTags is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTagsResponse {
     /// <p>Information about the tags.</p>
     #[serde(rename = "resourceTags")]
@@ -736,6 +756,7 @@ pub struct DescribeVirtualInterfacesRequest {
 
 /// <p>A direct connect gateway is an intermediate object that enables you to connect virtual interfaces and virtual private gateways.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DirectConnectGateway {
     /// <p>The autonomous system number (ASN) for the Amazon side of the connection.</p>
     #[serde(rename = "amazonSideAsn")]
@@ -761,6 +782,7 @@ pub struct DirectConnectGateway {
 
 /// <p>The association between a direct connect gateway and virtual private gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DirectConnectGatewayAssociation {
     #[serde(rename = "associationState")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -785,6 +807,7 @@ pub struct DirectConnectGatewayAssociation {
 
 /// <p>The association between a direct connect gateway and virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DirectConnectGatewayAttachment {
     #[serde(rename = "attachmentState")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -820,6 +843,7 @@ pub struct DisassociateConnectionFromLagRequest {
 
 /// <p>An interconnect is a connection that can host other connections.</p> <p>Like a standard AWS Direct Connect connection, an interconnect represents the physical connection between an AWS Direct Connect partner's network and a specific Direct Connect location. An AWS Direct Connect partner who owns an interconnect can provision hosted connections on the interconnect for their end customers, thereby providing the end customers with connectivity to AWS services.</p> <p>The resources of the interconnect, including bandwidth and VLAN numbers, are shared by all of the hosted connections on the interconnect, and the owner of the interconnect determines how these resources are assigned.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Interconnect {
     /// <p>Deprecated in favor of awsDeviceV2.</p> <p>The Direct Connection endpoint which the physical connection terminates on.</p>
     #[serde(rename = "awsDevice")]
@@ -858,6 +882,7 @@ pub struct Interconnect {
 
 /// <p>A structure containing a list of interconnects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Interconnects {
     /// <p>A list of interconnects.</p>
     #[serde(rename = "interconnects")]
@@ -867,6 +892,7 @@ pub struct Interconnects {
 
 /// <p>Describes a link aggregation group (LAG). A LAG is a connection that uses the Link Aggregation Control Protocol (LACP) to logically aggregate a bundle of physical connections. Like an interconnect, it can host other connections. All connections in a LAG must terminate on the same physical AWS Direct Connect endpoint, and must be the same bandwidth.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Lag {
     /// <p><p>Indicates whether the LAG can host other connections.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     #[serde(rename = "allowsHostedConnections")]
@@ -920,6 +946,7 @@ pub struct Lag {
 
 /// <p>A structure containing a list of LAGs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Lags {
     /// <p>A list of LAGs.</p>
     #[serde(rename = "lags")]
@@ -929,6 +956,7 @@ pub struct Lags {
 
 /// <p>A structure containing the Letter of Authorization - Connecting Facility Assignment (LOA-CFA) for a connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Loa {
     #[serde(rename = "loaContent")]
     #[serde(
@@ -944,6 +972,7 @@ pub struct Loa {
 
 /// <p>An AWS Direct Connect location where connections and interconnects can be requested.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Location {
     /// <p>The code used to indicate the AWS Direct Connect location.</p>
     #[serde(rename = "locationCode")]
@@ -961,6 +990,7 @@ pub struct Location {
 
 /// <p>A location is a network facility where AWS Direct Connect routers are available to be connected. Generally, these are colocation hubs where many network providers have equipment, and where cross connects can be delivered. Locations include a name and facility code, and must be provided when creating a connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Locations {
     /// <p>A list of colocation hubs where network providers have equipment. Most regions have multiple locations available.</p>
     #[serde(rename = "locations")]
@@ -1094,6 +1124,7 @@ pub struct NewPublicVirtualInterfaceAllocation {
 
 /// <p>The tags associated with a Direct Connect resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResourceTag {
     /// <p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p>
     #[serde(rename = "resourceArn")]
@@ -1139,6 +1170,7 @@ pub struct TagResourceRequest {
 
 /// <p>The response received when TagResource is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Container for the parameters to the UntagResource operation.</p>
@@ -1154,6 +1186,7 @@ pub struct UntagResourceRequest {
 
 /// <p>The response received when UntagResource is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p>Container for the parameters to the UpdateLag operation.</p>
@@ -1174,6 +1207,7 @@ pub struct UpdateLagRequest {
 
 /// <p>You can create one or more AWS Direct Connect private virtual interfaces linking to your virtual private gateway.</p> <p>Virtual private gateways can be managed using the Amazon Virtual Private Cloud (Amazon VPC) console or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html">Amazon EC2 CreateVpnGateway action</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VirtualGateway {
     #[serde(rename = "virtualGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1185,6 +1219,7 @@ pub struct VirtualGateway {
 
 /// <p>A structure containing a list of virtual private gateways.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VirtualGateways {
     /// <p>A list of virtual private gateways.</p>
     #[serde(rename = "virtualGateways")]
@@ -1194,6 +1229,7 @@ pub struct VirtualGateways {
 
 /// <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VirtualInterface {
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1267,6 +1303,7 @@ pub struct VirtualInterface {
 
 /// <p>A structure containing a list of virtual interfaces.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VirtualInterfaces {
     /// <p>A list of virtual interfaces.</p>
     #[serde(rename = "virtualInterfaces")]

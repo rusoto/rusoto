@@ -41,6 +41,7 @@ pub struct AssociateRoleToGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateRoleToGroupResponse {
     /// <p>The time, in milliseconds since the epoch, when the role ARN was associated with the group.</p>
     #[serde(rename = "AssociatedAt")]
@@ -57,6 +58,7 @@ pub struct AssociateServiceRoleToAccountRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateServiceRoleToAccountResponse {
     /// <p>The time when the service role was associated with the account.</p>
     #[serde(rename = "AssociatedAt")]
@@ -133,6 +135,7 @@ pub struct CreateCoreDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateCoreDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -180,6 +183,7 @@ pub struct CreateCoreDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateCoreDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -223,6 +227,7 @@ pub struct CreateDeploymentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDeploymentResponse {
     /// <p>The ARN of the deployment.</p>
     #[serde(rename = "DeploymentArn")]
@@ -251,6 +256,7 @@ pub struct CreateDeviceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDeviceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -298,6 +304,7 @@ pub struct CreateDeviceDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDeviceDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -334,6 +341,7 @@ pub struct CreateFunctionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateFunctionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -382,6 +390,7 @@ pub struct CreateFunctionDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateFunctionDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -413,6 +422,7 @@ pub struct CreateGroupCertificateAuthorityRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateGroupCertificateAuthorityResponse {
     /// <p>The ARN of the group certificate authority.</p>
     #[serde(rename = "GroupCertificateAuthorityArn")]
@@ -437,6 +447,7 @@ pub struct CreateGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateGroupResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -504,6 +515,7 @@ pub struct CreateGroupVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateGroupVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -540,6 +552,7 @@ pub struct CreateLoggerDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateLoggerDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -587,6 +600,7 @@ pub struct CreateLoggerDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateLoggerDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -623,6 +637,7 @@ pub struct CreateResourceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateResourceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -670,6 +685,7 @@ pub struct CreateResourceDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateResourceDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -716,6 +732,7 @@ pub struct CreateSoftwareUpdateJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSoftwareUpdateJobResponse {
     /// <p>The IoT Job ARN corresponding to this update.</p>
     #[serde(rename = "IotJobArn")]
@@ -744,6 +761,7 @@ pub struct CreateSubscriptionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSubscriptionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -791,6 +809,7 @@ pub struct CreateSubscriptionDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSubscriptionDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -812,6 +831,7 @@ pub struct CreateSubscriptionDefinitionVersionResponse {
 
 /// <p>Information about a definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DefinitionInformation {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -851,6 +871,7 @@ pub struct DeleteCoreDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteCoreDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -861,6 +882,7 @@ pub struct DeleteDeviceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDeviceDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -871,6 +893,7 @@ pub struct DeleteFunctionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteFunctionDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -881,6 +904,7 @@ pub struct DeleteGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -891,6 +915,7 @@ pub struct DeleteLoggerDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteLoggerDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -901,6 +926,7 @@ pub struct DeleteResourceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteResourceDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -911,10 +937,12 @@ pub struct DeleteSubscriptionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteSubscriptionDefinitionResponse {}
 
 /// <p>Information about a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Deployment {
     /// <p>The time, in milliseconds since the epoch, when the deployment was created.</p>
     #[serde(rename = "CreatedAt")]
@@ -976,6 +1004,7 @@ pub struct DisassociateRoleFromGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateRoleFromGroupResponse {
     /// <p>The time, in milliseconds since the epoch, when the role was disassociated from the group.</p>
     #[serde(rename = "DisassociatedAt")]
@@ -987,6 +1016,7 @@ pub struct DisassociateRoleFromGroupResponse {
 pub struct DisassociateServiceRoleFromAccountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateServiceRoleFromAccountResponse {
     /// <p>The time when the service role was disassociated from the account.</p>
     #[serde(rename = "DisassociatedAt")]
@@ -1000,6 +1030,7 @@ pub struct Empty {}
 
 /// <p>Details about the error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ErrorDetail {
     /// <p>A detailed error code.</p>
     #[serde(rename = "DetailedErrorCode")]
@@ -1104,6 +1135,7 @@ pub struct GetAssociatedRoleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetAssociatedRoleResponse {
     /// <p>The time when the role was associated with the group.</p>
     #[serde(rename = "AssociatedAt")]
@@ -1123,6 +1155,7 @@ pub struct GetConnectivityInfoRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetConnectivityInfoResponse {
     /// <p>Connectivity info list.</p>
     #[serde(rename = "ConnectivityInfo")]
@@ -1142,6 +1175,7 @@ pub struct GetCoreDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetCoreDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1184,6 +1218,7 @@ pub struct GetCoreDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetCoreDefinitionVersionResponse {
     /// <p>The ARN of the core definition version.</p>
     #[serde(rename = "Arn")]
@@ -1218,6 +1253,7 @@ pub struct GetDeploymentStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDeploymentStatusResponse {
     /// <p>The status of the deployment.</p>
     #[serde(rename = "DeploymentStatus")]
@@ -1249,6 +1285,7 @@ pub struct GetDeviceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDeviceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1291,6 +1328,7 @@ pub struct GetDeviceDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDeviceDefinitionVersionResponse {
     /// <p>The ARN of the device definition version.</p>
     #[serde(rename = "Arn")]
@@ -1322,6 +1360,7 @@ pub struct GetFunctionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetFunctionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1364,6 +1403,7 @@ pub struct GetFunctionDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetFunctionDefinitionVersionResponse {
     /// <p>The ARN of the function definition version.</p>
     #[serde(rename = "Arn")]
@@ -1398,6 +1438,7 @@ pub struct GetGroupCertificateAuthorityRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetGroupCertificateAuthorityResponse {
     /// <p>The ARN of the certificate authority for the group.</p>
     #[serde(rename = "GroupCertificateAuthorityArn")]
@@ -1421,6 +1462,7 @@ pub struct GetGroupCertificateConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetGroupCertificateConfigurationResponse {
     /// <p>The amount of time remaining before the certificate authority expires, in milliseconds.</p>
     #[serde(rename = "CertificateAuthorityExpiryInMilliseconds")]
@@ -1444,6 +1486,7 @@ pub struct GetGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetGroupResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1486,6 +1529,7 @@ pub struct GetGroupVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetGroupVersionResponse {
     /// <p>The ARN of the group version.</p>
     #[serde(rename = "Arn")]
@@ -1517,6 +1561,7 @@ pub struct GetLoggerDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetLoggerDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1559,6 +1604,7 @@ pub struct GetLoggerDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetLoggerDefinitionVersionResponse {
     /// <p>The ARN of the logger definition version.</p>
     #[serde(rename = "Arn")]
@@ -1590,6 +1636,7 @@ pub struct GetResourceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetResourceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1632,6 +1679,7 @@ pub struct GetResourceDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetResourceDefinitionVersionResponse {
     /// <p>Arn of the resource definition version.</p>
     #[serde(rename = "Arn")]
@@ -1659,6 +1707,7 @@ pub struct GetResourceDefinitionVersionResponse {
 pub struct GetServiceRoleForAccountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetServiceRoleForAccountResponse {
     /// <p>The time when the service role was associated with the account.</p>
     #[serde(rename = "AssociatedAt")]
@@ -1678,6 +1727,7 @@ pub struct GetSubscriptionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetSubscriptionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1720,6 +1770,7 @@ pub struct GetSubscriptionDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetSubscriptionDefinitionVersionResponse {
     /// <p>The ARN of the subscription definition version.</p>
     #[serde(rename = "Arn")]
@@ -1745,6 +1796,7 @@ pub struct GetSubscriptionDefinitionVersionResponse {
 
 /// <p>Information about a certificate authority for a group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GroupCertificateAuthorityProperties {
     /// <p>The ARN of the certificate authority for the group.</p>
     #[serde(rename = "GroupCertificateAuthorityArn")]
@@ -1769,6 +1821,7 @@ pub struct GroupCertificateConfiguration {
 
 /// <p>Information about a group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GroupInformation {
     /// <p>The ARN of the group.</p>
     #[serde(rename = "Arn")]
@@ -1858,6 +1911,7 @@ pub struct ListCoreDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListCoreDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -1882,6 +1936,7 @@ pub struct ListCoreDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListCoreDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -1918,6 +1973,7 @@ pub struct ListDeploymentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDeploymentsResponse {
     /// <p>A list of deployments for the requested groups.</p>
     #[serde(rename = "Deployments")]
@@ -1945,6 +2001,7 @@ pub struct ListDeviceDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDeviceDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -1969,6 +2026,7 @@ pub struct ListDeviceDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDeviceDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -1996,6 +2054,7 @@ pub struct ListFunctionDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListFunctionDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2020,6 +2079,7 @@ pub struct ListFunctionDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListFunctionDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2039,6 +2099,7 @@ pub struct ListGroupCertificateAuthoritiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListGroupCertificateAuthoritiesResponse {
     /// <p>A list of certificate authorities associated with the group.</p>
     #[serde(rename = "GroupCertificateAuthorities")]
@@ -2062,6 +2123,7 @@ pub struct ListGroupVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListGroupVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2086,6 +2148,7 @@ pub struct ListGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListGroupsResponse {
     /// <p>Information about a group.</p>
     #[serde(rename = "Groups")]
@@ -2113,6 +2176,7 @@ pub struct ListLoggerDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListLoggerDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2137,6 +2201,7 @@ pub struct ListLoggerDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListLoggerDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2164,6 +2229,7 @@ pub struct ListResourceDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListResourceDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2188,6 +2254,7 @@ pub struct ListResourceDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListResourceDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2215,6 +2282,7 @@ pub struct ListSubscriptionDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSubscriptionDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2239,6 +2307,7 @@ pub struct ListSubscriptionDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSubscriptionDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2340,6 +2409,7 @@ pub struct ResetDeploymentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResetDeploymentsResponse {
     /// <p>The ARN of the deployment.</p>
     #[serde(rename = "DeploymentArn")]
@@ -2481,6 +2551,7 @@ pub struct UpdateConnectivityInfoRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateConnectivityInfoResponse {
     /// <p>A message about the connectivity info update request.</p>
     #[serde(rename = "Message")]
@@ -2504,6 +2575,7 @@ pub struct UpdateCoreDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateCoreDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2518,6 +2590,7 @@ pub struct UpdateDeviceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDeviceDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2532,6 +2605,7 @@ pub struct UpdateFunctionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateFunctionDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2546,6 +2620,7 @@ pub struct UpdateGroupCertificateConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateGroupCertificateConfigurationResponse {
     /// <p>The amount of time remaining before the certificate authority expires, in milliseconds.</p>
     #[serde(rename = "CertificateAuthorityExpiryInMilliseconds")]
@@ -2573,6 +2648,7 @@ pub struct UpdateGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2587,6 +2663,7 @@ pub struct UpdateLoggerDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateLoggerDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2601,6 +2678,7 @@ pub struct UpdateResourceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateResourceDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2615,10 +2693,12 @@ pub struct UpdateSubscriptionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateSubscriptionDefinitionResponse {}
 
 /// <p>Information about a version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VersionInformation {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]

@@ -106,6 +106,7 @@ pub struct CreateDeliveryStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDeliveryStreamOutput {
     /// <p>The ARN of the delivery stream.</p>
     #[serde(rename = "DeliveryStreamARN")]
@@ -142,10 +143,12 @@ pub struct DeleteDeliveryStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDeliveryStreamOutput {}
 
 /// <p>Contains information about a delivery stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeliveryStreamDescription {
     /// <p>The date and time that the delivery stream was created.</p>
     #[serde(rename = "CreateTimestamp")]
@@ -198,6 +201,7 @@ pub struct DescribeDeliveryStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDeliveryStreamOutput {
     /// <p>Information about the delivery stream.</p>
     #[serde(rename = "DeliveryStreamDescription")]
@@ -219,6 +223,7 @@ pub struct Deserializer {
 
 /// <p>Describes the destination for a delivery stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DestinationDescription {
     /// <p>The ID of the destination.</p>
     #[serde(rename = "DestinationId")]
@@ -304,6 +309,7 @@ pub struct ElasticsearchDestinationConfiguration {
 
 /// <p>The destination description in Amazon ES.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ElasticsearchDestinationDescription {
     /// <p>The buffering options.</p>
     #[serde(rename = "BufferingHints")]
@@ -467,6 +473,7 @@ pub struct ExtendedS3DestinationConfiguration {
 
 /// <p>Describes a destination in Amazon S3.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ExtendedS3DestinationDescription {
     /// <p>The ARN of the S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     #[serde(rename = "BucketARN")]
@@ -597,6 +604,7 @@ pub struct KinesisStreamSourceConfiguration {
 
 /// <p>Details about a Kinesis data stream used as the source for a Kinesis Data Firehose delivery stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct KinesisStreamSourceDescription {
     /// <p>Kinesis Data Firehose starts retrieving records from the Kinesis data stream starting with this time stamp.</p>
     #[serde(rename = "DeliveryStartTimestamp")]
@@ -629,6 +637,7 @@ pub struct ListDeliveryStreamsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDeliveryStreamsOutput {
     /// <p>The names of the delivery streams.</p>
     #[serde(rename = "DeliveryStreamNames")]
@@ -654,6 +663,7 @@ pub struct ListTagsForDeliveryStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForDeliveryStreamOutput {
     /// <p>If this is <code>true</code> in the response, more tags are available. To list the remaining tags, set <code>ExclusiveStartTagKey</code> to the key of the last tag returned and call <code>ListTagsForDeliveryStream</code> again.</p>
     #[serde(rename = "HasMoreTags")]
@@ -810,6 +820,7 @@ pub struct PutRecordBatchInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutRecordBatchOutput {
     /// <p>The number of records that might have failed processing.</p>
     #[serde(rename = "FailedPutCount")]
@@ -821,6 +832,7 @@ pub struct PutRecordBatchOutput {
 
 /// <p>Contains the result for an individual record from a <a>PutRecordBatch</a> request. If the record is successfully added to your delivery stream, it receives a record ID. If the record fails to be added to your delivery stream, the result includes an error code and an error message.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutRecordBatchResponseEntry {
     /// <p>The error code for an individual record result.</p>
     #[serde(rename = "ErrorCode")]
@@ -847,6 +859,7 @@ pub struct PutRecordInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutRecordOutput {
     /// <p>The ID of the record.</p>
     #[serde(rename = "RecordId")]
@@ -911,6 +924,7 @@ pub struct RedshiftDestinationConfiguration {
 
 /// <p>Describes a destination in Amazon Redshift.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RedshiftDestinationDescription {
     /// <p>The Amazon CloudWatch logging options for your delivery stream.</p>
     #[serde(rename = "CloudWatchLoggingOptions")]
@@ -1040,6 +1054,7 @@ pub struct S3DestinationConfiguration {
 
 /// <p>Describes a destination in Amazon S3.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct S3DestinationDescription {
     /// <p>The ARN of the S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     #[serde(rename = "BucketARN")]
@@ -1143,6 +1158,7 @@ pub struct Serializer {
 
 /// <p>Details about a Kinesis data stream used as the source for a Kinesis Data Firehose delivery stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SourceDescription {
     /// <p>The <a>KinesisStreamSourceDescription</a> value for the source Kinesis data stream.</p>
     #[serde(rename = "KinesisStreamSourceDescription")]
@@ -1189,6 +1205,7 @@ pub struct SplunkDestinationConfiguration {
 
 /// <p>Describes a destination in Splunk.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SplunkDestinationDescription {
     /// <p>The Amazon CloudWatch logging options for your delivery stream.</p>
     #[serde(rename = "CloudWatchLoggingOptions")]
@@ -1301,6 +1318,7 @@ pub struct TagDeliveryStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TagDeliveryStreamOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1314,6 +1332,7 @@ pub struct UntagDeliveryStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UntagDeliveryStreamOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1346,6 +1365,7 @@ pub struct UpdateDestinationInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDestinationOutput {}
 
 /// Errors returned by CreateDeliveryStream

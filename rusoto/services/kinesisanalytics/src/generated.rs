@@ -42,6 +42,7 @@ pub struct AddApplicationCloudWatchLoggingOptionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddApplicationCloudWatchLoggingOptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -61,6 +62,7 @@ pub struct AddApplicationInputProcessingConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddApplicationInputProcessingConfigurationResponse {}
 
 /// <p><p/></p>
@@ -79,6 +81,7 @@ pub struct AddApplicationInputRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddApplicationInputResponse {}
 
 /// <p><p/></p>
@@ -97,6 +100,7 @@ pub struct AddApplicationOutputRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddApplicationOutputResponse {}
 
 /// <p><p/></p>
@@ -115,10 +119,12 @@ pub struct AddApplicationReferenceDataSourceRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddApplicationReferenceDataSourceResponse {}
 
 /// <p>Provides a description of the application, including the application Amazon Resource Name (ARN), status, latest version, and input and output configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ApplicationDetail {
     /// <p>ARN of the application.</p>
     #[serde(rename = "ApplicationARN")]
@@ -168,6 +174,7 @@ pub struct ApplicationDetail {
 
 /// <p>Provides application summary information, including the application Amazon Resource Name (ARN), name, and status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ApplicationSummary {
     /// <p>ARN of the application.</p>
     #[serde(rename = "ApplicationARN")]
@@ -229,6 +236,7 @@ pub struct CloudWatchLoggingOption {
 
 /// <p>Description of the CloudWatch logging option.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CloudWatchLoggingOptionDescription {
     /// <p>ID of the CloudWatch logging option description.</p>
     #[serde(rename = "CloudWatchLoggingOptionId")]
@@ -288,6 +296,7 @@ pub struct CreateApplicationRequest {
 
 /// <p>TBD</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateApplicationResponse {
     /// <p>In response to your <code>CreateApplication</code> request, Amazon Kinesis Analytics returns a response with a summary of the application it created, including the application Amazon Resource Name (ARN), name, and status.</p>
     #[serde(rename = "ApplicationSummary")]
@@ -308,6 +317,7 @@ pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteApplicationCloudWatchLoggingOptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -324,6 +334,7 @@ pub struct DeleteApplicationInputProcessingConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteApplicationInputProcessingConfigurationResponse {}
 
 /// <p><p/></p>
@@ -342,6 +353,7 @@ pub struct DeleteApplicationOutputRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteApplicationOutputResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -358,6 +370,7 @@ pub struct DeleteApplicationReferenceDataSourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteApplicationReferenceDataSourceResponse {}
 
 /// <p><p/></p>
@@ -373,6 +386,7 @@ pub struct DeleteApplicationRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteApplicationResponse {}
 
 /// <p><p/></p>
@@ -385,6 +399,7 @@ pub struct DescribeApplicationRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeApplicationResponse {
     /// <p>Provides a description of the application, such as the application Amazon Resource Name (ARN), status, latest version, and input and output configuration details.</p>
     #[serde(rename = "ApplicationDetail")]
@@ -426,6 +441,7 @@ pub struct DiscoverInputSchemaRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DiscoverInputSchemaResponse {
     /// <p>Schema inferred from the streaming source. It identifies the format of the data in the streaming source and how each data element maps to corresponding columns in the in-application stream that you can create.</p>
     #[serde(rename = "InputSchema")]
@@ -485,6 +501,7 @@ pub struct InputConfiguration {
 
 /// <p>Describes the application input configuration. For more information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InputDescription {
     /// <p>Returns the in-application stream names that are mapped to the stream source.</p>
     #[serde(rename = "InAppStreamNames")]
@@ -537,6 +554,7 @@ pub struct InputLambdaProcessor {
 
 /// <p>An object that contains the Amazon Resource Name (ARN) of the <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a> function that is used to preprocess records in the stream, and the ARN of the IAM role that is used to access the AWS Lambda expression.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InputLambdaProcessorDescription {
     /// <p>The ARN of the <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a> function that is used to preprocess the records in the stream.</p>
     #[serde(rename = "ResourceARN")]
@@ -589,6 +607,7 @@ pub struct InputProcessingConfiguration {
 
 /// <p>Provides configuration information about an input processor. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InputProcessingConfigurationDescription {
     /// <p>Provides configuration information about the associated <a>InputLambdaProcessorDescription</a>.</p>
     #[serde(rename = "InputLambdaProcessorDescription")]
@@ -683,6 +702,7 @@ pub struct KinesisFirehoseInput {
 
 /// <p> Describes the Amazon Kinesis Firehose delivery stream that is configured as the streaming source in the application input configuration. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct KinesisFirehoseInputDescription {
     /// <p>Amazon Resource Name (ARN) of the Amazon Kinesis Firehose delivery stream.</p>
     #[serde(rename = "ResourceARN")]
@@ -720,6 +740,7 @@ pub struct KinesisFirehoseOutput {
 
 /// <p> For an application output, describes the Amazon Kinesis Firehose delivery stream configured as its destination. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct KinesisFirehoseOutputDescription {
     /// <p>Amazon Resource Name (ARN) of the Amazon Kinesis Firehose delivery stream.</p>
     #[serde(rename = "ResourceARN")]
@@ -757,6 +778,7 @@ pub struct KinesisStreamsInput {
 
 /// <p> Describes the Amazon Kinesis stream that is configured as the streaming source in the application input configuration. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct KinesisStreamsInputDescription {
     /// <p>Amazon Resource Name (ARN) of the Amazon Kinesis stream.</p>
     #[serde(rename = "ResourceARN")]
@@ -794,6 +816,7 @@ pub struct KinesisStreamsOutput {
 
 /// <p> For an application output, describes the Amazon Kinesis stream configured as its destination. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct KinesisStreamsOutputDescription {
     /// <p>Amazon Resource Name (ARN) of the Amazon Kinesis stream.</p>
     #[serde(rename = "ResourceARN")]
@@ -831,6 +854,7 @@ pub struct LambdaOutput {
 
 /// <p>For an application output, describes the AWS Lambda function configured as its destination. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct LambdaOutputDescription {
     /// <p>Amazon Resource Name (ARN) of the destination Lambda function.</p>
     #[serde(rename = "ResourceARN")]
@@ -870,6 +894,7 @@ pub struct ListApplicationsRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListApplicationsResponse {
     /// <p>List of <code>ApplicationSummary</code> objects. </p>
     #[serde(rename = "ApplicationSummaries")]
@@ -917,6 +942,7 @@ pub struct Output {
 
 /// <p>Describes the application output configuration, which includes the in-application stream name and the destination where the stream data is written. The destination can be an Amazon Kinesis stream or an Amazon Kinesis Firehose delivery stream. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OutputDescription {
     /// <p>Data format used for writing data to the destination.</p>
     #[serde(rename = "DestinationSchema")]
@@ -1016,6 +1042,7 @@ pub struct ReferenceDataSource {
 
 /// <p>Describes the reference data source configured for an application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ReferenceDataSourceDescription {
     /// <p>ID of the reference data source. This is the ID that Amazon Kinesis Analytics assigns when you add the reference data source to your application using the <a>AddApplicationReferenceDataSource</a> operation.</p>
     #[serde(rename = "ReferenceId")]
@@ -1082,6 +1109,7 @@ pub struct S3ReferenceDataSource {
 
 /// <p>Provides the bucket name and object key name that stores the reference data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct S3ReferenceDataSourceDescription {
     /// <p>Amazon Resource Name (ARN) of the S3 bucket.</p>
     #[serde(rename = "BucketARN")]
@@ -1139,6 +1167,7 @@ pub struct StartApplicationRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartApplicationResponse {}
 
 /// <p><p/></p>
@@ -1151,6 +1180,7 @@ pub struct StopApplicationRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopApplicationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1167,6 +1197,7 @@ pub struct UpdateApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateApplicationResponse {}
 
 /// Errors returned by AddApplicationCloudWatchLoggingOption

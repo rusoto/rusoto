@@ -58,6 +58,7 @@ pub struct GenerateDataSetRequest {
 
 /// <p>Container for the result of the GenerateDataSet operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GenerateDataSetResult {
     /// <p>A unique identifier representing a specific request to the GenerateDataSet operation. This identifier can be used to correlate a request with notifications from the SNS topic.</p>
     #[serde(rename = "dataSetRequestId")]
@@ -95,6 +96,7 @@ pub struct StartSupportDataExportRequest {
 
 /// <p>Container for the result of the StartSupportDataExport operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartSupportDataExportResult {
     /// <p>A unique identifier representing a specific request to the StartSupportDataExport operation. This identifier can be used to correlate a request with notifications from the SNS topic.</p>
     #[serde(rename = "dataSetRequestId")]

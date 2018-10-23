@@ -30,6 +30,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>An object representing a container instance or task attachment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Attachment {
     /// <p>Details of the attachment. For elastic network interfaces, this includes the network interface ID, the MAC address, the subnet ID, and the private IPv4 address.</p>
     #[serde(rename = "details")]
@@ -98,6 +99,7 @@ pub struct AwsVpcConfiguration {
 
 /// <p>A regional grouping of one or more container instances on which you can run task requests. Each account receives a default cluster the first time you use the Amazon ECS service, but you may also create other clusters. Clusters may contain more than one instance type simultaneously.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Cluster {
     /// <p>The number of services that are running on the cluster in an <code>ACTIVE</code> state. You can view these services with <a>ListServices</a>.</p>
     #[serde(rename = "activeServicesCount")]
@@ -135,6 +137,7 @@ pub struct Cluster {
 
 /// <p>A Docker container that is part of a task.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Container {
     /// <p>The Amazon Resource Name (ARN) of the container.</p>
     #[serde(rename = "containerArn")]
@@ -297,6 +300,7 @@ pub struct ContainerDefinition {
 
 /// <p>An EC2 instance that is running the Amazon ECS agent and has been registered with a cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ContainerInstance {
     /// <p>This parameter returns <code>true</code> if the agent is connected to Amazon ECS. Registered instances with an agent that may be unhealthy or stopped return <code>false</code>. Only instances connected to an agent can accept placement requests.</p>
     #[serde(rename = "agentConnected")]
@@ -419,6 +423,7 @@ pub struct CreateClusterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateClusterResponse {
     /// <p>The full description of your new cluster.</p>
     #[serde(rename = "cluster")]
@@ -493,6 +498,7 @@ pub struct CreateServiceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateServiceResponse {
     /// <p>The full description of your service following the create call.</p>
     #[serde(rename = "service")]
@@ -512,6 +518,7 @@ pub struct DeleteAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteAttributesResponse {
     /// <p>A list of attribute objects that were successfully deleted from your resource.</p>
     #[serde(rename = "attributes")]
@@ -527,6 +534,7 @@ pub struct DeleteClusterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteClusterResponse {
     /// <p>The full description of the deleted cluster.</p>
     #[serde(rename = "cluster")]
@@ -550,6 +558,7 @@ pub struct DeleteServiceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteServiceResponse {
     /// <p>The full description of the deleted service.</p>
     #[serde(rename = "service")]
@@ -559,6 +568,7 @@ pub struct DeleteServiceResponse {
 
 /// <p>The details of an Amazon ECS service deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Deployment {
     /// <p>The Unix time stamp for when the service was created.</p>
     #[serde(rename = "createdAt")]
@@ -635,6 +645,7 @@ pub struct DeregisterContainerInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterContainerInstanceResponse {
     /// <p>The container instance that was deregistered.</p>
     #[serde(rename = "containerInstance")]
@@ -650,6 +661,7 @@ pub struct DeregisterTaskDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterTaskDefinitionResponse {
     /// <p>The full description of the deregistered task.</p>
     #[serde(rename = "taskDefinition")]
@@ -670,6 +682,7 @@ pub struct DescribeClustersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeClustersResponse {
     /// <p>The list of clusters.</p>
     #[serde(rename = "clusters")]
@@ -693,6 +706,7 @@ pub struct DescribeContainerInstancesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeContainerInstancesResponse {
     /// <p>The list of container instances.</p>
     #[serde(rename = "containerInstances")]
@@ -716,6 +730,7 @@ pub struct DescribeServicesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeServicesResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -735,6 +750,7 @@ pub struct DescribeTaskDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTaskDefinitionResponse {
     /// <p>The full task definition description.</p>
     #[serde(rename = "taskDefinition")]
@@ -754,6 +770,7 @@ pub struct DescribeTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTasksResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -794,6 +811,7 @@ pub struct DiscoverPollEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DiscoverPollEndpointResponse {
     /// <p>The endpoint for the Amazon ECS agent to poll.</p>
     #[serde(rename = "endpoint")]
@@ -807,6 +825,7 @@ pub struct DiscoverPollEndpointResponse {
 
 /// <p>A failed resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Failure {
     /// <p>The Amazon Resource Name (ARN) of the failed resource.</p>
     #[serde(rename = "arn")]
@@ -941,6 +960,7 @@ pub struct ListAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListAttributesResponse {
     /// <p>A list of attribute objects that meet the criteria of the request.</p>
     #[serde(rename = "attributes")]
@@ -965,6 +985,7 @@ pub struct ListClustersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListClustersResponse {
     /// <p>The list of full Amazon Resource Name (ARN) entries for each cluster associated with your account.</p>
     #[serde(rename = "clusterArns")]
@@ -1001,6 +1022,7 @@ pub struct ListContainerInstancesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListContainerInstancesResponse {
     /// <p>The list of container instances with full ARN entries for each container instance associated with the specified cluster.</p>
     #[serde(rename = "containerInstanceArns")]
@@ -1037,6 +1059,7 @@ pub struct ListServicesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListServicesResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListServices</code> request. When the results of a <code>ListServices</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -1069,6 +1092,7 @@ pub struct ListTaskDefinitionFamiliesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTaskDefinitionFamiliesResponse {
     /// <p>The list of task definition family names that match the <code>ListTaskDefinitionFamilies</code> request.</p>
     #[serde(rename = "families")]
@@ -1105,6 +1129,7 @@ pub struct ListTaskDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTaskDefinitionsResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListTaskDefinitions</code> request. When the results of a <code>ListTaskDefinitions</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -1157,6 +1182,7 @@ pub struct ListTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTasksResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListTasks</code> request. When the results of a <code>ListTasks</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -1250,6 +1276,7 @@ pub struct NetworkConfiguration {
 
 /// <p>An object representing the elastic network interface for tasks that use the <code>awsvpc</code> network mode.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>The attachment ID for the network interface.</p>
     #[serde(rename = "attachmentId")]
@@ -1320,6 +1347,7 @@ pub struct PutAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutAttributesResponse {
     /// <p>The attributes applied to your resource.</p>
     #[serde(rename = "attributes")]
@@ -1360,6 +1388,7 @@ pub struct RegisterContainerInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterContainerInstanceResponse {
     /// <p>The container instance that was registered.</p>
     #[serde(rename = "containerInstance")]
@@ -1410,6 +1439,7 @@ pub struct RegisterTaskDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterTaskDefinitionResponse {
     /// <p>The full description of the registered task definition.</p>
     #[serde(rename = "taskDefinition")]
@@ -1502,6 +1532,7 @@ pub struct RunTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RunTaskResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -1515,6 +1546,7 @@ pub struct RunTaskResponse {
 
 /// <p>Details on a service within a cluster</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Service {
     /// <p>The Amazon Resource Name (ARN) of the cluster that hosts the service.</p>
     #[serde(rename = "clusterArn")]
@@ -1608,6 +1640,7 @@ pub struct Service {
 
 /// <p>Details on an event associated with a service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ServiceEvent {
     /// <p>The Unix time stamp for when the event was triggered.</p>
     #[serde(rename = "createdAt")]
@@ -1675,6 +1708,7 @@ pub struct StartTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartTaskResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -1702,6 +1736,7 @@ pub struct StopTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopTaskResponse {
     /// <p>The task that was stopped.</p>
     #[serde(rename = "task")]
@@ -1742,6 +1777,7 @@ pub struct SubmitContainerStateChangeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SubmitContainerStateChangeResponse {
     /// <p>Acknowledgement of the state change.</p>
     #[serde(rename = "acknowledgment")]
@@ -1790,6 +1826,7 @@ pub struct SubmitTaskStateChangeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SubmitTaskStateChangeResponse {
     /// <p>Acknowledgement of the state change.</p>
     #[serde(rename = "acknowledgment")]
@@ -1799,6 +1836,7 @@ pub struct SubmitTaskStateChangeResponse {
 
 /// <p>Details on a task in a cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Task {
     /// <p>The elastic network adapter associated with the task if the task uses the <code>awsvpc</code> network mode.</p>
     #[serde(rename = "attachments")]
@@ -1912,6 +1950,7 @@ pub struct Task {
 
 /// <p>Details of a task definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TaskDefinition {
     /// <p>The launch type to use with your task. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "compatibilities")]
@@ -2046,6 +2085,7 @@ pub struct UpdateContainerAgentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateContainerAgentResponse {
     /// <p>The container instance for which the container agent was updated.</p>
     #[serde(rename = "containerInstance")]
@@ -2068,6 +2108,7 @@ pub struct UpdateContainerInstancesStateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateContainerInstancesStateResponse {
     /// <p>The list of container instances.</p>
     #[serde(rename = "containerInstances")]
@@ -2119,6 +2160,7 @@ pub struct UpdateServiceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateServiceResponse {
     /// <p>The full description of your service following the update call.</p>
     #[serde(rename = "service")]

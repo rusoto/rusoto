@@ -46,6 +46,7 @@ pub struct AssociateCreatedArtifactRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateCreatedArtifactResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -66,6 +67,7 @@ pub struct AssociateDiscoveredResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AssociateDiscoveredResourceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -80,6 +82,7 @@ pub struct CreateProgressUpdateStreamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateProgressUpdateStreamResult {}
 
 /// <p>An ARN of the AWS cloud resource target receiving the migration (e.g., AMI, EC2 instance, RDS instance, etc.).</p>
@@ -106,6 +109,7 @@ pub struct DeleteProgressUpdateStreamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteProgressUpdateStreamResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -116,6 +120,7 @@ pub struct DescribeApplicationStateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeApplicationStateResult {
     /// <p>Status of the application - Not Started, In-Progress, Complete.</p>
     #[serde(rename = "ApplicationStatus")]
@@ -138,6 +143,7 @@ pub struct DescribeMigrationTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeMigrationTaskResult {
     /// <p>Object encapsulating information about the migration task.</p>
     #[serde(rename = "MigrationTask")]
@@ -163,6 +169,7 @@ pub struct DisassociateCreatedArtifactRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateCreatedArtifactResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -183,6 +190,7 @@ pub struct DisassociateDiscoveredResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateDiscoveredResourceResult {}
 
 /// <p>Object representing the on-premises resource being migrated.</p>
@@ -212,6 +220,7 @@ pub struct ImportMigrationTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ImportMigrationTaskResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -233,6 +242,7 @@ pub struct ListCreatedArtifactsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListCreatedArtifactsResult {
     /// <p>List of created artifacts up to the maximum number of results specified in the request.</p>
     #[serde(rename = "CreatedArtifactList")]
@@ -263,6 +273,7 @@ pub struct ListDiscoveredResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDiscoveredResourcesResult {
     /// <p>Returned list of discovered resources associated with the given MigrationTask.</p>
     #[serde(rename = "DiscoveredResourceList")]
@@ -291,6 +302,7 @@ pub struct ListMigrationTasksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListMigrationTasksResult {
     /// <p>Lists the migration task's summary which includes: <code>MigrationTaskName</code>, <code>ProgressPercent</code>, <code>ProgressUpdateStream</code>, <code>Status</code>, and the <code>UpdateDateTime</code> for each task.</p>
     #[serde(rename = "MigrationTaskSummaryList")]
@@ -315,6 +327,7 @@ pub struct ListProgressUpdateStreamsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListProgressUpdateStreamsResult {
     /// <p>If there are more streams created than the max result, return the next token to be passed to the next call as a bookmark of where to start from.</p>
     #[serde(rename = "NextToken")]
@@ -328,6 +341,7 @@ pub struct ListProgressUpdateStreamsResult {
 
 /// <p>Represents a migration task in a migration tool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MigrationTask {
     /// <p>Unique identifier that references the migration task.</p>
     #[serde(rename = "MigrationTaskName")]
@@ -353,6 +367,7 @@ pub struct MigrationTask {
 
 /// <p>MigrationTaskSummary includes <code>MigrationTaskName</code>, <code>ProgressPercent</code>, <code>ProgressUpdateStream</code>, <code>Status</code>, and <code>UpdateDateTime</code> for each task.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MigrationTaskSummary {
     /// <p>Unique identifier that references the migration task.</p>
     #[serde(rename = "MigrationTaskName")]
@@ -395,6 +410,7 @@ pub struct NotifyApplicationStateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NotifyApplicationStateResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -421,10 +437,12 @@ pub struct NotifyMigrationTaskStateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NotifyMigrationTaskStateResult {}
 
 /// <p>Summary of the AWS resource used for access control that is implicitly linked to your AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProgressUpdateStreamSummary {
     /// <p>The name of the ProgressUpdateStream. </p>
     #[serde(rename = "ProgressUpdateStreamName")]
@@ -450,6 +468,7 @@ pub struct PutResourceAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutResourceAttributesResult {}
 
 /// <p><p>Attribute associated with a resource.</p> <p>Note the corresponding format required per type listed below:</p> <dl> <dt>IPV4</dt> <dd> <p> <code>x.x.x.x</code> </p> <p> <i>where x is an integer in the range [0,255]</i> </p> </dd> <dt>IPV6</dt> <dd> <p> <code>y : y : y : y : y : y : y : y</code> </p> <p> <i>where y is a hexadecimal between 0 and FFFF. [0, FFFF]</i> </p> </dd> <dt>MAC_ADDRESS</dt> <dd> <p> <code>^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$</code> </p> </dd> <dt>FQDN</dt> <dd> <p> <code>^[^&lt;&gt;{}\\/?,=\p{Cntrl}]{1,256}$</code> </p> </dd> </dl></p>

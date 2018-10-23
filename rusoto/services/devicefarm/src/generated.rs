@@ -30,6 +30,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>A container for account-level settings within AWS Device Farm.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AccountSettings {
     /// <p>The AWS account number specified in the <code>AccountSettings</code> container.</p>
     #[serde(rename = "awsAccountNumber")]
@@ -67,6 +68,7 @@ pub struct AccountSettings {
 
 /// <p>Represents the output of a test. Examples of artifacts include logs and screenshots.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Artifact {
     /// <p>The artifact's ARN.</p>
     #[serde(rename = "arn")]
@@ -92,6 +94,7 @@ pub struct Artifact {
 
 /// <p>Represents the amount of CPU that an app is using on a physical device.</p> <p>Note that this does not represent system-wide CPU usage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CPU {
     /// <p>The CPU's architecture, for example x86 or ARM.</p>
     #[serde(rename = "architecture")]
@@ -109,6 +112,7 @@ pub struct CPU {
 
 /// <p>Represents entity counters.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Counters {
     /// <p>The number of errored entities.</p>
     #[serde(rename = "errored")]
@@ -160,6 +164,7 @@ pub struct CreateDevicePoolRequest {
 
 /// <p>Represents the result of a create device pool request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDevicePoolResult {
     /// <p>The newly created device pool.</p>
     #[serde(rename = "devicePool")]
@@ -191,6 +196,7 @@ pub struct CreateInstanceProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateInstanceProfileResult {
     /// <p>An object containing information about your instance profile.</p>
     #[serde(rename = "instanceProfile")]
@@ -249,6 +255,7 @@ pub struct CreateNetworkProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateNetworkProfileResult {
     /// <p>The network profile that is returned by the create network profile request.</p>
     #[serde(rename = "networkProfile")]
@@ -270,6 +277,7 @@ pub struct CreateProjectRequest {
 
 /// <p>Represents the result of a create project request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateProjectResult {
     /// <p>The newly created project.</p>
     #[serde(rename = "project")]
@@ -343,6 +351,7 @@ pub struct CreateRemoteAccessSessionRequest {
 
 /// <p>Represents the server response from a request to create a remote access session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateRemoteAccessSessionResult {
     /// <p>A container that describes the remote access session when the request to create a remote access session is sent.</p>
     #[serde(rename = "remoteAccessSession")]
@@ -370,6 +379,7 @@ pub struct CreateUploadRequest {
 
 /// <p>Represents the result of a create upload request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateUploadResult {
     /// <p>The newly created upload.</p>
     #[serde(rename = "upload")]
@@ -395,6 +405,7 @@ pub struct CreateVPCEConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateVPCEConfigurationResult {
     /// <p>An object containing information about your VPC endpoint configuration.</p>
     #[serde(rename = "vpceConfiguration")]
@@ -429,6 +440,7 @@ pub struct DeleteDevicePoolRequest {
 
 /// <p>Represents the result of a delete device pool request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDevicePoolResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -439,6 +451,7 @@ pub struct DeleteInstanceProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteInstanceProfileResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -449,6 +462,7 @@ pub struct DeleteNetworkProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteNetworkProfileResult {}
 
 /// <p>Represents a request to the delete project operation.</p>
@@ -461,6 +475,7 @@ pub struct DeleteProjectRequest {
 
 /// <p>Represents the result of a delete project request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteProjectResult {}
 
 /// <p>Represents the request to delete the specified remote access session.</p>
@@ -473,6 +488,7 @@ pub struct DeleteRemoteAccessSessionRequest {
 
 /// <p>The response from the server when a request is made to delete the remote access session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteRemoteAccessSessionResult {}
 
 /// <p>Represents a request to the delete run operation.</p>
@@ -485,6 +501,7 @@ pub struct DeleteRunRequest {
 
 /// <p>Represents the result of a delete run request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteRunResult {}
 
 /// <p>Represents a request to the delete upload operation.</p>
@@ -497,6 +514,7 @@ pub struct DeleteUploadRequest {
 
 /// <p>Represents the result of a delete upload request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteUploadResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -507,10 +525,12 @@ pub struct DeleteVPCEConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteVPCEConfigurationResult {}
 
 /// <p>Represents a device type that an app is tested against.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Device {
     /// <p>The device's ARN.</p>
     #[serde(rename = "arn")]
@@ -596,6 +616,7 @@ pub struct Device {
 
 /// <p>Represents the device instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeviceInstance {
     /// <p>The Amazon Resource Name (ARN) of the device instance.</p>
     #[serde(rename = "arn")]
@@ -625,6 +646,7 @@ pub struct DeviceInstance {
 
 /// <p>Represents the total (metered or unmetered) minutes used by the resource to run tests. Contains the sum of minutes consumed by all children.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeviceMinutes {
     /// <p>When specified, represents only the sum of metered minutes used by the resource to run tests.</p>
     #[serde(rename = "metered")]
@@ -642,6 +664,7 @@ pub struct DeviceMinutes {
 
 /// <p>Represents a collection of device types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DevicePool {
     /// <p>The device pool's ARN.</p>
     #[serde(rename = "arn")]
@@ -667,6 +690,7 @@ pub struct DevicePool {
 
 /// <p>Represents a device pool compatibility result.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DevicePoolCompatibilityResult {
     /// <p>Whether the result was compatible with the device pool.</p>
     #[serde(rename = "compatible")]
@@ -709,6 +733,7 @@ pub struct GetAccountSettingsRequest {}
 
 /// <p>Represents the account settings return values from the <code>GetAccountSettings</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetAccountSettingsResult {
     /// <p>The account settings.</p>
     #[serde(rename = "accountSettings")]
@@ -724,6 +749,7 @@ pub struct GetDeviceInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDeviceInstanceResult {
     /// <p>An object containing information about your device instance.</p>
     #[serde(rename = "deviceInstance")]
@@ -757,6 +783,7 @@ pub struct GetDevicePoolCompatibilityRequest {
 
 /// <p>Represents the result of describe device pool compatibility request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDevicePoolCompatibilityResult {
     /// <p>Information about compatible devices.</p>
     #[serde(rename = "compatibleDevices")]
@@ -778,6 +805,7 @@ pub struct GetDevicePoolRequest {
 
 /// <p>Represents the result of a get device pool request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDevicePoolResult {
     /// <p>An object containing information about the requested device pool.</p>
     #[serde(rename = "devicePool")]
@@ -795,6 +823,7 @@ pub struct GetDeviceRequest {
 
 /// <p>Represents the result of a get device request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDeviceResult {
     /// <p>An object containing information about the requested device.</p>
     #[serde(rename = "device")]
@@ -810,6 +839,7 @@ pub struct GetInstanceProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetInstanceProfileResult {
     /// <p>An object containing information about your instance profile.</p>
     #[serde(rename = "instanceProfile")]
@@ -827,6 +857,7 @@ pub struct GetJobRequest {
 
 /// <p>Represents the result of a get job request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetJobResult {
     /// <p>An object containing information about the requested job.</p>
     #[serde(rename = "job")]
@@ -842,6 +873,7 @@ pub struct GetNetworkProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetNetworkProfileResult {
     /// <p>The network profile.</p>
     #[serde(rename = "networkProfile")]
@@ -860,6 +892,7 @@ pub struct GetOfferingStatusRequest {
 
 /// <p>Returns the status result for a device offering.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetOfferingStatusResult {
     /// <p>When specified, gets the offering status for the current period.</p>
     #[serde(rename = "current")]
@@ -885,6 +918,7 @@ pub struct GetProjectRequest {
 
 /// <p>Represents the result of a get project request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetProjectResult {
     /// <p>The project you wish to get information about.</p>
     #[serde(rename = "project")]
@@ -902,6 +936,7 @@ pub struct GetRemoteAccessSessionRequest {
 
 /// <p>Represents the response from the server that lists detailed information about the remote access session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetRemoteAccessSessionResult {
     /// <p>A container that lists detailed information about the remote access session.</p>
     #[serde(rename = "remoteAccessSession")]
@@ -919,6 +954,7 @@ pub struct GetRunRequest {
 
 /// <p>Represents the result of a get run request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetRunResult {
     /// <p>The run you wish to get results from.</p>
     #[serde(rename = "run")]
@@ -936,6 +972,7 @@ pub struct GetSuiteRequest {
 
 /// <p>Represents the result of a get suite request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetSuiteResult {
     /// <p>A collection of one or more tests.</p>
     #[serde(rename = "suite")]
@@ -953,6 +990,7 @@ pub struct GetTestRequest {
 
 /// <p>Represents the result of a get test request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetTestResult {
     /// <p>A test condition that is evaluated.</p>
     #[serde(rename = "test")]
@@ -970,6 +1008,7 @@ pub struct GetUploadRequest {
 
 /// <p>Represents the result of a get upload request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetUploadResult {
     /// <p>An app or a set of one or more tests to upload or that have been uploaded.</p>
     #[serde(rename = "upload")]
@@ -985,6 +1024,7 @@ pub struct GetVPCEConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetVPCEConfigurationResult {
     /// <p>An object containing information about your VPC endpoint configuration.</p>
     #[serde(rename = "vpceConfiguration")]
@@ -994,6 +1034,7 @@ pub struct GetVPCEConfigurationResult {
 
 /// <p>Represents information about incompatibility.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct IncompatibilityMessage {
     /// <p>A message about the incompatibility.</p>
     #[serde(rename = "message")]
@@ -1018,6 +1059,7 @@ pub struct InstallToRemoteAccessSessionRequest {
 
 /// <p>Represents the response from the server after AWS Device Farm makes a request to install to a remote access session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstallToRemoteAccessSessionResult {
     /// <p>An app to upload or that has been uploaded.</p>
     #[serde(rename = "appUpload")]
@@ -1027,6 +1069,7 @@ pub struct InstallToRemoteAccessSessionResult {
 
 /// <p>Represents the instance profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceProfile {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
     #[serde(rename = "arn")]
@@ -1056,6 +1099,7 @@ pub struct InstanceProfile {
 
 /// <p>Represents a device.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Job {
     /// <p>The job's ARN.</p>
     #[serde(rename = "arn")]
@@ -1128,6 +1172,7 @@ pub struct ListArtifactsRequest {
 
 /// <p>Represents the result of a list artifacts operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListArtifactsResult {
     /// <p>Information about the artifacts.</p>
     #[serde(rename = "artifacts")]
@@ -1152,6 +1197,7 @@ pub struct ListDeviceInstancesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDeviceInstancesResult {
     /// <p>An object containing information about your device instances.</p>
     #[serde(rename = "deviceInstances")]
@@ -1181,6 +1227,7 @@ pub struct ListDevicePoolsRequest {
 
 /// <p>Represents the result of a list device pools request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDevicePoolsResult {
     /// <p>Information about the device pools.</p>
     #[serde(rename = "devicePools")]
@@ -1207,6 +1254,7 @@ pub struct ListDevicesRequest {
 
 /// <p>Represents the result of a list devices operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListDevicesResult {
     /// <p>Information about the devices.</p>
     #[serde(rename = "devices")]
@@ -1231,6 +1279,7 @@ pub struct ListInstanceProfilesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListInstanceProfilesResult {
     /// <p>An object containing information about your instance profiles.</p>
     #[serde(rename = "instanceProfiles")]
@@ -1256,6 +1305,7 @@ pub struct ListJobsRequest {
 
 /// <p>Represents the result of a list jobs request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListJobsResult {
     /// <p>Information about the jobs.</p>
     #[serde(rename = "jobs")]
@@ -1283,6 +1333,7 @@ pub struct ListNetworkProfilesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListNetworkProfilesResult {
     /// <p>A list of the available network profiles.</p>
     #[serde(rename = "networkProfiles")]
@@ -1303,6 +1354,7 @@ pub struct ListOfferingPromotionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListOfferingPromotionsResult {
     /// <p>An identifier to be used in the next call to this operation, to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1325,6 +1377,7 @@ pub struct ListOfferingTransactionsRequest {
 
 /// <p>Returns the transaction log of the specified offerings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListOfferingTransactionsResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1347,6 +1400,7 @@ pub struct ListOfferingsRequest {
 
 /// <p>Represents the return values of the list of offerings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListOfferingsResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1373,6 +1427,7 @@ pub struct ListProjectsRequest {
 
 /// <p>Represents the result of a list projects request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListProjectsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1398,6 +1453,7 @@ pub struct ListRemoteAccessSessionsRequest {
 
 /// <p>Represents the response from the server after AWS Device Farm makes a request to return information about the remote access session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListRemoteAccessSessionsResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1423,6 +1479,7 @@ pub struct ListRunsRequest {
 
 /// <p>Represents the result of a list runs request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListRunsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1448,6 +1505,7 @@ pub struct ListSamplesRequest {
 
 /// <p>Represents the result of a list samples request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSamplesResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1473,6 +1531,7 @@ pub struct ListSuitesRequest {
 
 /// <p>Represents the result of a list suites request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSuitesResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1498,6 +1557,7 @@ pub struct ListTestsRequest {
 
 /// <p>Represents the result of a list tests request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTestsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1523,6 +1583,7 @@ pub struct ListUniqueProblemsRequest {
 
 /// <p>Represents the result of a list unique problems request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListUniqueProblemsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1548,6 +1609,7 @@ pub struct ListUploadsRequest {
 
 /// <p>Represents the result of a list uploads request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListUploadsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1572,6 +1634,7 @@ pub struct ListVPCEConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListVPCEConfigurationsResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1596,6 +1659,7 @@ pub struct Location {
 
 /// <p>A number representing the monetary amount for an offering or transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct MonetaryAmount {
     /// <p>The numerical amount of an offering or transaction.</p>
     #[serde(rename = "amount")]
@@ -1609,6 +1673,7 @@ pub struct MonetaryAmount {
 
 /// <p>An array of settings that describes characteristics of a network profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NetworkProfile {
     /// <p>The Amazon Resource Name (ARN) of the network profile.</p>
     #[serde(rename = "arn")]
@@ -1662,6 +1727,7 @@ pub struct NetworkProfile {
 
 /// <p>Represents the metadata of a device offering.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Offering {
     /// <p>A string describing the offering.</p>
     #[serde(rename = "description")]
@@ -1687,6 +1753,7 @@ pub struct Offering {
 
 /// <p>Represents information about an offering promotion.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OfferingPromotion {
     /// <p>A string describing the offering promotion.</p>
     #[serde(rename = "description")]
@@ -1700,6 +1767,7 @@ pub struct OfferingPromotion {
 
 /// <p>The status of the offering.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OfferingStatus {
     /// <p>The date on which the offering is effective.</p>
     #[serde(rename = "effectiveOn")]
@@ -1721,6 +1789,7 @@ pub struct OfferingStatus {
 
 /// <p>Represents the metadata of an offering transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OfferingTransaction {
     /// <p>The cost of an offering transaction.</p>
     #[serde(rename = "cost")]
@@ -1746,6 +1815,7 @@ pub struct OfferingTransaction {
 
 /// <p>Represents a specific warning or failure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Problem {
     /// <p>Information about the associated device.</p>
     #[serde(rename = "device")]
@@ -1779,6 +1849,7 @@ pub struct Problem {
 
 /// <p>Information about a problem detail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ProblemDetail {
     /// <p>The problem detail's ARN.</p>
     #[serde(rename = "arn")]
@@ -1792,6 +1863,7 @@ pub struct ProblemDetail {
 
 /// <p>Represents an operating-system neutral workspace for running and managing tests.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Project {
     /// <p>The project's ARN.</p>
     #[serde(rename = "arn")]
@@ -1830,6 +1902,7 @@ pub struct PurchaseOfferingRequest {
 
 /// <p>The result of the purchase offering (e.g., success or failure).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PurchaseOfferingResult {
     /// <p>Represents the offering transaction for the purchase result.</p>
     #[serde(rename = "offeringTransaction")]
@@ -1860,6 +1933,7 @@ pub struct Radios {
 
 /// <p>Specifies whether charges for devices will be recurring.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RecurringCharge {
     /// <p>The cost of the recurring charge.</p>
     #[serde(rename = "cost")]
@@ -1873,6 +1947,7 @@ pub struct RecurringCharge {
 
 /// <p>Represents information about the remote access session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoteAccessSession {
     /// <p>The Amazon Resource Name (ARN) of the remote access session.</p>
     #[serde(rename = "arn")]
@@ -1975,6 +2050,7 @@ pub struct RenewOfferingRequest {
 
 /// <p>The result of a renewal offering.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RenewOfferingResult {
     /// <p>Represents the status of the offering transaction for the renewal.</p>
     #[serde(rename = "offeringTransaction")]
@@ -1984,6 +2060,7 @@ pub struct RenewOfferingResult {
 
 /// <p>Represents the screen resolution of a device in height and width, expressed in pixels.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Resolution {
     /// <p>The screen resolution's height, expressed in pixels.</p>
     #[serde(rename = "height")]
@@ -2014,6 +2091,7 @@ pub struct Rule {
 
 /// <p>Represents a test run on a set of devices with a given app package, test parameters, etc.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Run {
     /// <p>An app to upload or that has been uploaded.</p>
     #[serde(rename = "appUpload")]
@@ -2135,6 +2213,7 @@ pub struct Run {
 
 /// <p>Represents a sample of performance data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Sample {
     /// <p>The sample's ARN.</p>
     #[serde(rename = "arn")]
@@ -2223,6 +2302,7 @@ pub struct ScheduleRunRequest {
 
 /// <p>Represents the result of a schedule run request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ScheduleRunResult {
     /// <p>Information about the scheduled run.</p>
     #[serde(rename = "run")]
@@ -2260,6 +2340,7 @@ pub struct StopRemoteAccessSessionRequest {
 
 /// <p>Represents the response from the server that describes the remote access session when AWS Device Farm stops the session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopRemoteAccessSessionResult {
     /// <p>A container representing the metadata from the service about the remote access session you are stopping.</p>
     #[serde(rename = "remoteAccessSession")]
@@ -2277,6 +2358,7 @@ pub struct StopRunRequest {
 
 /// <p>Represents the results of your stop run attempt.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopRunResult {
     /// <p>The run that was stopped.</p>
     #[serde(rename = "run")]
@@ -2286,6 +2368,7 @@ pub struct StopRunResult {
 
 /// <p>Represents a collection of one or more tests.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Suite {
     /// <p>The suite's ARN.</p>
     #[serde(rename = "arn")]
@@ -2335,6 +2418,7 @@ pub struct Suite {
 
 /// <p>Represents a condition that is evaluated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Test {
     /// <p>The test's ARN.</p>
     #[serde(rename = "arn")]
@@ -2384,6 +2468,7 @@ pub struct Test {
 
 /// <p>Represents information about free trial device minutes for an AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TrialMinutes {
     /// <p>The number of free trial minutes remaining in the account.</p>
     #[serde(rename = "remaining")]
@@ -2397,6 +2482,7 @@ pub struct TrialMinutes {
 
 /// <p>A collection of one or more problems, grouped by their result.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UniqueProblem {
     /// <p>A message about the unique problems' result.</p>
     #[serde(rename = "message")]
@@ -2424,6 +2510,7 @@ pub struct UpdateDeviceInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDeviceInstanceResult {
     /// <p>An object containing information about your device instance.</p>
     #[serde(rename = "deviceInstance")]
@@ -2453,6 +2540,7 @@ pub struct UpdateDevicePoolRequest {
 
 /// <p>Represents the result of an update device pool request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateDevicePoolResult {
     /// <p>The device pool you just updated.</p>
     #[serde(rename = "devicePool")]
@@ -2488,6 +2576,7 @@ pub struct UpdateInstanceProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateInstanceProfileResult {
     /// <p>An object containing information about your instance profile.</p>
     #[serde(rename = "instanceProfile")]
@@ -2547,6 +2636,7 @@ pub struct UpdateNetworkProfileRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateNetworkProfileResult {
     /// <p>A list of the available network profiles.</p>
     #[serde(rename = "networkProfile")]
@@ -2572,6 +2662,7 @@ pub struct UpdateProjectRequest {
 
 /// <p>Represents the result of an update project request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateProjectResult {
     /// <p>The project you wish to update.</p>
     #[serde(rename = "project")]
@@ -2603,6 +2694,7 @@ pub struct UpdateVPCEConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateVPCEConfigurationResult {
     /// <p>An object containing information about your VPC endpoint configuration.</p>
     #[serde(rename = "vpceConfiguration")]
@@ -2612,6 +2704,7 @@ pub struct UpdateVPCEConfigurationResult {
 
 /// <p>An app or a set of one or more tests to upload or that have been uploaded.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Upload {
     /// <p>The upload's ARN.</p>
     #[serde(rename = "arn")]
@@ -2653,6 +2746,7 @@ pub struct Upload {
 
 /// <p>Represents an Amazon Virtual Private Cloud (VPC) endpoint configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VPCEConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration.</p>
     #[serde(rename = "arn")]

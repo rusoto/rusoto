@@ -47,6 +47,7 @@ pub struct CreatePrivateDnsNamespaceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreatePrivateDnsNamespaceResponse {
     /// <p>A value that you can use to determine whether the request completed successfully. To get the status of the operation, see <a>GetOperation</a>.</p>
     #[serde(rename = "OperationId")]
@@ -70,6 +71,7 @@ pub struct CreatePublicDnsNamespaceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreatePublicDnsNamespaceResponse {
     /// <p>A value that you can use to determine whether the request completed successfully. To get the status of the operation, see <a>GetOperation</a>.</p>
     #[serde(rename = "OperationId")]
@@ -103,6 +105,7 @@ pub struct CreateServiceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateServiceResponse {
     /// <p>A complex type that contains information about the new service.</p>
     #[serde(rename = "Service")]
@@ -118,6 +121,7 @@ pub struct DeleteNamespaceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteNamespaceResponse {
     /// <p>A value that you can use to determine whether the request completed successfully. To get the status of the operation, see <a>GetOperation</a>.</p>
     #[serde(rename = "OperationId")]
@@ -133,6 +137,7 @@ pub struct DeleteServiceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteServiceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -146,6 +151,7 @@ pub struct DeregisterInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterInstanceResponse {
     /// <p>A value that you can use to determine whether the request completed successfully. For more information, see <a>GetOperation</a>.</p>
     #[serde(rename = "OperationId")]
@@ -178,6 +184,7 @@ pub struct DnsConfigChange {
 
 /// <p>A complex type that contains the ID for the hosted zone that Route 53 creates when you create a namespace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DnsProperties {
     /// <p>The ID for the hosted zone that Route 53 creates when you create a namespace.</p>
     #[serde(rename = "HostedZoneId")]
@@ -207,6 +214,7 @@ pub struct GetInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetInstanceResponse {
     /// <p>A complex type that contains information about a specified instance.</p>
     #[serde(rename = "Instance")]
@@ -234,6 +242,7 @@ pub struct GetInstancesHealthStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetInstancesHealthStatusResponse {
     /// <p>If more than <code>MaxResults</code> instances match the specified criteria, you can submit another <code>GetInstancesHealthStatus</code> request to get the next group of results. Specify the value of <code>NextToken</code> from the previous response in the next request.</p>
     #[serde(rename = "NextToken")]
@@ -253,6 +262,7 @@ pub struct GetNamespaceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetNamespaceResponse {
     /// <p>A complex type that contains information about the specified namespace.</p>
     #[serde(rename = "Namespace")]
@@ -268,6 +278,7 @@ pub struct GetOperationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetOperationResponse {
     /// <p>A complex type that contains information about the operation.</p>
     #[serde(rename = "Operation")]
@@ -283,6 +294,7 @@ pub struct GetServiceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetServiceResponse {
     /// <p>A complex type that contains information about the service.</p>
     #[serde(rename = "Service")]
@@ -316,6 +328,7 @@ pub struct HealthCheckCustomConfig {
 
 /// <p>A complex type that contains information about an instance that Amazon Route 53 creates when you submit a <code>RegisterInstance</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Instance {
     /// <p>A string map that contains the following information for the service that you specify in <code>ServiceId</code>:</p> <ul> <li> <p>The attributes that apply to the records that are defined in the service. </p> </li> <li> <p>For each attribute, the applicable value.</p> </li> </ul> <p>Supported attribute keys include the following:</p> <p> <b>AWS_ALIAS_DNS_NAME</b> </p> <p> <b/> </p> <p>If you want Route 53 to create an alias record that routes traffic to an Elastic Load Balancing load balancer, specify the DNS name that is associated with the load balancer. For information about how to get the DNS name, see "DNSName" in the topic <a href="http://docs.aws.amazon.com/http:/docs.aws.amazon.com/Route53/latest/APIReference/API_AliasTarget.html">AliasTarget</a>.</p> <p>Note the following:</p> <ul> <li> <p>The configuration for the service that is specified by <code>ServiceId</code> must include settings for an A record, an AAAA record, or both.</p> </li> <li> <p>In the service that is specified by <code>ServiceId</code>, the value of <code>RoutingPolicy</code> must be <code>WEIGHTED</code>.</p> </li> <li> <p>If the service that is specified by <code>ServiceId</code> includes <code>HealthCheckConfig</code> settings, Route 53 will create the health check, but it won't associate the health check with the alias record.</p> </li> <li> <p>Auto naming currently doesn't support creating alias records that route traffic to AWS resources other than ELB load balancers.</p> </li> <li> <p>If you specify a value for <code>AWS_ALIAS_DNS_NAME</code>, don't specify values for any of the <code>AWS_INSTANCE</code> attributes.</p> </li> </ul> <p> <b>AWS_INSTANCE_CNAME</b> </p> <p>If the service configuration includes a CNAME record, the domain name that you want Route 53 to return in response to DNS queries, for example, <code>example.com</code>.</p> <p>This value is required if the service specified by <code>ServiceId</code> includes settings for an CNAME record.</p> <p> <b>AWS_INSTANCE_IPV4</b> </p> <p>If the service configuration includes an A record, the IPv4 address that you want Route 53 to return in response to DNS queries, for example, <code>192.0.2.44</code>.</p> <p>This value is required if the service specified by <code>ServiceId</code> includes settings for an A record. If the service includes settings for an SRV record, you must specify a value for <code>AWS_INSTANCE_IPV4</code>, <code>AWS_INSTANCE_IPV6</code>, or both.</p> <p> <b>AWS_INSTANCE_IPV6</b> </p> <p>If the service configuration includes an AAAA record, the IPv6 address that you want Route 53 to return in response to DNS queries, for example, <code>2001:0db8:85a3:0000:0000:abcd:0001:2345</code>.</p> <p>This value is required if the service specified by <code>ServiceId</code> includes settings for an AAAA record. If the service includes settings for an SRV record, you must specify a value for <code>AWS_INSTANCE_IPV4</code>, <code>AWS_INSTANCE_IPV6</code>, or both.</p> <p> <b>AWS_INSTANCE_PORT</b> </p> <p>If the service includes an SRV record, the value that you want Route 53 to return for the port.</p> <p>If the service includes <code>HealthCheckConfig</code>, the port on the endpoint that you want Route 53 to send requests to. </p> <p>This value is required if you specified settings for an SRV record when you created the service.</p>
     #[serde(rename = "Attributes")]
@@ -332,6 +345,7 @@ pub struct Instance {
 
 /// <p>A complex type that contains information about the instances that you registered by using a specified service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct InstanceSummary {
     /// <p><p>A string map that contains the following information:</p> <ul> <li> <p>The attributes that are associate with the instance. </p> </li> <li> <p>For each attribute, the applicable value.</p> </li> </ul> <p>Supported attribute keys include the following:</p> <ul> <li> <p> <code>AWS<em>ALIAS</em>DNS<em>NAME</code>: For an alias record that routes traffic to an Elastic Load Balancing load balancer, the DNS name that is associated with the load balancer. </p> </li> <li> <p> <code>AWS</em>INSTANCE<em>CNAME</code>: For a CNAME record, the domain name that Route 53 returns in response to DNS queries, for example, <code>example.com</code>.</p> </li> <li> <p> <code>AWS</em>INSTANCE<em>IPV4</code>: For an A record, the IPv4 address that Route 53 returns in response to DNS queries, for example, <code>192.0.2.44</code>.</p> </li> <li> <p> <code>AWS</em>INSTANCE<em>IPV6</code>: For an AAAA record, the IPv6 address that Route 53 returns in response to DNS queries, for example, <code>2001:0db8:85a3:0000:0000:abcd:0001:2345</code>.</p> </li> <li> <p> <code>AWS</em>INSTANCE_PORT</code>: For an SRV record, the value that Route 53 returns for the port. In addition, if the service includes <code>HealthCheckConfig</code>, the port on the endpoint that Route 53 sends requests to.</p> </li> </ul></p>
     #[serde(rename = "Attributes")]
@@ -359,6 +373,7 @@ pub struct ListInstancesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListInstancesResponse {
     /// <p>Summary information about the instances that are associated with the specified service.</p>
     #[serde(rename = "Instances")]
@@ -387,6 +402,7 @@ pub struct ListNamespacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListNamespacesResponse {
     /// <p>An array that contains one <code>NamespaceSummary</code> object for each namespace that matches the specified filter criteria.</p>
     #[serde(rename = "Namespaces")]
@@ -415,6 +431,7 @@ pub struct ListOperationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListOperationsResponse {
     /// <p><p>If the response contains <code>NextToken</code>, submit another <code>ListOperations</code> request to get the next group of results. Specify the value of <code>NextToken</code> from the previous response in the next request.</p> <note> <p>Route 53 gets <code>MaxResults</code> operations and then filters them based on the specified criteria. It&#39;s possible that no operations in the first <code>MaxResults</code> operations matched the specified criteria but that subsequent groups of <code>MaxResults</code> operations do contain operations that match the criteria.</p> </note></p>
     #[serde(rename = "NextToken")]
@@ -443,6 +460,7 @@ pub struct ListServicesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListServicesResponse {
     /// <p><p>If the response contains <code>NextToken</code>, submit another <code>ListServices</code> request to get the next group of results. Specify the value of <code>NextToken</code> from the previous response in the next request.</p> <note> <p>Route 53 gets <code>MaxResults</code> services and then filters them based on the specified criteria. It&#39;s possible that no services in the first <code>MaxResults</code> services matched the specified criteria but that subsequent groups of <code>MaxResults</code> services do contain services that match the criteria.</p> </note></p>
     #[serde(rename = "NextToken")]
@@ -456,6 +474,7 @@ pub struct ListServicesResponse {
 
 /// <p>A complex type that contains information about a specified namespace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Namespace {
     /// <p>The Amazon Resource Name (ARN) that Route 53 assigns to the namespace when you create it.</p>
     #[serde(rename = "Arn")]
@@ -512,6 +531,7 @@ pub struct NamespaceFilter {
 
 /// <p>A complex type that contains information that is specific to the namespace type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NamespaceProperties {
     /// <p>A complex type that contains the ID for the hosted zone that Route 53 creates when you create a namespace.</p>
     #[serde(rename = "DnsProperties")]
@@ -521,6 +541,7 @@ pub struct NamespaceProperties {
 
 /// <p>A complex type that contains information about a namespace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NamespaceSummary {
     /// <p>The Amazon Resource Name (ARN) that Route 53 assigns to the namespace when you create it.</p>
     #[serde(rename = "Arn")]
@@ -542,6 +563,7 @@ pub struct NamespaceSummary {
 
 /// <p>A complex type that contains information about a specified operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Operation {
     /// <p>The date and time that the request was submitted, in Unix date/time format and Coordinated Universal Time (UTC). The value of <code>CreateDate</code> is accurate to milliseconds. For example, the value <code>1516925490.087</code> represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "CreateDate")]
@@ -594,6 +616,7 @@ pub struct OperationFilter {
 
 /// <p>A complex type that contains information about an operation that matches the criteria that you specified in a <a>ListOperations</a> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct OperationSummary {
     /// <p>The ID for an operation.</p>
     #[serde(rename = "Id")]
@@ -623,6 +646,7 @@ pub struct RegisterInstanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterInstanceResponse {
     /// <p>A value that you can use to determine whether the request completed successfully. To get the status of the operation, see <a>GetOperation</a>.</p>
     #[serde(rename = "OperationId")]
@@ -632,6 +656,7 @@ pub struct RegisterInstanceResponse {
 
 /// <p>A complex type that contains information about the specified service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Service {
     /// <p>The Amazon Resource Name (ARN) that Route 53 assigns to the service when you create it.</p>
     #[serde(rename = "Arn")]
@@ -706,6 +731,7 @@ pub struct ServiceFilter {
 
 /// <p>A complex type that contains information about a specified service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ServiceSummary {
     /// <p>The Amazon Resource Name (ARN) that Route 53 assigns to the service when you create it.</p>
     #[serde(rename = "Arn")]
@@ -750,6 +776,7 @@ pub struct UpdateServiceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateServiceResponse {
     /// <p>A value that you can use to determine whether the request completed successfully. To get the status of the operation, see <a>GetOperation</a>.</p>
     #[serde(rename = "OperationId")]

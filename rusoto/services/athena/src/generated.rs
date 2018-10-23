@@ -36,6 +36,7 @@ pub struct BatchGetNamedQueryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchGetNamedQueryOutput {
     /// <p>Information about the named query IDs submitted.</p>
     #[serde(rename = "NamedQueries")]
@@ -55,6 +56,7 @@ pub struct BatchGetQueryExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchGetQueryExecutionOutput {
     /// <p>Information about a query execution.</p>
     #[serde(rename = "QueryExecutions")]
@@ -68,6 +70,7 @@ pub struct BatchGetQueryExecutionOutput {
 
 /// <p>Information about the columns in a query execution result.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ColumnInfo {
     /// <p>Indicates whether values in the column are case-sensitive.</p>
     #[serde(rename = "CaseSensitive")]
@@ -131,6 +134,7 @@ pub struct CreateNamedQueryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateNamedQueryOutput {
     /// <p>The unique ID of the query.</p>
     #[serde(rename = "NamedQueryId")]
@@ -140,6 +144,7 @@ pub struct CreateNamedQueryOutput {
 
 /// <p>A piece of data (a field in the table).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Datum {
     /// <p>The value of the datum.</p>
     #[serde(rename = "VarCharValue")]
@@ -155,6 +160,7 @@ pub struct DeleteNamedQueryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteNamedQueryOutput {}
 
 /// <p>If query results are encrypted in Amazon S3, indicates the Amazon S3 encryption option used.</p>
@@ -177,6 +183,7 @@ pub struct GetNamedQueryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetNamedQueryOutput {
     /// <p>Information about the query.</p>
     #[serde(rename = "NamedQuery")]
@@ -192,6 +199,7 @@ pub struct GetQueryExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetQueryExecutionOutput {
     /// <p>Information about the query execution.</p>
     #[serde(rename = "QueryExecution")]
@@ -215,6 +223,7 @@ pub struct GetQueryResultsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetQueryResultsOutput {
     /// <p>A token to be used by the next request if this request is truncated.</p>
     #[serde(rename = "NextToken")]
@@ -239,6 +248,7 @@ pub struct ListNamedQueriesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListNamedQueriesOutput {
     /// <p>The list of unique query IDs.</p>
     #[serde(rename = "NamedQueryIds")]
@@ -263,6 +273,7 @@ pub struct ListQueryExecutionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListQueryExecutionsOutput {
     /// <p>A token to be used by the next request if this request is truncated.</p>
     #[serde(rename = "NextToken")]
@@ -276,6 +287,7 @@ pub struct ListQueryExecutionsOutput {
 
 /// <p>A query, where <code>QueryString</code> is the SQL query statements that comprise the query.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct NamedQuery {
     /// <p>The database to which the query belongs.</p>
     #[serde(rename = "Database")]
@@ -298,6 +310,7 @@ pub struct NamedQuery {
 
 /// <p>Information about a single instance of a query execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct QueryExecution {
     /// <p>The SQL query statements which the query execution ran.</p>
     #[serde(rename = "Query")]
@@ -336,6 +349,7 @@ pub struct QueryExecutionContext {
 
 /// <p>The amount of data scanned during the query execution and the amount of time that it took to execute.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct QueryExecutionStatistics {
     /// <p>The number of bytes in the data that was queried.</p>
     #[serde(rename = "DataScannedInBytes")]
@@ -349,6 +363,7 @@ pub struct QueryExecutionStatistics {
 
 /// <p>The completion date, current state, submission time, and state change reason (if applicable) for the query execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct QueryExecutionStatus {
     /// <p>The date and time that the query completed.</p>
     #[serde(rename = "CompletionDateTime")]
@@ -382,6 +397,7 @@ pub struct ResultConfiguration {
 
 /// <p>The metadata and rows that comprise a query result set. The metadata describes the column structure and data types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResultSet {
     /// <p>The metadata that describes the column structure and data types of a table of query results.</p>
     #[serde(rename = "ResultSetMetadata")]
@@ -395,6 +411,7 @@ pub struct ResultSet {
 
 /// <p>The metadata that describes the column structure and data types of a table of query results.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResultSetMetadata {
     /// <p>Information about the columns in a query execution result.</p>
     #[serde(rename = "ColumnInfo")]
@@ -404,6 +421,7 @@ pub struct ResultSetMetadata {
 
 /// <p>The rows that comprise a query result table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Row {
     /// <p>The data that populates a row in a query result table.</p>
     #[serde(rename = "Data")]
@@ -430,6 +448,7 @@ pub struct StartQueryExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartQueryExecutionOutput {
     /// <p>The unique ID of the query that ran as a result of this request.</p>
     #[serde(rename = "QueryExecutionId")]
@@ -445,10 +464,12 @@ pub struct StopQueryExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StopQueryExecutionOutput {}
 
 /// <p>Information about a named query ID that could not be processed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UnprocessedNamedQueryId {
     /// <p>The error code returned when the processing request for the named query failed, if applicable.</p>
     #[serde(rename = "ErrorCode")]
@@ -466,6 +487,7 @@ pub struct UnprocessedNamedQueryId {
 
 /// <p>Describes a query execution that failed to process.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UnprocessedQueryExecutionId {
     /// <p>The error code returned when the query execution failed to process, if applicable.</p>
     #[serde(rename = "ErrorCode")]

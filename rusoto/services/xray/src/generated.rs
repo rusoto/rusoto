@@ -30,6 +30,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 /// <p>An alias for an edge.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Alias {
     /// <p>The canonical name of the alias.</p>
     #[serde(rename = "Name")]
@@ -47,6 +48,7 @@ pub struct Alias {
 
 /// <p>Value of a segment annotation. Has one of three value types: Number, Boolean or String.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AnnotationValue {
     /// <p>Value for a Boolean annotation.</p>
     #[serde(rename = "BooleanValue")]
@@ -103,6 +105,7 @@ pub struct BatchGetTracesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct BatchGetTracesResult {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -120,6 +123,7 @@ pub struct BatchGetTracesResult {
 
 /// <p>Information about a connection between two services.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Edge {
     /// <p>Aliases for the edge.</p>
     #[serde(rename = "Aliases")]
@@ -149,6 +153,7 @@ pub struct Edge {
 
 /// <p>Response statistics for an edge.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EdgeStatistics {
     /// <p>Information about requests that failed with a 4xx Client Error status code.</p>
     #[serde(rename = "ErrorStatistics")]
@@ -174,6 +179,7 @@ pub struct EdgeStatistics {
 
 /// <p>A configuration document that specifies encryption configuration settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EncryptionConfig {
     /// <p>The ID of the customer master key (CMK) used for encryption, if applicable.</p>
     #[serde(rename = "KeyId")]
@@ -191,6 +197,7 @@ pub struct EncryptionConfig {
 
 /// <p>Information about requests that failed with a 4xx Client Error status code.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ErrorStatistics {
     /// <p>The number of requests that failed with untracked 4xx Client Error status codes.</p>
     #[serde(rename = "OtherCount")]
@@ -208,6 +215,7 @@ pub struct ErrorStatistics {
 
 /// <p>Information about requests that failed with a 5xx Server Error status code.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct FaultStatistics {
     /// <p>The number of requests that failed with untracked 5xx Server Error status codes.</p>
     #[serde(rename = "OtherCount")]
@@ -223,6 +231,7 @@ pub struct FaultStatistics {
 pub struct GetEncryptionConfigRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetEncryptionConfigResult {
     /// <p>The encryption configuration document.</p>
     #[serde(rename = "EncryptionConfig")]
@@ -245,6 +254,7 @@ pub struct GetServiceGraphRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetServiceGraphResult {
     /// <p>The end of the time frame for which the graph was generated.</p>
     #[serde(rename = "EndTime")]
@@ -276,6 +286,7 @@ pub struct GetTraceGraphRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetTraceGraphResult {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -310,6 +321,7 @@ pub struct GetTraceSummariesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetTraceSummariesResult {
     /// <p>The start time of this page of results.</p>
     #[serde(rename = "ApproximateTime")]
@@ -331,6 +343,7 @@ pub struct GetTraceSummariesResult {
 
 /// <p>An entry in a histogram for a statistic. A histogram maps the range of observed values on the X axis, and the prevalence of each value on the Y axis.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct HistogramEntry {
     /// <p>The prevalence of the entry.</p>
     #[serde(rename = "Count")]
@@ -344,6 +357,7 @@ pub struct HistogramEntry {
 
 /// <p>Information about an HTTP request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Http {
     /// <p>The IP address of the requestor.</p>
     #[serde(rename = "ClientIp")]
@@ -379,6 +393,7 @@ pub struct PutEncryptionConfigRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutEncryptionConfigResult {
     /// <p>The new encryption configuration.</p>
     #[serde(rename = "EncryptionConfig")]
@@ -406,6 +421,7 @@ pub struct PutTelemetryRecordsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutTelemetryRecordsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -416,6 +432,7 @@ pub struct PutTraceSegmentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct PutTraceSegmentsResult {
     /// <p>Segments that failed processing.</p>
     #[serde(rename = "UnprocessedTraceSegments")]
@@ -425,6 +442,7 @@ pub struct PutTraceSegmentsResult {
 
 /// <p>A segment from a trace that has been ingested by the X-Ray service. The segment can be compiled from documents uploaded with <a>PutTraceSegments</a>, or an <code>inferred</code> segment for a downstream service, generated from a subsegment sent by the service that called it.</p> <p>For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Segment {
     /// <p>The segment document.</p>
     #[serde(rename = "Document")]
@@ -438,6 +456,7 @@ pub struct Segment {
 
 /// <p>Information about an application that processed requests, users that made requests, or downstream services, resources and applications that an application used.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Service {
     /// <p>Identifier of the AWS account in which the service runs.</p>
     #[serde(rename = "AccountId")]
@@ -495,6 +514,7 @@ pub struct Service {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ServiceId {
     /// <p><p/></p>
     #[serde(rename = "AccountId")]
@@ -516,6 +536,7 @@ pub struct ServiceId {
 
 /// <p>Response statistics for a service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ServiceStatistics {
     /// <p>Information about requests that failed with a 4xx Client Error status code.</p>
     #[serde(rename = "ErrorStatistics")]
@@ -569,6 +590,7 @@ pub struct TelemetryRecord {
 
 /// <p>A collection of segment documents with matching trace IDs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Trace {
     /// <p>The length of time in seconds between the start time of the root segment and the end time of the last segment that completed.</p>
     #[serde(rename = "Duration")]
@@ -586,6 +608,7 @@ pub struct Trace {
 
 /// <p>Metadata generated from the segment documents in a trace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TraceSummary {
     /// <p>Annotations from the trace's segment documents.</p>
     #[serde(rename = "Annotations")]
@@ -635,6 +658,7 @@ pub struct TraceSummary {
 
 /// <p>Information about a user recorded in segment documents.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct TraceUser {
     /// <p>Services that the user's request hit.</p>
     #[serde(rename = "ServiceIds")]
@@ -648,6 +672,7 @@ pub struct TraceUser {
 
 /// <p>Information about a segment that failed processing.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UnprocessedTraceSegment {
     /// <p>The error that caused processing to fail.</p>
     #[serde(rename = "ErrorCode")]
@@ -665,6 +690,7 @@ pub struct UnprocessedTraceSegment {
 
 /// <p>Information about a segment annotation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ValueWithServiceIds {
     /// <p>Values of the annotation.</p>
     #[serde(rename = "AnnotationValue")]

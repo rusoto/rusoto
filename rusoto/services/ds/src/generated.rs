@@ -43,6 +43,7 @@ pub struct AddIpRoutesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddIpRoutesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -56,6 +57,7 @@ pub struct AddTagsToResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct AddTagsToResourceResult {}
 
 /// <p>Represents a named directory attribute.</p>
@@ -82,10 +84,12 @@ pub struct CancelSchemaExtensionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CancelSchemaExtensionResult {}
 
 /// <p>Contains information about a computer account in a directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Computer {
     /// <p>An array of <a>Attribute</a> objects containing the LDAP attributes that belong to the computer account.</p>
     #[serde(rename = "ComputerAttributes")]
@@ -103,6 +107,7 @@ pub struct Computer {
 
 /// <p>Points to a remote domain with which you are setting up a trust relationship. Conditional forwarders are required in order to set up a trust relationship with another domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConditionalForwarder {
     /// <p>The IP addresses of the remote DNS server associated with RemoteDomainName. This is the IP address of the DNS server that your conditional forwarder points to.</p>
     #[serde(rename = "DnsIpAddrs")]
@@ -145,6 +150,7 @@ pub struct ConnectDirectoryRequest {
 
 /// <p>Contains the results of the <a>ConnectDirectory</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ConnectDirectoryResult {
     /// <p>The identifier of the new directory.</p>
     #[serde(rename = "DirectoryId")]
@@ -165,6 +171,7 @@ pub struct CreateAliasRequest {
 
 /// <p>Contains the results of the <a>CreateAlias</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateAliasResult {
     /// <p>The alias for the directory.</p>
     #[serde(rename = "Alias")]
@@ -200,6 +207,7 @@ pub struct CreateComputerRequest {
 
 /// <p>Contains the results for the <a>CreateComputer</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateComputerResult {
     /// <p>A <a>Computer</a> object that represents the computer account.</p>
     #[serde(rename = "Computer")]
@@ -223,6 +231,7 @@ pub struct CreateConditionalForwarderRequest {
 
 /// <p>The result of a CreateConditinalForwarder request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateConditionalForwarderResult {}
 
 /// <p>Contains the inputs for the <a>CreateDirectory</a> operation. </p>
@@ -253,6 +262,7 @@ pub struct CreateDirectoryRequest {
 
 /// <p>Contains the results of the <a>CreateDirectory</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateDirectoryResult {
     /// <p>The identifier of the directory that was created.</p>
     #[serde(rename = "DirectoryId")]
@@ -288,6 +298,7 @@ pub struct CreateMicrosoftADRequest {
 
 /// <p>Result of a CreateMicrosoftAD request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateMicrosoftADResult {
     /// <p>The identifier of the directory that was created.</p>
     #[serde(rename = "DirectoryId")]
@@ -309,6 +320,7 @@ pub struct CreateSnapshotRequest {
 
 /// <p>Contains the results of the <a>CreateSnapshot</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateSnapshotResult {
     /// <p>The identifier of the snapshot that was created.</p>
     #[serde(rename = "SnapshotId")]
@@ -343,6 +355,7 @@ pub struct CreateTrustRequest {
 
 /// <p>The result of a CreateTrust request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct CreateTrustResult {
     /// <p>A unique identifier for the trust relationship that was created.</p>
     #[serde(rename = "TrustId")]
@@ -363,6 +376,7 @@ pub struct DeleteConditionalForwarderRequest {
 
 /// <p>The result of a DeleteConditionalForwarder request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteConditionalForwarderResult {}
 
 /// <p>Contains the inputs for the <a>DeleteDirectory</a> operation.</p>
@@ -375,6 +389,7 @@ pub struct DeleteDirectoryRequest {
 
 /// <p>Contains the results of the <a>DeleteDirectory</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDirectoryResult {
     /// <p>The directory identifier.</p>
     #[serde(rename = "DirectoryId")]
@@ -392,6 +407,7 @@ pub struct DeleteSnapshotRequest {
 
 /// <p>Contains the results of the <a>DeleteSnapshot</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteSnapshotResult {
     /// <p>The identifier of the directory snapshot that was deleted.</p>
     #[serde(rename = "SnapshotId")]
@@ -413,6 +429,7 @@ pub struct DeleteTrustRequest {
 
 /// <p>The result of a DeleteTrust request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTrustResult {
     /// <p>The Trust ID of the trust relationship that was deleted.</p>
     #[serde(rename = "TrustId")]
@@ -433,6 +450,7 @@ pub struct DeregisterEventTopicRequest {
 
 /// <p>The result of a DeregisterEventTopic request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterEventTopicResult {}
 
 /// <p>Describes a conditional forwarder.</p>
@@ -449,6 +467,7 @@ pub struct DescribeConditionalForwardersRequest {
 
 /// <p>The result of a DescribeConditionalForwarder request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConditionalForwardersResult {
     /// <p>The list of conditional forwarders that have been created.</p>
     #[serde(rename = "ConditionalForwarders")]
@@ -475,6 +494,7 @@ pub struct DescribeDirectoriesRequest {
 
 /// <p>Contains the results of the <a>DescribeDirectories</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDirectoriesResult {
     /// <p>The list of <a>DirectoryDescription</a> objects that were retrieved.</p> <p>It is possible that this list contains less than the number of items specified in the <i>Limit</i> member of the request. This occurs if there are less than the requested number of items left to retrieve, or if the limitations of the operation have been exceeded.</p>
     #[serde(rename = "DirectoryDescriptions")]
@@ -506,6 +526,7 @@ pub struct DescribeDomainControllersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDomainControllersResult {
     /// <p>List of the <a>DomainController</a> objects that were retrieved.</p>
     #[serde(rename = "DomainControllers")]
@@ -532,6 +553,7 @@ pub struct DescribeEventTopicsRequest {
 
 /// <p>The result of a DescribeEventTopic request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeEventTopicsResult {
     /// <p>A list of SNS topic names that receive status messages from the specified Directory ID.</p>
     #[serde(rename = "EventTopics")]
@@ -562,6 +584,7 @@ pub struct DescribeSnapshotsRequest {
 
 /// <p>Contains the results of the <a>DescribeSnapshots</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSnapshotsResult {
     /// <p>If not null, more results are available. Pass this value in the <i>NextToken</i> member of a subsequent call to <a>DescribeSnapshots</a>.</p>
     #[serde(rename = "NextToken")]
@@ -596,6 +619,7 @@ pub struct DescribeTrustsRequest {
 
 /// <p>The result of a DescribeTrust request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTrustsResult {
     /// <p>If not null, more results are available. Pass this value for the <i>NextToken</i> parameter in a subsequent call to <a>DescribeTrusts</a> to retrieve the next set of items.</p>
     #[serde(rename = "NextToken")]
@@ -626,6 +650,7 @@ pub struct DirectoryConnectSettings {
 
 /// <p>Contains information about an AD Connector directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DirectoryConnectSettingsDescription {
     /// <p>A list of the Availability Zones that the directory is in.</p>
     #[serde(rename = "AvailabilityZones")]
@@ -655,6 +680,7 @@ pub struct DirectoryConnectSettingsDescription {
 
 /// <p>Contains information about an AWS Directory Service directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DirectoryDescription {
     /// <p>The access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>. If no alias has been created for the directory, <code>&lt;alias&gt;</code> is the directory identifier, such as <code>d-XXXXXXXXXX</code>.</p>
     #[serde(rename = "AccessUrl")]
@@ -740,6 +766,7 @@ pub struct DirectoryDescription {
 
 /// <p>Contains directory limit information for a region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DirectoryLimits {
     /// <p>The current number of cloud directories in the region.</p>
     #[serde(rename = "CloudOnlyDirectoriesCurrentCount")]
@@ -792,6 +819,7 @@ pub struct DirectoryVpcSettings {
 
 /// <p>Contains information about the directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DirectoryVpcSettingsDescription {
     /// <p>The list of Availability Zones that the directory is in.</p>
     #[serde(rename = "AvailabilityZones")]
@@ -821,6 +849,7 @@ pub struct DisableRadiusRequest {
 
 /// <p>Contains the results of the <a>DisableRadius</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisableRadiusResult {}
 
 /// <p>Contains the inputs for the <a>DisableSso</a> operation.</p>
@@ -841,10 +870,12 @@ pub struct DisableSsoRequest {
 
 /// <p>Contains the results of the <a>DisableSso</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DisableSsoResult {}
 
 /// <p>Contains information about the domain controllers for a specified directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct DomainController {
     /// <p>The Availability Zone where the domain controller is located.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -901,6 +932,7 @@ pub struct EnableRadiusRequest {
 
 /// <p>Contains the results of the <a>EnableRadius</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EnableRadiusResult {}
 
 /// <p>Contains the inputs for the <a>EnableSso</a> operation.</p>
@@ -921,10 +953,12 @@ pub struct EnableSsoRequest {
 
 /// <p>Contains the results of the <a>EnableSso</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EnableSsoResult {}
 
 /// <p>Information about SNS topic and AWS Directory Service directory associations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct EventTopic {
     /// <p>The date and time of when you associated your directory with the SNS topic.</p>
     #[serde(rename = "CreatedDateTime")]
@@ -954,6 +988,7 @@ pub struct GetDirectoryLimitsRequest {}
 
 /// <p>Contains the results of the <a>GetDirectoryLimits</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetDirectoryLimitsResult {
     /// <p>A <a>DirectoryLimits</a> object that contains the directory limits for the current region.</p>
     #[serde(rename = "DirectoryLimits")]
@@ -971,6 +1006,7 @@ pub struct GetSnapshotLimitsRequest {
 
 /// <p>Contains the results of the <a>GetSnapshotLimits</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct GetSnapshotLimitsResult {
     /// <p>A <a>SnapshotLimits</a> object that contains the manual snapshot limits for the specified directory.</p>
     #[serde(rename = "SnapshotLimits")]
@@ -993,6 +1029,7 @@ pub struct IpRoute {
 
 /// <p>Information about one or more IP address blocks.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct IpRouteInfo {
     /// <p>The date and time the address block was added to the directory.</p>
     #[serde(rename = "AddedDateTime")]
@@ -1036,6 +1073,7 @@ pub struct ListIpRoutesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListIpRoutesResult {
     /// <p>A list of <a>IpRoute</a>s.</p>
     #[serde(rename = "IpRoutesInfo")]
@@ -1063,6 +1101,7 @@ pub struct ListSchemaExtensionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListSchemaExtensionsResult {
     /// <p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to <code>ListSchemaExtensions</code> to retrieve the next set of items.</p>
     #[serde(rename = "NextToken")]
@@ -1090,6 +1129,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ListTagsForResourceResult {
     /// <p>Reserved for future use.</p>
     #[serde(rename = "NextToken")]
@@ -1151,6 +1191,7 @@ pub struct RegisterEventTopicRequest {
 
 /// <p>The result of a RegisterEventTopic request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RegisterEventTopicResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1164,6 +1205,7 @@ pub struct RemoveIpRoutesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveIpRoutesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1177,6 +1219,7 @@ pub struct RemoveTagsFromResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RemoveTagsFromResourceResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1193,6 +1236,7 @@ pub struct ResetUserPasswordRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ResetUserPasswordResult {}
 
 /// <p>An object representing the inputs for the <a>RestoreFromSnapshot</a> operation.</p>
@@ -1205,10 +1249,12 @@ pub struct RestoreFromSnapshotRequest {
 
 /// <p>Contains the results of the <a>RestoreFromSnapshot</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct RestoreFromSnapshotResult {}
 
 /// <p>Information about a schema extension.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SchemaExtensionInfo {
     /// <p>A description of the schema extension.</p>
     #[serde(rename = "Description")]
@@ -1242,6 +1288,7 @@ pub struct SchemaExtensionInfo {
 
 /// <p>Describes a directory snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Snapshot {
     /// <p>The directory identifier.</p>
     #[serde(rename = "DirectoryId")]
@@ -1271,6 +1318,7 @@ pub struct Snapshot {
 
 /// <p>Contains manual snapshot limit information for a directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct SnapshotLimits {
     /// <p>The current number of manual snapshots of the directory.</p>
     #[serde(rename = "ManualSnapshotsCurrentCount")]
@@ -1303,6 +1351,7 @@ pub struct StartSchemaExtensionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct StartSchemaExtensionResult {
     /// <p>The identifier of the schema extension that will be applied.</p>
     #[serde(rename = "SchemaExtensionId")]
@@ -1323,6 +1372,7 @@ pub struct Tag {
 
 /// <p>Describes a trust relationship between an Microsoft AD in the AWS cloud and an external domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct Trust {
     /// <p>The date and time that the trust relationship was created.</p>
     #[serde(rename = "CreatedDateTime")]
@@ -1382,6 +1432,7 @@ pub struct UpdateConditionalForwarderRequest {
 
 /// <p>The result of an UpdateConditionalForwarder request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateConditionalForwarderResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1395,6 +1446,7 @@ pub struct UpdateNumberOfDomainControllersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateNumberOfDomainControllersResult {}
 
 /// <p>Contains the inputs for the <a>UpdateRadius</a> operation.</p>
@@ -1410,6 +1462,7 @@ pub struct UpdateRadiusRequest {
 
 /// <p>Contains the results of the <a>UpdateRadius</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct UpdateRadiusResult {}
 
 /// <p>Initiates the verification of an existing trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>
@@ -1422,6 +1475,7 @@ pub struct VerifyTrustRequest {
 
 /// <p>Result of a VerifyTrust request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct VerifyTrustResult {
     /// <p>The unique Trust ID of the trust relationship that was verified.</p>
     #[serde(rename = "TrustId")]
