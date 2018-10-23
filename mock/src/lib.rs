@@ -56,6 +56,8 @@ impl MockRequestDispatcher {
         self
     }
 
+    /// Mocks the json serialized response body what would be
+    /// returned from AWS
     pub fn with_json_body<B>(mut self, body: B) -> MockRequestDispatcher
         where B: Serialize {
         self.body = serde_json::to_vec(&body).expect("failed to deserialize into json");
