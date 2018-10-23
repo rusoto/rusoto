@@ -428,25 +428,32 @@ fn generate_struct<P>(service: &Service,
     }
 
     let attributes = format!("#[derive({})]", derived.join(","));
+    let test_attributes = if derived.iter().any(|&x| x == "Deserialize") && !derived.iter().any(|&x| x == "Serialize") {
+        "\n#[cfg_attr(test, derive(Serialize))]"
+    } else {
+        ""
+    };
 
     if shape.members.is_none() || shape.members.as_ref().unwrap().is_empty() {
         format!(
-            "{attributes}
+            "{attributes}{test_attributes}
             pub struct {name} {{}}
             ",
             attributes = attributes,
+            test_attributes = test_attributes,
             name = name,
         )
     } else {
         // Serde attributes are only needed if deriving the Serialize or Deserialize trait
         let need_serde_attrs = derived.iter().any(|&x| x == "Serialize" || x == "Deserialize");
         format!(
-            "{attributes}
+            "{attributes}{test_attributes}
             pub struct {name} {{
                 {struct_fields}
             }}
             ",
             attributes = attributes,
+            test_attributes = test_attributes,
             name = name,
             struct_fields = generate_struct_fields(service, shape, name, need_serde_attrs, protocol_generator),
         )
