@@ -130,4 +130,5 @@ exclude = [
     "integration_tests",
     "mock",
     "service_crategen",
+    "skeptical"
 ]
