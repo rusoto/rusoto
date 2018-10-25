@@ -22,7 +22,7 @@ It's also possible to implement your own credentials sourcing mechanism by creat
 
 If your aws account belongs to an organization and you need to use sts:AssumeRole, you're probably looking for `rusoto_sts::StsAssumeRoleSessionCredentialsProvider`. A simple program that uses sts:AssumeRole looks like this:
 
-```rust
+```rust,no_run
 extern crate env_logger;
 extern crate rusoto_core;
 extern crate rusoto_ec2;
@@ -30,17 +30,15 @@ extern crate rusoto_sts;
 
 use std::default::Default;
 
-use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_core::default_tls_client;
+use rusoto_core::{Region, HttpClient};
 
-use rusoto_ec2::{Ec2Client, Ec2};
+use rusoto_ec2::{Ec2Client, Ec2, DescribeSpotInstanceRequestsRequest};
 use rusoto_sts::{StsClient, StsAssumeRoleSessionCredentialsProvider};
 
 fn main() {
     let _ = env_logger::try_init();
 
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let sts = StsClient::new(default_tls_client().unwrap(), credentials, Region::EuWest1);
+    let sts = StsClient::new(Region::EuWest1);
 
     let provider = StsAssumeRoleSessionCredentialsProvider::new(
         sts,
@@ -49,11 +47,10 @@ fn main() {
         None, None, None, None
     );
 
-    let client = Ec2Client::new(default_tls_client().unwrap(), provider, Region::UsEast1);
+    let client = Ec2Client::new_with(HttpClient::new().unwrap(), provider, Region::UsEast1);
 
-    let sir_input = Default::default();
-    println!("[*] requesting...");
-    let x = client.describe_spot_instance_requests(&sir_input);
+    let sir_input = DescribeSpotInstanceRequestsRequest::default();
+    let x = client.describe_spot_instance_requests(sir_input).sync();
 
     println!("{:?}", x);
 }
@@ -74,6 +71,6 @@ IAM credentials expiration time comes from the IAM metadata response.
 Edit the relevant `address`/IP locations in [credential/src/container.rs](credential/src/container.rs) and [credential/src/instance_metadata.rs](credential/src/instance_metadata.rs).
 For local testing, you can use [moe](https://github.com/matthewkmayer/moe) and set the string to this:
 
-```rust
+```rust,ignore
 let mut address: String = "http://localhost:8080/latest/meta-data/iam/security-credentials".to_owned();
 ```

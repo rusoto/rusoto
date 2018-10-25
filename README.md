@@ -46,7 +46,7 @@ To use Rusoto in your Rust program built with Cargo, add it as a dependency and 
 
 For example, to include only S3 and SQS:
 
-``` toml
+```toml
 [dependencies]
 rusoto_core = "0.34.0"
 rusoto_sqs = "0.34.0"
@@ -66,7 +66,7 @@ Consult the rustdoc documentation for full details by running `cargo doc` or vis
 
 A simple example of using Rusoto's DynamoDB API to list the names of all tables in a database:
 
-```rust
+```rust,no_run
 extern crate rusoto_core;
 extern crate rusoto_dynamodb;
 
@@ -119,10 +119,7 @@ See [CONTRIBUTING](CONTRIBUTING.md).
 
 Linux, OSX and Windows are supported and tested via TravisCI and Appveyor.
 
-Rust stable is supported.  Older versions of Rust are supported and tested via TravisCI.  The minimum Rust version is
-incremented when it becomes inconvenient to support older versions.  The current minimum version of Rust supported can
-be found in [.travis.yml](.travis.yml).  If a version number is not specified in the `rust` section, only the named versions
-listed are supported.  This should be stable, beta and nightly.
+Rust stable is supported.  Older versions of Rust are supported and tested via TravisCI.  The minimum Rust version is incremented when it becomes inconvenient to support older versions.  The current minimum version of Rust supported can be found in [.travis.yml](.travis.yml).  If a version number is not specified in the `rust` section, only the named versions listed are supported.  This should be stable, beta and nightly.
 
 ## License
 
