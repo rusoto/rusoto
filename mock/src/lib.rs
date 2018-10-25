@@ -11,6 +11,10 @@
 //!
 //! # Example
 //!
+//! The following is an example for the `rusoto_s3` crate but should
+//! work for all service crates just the same. The code is commented
+//! out for illustration but also to avoid a cyclic dependency in this crate.
+//!
 //! ```rust
 //! extern crate rusoto_mock;
 //! // extern crate rusoto_s3;
@@ -33,18 +37,18 @@ extern crate futures;
 extern crate http;
 extern crate rusoto_core;
 
+use std::collections::HashMap;
 use std::fs::File;
 use std::io::Read;
-use std::collections::HashMap;
 use std::time::Duration;
 
-use rusoto_core::{DispatchSignedRequest, HttpDispatchError};
-use rusoto_core::credential::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
-use rusoto_core::request::{Headers, HttpResponse};
-use rusoto_core::signature::SignedRequest;
-use futures::future::{FutureResult, ok};
+use futures::future::{ok, FutureResult};
 use futures::stream::once;
 use http::{HttpTryFrom, StatusCode};
+use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::{Headers, HttpResponse};
+use rusoto_core::signature::SignedRequest;
+use rusoto_core::{DispatchSignedRequest, HttpDispatchError};
 
 /// Provides a set of credentials that always resolve
 /// successfully
@@ -54,10 +58,7 @@ impl ProvideAwsCredentials for MockCredentialsProvider {
     type Future = FutureResult<AwsCredentials, CredentialsError>;
 
     fn credentials(&self) -> Self::Future {
-        ok(AwsCredentials::new("mock_key",
-                               "mock_secret",
-                               None,
-                               None))
+        ok(AwsCredentials::new("mock_key", "mock_secret", None, None))
     }
 }
 
@@ -96,7 +97,9 @@ impl MockRequestDispatcher {
     /// Mocks the signed request checking applied to a request before sending
     /// to AWS
     pub fn with_request_checker<F>(mut self, checker: F) -> MockRequestDispatcher
-        where F: Fn(&SignedRequest) + Send + Sync + 'static {
+    where
+        F: Fn(&SignedRequest) + Send + Sync + 'static,
+    {
         self.request_checker = Some(Box::new(checker));
         self
     }
@@ -140,10 +143,9 @@ impl ReadMockResponse for MockResponseReader {
 
         let mut mock_response = String::new();
 
-        input_file.read_to_string(&mut mock_response).expect(&format!(
-	        "Failed to read {:?}",
-	        file_name,
-	    ));
+        input_file
+            .read_to_string(&mut mock_response)
+            .expect(&format!("Failed to read {:?}", file_name,));
 
         mock_response
     }
