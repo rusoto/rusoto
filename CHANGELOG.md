@@ -24,6 +24,8 @@
 - Add MediaStore support
 - Expose raw BufferedHttpResponse on ::Unknown error variants
 - Removed Ceph test for `Luminous`
+- Honor profile region in `Default` implementation of `Region`
+- Fix bug that could not authenticate ARN with colon
 
 ## [0.34.0] - 2018-09-05
 

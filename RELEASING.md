@@ -22,7 +22,7 @@ Rusoto uses [semantic versioning 2.0.0](http://semver.org/).
 
 ### Publishing walkthrough:
 
-1. Make a pull request that bumps version numbers for `rusoto_core`, `rusoto_credential` and `rusoto_mock` if needed and each service that changed since previous release.  Service versions are in the `services.json` file in the codegen project. Otherwise they are in the `Cargo.toml` files for each project.  Make sure the root Rusoto README example gets updated with the new version.
+1. Make a pull request that bumps version numbers for `rusoto_core`, `rusoto_credential` and `rusoto_mock` if needed and each service that changed since previous release.  Service versions are in the `services.json` file in the codegen project. Otherwise they are in the `Cargo.toml` files for each project.  Make sure the root Rusoto README example gets updated with the new version. The `skeptical` package will also need to be set to use the new version of Rusoto.
 2. Merge release PR.
 3. Publish new version of `rusoto_credential` if changes have been made to it.
 4. Publish new version of `rusoto_mock` if changes have been made to it.
