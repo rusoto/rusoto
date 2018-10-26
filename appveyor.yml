@@ -32,6 +32,8 @@ test_script:
   - cd integration_tests
   - cargo check --tests --features "all"
   - cd ..
+  - cd skeptical
+  - cargo test
 
 branches:
   only:
